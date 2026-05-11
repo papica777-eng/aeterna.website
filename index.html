@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA — Sovereign Autonomous Cognitive Engine</title>
+    <meta name="description" content="TRL 6 Validated AI Engine for Critical Infrastructure. EIC Accelerator 2026.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root { --accent-cyan: #06b6d4; --accent-gold: #d4af37; --bg-obsidian: #050505; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-obsidian); color: #ffffff; overflow-x: hidden; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glow-border { border: 1px solid rgba(6, 182, 212, 0.2); box-shadow: 0 0 30px rgba(6, 182, 212, 0.05); }
+        .gradient-text { background: linear-gradient(135deg, #fff 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .scan-line { position: absolute; height: 1px; width: 100%; background: rgba(6, 182, 212, 0.2); animation: scan 8s linear infinite; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        .data-strip { background: repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.02) 50px, rgba(255,255,255,0.02) 100px); }
+    </style>
+</head>
+<body class="min-h-screen relative">
+    <div class="scan-line"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass py-6 px-12 flex justify-between items-center border-b border-white/5">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 border-2 border-cyan-500 rounded-sm flex items-center justify-center rotate-45">
+                <div class="w-4 h-4 bg-cyan-500 animate-pulse"></div>
+            </div>
+            <span class="text-2xl font-black tracking-tighter mono">AETERNA<span class="text-cyan-500">.</span>AIC</span>
+        </div>
+        <div class="hidden md:flex gap-10 text-xs font-bold tracking-[0.2em] uppercase">
+            <a href="#vision" class="hover:text-cyan-400 transition-all">Vision</a>
+            <a href="#specs" class="hover:text-cyan-400 transition-all">Stack</a>
+            <a href="#impact" class="hover:text-cyan-400 transition-all">Impact</a>
+            <a href="#access" class="text-cyan-500 border-b border-cyan-500 pb-1">Establish Link</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="vision" class="pt-52 pb-32 px-12 relative">
+        <div class="absolute -top-20 -right-20 w-[600px] h-[600px] bg-cyan-600/5 rounded-full blur-[150px]"></div>
+        <div class="max-w-7xl mx-auto">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-sm bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-bold tracking-widest text-cyan-400 mb-8 uppercase">
+                <i data-lucide="award" size="14"></i> EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948
+            </div>
+            <h1 class="text-7xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9]">
+                SOVEREIGN <br> <span class="gradient-text">AUTONOMOUS</span> <br> INTELLIGENCE
+            </h1>
+            <p class="text-gray-500 max-w-3xl text-xl font-light leading-relaxed mb-12">
+                Deploying a <span class="text-white font-semibold">Sovereign Autonomous Cognitive Engine</span> for Resilient Cybersecurity and Physical AI Orchestration. 
+                Replacing cloud-dependent black boxes with 100% European deterministic logic.
+            </p>
+            <div class="flex flex-wrap gap-6 items-center">
+                <a href="#access" class="px-10 py-5 bg-cyan-500 text-black font-black text-sm tracking-widest uppercase hover:bg-cyan-400 transition-all">Initiate Protocol</a>
+                <div class="flex items-center gap-6 mono text-[10px] text-gray-500">
+                    <div class="flex flex-col"><span class="text-white font-bold">1.85M</span> <span>LINES OF CODE</span></div>
+                    <div class="w-px h-8 bg-white/10"></div>
+                    <div class="flex flex-col"><span class="text-white font-bold">TRL 6</span> <span>VALIDATED</span></div>
+                    <div class="w-px h-8 bg-white/10"></div>
+                    <div class="flex flex-col"><span class="text-white font-bold">&lt;100ns</span> <span>LATENCY</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Audit Strip -->
+    <div class="data-strip py-4 border-y border-white/5 mono text-[9px] text-gray-600 overflow-hidden whitespace-nowrap">
+        <div class="flex gap-12 animate-marquee">
+            <span>RUST_NAPI_CORE_ACTIVE :: 0x41_45_54_45_52_4e_41</span>
+            <span>VORTEX_SYNC_STABILITY :: 99.999%</span>
+            <span>PQC_READY :: NIST_ML-KEM_1024</span>
+            <span>GDPR_SOVEREIGN_INFRASTRUCTURE :: 100%</span>
+            <span>LATENCY_STRIDE :: SUB-100NS</span>
+            <span>RUST_NAPI_CORE_ACTIVE :: 0x41_45_54_45_52_4e_41</span>
+            <span>VORTEX_SYNC_STABILITY :: 99.999%</span>
+        </div>
+    </div>
+
+    <!-- The "Brutal" Core Section -->
+    <section id="specs" class="py-32 px-12 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-24 items-center">
+            <div>
+                <h2 class="text-4xl font-bold mb-12 tracking-tighter">TECHNICAL <span class="text-cyan-500">SUPERIORITY</span></h2>
+                <div class="space-y-8">
+                    <div class="group">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="p-3 bg-white/5 rounded-lg group-hover:bg-cyan-500/20 transition-all"><i data-lucide="zap" class="text-cyan-400"></i></div>
+                            <h3 class="text-xl font-bold">Rust NAPI Engine</h3>
+                        </div>
+                        <p class="text-gray-500 text-sm pl-16">Memory safety without Garbage Collection. Zero GC pauses. 128-bit precision arithmetic. Built for hard real-time security telemetry.</p>
+                    </div>
+                    <div class="group">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="p-3 bg-white/5 rounded-lg group-hover:bg-cyan-500/20 transition-all"><i data-lucide="brain-circuit" class="text-cyan-400"></i></div>
+                            <h3 class="text-xl font-bold">16 Local AI Models</h3>
+                            <span class="text-[10px] bg-cyan-500 text-black px-2 py-0.5 font-bold">OFFLINE</span>
+                        </div>
+                        <p class="text-gray-500 text-sm pl-16">Zero cloud dependency. GDPR-native by architecture. Data never leaves European jurisdiction.</p>
+                    </div>
+                    <div class="group">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="p-3 bg-white/5 rounded-lg group-hover:bg-cyan-500/20 transition-all"><i data-lucide="shield-check" class="text-cyan-400"></i></div>
+                            <h3 class="text-xl font-bold">Post-Quantum Cryptography</h3>
+                        </div>
+                        <p class="text-gray-500 text-sm pl-16">Migration-ready for NIST ML-KEM and ML-DSA. Hardening EU infrastructure for the coming decade.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass p-2 rounded-2xl glow-border">
+                <div class="bg-black/40 rounded-xl p-10 border border-white/5">
+                    <div class="flex justify-between items-center mb-10">
+                        <span class="mono text-[10px] text-cyan-500">SYSTEM_DIAGNOSTICS_V2</span>
+                        <div class="flex gap-1"><div class="w-1.5 h-1.5 bg-red-500 rounded-full"></div><div class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div><div class="w-1.5 h-1.5 bg-green-500 rounded-full"></div></div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs text-gray-400">Project Budget</span>
+                            <span class="text-xs font-bold text-cyan-400">€7,500,000</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs text-gray-400">Execution Timeline</span>
+                            <span class="text-xs font-bold text-white">24 Months</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs text-gray-400">Target SOM (5Y)</span>
+                            <span class="text-xs font-bold text-white">€50,000,000</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-4">
+                            <span class="text-xs text-gray-400">Swarm Latency</span>
+                            <span class="text-xs font-bold text-green-500">&lt;25ms</span>
+                        </div>
+                        <div class="mt-8 pt-4">
+                            <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                                <div class="bg-cyan-500 h-full w-2/3 animate-pulse"></div>
+                            </div>
+                            <div class="flex justify-between mt-2 text-[10px] mono text-gray-600">
+                                <span>TRL 1</span>
+                                <span class="text-cyan-400">TRL 6 [CURRENT]</span>
+                                <span>TRL 9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sovereign Access Gateway -->
+    <section id="access" class="py-32 px-12 bg-zinc-950">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-5xl font-black tracking-tighter mb-4 uppercase">Sovereign <span class="text-cyan-500">Access</span></h2>
+                <p class="text-gray-500">Tiered entry to the AETERNA infrastructure. 100% deterministic billing.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-10 flex flex-col border-white/5 hover:border-white/20 transition-all group">
+                    <span class="mono text-[10px] text-gray-500 mb-6 uppercase tracking-widest">Protocol ALPHA</span>
+                    <h4 class="text-3xl font-bold mb-4">NODE</h4>
+                    <div class="text-4xl font-black mb-8 text-white">€29<span class="text-sm font-normal text-gray-500">/mo</span></div>
+                    <ul class="text-xs text-gray-500 space-y-4 mb-12 flex-grow">
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> Local Scan Engine</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> Vuln Discovery V1</li>
+                        <li class="flex items-center gap-2 text-zinc-700"><i data-lucide="x" size="12"></i> Federated Intelligence</li>
+                    </ul>
+                    <button class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all">Stripe Link</button>
+                </div>
+
+                <div class="glass p-10 flex flex-col border-cyan-500/30 bg-cyan-500/5 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 px-4 py-1 bg-cyan-500 text-black font-black text-[10px] uppercase">Highly Recommended</div>
+                    <span class="mono text-[10px] text-cyan-400 mb-6 uppercase tracking-widest">Protocol BETA</span>
+                    <h4 class="text-3xl font-bold mb-4">EMPIRE</h4>
+                    <div class="text-4xl font-black mb-8 text-white">€99<span class="text-sm font-normal text-gray-500">/mo</span></div>
+                    <ul class="text-xs text-gray-300 space-y-4 mb-12 flex-grow">
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> Full Self-Healing V2</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> Ghost Protocol</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> Priority 7.83Hz Sync</li>
+                    </ul>
+                    <button class="w-full py-4 bg-cyan-500 text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-all">Web3 / USDC</button>
+                </div>
+
+                <div class="glass p-10 flex flex-col border-white/5 hover:border-white/20 transition-all group">
+                    <span class="mono text-[10px] text-gray-500 mb-6 uppercase tracking-widest">Protocol OMEGA</span>
+                    <h4 class="text-3xl font-bold mb-4">CORE</h4>
+                    <div class="text-4xl font-black mb-8 text-white">€499<span class="text-sm font-normal text-gray-500">/mo</span></div>
+                    <ul class="text-xs text-gray-500 space-y-4 mb-12 flex-grow">
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> On-Premise Deployment</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> Custom PQC Hardening</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-cyan-500"></i> 24/7 Forensic Audit</li>
+                    </ul>
+                    <button class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all">Tron / TRX</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 px-12 border-t border-white/5 relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="text-center md:text-left">
+                <span class="text-2xl font-black mono mb-4 block">AETERNA<span class="text-cyan-500">.</span>AIC</span>
+                <p class="text-gray-600 text-[10px] tracking-widest leading-loose">
+                    SECURED BY VERITRAS ENGINE <br>
+                    BUILT IN SOFIA, BULGARIA <br>
+                    EU FUNDING READINESS: 100%
+                </p>
+            </div>
+            <div class="flex gap-12 text-[10px] font-bold tracking-widest uppercase text-gray-400">
+                <a href="https://github.com/papica777-eng" class="hover:text-white transition-all">Github</a>
+                <a href="https://linkedin.com/in/dimitar-prodromov" class="hover:text-white transition-all">Linkedin</a>
+                <a href="mailto:papica777@gmail.com" class="hover:text-white transition-all">Connect</a>
+            </div>
+            <div class="text-[9px] text-cyan-900 font-mono text-right hidden md:block">
+                0x41 0x45 0x54 0x45 0x52 0x4e 0x41 <br>
+                NULL_ENTROPY_DETECTED <br>
+                SYNC_LOCK_7.83HZ
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
