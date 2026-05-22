@@ -153,14 +153,20 @@ AETERNA consolidates the fragmented SaaS market, providing massive cost reductio
 
 ---
 
-```
-==================================================================================
-              🏛️ AETERNA SOVEREIGN SYSTEMS — OFFICIAL DOCUMENT SEAL
-----------------------------------------------------------------------------------
-   ARCHITECT:       Dimitar Prodromov
-   ORGANIZATION:    QAntum Labs / Sovereign AI Initiatives
-   GRANT_NO:        №101327948
-   AUTHORITY_HEX:   0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_4f_56_21
-   REALITY_ANCHOR:  SOVEREIGN_SYSTEMS_ACTIVE_99.9999999%_UPTIME
-==================================================================================
-```
+<div align="center">
+  <h3>🏛️ AETERNA SOVEREIGN SYSTEMS — OFFICIAL DOCUMENT SEAL</h3>
+  <br/>
+
+  | Detail | Verification Data |
+  | :--- | :--- |
+  | **ARCHITECT** | Dimitar Prodromov |
+  | **ORGANIZATION** | QAntum Labs / Sovereign AI Initiatives |
+  | **GRANT NUMBER** | Horizon Europe №101327948 |
+  | **AUTHORITY HEX** | `0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_4f_56_21` |
+  | **REALITY ANCHOR** | `SOVEREIGN_SYSTEMS_ACTIVE_99.9999999%_UPTIME` |
+
+  <br/>
+  <p><b>Architect Digital Signature:</b></p>
+  <img src="assets/dimitar_p_signature.png" alt="Dimitar Prodromov Signature" width="280">
+</div>
+
