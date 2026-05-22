@@ -42,22 +42,26 @@
         .data-strip { background: repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.01) 50px, rgba(255,255,255,0.01) 100px); }
         .cyber-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
         
-        /* Language toggle custom switch styling */
         .lang-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .lang-active { background: rgba(0, 240, 255, 0.15); border-color: rgba(0, 240, 255, 0.4); color: #00f0ff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
         
-        /* Terminal styling */
         .terminal-scroll::-webkit-scrollbar { width: 4px; }
         .terminal-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.01); }
         .terminal-scroll::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 2px; }
         
-        /* TRL slider step highlight */
         .trl-step-node { transition: all 0.3s ease; }
         .trl-step-active { background: #00f0ff; border-color: #ffffff; box-shadow: 0 0 15px #00f0ff; transform: scale(1.25); }
+
+        /* Vertical Tabs Styling */
+        .spec-tab { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-left: 3px solid transparent; }
+        .spec-tab-active { background: rgba(255,255,255,0.02); border-left: 3px solid #00f0ff; color: #00f0ff; }
     </style>
 </head>
 <body class="min-h-screen relative font-sans cyber-grid">
     <div class="scan-line pointer-events-none"></div>
+
+    <!-- HTML5 Canvas Animated Network Backdrop -->
+    <canvas id="cyber-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-25"></canvas>
 
     <!-- Navigation Header -->
     <nav class="fixed w-full z-50 glass py-5 px-6 md:px-12 flex justify-between items-center border-b border-white/5">
@@ -71,8 +75,7 @@
         <div class="flex items-center gap-8">
             <div class="hidden lg:flex gap-10 text-xs font-bold tracking-[0.2em] uppercase">
                 <a href="#vision" class="hover:text-accent-cyan transition-all" data-i18n="nav.vision">VISION</a>
-                <a href="#specs" class="hover:text-accent-cyan transition-all" data-i18n="nav.specs">STACK</a>
-                <a href="#console" class="hover:text-accent-cyan transition-all" data-i18n="nav.console">COMMAND CENTRE</a>
+                <a href="#specs" class="hover:text-accent-cyan transition-all" data-i18n="nav.specs">SPECIFICATIONS LAB</a>
                 <a href="#timeline" class="hover:text-accent-cyan transition-all" data-i18n="nav.timeline">CHRONOLOGY</a>
                 <a href="#access" class="hover:text-accent-cyan transition-all" data-i18n="nav.pricing">PRICING</a>
             </div>
@@ -86,22 +89,9 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="vision" class="pt-48 pb-24 px-6 md:px-12 relative overflow-hidden">
-        <!-- Constellation Node Background SVG -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-25">
-            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="15%" cy="25%" r="2" fill="#00f0ff" class="animate-pulse" />
-                <circle cx="85%" cy="35%" r="3" fill="#b55fe6" class="animate-pulse" style="animation-delay: 1.5s;" />
-                <circle cx="45%" cy="70%" r="2.5" fill="#00f0ff" class="animate-pulse" style="animation-delay: 0.7s;" />
-                <circle cx="70%" cy="80%" r="4" fill="#b55fe6" class="animate-pulse" style="animation-delay: 2.2s;" />
-                <line x1="15%" y1="25%" x2="45%" y2="70%" stroke="rgba(0,240,255,0.06)" stroke-width="1.5" />
-                <line x1="85%" y1="35%" x2="70%" y2="80%" stroke="rgba(181,95,230,0.06)" stroke-width="1.5" />
-                <line x1="45%" y1="70%" x2="70%" y2="80%" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
-            </svg>
-        </div>
-        
-        <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-accent-cyan/5 rounded-full blur-[150px]"></div>
-        <div class="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-accent-purple/5 rounded-full blur-[150px]"></div>
+    <section id="vision" class="pt-48 pb-20 px-6 md:px-12 relative overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-accent-cyan/5 rounded-full blur-[150px] pointer-events-none"></div>
+        <div class="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-accent-purple/5 rounded-full blur-[150px] pointer-events-none"></div>
         
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="inline-flex items-center gap-3 px-4 py-2 rounded border border-accent-cyan/20 bg-accent-cyan/5 text-[10px] font-bold tracking-widest text-accent-cyan mb-8 uppercase font-mono">
@@ -120,7 +110,11 @@
             </p>
             
             <div class="flex flex-wrap gap-6 items-center">
-                <a href="#console" class="px-10 py-5 bg-accent-cyan text-black font-black text-xs tracking-widest uppercase hover:bg-white transition-all rounded shadow-lg shadow-accent-cyan/15 glow-cyan" data-i18n="hero.cta">Initiate Protocol</a>
+                <a href="#specs" class="px-10 py-5 bg-accent-cyan text-black font-black text-xs tracking-widest uppercase hover:bg-white transition-all rounded shadow-lg shadow-accent-cyan/15 glow-cyan" data-i18n="hero.cta">Enter Sandbox Lab</a>
+                <a href="https://qantum.site" target="_blank" class="px-10 py-5 glass border border-accent-cyan/30 text-accent-cyan font-black text-xs tracking-widest uppercase hover:bg-accent-cyan hover:text-black transition-all rounded shadow-lg shadow-accent-cyan/5 flex items-center gap-2 group">
+                    <i data-lucide="play" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                    <span data-i18n="hero.cta_action_text">Aeterna in Action</span>
+                </a>
                 <div class="flex items-center gap-6 font-mono text-[10px] text-gray-500">
                     <div class="flex flex-col"><span class="text-white font-bold text-sm" data-i18n="hero.lines_val">1.85M</span> <span data-i18n="hero.lines">LINES OF CODE</span></div>
                     <div class="w-px h-8 bg-white/10"></div>
@@ -133,7 +127,7 @@
     </section>
 
     <!-- Technical Audit Strip -->
-    <div class="data-strip py-4 border-y border-white/5 font-mono text-[9px] text-gray-500 overflow-hidden whitespace-nowrap">
+    <div class="data-strip py-4 border-y border-white/5 font-mono text-[9px] text-gray-500 overflow-hidden whitespace-nowrap relative z-10">
         <div class="flex gap-12 animate-marquee inline-block">
             <span>RUST_NAPI_CORE_ACTIVE :: 0x41_45_54_45_52_4e_41</span>
             <span>VORTEX_SYNC_STABILITY :: 99.999%</span>
@@ -146,187 +140,105 @@
         </div>
     </div>
 
-    <!-- Technical Superiority Section -->
-    <section id="specs" class="py-28 px-6 md:px-12 max-w-7xl mx-auto">
-        <div class="grid lg:grid-cols-2 gap-20 items-center">
-            <div>
-                <h2 class="text-4xl md:text-5xl font-black mb-12 tracking-tighter uppercase" data-i18n="specs.title">TECHNICAL <span class="text-accent-cyan">SUPERIORITY</span></h2>
-                <div class="space-y-8">
-                    <div class="group flex gap-5">
-                        <div class="p-4 bg-white/5 border border-white/10 rounded-lg group-hover:bg-accent-cyan/10 group-hover:border-accent-cyan/30 transition-all h-fit shadow-md">
-                            <i data-lucide="zap" class="text-accent-cyan w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-white mb-2" data-i18n="specs.card1_title">Rust NAPI Engine</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="specs.card1_desc">Memory safety without Garbage Collection. Zero GC pauses. 128-bit precision arithmetic. Built for hard real-time security telemetry.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="group flex gap-5">
-                        <div class="p-4 bg-white/5 border border-white/10 rounded-lg group-hover:bg-accent-cyan/10 group-hover:border-accent-cyan/30 transition-all h-fit shadow-md">
-                            <i data-lucide="brain-circuit" class="text-accent-cyan w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-3 mb-2">
-                                <h3 class="text-lg font-bold text-white" data-i18n="specs.card2_title">16 Local AI Models</h3>
-                                <span class="text-[9px] bg-accent-cyan text-black px-2 py-0.5 font-extrabold rounded font-mono" data-i18n="specs.card2_tag">OFFLINE</span>
-                            </div>
-                            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="specs.card2_desc">Zero cloud dependency. GDPR-native by architecture. Diagnostic processing never leaves sovereign European boundaries.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="group flex gap-5">
-                        <div class="p-4 bg-white/5 border border-white/10 rounded-lg group-hover:bg-accent-cyan/10 group-hover:border-accent-cyan/30 transition-all h-fit shadow-md">
-                            <i data-lucide="shield-check" class="text-accent-cyan w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-white mb-2" data-i18n="specs.card3_title">Post-Quantum Cryptography</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed" data-i18n="specs.card3_desc">Migration-ready for NIST ML-KEM and ML-DSA standards. Shielding critical energy grids and sovereign aerospace nodes for the coming decade.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="glass-premium p-1.5 rounded-2xl glow-cyan">
-                <div class="bg-black/60 rounded-xl p-8 md:p-10 border border-white/5">
-                    <div class="flex justify-between items-center mb-8">
-                        <span class="font-mono text-[10px] text-accent-cyan font-bold tracking-widest">SYSTEM_DIAGNOSTICS_V2</span>
-                        <div class="flex gap-1.5"><div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div><div class="w-2 h-2 bg-yellow-500 rounded-full"></div><div class="w-2 h-2 bg-green-500 rounded-full"></div></div>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="flex justify-between border-b border-white/5 pb-4">
-                            <span class="text-sm text-gray-400" data-i18n="specs.diag_budget">Project Budget</span>
-                            <span class="text-sm font-bold text-accent-cyan font-mono">€7,500,000</span>
-                        </div>
-                        <div class="flex justify-between border-b border-white/5 pb-4">
-                            <span class="text-sm text-gray-400" data-i18n="specs.diag_timeline">Execution Timeline</span>
-                            <span class="text-sm font-bold text-white font-mono" data-i18n="specs.diag_timeline_val">24 Months</span>
-                        </div>
-                        <div class="flex justify-between border-b border-white/5 pb-4">
-                            <span class="text-sm text-gray-400" data-i18n="specs.diag_som">Target SOM (5Y)</span>
-                            <span class="text-sm font-bold text-white font-mono">€50,000,000</span>
-                        </div>
-                        <div class="flex justify-between border-b border-white/5 pb-4">
-                            <span class="text-sm text-gray-400" data-i18n="specs.diag_latency">Swarm Latency</span>
-                            <span class="text-sm font-bold text-green-400 font-mono">&lt;25ms</span>
-                        </div>
-                        <div class="mt-8 pt-4">
-                            <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-accent-cyan h-full w-2/3 animate-pulse"></div>
-                            </div>
-                            <div class="flex justify-between mt-3 text-[10px] font-mono text-gray-500">
-                                <span>TRL 1</span>
-                                <span class="text-accent-cyan font-bold" data-i18n="specs.diag_trl">TRL 6 [CURRENT]</span>
-                                <span>TRL 9</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Specifications Interactive Lab Section -->
+    <section id="specs" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase" data-i18n="specs.lab_title">INTERACTIVE SPECIFICATIONS LAB</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed" data-i18n="specs.lab_subtitle">Explore our technical architectures at a low-level. Select any specification node to load its exhaustive documentation and execute dedicated simulations inside its sandbox terminal.</p>
         </div>
-    </section>
-
-    <!-- Cyber-Sentinel Terminal Section -->
-    <section id="console" class="py-24 px-6 md:px-12 bg-zinc-950/80 border-y border-white/5 relative">
-        <div class="absolute -top-32 -left-32 w-96 h-96 bg-accent-indigo/5 rounded-full blur-[100px] pointer-events-none"></div>
         
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase" data-i18n="console.title">CYBER-SENTINEL COMMAND CENTRE</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed" data-i18n="console.subtitle">Test AETERNA's autonomic defense capability live. Run post-quantum scans, secure communication vectors, and audit physical AI node coordination with Samsung Knox TEE safety boundaries.</p>
+        <div class="grid lg:grid-cols-4 gap-8">
+            <!-- Left Side: Tabs Selection -->
+            <div class="lg:col-span-1 flex flex-col gap-4">
+                <button onclick="setSpecTab('napi')" id="tab-napi" class="spec-tab p-6 text-left glass hover:bg-white/[0.01] transition-all rounded-lg flex items-center justify-between group spec-tab-active">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="zap" class="text-accent-cyan w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm tracking-wide font-mono uppercase" data-i18n="tab.napi">Rust NAPI Core</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                
+                <button onclick="setSpecTab('swarm')" id="tab-swarm" class="spec-tab p-6 text-left glass hover:bg-white/[0.01] transition-all rounded-lg flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="brain-circuit" class="text-accent-cyan w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm tracking-wide font-mono uppercase" data-i18n="tab.swarm">16 Local AI Models</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                
+                <button onclick="setSpecTab('pqc')" id="tab-pqc" class="spec-tab p-6 text-left glass hover:bg-white/[0.01] transition-all rounded-lg flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="shield-check" class="text-accent-purple w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm tracking-wide font-mono uppercase" data-i18n="tab.pqc">Post-Quantum Cryptography</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                
+                <button onclick="setSpecTab('knox')" id="tab-knox" class="spec-tab p-6 text-left glass hover:bg-white/[0.01] transition-all rounded-lg flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="cpu" class="text-accent-purple w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm tracking-wide font-mono uppercase" data-i18n="tab.knox">Knox TEE Isolation</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform"></i>
+                </button>
             </div>
             
-            <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Terminal Window -->
-                <div class="lg:col-span-2 glass-premium rounded-xl overflow-hidden border border-white/10 glow-cyan">
-                    <!-- Window Header -->
-                    <div class="bg-black/90 px-6 py-4 border-b border-white/10 flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="terminal" class="text-accent-cyan w-4 h-4"></i>
-                            <span class="font-mono text-xs text-gray-400 font-bold tracking-widest">AETERNA // SOVEREIGN_TERMINAL_V3.0</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-white/10"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-white/10"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-accent-cyan/80 animate-pulse"></span>
-                        </div>
-                    </div>
+            <!-- Middle Column: Technical Specifications Documentation -->
+            <div class="lg:col-span-1 glass-premium p-8 rounded-xl border border-white/10 flex flex-col justify-between h-[520px]">
+                <div>
+                    <span class="font-mono text-[9px] text-accent-cyan font-bold tracking-widest uppercase mb-2 block" id="spec-category-label">CORE INFRASTRUCTURE</span>
+                    <h3 class="text-2xl font-black text-white leading-snug tracking-tight mb-4 uppercase" id="spec-heading">Rust NAPI Engine</h3>
                     
-                    <!-- Terminal Body -->
-                    <div class="bg-black/85 p-6 h-96 overflow-y-auto font-mono text-xs text-gray-300 space-y-3 terminal-scroll" id="terminal-screen">
-                        <div class="text-gray-500">// INITIALIZING INTEGRITY DIAGNOSTIC STACKS...</div>
-                        <div>SYSTEM INTEGRITY: <span class="text-accent-emerald font-bold">STEEL</span></div>
-                        <div>KNOX TEE: <span class="text-accent-cyan font-bold">RECOVERY BOUNDARIES ACTIVE</span></div>
-                        <div>ENTROPY FACTOR: <span class="text-accent-emerald font-bold">0.00 (VERITAS ANCHOR ACTIVE)</span></div>
-                        <div>CRYPTOGRAPHY: <span class="text-accent-cyan">NIST_ML-KEM_1024</span></div>
-                        <div class="text-gray-500">// Sovereign AI network link active. Ready for simulation command...</div>
-                    </div>
+                    <div class="w-12 h-1 bg-gradient-to-r from-accent-cyan to-accent-purple mb-6"></div>
                     
-                    <!-- Quick Actions Footer -->
-                    <div class="bg-black/70 p-4 border-t border-white/5 flex flex-wrap gap-4 justify-between items-center">
-                        <div class="flex gap-3">
-                            <button onclick="runCommand('scan')" class="px-5 py-2.5 bg-accent-cyan hover:bg-white text-black font-extrabold text-[10px] tracking-widest font-mono uppercase rounded transition-all shadow-md hover:-translate-y-0.5" data-i18n="console.btn_scan">THREAT SCAN</button>
-                            <button onclick="runCommand('encrypt')" class="px-5 py-2.5 bg-accent-purple/20 border border-accent-purple/40 hover:bg-accent-purple hover:text-white text-accent-purple font-extrabold text-[10px] tracking-widest font-mono uppercase rounded transition-all shadow-md hover:-translate-y-0.5" data-i18n="console.btn_encrypt">PQ ENCRYPT</button>
-                            <button onclick="runCommand('swarm')" class="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-extrabold text-[10px] tracking-widest font-mono uppercase rounded transition-all shadow-md hover:-translate-y-0.5" data-i18n="console.btn_swarm">VERIFY SWARM</button>
-                        </div>
-                        <button onclick="clearTerminal()" class="text-gray-500 hover:text-white font-mono text-[10px] tracking-wider uppercase px-3 py-2" data-i18n="console.btn_clear">Clear Console</button>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6" id="spec-desc">Memory safety without Garbage Collection. Zero GC pauses. 128-bit precision arithmetic. Built for hard real-time security telemetry.</p>
+                </div>
+                
+                <div class="space-y-4 pt-6 border-t border-white/5">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-gray-500" id="spec-metric-label">Execution Stride</span>
+                        <span class="font-bold font-mono text-accent-cyan" id="spec-metric-val">SUB-100NS</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-gray-500" id="spec-status-label">Engine Integrity</span>
+                        <span class="font-bold font-mono text-accent-emerald">STEEL</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Interactive Sandbox Terminal -->
+            <div class="lg:col-span-2 glass-premium rounded-xl overflow-hidden border border-white/10 glow-cyan flex flex-col justify-between h-[520px]">
+                <!-- Terminal Header -->
+                <div class="bg-black/90 px-6 py-4 border-b border-white/10 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="terminal" class="text-accent-cyan w-4 h-4"></i>
+                        <span class="font-mono text-xs text-gray-400 font-bold tracking-widest" id="terminal-header-title">AETERNA // RUST_NAPI_CORE_SANDBOX</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-white/10"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-white/10"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-accent-cyan/80 animate-pulse"></span>
                     </div>
                 </div>
                 
-                <!-- Live Telemetry / Diagnostics Dashboard -->
-                <div class="glass-premium p-6 rounded-xl border border-white/10 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-6">
-                            <i data-lucide="activity" class="text-accent-purple w-5 h-5"></i>
-                            <h3 class="text-sm font-bold font-mono tracking-widest text-white uppercase" data-i18n="console.metrics_title">LIVE SECURE METRICS</h3>
-                        </div>
-                        
-                        <div class="space-y-5">
-                            <div class="bg-black/40 border border-white/5 rounded p-4 flex justify-between items-center">
-                                <div>
-                                    <div class="text-[10px] font-mono text-gray-500 uppercase" data-i18n="console.metric_threats">Threats Blocked</div>
-                                    <div class="text-xl font-bold font-mono text-white mt-1" id="metric-threats">1,482</div>
-                                </div>
-                                <div class="w-8 h-8 rounded-full bg-accent-cyan/10 flex items-center justify-center text-accent-cyan">
-                                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-black/40 border border-white/5 rounded p-4 flex justify-between items-center">
-                                <div>
-                                    <div class="text-[10px] font-mono text-gray-500 uppercase" data-i18n="console.metric_pqc">Last PQ Key Rotation</div>
-                                    <div class="text-xs font-bold font-mono text-accent-cyan mt-1 select-all" id="metric-pqc-key">0x415F455445524E41</div>
-                                </div>
-                                <div class="w-8 h-8 rounded-full bg-accent-purple/10 flex items-center justify-center text-accent-purple">
-                                    <i data-lucide="key-round" class="w-4 h-4"></i>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-black/40 border border-white/5 rounded p-4 flex justify-between items-center">
-                                <div>
-                                    <div class="text-[10px] font-mono text-gray-500 uppercase" data-i18n="console.metric_swarm">Swarm Sync Precision</div>
-                                    <div class="text-xs font-bold font-mono text-white mt-1" id="metric-swarm-sync">LOCKED (7.83Hz)</div>
-                                </div>
-                                <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400">
-                                    <i data-lucide="radio" class="w-4 h-4"></i>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Terminal Screen -->
+                <div class="bg-black/85 p-6 flex-grow overflow-y-auto font-mono text-xs text-gray-300 space-y-3 terminal-scroll" id="terminal-screen">
+                    <!-- Dynamic Logs Loaded on setSpecTab -->
+                </div>
+                
+                <!-- Terminal Quick Action Triggers -->
+                <div class="bg-black/75 p-5 border-t border-white/10 flex flex-wrap gap-4 justify-between items-center relative z-20">
+                    <div class="flex gap-3" id="terminal-actions-container">
+                        <!-- Dynamic Action Buttons Loaded on setSpecTab -->
                     </div>
-                    
-                    <div class="mt-6 pt-6 border-t border-white/5">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-2 h-2 bg-accent-cyan rounded-full animate-ping"></span>
-                            <span class="font-mono text-[9px] text-gray-400 tracking-wider" id="console-status-text">OFF-GRID HARDWARE RECOVERY SYSTEM ACTIVE</span>
-                        </div>
-                    </div>
+                    <button onclick="clearActiveTerminal()" class="text-gray-500 hover:text-white font-mono text-[10px] tracking-wider uppercase px-2 py-1" data-i18n="console.btn_clear">Clear Logs</button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Interactive TRL Timeline Section -->
-    <section id="timeline" class="py-28 px-6 md:px-12 max-w-7xl mx-auto">
+    <section id="timeline" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase" data-i18n="timeline.title">TECHNOLOGY READINESS PROGRESSION</h2>
             <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed" data-i18n="timeline.subtitle">Tracing the engineering maturity of the AETERNA cognitive core. From deep mathematical proofs to real-world critical infrastructure pilots.</p>
@@ -370,7 +282,7 @@
     </section>
 
     <!-- European Sovereignty & Compliance Grid -->
-    <section class="py-24 px-6 md:px-12 bg-zinc-950 border-t border-white/5 relative">
+    <section class="py-24 px-6 md:px-12 bg-zinc-950 border-t border-white/5 relative z-10">
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-accent-purple/5 rounded-full blur-[100px] pointer-events-none"></div>
         
         <div class="max-w-7xl mx-auto">
@@ -411,7 +323,7 @@
     </section>
 
     <!-- Pricing Section -->
-    <section id="access" class="py-28 px-6 md:px-12 bg-zinc-950/40">
+    <section id="access" class="py-28 px-6 md:px-12 bg-zinc-950/40 relative z-10">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-20">
                 <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase" data-i18n="pricing.title">SOVEREIGN ACCESS PROTOCOL</h2>
@@ -463,12 +375,12 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-16 px-6 md:px-12 border-t border-white/5 relative bg-black/60 backdrop-blur-md">
+    <footer class="py-16 px-6 md:px-12 border-t border-white/5 relative bg-black/60 backdrop-blur-md z-10">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
             <div class="text-center md:text-left">
                 <span class="text-2xl font-black font-mono mb-4 block">AETERNA<span class="text-accent-cyan">.</span>AIC</span>
                 <p class="text-gray-500 text-[10px] tracking-widest leading-loose font-mono uppercase">
-                    SECURED BY VERITRAS COGNITIVE SHIELD <br>
+                    SECURED BY VERITRAS COGNITIVE SHIELD // TRUSTED BY BRUSSELS <br>
                     DEVELOPED IN SOFIA, BULGARIA // ARCHITECT DIMITAR PRODROMOV <br>
                     EU FUNDING READINESS LEVEL: 100%
                 </p>
@@ -492,19 +404,223 @@
         // Lucide Icons Initialization
         lucide.createIcons();
 
-        // Application State
+        // 60FPS Interactive HTML5 Canvas Neural Lattice Background
+        const canvas = document.getElementById('cyber-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let pulses = [];
+        let telemetryRain = [];
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.radius = Math.random() * 1.5 + 1.2;
+                this.color = Math.random() > 0.5 ? '#00f0ff' : '#b55fe6';
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Mouse Repulsion Distortion Field
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 180) {
+                        const force = (180 - dist) / 180;
+                        const angle = Math.atan2(dy, dx);
+                        const pushX = Math.cos(angle) * force * 1.6;
+                        const pushY = Math.sin(angle) * force * 1.6;
+                        this.x += pushX;
+                        this.y += pushY;
+                    }
+                }
+
+                // Smooth viewport wrapping boundaries
+                if (this.x < -20) this.x = canvas.width + 20;
+                if (this.x > canvas.width + 20) this.x = -20;
+                if (this.y < -20) this.y = canvas.height + 20;
+                if (this.y > canvas.height + 20) this.y = -20;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        class Pulse {
+            constructor(fromNode, toNode) {
+                this.from = fromNode;
+                this.to = toNode;
+                this.progress = 0;
+                this.speed = Math.random() * 0.015 + 0.008;
+            }
+            update() {
+                this.progress += this.speed;
+            }
+            draw() {
+                const px = this.from.x + (this.to.x - this.from.x) * this.progress;
+                const py = this.from.y + (this.to.y - this.from.y) * this.progress;
+                
+                ctx.beginPath();
+                ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#00f0ff';
+                ctx.shadowColor = '#00f0ff';
+                ctx.shadowBlur = 8;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        class RainTelemetry {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height;
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -40;
+                this.vy = Math.random() * 0.6 + 0.25;
+                this.alpha = Math.random() * 0.08 + 0.01;
+                this.fontSize = Math.floor(Math.random() * 4) + 9;
+                const codes = [
+                    "0101", "AETERNA.AIC", "KNOX_TEE", "RUST_NAPI", "PQC_ML-KEM", 
+                    "SECURE", "determ_logic", "0x41_45_54", "AVX-512", "7.83Hz", 
+                    "zero-GC", "steel_runtime", "NIS2_COMPLIANT", "EU_SOVEREIGN"
+                ];
+                this.text = codes[Math.floor(Math.random() * codes.length)];
+            }
+            update() {
+                this.y += this.vy;
+                if (this.y > canvas.height + 40) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.font = `${this.fontSize}px 'JetBrains Mono', monospace`;
+                ctx.fillStyle = `rgba(0, 240, 255, ${this.alpha})`;
+                ctx.fillText(this.text, this.x, this.y);
+            }
+        }
+
+        // Initialize particles & telemetry rain columns
+        const particleCount = 80;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+        const rainCount = 20;
+        for (let i = 0; i < rainCount; i++) {
+            telemetryRain.push(new RainTelemetry());
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Telemetry Rain
+            telemetryRain.forEach(rain => {
+                rain.update();
+                rain.draw();
+            });
+
+            // Draw Connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 115) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(181, 95, 230, ${0.12 * (1 - dist / 115)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+
+                        // Occasional Synaptic Signal Pulse triggering
+                        if (pulses.length < 18 && Math.random() < 0.0003) {
+                            pulses.push(new Pulse(particles[i], particles[j]));
+                        }
+                    }
+                }
+
+                // Connect to Mouse Proximity (Cyan glow connections)
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = particles[i].x - mouse.x;
+                    const dy = particles[i].y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 160) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.2 * (1 - dist / 160)})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.stroke();
+                    }
+                }
+
+                particles[i].update();
+                particles[i].draw();
+            }
+
+            // Update and Draw Synaptic Pulses
+            pulses = pulses.filter(p => p.progress < 1);
+            pulses.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        // Specifications Lab Global Application State
         let state = {
             lang: "en",
+            activeSpec: "napi",
             trlStep: 6,
-            threatCount: 1482
+            // Track terminal histories for all four compartments for absolute authentication
+            terminalHistory: {
+                napi: [],
+                swarm: [],
+                pqc: [],
+                knox: []
+            }
         };
 
-        // Complete Multilingual Dictionary (BG / EN)
+        // Complete Bilingual Spec-Lab Dictionary (BG / EN)
         const translations = {
             bg: {
                 "nav.vision": "ВИЗИЯ",
-                "nav.specs": "АРХИТЕКТУРА",
-                "nav.console": "КОМАНДЕН ЦЕНТЪР",
+                "nav.specs": "СПЕЦИФИКАЦИИ",
                 "nav.timeline": "ХРОНОЛОГИЯ",
                 "nav.pricing": "ЦЕНИ",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
@@ -512,39 +628,26 @@
                 "hero.title_2": "АВТОНОМЕН",
                 "hero.title_3": "ИНТЕЛЕКТ",
                 "hero.subtitle": "Разгръщане на суверенна автономна когнитивна архитектура за киберсигурност и физическа AI координация. Замяна на чуждите облачни платформи със 100% локална европейска детерминирана логика.",
-                "hero.cta": "Инициирай протокол",
+                "hero.cta": "Влез в Лабораторията",
+                "hero.cta_action_text": "Аетерна в действие",
                 "hero.lines": "РЕДА СУВЕРЕНЕН КОД",
                 "hero.lines_val": "1.85М",
                 "hero.trl": "ВАЛИДИРАН СТАНДАРТ",
                 "hero.trl_val": "TRL 6",
                 "hero.latency": "ЗАКЪСНЕНИЕ НА СИСТЕМА",
                 "hero.latency_val": "<100ns",
-                "specs.title": "ТЕХНИЧЕСКО <span class='text-accent-cyan'>ПРЕВЪЗХОДСТВО</span>",
-                "specs.card1_title": "Rust NAPI Двигател",
-                "specs.card1_desc": "Пълна безопасност на паметта без компилаторни паузи (Zero GC). 128-битова прецизна аритметика. Проектиран за тежки промишлени натоварвания в реално време.",
-                "specs.card2_title": "16 Офлайн AI Модела",
-                "specs.card2_tag": "ОФЛАЙН",
-                "specs.card2_desc": "Без никаква облачна зависимост. По рождение съвместим с GDPR. Цялата телеметрия се анализира локално на чипа, без изтичане на данни извън ЕС.",
-                "specs.card3_title": "Пост-Квантова Криптография",
-                "specs.card3_desc": "Миграционно готов за стандартите NIST ML-KEM и ML-DSA. Защита на европейската критична инфраструктура от утрешните заплахи.",
-                "specs.diag_budget": "Бюджет на проекта",
-                "specs.diag_timeline": "Срок на изпълнение",
-                "specs.diag_timeline_val": "24 Месеца",
-                "specs.diag_som": "Пазарен дял SOM (5г)",
-                "specs.diag_latency": "Закъснение на рояка",
-                "specs.diag_trl": "TRL 6 [ТЕКУЩ]",
-                "console.title": "КОМАНДЕН ЦЕНТЪР CYBER-SENTINEL",
-                "console.subtitle": "Тествай на живо автономен рефлекс за отбрана на AETERNA. Изпълни квантово криптиране, сканирай за заплахи и провери роевия интегритет под хардуерна защита на Samsung Knox TEE.",
-                "console.btn_scan": "СКАН ЗА ЗАПЛАХИ",
-                "console.btn_encrypt": "КВАНТОВО КРИПТИРАНЕ",
-                "console.btn_swarm": "РОЕВА ПРОВЕРКА",
-                "console.btn_clear": "Изчисти конзола",
-                "console.metrics_title": "ЗАЩИТЕНА ТЕЛЕМЕТРИЯ НА ЖИВО",
-                "console.metric_threats": "Неутрализирани Атаки",
-                "console.metric_pqc": "Ротация на PQC Ключ",
-                "console.metric_swarm": "Роева Синхронизация",
+                
+                "specs.lab_title": "ИНТЕРАКТИВНА ЛАБОРАТОРИЯ ЗА СПЕЦИФИКАЦИИ",
+                "specs.lab_subtitle": "Разгледайте техническите архитектури отблизо. Изберете спецификация, за да заредите нейната документация и да изпълните симулации в съответния терминал.",
+                
+                "tab.napi": "Rust NAPI Ядро",
+                "tab.swarm": "16 Офлайн AI Модела",
+                "tab.pqc": "Пост-Квантова Криптография",
+                "tab.knox": "Knox TEE Изолация",
+                
                 "timeline.title": "ТЕХНОЛОГИЧНА ЗРЯЛОСТ (TRL)",
                 "timeline.subtitle": "Проследи инженеринговата еволюция на когнитивното ядро AETERNA от математическо уравнение до критична отбрана.",
+                
                 "compliance.title": "ЕВРОПЕЙСКИ МАТРИЧЕН СТАНДАРТ",
                 "compliance.subtitle": "Суверенна защита. Когнитивната логика на AETERNA е сертифицирана за пълно покриване на изискванията на законодателството на ЕС.",
                 "compliance.card1_title": "NIS 2 Директива Готовност",
@@ -553,6 +656,7 @@
                 "compliance.card2_desc": "Пълна офлайн функционалност. Личните данни и показателите остават изцяло в локалния чип, гарантирайки недосегаемост от външни юрисдикции.",
                 "compliance.card3_title": "Акт за Киберустойчивост (CRA)",
                 "compliance.card3_desc": "Директно внедряване в Samsung Knox TEE криптопроцесор, осигуряващо пълен хардуерен одит на жизнения цикъл на устройството.",
+                
                 "pricing.title": "СУВЕРЕНЕН ПРОТОКОЛ ЗА ДОСТЪП",
                 "pricing.subtitle": "Гъвкави нива за интеграция на инфраструктурата. 100% предвидими разходи.",
                 "pricing.tier1_proto": "Протокол АЛФА",
@@ -563,7 +667,7 @@
                 "pricing.tier1_feat3": "Споделена интелигентност",
                 "pricing.tier1_btn": "Stripe Връзка",
                 "pricing.tier2_badge": "ПРЕПОРЪЧИТЕЛНО",
-                "pricing.tier2_proto": "Протокол БЕТА",
+                "pricing.tier2_proto": "Protocol БЕТА",
                 "pricing.tier2_name": "ИМПЕРИЯ",
                 "pricing.tier2_feat1": "Самолечение на Рояка V2",
                 "pricing.tier2_feat2": "Ghost Скрити Комуникации",
@@ -574,12 +678,13 @@
                 "pricing.tier3_feat1": "Локално внедряване On-Premise",
                 "pricing.tier3_feat2": "Специфично PQC подсилване",
                 "pricing.tier3_feat3": "24/7 Криминалистичен Одит",
-                "pricing.tier3_btn": "Tron / TRX"
+                "pricing.tier3_btn": "Tron / TRX",
+
+                "console.btn_clear": "Изчисти логове"
             },
             en: {
                 "nav.vision": "VISION",
-                "nav.specs": "STACK",
-                "nav.console": "COMMAND CENTRE",
+                "nav.specs": "SPECIFICATIONS LAB",
                 "nav.timeline": "CHRONOLOGY",
                 "nav.pricing": "PRICING",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
@@ -587,39 +692,26 @@
                 "hero.title_2": "AUTONOMOUS",
                 "hero.title_3": "INTELLIGENCE",
                 "hero.subtitle": "Deploying a Sovereign Autonomous Cognitive Engine for Resilient Cybersecurity and Physical AI Orchestration. Replacing cloud-dependent black boxes with 100% European deterministic logic.",
-                "hero.cta": "Initiate Protocol",
+                "hero.cta": "Enter Sandbox Lab",
+                "hero.cta_action_text": "Aeterna in Action",
                 "hero.lines": "LINES OF CODE",
                 "hero.lines_val": "1.85M",
                 "hero.trl": "VALIDATED",
                 "hero.trl_val": "TRL 6",
                 "hero.latency": "LATENCY",
                 "hero.latency_val": "<100ns",
-                "specs.title": "TECHNICAL <span class='text-accent-cyan'>SUPERIORITY</span>",
-                "specs.card1_title": "Rust NAPI Engine",
-                "specs.card1_desc": "Memory safety without Garbage Collection. Zero GC pauses. 128-bit precision arithmetic. Built for hard real-time security telemetry.",
-                "specs.card2_title": "16 Local AI Models",
-                "specs.card2_tag": "OFFLINE",
-                "specs.card2_desc": "Zero cloud dependency. GDPR-native by architecture. Data never leaves European jurisdiction.",
-                "specs.card3_title": "Post-Quantum Cryptography",
-                "specs.card3_desc": "Migration-ready for NIST ML-KEM and ML-DSA standards. Shielding critical energy grids and sovereign aerospace nodes for the coming decade.",
-                "specs.diag_budget": "Project Budget",
-                "specs.diag_timeline": "Execution Timeline",
-                "specs.diag_timeline_val": "24 Months",
-                "specs.diag_som": "Target SOM (5Y)",
-                "specs.diag_latency": "Swarm Latency",
-                "specs.diag_trl": "TRL 6 [CURRENT]",
-                "console.title": "CYBER-SENTINEL COMMAND CENTRE",
-                "console.subtitle": "Test AETERNA's autonomic defense capability live. Run post-quantum scans, secure communication vectors, and audit physical AI node coordination with Samsung Knox TEE safety boundaries.",
-                "console.btn_scan": "THREAT SCAN",
-                "console.btn_encrypt": "PQ ENCRYPT",
-                "console.btn_swarm": "VERIFY SWARM",
-                "console.btn_clear": "Clear Console",
-                "console.metrics_title": "LIVE SECURE METRICS",
-                "console.metric_threats": "Threats Blocked",
-                "console.metric_pqc": "Last PQ Key Rotation",
-                "console.metric_swarm": "Swarm Sync Precision",
+                
+                "specs.lab_title": "INTERACTIVE SPECIFICATIONS LAB",
+                "specs.lab_subtitle": "Explore our technical architectures at a low-level. Select any specification node to load its exhaustive documentation and execute dedicated simulations inside its sandbox terminal.",
+                
+                "tab.napi": "Rust NAPI Core",
+                "tab.swarm": "16 Local AI Models",
+                "tab.pqc": "Post-Quantum Cryptography",
+                "tab.knox": "Knox TEE Isolation",
+                
                 "timeline.title": "TECHNOLOGY READINESS PROGRESSION",
                 "timeline.subtitle": "Tracing the engineering maturity of the AETERNA cognitive core. From deep mathematical proofs to real-world critical infrastructure pilots.",
+                
                 "compliance.title": "EUROPEAN COMPLIANCE MATRIX",
                 "compliance.subtitle": "Empowering continental resilience. The AETERNA cognitive logic is engineered to satisfy the strictest criteria of the upcoming European legislative framework.",
                 "compliance.card1_title": "NIS 2 Directive Ready",
@@ -627,31 +719,436 @@
                 "compliance.card2_title": "GDPR Data Sovereignty",
                 "compliance.card2_desc": "Offline-native execution. Data remains strictly within local borders and on-premise memory blocks, completely protecting user metrics and privacy mandates from overseas intercept.",
                 "compliance.card3_title": "Cyber Resilience Act (CRA)",
-                "compliance.card3_desc": "Samsung Knox TEE hardware cryptoprocessor integration allows device lifecycle auditing, guaranteeing robust cryptographic security and immediate patching mechanisms.",
-                "pricing.title": "SOVEREIGN ACCESS PROTOCOL",
-                "pricing.subtitle": "Tiered entry to the AETERNA infrastructure. 100% deterministic billing models.",
-                "pricing.tier1_proto": "Protocol ALPHA",
-                "pricing.tier1_name": "NODE",
-                "pricing.mo": "/mo",
-                "pricing.tier1_feat1": "Local Scan Engine",
-                "pricing.tier1_feat2": "Vuln Discovery V1",
-                "pricing.tier1_feat3": "Federated Intelligence",
-                "pricing.tier1_btn": "Stripe Link",
-                "pricing.tier2_badge": "RECOMMENDED",
-                "pricing.tier2_proto": "Protocol BETA",
-                "pricing.tier2_name": "EMPIRE",
-                "pricing.tier2_feat1": "Full Self-Healing V2",
-                "pricing.tier2_feat2": "Ghost Protocol Vectors",
-                "pricing.tier2_feat3": "Priority 7.83Hz Sync",
-                "pricing.tier2_btn": "Web3 / USDC",
-                "pricing.tier3_proto": "Protocol OMEGA",
-                "pricing.tier3_name": "CORE",
-                "pricing.tier3_feat1": "On-Premise Deployment",
-                "pricing.tier3_feat2": "Custom PQC Hardening",
-                "pricing.tier3_feat3": "24/7 Forensic Audit",
-                "pricing.tier3_btn": "Tron / TRX"
+                "compliance.card3_desc": "Samsung Knox TEE hardware cryptoprocessor integration allows device lifecycle auditing, guaranteei        // Specifications Documentation Database Mapped to Vertical Tabs
+        const specDocs = {
+            napi: {
+                bg: {
+                    category: "ИЗКЛЮЧИТЕЛНО БЪРЗО ЯДРО // RUST NAPI",
+                    heading: "Rust NAPI Ядро",
+                    desc: "Спецификация за памет-безопасно, многонишково ядро без Garbage Collection (GC) забавяния.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>AVX-512 SIMD:</b> Хардуерно ускорение на векторната аритметика с 512-битови регистри за ултра-бърза IoT обработка.</li><li><b>Lock-Free Queues:</b> Диспечер VORTEX за разпределяне на задачите между 16 нишки без семафори и заключване.</li><li><b>Zero-Copy buffers:</b> Директна работа с I/O буфери без транслация на адресите или дублиране на паметта.</li><li><b>Formal Bounds Proofs:</b> Математически гарантирана памет-безопасност на компилаторно ниво.</li></ul>",
+                    metric_label: "Закъснение при цикъл",
+                    metric_val: "<86 наносекунди",
+                    status_label: "Памет-безопасност",
+                    status_val: "ПЪЛНА (100% Rust)",
+                    header_title: "AETERNA // RUST_NAPI_CORE_SANDBOX",
+                    actions: [
+                        { label: "ТЕСТ СКОРОСТ", cmd: "napi_benchmark" },
+                        { label: "ОДИТ НА ПАМЕТТА", cmd: "napi_audit" }
+                    ]
+                },
+                en: {
+                    category: "ULTRA-FAST RUNTIME // RUST NAPI",
+                    heading: "Rust NAPI Engine",
+                    desc: "Sovereign memory-safe execution layer mapping binary headers directly to C-level bindings.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>AVX-512 SIMD:</b> Hardware-accelerated vector arithmetic utilizing 512-bit register matrices.</li><li><b>Lock-Free Queues:</b> Custom VORTEX thread scheduling eliminating mutex overhead and locking.</li><li><b>Zero-Copy buffers:</b> Absolute direct access to system I/O structures with zero memory duplication.</li><li><b>Formal Bounds Proofs:</b> Mathematical memory boundary proofs compiled under strict Rust steel framework.</li></ul>",
+                    metric_label: "Thread Stride Speed",
+                    metric_val: "<86 nanoseconds",
+                    status_label: "Memory Safety",
+                    status_val: "SECURED (100% Rust)",
+                    header_title: "AETERNA // RUST_NAPI_CORE_SANDBOX",
+                    actions: [
+                        { label: "BENCHMARK SPEED", cmd: "napi_benchmark" },
+                        { label: "AUDIT MEMORY", cmd: "napi_audit" }
+                    ]
+                }
+            },
+            swarm: {
+                bg: {
+                    category: "ЛОКАЛЕН AI РОЙ // OFFLINE INTEL",
+                    heading: "16 Офлайн AI Модела",
+                    desc: "Управление на физически критични мрежи изцяло офлайн. Вградени 16 оптимизирани невронни мрежи, работещие изцяло локално.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>Air-Gapped Vectors:</b> Векторни бази данни и модели, изцяло изолирани от интернет мрежата за GDPR защита.</li><li><b>L3-Cache Binding:</b> Фиксиране на теглата на моделите в L3 кеша на процесора за мигновена инференция.</li><li><b>Schumann Sync Lock:</b> Синхронизация на 16-те възела по Шумановия резонанс от 7.83Hz срещу дрейф на часовника.</li><li><b>Resilience Core:</b> Автономно самолечение на физическите задействания при засичане на кибер-аномалия.</li></ul>",
+                    metric_label: " AI Локални Възли",
+                    metric_val: "16 Активни Модела",
+                    status_label: "Облачна връзка",
+                    status_val: "0% (ИЗОЛИРАНА)",
+                    header_title: "AETERNA // SWARM_AI_MODELS_SANDBOX",
+                    actions: [
+                        { label: "ЗАРЕДИ ТЕГЛА", cmd: "swarm_load" },
+                        { label: "СИНХРОНИЗИРАЙ", cmd: "swarm_sync" }
+                    ]
+                },
+                en: {
+                    category: "OFFLINE COGNITIVE SENTINEL // LOCAL AI",
+                    heading: "16 On-Premise Models",
+                    desc: "Full off-grid decision matrix executing deep neural inferences directly on local physical processors.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>Air-Gapped Vector Indexes:</b> Zero internet telemetry leakage. Strict local data ownership and GDPR shield.</li><li><b>L3-Cache Bound Weights:</b> Pinning optimized model weights directly to CPU caches to minimize latency.</li><li><b>Schumann Resonance Sync:</b> Coordinating 16 modular edge networks via a 7.83Hz master coordinate lock.</li><li><b>Self-Healing Swarm:</b> Dynamic local actuator state isolation upon detecting Byzantine threat patterns.</li></ul>",
+                    metric_label: "AI Neural Models",
+                    metric_val: "16 Local Networks",
+                    status_label: "Cloud Leakage Risk",
+                    status_val: "0% (AIR-GAPPED)",
+                    header_title: "AETERNA // SWARM_AI_MODELS_SANDBOX",
+                    actions: [
+                        { label: "LOAD WEIGHTS", cmd: "swarm_load" },
+                        { label: "SYNC OFF-GRID", cmd: "swarm_sync" }
+                    ]
+                }
+            },
+            pqc: {
+                bg: {
+                    category: "ПОСТ-КВАНТОВА ОТБРАНА // CRITICAL CRYPTO",
+                    heading: "Квантова Защита",
+                    desc: "Квантова защита срещу бъдещи декриптиращи суперкомпютри, работещи с алгоритъма на Шор.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>NIST ML-KEM-1024:</b> Латентно-базирано капсулиране на ключове с 8192-битова криптографска матрица.</li><li><b>ML-DSA-87:</b> Устойчиви цифрови подписи за абсолютна оторизация на хардуерните команди.</li><li><b>Quantum Immunization:</b> Защита на транзакциите и комуникациите съгласно европейските директиви за NIS 2.</li><li><b>Double-Layer Hybrid:</b> Комбиниран пост-квантов и традиционен шифър за пълна обратна съвместимост.</li></ul>",
+                    metric_label: "Криптографски стандарт",
+                    metric_val: "NIST ML-KEM-1024",
+                    status_label: "Квантова защита",
+                    status_val: "АКТИВНА (Lattice)",
+                    header_title: "AETERNA // POST_QUANTUM_CRYPTO_SANDBOX",
+                    actions: [
+                        { label: "ГЕНЕРИРАЙ КЛЮЧ", cmd: "pqc_key" },
+                        { label: "NIST СЪВМЕСТИМОСТ", cmd: "pqc_nist" }
+                    ]
+                },
+                en: {
+                    category: "QUANTUM RESISTANCE // HIGH ENCRYPTION",
+                    heading: "Post-Quantum Cryptography",
+                    desc: "Lattice-based mathematical protocols rendering data immune to future decryption attacks by quantum supercomputers.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>NIST ML-KEM-1024:</b> High-entropy lattice-based key encapsulation under Ring Learning with Errors.</li><li><b>ML-DSA-87 Signatures:</b> Mathematically hardened digital signatures validating system triggers.</li><li><b>Shor & Grover Immunization:</b> Advanced cryptographic parameters fully protecting critical nodes.</li><li><b>Hybrid Signing Layer:</b> Dual post-quantum and classical ECDSA wrapping for retroactive auditing.</li></ul>",
+                    metric_label: "Standard Suite",
+                    metric_val: "NIST ML-KEM-1024 / DSA",
+                    status_label: "Lattice Integrity",
+                    status_val: "SECURED (Post-Quantum)",
+                    header_title: "AETERNA // POST_QUANTUM_CRYPTO_SANDBOX",
+                    actions: [
+                        { label: "GENERATE KEY", cmd: "pqc_key" },
+                        { label: "NIST COMPLIANCE", cmd: "pqc_nist" }
+                    ]
+                }
+            },
+            knox: {
+                bg: {
+                    category: "ХАРДУЕРНА СИГУРНОСТ // KNOX TEE GATE",
+                    heading: "Samsung Knox TEE",
+                    desc: "Абсолютна изолация на критичните вериги за управление на хардуерно ниво чрез Trusted Execution Environment.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>ARM TrustZone:</b> Изолиран хардуерен дял, недостъпен за операционната система или зловреден софтуер.</li><li><b>Fuses-Anchored Keys:</b> Криптографските ключове са физически изгорени в силициевите предпазители (eFuses).</li><li><b>Lockout Actuators:</b> Автоматични прекъсвачи, управлявани изключително от изолираната TEE микросхема.</li><li><b>Samsung Knox API:</b> Пълен хардуерен контрол над жизнения цикъл на възлите и защита на фърмуера.</li></ul>",
+                    metric_label: "Хардуерен Слой",
+                    metric_val: "ARM TrustZone TEE",
+                    status_label: "Knox Защита",
+                    status_val: "АКТИВНА (LEVEL_4)",
+                    header_title: "AETERNA // SAMSUNG_KNOX_TEE_SANDBOX",
+                    actions: [
+                        { label: "TEE БАРИЕРИ", cmd: "knox_assert" },
+                        { label: "КЛЮЧОВ ОДИТ", cmd: "knox_audit" }
+                    ]
+                },
+                en: {
+                    category: "HARDWARE-ANCHORED ISOLATION // KNOX TEE",
+                    heading: "Samsung Knox TEE",
+                    desc: "Absolute physical compartmentalization leveraging hardware-level ARM TrustZone architectures.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>ARM TrustZone Enclaves:</b> Physically isolated secure world execution completely blocking OS-level breaches.</li><li><b>eFuse Cryptographic Storage:</b> Master signing keys burnt into hardware fuses during silicon manufacture.</li><li><b>Lockout Actuators:</b> Physical safety shutdown triggers governed exclusively inside the isolated TEE.</li><li><b>Knox Lifecycle Guard:</b> Real-time boot environment measurement auditing and active protection engines.</li></ul>",
+                    metric_label: "Hardware Enclave",
+                    metric_val: "ARM TrustZone TEE",
+                    status_label: "Knox TEE Status",
+                    status_val: "ISOLATED (LEVEL_4)",
+                    header_title: "AETERNA // SAMSUNG_KNOX_TEE_SANDBOX",
+                    actions: [
+                        { label: "ASSERT BOUNDARY", cmd: "knox_assert" },
+                        { label: "TEE KEY AUDIT", cmd: "knox_audit" }
+                    ]
+                }
+            }
+        };                    status_label: "Lattice Integrity",
+                    status_val: "SECURED (Post-Quantum)",
+                    header_title: "AETERNA // POST_QUANTUM_CRYPTO_SANDBOX",
+                    actions: [
+                        { label: "GENERATE KEY", cmd: "pqc_key" },
+                        { label: "NIST COMPLIANCE", cmd: "pqc_nist" }
+                    ]
+                }
+            },
+            knox: {
+                bg: {
+                    category: "ХАРДУЕРНА СИГУРНОСТ // KNOX TEE GATE",
+                    heading: "Samsung Knox TEE",
+                    desc: "Директно изолиране на критичните вериги в доверена среда за изпълнение (Trusted Execution Environment) на хардуерно ниво. Подписва физически задействания чрез Knox TEE, предотвратявайки зловреден софтуерен достъп.",
+                    metric_label: "Хардуерен Слой",
+                    metric_val: "ARM TrustZone TEE",
+                    status_label: "Knox Защита",
+                    status_val: "АКТИВНА (LEVEL_4)",
+                    header_title: "AETERNA // SAMSUNG_KNOX_TEE_SANDBOX",
+                    actions: [
+                        { label: "TEE БАРИЕРИ", cmd: "knox_assert" },
+                        { label: "КЛЮЧОВ ОДИТ", cmd: "knox_audit" }
+                    ]
+                },
+                en: {
+                    category: "HARDWARE-ANCHORED ISOLATION // KNOX TEE",
+                    heading: "Samsung Knox TEE",
+                    desc: "Absolute physical compartmentalization leveraging hardware-level ARM TrustZone. Cryptographically shields all automated actuators and physical swarm triggers within a secure, tamper-proof Trusted Execution Environment.",
+                    metric_label: "Hardware Enclave",
+                    metric_val: "ARM TrustZone TEE",
+                    status_label: "Knox TEE Status",
+                    status_val: "ISOLATED (LEVEL_4)",
+                    header_title: "AETERNA // SAMSUNG_KNOX_TEE_SANDBOX",
+                    actions: [
+                        { label: "ASSERT BOUNDARY", cmd: "knox_assert" },
+                        { label: "TEE KEY AUDIT", cmd: "knox_audit" }
+                    ]
+                }
             }
         };
+
+        // Bootstrap logs for each terminal instance
+        const bootstrapLogs = {
+            napi: {
+                bg: [
+                    "// ИНИЦИАЛИЗИРАНЕ НА RUST NAPI КОМПИЛАТОР...",
+                    "ВЕРСИЯ: rustc 1.76.0-nightly (NAPI_v3)",
+                    "VORTEX SCHEDULER: 16 логически ядра засичани",
+                    "SIMD ИНСТРУКЦИИ: AVX-512 АКТИВЕН",
+                    "СТАТУС: Безопасна алокация на паметта (Steel Integrity)"
+                ],
+                en: [
+                    "// INITIALIZING RUST NAPI CORE RUNTIME...",
+                    "VERSION: rustc 1.76.0-nightly (NAPI_v3)",
+                    "VORTEX SCHEDULER: 16 logical hardware threads detected",
+                    "SIMD INSTRUCTION PIPELINES: AVX-512 ACTIVE",
+                    "STATUS: Zero garbage collection overhead configured. Ready."
+                ]
+            },
+            swarm: {
+                bg: [
+                    "// ЗАРЕЖДАНЕ НА ЛОКАЛНИ AI МОДЕЛИ...",
+                    "МОДЕЛИ: 16 вградени невронни мрежи",
+                    "МАТРИЦА: Шуманова честота заключена на 7.83Hz",
+                    "GDPR: Офлайн режимът е изцяло активен (0% изтичане на данни)",
+                    "СТАТУС: AI рояците са готови за координация"
+                ],
+                en: [
+                    "// BOOTING LOCAL NEURAL COGNITIVE ENCLAVES...",
+                    "MODELS: 16 discrete edge networks loaded in memory",
+                    "MATRIX: Schumann synchronization lock activated (7.83Hz)",
+                    "GDPR: Air-gap native mode active (0.00% external telemetry leak)",
+                    "STATUS: Decentralized swarm synchronization active."
+                ]
+            },
+            pqc: {
+                bg: [
+                    "// АКТИВИРАНЕ НА ПОСТ-КВАНТОВИ АЛГОРИТМИ...",
+                    "ШИФЪР: NIST ML-KEM-1024 криптографски модул",
+                    "ПОДПИСИ: ML-DSA-87 изчислителен блок",
+                    "ЛАТЕНТНОСТ НА РЪКОСТИСКАНЕ: <4.2ms",
+                    "СТАТУС: Устойчивост срещу Shor's декриптиращ алгоритъм"
+                ],
+                en: [
+                    "// INITIALIZING POST-QUANTUM CRYPTOGRAPHIC PIPELINE...",
+                    "CIPHER MODULE: NIST ML-KEM-1024 lattice key encapsulation",
+                    "SIGNATURE ENGINE: ML-DSA-87 high-fidelity authentication",
+                    "HANDSHAKE LATENCY: <4.2ms verified",
+                    "STATUS: Permanent immunity to Shor's decryption algorithms verified."
+                ]
+            },
+            knox: {
+                bg: [
+                    "// СТАРТИРАНЕ НА ХАРДУЕРЕН АНКЕР SAMSUNG KNOX...",
+                    "TEE ХАРДУЕР: ARM TrustZone архитектура",
+                    "ЗАЩИТНА БАРИЕРА: Level 4 криптографски ключове",
+                    "АВТОМАТИЗАЦИЯ: Прекъсвачите са затворени в enclave",
+                    "СТАТУС: Външни софтуерни модификации са блокирани"
+                ],
+                en: [
+                    "// MOUNTING SAMSUNG KNOX TEE HARDWARE ANCHORS...",
+                    "TEE HARDWARE: ARM TrustZone isolated microarchitecture",
+                    "SECURITY GATE: Level 4 cryptographic lockout enforcement active",
+                    "ACTUATORS: Physical automated infusion pumps locked in TEE",
+                    "STATUS: Secure hardware enclave boots successfully. Fully isolated."
+                ]
+            }
+        };
+
+        // Active Spec Tab Configuration
+        function setSpecTab(specId) {
+            state.activeSpec = specId;
+
+            // Remove active style from tabs, add to clicked
+            document.querySelectorAll('.spec-tab').forEach(tab => {
+                tab.classList.remove('spec-tab-active');
+            });
+            document.getElementById(`tab-${specId}`).classList.add('spec-tab-active');
+
+            // Render details
+            const doc = specDocs[specId][state.lang];
+            document.getElementById('spec-category-label').textContent = doc.category;
+            document.getElementById('spec-heading').innerHTML = doc.heading;
+            document.getElementById('spec-desc').textContent = doc.desc;
+            document.getElementById('spec-metric-label').textContent = doc.metric_label;
+            document.getElementById('spec-metric-val').textContent = doc.metric_val;
+            document.getElementById('spec-status-label').textContent = doc.status_label;
+            document.getElementById('spec-status-val').textContent = doc.status_val;
+            document.getElementById('terminal-header-title').textContent = doc.header_title;
+
+            // Load Action Buttons
+            const actionsContainer = document.getElementById('terminal-actions-container');
+            actionsContainer.innerHTML = '';
+            doc.actions.forEach(act => {
+                const btn = document.createElement('button');
+                btn.onclick = () => runActiveCommand(act.cmd);
+                btn.className = "px-5 py-2.5 bg-accent-cyan hover:bg-white text-black font-extrabold text-[10px] tracking-widest font-mono uppercase rounded transition-all shadow-md hover:-translate-y-0.5";
+                btn.textContent = act.label;
+                actionsContainer.appendChild(btn);
+            });
+
+            // Initialize Terminal Logs
+            renderTerminalHistory(specId);
+        }
+
+        // Render Terminal Screen History
+        function renderTerminalHistory(specId) {
+            const screen = document.getElementById('terminal-screen');
+            screen.innerHTML = '';
+
+            // Load Bootstrap Logs
+            const boots = bootstrapLogs[specId][state.lang];
+            boots.forEach(line => {
+                const div = document.createElement('div');
+                div.className = 'text-gray-500';
+                div.textContent = line;
+                screen.appendChild(div);
+            });
+
+            // Load Custom Historic logs for this tab
+            const history = state.terminalHistory[specId];
+            history.forEach(line => {
+                const div = document.createElement('div');
+                if (line.includes('УСПЕХ') || line.includes('SUCCESS')) {
+                    div.className = 'text-accent-emerald font-bold';
+                } else if (line.includes('ML-') || line.includes('KNOX') || line.includes('VORTEX')) {
+                    div.className = 'text-accent-cyan';
+                }
+                div.textContent = line;
+                screen.appendChild(div);
+            });
+
+            screen.scrollTop = screen.scrollHeight;
+        }
+
+        // Run Tab-Specific Sandbox Commands
+        function runActiveCommand(cmd) {
+            const time = new Date().toLocaleTimeString();
+            let logLines = [];
+
+            if (cmd === 'napi_benchmark') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [VORTEX] Стартиране на 16-нишков SIMD бенчмарк...`,
+                        `[${time}] [AVX-512] Изпълнени са 4.2 милиарда float операции...`,
+                        `[${time}] [BENCHMARK] Скорост на диспечер: 86 наносекунди`,
+                        `[${time}] [УСПЕХ] Тестът завърши успешно. Системно ускорение: 8.4x.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [VORTEX] Executing parallel SIMD speed tests (16 hardware threads)...`,
+                        `[${time}] [AVX-512] Evaluated 4.2 billion float metrics in real-time...`,
+                        `[${time}] [BENCHMARK] VORTEX scheduler thread latency: 86ns`,
+                        `[${time}] [SUCCESS] Benchmark complete. Hardware performance multiplier: 8.4x.`
+                    ];
+                }
+            } else if (cmd === 'napi_audit') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [MEM] Сканиране за утечки на памет в Rust алокатора...`,
+                        `[${time}] [SAFETY] Проверка на аритметични препълвания (128-bit)...`,
+                        `[${time}] [УСПЕХ] Намерени утечки: 0 байта. Памет-безопасността е непокътната.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [MEM] Scanning binary allocator blocks for memory leaks...`,
+                        `[${time}] [SAFETY] Checking for integer arithmetic overflows (128-bit registry)...`,
+                        `[${time}] [SUCCESS] Leaks discovered: 0 bytes. Zero GC-pauses confirmed.`
+                    ];
+                }
+            } else if (cmd === 'swarm_load') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [AI] Зареждане на локални тегла за 16 невронни мрежи...`,
+                        `[${time}] [ON-PREMISE] Компилиране на векторни бази за GDPR съвместимост...`,
+                        `[${time}] [УСПЕХ] Всички AI модели са заредени в L3 кеша с 0% външна връзка.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [AI] Compiling offline tensor structures for 16 models...`,
+                        `[${time}] [ON-PREMISE] Hardening local vector indexes for GDPR air-gapping...`,
+                        `[${time}] [SUCCESS] SWARM AI models loaded in L3 cache. Zero cloud dependencies.`
+                    ];
+                }
+            } else if (cmd === 'swarm_sync') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [7.83HZ] Стартиране на роева синхронизация с Шумановия резонанс...`,
+                        `[${time}] [TELEMETRY] Изравняване на системния часовник с нулев дрейф...`,
+                        `[${time}] [УСПЕХ] Всички локални AI възли са калибрирани в перфектен синхрон.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [7.83Hz] Aligning swarm hardware clocks to Schumann Resonance frequency...`,
+                        `[${time}] [TELEMETRY] Auditing off-grid telemetry frames for synchronization drift...`,
+                        `[${time}] [SUCCESS] Swarm network clocks synchronized perfectly. Drift: <0.01ms.`
+                    ];
+                }
+            } else if (cmd === 'pqc_key') {
+                const randomHex = "0x" + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16).toUpperCase()).join('');
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [LATTICE] Извеждане на пост-квантова двойка ключове...`,
+                        `[${time}] [ML-KEM] Генериране на капсулиран таен ключ (1024-bit)...`,
+                        `[${time}] [УСПЕХ] Генериран пост-квантов хеш ключ: ${randomHex}`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [LATTICE] Generating high-entropy lattice-based keypair...`,
+                        `[${time}] [ML-KEM] NIST ML-KEM-1024 public/private key encapsulation complete...`,
+                        `[${time}] [SUCCESS] Active Post-Quantum key derived: ${randomHex}`
+                    ];
+                }
+            } else if (cmd === 'pqc_nist') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [NIST] Проверка за съвместимост с регулациите на ЕС...`,
+                        `[${time}] [ML-DSA] Тестване на цифрови подписи за криптографска устойчивост...`,
+                        `[${time}] [УСПЕХ] Криптографската мрежа е напълно съвместима с NIST ML-DSA стандарти.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [NIST] Auditing lattice parameters against EU compliance directives...`,
+                        `[${time}] [ML-DSA] Verifying cryptographic digital signature matrices...`,
+                        `[${time}] [SUCCESS] Post-Quantum cipher completely certified for NIS 2 standards.`
+                    ];
+                }
+            } else if (cmd === 'knox_assert') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [KNOX] Проверка на изолационните бариери на TEE enclaves...`,
+                        `[${time}] [TRUSTZONE] Спиране на неоторизирани софтуерни повиквания...`,
+                        `[${time}] [УСПЕХ] TEE бариерите са стабилни. Всички хардуерни прекъсвачи са изолирани.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [KNOX] Auditing physical isolation barriers in isolated ARM enclaves...`,
+                        `[${time}] [TRUSTZONE] Blocking non-secure system service calls to physical ports...`,
+                        `[${time}] [SUCCESS] TEE hardware boundaries secure. System lockout rules enforced.`
+                    ];
+                }
+            } else if (cmd === 'knox_audit') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [TEE] Изпълнение на одит на цифрови ключове в защитена памет...`,
+                        `[${time}] [AUDIT] Валидиране на Samsung Knox хардуерни сертификати...`,
+                        `[${time}] [УСПЕХ] Knox TEE одитът е успешен. Сертификат за хардуерен интегритет: ОДОБРЕН.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [TEE] Auditing secure hardware keys stored inside tamper-proof silicon...`,
+                        `[${time}] [AUDIT] Running Samsung Knox cryptographic signature verification...`,
+                        `[${time}] [SUCCESS] Secure key store audited successfully. Integrity: APPROVED.`
+                    ];
+                }
+            }
+
+            // Save to internal state history
+            state.terminalHistory[state.activeSpec].push(...logLines);
+
+            // Re-render
+            renderTerminalHistory(state.activeSpec);
+        }
+
+        function clearActiveTerminal() {
+            state.terminalHistory[state.activeSpec] = [];
+            renderTerminalHistory(state.activeSpec);
+        }
 
         // TRL Steps Details Database
         const trlData = {
@@ -717,87 +1214,6 @@
             }
         };
 
-        // Live Command Simulator Logic
-        function runCommand(command) {
-            const screen = document.getElementById('terminal-screen');
-            const time = new Date().toLocaleTimeString();
-            
-            let logLines = [];
-            
-            if (command === 'scan') {
-                if (state.lang === 'bg') {
-                    logLines = [
-                        `[${time}] [INGRESS] Стартиране на физически скенер за кибер-заплахи...`,
-                        `[${time}] [KNOX TEE] Одит на целостта на криптографския чип...`,
-                        `[${time}] [NIS 2] Сканиране на периферните мрежови съединения...`,
-                        `[${time}] [УСПЕХ] Открити аномалии: 0. Системата е 100% стабилна.`
-                    ];
-                } else {
-                    logLines = [
-                        `[${time}] [INGRESS] Initiating physical infrastructure security audit...`,
-                        `[${time}] [KNOX TEE] Auditing hardware-anchored cryptoprocessor lifecycle...`,
-                        `[${time}] [NIS 2] Checking smart-grid critical connection paths...`,
-                        `[${time}] [SUCCESS] Anomalies detected: 0. System integrity: STEEL.`
-                    ];
-                }
-                state.threatCount += Math.floor(Math.random() * 5) + 3;
-                document.getElementById('metric-threats').textContent = state.threatCount.toLocaleString();
-            } else if (command === 'encrypt') {
-                const randomHex = "0x" + Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16).toUpperCase()).join('');
-                if (state.lang === 'bg') {
-                    logLines = [
-                        `[${time}] [CRYPT] Ротация на пост-квантови ключове...`,
-                        `[${time}] [ML-KEM] Ротация на NIST ML-KEM-1024 споделена тайна...`,
-                        `[${time}] [ML-DSA] Подписване на криптографски ръкостискания през Knox TEE...`,
-                        `[${time}] [УСПЕХ] Активен PQC Хеш: ${randomHex}`
-                    ];
-                } else {
-                    logLines = [
-                        `[${time}] [CRYPT] Rotating Post-Quantum cryptographic matrices...`,
-                        `[${time}] [ML-KEM] Instantiating NIST ML-KEM-1024 handshakes...`,
-                        `[${time}] [ML-DSA] Cryptographic handshake signed via local Knox TEE...`,
-                        `[${time}] [SUCCESS] Quantum-Safe session established with key: ${randomHex}`
-                    ];
-                }
-                document.getElementById('metric-pqc-key').textContent = randomHex;
-            } else if (command === 'swarm') {
-                if (state.lang === 'bg') {
-                    logLines = [
-                        `[${time}] [SWARM] Проверка на роевия интегритет на физическите AI дрони...`,
-                        `[${time}] [7.83HZ] Заключване на честотната Шуман-синхронизация...`,
-                        `[${time}] [LOCAL] Стартиране на авариен автономен офлайн протокол...`,
-                        `[${time}] [УСПЕХ] Координатен дрейф на рояка: <1см (ПЪЛЕН СИНХРОН).`
-                    ];
-                } else {
-                    logLines = [
-                        `[${time}] [SWARM] Verifying coordinate telemetry of physical AI drone swarms...`,
-                        `[${time}] [7.83Hz] Aligning system time to Schumann Resonance lock...`,
-                        `[${time}] [LOCAL] Running Knox-hardware off-grid recovery loops...`,
-                        `[${time}] [SUCCESS] Swarm node precision aligned with 0% drift (<1cm limit).`
-                    ];
-                }
-                document.getElementById('metric-swarm-sync').textContent = (state.lang === 'bg') ? "ЗАКЛЮЧЕНА (7.83Hz)" : "LOCKED (7.83Hz)";
-            }
-
-            logLines.forEach(line => {
-                const div = document.createElement('div');
-                if (line.includes('УСПЕХ') || line.includes('SUCCESS')) {
-                    div.className = 'text-accent-emerald font-bold';
-                } else if (line.includes('KNOX') || line.includes('ML-')) {
-                    div.className = 'text-accent-cyan';
-                }
-                div.textContent = line;
-                screen.appendChild(div);
-            });
-
-            screen.scrollTop = screen.scrollHeight;
-        }
-
-        function clearTerminal() {
-            const screen = document.getElementById('terminal-screen');
-            screen.innerHTML = `<div class="text-gray-500">// Terminal cleared. AETERNA active and ready...</div>`;
-        }
-
         // TRL Steps Progression Slider Logic
         function setTRLStep(step) {
             state.trlStep = step;
@@ -840,18 +1256,11 @@
                 }
             });
 
-            // Status updates and dynamically rendered details
-            setTRLStep(state.trlStep);
-            document.getElementById('console-status-text').textContent = (langCode === 'bg') ? "СТАТУС: АКТИВЕН АВТОНОМЕН РЕФЛЕКС НА ХАРДУЕРА" : "OFF-GRID HARDWARE RECOVERY SYSTEM ACTIVE";
+            // Adjust spec tabs dynamic loads
+            setSpecTab(state.activeSpec);
             
-            // Adjust placeholders or dynamic fields
-            const threatsElement = document.getElementById('metric-threats');
-            threatsElement.textContent = state.threatCount.toLocaleString();
-
-            const syncElement = document.getElementById('metric-swarm-sync');
-            if (syncElement.textContent.includes("ЗАКЛЮЧЕНА") || syncElement.textContent.includes("LOCKED")) {
-                syncElement.textContent = (langCode === 'bg') ? "ЗАКЛЮЧЕНА (7.83Hz)" : "LOCKED (7.83Hz)";
-            }
+            // Adjust TRL slider dynamic loads
+            setTRLStep(state.trlStep);
         }
 
         // Initialize App on Page Load
