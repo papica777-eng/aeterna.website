@@ -21,12 +21,12 @@
 ## 🌌 The Deep Tech Singularity: Technological Sovereignty
 AETERNA is not an LLM wrapper or a standard web application. It is a **Sovereign Autonomous Cybersecurity & Quality Assurance Platform**, engineered from the silicon up in Erlang/BEAM, Rust, Zig, and TypeScript. Developed specifically under **Horizon Europe (EIC Accelerator 2026)**, it is designed to operate completely independently of foreign cloud monopolies, securing Europe's digital autonomy while providing a robust, self-healing, zero-panic, and zero-float infrastructure for businesses.
 
-This repository serves as the **official master hub for the EIC Accelerator Step 2 Technical & Commercialization Review**, reflecting the exact data submitted in our **Official Full Application (Grant №101327948)**.
+This repository serves as the **official master hub for the EIC Accelerator Step 1 and Step 2 Unified Defense Portfolio**, representing our submitted **Official Proposal (Grant №101327948 / Submission SEP-211301397)** on **26 February 2026** and the subsequent Step 2 materials.
 
 ---
 
-## 📁 EIC Step 2 Interview Defense Package
-We have integrated our full, final-stage interview defense materials directly into this repository. Click any of the briefs below to explore our comprehensive strategic defense:
+## 📁 EIC Unified Defense & Portfolio Package
+We have integrated our full, final-stage interview defense materials and original Step 1 submission documents directly into this repository. Click any of the briefs below to explore our comprehensive strategic defense:
 
 | # | EIC Defense Package Document | Core Strategic Focus & Purpose | Status |
 |---|-----------------------------|--------------------------------|--------|
@@ -36,6 +36,7 @@ We have integrated our full, final-stage interview defense materials directly in
 | 04 | **[5-Year Financial Model](eic/04_FINANCIAL_MODEL_5YEAR.md)** | Granular financial projections: customer tiers (Node, Sovereign, Galactic), Y3 target of **€2.34M ARR**, and break-even scheduled for **Month 22**. | **✅ Finalized** |
 | 05 | **[TRL 6 Evidence Package](eic/05_TRL_EVIDENCE_PACKAGE.md)** | Rigorous verification matrix mapping compiled binaries, cryptographic self-healing mirrors, and zero-float compliance. | **✅ Finalized** |
 | 06 | **[Pre-Interview Master Index](eic/00_MASTER_INDEX.md)** | Pre-interview checkpoints, success metrics, emergency fail-safe responses, and essential facts/numbers. | **✅ Finalized** |
+| 07 | **[Official Step 1 Proposal (26 Feb 2026)](eic/06_OFFICIAL_STEP1_PROPOSAL.md)** | The original submitted Horizon Europe Proposal №101327948 / SEP-211301397, locking in AETERNA's core specifications. | **✅ Integrated** |
 
 ---
 

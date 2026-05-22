@@ -13,6 +13,8 @@
 | 03 | [Q&A Preparation (53 Questions)](./03_QA_PREPARATION_53_QUESTIONS.md) | Defense guide for 35-min interrogation | ~15 |
 | 04 | [Financial Model (5 Year)](./04_FINANCIAL_MODEL_5YEAR.md) | Revenue, P&L, cash flow, sensitivity | ~6 |
 | 05 | [TRL Evidence Package](./05_TRL_EVIDENCE_PACKAGE.md) | TRL 6 evidence chain + demo protocol | ~5 |
+| 06 | [Official Step 1 Proposal](./06_OFFICIAL_STEP1_PROPOSAL.md) | Submitted Horizon Europe Proposal (№101327948) | ~16 |
+
 
 ---
 
