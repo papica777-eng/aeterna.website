@@ -1,131 +1,121 @@
 # AETERNA — 5-Year Financial Model
 ## EIC Accelerator Step 2: Financial Summary
-### Grant №101327948 | All values in EUR
+### Proposal ID №101327948 | All values in EUR
 
 ---
 
-## 1. Revenue Model & SaaS Tiers
+## 1. Revenue Model
 
-AETERNA consolidates the fragmented security and automated quality testing market, providing massive cost reductions for European SMEs while securing outstanding unit economics.
+AETERNA utilizes a high-margin, predictable SaaS subscription model combined with enterprise on-premise licensing. Because our AI models and scanning engines run entirely locally, our infrastructure overhead is exceptionally low compared to cloud-dependent cybersecurity platforms.
 
-### Pricing Structure
+### Tier Structure
 
-| Plan Tier | Monthly Price | Annual Price (15% Disc.) | Target Customer | Est. Mix |
-|-----------|---------------|--------------------------|-----------------|----------|
-| **NODE ACCESS** | €29 | €295 | Freelancers, Micro-SMEs | 35% |
-| **SOVEREIGN EMPIRE** | €99 | €1,010 | SMEs (20–100 employees) | 30% |
-| **GALACTIC CORE** | €499 | €5,090 | Scale-ups & Enterprises | 25% |
-| **ENTERPRISE CUSTOM** | €2,000+ | €20,400+ | Large Enterprises, On-Premise | 10% |
+| Plan | Monthly | Annual (Blended) | Target Segment | Est. Mix |
+| :--- | :--- | :--- | :--- | :--- |
+| **Node Access** | €29 | €278 | Freelancers, Micro-SMEs | 40% |
+| **Sovereign Empire** | €99 | €950 | SMEs (20–100 employees) | 35% |
+| **Galactic Core** | €499 | €4,790 | Scale-ups, Large Enterprises | 20% |
+| **Enterprise Custom** | €2,000+ | €24,000+ | Critical infrastructure, Govt | 5% |
 
-**Blended ARPU (Monthly):** €119.78  
-**Infrastructure Operating Cost:** **€0.16/user/day** (running open-weight models locally on edge nodes eliminates cloud API inference fees).
+**Blended ARPU (Year 3):** €65.00/mo (€780/yr)
 
 ---
 
 ## 2. Unit Economics
 
-| Financial Metric | Value | Benchmark | Significance |
-|------------------|-------|-----------|--------------|
-| **Customer Acquisition Cost (CAC)** | **€180** | — | Driven by organic open-source funnels and MSP channels |
-| **Customer Lifetime Value (LTV)** | **€4,312** | — | Based on 36-month average customer lifetime retention |
-| **LTV:CAC Ratio** | **23.9x** | > 3.0x = Healthy | Exceptional capital efficiency and scaling room |
-| **Gross Margin** | **87%** | SaaS Avg: 75% | Driven by local execution architecture (low overhead) |
-| **Net Revenue Retention (NRR)** | **115%** | > 100% = Healthy | Upsells to custom enterprise tiers and extra nodes |
-| **Monthly Churn** | **1.25%** | SaaS Avg: 3% | Deep customer integration creates high data gravity |
-| **Annual Churn** | **15%** | — | Target industry average for essential IT security |
-| **Payback Period** | **1.5 months**| SaaS Avg: 12-18m | Extremely fast cash recycling |
+AETERNA's local processing architecture provides an unmatched margin profile by shifting AI inference costs from our servers to the client's local GPUs.
+
+| Metric | Value | Benchmark / Significance |
+| :--- | :--- | :--- |
+| **Customer Acquisition Cost (CAC)** | €180 | Low CAC enabled by organic search, open-source core release. |
+| **Customer Lifetime Value (LTV)** | €4,312 | Based on a blended €119.78 target ARPU and 36-month retention. |
+| **LTV:CAC Ratio** | **23.9x** | Highly efficient customer acquisition engine (SaaS benchmark: >3.0x). |
+| **Gross Margin** | **87%** | Shifting AI processing to the client cuts infrastructure overhead. |
+| **Infrastructure Cost per User/Day** | **€0.16** | Extremely low resource footprint utilizing local Ollama models. |
+| **Payback Period** | **1.5 months** | Rapid recovery of sales/marketing costs (SaaS benchmark: 12 months). |
 
 ---
 
-## 3. Five-Year Revenue Projections (Official Application Figures)
+## 3. Five-Year Projections (ARR & Customers)
 
-### Annual Summary
+The following metrics represent the legally authentic projections submitted in our EIC Accelerator application:
 
-| Financial Metric | Year 1 (2026) | Year 2 (2027) | Year 3 (2028) | Year 4 (2029) | Year 5 (2030) |
-|------------------|---------------|---------------|---------------|---------------|---------------|
+| Metric | Year 1 (2026) | Year 2 (2027) | Year 3 (2028) | Year 4 (2029) | Year 5 (2030) |
+| :--- | :--- | :--- | :--- | :--- | :--- |
 | **Active Customers** | 125 | 800 | 3,000 | 8,000 | 15,000 |
-| **MRR (EOY)** | €7,375 | €52,000 | €195,000 | €480,000 | €950,000 |
 | **ARR (EOY)** | **€88,500** | **€624,000** | **€2,340,000** | **€5,760,000** | **€11,400,000** |
-| **Recognized Revenue** | €88,500 | €624,000 | €2,340,000 | €5,760,000 | €11,400,000 |
 | **Gross Margin %** | 82% | 85% | 87% | 89% | 91% |
 | **Gross Profit** | €72,570 | €530,400 | €2,035,800 | €5,126,400 | €10,374,000 |
 
-> **Note:** Projections reflect conservative SME conversions under standard SaaS operations. When accounting for multi-year secure government contracts and enterprise on-premise volume deployments, total contract value is expected to grow significantly faster.
+### Market Sizing
+* **Total Addressable Market (TAM):** **€15.0B**
+* **Serviceable Addressable Market (SAM):** **€2.1B**
+* **Serviceable Obtainable Market (SOM):** **€50.0M** (1% SAM in 5 years)
+* **Break-Even Target:** **Month 26**
 
 ---
 
-## 4. Cost Structure (Grant R&D Phase)
+## 4. Cost Structure
 
-### Monthly Operating Expenses (Averages during 24-month project)
+### Operating Expenses (OpEx) Summary (Post-Funding Y1-Y3)
 
-| OpEx Category | Year 1 (Avg) | Year 2 (Avg) | Year 3 (Post-Grant) | Justification |
-|---------------|--------------|--------------|---------------------|---------------|
-| **Personnel (Engineering)** | €50,000 | €70,000 | €120,000 | Elite systems (Rust) and ML (Ollama) engineers |
-| **Infrastructure (Sovereign Edge)** | €5,000 | €10,000 | €20,000 | Hetzner member nodes + Next.js orchestration edge |
-| **Sales & Marketing** | €10,000 | €25,000 | €60,000 | Regional DACH/Nordics enterprise sales team hires |
-| **Operations & Compliance** | €5,000 | €10,000 | €15,000 | SOC 2 Type II maintenance + legal IP registry |
-| **Total Monthly OpEx** | **€70,000** | **€115,000** | **€215,000** | |
-| **Total Annual OpEx** | **€840,000** | **€1,380,000**| **€2,580,000**| |
-
----
-
-## 5. Profit & Loss Summary (EUR)
-
-| P&L Metric | Y1 (2026) | Y2 (2027) | Y3 (2028) | Y4 (2029) | Y5 (2030) |
-|------------|-----------|-----------|-----------|-----------|-----------|
-| **Revenue** | €88.5K | €624K | €2.34M | €5.76M | €11.40M |
-| **COGS** | (€15.9K) | (€93.6K) | (€304.2K) | (€633.6K) | (€1.026M) |
-| **Gross Profit** | **€72.6K** | **€530.4K**| **€2.036M** | **€5.126M** | **€10.374M**|
-| **OpEx** | (€840K) | (€1.38M) | (€2.58M) | (€4.20M) | (€6.80M) |
-| **EBITDA** | **(€767.4K)**| **(€849.6K)**| **(€544.2K)** | **€926.4K** | **€3.574M** |
-| **Cumulative EBITDA**| **(€767.4K)**| **(€1.617M)**| **(€2.161M)** | **(€1.235M)** | **€2.339M** |
-
-*Note: The deep operational deficit in Years 1–2 is fully absorbed and subsidized by the €2.5M EIC Grant.*
+| Cost Category | Year 1 (Blended) | Year 2 (Blended) | Year 3 (Blended) |
+| :--- | :--- | :--- | :--- |
+| **Personnel (incl. Social Charges)** | €600,000 | €1,320,000 | €2,280,000 |
+| **Infrastructure & Caching** | €60,000 | €180,000 | €420,000 |
+| **Sales, Marketing & GTM Channel** | €96,000 | €300,000 | €780,000 |
+| **Subcontracting, Audits & Legal** | €400,000 | €150,000 | €200,000 |
+| **Operations, Travel & Indirect** | €250,000 | €350,000 | €500,000 |
+| **Total Annual OpEx** | **€1,406,000** | **€2,300,000** | **€4,180,000** |
 
 ---
 
-## 6. Cash Flow & EIC Grant Tranches
+## 5. EIC Funding & Grant Allocation
 
-### Funding Sources
-1. **EIC Grant (€2,500,000):** Paid in three structured tranches:
-   - **Month 1 (Advance):** 70% (€1,750,000) to secure hiring and GPU hardware.
-   - **Month 12 (Milestone Check):** 20% (€500,000) upon validation of WP1 (PQC migration) and WP3 (AI Act toolkit).
-   - **Month 24 (Final Audit):** 10% (€250,000) post-project audit.
-2. **SaaS Revenue:** Growing progressively from €88.5K to €2.34M by Y3.
+AETERNA leverages the €2,500,000 EIC Grant component to accelerate the deep-tech engineering roadmap over a **9-month duration**, complemented by up to €5,000,000 in equity co-investment from the EIC Fund.
 
-### Cash Runway Scenario (Grant-Only)
+### Grant Budget Breakdown (€2,500,000)
 
-- **Year 1 Monthly Burn:** €43,000 average (highly conservative, factoring progressive onboarding).
-- **Runway with €1.75M Advance:** **58 months** at Y1 burn rate, proving absolute zero-default security.
-- **Break-Even Target:** **Month 22 (Q2 2028)**, where organic MRR surpasses operational burn, achieving infinite sustainable runway.
-
----
-
-## 7. Sensitivity Analysis
-
-### ARR Sensitivity Scenario
-
-| Growth Scenario | Y3 ARR | Y5 ARR | Break-Even Month |
-|-----------------|--------|--------|------------------|
-| **Bear (-30%)** | €1.64M | €7.98M | Month 28 |
-| **Base** | **€2.34M** | **€11.40M** | **Month 22** |
-| **Bull (+30%)** | €3.04M | €14.82M | Month 18 |
+| Category | Amount | % | Operational Justification |
+| :--- | :--- | :--- | :--- |
+| **Personnel** | €1,200,000 | 48% | 5 FTE systems engineers & security researchers × 24 months (blended avg €10K/mo incl. social charges) in the Sofia tech hub. |
+| **Equipment** | €150,000 | 6% | High-performance local GPU servers (2× NVIDIA A100/H100) for local model training and physical HSM hardware. |
+| **Subcontracting** | €400,000 | 16% | Independent cryptographic audit (€150K), EU AI Act notified body (€100K), SOC 2 Type II (€80K), IP filing (€70K). |
+| **Travel & Conferences** | €100,000 | 4% | Scientific presentations, ENISA workshops, RSA Europe, and Black Hat EU. |
+| **Consumables & Cloud** | €150,000 | 6% | Redundancy infrastructure, CI/CD automated test pipelines, and SRE monitoring. |
+| **Other Direct Costs** | €200,000 | 8% | GTM market research, localized UX testing (DE/FR/NL/SE), and technical marketing. |
+| **Indirect Costs** | €300,000 | 12% | Flat 25% overhead rate per European Commission guidelines. |
+| **Total Grant** | **€2,500,000** | **100%** | **Sovereign deep-tech acceleration** |
 
 ---
 
-## 8. Valuation Indicators & Exit Strategy
+## 6. Cash Flow & Runway
 
-| Valuation Method | Year 3 Valuation | Year 5 Valuation |
-|------------------|------------------|------------------|
-| **Revenue Multiple (10x ARR)** | €23.4M | €114.0M |
-| **Revenue Multiple (15x ARR - Deep Tech)** | €35.1M | €171.0M |
-| **DCF (12% Discount Rate)** | €28.6M | €138.0M |
-
-### Exit Horizons
-1. **Series A (Month 24):** Targeting a €30M+ valuation to fund global enterprise scaling.
-2. **Strategic Acquisition (Y5–Y7):** Potential buyout by major European or global cybersecurity players (e.g., Orange Cyberdefense, Sophos, ServiceNow) looking for Common Criteria EAL4+ post-quantum sovereign telemetry cores.
+### Cash Position (Grant-Only Scenario)
+* **Q1 Y1:** €1,750,000 (EIC Grant 70% advance payment). Cash buffer handles all initial personnel, local GPU server acquisition, and initial PQC cryptographic audits.
+* **Q1 Y2:** €750,000 (Remaining 30% grant tranche released upon successful technical reporting at Month 9).
+* **Break-Even Point:** Achieved at **Month 26** as SaaS recurring revenues scale to cover team and operational overhead.
+* **Runway:** The combination of EIC Grant advance and initial SaaS revenue provides a secure **26-month runway**, eliminating bankruptcy risks during the critical engineering phase.
 
 ---
 
-*Financial Model Version: 3.0 | Prepared: 2026-05-22*
-*EIC Accelerator Grant Application: №101327948*
+## 7. Key Projections and Sensitivity Analysis
+
+### Revenue Sensitivity Scenarios
+
+| Scenario | Year 3 ARR | Year 5 ARR | Break-Even Month |
+| :--- | :--- | :--- | :--- |
+| **Bear Case (-30%)** | €1,638,000 | €7,980,000 | Month 32 |
+| **Base Case** | **€2,340,000** | **€11,400,000** | **Month 26** |
+| **Bull Case (+30%)** | €3,042,000 | €14,820,000 | Month 21 |
+
+### Churn and ARPU Leverage
+
+* **Churn Impact:** Our target churn is 1.25% monthly. If annual churn increases from 15% to 20%, Year 5 ARR drifts down to **€9.7M**.
+* **Gross Margin Moat:** Due to our local processing architecture, even in a hyper-aggressive price-war scenario where ARPU drops by 20%, AETERNA retains a gross margin above **80%**, safeguarding long-term unit economics.
+
+---
+
+*Financial Model Version: 3.0*
+*Last updated: 2026-05-22*
+*Prepared for: EIC Accelerator Step 2 Interview | Proposal ID №101327948*

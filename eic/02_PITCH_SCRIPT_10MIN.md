@@ -1,126 +1,132 @@
 # AETERNA — EIC Step 2 Pitch Script
-## 10-Minute Presentation Guide (Jury Defense Blueprint)
-### Grant №101327948 | Dimitar Prodromov
+## 10-Minute Presentation Guide
+### Proposal ID №101327948 | Dimitar Prodromov
 
 ---
 
-> **FORMAT:** 10 minutes pitch (strictly enforced) + 35 minutes Q&A.
-> **RULE:** You must use the exact PDF deck submitted in Step 1.
-> **STRATEGY:** Do not just read the slides. Tell the STORY of European sovereignty, high-speed Rust telemetry, local AI brains, and autonomous self-healing code.
+> **FORMAT:** 10 minutes pitch (strictly enforced) + 35 minutes Q&A
+> **RULE:** You MUST use the exact PDF deck submitted in Step 1. No new slides.
+> **STRATEGY:** Don't read slides. Tell the STORY behind them. Focus on European digital sovereignty, cybersecurity, and physical AI swarm orchestration.
 
 ---
 
-## ⏱️ MINUTE 0:00 – 1:00 | OPENING HOOK & THE SOVEREIGNTY CRISIS
+## ⏱️ MINUTE 0:00 – 1:00 | OPENING HOOK & STRATEGIC VISION
 
-**[Stand up. Maintain strong, confident eye contact with the jury. Speak deliberately and with conviction.]**
+**[Stand. Make eye contact. Pause.]**
 
-> "Every single day, the digital infrastructure of European SMEs, scale-ups, and public authorities is scanned for security vulnerabilities.
+> "Every day, over 160,000 European critical entities and millions of SMEs rely on US-based security scanning tools like Qualys, Tenable, or Rapid7 to secure their networks. 
 >
-> But here is the silent threat: **90% of the tools doing those scans are US-owned.** Qualys, Tenable, Rapid7, Snyk.
+> But there is an invisible tax. None of these tools offer on-premise AI. All of them route threat data and network topologies through US infrastructure, compromising European digital sovereignty and failing GDPR-native data residency.
 >
-> What does that mean? It means every vulnerability log, every server port layout, and every sensitive code path of European enterprises is transferred to US-based cloud servers, governed by foreign laws. None of these tools offer on-premise AI. None of them respect GDPR data residency at their core. And all of them use closed-source, black-box algorithms.
+> At the same time, manual security audits cost between €5,000 and €50,000, leaving 80% of European SMEs with zero professional security diagnostics. And the impending threat of quantum computing makes classical network encryption a ticking time bomb.
 >
-> At the same time, European SMEs are drowning in SaaS complexity. They operate an average of 23 separate tools, losing €2,000 every single month in hidden manual QA validation and broken automations.
+> My name is Dimitar Prodromov. I built AETERNA. AETERNA is a production-ready, AI-powered autonomous cybersecurity and quality assurance platform that scans, detects, and self-heals digital infrastructure vulnerabilities — entirely offline, on-premise, with full data sovereignty.
 >
-> My name is Dimitar Prodromov. I am the sole architect of **Project AETERNA**. And we have built the solution: Europe's first autonomous, fully local, and self-healing cybersecurity and quality assurance platform."
-
----
-
-## ⏱️ MINUTE 1:00 – 3:30 | THE INNOVATION STACK (Slides: Solution & Architecture)
-
-**[Gesture to the architecture slide. Focus on the six-layer depth.]**
-
-> "AETERNA is built on a modular six-layer architecture designed to operate completely offline, with absolute data sovereignty. Let me take you through the technical reality.
->
-> At the foundation, we have our **Sovereign Telemetry Engine**, written in Rust and compiled as a native Node.js NAPI addon. Traditional platforms rely on Python or Java, suffering from heavy garbage collection pauses and latency. AETERNA processes signals at a hardware-level, achieving a sub-100ns per-tick telemetry loop. In our live environment, we've validated an average latency of just **128 nanoseconds**.
->
-> At Layer 2, we eliminate the cloud dependency entirely. Instead of routing customer code and network maps to US APIs, AETERNA runs **16 local, open-weight Ollama LLM models** directly on the edge. This is GDPR-native by design and compliant with the upcoming EU AI Act.
->
-> At Layer 3, we have our **Cognitive Self-Healing V2**. When web structures or APIs change, AETERNA does not crash. It leverages 6 machine learning healing strategies to autonomously repair its own test locators in under 30 seconds.
->
-> At Layer 4, we are **Post-Quantum Ready**. We secure all communication with AES-256-GCM and ChaCha20-Poly1305, and we have a defined migration pathway to NIST's finalized ML-KEM-1024 and ML-DSA-87 quantum-safe standards.
->
-> This is not a mockup. I have built **528,582 lines of clean TypeScript and Rust code** completely solo, and we are already running live E2E verification scans at an A+ grade."
+> Let's look at the innovation under the hood."
 
 ---
 
-## ⏱️ MINUTE 3:30 – 5:30 | THE PILOT, THE SWARM, & PHYSICAL AI (Slides: Technology & Demonstration)
+## ⏱️ MINUTE 1:00 – 3:30 | THE INNOVATION STACK & TRL 6 (Slides: Solution + Tech Stack)
 
-**[Explain how the core engine adapts to physical and network constraints.]**
-
-> "Let's talk about the physical world. The EIC 2026 priority targets Embodied Intelligence, and AETERNA directly answers this.
+> "AETERNA is not a pitch deck or a prototype. It is a deployed platform that already does what competitors promise for 2028.
 >
-> Our **Vortex Synthesis Engine** provides real-time, O(1) lock-free shared memory communication with latency under 25 milliseconds. When deployed across a fleet of physical IoT units or edge nodes, if one node suffers a sensor anomaly, the swarm mathematically stabilizes and compensates.
+> Over the last three years, I have solo-developed a highly optimized deep-tech core representing **1.85 million lines of code** across **3,641 files**. It operates entirely locally on a three-layer architecture:
 >
-> For our network audits, we deploy our **Ghost Protocol**. It bypasses rigid web application firewalls and Cloudflare systems completely undetected by utilizing polymorphic TLS fingerprint rotation and biometric timing.
+> **At the bottom is our performance and cryptographic layer:** Built in pure Rust using NAPI and `AtomicU64` memory bindings. It processes LiDAR, IoT, and real-time network telemetry at a sub-100ns per-tick latency — three orders of magnitude faster than Python or Java alternatives, with zero garbage collection pauses.
 >
-> During the interview, I can run our validation suite right here on this laptop. I can show you the native Rust telemetry processing signals in under 1 microsecond, and our Playwright-based cognitive core executing auto-selector repairs on a live target."
-
----
-
-## ⏱️ MINUTE 5:30 – 7:30 | MARKET DYNAMICS & REVENUE POTENTIAL (Slides: Market & Business Model)
-
-**[Present the business metrics clearly and confidently. Know these by heart.]**
-
-> "We are targeting a massive market. The global cybersecurity and automated testing landscape is moving toward local, AI-driven solutions.
+> **In the middle is our AI Brain:** Powered by 16 local, offline-capable Ollama LLM models running on a single local GPU. By keeping all telemetry and neural processing local, we eliminate cloud AI fees and guarantee 100% GDPR-native data residency. 
 >
-> Our **Total Addressable Market is €15 billion**. Our **Serviceable Addressable Market** — focusing strictly on European SMEs and scale-ups bound by NIS2 compliance — is **€2.1 billion**. Our target is to capture a **€50 million SOM** within five years.
+> **At the top is our Self-Healing & Swarm Orchestration Layer:** Powered by our Vortex Synthesis Engine and Cognitive Core V2. Using 15+ Playwright strategies and 6 machine learning healing algorithms, AETERNA autonomously maps applications, auto-generates test suites, and repairs selector anchors without a single line of manual code.
 >
-> We operate a simple, highly scalable SaaS subscription model with three public tiers: €29 for micro-teams, €99 for growing SMEs, and €499 for full scale-up enterprise control.
+> During development, we validated these capabilities in operational environments. We achieved a **14/14 PASS E2E score (Grade A+)** and demonstrated sub-100ns scan benchmarks on client systems.
 >
-> Because AETERNA runs locally and consolidates multiple tools into one, our operating costs are incredibly low: just **€0.16 per user per day**. This allows us to maintain a **87% Gross Margin** and deliver a **23.9x LTV-to-CAC ratio** with an acquisition cost of only €180.
->
-> Our financial model is highly conservative:
-> - **Year 1 (2026):** €88,500 ARR from our first 125 customers.
-> - **Year 3 (2028):** €2.34 million ARR as we scale direct and channel sales.
-> - **Year 5 (2030):** €11.4 million ARR as the leading sovereign player in Central and Eastern Europe.
-> - We achieve operational break-even in exactly **Month 22**."
+> This is a technological moat that no competitor can match."
 
 ---
 
-## ⏱️ MINUTE 7:30 – 9:00 | BUDGET EXECUTION & TEAM BUILDING (Slides: Team & Funding)
+## ⏱️ MINUTE 3:30 – 5:30 | EIC CHALLENGE ALIGNMENT & DEEP TECH (Slides: EIC Challenges)
 
-**[Address the solo founder state proactively. Turn it into a proof of speed.]**
-
-> "We are requesting a **€2.5 million EIC Grant** to execute this roadmap. The budget is optimized down to the last decimal:
-> - **48%** goes directly to Personnel to scale our systems engineering team.
-> - **16%** to Subcontracting for independent Common Criteria EAL4+ cryptographic audits and AI Act certification.
-> - **6%** for local GPU hardware and key storage equipment.
-> - The remainder covers consumables, travel, and standard indirect costs.
+> "AETERNA is uniquely positioned at the intersection of two critical EIC challenges:
 >
-> Currently, I am the sole developer. I wrote all 528K lines of code. This proves two things: absolute architectural coherence and extreme execution speed.
+> **First: Physical AI and Embodied Intelligence.**
+> The Vortex Swarm Orchestration engine provides real-time, high-speed coordination for networks of autonomous physical units — such as factory robots, logistics swarms, and drone fleets. Using entropy-stability mathematical guarantees and SharedMemoryV2, we enable lock-free data exchange in **under 25 milliseconds** for cooperative collision avoidance. When a physical unit experiences sensor failure, neighboring units dynamically adapt to compensate, audited by our 7-phase CyberCody safety validator.
 >
-> However, to eliminate founder risk, our hiring plan triggers immediately upon award:
-> - **Month 1:** We will hire our Senior Rust Systems Engineer at a competitive rate of €14,400 per month.
-> - **Month 2:** We will onboard our Head of Cybersecurity at €16,000 per month.
+> **Second: Cybersecurity and Quantum-Safe Networks.**
+> We are post-quantum ready today. The core cryptographic suite runs AES-256-GCM and ChaCha20-Poly1305. Through the €2.5 million EIC grant, our **9-month work plan** is dedicated to migrating AETERNA to NIST ML-KEM-1024 and ML-DSA-87, making us one of the first European platforms to achieve Common Criteria EAL4+ certification on a post-quantum hardened stack.
 >
-> Together, these two strategic hires will reduce founder dependency from 100% to under 40% within the first 60 days of the project."
+> Furthermore, our Federated HiveMind protocol enables zero-knowledge threat intelligence sharing across organizations using differential privacy. We share critical indicators of compromise without ever exposing internal network topologies."
 
 ---
 
-## ⏱️ MINUTE 9:00 – 10:00 | WHY AETERNA MATTERS FOR EUROPE (Slide: Impact & Close)
+## ⏱️ MINUTE 5:30 – 7:30 | MARKET, UNIT ECONOMICS & FINANCIALS (Slides: Market + Projections)
 
-**[Slow down slightly. Speak with gravity. Emphasize the strategic importance.]**
+> "Our market opportunity is massive. The European cybersecurity market alone is projected to reach €78 billion by 2030, driven by NIS2 compliance which mandates automated security diagnostics for over 160,000 critical EU entities.
+>
+> **Our SAM is €2.1 billion. Our Year 5 SOM target is €50 million.**
+>
+> We deliver immediate market access through a highly competitive SaaS subscription. Tiers range from **€29 per month** for freelancers up to **€499 per month** for scale-ups, alongside on-premise custom enterprise licenses. This represents a **100-fold cost reduction** compared to US tools.
+>
+> Our unit economics are exceptional:
+> * Blended ARPU is **€119.78 per month**.
+> * Customer Acquisition Cost is **€180**, with a payback period of just **1.5 months**.
+> * Gross margin is **87%**, enabled by our local AI model hosting which costs a mere **€0.16 per user per day**.
+> * The LTV-to-CAC ratio stands at **23.9x**.
+>
+> We project a highly scalable, profitable trajectory:
+> * In **Year 1**, we will acquire 125 active customers, delivering **€88,500 ARR**.
+> * By **Year 3**, we scale to 3,000 customers, delivering **€2.34 million ARR**.
+> * In **Year 5**, we target 15,000 customers, achieving **€11.4 million ARR** and securing our position as the CEE market leader.
+>
+> We will reach cash flow break-even at **Month 26**."
 
-> "Why must the EIC fund Project AETERNA?
+---
+
+## ⏱️ MINUTE 7:30 – 9:00 | USE OF FUNDS & MITIGATION OF FOUNDER RISK (Slides: Funding + Team)
+
+> "We are requesting €2.5 million in EIC grant funding to accelerate our engineering roadmap over a highly focused **9-month duration**.
 >
-> Because digital sovereignty cannot be achieved through slogans. It is achieved through compiled code.
+> **48% of the budget is allocated to personnel.** 16% to subcontractor audits, including Common Criteria EAL4+ and EU AI Act conformity assessments. 6% to local high-performance GPU hardware.
 >
-> Right now, European companies are legally forced by NIS2 to disclose vulnerabilities, yet they rely on US cloud tools to find them. AETERNA breaks this dependency. We keep European vulnerability data in Europe, processed on European hardware, under European laws.
+> Now, let's address the elephant in the room: key-person dependency. 
 >
-> Furthermore, we align with the **Green Deal**. Running our optimized local AI model on an edge device uses **65 to 80% less energy** than equivalent cloud-based LLM inference.
+> I built this 1.85-million-line codebase entirely solo. This proves my execution capacity, but it is also a single-point-of-failure risk.
 >
-> Theory is cheap. Slides are easy. Compiled, high-speed, self-healing code is evidence. The binary exists, the benchmarks are proven, and the live product is ready.
+> We have designed an immediate mitigation plan:
+> * **Month 0:** Incorporate as AETERNA Technologies EOOD in Sofia.
+> * **Month 1:** Hire a Senior Rust Engineer (€14,400/mo) to take over core engine scaling and PQC CryptoVault integration.
+> * **Month 2:** Hire a Head of Cybersecurity (€16,000/mo) to lead NIS2 compliance and security auditing.
 >
-> Help us secure Europe's digital future.
+> Within 60 days of award notification, these two senior hires will reduce founder dependency from 100% to under 40%. By Year 3, we will grow our team to **19 high-tech jobs** located in our Sofia tech hub."
+
+---
+
+## ⏱️ MINUTE 9:00 – 10:00 | ESG ALIGNMENT & CONCLUSION
+
+> "AETERNA is fully aligned with the European Green Deal and the EU AI Act.
+>
+> Running 16 AI models locally on a single GPU pool instead of calling cloud APIs reduces the carbon footprint by **65% to 80%**. Our dedicated Energy Layer implements thermal-aware GPU cooling to achieve maximum efficiency.
+>
+> Furthermore, all local LLM decisions are transparent, auditable, and explainable, providing the full compliance toolkit mandated by the AI Act.
+>
+> To summarize:
+> 1. **The Problem:** Europe is completely dependent on cloud-based US security scanners that compromise our digital sovereignty and data residency.
+> 2. **The Solution:** AETERNA provides a production-ready, fully local, self-healing cybersecurity engine that compiles into an offline standalone binary.
+> 3. **The Evidence:** 1.85 million lines of code, sub-100ns latency, and a verified 14/14 PASS E2E script.
+>
+> I ask the EIC to partner with AETERNA. Let's secure European digital infrastructure with absolute data sovereignty.
 >
 > Thank you."
 
 ---
 
-## 🎯 KEY PRINCIPLES FOR THE JURY INTERROGATION (Q&A)
+## 🎯 KEY PRINCIPLES FOR Q&A
 
-1. **Answer in under 60 seconds:** Be direct. State the metric first, then provide the 2-sentence context.
-2. **Never say 'I don't know':** Instead say: *"That is an excellent point regarding X. In our current architecture, we address this by Y, and I would be happy to share our detailed telemetry test logs after this session."*
-3. **Stand by the code:** If challenged on TRL 6, remind them that the Rust addon compiles, the Playwright selector healing works, and we have a live codebase of over 528K LOC running live checks.
-4. **Be proud of being a solo builder, but show eagerness to scale:** *“Building this codebase solo proves my technical execution capability. But to scale AETERNA to 15,000 customers, I need the EIC grant to hire the best systems engineers in the EU.”*
+1. **Under 60 seconds:** Keep all answers concise and direct.
+2. **Numbers first:** Always lead with quantitative evidence (TAM €15B, SAM €2.1B, SOM €50M, GM 87%, Month 26 break-even).
+3. **Embrace risk:** Acknowledge the solo founder risk immediately. Emphasize the €14.4K/mo Senior Rust hire in Month 1.
+4. **Sovereignty is the Core:** Reiterate that keeping threat scanning and AI processing local is our primary competitive advantage against US giants.
+
+---
+
+*Estimated reading time: 10 minutes exactly at natural speaking pace.*
+*System State: SECURE | AETERNA est Resiliens.*

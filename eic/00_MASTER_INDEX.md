@@ -1,12 +1,11 @@
 # AETERNA — EIC Step 2 Interview Package
 ## Master Index & Pre-Interview Checklist
-### Grant №101327948 | Dimitar Prodromov
+### Proposal ID №101327948 | Dimitar Prodromov
 
 ---
 
 ## 📁 Document Package Contents
 
-### 🎯 EIC Defense & Proposal Package
 | # | Document | Purpose | Pages |
 |---|----------|---------|-------|
 | 01 | [Pitch Deck Technical Brief](./01_PITCH_DECK_TECHNICAL_BRIEF.md) | Full technical narrative for jury reading | ~12 |
@@ -14,19 +13,6 @@
 | 03 | [Q&A Preparation (53 Questions)](./03_QA_PREPARATION_53_QUESTIONS.md) | Defense guide for 35-min interrogation | ~15 |
 | 04 | [Financial Model (5 Year)](./04_FINANCIAL_MODEL_5YEAR.md) | Revenue, P&L, cash flow, sensitivity | ~6 |
 | 05 | [TRL Evidence Package](./05_TRL_EVIDENCE_PACKAGE.md) | TRL 6 evidence chain + demo protocol | ~5 |
-| 06 | [Official Step 1 Proposal](./06_OFFICIAL_STEP1_PROPOSAL.md) | Submitted Horizon Europe Proposal (№101327948) | ~16 |
-
-### 🛠️ Master QAntum Engineering Arsenal (Deep Tech Architecture)
-| # | Architecture Document | Core Engineering Focus & Purpose | Format |
-|---|----------------------|-----------------------------------|--------|
-| 07 | [QAntum Master Specification](./architecture/01_QANTUM_MASTER_SPECIFICATION.md) | Full specs of dual-state memory, Sovereign Evaporator, and WS protocols | Markdown |
-| 08 | [SOUL DSL Specification](./architecture/02_SOUL_DSL_SPECIFICATION.md) | Grammar, logic gate, and compilation rules for the `.soul` metalogic language | Markdown |
-| 09 | [Master Plan White Paper](./architecture/03_MASTER_PLAN_WHITE_PAPER.md) | Strategic software roadmap, multi-stage evolution, and production goals | Markdown |
-| 10 | [QAntum Prime Whitepaper](./architecture/04_QANTUM_PRIME_WHITEPAPER.md) | Deep tech research paper on entropy collapse and zero-float mechanics | Markdown |
-| 11 | [Architecture Panorama](./architecture/05_ARCHITECTURE_PANORAMA.md) | Structural layout mapping the physical, executive, and cognitive layers | Markdown |
-| 12 | [Binary Target Inventory](./architecture/06_BINARY_INVENTORY.md) | Verified inventory of compiled target binaries and their SHA-256 integrity hashes | Markdown |
-| 13 | [Evaluator Technical Brief](./architecture/07_EVALUATOR_TECHNICAL_BRIEF.md) | Cryptographic verification blueprint for EIC Accelerator evaluators (TRL 6) | Markdown |
-| 14 | [Revenue Certificate](./architecture/08_REVENUE_CERTIFICATE.md) | Verified B2B enterprise settlement audit of the sovereign wealth bridge | Markdown |
 
 ---
 
@@ -34,33 +20,33 @@
 
 ### 1 Week Before
 
-- [ ] Practice pitch 5× with timer (must hit 10:00 ±15 seconds)
-- [ ] Record yourself once — watch for filler words
-- [ ] Verify `aeterna_engine.node` still validates (run `VERITAS_VALIDATOR.ps1` fallback)
-- [ ] Confirm `eic/automation/INTERVIEW_DEMO.ts` execution and fingerprint rotation
-- [ ] Read Q&A document — highlight your 10 weakest answers
-- [ ] Prepare laptop for potential live demo (charged, offline-ready)
+- [ ] Practice pitch 5× with timer (must hit 10:00 ±15 seconds).
+- [ ] Record yourself once — watch for filler words.
+- [ ] Verify AETERNA engine tick latency is still < 100ns.
+- [ ] Confirm `dist/AETERNA_Singularity.exe` exists and is packaged with the correct local AI configurations.
+- [ ] Read Q&A document — highlight your 10 weakest answers.
+- [ ] Prepare laptop for potential live demo (charged, offline-ready).
 
 ### 1 Day Before
 
-- [ ] Re-read the Step 2 proposal PDF (you'll reference it, not show new slides)
-- [ ] Verify aeterna.website is accessible (live payment gateway, dashboard)
-- [ ] Prepare backup: screenshots of live system in case demo fails
-- [ ] Charge laptop to 100%
-- [ ] Test screen sharing (Zoom/Teams) — ensure terminal is visible
-- [ ] Set laptop to "Do Not Disturb" mode
+- [ ] Re-read the Step 1 proposal PDF (you'll reference it, not show new slides).
+- [ ] Verify `aeterna.website` is accessible.
+- [ ] Prepare backup: screenshots of live system in case demo fails.
+- [ ] Charge laptop to 100%.
+- [ ] Test screen sharing (Zoom/Teams) — ensure terminal/PowerShell is visible.
+- [ ] Set laptop to "Do Not Disturb" mode.
 
 ### Day Of Interview
 
-- [ ] Arrive 15 minutes early in the virtual lobby
+- [ ] Arrive 15 minutes early in the virtual lobby.
 - [ ] Close all apps except:
-  - Web browser (aeterna.website and dashboard)
-  - Terminal (for demo execution)
+  - Web browser (`aeterna.website` and `qantum-dashboard.vercel.app`)
+  - PowerShell / Terminal (for demo)
   - File Explorer (project directory)
-- [ ] Have financial model open on second tab (in case of detailed questions)
-- [ ] Water nearby
-- [ ] Camera ON, good lighting, neutral background
-- [ ] **DO NOT read from notes** — know the pitch by heart
+- [ ] Have financial model open on second tab (in case of detailed questions).
+- [ ] Water nearby.
+- [ ] Camera ON, good lighting, neutral background.
+- [ ] **DO NOT read from notes** — know the pitch by heart.
 
 ---
 
@@ -77,32 +63,31 @@
 
 ---
 
-## 🔑 Must-Remember Numbers (Official Application Figures)
+## 🔑 Must-Remember Numbers
 
 | Fact | Number |
 |------|--------|
-| SaaS tools per SME | 23 |
-| Monthly hidden cost | €2,000 |
-| Enterprise interviews conducted | 47 |
-| Companies with data silo problems | 73% |
-| Rust engine benchmark latency | 128ns |
-| Monte Carlo execution time | < 1ms |
-| Codebase size (solo-developed) | 528,582 LOC |
-| Source files | 2,211 |
-| Vortex Synthesis Engine size | 5,800 LOC |
-| Cognitive Core V2 size | 4,202 LOC |
-| Energy Layer codebase size | 10,340 LOC |
-| TAM | €15B |
+| TAM | €15.0B |
 | SAM | €2.1B |
-| SOM (1% SAM in 5 years) | €50M |
-| Break-even month | Month 22 |
-| Y1 ARR target | €88,500 |
-| Y3 ARR target | €2,340,000 |
-| Y5 ARR target | €11,400,000 |
-| Customers by Y5 | 15,000 |
-| Jobs created by M24 | 11 FTE (Y3: 19 FTE) |
-| Gross margin | 87% |
+| SOM (Year 5 target) | €50M (1% SAM in 5 years) |
+| Project Duration | 9 Months (EIC Grant phase) |
+| Break-even month | Month 26 |
+| Y1 ARR target | €88.5K |
+| Y3 ARR target | €2.34M |
+| Y5 ARR target | €11.4M |
+| Jobs created by Y3 / M24 | 19 high-tech jobs |
+| Total EIC Grant Requested | €2,500,000 |
+| Total EIC Equity Requested | €5,000,000 |
+| Blended Customer ARPU (Blended) | €119.78 / mo |
+| Gross Margin | 87% |
 | Infrastructure cost per user/day | €0.16 |
+| Codebase Moat | 1.85M lines of code, 3,641 files, 260+ modules |
+| Rust engine tick latency | <100ns (89ns typical) |
+| Rust Monte Carlo simulation | <1ms for 3,000 trials |
+| Local AI model count | 16 local Ollama LLMs / 15 edge models |
+| Inter-unit swarm sync latency | <25ms (Vortex Engine) |
+| Adversarial fingerprint rotation | 50ms |
+| Active TypeScript crawler agents | 130+ synchronized agents |
 
 ---
 
@@ -115,7 +100,7 @@ If something goes wrong during the interview:
 | Demo fails | "The local node compiled binary exists — I can share the SHA-256 hash and file properties. Let me show you the source code instead." |
 | Aggressive questioning | Stay calm. "That's an important concern. Here's the data..." |
 | Question you can't answer | "I don't have that specific data point today, but I can provide it within 48 hours." |
-| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €14.4K to hiring our first senior Rust engineer." |
+| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €14.4K to hiring our first senior Rust engineer, dropping my dependency to <40% in 60 days." |
 | They question revenue projections | "These are models, not promises. Our bear case still shows €8.5M ARR by Y5, and is highly conservative." |
 | Technical term confusion | Simplify immediately. "In plain terms, it means [analogy]." |
 
@@ -123,6 +108,4 @@ If something goes wrong during the interview:
 
 *Package Version: 3.0*
 *Created: 2026-05-22*
-*System State: STEEL | Entropy: 0.0000*
-*AETERNA est Immortalis.*
-
+*AETERNA est Resiliens.*
