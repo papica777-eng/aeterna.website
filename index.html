@@ -728,7 +728,36 @@
                 "compliance.card2_title": "GDPR Data Sovereignty",
                 "compliance.card2_desc": "Offline-native execution. Data remains strictly within local borders and on-premise memory blocks, completely protecting user metrics and privacy mandates from overseas intercept.",
                 "compliance.card3_title": "Cyber Resilience Act (CRA)",
-                "compliance.card3_desc": "Samsung Knox TEE hardware cryptoprocessor integration allows device lifecycle auditing, guaranteei        // Specifications Documentation Database Mapped to Vertical Tabs
+                "compliance.card3_desc": "Samsung Knox TEE hardware cryptoprocessor integration allows device lifecycle auditing, guaranteeing robust cryptographic security and immediate patching mechanisms.",
+                
+                "pricing.title": "SOVEREIGN ACCESS PROTOCOL",
+                "pricing.subtitle": "Flexible tiers for infrastructure integration. 100% predictable costs.",
+                "pricing.tier1_proto": "Protocol ALPHA",
+                "pricing.tier1_name": "NODE",
+                "pricing.mo": "/mo",
+                "pricing.tier1_feat1": "Local Scanner",
+                "pricing.tier1_feat2": "Vulnerability Analysis V1",
+                "pricing.tier1_feat3": "Shared Intelligence",
+                "pricing.tier1_btn": "Stripe Link",
+                "pricing.tier2_badge": "RECOMMENDED",
+                "pricing.tier2_proto": "Protocol BETA",
+                "pricing.tier2_name": "EMPIRE",
+                "pricing.tier2_feat1": "Swarm Self-Healing V2",
+                "pricing.tier2_feat2": "Ghost Covert Comms",
+                "pricing.tier2_feat3": "Priority 7.83Hz Sync",
+                "pricing.tier2_btn": "Web3 / USDC",
+                "pricing.tier3_proto": "Protocol OMEGA",
+                "pricing.tier3_name": "CORE",
+                "pricing.tier3_feat1": "Local Deployment On-Premise",
+                "pricing.tier3_feat2": "Specific PQC Hardening",
+                "pricing.tier3_feat3": "24/7 Forensic Audit",
+                "pricing.tier3_btn": "Tron / TRX",
+                
+                "console.btn_clear": "Clear Logs"
+            }
+        };
+
+        // Specifications Documentation Database Mapped to Vertical Tabs
         const specDocs = {
             napi: {
                 bg: {
@@ -839,45 +868,6 @@
                     category: "HARDWARE-ANCHORED ISOLATION // KNOX TEE",
                     heading: "Samsung Knox TEE",
                     desc: "Absolute physical compartmentalization leveraging hardware-level ARM TrustZone architectures.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>ARM TrustZone Enclaves:</b> Physically isolated secure world execution completely blocking OS-level breaches.</li><li><b>eFuse Cryptographic Storage:</b> Master signing keys burnt into hardware fuses during silicon manufacture.</li><li><b>Lockout Actuators:</b> Physical safety shutdown triggers governed exclusively inside the isolated TEE.</li><li><b>Knox Lifecycle Guard:</b> Real-time boot environment measurement auditing and active protection engines.</li></ul>",
-                    metric_label: "Hardware Enclave",
-                    metric_val: "ARM TrustZone TEE",
-                    status_label: "Knox TEE Status",
-                    status_val: "ISOLATED (LEVEL_4)",
-                    header_title: "AETERNA // SAMSUNG_KNOX_TEE_SANDBOX",
-                    actions: [
-                        { label: "ASSERT BOUNDARY", cmd: "knox_assert" },
-                        { label: "TEE KEY AUDIT", cmd: "knox_audit" }
-                    ]
-                }
-            }
-        };                    status_label: "Lattice Integrity",
-                    status_val: "SECURED (Post-Quantum)",
-                    header_title: "AETERNA // POST_QUANTUM_CRYPTO_SANDBOX",
-                    actions: [
-                        { label: "GENERATE KEY", cmd: "pqc_key" },
-                        { label: "NIST COMPLIANCE", cmd: "pqc_nist" }
-                    ]
-                }
-            },
-            knox: {
-                bg: {
-                    category: "ХАРДУЕРНА СИГУРНОСТ // KNOX TEE GATE",
-                    heading: "Samsung Knox TEE",
-                    desc: "Директно изолиране на критичните вериги в доверена среда за изпълнение (Trusted Execution Environment) на хардуерно ниво. Подписва физически задействания чрез Knox TEE, предотвратявайки зловреден софтуерен достъп.",
-                    metric_label: "Хардуерен Слой",
-                    metric_val: "ARM TrustZone TEE",
-                    status_label: "Knox Защита",
-                    status_val: "АКТИВНА (LEVEL_4)",
-                    header_title: "AETERNA // SAMSUNG_KNOX_TEE_SANDBOX",
-                    actions: [
-                        { label: "TEE БАРИЕРИ", cmd: "knox_assert" },
-                        { label: "КЛЮЧОВ ОДИТ", cmd: "knox_audit" }
-                    ]
-                },
-                en: {
-                    category: "HARDWARE-ANCHORED ISOLATION // KNOX TEE",
-                    heading: "Samsung Knox TEE",
-                    desc: "Absolute physical compartmentalization leveraging hardware-level ARM TrustZone. Cryptographically shields all automated actuators and physical swarm triggers within a secure, tamper-proof Trusted Execution Environment.",
                     metric_label: "Hardware Enclave",
                     metric_val: "ARM TrustZone TEE",
                     status_label: "Knox TEE Status",
