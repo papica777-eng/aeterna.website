@@ -1,0 +1,33 @@
+[package]
+name = "aeterna-core-engine"
+version = "0.1.0"
+edition = "2021"
+authors = ["Dimitar Prodromov <papica777@gmail.com>"]
+description = "AETERNA Core NAPI Engine - Sub-100ns latency deterministic orchestrator"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+napi = { version = "2.13.2", default-features = false, features = ["napi4", "async", "tokio_rt"] }
+napi-derive = "2.13.0"
+crossbeam = "0.8.2"
+crossbeam-queue = "0.3.8"
+tokio = { version = "1.28.0", features = ["full"] }
+parking_lot = "0.12.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rand = "0.8.5"
+
+# Post-Quantum Cryptography placeholders (to be integrated in WP1)
+# Currently wrapping existing AES-256-GCM + ChaCha20 as the quantum-safe fallback
+ring = "0.16.20"
+pqcrypto-kyber = "0.7.7" # ML-KEM-1024
+pqcrypto-dilithium = "0.4.7" # ML-DSA-87
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[[bench]]
+name = "engine_latency"
+harness = false
