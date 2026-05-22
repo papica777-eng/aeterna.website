@@ -22,26 +22,26 @@
 
 - [ ] Practice pitch 5× with timer (must hit 10:00 ±15 seconds)
 - [ ] Record yourself once — watch for filler words
-- [ ] Verify `veritas_lock.bin` still validates (run `VERITAS_VALIDATOR.ps1`)
-- [ ] Confirm `dist/AETERNA_Singularity.exe` exists and is 30.15 MB
+- [ ] Verify `aeterna_engine.node` still validates (run `VERITAS_VALIDATOR.ps1` fallback)
+- [ ] Confirm `eic/automation/INTERVIEW_DEMO.ts` execution and fingerprint rotation
 - [ ] Read Q&A document — highlight your 10 weakest answers
 - [ ] Prepare laptop for potential live demo (charged, offline-ready)
 
 ### 1 Day Before
 
-- [ ] Re-read the Step 1 proposal PDF (you'll reference it, not show new slides)
-- [ ] Verify aeterna.website is accessible (if deployed by then)
+- [ ] Re-read the Step 2 proposal PDF (you'll reference it, not show new slides)
+- [ ] Verify aeterna.website is accessible (live payment gateway, dashboard)
 - [ ] Prepare backup: screenshots of live system in case demo fails
 - [ ] Charge laptop to 100%
-- [ ] Test screen sharing (Zoom/Teams) — ensure PowerShell is visible
+- [ ] Test screen sharing (Zoom/Teams) — ensure terminal is visible
 - [ ] Set laptop to "Do Not Disturb" mode
 
 ### Day Of Interview
 
 - [ ] Arrive 15 minutes early in the virtual lobby
 - [ ] Close all apps except:
-  - Web browser (aeterna.website, if live)
-  - PowerShell (for demo)
+  - Web browser (aeterna.website and dashboard)
+  - Terminal (for demo execution)
   - File Explorer (project directory)
 - [ ] Have financial model open on second tab (in case of detailed questions)
 - [ ] Water nearby
@@ -63,7 +63,7 @@
 
 ---
 
-## 🔑 Must-Remember Numbers
+## 🔑 Must-Remember Numbers (Official Application Figures)
 
 | Fact | Number |
 |------|--------|
@@ -71,20 +71,24 @@
 | Monthly hidden cost | €2,000 |
 | Enterprise interviews conducted | 47 |
 | Companies with data silo problems | 73% |
-| AETERNA price vs. competitors | 77% less |
-| Binary size | 30.15 MB |
-| Veritas anchor size | 32 bytes |
-| Zero-Float violations | 0 |
-| Evolution fitness | 0.6667 |
-| LTV:CAC ratio | 23.9x |
-| Break-even month | 22 |
-| Y3 ARR target | €8.2M |
-| Y5 ARR target | €48.7M |
-| Jobs created by M24 | 12 |
+| Rust engine benchmark latency | 128ns |
+| Monte Carlo execution time | < 1ms |
+| Codebase size (solo-developed) | 528,582 LOC |
+| Source files | 2,211 |
+| Vortex Synthesis Engine size | 5,800 LOC |
+| Cognitive Core V2 size | 4,202 LOC |
+| Energy Layer codebase size | 10,340 LOC |
+| TAM | €15B |
+| SAM | €2.1B |
+| SOM (1% SAM in 5 years) | €50M |
+| Break-even month | Month 22 |
+| Y1 ARR target | €88,500 |
+| Y3 ARR target | €2,340,000 |
+| Y5 ARR target | €11,400,000 |
+| Customers by Y5 | 15,000 |
+| Jobs created by M24 | 11 FTE (Y3: 19 FTE) |
 | Gross margin | 87% |
 | Infrastructure cost per user/day | €0.16 |
-| EU companies served by Y3 | 1,800 |
-| SAM | €156.5M/yr |
 
 ---
 
@@ -94,16 +98,17 @@ If something goes wrong during the interview:
 
 | Situation | Response |
 |-----------|----------|
-| Demo fails | "The binary exists — I can share the SHA-256 hash and file properties. Let me show you the source code instead." |
+| Demo fails | "The local node compiled binary exists — I can share the SHA-256 hash and file properties. Let me show you the source code instead." |
 | Aggressive questioning | Stay calm. "That's an important concern. Here's the data..." |
 | Question you can't answer | "I don't have that specific data point today, but I can provide it within 48 hours." |
-| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €10K to hiring." |
-| They question revenue projections | "These are models, not promises. Our bear case still shows €8.5M ARR by Y5." |
+| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €14.4K to hiring our first senior Rust engineer." |
+| They question revenue projections | "These are models, not promises. Our bear case still shows €8.5M ARR by Y5, and is highly conservative." |
 | Technical term confusion | Simplify immediately. "In plain terms, it means [analogy]." |
 
 ---
 
-*Package Version: 2.0*
-*Created: 2026-04-06*
+*Package Version: 3.0*
+*Created: 2026-05-22*
 *System State: STEEL | Entropy: 0.0000*
 *AETERNA est Immortalis.*
+

@@ -19,9 +19,9 @@
 ---
 
 ## 🌌 The Deep Tech Singularity: Technological Sovereignty
-AETERNA is not an LLM wrapper or a standard web application. It is a **Sovereign Technological Organism**, engineered from the silicon up in Erlang/BEAM, Rust, Zig, and TypeScript. Developed specifically under **Horizon Europe (EIC Accelerator)**, it is designed to operate completely independently of foreign cloud monopolies, securing Europe's digital autonomy while providing a robust, self-healing, zero-panic, and zero-float infrastructure for businesses.
+AETERNA is not an LLM wrapper or a standard web application. It is a **Sovereign Autonomous Cybersecurity & Quality Assurance Platform**, engineered from the silicon up in Erlang/BEAM, Rust, Zig, and TypeScript. Developed specifically under **Horizon Europe (EIC Accelerator 2026)**, it is designed to operate completely independently of foreign cloud monopolies, securing Europe's digital autonomy while providing a robust, self-healing, zero-panic, and zero-float infrastructure for businesses.
 
-This repository serves as the **official master hub for the EIC Accelerator Step 2 Technical & Commercialization Review**. Below is the complete preparation package, live TRL 6 evidence verification chains, and our 5-year financial models.
+This repository serves as the **official master hub for the EIC Accelerator Step 2 Technical & Commercialization Review**, reflecting the exact data submitted in our **Official Full Application (Grant №101327948)**.
 
 ---
 
@@ -33,7 +33,7 @@ We have integrated our full, final-stage interview defense materials directly in
 | 01 | **[Pitch Deck Technical Brief](eic/01_PITCH_DECK_TECHNICAL_BRIEF.md)** | Direct technical backup for all pitch slides. Unpacks the **€2,000/month SaaS Fragmentation Tax**, competitive landscape, and detailed unit economics. | **✅ Finalized** |
 | 02 | **[10-Minute Jury Pitch Script](eic/02_PITCH_SCRIPT_10MIN.md)** | The exact timed delivery blueprint for the 10-minute presentation, optimized for verbal execution and maximum impact. | **✅ Finalized** |
 | 03 | **[Q&A Defense Guide (53 Questions)](eic/03_QA_PREPARATION_53_QUESTIONS.md)** | Standard-setting master plan addressing aggressive jury interrogations, solo founder key-person risk mitigations, and scalability questions. | **✅ Finalized** |
-| 04 | **[5-Year Financial Model](eic/04_FINANCIAL_MODEL_5YEAR.md)** | Granular financial projections: customer tiers (Node, Sovereign, Galactic), Y3 target of **€8.2M ARR**, and break-even scheduled for **Month 22**. | **✅ Finalized** |
+| 04 | **[5-Year Financial Model](eic/04_FINANCIAL_MODEL_5YEAR.md)** | Granular financial projections: customer tiers (Node, Sovereign, Galactic), Y3 target of **€2.34M ARR**, and break-even scheduled for **Month 22**. | **✅ Finalized** |
 | 05 | **[TRL 6 Evidence Package](eic/05_TRL_EVIDENCE_PACKAGE.md)** | Rigorous verification matrix mapping compiled binaries, cryptographic self-healing mirrors, and zero-float compliance. | **✅ Finalized** |
 | 06 | **[Pre-Interview Master Index](eic/00_MASTER_INDEX.md)** | Pre-interview checkpoints, success metrics, emergency fail-safe responses, and essential facts/numbers. | **✅ Finalized** |
 
@@ -131,25 +131,34 @@ npx ts-node eic/automation/INTERVIEW_DEMO.ts
 
 ---
 
-## 📊 Market Projections & Unit Economics
+## 📊 Market Projections & Unit Economics (Official Submitted Figures)
 AETERNA consolidates the fragmented SaaS market, providing massive cost reductions for European SMEs while securing outstanding unit economics:
 
-* **SaaS Consolidation:** Replaces UiPath, Zapier, HubSpot, Salesforce, and CrowdStrike with a single, unified, offline-capable platform, offering **77% cost reduction** for customers.
-* **TAM (Total Addressable Market):** €50B+ (Global Enterprise SaaS Consolidation)
-* **SAM (Serviceable Addressable Market):** €156.5M/yr (EU SMEs & Scale-ups)
-* **SOM (Year 3 Target):** €8.2M ARR
-* **Customer Retention Target:** Blended ARPU of €119.78/month with a 36-month average customer lifetime.
-* **LTV:CAC Ratio:** **`23.9x`** (Customer Acquisition Cost: €180, Lifetime Value: €4,312).
+* **SaaS Consolidation:** Replaces UiPath, Zapier, HubSpot, Salesforce, and CrowdStrike with a single, unified, offline-capable platform, offering **100× cost reduction** for customers (€29–€499/mo SaaS vs. €5K–€50K per audit).
+* **TAM (Total Addressable Market):** **€15B**
+* **SAM (Serviceable Addressable Market):** **€2.1B**
+* **SOM (Serviceable Obtainable Market):** **€50M** (1% SAM in 5 years)
 * **High Gross Margin:** **`87%`** (Infrastructure operating cost of just **€0.16/user/day**).
+* **Demonstrated Codebase Moat:** **528,582 lines of TypeScript code**, 1,015 modules, 2,211 source files developed completely solo by the founder.
+* **Rust Engine Benchmarks:** **128ns average latency**, 3000 Monte Carlo simulations completed in `<1ms`.
+
+### 5-Year Revenue Growth Projections:
+* **Y1 (2026):** 125 Customers | **€88,500 ARR**
+* **Y2 (2027):** 800 Customers | **€624,000 ARR**
+* **Y3 (2028):** 3,000 Customers | **€2,340,000 ARR**
+* **Y4 (2029):** 8,000 Customers | **€5,760,000 ARR**
+* **Y5 (2030):** 15,000 Customers | **€11,400,000 ARR** (CEE Market Leader)
 
 ---
 
 ## 🇪🇺 EIC Funding Allocation Strategy (€2.5M Grant)
-* **48% (€1,200,000):** Deep Tech Systems Engineering (expanding Mojo hardware SIMD, Zig metal bridges, and Rust compilation layers).
-* **18% (€450,000):** Five-country European market commercialization pilot (Germany, France, Netherlands, Spain, Poland).
-* **15% (€375,000):** Hiring 5 senior software and DevOps engineers within the first 3 months.
-* **14% (€350,000):** Multi-region sovereign edge server infrastructure setup.
-* **5% (€125,000):** Patent filing for the Veritas Substrate Anchor and Catuskoti Logic Gate + SOC 2 Type II audit.
+* **48% (€1,200,000):** Personnel (5 FTE systems engineers/researchers × 24 months, avg €10K/mo incl. social charges).
+* **16% (€400,000):** Subcontracting (Cryptographic audit €150K, AI Act notified body €100K, SOC 2 auditor €80K, Legal/IP €70K).
+* **6% (€150,000):** Equipment (GPU servers for local AI training with 2× NVIDIA A100, HSM for PQC key management).
+* **6% (€150,000):** Consumables & Cloud (Vercel Pro, Hetzner EU infrastructure, CI/CD, monitoring).
+* **8% (€200,000):** Other Direct Costs (Market research, UX testing, localization DE/FR/NL/SE, marketing).
+* **4% (€100,000):** Travel & Conferences (Black Hat EU, RSA, Web Summit, ENISA workshops).
+* **12% (€300,000):** Indirect Costs (Flat 25% rate per EIC rules).
 
 ---
 
@@ -169,4 +178,3 @@ AETERNA consolidates the fragmented SaaS market, providing massive cost reductio
   <p><b>Architect Digital Signature:</b></p>
   <img src="assets/dimitar_p_signature.png" alt="Dimitar Prodromov Signature" width="280">
 </div>
-
