@@ -206,7 +206,7 @@
                     </div>
                     <div class="flex justify-between items-center text-xs">
                         <span class="text-gray-500" id="spec-status-label">Engine Integrity</span>
-                        <span class="font-bold font-mono text-accent-emerald">STEEL</span>
+                        <span class="font-bold font-mono text-accent-emerald" id="spec-status-val">STEEL</span>
                     </div>
                 </div>
             </div>
@@ -963,7 +963,7 @@
             const doc = specDocs[specId][state.lang];
             document.getElementById('spec-category-label').textContent = doc.category;
             document.getElementById('spec-heading').innerHTML = doc.heading;
-            document.getElementById('spec-desc').textContent = doc.desc;
+            document.getElementById('spec-desc').innerHTML = doc.desc;
             document.getElementById('spec-metric-label').textContent = doc.metric_label;
             document.getElementById('spec-metric-val').textContent = doc.metric_val;
             document.getElementById('spec-status-label').textContent = doc.status_label;
