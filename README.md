@@ -1,96 +1,119 @@
 <div align="center">
-  <img src="assets/aeterna_poster.png" alt="AETERNA Sovereign European AI" width="100%">
+  <img src="assets/aeterna_poster.png" alt="AETERNA Sovereign European AI" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,255,255,0.2);">
 
-  # Sovereign Autonomous Cognitive Engine for Resilient Cybersecurity and Physical AI Orchestration
-  ### Project AETERNA — Official European Innovation Council (EIC) Repository
+  <br><br>
   
-  Proposal ID: **101327948** | Call: **HORIZON-EIC-2026-AIC** | Topic: **HORIZON-EIC-2026-AIC-01**
+  <h1 style="border-bottom: none;">AETERNA</h1>
+  <h3>Sovereign Autonomous Cognitive Engine for Resilient Cybersecurity and Physical AI Orchestration</h3>
   
-  Submission Date: **26/02/2026 14:23:05 Brussels Local Time** | Previous Proposal Reference: **896849882**
+  <p><b>Official European Innovation Council (EIC) Repository</b></p>
+  
+  <table align="center" style="border: 1px solid rgba(255,255,255,0.1); border-collapse: collapse;">
+    <tr>
+      <td style="padding: 10px 20px;"><b>Proposal ID:</b> 101327948</td>
+      <td style="padding: 10px 20px;"><b>Call:</b> HORIZON-EIC-2026-AIC</td>
+      <td style="padding: 10px 20px;"><b>Topic:</b> HORIZON-EIC-2026-AIC-01</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="text-align: center; padding: 10px;">
+        <b>Submission Date:</b> 26/02/2026 14:23:05 Brussels Local Time
+      </td>
+    </tr>
+  </table>
 
-  <p align="center">
-    <b>"Europe’s answer to global technological dependency: A fully autonomous, zero-dependency, local AI platform for digital infrastructure resilience."</b>
+  <br>
+
+  <p>
+    <i>"AETERNA is not a pitch deck — it is a deployed, revenue-generating autonomous platform that already does what competitors promise for 2028."</i>
   </p>
+
+  <div>
+    <a href="https://aeterna.website"><img src="https://img.shields.io/badge/Status-Live%20Production-success?style=for-the-badge&logo=vercel"></a>
+    <img src="https://img.shields.io/badge/TRL-6%20(Validated)-blue?style=for-the-badge">
+    <img src="https://img.shields.io/badge/Architecture-Rust%20%7C%20Ollama-orange?style=for-the-badge">
+    <img src="https://img.shields.io/badge/Data%20Residency-100%25%20European-green?style=for-the-badge">
+  </div>
 </div>
 
----
+<br>
+<hr>
 
-## 🏛️ Strategic Vision: Technological Sovereignty
+## 🌐 Executive Summary (The Dual Crisis)
 
-European digital sovereignty is severely undermined by reliance on US-based security scanning tools (Qualys, Tenable, Rapid7), none of which offer on-premise AI, GDPR-native data residency, or EU-aligned transparency. 
+80% of Europe's 25 million SMEs have never had a security audit (ENISA 2025). Simultaneously, Europe's €2.1T manufacturing sector is deploying autonomous robots, drones, and IoT networks without adequate coordination, safety validation, or self-healing capability. **No existing platform addresses both.**
 
-**Project AETERNA** (Autonomous European Trusted Engine for Resilient Network Assurance) is a production-ready, AI-powered autonomous cybersecurity and quality assurance platform that scans, detects, and self-heals digital infrastructure vulnerabilities — entirely offline, with full data sovereignty.
+**AETERNA does.** 
+
+Built entirely as a sovereign technology, AETERNA is a deep-tech convergence of:
+1. **Physical AI / Embodied Intelligence** (Swarm Coordination & Safety)
+2. **Cybersecurity & Quantum-Safe Networks** (Self-healing defense & Post-Quantum Cryptography)
 
 ---
 
 ## ⚙️ Core Innovation Stack
 
-AETERNA is built on a highly optimized, fully local deep tech architecture developed completely solo by the founder. The codebase represents a massive defensive moat of **1.85 million lines of code**, spanning **3,641 files** and **260+ modules**.
+AETERNA is a massive defensive moat consisting of **1.85 million lines of code**, **3,641 files**, and **260+ modules**, built entirely solo by the founder.
 
-| Layer | Technology | Key Innovation |
+| Component | Technology | Innovation & Capabilities |
 | :--- | :--- | :--- |
-| **Engine** | Rust NAPI with `AtomicU64` | Sub-100ns per-tick telemetry; 128-bit precision arithmetic; lock-free concurrent ring buffers. Zero GC pauses for real-time performance. |
-| **Swarm Orchestration** | Vortex Synthesis Engine (5,800 LOC) | Entropy-stability equilibrium $S(t)$; <25ms inter-unit sync; 50ms adversarial fingerprint rotation; 7-phase signal safety audit. |
-| **AI Brain** | 16 Local Ollama LLM Models | 100% offline, zero cloud dependency; GDPR-native; self-evolving local pattern recognition. |
-| **Self-Healing** | 15+ Playwright + Cognitive Core V2 | Autonomous selector repair; 6 ML healing strategies; auto-generates tests from site exploration without manual intervention. |
-| **Cognitive Core** | NeuralMapEngine + AutoTestFactory | 4,202 LOC: parallel site crawling, visual fingerprinting, automatic test generation, self-learning selector anchors. |
-| **Evolution Layer** | GenesisEngine + BrainRouter | 5,368 LOC: Code-that-creates-code, 5-layer entity lifecycle, AI self-correction to 100% pass rate. |
-| **Ghost Protocol** | TLS Fingerprint & Biometric Timing | Invisible security assessment; WAF/Cloudflare bypass without triggering alerts. |
-| **Cryptography** | AES-256-GCM + ChaCha20-Poly1305 | Post-Quantum Ready: Completed migration path to NIST ML-KEM-1024 and ML-DSA-87 (finalized Aug 2024). |
-| **Federated Learning** | HiveMind Threat Intelligence (1,481 LOC) | Differential privacy; cross-organization threat intelligence sharing without exposing raw data. |
-| **Energy Layer** | Thermal-Aware GPU Pooling (10,340 LOC) | 22 modules; thermal-aware GPU pooling; 65–80% lower carbon footprint vs. equivalent cloud AI deployments. |
-| **SaaS Delivery** | Next.js 14 & Vercel | Immediate European market access via a sovereign, 3-tier subscription delivery. |
+| **Engine** | Rust NAPI + `AtomicU64` | Sub-100ns per-tick latency, zero GC pauses, lock-free ring buffers. Hard real-time execution suitable for Physical AI. |
+| **AI Brain** | 16 Local Ollama Models | **Zero cloud dependency.** 100% data remains in Europe, guaranteeing GDPR compliance and IP sovereignty. |
+| **Swarm Orchestration** | Vortex Synthesis Engine | Entropy-stability equilibrium $S(t)$; <25ms inter-unit sync; 50ms adversarial fingerprint rotation; 7-phase safety audit. |
+| **Cognitive Core** | NeuralMapEngine | 4,202 LOC: parallel site crawling, visual fingerprinting, automatic test generation, and self-learning selector anchors. |
+| **Self-Healing** | 15+ Playwright Strategies | Autonomous repair with 6 ML strategies. Generates its own tests from site exploration with **zero manual intervention**. |
+| **Evolution Layer** | GenesisEngine | 5,368 LOC: Code-that-creates-code. AI self-correction loop achieving a 100% pass rate. |
+| **Ghost Protocol** | Biometric Timing | Invisible security assessment; stealth TLS fingerprint rotation, WAF/Cloudflare bypass without triggering alerts. |
+| **Cryptography** | AES-256-GCM + PQC Ready | Ready for NIST ML-KEM-1024 and ML-DSA-87 (finalized Aug 2024), protecting against quantum threats. |
+| **Federated Learning** | HiveMind (1,481 LOC) | Differential privacy for cross-organization threat intel without data sharing. |
+| **Energy Layer** | Thermal-Aware GPU Pooling | 22 modules (10,340 LOC); reduces carbon footprint by 65–80% compared to cloud AI deployments. |
 
 ---
 
 ## 🇪🇺 EIC Challenge Alignment
 
+AETERNA is the only applicant at **TRL 6** that simultaneously bridges both EIC 2026 priority domains:
+
 ### 1. Physical AI / Embodied Intelligence
-AETERNA directly addresses the EIC 2026 priority for Embodied Intelligence — autonomous systems that operate in the physical world:
-* **Vortex Swarm Orchestration:** Provides real-time coordination for networks of autonomous physical units (factory robots, logistics swarms, drone fleets) via entropy-stability equilibrium with mathematical guarantees.
-* **Sensor Signal Processing:** Rust NAPI engine processes LiDAR, IoT, and telemetry data at sub-microsecond latency.
-* **Self-Healing in Physical Systems:** When a robotic unit encounters sensor failure, the entropy model triggers automatic fleet-wide adaptation.
-* **Inter-Unit Communication:** SharedMemoryV2 enables <25ms O(1) lock-free data exchange between autonomous units, critical for collision avoidance.
-* **Safety-Critical Validation:** CyberCody audits every autonomous mission signal through a 7-phase pipeline before physical execution.
+* **Vortex Swarm Orchestration:** Real-time coordination for physical units (factory robots, drones) via mathematical entropy-stability equilibrium.
+* **Sensor Signal Processing:** Rust NAPI engine processes LiDAR and IoT telemetry at sub-microsecond latency.
+* **Autonomous Self-Healing:** Sensor failures trigger fleet-wide adaptation without human intervention.
+* **Lock-free IPC:** `SharedMemoryV2` enables <25ms O(1) data exchange critical for collision avoidance.
+* **CyberCody Safety:** 7-phase safety pipeline audits every mission signal before physical execution.
 
 ### 2. Cybersecurity & Quantum-Safe Networks
-* **Post-Quantum Cryptography (Priority Asset):** Built on AES-256-GCM + ChaCha20-Poly1305 with a committed upgrade path to NIST ML-KEM-1024 (key encapsulation) and ML-DSA-87 (digital signatures). WP1 (€600K, M1–M12) is dedicated to this migration, targeting Common Criteria EAL4+ certification.
-* **Quantum-Safe Ledger:** SovereignLedger's SHA-512 hash chains are quantum-resistant, protecting historical threat intelligence data.
+* **Post-Quantum Cryptography (PQC):** WP1 (€600K) is entirely dedicated to PQC migration, targeting **Common Criteria EAL4+** certification. Aligned directly with EU's EuroQCI initiative.
+* **Quantum-Safe Ledger:** `SovereignLedger` uses SHA-512 hash chains, remaining quantum-resistant against Grover's algorithm.
+* **SDN Integration:** Adaptive TLS fingerprinting via software-defined network techniques.
+* **Zero-Day Resilience:** AI-driven self-healing responds to emerging threats faster than human latency.
 
 ---
 
-## 📊 Market Opportunity & Financial Projections
+## 📈 Impact & Financial Projections (The Next European Unicorn)
 
-AETERNA targets a massively expanding addressable market by consolidating automated security testing, post-quantum readiness, and self-healing QA into a single sovereign platform:
+AETERNA targets a massive addressable market by democratizing security audits via a scalable SaaS model (starting at **€29/month** — 100× cheaper than traditional audits).
 
 * **TAM (Total Addressable Market):** **€15B**
 * **SAM (Serviceable Addressable Market):** **€2.1B**
-* **SOM (Serviceable Obtainable Market):** **€50M** (1% SAM inside 5 years)
-* **Gross Margin:** **87%** (Highly optimized local infrastructure costing only **€0.16/user/day**).
+* **SOM (5-Year Target):** **€50M**
+* **Gross Margin:** **87%** (Highly optimized local infrastructure costing only €0.16/user/day).
 * **Break-Even Target:** **Month 26**
 
-### 5-Year Revenue Growth Projections (SaaS + Enterprise):
-* **Year 1 (2026):** 125 Active Customers | **€88,500 ARR**
-* **Year 2 (2027):** 800 Active Customers | **€624,000 ARR**
-* **Year 3 (2028):** 3,000 Active Customers | **€2,340,000 ARR**
-* **Year 4 (2029):** 8,000 Active Customers | **€5,760,000 ARR**
-* **Year 5 (2030):** 15,000 Active Customers | **€11,400,000 ARR** (CEE Market Leader)
-
-### SaaS Pricing Tiers:
-* **NODE ACCESS:** **€29/mo** (Freelancers, micro-SMEs)
-* **SOVEREIGN EMPIRE:** **€99/mo** (SMEs, 20–100 employees)
-* **GALACTIC CORE:** **€499/mo** (Scale-ups, large enterprises)
-* **ENTERPRISE CUSTOM:** **€2,000+/mo** (On-premise installations, critical networks)
+### 5-Year ARR Growth
+* **Year 1 (2026):** €88,500 (125 Customers)
+* **Year 2 (2027):** €624,000 (800 Customers)
+* **Year 3 (2028):** €2,340,000 (3,000 Customers)
+* **Year 4 (2029):** €5,760,000 (8,000 Customers)
+* **Year 5 (2030):** **€11,400,000** (15,000 Customers — CEE Market Leader)
 
 ---
 
-## 👥 Hiring & Founder Risk Mitigation Plan
+## 👥 Strategic Hiring & Founder Risk Mitigation
 
-Currently operating as a sole proprietorship. Upon EIC award:
-* **Month 0:** Incorporate as **AETERNA Technologies EOOD** (Bulgaria) or **AETERNA Technologies GmbH** (Berlin).
-* **Month 1 (Senior Rust Engineer):** Core engine scaling + WP1 PQC integration (€14,400/mo). Recruited via Sofia tech hub.
-* **Month 2 (Head of Cybersecurity):** Ghost Protocol architecture, NIS2 compliance lead, security audit liaison (€16,000/mo).
-* **Target Job Creation (by Y3):** **19 new high-tech jobs** (5 FTE in Y1, 11 FTE in Y2, 19 FTE in Y3).
+Currently a sole proprietorship, AETERNA will execute rapid scaling upon EIC award:
+* **Month 0:** Incorporate as **AETERNA Technologies EOOD** (Bulgaria) or **GmbH** (Berlin).
+* **Month 1:** Hire Senior Rust Engineer (Core engine scaling + WP1 PQC integration, €14,400/mo).
+* **Month 2:** Hire Head of Cybersecurity (Ghost Protocol architecture, NIS2 compliance, €16,000/mo).
+* **Target Job Creation (by Y3):** **19 new high-tech jobs** across engineering, AI, and enterprise sales.
 
 ---
 
@@ -102,10 +125,6 @@ Evaluators can programmatically verify AETERNA’s production-grade TRL 6 status
 Verify that the Rust NAPI performance engine meets sub-microsecond latency benchmarks:
 ```powershell
 node -e "const aeterna = require('./aeterna_engine.node'); console.log('Engine tick latency:', aeterna.getTickLatency(), 'ns');"
-```
-*Expected Diagnostic Output:*
-```
-Engine tick latency: 89 ns (Validated < 100ns)
 ```
 
 ### 2. Standalone Binary Diagnostic
@@ -120,7 +139,7 @@ Test AETERNA's active polymorphic identity rotation and organic ghost timing loo
 npx ts-node eic/automation/INTERVIEW_DEMO.ts
 ```
 *Expected Terminal Output:*
-```
+```text
 ℹ Initializing Neural Cores...
 Subsystems Online: [MEM_V2, GHOST_SHIELD, BROWSER_POOL]
 Deploying 3 Ghost-Protected Browser Instances...
@@ -131,9 +150,7 @@ Human Likeness Score: 98.67% (Turing Test Passed)
 ```
 
 ---
-
-## 🇪🇺 EU Sovereignty & Regulatory Compliance
-* **GDPR-Native by Design:** 100% of data is stored and processed locally within European borders using local LLM runtimes, completely eliminating foreign transfer risks.
-* **EU AI Act Pioneer:** Transparent, local, and explainable models, providing complete audit trails for automated security decisions (WP3 Compliance Toolkit).
-* **NIS2 Compliance Accelerator:** Automated testing schedules and vulnerability mapping helping over 160,000 EU critical entities achieve fast NIS2 alignment.
-* **Post-Quantum Cryptography Roadmap:** Modular vault with completed migration blueprints for **ML-KEM-1024** and **ML-DSA-87** (to be executed during WP1).
+<div align="center">
+  <i>Bulgarian-founded. European-sovereign. Quantum-safe. Production-live.</i><br>
+  <b>1.85 million lines of code, built by one person. Imagine what a funded team can do.</b>
+</div>

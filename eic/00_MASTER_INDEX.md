@@ -1,6 +1,6 @@
 # AETERNA — EIC Step 2 Interview Package
 ## Master Index & Pre-Interview Checklist
-### Proposal ID №101327948 | Dimitar Prodromov
+### Grant №101327948 | Dimitar Prodromov
 
 ---
 
@@ -20,33 +20,33 @@
 
 ### 1 Week Before
 
-- [ ] Practice pitch 5× with timer (must hit 10:00 ±15 seconds).
-- [ ] Record yourself once — watch for filler words.
-- [ ] Verify AETERNA engine tick latency is still < 100ns.
-- [ ] Confirm `dist/AETERNA_Singularity.exe` exists and is packaged with the correct local AI configurations.
-- [ ] Read Q&A document — highlight your 10 weakest answers.
-- [ ] Prepare laptop for potential live demo (charged, offline-ready).
+- [ ] Practice pitch 5× with timer (must hit 10:00 ±15 seconds)
+- [ ] Record yourself once — watch for filler words
+- [ ] Verify `veritas_lock.bin` still validates (run `VERITAS_VALIDATOR.ps1`)
+- [ ] Confirm `dist/AETERNA_Singularity.exe` exists and is 30.15 MB
+- [ ] Read Q&A document — highlight your 10 weakest answers
+- [ ] Prepare laptop for potential live demo (charged, offline-ready)
 
 ### 1 Day Before
 
-- [ ] Re-read the Step 1 proposal PDF (you'll reference it, not show new slides).
-- [ ] Verify `aeterna.website` is accessible.
-- [ ] Prepare backup: screenshots of live system in case demo fails.
-- [ ] Charge laptop to 100%.
-- [ ] Test screen sharing (Zoom/Teams) — ensure terminal/PowerShell is visible.
-- [ ] Set laptop to "Do Not Disturb" mode.
+- [ ] Re-read the Step 1 proposal PDF (you'll reference it, not show new slides)
+- [ ] Verify aeterna.website is accessible (if deployed by then)
+- [ ] Prepare backup: screenshots of live system in case demo fails
+- [ ] Charge laptop to 100%
+- [ ] Test screen sharing (Zoom/Teams) — ensure PowerShell is visible
+- [ ] Set laptop to "Do Not Disturb" mode
 
 ### Day Of Interview
 
-- [ ] Arrive 15 minutes early in the virtual lobby.
+- [ ] Arrive 15 minutes early in the virtual lobby
 - [ ] Close all apps except:
-  - Web browser (`aeterna.website` and `qantum-dashboard.vercel.app`)
-  - PowerShell / Terminal (for demo)
+  - Web browser (aeterna.website, if live)
+  - PowerShell (for demo)
   - File Explorer (project directory)
-- [ ] Have financial model open on second tab (in case of detailed questions).
-- [ ] Water nearby.
-- [ ] Camera ON, good lighting, neutral background.
-- [ ] **DO NOT read from notes** — know the pitch by heart.
+- [ ] Have financial model open on second tab (in case of detailed questions)
+- [ ] Water nearby
+- [ ] Camera ON, good lighting, neutral background
+- [ ] **DO NOT read from notes** — know the pitch by heart
 
 ---
 
@@ -67,27 +67,24 @@
 
 | Fact | Number |
 |------|--------|
-| TAM | €15.0B |
-| SAM | €2.1B |
-| SOM (Year 5 target) | €50M (1% SAM in 5 years) |
-| Project Duration | 9 Months (EIC Grant phase) |
-| Break-even month | Month 26 |
-| Y1 ARR target | €88.5K |
-| Y3 ARR target | €2.34M |
-| Y5 ARR target | €11.4M |
-| Jobs created by Y3 / M24 | 19 high-tech jobs |
-| Total EIC Grant Requested | €2,500,000 |
-| Total EIC Equity Requested | €5,000,000 |
-| Blended Customer ARPU (Blended) | €119.78 / mo |
-| Gross Margin | 87% |
+| SaaS tools per SME | 23 |
+| Monthly hidden cost | €2,000 |
+| Enterprise interviews conducted | 47 |
+| Companies with data silo problems | 73% |
+| AETERNA price vs. competitors | 77% less |
+| Binary size | 30.15 MB |
+| Veritas anchor size | 32 bytes |
+| Zero-Float violations | 0 |
+| Evolution fitness | 0.6667 |
+| LTV:CAC ratio | 23.9x |
+| Break-even month | 22 |
+| Y3 ARR target | €8.2M |
+| Y5 ARR target | €48.7M |
+| Jobs created by M24 | 12 |
+| Gross margin | 87% |
 | Infrastructure cost per user/day | €0.16 |
-| Codebase Moat | 1.85M lines of code, 3,641 files, 260+ modules |
-| Rust engine tick latency | <100ns (89ns typical) |
-| Rust Monte Carlo simulation | <1ms for 3,000 trials |
-| Local AI model count | 16 local Ollama LLMs / 15 edge models |
-| Inter-unit swarm sync latency | <25ms (Vortex Engine) |
-| Adversarial fingerprint rotation | 50ms |
-| Active TypeScript crawler agents | 130+ synchronized agents |
+| EU companies served by Y3 | 1,800 |
+| SAM | €156.5M/yr |
 
 ---
 
@@ -97,10 +94,23 @@ If something goes wrong during the interview:
 
 | Situation | Response |
 |-----------|----------|
+| Demo fails | "The binary exists — I can share the SHA-256 hash and file properties. Let me show you the source code instead." |
+| Aggressive questioning | Stay calm. "That's an important concern. Here's the data..." |
+| Question you can't answer | "I don't have that specific data point today, but I can provide it within 48 hours." |
+| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €10K to hiring." |
+| They question revenue projections | "These are models, not promises. Our bear case still shows €8.5M ARR by Y5." |
+| Technical term confusion | Simplify immediately. "In plain terms, it means [analogy]." |
+
+---
+
+*Package Version: 2.0*
+*Created: 2026-04-06*
+*System State: STEEL | Entropy: 0.0000*
+*AETERNA est Immortalis.*
 | Demo fails | "The local node compiled binary exists — I can share the SHA-256 hash and file properties. Let me show you the source code instead." |
 | Aggressive questioning | Stay calm. "That's an important concern. Here's the data..." |
 | Question you can't answer | "I don't have that specific data point today, but I can provide it within 48 hours." |
-| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €14.4K to hiring our first senior Rust engineer, dropping my dependency to <40% in 60 days." |
+| They challenge your solo status | "You're right — it's a risk. That's exactly why month 1 budget allocates €14.4K to hiring our first senior Rust engineer." |
 | They question revenue projections | "These are models, not promises. Our bear case still shows €8.5M ARR by Y5, and is highly conservative." |
 | Technical term confusion | Simplify immediately. "In plain terms, it means [analogy]." |
 
@@ -108,4 +118,6 @@ If something goes wrong during the interview:
 
 *Package Version: 3.0*
 *Created: 2026-05-22*
-*AETERNA est Resiliens.*
+*System State: STEEL | Entropy: 0.0000*
+*AETERNA est Immortalis.*
+
