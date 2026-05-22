@@ -26,8 +26,9 @@ This repository serves as the **official master hub for the EIC Accelerator Step
 ---
 
 ## 📁 EIC Unified Defense & Portfolio Package
-We have integrated our full, final-stage interview defense materials and original Step 1 submission documents directly into this repository. Click any of the briefs below to explore our comprehensive strategic defense:
+We have integrated our full, final-stage interview defense materials, original Step 1 submission documents, and our master engineering specs directly into this repository. Click any of the briefs below to explore:
 
+### 🎯 EIC Defense & Proposal Package
 | # | EIC Defense Package Document | Core Strategic Focus & Purpose | Status |
 |---|-----------------------------|--------------------------------|--------|
 | 01 | **[Pitch Deck Technical Brief](eic/01_PITCH_DECK_TECHNICAL_BRIEF.md)** | Direct technical backup for all pitch slides. Unpacks the **€2,000/month SaaS Fragmentation Tax**, competitive landscape, and detailed unit economics. | **✅ Finalized** |
@@ -37,6 +38,18 @@ We have integrated our full, final-stage interview defense materials and origina
 | 05 | **[TRL 6 Evidence Package](eic/05_TRL_EVIDENCE_PACKAGE.md)** | Rigorous verification matrix mapping compiled binaries, cryptographic self-healing mirrors, and zero-float compliance. | **✅ Finalized** |
 | 06 | **[Pre-Interview Master Index](eic/00_MASTER_INDEX.md)** | Pre-interview checkpoints, success metrics, emergency fail-safe responses, and essential facts/numbers. | **✅ Finalized** |
 | 07 | **[Official Step 1 Proposal (26 Feb 2026)](eic/06_OFFICIAL_STEP1_PROPOSAL.md)** | The original submitted Horizon Europe Proposal №101327948 / SEP-211301397, locking in AETERNA's core specifications. | **✅ Integrated** |
+
+### 🛠️ Master QAntum Engineering Arsenal (Deep Tech Architecture)
+| # | Architecture Document | Core Engineering Focus & Purpose | Format |
+|---|----------------------|-----------------------------------|--------|
+| 08 | **[QAntum Master Specification](eic/architecture/01_QANTUM_MASTER_SPECIFICATION.md)** | Full specifications of dual-state memory, Sovereign Evaporator, and WS protocols | **✅ Integrated** |
+| 09 | **[SOUL DSL Specification](eic/architecture/02_SOUL_DSL_SPECIFICATION.md)** | Grammar, logic gate, and compilation rules for the `.soul` metalogic language | **✅ Integrated** |
+| 10 | **[Master Plan White Paper](eic/architecture/03_MASTER_PLAN_WHITE_PAPER.md)** | Strategic software roadmap, multi-stage evolution, and production goals | **✅ Integrated** |
+| 11 | **[QAntum Prime Whitepaper](eic/architecture/04_QANTUM_PRIME_WHITEPAPER.md)** | Deep tech research paper on entropy collapse and zero-float mechanics | **✅ Integrated** |
+| 12 | **[Architecture Panorama](eic/architecture/05_ARCHITECTURE_PANORAMA.md)** | Structural layout mapping physical, executive, and cognitive layers | **✅ Integrated** |
+| 13 | **[Binary Target Inventory](eic/architecture/06_BINARY_INVENTORY.md)** | Verified inventory of compiled target binaries and their SHA-256 integrity hashes | **✅ Integrated** |
+| 14 | **[Evaluator Technical Brief](eic/architecture/07_EVALUATOR_TECHNICAL_BRIEF.md)** | Cryptographic verification blueprint for EIC Accelerator evaluators (TRL 6) | **✅ Integrated** |
+| 15 | **[Revenue Certificate](eic/architecture/08_REVENUE_CERTIFICATE.md)** | Verified B2B enterprise settlement audit of the sovereign wealth bridge | **✅ Integrated** |
 
 ---
 

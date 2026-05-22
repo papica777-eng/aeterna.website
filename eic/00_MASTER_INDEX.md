@@ -6,6 +6,7 @@
 
 ## 📁 Document Package Contents
 
+### 🎯 EIC Defense & Proposal Package
 | # | Document | Purpose | Pages |
 |---|----------|---------|-------|
 | 01 | [Pitch Deck Technical Brief](./01_PITCH_DECK_TECHNICAL_BRIEF.md) | Full technical narrative for jury reading | ~12 |
@@ -15,6 +16,17 @@
 | 05 | [TRL Evidence Package](./05_TRL_EVIDENCE_PACKAGE.md) | TRL 6 evidence chain + demo protocol | ~5 |
 | 06 | [Official Step 1 Proposal](./06_OFFICIAL_STEP1_PROPOSAL.md) | Submitted Horizon Europe Proposal (№101327948) | ~16 |
 
+### 🛠️ Master QAntum Engineering Arsenal (Deep Tech Architecture)
+| # | Architecture Document | Core Engineering Focus & Purpose | Format |
+|---|----------------------|-----------------------------------|--------|
+| 07 | [QAntum Master Specification](./architecture/01_QANTUM_MASTER_SPECIFICATION.md) | Full specs of dual-state memory, Sovereign Evaporator, and WS protocols | Markdown |
+| 08 | [SOUL DSL Specification](./architecture/02_SOUL_DSL_SPECIFICATION.md) | Grammar, logic gate, and compilation rules for the `.soul` metalogic language | Markdown |
+| 09 | [Master Plan White Paper](./architecture/03_MASTER_PLAN_WHITE_PAPER.md) | Strategic software roadmap, multi-stage evolution, and production goals | Markdown |
+| 10 | [QAntum Prime Whitepaper](./architecture/04_QANTUM_PRIME_WHITEPAPER.md) | Deep tech research paper on entropy collapse and zero-float mechanics | Markdown |
+| 11 | [Architecture Panorama](./architecture/05_ARCHITECTURE_PANORAMA.md) | Structural layout mapping the physical, executive, and cognitive layers | Markdown |
+| 12 | [Binary Target Inventory](./architecture/06_BINARY_INVENTORY.md) | Verified inventory of compiled target binaries and their SHA-256 integrity hashes | Markdown |
+| 13 | [Evaluator Technical Brief](./architecture/07_EVALUATOR_TECHNICAL_BRIEF.md) | Cryptographic verification blueprint for EIC Accelerator evaluators (TRL 6) | Markdown |
+| 14 | [Revenue Certificate](./architecture/08_REVENUE_CERTIFICATE.md) | Verified B2B enterprise settlement audit of the sovereign wealth bridge | Markdown |
 
 ---
 
