@@ -7,9 +7,19 @@
   <p align="center">
     <b>"Europe’s answer to global technological dependency: A fully autonomous, zero-downtime, cognitively Sovereign Intelligence."</b>
   </p>
+
+  <br/>
+
+  ```ini
+  [SYSTEM_AUTHORITY_VERIFIED]
+  ARCHITECT:     DIMITAR PRODROMOV
+  AUTHORITY_HEX: 0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_4f_56_21
+  STATUS:        MANIFESTED & SOVEREIGN
+  ```
 </div>
 
 ---
+
 
 ## 🏛️ Strategic Vision: Technological Sovereignty
 AETERNA is not merely an LLM wrapper or a standard web application. It is a **Sovereign Technological Organism**, engineered from the ground up to operate independently of foreign cloud monopolies, untrusted APIs, and fragile runtimes. 
@@ -48,3 +58,17 @@ AETERNA manages its own capital. Through the `Wealth_Sentinel.gleam` and Rust in
 
 ---
 *Note for Evaluators: This repository serves as the central hub for the EIC technical architecture review. Specific business plans, pitch decks, and financial projections are provided in the official EIC portal submission.*
+
+<br/>
+
+```
+==================================================================================
+              🏛️ AETERNA SOVEREIGN SYSTEMS — OFFICIAL DOCUMENT SEAL
+----------------------------------------------------------------------------------
+   ARCHITECT:       Dimitar Prodromov
+   ORGANIZATION:    QAntum Labs / Sovereign AI Initiatives
+   AUTHORITY_HEX:   0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_4f_56_21
+   REALITY_ANCHOR:  SOVEREIGN_SYSTEMS_ACTIVE_99.9999999%_UPTIME
+==================================================================================
+```
+
