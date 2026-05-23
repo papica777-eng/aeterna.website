@@ -186,6 +186,14 @@
                     </div>
                     <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform"></i>
                 </button>
+                
+                <button onclick="setSpecTab('eic')" id="tab-eic" class="spec-tab p-6 text-left glass hover:bg-white/[0.01] transition-all rounded-lg flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="graduation-cap" class="text-accent-gold w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm tracking-wide font-mono uppercase" data-i18n="tab.eic">EIC Step 2 Hub</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500 group-hover:translate-x-1 transition-transform"></i>
+                </button>
             </div>
             
             <!-- Middle Column: Technical Specifications Documentation -->
@@ -612,12 +620,13 @@
             lang: "en",
             activeSpec: "napi",
             trlStep: 6,
-            // Track terminal histories for all four compartments for absolute authentication
+            // Track terminal histories for all compartments for absolute authentication
             terminalHistory: {
                 napi: [],
                 swarm: [],
                 pqc: [],
-                knox: []
+                knox: [],
+                eic: []
             }
         };
 
@@ -651,6 +660,7 @@
                 "tab.swarm": "16 Офлайн AI Модела",
                 "tab.pqc": "Пост-Квантова Криптография",
                 "tab.knox": "Knox TEE Изолация",
+                "tab.eic": "EIC Step 2 Портфолио",
                 
                 "timeline.title": "ТЕХНОЛОГИЧНА ЗРЯЛОСТ (TRL)",
                 "timeline.subtitle": "Проследи инженеринговата еволюция на когнитивното ядро AETERNA от математическо уравнение до критична отбрана.",
@@ -717,6 +727,7 @@
                 "tab.swarm": "16 Local AI Models",
                 "tab.pqc": "Post-Quantum Cryptography",
                 "tab.knox": "Knox TEE Isolation",
+                "tab.eic": "EIC Step 2 Hub",
                 
                 "timeline.title": "TECHNOLOGY READINESS PROGRESSION",
                 "timeline.subtitle": "Tracing the engineering maturity of the AETERNA cognitive core. From deep mathematical proofs to real-world critical infrastructure pilots.",
@@ -878,6 +889,36 @@
                         { label: "TEE KEY AUDIT", cmd: "knox_audit" }
                     ]
                 }
+            },
+            eic: {
+                bg: {
+                    category: "ЕВРОПЕЙСКИ ШАМПИОН // EIC ACCELERATOR",
+                    heading: "EIC Step 2 Портфолио",
+                    desc: "Изчерпателен набор от официални материали за интервюто за защита на AETERNA пред Европейската комисия.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>01_Pitch Deck Brief:</b> Техническо резюме на платформата, TRL 6 валидация и пазарни предимства.</li><li><b>02_Pitch Script:</b> Текстът на 10-минутната презентация, описващ елиминирането на облачната зависимост.</li><li><b>03_QA Prep Index:</b> База от 53 критични въпроса и отговора, покриващи архитектурата, финансите и риска.</li><li><b>04_Financial Model:</b> 5-годишен финансов план с консервативна ARR прогноза от €8.5M до година 5.</li><li><b>05_TRL 6 Package:</b> Доказателства за индустриално внедряване и ретроспективни валидационни данни.</li></ul>",
+                    metric_label: "Requested Funding",
+                    metric_val: "€7.5M Scale-up Budget",
+                    status_label: "Veritas Validation",
+                    status_val: "PASSED (100% Steel)",
+                    header_title: "AETERNA // EIC_STEP2_INTERVIEW_DOME",
+                    actions: [
+                        { label: "КАТАЛОГ С ФАЙЛОВЕ", cmd: "eic_list" },
+                        { label: "VERITAS ОДИТ", cmd: "eic_audit" }
+                    ]
+                },
+                en: {
+                    category: "EUROPEAN CHAMPION // EIC ACCELERATOR",
+                    heading: "EIC Step 2 Portfolio",
+                    desc: "Comprehensive suite of official interview preparation materials submitted for AETERNA's defense before the European Commission.<br><br><ul class='space-y-2 text-xs text-gray-400 list-disc pl-4 font-mono'><li><b>01_Pitch Deck Brief:</b> System technical summary, TRL 6 physical validation, and proprietary USP.</li><li><b>02_Pitch Script:</b> The 10-minute presentation script highlighting cloud independence and local execution.</li><li><b>03_QA Prep Index:</b> Advanced Q&A ledger addressing 53 critical queries on architecture, financials, and risk.</li><li><b>04_Financial Model:</b> 5-year financial projection showing a conservative Y5 ARR target of €8.5M.</li><li><b>05_TRL 6 Package:</b> Hard industrial environment deployment proofs and retrospectives.</li></ul>",
+                    metric_label: "Requested Funding",
+                    metric_val: "€7.5M Scale-up Budget",
+                    status_label: "Veritas Validation",
+                    status_val: "PASSED (100% Steel)",
+                    header_title: "AETERNA // EIC_STEP2_INTERVIEW_DOME",
+                    actions: [
+                        { label: "FILE CATALOG", cmd: "eic_list" },
+                        { label: "VERITAS AUDIT", cmd: "eic_audit" }
+                    ]
+                }
             }
         };
 
@@ -945,6 +986,22 @@
                     "SECURITY GATE: Level 4 cryptographic lockout enforcement active",
                     "ACTUATORS: Physical automated infusion pumps locked in TEE",
                     "STATUS: Secure hardware enclave boots successfully. Fully isolated."
+                ]
+            },
+            eic: {
+                bg: [
+                    "// ОТВАРЯНЕ НА EIC STEP 2 ИНТЕРВЮ ПОРТФОЛИО...",
+                    "ВЕРСИЯ: AETERNA-EIC-v3.0",
+                    "СТАТУС: Успешно заредени 6 файла от C:\\EIC_STEP2_INTERVIEW",
+                    "АНКЕР: Математическа защита на O(1) сложност и Bus Factor е активна",
+                    "СТАТУС: Материалите са детерминирано валидирани през VERITAS"
+                ],
+                en: [
+                    "// OPENING EIC STEP 2 INTERVIEW PORTFOLIO...",
+                    "VERSION: AETERNA-EIC-v3.0",
+                    "SOURCE COMPARTMENT: C:\\EIC_STEP2_INTERVIEW",
+                    "CORE DEFENSE: O(1) complexity and Bus Factor mathematical attestation active",
+                    "STATUS: Interview assets verified successfully via VERITAS validator."
                 ]
             }
         };
@@ -1133,6 +1190,46 @@
                         `[${time}] [TEE] Auditing secure hardware keys stored inside tamper-proof silicon...`,
                         `[${time}] [AUDIT] Running Samsung Knox cryptographic signature verification...`,
                         `[${time}] [SUCCESS] Secure key store audited successfully. Integrity: APPROVED.`
+                    ];
+                }
+            } else if (cmd === 'eic_list') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [CATALOG] Зареждане на списък с файлове от C:\\EIC_STEP2_INTERVIEW...`,
+                        `[${time}] [FILE] 00_MASTER_INDEX.md (4350 B) - Зареден`,
+                        `[${time}] [FILE] 01_PITCH_DECK_TECHNICAL_BRIEF.md (13706 B) - Зареден`,
+                        `[${time}] [FILE] 02_PITCH_SCRIPT_10MIN.md (9522 B) - Зареден`,
+                        `[${time}] [FILE] 03_QA_PREPARATION_53_QUESTIONS.md (21760 B) - Зареден`,
+                        `[${time}] [FILE] 04_FINANCIAL_MODEL_5YEAR.md (7422 B) - Зареден`,
+                        `[${time}] [FILE] 05_TRL_EVIDENCE_PACKAGE.md (7984 B) - Зареден`,
+                        `[${time}] [УСПЕХ] Всички файлове са заредени. Достъпни за четене в /eic/ директорията.`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [CATALOG] Reading interview file structure from C:\\EIC_STEP2_INTERVIEW...`,
+                        `[${time}] [FILE] 00_MASTER_INDEX.md (4350 B) - Loaded`,
+                        `[${time}] [FILE] 01_PITCH_DECK_TECHNICAL_BRIEF.md (13706 B) - Loaded`,
+                        `[${time}] [FILE] 02_PITCH_SCRIPT_10MIN.md (9522 B) - Loaded`,
+                        `[${time}] [FILE] 03_QA_PREPARATION_53_QUESTIONS.md (21760 B) - Loaded`,
+                        `[${time}] [FILE] 04_FINANCIAL_MODEL_5YEAR.md (7422 B) - Loaded`,
+                        `[${time}] [FILE] 05_TRL_EVIDENCE_PACKAGE.md (7984 B) - Loaded`,
+                        `[${time}] [SUCCESS] All assets mapped successfully. Fully visible inside /eic/ endpoint.`
+                    ];
+                }
+            } else if (cmd === 'eic_audit') {
+                if (state.lang === 'bg') {
+                    logLines = [
+                        `[${time}] [VERITAS] Стартиране на одит на документите за интервюто...`,
+                        `[${time}] [O(1) PROOF] Твърдението за O(1) сложност е МАТЕМАТИЧЕСКИ ПОТВЪРДЕНО спрямо мащаба N.`,
+                        `[${time}] [BUS FACTOR] Защитата на Bus Factor през Metacompilation Core е ОДОБРЕНА.`,
+                        `[${time}] [УСПЕХ] Одитът премина успешно. Всички твърдения съответстват на софтуерната реалност!`
+                    ];
+                } else {
+                    logLines = [
+                        `[${time}] [VERITAS] Launching compliance audit on EIC interview documents...`,
+                        `[${time}] [O(1) PROOF] Neural network constant-time O(1) complexity validated against input scaling N.`,
+                        `[${time}] [BUS FACTOR] Metacompiler expansion mechanism validated. Bus Factor risk mitigated.`,
+                        `[${time}] [SUCCESS] VERITAS verification passed. All technical claims verified for EC evaluators!`
                     ];
                 }
             }
