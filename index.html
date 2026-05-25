@@ -36,6 +36,7 @@
         .glass-premium { background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .glow-cyan { box-shadow: 0 0 30px rgba(0, 240, 255, 0.1); }
         .glow-purple { box-shadow: 0 0 30px rgba(181, 95, 230, 0.1); }
+        .glow-gold { box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
         .gradient-text { background: linear-gradient(135deg, #ffffff 0%, #00f0ff 50%, #b55fe6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .scan-line { position: absolute; height: 1px; width: 100%; background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent); animation: scan 6s linear infinite; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
@@ -78,7 +79,8 @@
                 <a href="#specs" class="hover:text-accent-cyan transition-all" data-i18n="nav.specs">SPECIFICATIONS LAB</a>
                 <a href="#timeline" class="hover:text-accent-cyan transition-all" data-i18n="nav.timeline">CHRONOLOGY</a>
                 <a href="#access" class="hover:text-accent-cyan transition-all" data-i18n="nav.pricing">PRICING</a>
-                <a href="./hud.html" class="text-accent-purple hover:text-white transition-all font-black" data-i18n="nav.vht">ONCOLOGY VHT HUD</a>
+                <a href="./hud.html" class="text-accent-purple hover:text-white transition-all font-black" data-i18n="nav.vht">ONCOLOGY HUD</a>
+                <a href="./vht_diabet.html" class="text-accent-emerald hover:text-white transition-all font-black" data-i18n="nav.diabet">DIABETES HUD</a>
             </div>
 
             <!-- Glassmorphic Language Selector Pill -->
@@ -114,7 +116,11 @@
                 <a href="#specs" class="px-10 py-5 bg-accent-cyan text-black font-black text-xs tracking-widest uppercase hover:bg-white transition-all rounded shadow-lg shadow-accent-cyan/15 glow-cyan" data-i18n="hero.cta">Enter Sandbox Lab</a>
                 <a href="./hud.html" class="px-10 py-5 glass border border-accent-purple/40 text-accent-purple font-black text-xs tracking-widest uppercase hover:bg-accent-purple hover:text-white transition-all rounded shadow-lg shadow-accent-purple/5 flex items-center gap-2 group">
                     <i data-lucide="activity" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-                    <span data-i18n="hero.cta_vht_diabet">Oncology VHT HUD</span>
+                    <span data-i18n="hero.cta_vht_diabet">Oncology HUD</span>
+                </a>
+                <a href="./vht_diabet.html" class="px-10 py-5 glass border border-accent-emerald/40 text-accent-emerald font-black text-xs tracking-widest uppercase hover:bg-accent-emerald hover:text-black transition-all rounded shadow-lg shadow-accent-emerald/5 flex items-center gap-2 group">
+                    <i data-lucide="activity" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                    <span data-i18n="hero.cta_diabet">Diabetes HUD</span>
                 </a>
                 <a href="https://qantum.site" target="_blank" class="px-10 py-5 glass border border-accent-cyan/30 text-accent-cyan font-black text-xs tracking-widest uppercase hover:bg-accent-cyan hover:text-black transition-all rounded shadow-lg shadow-accent-cyan/5 flex items-center gap-2 group">
                     <i data-lucide="play" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
@@ -144,6 +150,74 @@
             <span>VORTEX_SYNC_STABILITY :: 99.999%</span>
         </div>
     </div>
+
+    <!-- EIC Step 2 Jury Defense Section -->
+    <section id="eic-defense" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase" data-i18n="eic.title">EIC Step 2 <span class="text-accent-gold">Jury Defense</span></h2>
+            <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed" data-i18n="eic.subtitle">The Sovereign Autonomous SaaS Engine. Eradicating the €2,000/month SaaS Fragmentation Tax for EU SMEs through zero-entropy deterministic logic.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <div class="glass-premium p-6 rounded-xl border-l-4 border-l-accent-cyan hover:border-white/20 transition-all flex gap-4">
+                    <i data-lucide="shield-check" class="text-accent-cyan w-6 h-6 shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">1. Veritas Substrate Anchor</h3>
+                        <p class="text-gray-400 text-sm">32-byte SHA-256 binary anchor (<code class="text-accent-cyan font-mono text-[10px]">veritas_lock.bin</code>) proving system integrity. Auto-restores corrupted logic layers with 100% byte-identical precision.</p>
+                    </div>
+                </div>
+                <div class="glass-premium p-6 rounded-xl border-l-4 border-l-accent-emerald hover:border-white/20 transition-all flex gap-4">
+                    <i data-lucide="coins" class="text-accent-emerald w-6 h-6 shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">2. Zero-Float Financial Engine</h3>
+                        <p class="text-gray-400 text-sm">Replaces IEEE 754 floating-point with <code class="text-accent-emerald font-mono text-[10px]">u64 atomic cents</code>. Guarantees €0.00 reconciliation drift at €462K/month throughput.</p>
+                    </div>
+                </div>
+                <div class="glass-premium p-6 rounded-xl border-l-4 border-l-accent-purple hover:border-white/20 transition-all flex gap-4">
+                    <i data-lucide="network" class="text-accent-purple w-6 h-6 shrink-0 mt-1"></i>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2">3. Catuṣkoṭi Logic Gate</h3>
+                        <p class="text-gray-400 text-sm">Nagarjuna's 4-valued logic (True, False, Both, Neither) eliminating "crash on paradox" failures common in classical binary AI agents.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EIC Metrics Terminal -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-gold/30 glow-gold shadow-2xl">
+                <div class="bg-black/90 px-4 py-3 border-b border-white/10 flex justify-between items-center">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="terminal" class="text-accent-gold w-4 h-4"></i>
+                        <span class="font-mono text-[10px] text-accent-gold font-bold tracking-widest uppercase">EIC_METRIC_REGISTRY.exe</span>
+                    </div>
+                    <div class="flex gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                    </div>
+                </div>
+                <div class="bg-[#050505] p-6 font-mono text-[11px] leading-relaxed text-gray-300">
+                    <div class="text-accent-gold font-bold mb-4">AETERNA OMNICORE // STEP 2 FINANCIALS & METRICS</div>
+                    <div class="grid grid-cols-2 gap-4 mb-4 border-b border-white/5 pb-4">
+                        <div><div class="text-gray-500">TAM (Global SaaS):</div><div class="text-white font-bold">€50.0 Billion</div></div>
+                        <div><div class="text-gray-500">SAM (EU SMEs):</div><div class="text-white font-bold">€156.5 Million/yr</div></div>
+                        <div><div class="text-gray-500">Year 3 ARR Target:</div><div class="text-accent-emerald font-bold">€8.2M</div></div>
+                        <div><div class="text-gray-500">Year 5 ARR Target:</div><div class="text-accent-emerald font-bold">€48.7M</div></div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-500">LTV:CAC Ratio:</span><span class="text-accent-cyan font-bold">23.9x</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1 pt-1"><span class="text-gray-500">Gross Profit Margin:</span><span class="text-white font-bold">87%</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1 pt-1"><span class="text-gray-500">Infra cost / user / day:</span><span class="text-white font-bold">€0.16</span></div>
+                        <div class="flex justify-between pt-1"><span class="text-gray-500">Payback Period:</span><span class="text-white font-bold">1.5 months</span></div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-white/5 text-accent-emerald font-bold">
+                        > VERDICT: TRL 6 STATUS VALIDATED. <br>
+                        > AETERNA EST IMMORTALIS.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Specifications Interactive Lab Section -->
     <section id="specs" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
@@ -543,11 +617,7 @@
             }
         }
 
-        // Initialize particles & telemetry rain columns
-        const particleCount = 80;
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        // Initialize telemetry rain columns
         const rainCount = 20;
         for (let i = 0; i < rainCount; i++) {
             telemetryRain.push(new RainTelemetry());
@@ -560,55 +630,6 @@
             telemetryRain.forEach(rain => {
                 rain.update();
                 rain.draw();
-            });
-
-            // Draw Connections
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 115) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(181, 95, 230, ${0.12 * (1 - dist / 115)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-
-                        // Occasional Synaptic Signal Pulse triggering
-                        if (pulses.length < 18 && Math.random() < 0.0003) {
-                            pulses.push(new Pulse(particles[i], particles[j]));
-                        }
-                    }
-                }
-
-                // Connect to Mouse Proximity (Cyan glow connections)
-                if (mouse.x !== null && mouse.y !== null) {
-                    const dx = particles[i].x - mouse.x;
-                    const dy = particles[i].y - mouse.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 160) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.2 * (1 - dist / 160)})`;
-                        ctx.lineWidth = 0.7;
-                        ctx.stroke();
-                    }
-                }
-
-                particles[i].update();
-                particles[i].draw();
-            }
-
-            // Update and Draw Synaptic Pulses
-            pulses = pulses.filter(p => p.progress < 1);
-            pulses.forEach(p => {
-                p.update();
-                p.draw();
             });
 
             requestAnimationFrame(animateCanvas);
@@ -637,7 +658,8 @@
                 "nav.specs": "СПЕЦИФИКАЦИИ",
                 "nav.timeline": "ХРОНОЛОГИЯ",
                 "nav.pricing": "ЦЕНИ",
-                "nav.vht": "ОНКОЛОГИЧЕН БЛИЗНАК HUD",
+                "nav.vht": "ОНКОЛОГИЧЕН HUD",
+                "nav.diabet": "ДИАБЕТ HUD",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
                 "hero.title_1": "СУВЕРЕНЕН",
                 "hero.title_2": "АВТОНОМЕН",
@@ -645,7 +667,8 @@
                 "hero.subtitle": "Разгръщане на суверенна автономна когнитивна архитектура за киберсигурност и физическа AI координация. Замяна на чуждите облачни платформи със 100% локална европейска детерминирана логика.",
                 "hero.cta": "Влез в Лабораторията",
                 "hero.cta_action_text": "Аетерна в действие",
-                "hero.cta_vht_diabet": "Онкологичен Близнак HUD",
+                "hero.cta_vht_diabet": "Онкологичен HUD",
+                "hero.cta_diabet": "Диабет HUD",
                 "hero.lines": "РЕДА СУВЕРЕНЕН КОД",
                 "hero.lines_val": "1.85М",
                 "hero.trl": "ВАЛИДИРАН СТАНДАРТ",
@@ -653,6 +676,9 @@
                 "hero.latency": "ЗАКЪСНЕНИЕ НА СИСТЕМА",
                 "hero.latency_val": "<100ns",
                 
+                "eic.title": "EIC Step 2 <span class=\"text-accent-gold\">Защита пред Жури</span>",
+                "eic.subtitle": "Суверенната автономна SaaS платформа. Елиминиране на скрития данък от €2000/месец за софтуерна фрагментация при МСП в Европа чрез детерминирана логика с нулева ентропия.",
+
                 "specs.lab_title": "ИНТЕРАКТИВНА ЛАБОРАТОРИЯ ЗА СПЕЦИФИКАЦИИ",
                 "specs.lab_subtitle": "Разгледайте техническите архитектури отблизо. Изберете спецификация, за да заредите нейната документация и да изпълните симулации в съответния терминал.",
                 
@@ -704,7 +730,8 @@
                 "nav.specs": "SPECIFICATIONS LAB",
                 "nav.timeline": "CHRONOLOGY",
                 "nav.pricing": "PRICING",
-                "nav.vht": "ONCOLOGY VHT HUD",
+                "nav.vht": "ONCOLOGY HUD",
+                "nav.diabet": "DIABETES HUD",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
                 "hero.title_1": "SOVEREIGN",
                 "hero.title_2": "AUTONOMOUS",
@@ -712,7 +739,8 @@
                 "hero.subtitle": "Deploying a Sovereign Autonomous Cognitive Engine for Resilient Cybersecurity and Physical AI Orchestration. Replacing cloud-dependent black boxes with 100% European deterministic logic.",
                 "hero.cta": "Enter Sandbox Lab",
                 "hero.cta_action_text": "Aeterna in Action",
-                "hero.cta_vht_diabet": "Oncology VHT HUD",
+                "hero.cta_vht_diabet": "Oncology HUD",
+                "hero.cta_diabet": "Diabetes HUD",
                 "hero.lines": "LINES OF CODE",
                 "hero.lines_val": "1.85M",
                 "hero.trl": "VALIDATED",
@@ -720,6 +748,9 @@
                 "hero.latency": "LATENCY",
                 "hero.latency_val": "<100ns",
                 
+                "eic.title": "EIC Step 2 <span class=\"text-accent-gold\">Jury Defense</span>",
+                "eic.subtitle": "The Sovereign Autonomous SaaS Engine. Eradicating the €2,000/month SaaS Fragmentation Tax for EU SMEs through zero-entropy deterministic logic.",
+
                 "specs.lab_title": "INTERACTIVE SPECIFICATIONS LAB",
                 "specs.lab_subtitle": "Explore our technical architectures at a low-level. Select any specification node to load its exhaustive documentation and execute dedicated simulations inside its sandbox terminal.",
                 
@@ -1586,7 +1617,6 @@
         // Initialize App on Page Load
         window.addEventListener('DOMContentLoaded', () => {
             setLanguage('en');
-            startTerminalAutoRotation();
         });
     </script>
 </body>
