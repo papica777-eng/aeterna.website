@@ -105,7 +105,7 @@ AETERNA is the only applicant at **TRL 6** that simultaneously bridges both EIC 
 - `📂 docs/` — Detailed whitepapers, diagrams, and deployment guides.
 - `📂 eic/` — Official grant drafts, full applications, and compliance documentation.
 - `📄 index.html` — The premium, orange/amber glassmorphic research landing portal featuring responsive grid transitions.
-- `📄 vht_diabet.html` — Interactive VHT Diabetic simulation and metabolic mapping HUD.
+- `📄 hud.html` — Interactive Oncology Twin simulation, metabolic mapping, and Synthetic Lethality HUD.
 - `📄 IP_FINDER.html` — Zero-leak target routing interface.
 - `📄 LICENSE` — AETERNA Academic & Proprietary License.
 
@@ -138,50 +138,50 @@ Currently a sole proprietorship, AETERNA will execute rapid scaling upon EIC awa
 
 ---
 
-## 🏛️ TRL 6 Live Verification Protocol (Инструкции за Оценители)
-Оценителите на **European Innovation Council (EIC)** могат да стартират нашия интерактивен диагностичен симулатор локално, за да проверят софтуерната готовност и революционния характер на архитектурата на AETERNA при пълно натоварване в реално време.
+## 🏛️ TRL 6 Live Verification Protocol (Evaluator Instructions)
+European Innovation Council (EIC) evaluators can launch our interactive diagnostic simulator locally to verify software readiness and the revolutionary nature of AETERNA's architecture under full load in real-time.
 
-### 🚀 Стъпка 1: Инсталиране на Зависимостите
-Всички софтуерни ядра и зависимости за диагностика са напълно стандартизирани и готови за работа без облачни зависимости. Изпълнете следната команда в основната директория:
+### 🚀 Step 1: Installing Dependencies
+All software cores and diagnostic dependencies are fully standardized and ready for execution with zero cloud dependencies. Run the following command in the root directory:
 ```bash
 npm install
 ```
 
-### 🎯 Стъпка 2: Стартиране на Диагностичния Тест
-За да тествате активната полиморфна ротация на самоличности и физиологичната симулация на органично движение на курсора, стартирайте следната ултра-бърза ESM команда (която използва предварително конфигурирания `tsx` енджин):
+### 🎯 Step 2: Running the Diagnostic Test
+To test the active polymorphic identity rotation and physical simulation of organic cursor movements, run the following ultra-fast ESM command (using the preconfigured `tsx` engine):
 ```bash
 npm run demo
 ```
-*(Като алтернатива, можете да стартирате и компилираната Javascript версия: `npx tsc && node dist/automation/INTERVIEW_DEMO.js`)*
+*(Alternatively, you can run the compiled Javascript version: `npx tsc && node dist/automation/INTERVIEW_DEMO.js`)*
 
 ---
 
-## 🧠 Дълбока Архитектурна Спецификация (Разбиване на Парадигмите)
-Настоящото демо не е прост мок. То е **математически точна високопроизводителна симулация (TRL 6)**, отразяваща реалното ядро на нашата система, което работи по следния начин:
+## 🧠 Deep Architectural Specification (Paradigm Shift)
+This demo is not a simple mock. It is a **mathematically precise high-performance simulation (TRL 6)**, reflecting our actual system engine operating under the following paradigms:
 
-### 1. Споделена Памет `SharedMemoryV2` (Конкуренция & Нулева Ентропия)
-За разлика от стандартните блокиращи механизми за междупроцесна комуникация (IPC), AETERNA използва **Lock-Free парадигма за четене $O(1)$** и контролирана конкуренция за писане.
-* **Stale Lock Watchdog:** Системата разполага с автономен пазач (watchdog), работещ на 5ms интервали, който автоматично открива блокирали процеси и принудително освобождава системния ресурс за **по-малко от 25ms**. Това предотвратява всякакви ситуации на мъртва хватка (deadlocks) в Swarm мрежата.
-* **Оптимистичен Контрол на Версиите (OCC):** Писането се съгласува чрез проверка на системните версии, предотвратявайки "race conditions" между паралелните инстанции на виртуалните браузъри.
+### 1. Shared Memory `SharedMemoryV2` (Concurrency & Zero Entropy)
+Unlike standard blocking Inter-Process Communication (IPC) mechanisms, AETERNA uses a **Lock-Free reading paradigm operating at $O(1)$** complexity alongside controlled write concurrency.
+* **Stale Lock Watchdog:** The system features an autonomous watchdog running at 5ms intervals, which automatically detects blocked processes and forcibly releases system resources in **less than 25ms**, preventing deadlocks inside the Swarm network.
+* **Optimistic Concurrency Control (OCC):** Write synchronization is mediated via system version checks, eliminating race conditions across parallel virtual browser instances.
 
-### 2. Бот Девиация & `GhostShield` (Post-Quantum & Защита от WAF)
-Стандартните бот-детектори (като Cloudflare, Akamai, Incapsula) разпознават автоматизираните агенти чрез анализ на TLS отпечатъци (JA3/JA4) и HTTP/2 рамки. `GhostShield` прави тези защити напълно безполезни:
-* **Mutation Loop (50ms):** На всеки 50 милисекунди GhostShield генерира изцяло нов, TLS подпис, ротирайки списъците с шифри (Cipher Suites), разширения (Extensions) и елиптични криви.
-* **Квантова Устойчивост (Post-Quantum Cryptography):** Пулът от подписи симулира интеграцията на квантово-устойчиви хибридни криви като **x25519_kyber768** (съответстващи на финалните стандарти на NIST от август 2024 г.).
-* **HTTP/2 Сигнализация:** Всяка инстанция ротира динамично настройките на `HEADER_TABLE_SIZE`, `MAX_CONCURRENT_STREAMS` и първоначалните размери на прозореца.
+### 2. Bot Deviation & `GhostShield` (Post-Quantum & WAF Bypass)
+Standard bot-detection matrices (such as Cloudflare, Akamai, Incapsula) recognize automated agents by analyzing TLS fingerprints (JA3/JA4) and HTTP/2 frames. `GhostShield` renders these defenses obsolete:
+* **Mutation Loop (50ms):** Every 50 milliseconds, GhostShield generates a completely unique, valid TLS signature, rotating Cipher Suites, Extensions, and elliptic curves.
+* **Post-Quantum Cryptography (PQC):** The signature pool simulates the integration of hybrid curves like **x25519_kyber768** (conforming to finalized NIST standards from August 2024).
+* **HTTP/2 Signaling:** Each instance dynamically rotates settings for `HEADER_TABLE_SIZE`, `MAX_CONCURRENT_STREAMS`, and initial window parameters to mimic natural human anomalies.
 
-### 3. Биомиметичен Курсор `GhostCursor` (Математика на Човешкото Поведение)
-Съвременните поведенчески WAF системи анализират траекторията на мишката за праволинейност и постоянна скорост. `GhostCursor` разбива тези модели с три нива на физична и неврологична симулация:
-* **Кубични Криви на Безие (Cubic Bezier):** Движението се изчислява по формула, използваща начална точка $P_0$, крайна точка $P_3$ и две динамично отклоняващи се контролни точки $P_1$ и $P_2$:
+### 3. Biomimetic Cursor `GhostCursor` (Mathematics of Human Behavior)
+Modern behavioral WAF systems analyze cursor trajectories for linear paths and constant speeds. `GhostCursor` breaks these models using three layers of physical and neurological simulation:
+* **Cubic Bezier Curves:** Cursor coordinates are calculated using mathematical curves based on a start point $P_0$, end point $P_3$, and two dynamically diverging control points $P_1$ and $P_2$:
   $$B(t) = (1-t)^3 P_0 + 3(1-t)^2 t P_1 + 3(1-t) t^2 P_2 + t^3 P_3$$
-* **Закон на Фитс & Гаусов Профил на Скоростта:** Хората не движат ръката си с постоянна скорост. Те ускоряват бързо и забавят плавно, когато се приближават до целта. Това се симулира чрез Гаусово разпределение на скоростта:
+* **Fitts' Law & Gaussian Velocity Profile:** Humans do not move their hands at constant speeds; they accelerate rapidly and slow down smoothly as they approach targets. This is simulated using a Gaussian velocity distribution:
   $$v(t) = 0.15 + 0.85 \cdot e^{-\frac{(t - 0.45)^2}{2 \cdot 0.22^2}}$$
-* **Физиологичен Микротремор (Gaussian Jitter):** Към всяка стъпка от движението се добавя фин неврологичен шум от порядъка на $\pm 0.45$ пиксела, симулиращ естествените мускулни трептения.
-* **Turing Likeness Score:** На база анализ на ускорението, кривината и тремора, алгоритъмът изчислява процент на човешка автентичност. Траекториите преминават поведенческия Тюринг тест с над **98.5% съвпадение**.
+* **Physiological Micro-tremor (Gaussian Jitter):** Fine neurological noise ($\pm 0.45$ pixels) is added to every movement step, simulating natural muscle micro-oscillations.
+* **Turing Likeness Score:** By analyzing acceleration, curvature, and jitter, the system calculates a human likeness score. All generated paths pass behavioral Turing tests with over **98.5% concordance**.
 
 ---
 
 <div align="center">
-  <i>AETERNA е доказателство, че една суверенна европейска технология може да изпревари световните гиганти.</i><br>
-  <b>1.85 милиона реда код, проектирани за сигурността на утрешния ден.</b>
+  <i>AETERNA is proof that sovereign European technology can leapfrog global giants.</i><br>
+  <b>1.85 million lines of code designed for tomorrow's security today.</b>
 </div>

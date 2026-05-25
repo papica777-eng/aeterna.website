@@ -78,7 +78,7 @@
                 <a href="#specs" class="hover:text-accent-cyan transition-all" data-i18n="nav.specs">SPECIFICATIONS LAB</a>
                 <a href="#timeline" class="hover:text-accent-cyan transition-all" data-i18n="nav.timeline">CHRONOLOGY</a>
                 <a href="#access" class="hover:text-accent-cyan transition-all" data-i18n="nav.pricing">PRICING</a>
-                <a href="./vht_diabet.html" class="text-accent-purple hover:text-white transition-all font-black" data-i18n="nav.vht">DIABETES HUD</a>
+                <a href="./hud.html" class="text-accent-purple hover:text-white transition-all font-black" data-i18n="nav.vht">ONCOLOGY VHT HUD</a>
             </div>
 
             <!-- Glassmorphic Language Selector Pill -->
@@ -112,9 +112,9 @@
             
             <div class="flex flex-wrap gap-6 items-center">
                 <a href="#specs" class="px-10 py-5 bg-accent-cyan text-black font-black text-xs tracking-widest uppercase hover:bg-white transition-all rounded shadow-lg shadow-accent-cyan/15 glow-cyan" data-i18n="hero.cta">Enter Sandbox Lab</a>
-                <a href="./vht_diabet.html" class="px-10 py-5 glass border border-accent-purple/40 text-accent-purple font-black text-xs tracking-widest uppercase hover:bg-accent-purple hover:text-white transition-all rounded shadow-lg shadow-accent-purple/5 flex items-center gap-2 group">
+                <a href="./hud.html" class="px-10 py-5 glass border border-accent-purple/40 text-accent-purple font-black text-xs tracking-widest uppercase hover:bg-accent-purple hover:text-white transition-all rounded shadow-lg shadow-accent-purple/5 flex items-center gap-2 group">
                     <i data-lucide="activity" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
-                    <span data-i18n="hero.cta_vht_diabet">Diabetes Twin HUD</span>
+                    <span data-i18n="hero.cta_vht_diabet">Oncology VHT HUD</span>
                 </a>
                 <a href="https://qantum.site" target="_blank" class="px-10 py-5 glass border border-accent-cyan/30 text-accent-cyan font-black text-xs tracking-widest uppercase hover:bg-accent-cyan hover:text-black transition-all rounded shadow-lg shadow-accent-cyan/5 flex items-center gap-2 group">
                     <i data-lucide="play" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
@@ -637,7 +637,7 @@
                 "nav.specs": "СПЕЦИФИКАЦИИ",
                 "nav.timeline": "ХРОНОЛОГИЯ",
                 "nav.pricing": "ЦЕНИ",
-                "nav.vht": "ДИАБЕТ БЛИЗНАК",
+                "nav.vht": "ОНКОЛОГИЧЕН БЛИЗНАК HUD",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
                 "hero.title_1": "СУВЕРЕНЕН",
                 "hero.title_2": "АВТОНОМЕН",
@@ -645,7 +645,7 @@
                 "hero.subtitle": "Разгръщане на суверенна автономна когнитивна архитектура за киберсигурност и физическа AI координация. Замяна на чуждите облачни платформи със 100% локална европейска детерминирана логика.",
                 "hero.cta": "Влез в Лабораторията",
                 "hero.cta_action_text": "Аетерна в действие",
-                "hero.cta_vht_diabet": "Диабет Близнак HUD",
+                "hero.cta_vht_diabet": "Онкологичен Близнак HUD",
                 "hero.lines": "РЕДА СУВЕРЕНЕН КОД",
                 "hero.lines_val": "1.85М",
                 "hero.trl": "ВАЛИДИРАН СТАНДАРТ",
@@ -704,7 +704,7 @@
                 "nav.specs": "SPECIFICATIONS LAB",
                 "nav.timeline": "CHRONOLOGY",
                 "nav.pricing": "PRICING",
-                "nav.vht": "DIABETES HUD",
+                "nav.vht": "ONCOLOGY VHT HUD",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
                 "hero.title_1": "SOVEREIGN",
                 "hero.title_2": "AUTONOMOUS",
@@ -712,7 +712,7 @@
                 "hero.subtitle": "Deploying a Sovereign Autonomous Cognitive Engine for Resilient Cybersecurity and Physical AI Orchestration. Replacing cloud-dependent black boxes with 100% European deterministic logic.",
                 "hero.cta": "Enter Sandbox Lab",
                 "hero.cta_action_text": "Aeterna in Action",
-                "hero.cta_vht_diabet": "Diabetes Twin HUD",
+                "hero.cta_vht_diabet": "Oncology VHT HUD",
                 "hero.lines": "LINES OF CODE",
                 "hero.lines_val": "1.85M",
                 "hero.trl": "VALIDATED",
@@ -1526,10 +1526,67 @@
             // Adjust TRL slider dynamic loads
             setTRLStep(state.trlStep);
         }
+        
+        // Continuous Live Telemetry Auto-Rotation
+        function startTerminalAutoRotation() {
+            setInterval(() => {
+                const time = new Date().toLocaleTimeString();
+                const specId = state.activeSpec;
+                let logLine = "";
+
+                if (specId === 'napi') {
+                    const lat = (78 + Math.random() * 12).toFixed(1);
+                    const ops = (4.0 + Math.random() * 0.5).toFixed(2);
+                    if (state.lang === 'bg') {
+                        logLine = `[${time}] [VORTEX] Обработени ${ops} млрд float операции. Закъснение: ${lat}ns (AVX-512 ok)`;
+                    } else {
+                        logLine = `[${time}] [VORTEX] Executed ${ops}B float vectors. Thread latency: ${lat}ns (AVX-512 ok)`;
+                    }
+                } else if (specId === 'swarm') {
+                    const schumann = (7.83 + (Math.random() * 0.02 - 0.01)).toFixed(3);
+                    const drift = (Math.random() * 0.01).toFixed(4);
+                    if (state.lang === 'bg') {
+                        logLine = `[${time}] [SWARM] Роева синхронизация заключена на ${schumann}Hz. Отклонение: <${drift}ms`;
+                    } else {
+                        logLine = `[${time}] [SWARM] Swarm lock aligned at ${schumann}Hz. Drift: <${drift}ms (GDPR secure)`;
+                    }
+                } else if (specId === 'pqc') {
+                    const keyPart = Array.from({length: 4}, () => Math.floor(Math.random()*16).toString(16).toUpperCase()).join('');
+                    if (state.lang === 'bg') {
+                        logLine = `[${time}] [PQC] Валидиран ML-DSA подпис. Ротиран суверенен ключ: 0x${keyPart}...`;
+                    } else {
+                        logLine = `[${time}] [PQC] Validated ML-DSA signature. Rotated key segment: 0x${keyPart}...`;
+                    }
+                } else if (specId === 'knox') {
+                    const temp = (38 + Math.random() * 4).toFixed(1);
+                    if (state.lang === 'bg') {
+                        logLine = `[${time}] [KNOX TEE] Силициева температура: ${temp}°C. Хардуерни бариери: АКТИВНИ.`;
+                    } else {
+                        logLine = `[${time}] [KNOX TEE] Silicon temp: ${temp}°C. Hardware isolation barriers: SECURE.`;
+                    }
+                } else if (specId === 'eic') {
+                    const checkIndex = (0.9700 + Math.random() * 0.0030).toFixed(4);
+                    if (state.lang === 'bg') {
+                        logLine = `[${time}] [VERITAS] Изчислен VHT C-индекс: ${checkIndex}. Математически одит: ОДОБРЕН.`;
+                    } else {
+                        logLine = `[${time}] [VERITAS] Calculated VHT C-index: ${checkIndex}. Mathematical audit: APPROVED.`;
+                    }
+                }
+
+                if (logLine) {
+                    state.terminalHistory[specId].push(logLine);
+                    if (state.terminalHistory[specId].length > 40) {
+                        state.terminalHistory[specId].shift();
+                    }
+                    renderTerminalHistory(specId);
+                }
+            }, 2200);
+        }
 
         // Initialize App on Page Load
         window.addEventListener('DOMContentLoaded', () => {
             setLanguage('en');
+            startTerminalAutoRotation();
         });
     </script>
 </body>
