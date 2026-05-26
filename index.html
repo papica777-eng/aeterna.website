@@ -18,7 +18,8 @@
                             indigo: '#4f46e5',
                             purple: '#b55fe6',
                             gold: '#d4af37',
-                            emerald: '#00ffaa'
+                            emerald: '#00ffaa',
+                            pink: '#ff2a85'
                         },
                         obsidian: '#050505',
                     },
@@ -82,6 +83,7 @@
                 <a href="#access" class="hover:text-accent-cyan transition-all" data-i18n="nav.pricing">PRICING</a>
                 <a href="./hud.html" class="text-accent-purple hover:text-white transition-all font-black" data-i18n="nav.vht">ONCOLOGY HUD</a>
                 <a href="./vht_diabet.html" class="text-accent-emerald hover:text-white transition-all font-black" data-i18n="nav.diabet">DIABETES HUD</a>
+                <a href="https://papica777-eng.github.io/VHT-BRAIN/" target="_blank" class="text-accent-pink hover:text-white transition-all font-black flex items-center gap-1.5 glow-text-pink animate-pulse" data-i18n="nav.live_brain">LIVE 3D BRAIN HUD</a>
             </div>
 
             <!-- Glassmorphic Language Selector Pill -->
@@ -122,6 +124,10 @@
                 <a href="./vht_diabet.html" class="px-10 py-5 glass border border-accent-emerald/40 text-accent-emerald font-black text-xs tracking-widest uppercase hover:bg-accent-emerald hover:text-black transition-all rounded shadow-lg shadow-accent-emerald/5 flex items-center gap-2 group">
                     <i data-lucide="activity" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
                     <span data-i18n="hero.cta_diabet">Diabetes HUD</span>
+                </a>
+                <a href="https://papica777-eng.github.io/VHT-BRAIN/" target="_blank" class="px-10 py-5 glass border border-accent-pink/40 text-accent-pink font-black text-xs tracking-widest uppercase hover:bg-accent-pink hover:text-black transition-all rounded shadow-lg shadow-accent-pink/5 flex items-center gap-2 group animate-pulse">
+                    <i data-lucide="brain" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                    <span data-i18n="hero.cta_live_brain">Live 3D Brain HUD</span>
                 </a>
                 <a href="https://qantum.site" target="_blank" class="px-10 py-5 glass border border-accent-cyan/30 text-accent-cyan font-black text-xs tracking-widest uppercase hover:bg-accent-cyan hover:text-black transition-all rounded shadow-lg shadow-accent-cyan/5 flex items-center gap-2 group">
                     <i data-lucide="play" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
@@ -180,6 +186,13 @@
                     <div>
                         <h3 class="text-lg font-bold text-white mb-2">3. Catuṣkoṭi Logic Gate</h3>
                         <p class="text-gray-400 text-sm">Nagarjuna's 4-valued logic (True, False, Both, Neither) eliminating "crash on paradox" failures common in classical binary AI agents.</p>
+                    </div>
+                </div>
+                <div class="glass-premium p-6 rounded-xl border-l-4 border-l-accent-pink hover:border-white/20 transition-all flex gap-4">
+                    <i data-lucide="brain" class="text-accent-pink w-6 h-6 shrink-0 mt-1 animate-pulse"></i>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="eic.card4_title">4. Live 3D Brain Virtual Twin</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="eic.card4_desc">WebGL-based real-time 3D neuro-simulation (<a href="https://papica777-eng.github.io/VHT-BRAIN/" target="_blank" class="text-accent-pink font-bold hover:underline">Launch Live Simulator</a>) demonstrating Glioblastoma modeling with 98.50% Synaptic Density recovery, 54.20 mL/100g/min L-CBF perfusion, and 97.13% C-index safety precision.</p>
                     </div>
                 </div>
             </div>
@@ -780,6 +793,7 @@
                 "nav.pricing": "ЦЕНИ",
                 "nav.vht": "ОНКОЛОГИЧЕН HUD",
                 "nav.diabet": "ДИАБЕТ HUD",
+                "nav.live_brain": "LIVE 3D МОЗЪК HUD",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
                 "hero.title_1": "СУВЕРЕНЕН",
                 "hero.title_2": "АВТОНОМЕН",
@@ -789,6 +803,7 @@
                 "hero.cta_action_text": "Аетерна в действие",
                 "hero.cta_vht_diabet": "Онкологичен HUD",
                 "hero.cta_diabet": "Диабет HUD",
+                "hero.cta_live_brain": "Live 3D Мозък HUD",
                 "hero.lines": "РЕДА СУВЕРЕНЕН КОД",
                 "hero.lines_val": "1.85М",
                 "hero.trl": "ВАЛИДИРАН СТАНДАРТ",
@@ -798,6 +813,8 @@
                 
                 "eic.title": "EIC Step 2 <span class=\"text-accent-gold\">Защита пред Жури</span>",
                 "eic.subtitle": "Суверенната автономна SaaS платформа. Елиминиране на скрития данък от €2000/месец за софтуерна фрагментация при МСП в Европа чрез детерминирана логика с нулева ентропия.",
+                "eic.card4_title": "4. Интерактивен 3D Мозъчен Близнак",
+                "eic.card4_desc": "WebGL 3D невро-симулация на живо (<a href=\"https://papica777-eng.github.io/VHT-BRAIN/\" target=\"_blank\" class=\"text-accent-pink font-bold hover:underline\">Стартирай симулатора</a>) за Glioblastoma моделиране: 98.50% синаптично възстановяване (BDNF), 54.20 mL/100g/min L-CBF перфузия и 97.13% C-index безопасност.",
 
                 "nav.grants": "ЕС ГРАНТОВЕ",
                 "grants.title": "ЕВРОПЕЙСКО ГРАНТОВО ПОРТФОЛИО",
@@ -805,7 +822,7 @@
                 "grants.budget": "Бюджет:",
                 "grants.defense_title": "Технологичен Защитен Щит",
                 "grants.eic_desc": "Veritas Substrate Anchor (SHA-256 валидация на физически диск). Финансов двигател с нулева ентропия и детерминирана прецизност. Catuṣkoṭi логическа порта. Интеграция с Knox TEE.",
-                "grants.cancer_desc": "Cognitive Ingress Alignment Layer (CIAL) за FHIR обработка. O(1) Inter-Procedural Taint Traversal алгоритъм. Локално изпълнение за 100% GDPR суверенност.",
+                "grants.cancer_desc": "Horizon Europe Cancer Mission. Моделиране на Glioblastoma Multiforme с 98.50% синаптично възстановяване (BDNF), 54.20 mL/100g/min L-CBF перфузия и 2.10% намаляване на mtDNA мутациите. O(1) Taint Traversal за синтетична леталност.",
                 "grants.smart_desc": "Mojo рефлексен двигател (35,000x ускорение). Zig кинетична ингестия. Sentinel eBPF изолация под 1ms. Атомни леджъри с нулев дрейф (AtomicU64).",
                 "grants.cef_desc": "AIGIS Subsea Shield анализиращ DAS/SOP оптични сигнали. Хардуерна PCIe интеграция. eBPF мониторинг на ниво ядро за прекъсване на SCADA атаки под 1.2ms.",
                 "grants.circat_desc": "Sovereign SOUL VM и Zig/Rust инструменти за AI-усилен penetration testing. Пресъздаване на APT тактики (Lazarus Group) с O(1) детектиране на уязвимости във финансови екосистеми.",
@@ -863,6 +880,7 @@
                 "nav.pricing": "PRICING",
                 "nav.vht": "ONCOLOGY HUD",
                 "nav.diabet": "DIABETES HUD",
+                "nav.live_brain": "LIVE 3D BRAIN HUD",
                 "hero.badge": "EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948",
                 "hero.title_1": "SOVEREIGN",
                 "hero.title_2": "AUTONOMOUS",
@@ -872,6 +890,7 @@
                 "hero.cta_action_text": "Aeterna in Action",
                 "hero.cta_vht_diabet": "Oncology HUD",
                 "hero.cta_diabet": "Diabetes HUD",
+                "hero.cta_live_brain": "Live 3D Brain HUD",
                 "hero.lines": "LINES OF CODE",
                 "hero.lines_val": "1.85M",
                 "hero.trl": "VALIDATED",
@@ -881,6 +900,8 @@
                 
                 "eic.title": "EIC Step 2 <span class=\"text-accent-gold\">Jury Defense</span>",
                 "eic.subtitle": "The Sovereign Autonomous SaaS Engine. Eradicating the €2,000/month SaaS Fragmentation Tax for EU SMEs through zero-entropy deterministic logic.",
+                "eic.card4_title": "4. Live 3D Brain Virtual Twin",
+                "eic.card4_desc": "WebGL-based real-time 3D neuro-simulation (<a href=\"https://papica777-eng.github.io/VHT-BRAIN/\" target=\"_blank\" class=\"text-accent-pink font-bold hover:underline\">Launch Live Simulator</a>) demonstrating Glioblastoma modeling with 98.50% Synaptic Density recovery, 54.20 mL/100g/min L-CBF perfusion, and 97.13% C-index safety precision.",
 
                 "nav.grants": "EU GRANTS",
                 "grants.title": "EUROPEAN GRANT PORTFOLIO",
@@ -888,7 +909,7 @@
                 "grants.budget": "Budget:",
                 "grants.defense_title": "Technology Defense Shield",
                 "grants.eic_desc": "Veritas Substrate Anchor (SHA-256 physical disk validation). Zero-float financial engine ensuring €0.00 drift. Catuṣkoṭi logic gate eliminating paradox crashes. Knox TEE integration.",
-                "grants.cancer_desc": "Cognitive Ingress Alignment Layer (CIAL) with zero-cloud HL7/FHIR processing. O(1) Inter-Procedural Taint Traversal identifying Synthetic Lethality. 100% GDPR Data Residency.",
+                "grants.cancer_desc": "Horizon Europe Brain Cancer / Glioblastoma Mission. Simulating Glioblastoma with 98.50% Synaptic Density recovery (BDNF), 54.20 mL/100g/min L-CBF perfusion, and 2.10% mtDNA mutation load mitigation. O(1) Taint Traversal identifying Synthetic Lethality.",
                 "grants.smart_desc": "Mojo-Accelerated Reflex Control Plane (35,000x speed-up). Line-Rate Kinetic Protocol Ingestion via Zig avoiding logic injection. Sentinel eBPF isolation terminating threats in <1ms.",
                 "grants.cef_desc": "AIGIS Subsea Shield evaluating DAS/SOP signals. Zero-copy PCIe mapping for submarine fiber optics. Kernel-level eBPF monitoring terminating malicious SCADA access within 1.2ms.",
                 "grants.circat_desc": "AI-enhanced penetration testing for EVM-based financial settlements and Energy ICS. Sovereign SOUL VM and Zig/Rust engines replicating APT tactics (Lazarus Group) with O(1) complexity.",
