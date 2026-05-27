@@ -445,6 +445,7 @@
             language: "bg",
             curedState: false,
             isTransitioning: false,
+            bciCooldown: false,
             entropy: 3.56,
             cPeptide: 0.01,
             homaIr: 2.40,
@@ -907,16 +908,17 @@
             let styledMsg = msg
                 .replace(/^(\[SUCCESS\]|SUCCESS:|BIO_CURE_INIT:|ONLINE:)/g, '<span style="color: var(--neon-emerald); font-weight: 600;">$1</span>')
                 .replace(/^(\[CRITICAL_ALERT\]|CRITICAL_ALERT:|WARNING:)/g, '<span style="color: var(--neon-red); font-weight: 600;">$1</span>')
-                .replace(/^(\[SYSTEM_RESET\]|SYSTEM_RESET:|\[SYSTEM_RESET\])/g, '<span style="color: var(--neon-amber); font-weight: 600;">$1</span>')
-                .replace(/^(\[TEE_LOCKOUT\]|TEE_LOCKOUT:|CHRONOS_LOCKOUT:|KNOX_SAFETY:|KNOX_LOCKOUT:)/g, '<span style="color: var(--neon-purple); font-weight: 600;">$1</span>')
+                .replace(/^(\[SYSTEM_RESET\]|SYSTEM_RESET:|\[SYSTEM_RESET\]|\[SYSTEM\])/g, '<span style="color: var(--neon-amber); font-weight: 600;">$1</span>')
+                .replace(/^(\[TEE_LOCKOUT\]|TEE_LOCKOUT:|CHRONOS_LOCKOUT:|KNOX_SAFETY:|KNOX_LOCKOUT:|\[⚡ BCI-EEG\]|\[⚡ BCI-LINK\])/g, '<span style="color: var(--neon-purple); font-weight: 600;">$1</span>')
                 .replace(/^(AMPK_GLUT4:|AMPK_GLUT4|VIVISECTOR:)/g, '<span style="color: var(--neon-blue); font-weight: 600;">$1</span>');
                 
             return `<div style="line-height: 1.5; margin-bottom: 2px;"><span style="color: #4a4a4f; margin-right: 8px;">[${log.time}]</span><span>${styledMsg}</span></div>`;
         }
 
         function triggerCureRestoration() {
-            if (state.isTransitioning || state.curedState) return;
+            if (state.isTransitioning || state.curedState || state.bciCooldown) return;
             state.isTransitioning = true;
+            state.bciCooldown = true;
             
             const required_boost = 95.0 - state.deltaWaveAmplitude;
             
@@ -925,6 +927,10 @@
             addLogEntry(
                 `[⚡ BCI-EEG] Induced resonant wave-sweep: +${required_boost.toFixed(1)} µV. Conformal fluid drainage deployed. Delta-accumulation terminated.`,
                 `[⚡ BCI-EEG] Induced resonant wave-sweep: +${required_boost.toFixed(1)} µV. Conformal fluid drainage deployed. Delta-accumulation terminated.`
+            );
+            addLogEntry(
+                `[SYSTEM] BCI Refractory Period active. Reflux suppression engaged.`,
+                `[SYSTEM] BCI Refractory Period active. Reflux suppression engaged.`
             );
 
             let duration = 3000;
@@ -972,6 +978,15 @@
                 }
                 renderVanillaHUD();
             }, intervalTime);
+
+            setTimeout(() => {
+                state.bciCooldown = false;
+                addLogEntry(
+                    `[SYSTEM] BCI Refractory Period complete. Closed-loop receiver online.`,
+                    `[SYSTEM] BCI Refractory Period complete. Closed-loop receiver online.`
+                );
+                renderVanillaHUD();
+            }, 3000);
         }
 
         function resetCureState() {
@@ -1349,8 +1364,10 @@
                         </button>
                     </div>
                     <div>
-                        ${!state.curedState && !state.isTransitioning ? `
-                            <button class="cure-btn" onclick="triggerCureRestoration()">
+                        ${!state.curedState ? `
+                            <button class="cure-btn ${state.isTransitioning || state.bciCooldown ? 'opacity-50 cursor-not-allowed' : ''}" 
+                                onclick="triggerCureRestoration()" 
+                                ${(state.isTransitioning || state.bciCooldown) ? 'disabled' : ''}>
                                 <i data-lucide="play" class="w-4 h-4 inline-block mr-2 text-white"></i>${t('btnInduceCure')}
                             </button>
                         ` : `
@@ -2154,6 +2171,12 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; font-size: 0.85rem;">
                                         <span style="color: var(--text-secondary);">${t('synthesisRateLabel')}</span>
                                         <span style="font-weight: 700; color: #fff;">+${state.amyloidSynthesisRate.toFixed(4)} pg/mL/sec</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; font-size: 0.85rem;">
+                                        <span style="color: var(--text-secondary);">${state.language === 'bg' ? 'Необходим BCI тласък:' : 'Required BCI Boost:'}</span>
+                                        <span style="font-weight: 800; color: ${clearance.isHomeostasis ? 'var(--neon-emerald)' : 'var(--neon-purple)'}; font-size: 0.85rem;">
+                                            +${(Math.max(0.0, 95.0 - state.deltaWaveAmplitude)).toFixed(1)} µV
+                                        </span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; font-size: 0.85rem;">
                                         <span style="color: var(--text-secondary);">${t('clearanceFlowLabel')}</span>
