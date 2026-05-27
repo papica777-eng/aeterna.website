@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AETERNA // Sovereign VHT HUD</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/aeterna_logo.svg">
 
     <!-- React & Babel Standalone (Fallback-Resilient) -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -19,23 +20,23 @@
 
     <style>
         :root {
-            --bg-color: #04010a;
-            --purple-glass: rgba(18, 9, 36, 0.55);
-            --purple-border: rgba(181, 95, 230, 0.15);
-            --purple-glow: rgba(181, 95, 230, 0.25);
+            --bg-color: #060608;
+            --purple-glass: rgba(12, 12, 16, 0.75);
+            --purple-border: rgba(255, 255, 255, 0.05);
+            --purple-glow: rgba(99, 102, 241, 0.06);
 
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
+            --text-primary: #f4f4f5;
+            --text-secondary: #8e9196;
 
-            --neon-purple: #b55fe6;
-            --neon-pink: #ff2a85;
-            --neon-emerald: #00ffaa;
-            --neon-emerald-glow: rgba(0, 255, 170, 0.3);
-            --neon-blue: #00f0ff;
-            --neon-blue-glow: rgba(0, 240, 255, 0.3);
-            --neon-red: #ff3b6f;
-            --neon-red-glow: rgba(255, 59, 111, 0.4);
-            --neon-amber: #ffb800;
+            --neon-purple: #6366f1;
+            --neon-pink: #d946ef;
+            --neon-emerald: #10b981;
+            --neon-emerald-glow: rgba(16, 185, 129, 0.06);
+            --neon-blue: #0ea5e9;
+            --neon-blue-glow: rgba(14, 165, 233, 0.06);
+            --neon-red: #ef4444;
+            --neon-red-glow: rgba(239, 68, 68, 0.08);
+            --neon-amber: #f59e0b;
         }
 
         * {
@@ -43,17 +44,17 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Outfit', sans-serif;
-            cursor: crosshair;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: #03010a;
             color: var(--text-primary);
             overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 50% -20%, rgba(181, 95, 230, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 70%, rgba(255, 42, 133, 0.03) 0%, transparent 40%);
+            background-image: 
+                linear-gradient(rgba(3, 1, 10, 0.75), rgba(6, 6, 8, 0.9)),
+                url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
             transition: background 1s ease, background-color 1s ease;
@@ -61,51 +62,41 @@
 
         .mono {
             font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -0.2px;
         }
 
-        /* Sovereign Purple Glassmorphism */
+        /* Sovereign Slate Glassmorphism */
         .glass-card {
             background: var(--purple-glass);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--purple-border);
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.45);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
 
         .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(181, 95, 230, 0.05), transparent);
-            transition: 0.8s;
-        }
-
-        .glass-card:hover::before {
-            left: 100%;
+            display: none;
         }
 
         .glass-card:hover {
-            border-color: rgba(181, 95, 230, 0.35);
-            box-shadow: 0 0 35px var(--purple-glow);
-            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55), 0 0 20px var(--purple-glow);
+            transform: translateY(-1px);
         }
 
         .glass-card.glow-emerald:hover {
-            border-color: var(--neon-emerald);
-            box-shadow: 0 0 35px var(--neon-emerald-glow);
+            border-color: rgba(16, 185, 129, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55), 0 0 20px var(--neon-emerald-glow);
         }
 
         .glass-card.glow-red:hover {
-            border-color: var(--neon-red);
-            box-shadow: 0 0 35px var(--neon-red-glow);
+            border-color: rgba(239, 68, 68, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55), 0 0 20px var(--neon-red-glow);
         }
 
         /* Status indicators */
@@ -128,17 +119,17 @@
             border-radius: 50%;
             border: 2px solid currentColor;
             opacity: 0;
-            animation: ripple 1.8s infinite ease-out;
+            animation: ripple 2.2s infinite ease-out;
         }
 
         @keyframes ripple {
             0% {
                 transform: scale(0.6);
-                opacity: 1;
+                opacity: 0.8;
             }
 
             100% {
-                transform: scale(2.2);
+                transform: scale(2.0);
                 opacity: 0;
             }
         }
@@ -170,17 +161,17 @@
 
         /* Custom Scrollbars */
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #020105;
+            background: #040406;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #1f1430;
-            border-radius: 3px;
+            background: #1c1c24;
+            border-radius: 2px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -189,14 +180,14 @@
 
         /* Professional tab buttons */
         .tab-btn {
-            background: rgba(181, 95, 230, 0.02);
-            border: 1px solid var(--purple-border);
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
             text-transform: uppercase;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -204,103 +195,93 @@
         .tab-btn.active {
             border-color: var(--neon-purple);
             color: #fff;
-            background: rgba(181, 95, 230, 0.12);
-            box-shadow: 0 0 25px rgba(181, 95, 230, 0.2);
-            transform: translateY(-1px);
+            background: rgba(99, 102, 241, 0.08);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+            transform: translateY(0);
         }
 
         .tab-btn:hover:not(.active) {
             color: #fff;
-            border-color: rgba(181, 95, 230, 0.3);
-            background: rgba(181, 95, 230, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.02);
         }
 
         /* High-glowing Cure Trigger button */
         .cure-btn {
-            background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
             color: #fff;
-            font-weight: 900;
-            font-size: 0.95rem;
+            font-weight: 600;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             border: none;
-            padding: 16px 42px;
-            border-radius: 50px;
-            box-shadow: 0 0 35px rgba(181, 95, 230, 0.35);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 14px 36px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.18);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             position: relative;
             overflow: hidden;
         }
 
         .cure-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-            transition: 0.6s;
+            display: none;
         }
 
         .cure-btn:hover {
-            transform: scale(1.04) translateY(-2px);
-            box-shadow: 0 0 45px rgba(0, 255, 170, 0.6);
-            background: linear-gradient(135deg, var(--neon-emerald), var(--neon-blue));
-            color: #020105;
-        }
-
-        .cure-btn:hover::before {
-            left: 100%;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.25);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
         }
 
         .cure-btn:active {
-            transform: scale(0.97) translateY(1px);
+            transform: translateY(1px);
         }
 
         .glow-text-emerald {
-            text-shadow: 0 0 15px var(--neon-emerald-glow);
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
         }
 
         .glow-text-purple {
-            text-shadow: 0 0 15px var(--purple-glow);
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
         }
 
         .glow-text-blue {
-            text-shadow: 0 0 15px var(--neon-blue-glow);
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.15);
         }
 
         .glow-text-red {
-            text-shadow: 0 0 15px var(--neon-red-glow);
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
         }
 
         /* Code display styling */
         .code-container {
-            background: #080310;
-            border: 1px solid rgba(181, 95, 230, 0.08);
-            border-radius: 14px;
+            background: #030304;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
             padding: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             line-height: 1.6;
-            color: #b2ccd6;
+            color: #a1a1aa;
             overflow-x: auto;
         }
 
         /* Emergency theme overrides */
         .emergency-theme {
-            background-color: #0b0104 !important;
+            background-color: #080304 !important;
             background-image:
-                radial-gradient(circle at 50% -20%, rgba(255, 59, 111, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 10% 80%, rgba(255, 184, 0, 0.03) 0%, transparent 40%) !important;
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                radial-gradient(circle at 50% -20%, rgba(239, 68, 68, 0.08) 0%, transparent 60%) !important;
         }
 
         .emergency-card {
-            border-color: var(--neon-red) !important;
-            box-shadow: 0 0 35px var(--neon-red-glow) !important;
-            background: rgba(22, 6, 12, 0.85) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.08) !important;
+            background: rgba(14, 12, 12, 0.85) !important;
         }
 
         @keyframes pulse {
@@ -309,7 +290,7 @@
             }
 
             50% {
-                transform: scale(1.015);
+                transform: scale(1.008);
             }
 
             100% {
@@ -318,7 +299,7 @@
         }
 
         .animate-pulse {
-            animation: pulse 2.2s infinite ease-in-out;
+            animation: pulse 2.5s infinite ease-in-out;
         }
 
         /* Perfectly balanced dashboard grid layout */
@@ -353,20 +334,20 @@
             padding: 16px;
             text-align: left;
             color: var(--text-secondary);
-            border-bottom: 2px solid rgba(181, 95, 230, 0.15);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
             font-weight: 600;
             letter-spacing: 0.5px;
         }
 
         .sovereign-table td {
             padding: 16px;
-            border-bottom: 1px solid rgba(181, 95, 230, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
             vertical-align: middle;
             transition: background 0.3s ease;
         }
 
         .sovereign-table tr:hover td {
-            background: rgba(181, 95, 230, 0.03);
+            background: rgba(255, 255, 255, 0.01);
         }
 
         @keyframes blink {
@@ -399,8 +380,8 @@
             z-index: 50;
             max-height: calc(100vh - 160px);
             overflow-y: auto;
-            border-color: rgba(181, 95, 230, 0.3) !important;
-            box-shadow: 0 0 30px rgba(181, 95, 230, 0.15) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.08) !important;
         }
 
         .surgical-coords-card {
@@ -409,8 +390,8 @@
             left: 40px;
             width: 320px;
             z-index: 50;
-            border-color: var(--neon-emerald) !important;
-            box-shadow: 0 0 30px var(--neon-emerald-glow) !important;
+            border-color: rgba(16, 185, 129, 0.2) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--neon-emerald-glow) !important;
         }
 
         /* Sovereign pointer events mapping */
@@ -437,9 +418,7 @@
 </head>
 
 <body>
-    <!-- VHT-BRAIN Volume Raymarching Substrate Canvas -->
-    <canvas id="vht-brain-core"
-        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background-color: #030107;"></canvas>
+    <!-- Sovereign Cosmic Telemetry Substrate -->
 
     <div id="app-root">
         <!-- Self-Healing Fallback Visual preloaded -->
@@ -479,7 +458,7 @@
             hebbianConfidence: 8.8,
             bdnfLevel: 1.0,
             glut4Upregulation: 1.0,
-            fesStatus: "STANDBY",
+            fesStatus: "EEG_STANDBY",
             gaitPhase: 0,
             catuskotiState: "SYNERGY",
             fesActiveChannels: {
@@ -489,9 +468,9 @@
                 hamstring: 0
             },
             logs: [
-                { time: "12:12:00", bg: "INIT: AETERNA VHT ядрото е онлайн. Knox офлайн пясъчник е активиран.", en: "INIT: AETERNA VHT core online. Knox offline sandbox engaged." },
-                { time: "12:12:01", bg: "INGEST: Заредени 900 близнака от Националния регистър на България за 2015 г.", en: "INGEST: Loaded 900 patient twins from Bulgaria 2015 national registry." },
-                { time: "12:12:02", bg: "TELEMETRY: Активно високоентропийно състояние (Ентропия = 3.56). Некомпенсирани глюкозни криви.", en: "TELEMETRY: High-entropy state active (Entropy = 3.56). Uncompensated glucose curves." }
+                { time: "12:12:00", bg: "INIT: AETERNA VHT ядрото за ОНКОЛОГИЯ е онлайн. Knox офлайн пясъчник е активиран.", en: "INIT: AETERNA VHT ONCOLOGY core online. Knox offline sandbox engaged." },
+                { time: "12:12:01", bg: "INGEST: Заредени 900 близнака с глиобластом от Европейските онко-регистри (2015-2026).", en: "INGEST: Loaded 900 glioblastoma patient twins from European Cancer Registries (2015-2026)." },
+                { time: "12:12:02", bg: "TELEMETRY: Активно високоентропийно неопластично състояние (Обем = 24.50 cm³). Некомпенсиран глутаматен шок.", en: "TELEMETRY: High-entropy neoplastic growth active (Volume = 24.50 cm³). Uncompensated glutamate curves." }
             ],
             hudVisible: true,
             clipX: 1.0,
@@ -506,23 +485,32 @@
             clickCoords: null,
             bdnfIntensity: 1.0,
             invModelViewProj: new Float32Array(16),
-            modelMatrixInverse: new Float32Array(16)
+            modelMatrixInverse: new Float32Array(16),
+            grantsKeyword: "cancer",
+            grantsList: [],
+            picSearchInput: "",
+            picOrgProfile: null,
+            grantsLoading: false,
+            picLoading: false,
+            aqp4Polarization: 0.42,
+            deltaWaveAmplitude: 66.0,
+            amyloidSynthesisRate: 1.50
         };
 
         const rawChaoticData = [
-            { val: 12.4 }, { val: 14.8 }, { val: 16.5 },
-            { val: 15.2 }, { val: 16.1 }, { val: 13.2 },
-            { val: 14.9 }, { val: 15.8 }, { val: 11.2 },
-            { val: 13.9 }, { val: 16.2 }, { val: 12.8 },
-            { val: 14.2 }
+            { val: 24.5 }, { val: 26.8 }, { val: 28.5 },
+            { val: 27.2 }, { val: 28.1 }, { val: 25.2 },
+            { val: 26.9 }, { val: 27.8 }, { val: 23.2 },
+            { val: 25.9 }, { val: 28.2 }, { val: 24.8 },
+            { val: 26.2 }
         ];
 
         const curedData = [
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }
+            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
+            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
+            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
+            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
+            { val: 0.00 }
         ];
 
         let currentGlucose = [...rawChaoticData];
@@ -538,209 +526,266 @@
 
         const translations = {
             bg: {
-                hudTitle: "AETERNA // SOVEREIGN VHT HUD",
+                hudTitle: "AETERNA // SOVEREIGN NEURO-ONCOLOGY HUD",
                 neuralLink: "НЕВРОННА ВРЪЗКА:",
                 connected: "СВЪРЗАНА",
                 severed: "ПРЕКЪСНАТА",
                 knoxHeartbeat: "KNOX HEARTBEAT:",
-                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026",
-                tabScientific: "Научен Панел (Лекари)",
+                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY ONCOLOGICAL CURE PROTOCOL // 2026",
+                tabScientific: "Научен Панел (Онколози)",
                 tabCohort: "Кохортно Изследване (900 Близнаци)",
                 tabPillars: "Четирите Стълба на Сигурност",
-                tabFes: "BCI-FES Невро-Локомоция",
-                btnInduceCure: "ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ",
-                btnRestoreChaos: "ВЪЗСТАНОВЯВАНЕ НА ХАОСА",
+                tabFes: "BCI-EEG Невро-Модулация",
+                btnInduceCure: "ИНДУЦИРАНЕ НА ТУМОРНА РЕВЕРСИЯ",
+                btnRestoreChaos: "ВЪЗСТАНОВЯВАНЕ НА НЕОПЛАЗМАТА",
                 btnResetSimulation: "RESET SIMULATION",
-                btnInjectSpasm: "ИНЖЕКТИРАНЕ НА СПАЗЪМ",
-                btnInjectAnomaly: "INJECT METABOLIC ANOMALY",
-                btnStartFes: "СТАРТ НА CLOSED-LOOP FES",
-                btnStopFes: "СПИРАНЕ НА CLOSED-LOOP FES",
+                btnInjectSpasm: "ИНЖЕКТИРАНЕ НА ЕПИ-ПРИСТЪП",
+                btnInjectAnomaly: "ИНЖЕКТИРАНЕ НА ГЛУТАМАТЕН ШОК",
+                btnStartFes: "СТАРТ НА CLOSED-LOOP EEG",
+                btnStopFes: "СПИРАНЕ НА CLOSED-LOOP EEG",
                 criticalAlert: "⚠️ КРИТИЧНА ТРЕВОГА",
-                lockoutEnforced: "AURA SOVEREIGN METABOLIC LOCKOUT ENFORCED",
-                lockoutDesc: "Засечено критично отклонение от <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> в субстрата на пациента (Layer 4 Z-score Limit).<br><br>Автоматичните инсулинови/пептидни помпи са <span style=\"color: #ff0055; font-weight: bold;\">ХАРДУЕРНО БЛОКИРАНИ</span> чрез Samsung Knox TEE криптографски подпис на апаратно ниво за предотвратяване на фатален медицински изход.",
-                emergencyModeActive: "EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED",
-                emergencyBannerDesc: "Системата премина в авариен офлайн режим. Всички команди се подписват хардуерно от **Samsung Knox TEE** директно на силиция, гарантирайки поддържането на безопасни дози и предотвратяване на грешки.",
-                auraShieldActive: "🛡️ AURA INTEGRITY SHIELD ACTIVE",
-                auraShieldCompromised: "🛡️ AURA INTEGRITY SHIELD COMPROMISED",
+                lockoutEnforced: "AURA SOVEREIGN SEIZURE LOCKOUT ENFORCED",
+                lockoutDesc: "Засечено критично отклонение от <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> в перитуморалните нива на глутамат (Layer 4 Z-score Limit).<br><br>Автоматичните невро-модулатори са <span style=\"color: #ff0055; font-weight: bold;\">ХАРДУЕРНО БЛОКИРАНИ</span> чрез Samsung Knox TEE подпис за предотвратяване на ексайтотоксичност и фатален статус епилептикус.",
+                emergencyModeActive: "EMERGENCY LOCAL ONCOLOGY MODE ACTIVE // NEURAL LINK SEVERED",
+                emergencyBannerDesc: "Системата премина в авариен локален режим. Всички команди за невро-стимулация се подписват хардуерно от **Samsung Knox TEE** директно на силиция за предотвратяване на туморна хипервъзбудимост.",
+                auraShieldActive: "🛡️ AURA ONCOLOGY SHIELD ACTIVE",
+                auraShieldCompromised: "🛡️ AURA ONCOLOGY SHIELD COMPROMISED",
                 shieldEnforced: "LAYER 4 ENFORCED",
                 shieldLockout: "LOCKOUT ACTIVE",
-                statusActiveDesc: "Всички жизнени показатели са математически проверени и потвърдени спрямо критичния праг от <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
-                statusCompromisedDesc: "Засечено критично излизане от нормите за безопасност. Автоматичното дозиране е преустановено криптографски.",
+                statusActiveDesc: "Всички невро-онкологични жизнени показатели са математически проверени и потвърдени спрямо критичния праг от <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
+                statusCompromisedDesc: "Засечено критично излизане от нормите за невронна безопасност. Автоматичното стимулационно дозиране е преустановено криптографски.",
                 bloodPh: "pH НА КРЪВТА",
                 normalPh: "Норма: 7.35 - 7.45",
                 oxygenSat: "КИСЛОРОДНО НАСИЩАНЕ (O₂)",
                 normalO2: "Норма: 95% - 100%",
-                metabolicZscore: "METABOLIC Z-SCORE",
+                metabolicZscore: "Z-SCORE РИСК ОТ ГЪРЧОВЕ",
                 criticalZscore: "Критичен праг: >3.0σ",
-                glycemicTrajectory: "Гликемична траектория на Ден 2 (Steady-State)",
-                glycemicDesc: "Метаболитна крива на пациент P-402 при симулация. Зелената зона (4.0 - 10.0 mmol/L) е клиничната норма.",
+                glycemicTrajectory: "Крива на туморния регрес на Ден 2 (Steady-State)",
+                glycemicDesc: "Симулиран обем на глиобластома (GBM) при приложен метаболитен блок. Нормата е пълна реверсия (0.00 cm³).",
                 globalEntropy: "GLOBAL ENTROPY",
-                glucoseLabel: "Глюкоза (Glucose)",
-                normalGlucose: "Норма: 4.5 - 6.0 mmol/L",
-                endogenousCpeptide: "Ендогенен C-Пептид",
-                normalCpeptide: "Норма: 0.26 - 1.39 nmol/L",
-                homaIrIndex: "HOMA-IR Индекс",
-                normalHomaIr: "Норма: < 1.0 (Сензитивност)",
+                glucoseLabel: "Обем на тумора (GBM)",
+                normalGlucose: "Норма: 0.00 cm³",
+                endogenousCpeptide: "Интегритет на КМБ (BBB)",
+                normalCpeptide: "Норма: >90% (Защитена)",
+                homaIrIndex: "Глутаматна Токсичност",
+                normalHomaIr: "Норма: < 1.00 mM",
                 patientProfile: "Описание на Пациента",
                 patientLabel: "ПАЦИЕНТ:",
-                ageWeightLabel: "ВЪЗРАСТ / ТЕГЛО:",
-                ageWeightVal: "9 години / 32 кг",
-                bypassStateLabel: "БАЙПАС СЪСТОЯНИЕ:",
-                bypassAtrophy: "SEVERE_PANCREATIC_ATROPHY",
-                bypassReversion: "BIOLOGICAL_REVERSION",
-                activeInsulinLabel: "АКТИВЕН ИНСУЛИН:",
-                insulinAuto: "0.00 U (Автоложна регулация)",
-                insulinExternal: "4.50 U (Външна помпа)",
+                ageWeightLabel: "ВЪЗРАСТ / ДИАГНОЗА:",
+                ageWeightVal: "42 години / Мултиформен Глиобластом (GBM)",
+                bypassStateLabel: "ТЕРАПЕВТИЧЕН БАЙПАС:",
+                bypassAtrophy: "TUMOR_NEOPLASM_ACTIVE",
+                bypassReversion: "ONCOLOGICAL_REVERSION",
+                activeInsulinLabel: "АКТИВЕН ИНХИБИТОР:",
+                insulinAuto: "Pax4-Sovereign Block (0.00 cm³)",
+                insulinExternal: "Temozolomide + Metabolic Block",
                 clinicalConclusion: "КЛИНИЧЕН ИЗВОД:",
-                conclusionCured: "Появата на ендогенен C-пептид (0.90 nmol/L) в съчетание с пълно периферно възстановяване на инсулиновата чувствителност (HOMA-IR = 1.0) бележи успешна Pax4-индуцирана бета-клетъчна регенерация и автологична терапия.",
-                conclusionChaos: "Пациентът е в хаотична метаболитна декомпенсация с абсолютен инсулинов дефицит. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.",
-                telemetryLog: "LIVE_SUBSTRATE_TELEMETRY_LOG",
-                engConsole: "ENGINEERING CONSOLE // TEST INJECTORS",
-                engConsoleDesc: "Симулиране на критична метаболитна декомпенсация за стрес-тест на Layer 4 безопасността.",
-                cohortTitle: "Сравнителен кохортен екран (900 виртуални близнаци)",
-                cohortDesc: "Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Националния регистър за 2015 г.",
+                conclusionCured: "Успешното блокиране на туморния метаболизъм (0.00 cm³) в съчетание с пълно периферно възстановяване на невронната стабилност бележи успешна Sovereign-индуцирана онкологична реверсия и автологична терапия.",
+                conclusionChaos: "Пациентът е в състояние на прогресираща неоплазма с активна глутаматна токсичност и висок риск от гърчове. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.",
+                telemetryLog: "LIVE_ONCOLOGY_TELEMETRY_LOG",
+                engConsole: "CLINICAL CONSOLE // TUMOR TEST INJECTORS",
+                engConsoleDesc: "Симулиране на критична глутаматна екскурзия и тумор-индуциран епилептичен спазъм за стрес-тест на Layer 4 безопасността.",
+                cohortTitle: "Сравнителен кохортен екран (900 виртуални онкологични близнаци)",
+                cohortDesc: "Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Глиобластомните кохорти за 2015-2026 г.",
                 ageGroup: "Възрастова Група",
                 count: "Брой",
-                baselineTir: "Базов TIR (2015)",
-                conventionalTir: "Конвенционален TIR",
-                v3Tir: "VHT v3.0 TIR",
-                v4Tir: "v4.0 Биологичен TIR",
-                baselineHypo: "Базови Хипогликемии",
-                v4Hypo: "v4.0 Хипогликемии",
-                groupPediatric: "0-14 (Педиатричен)",
+                baselineTir: "Базова Преживяемост",
+                conventionalTir: "Конвенционална Преживяемост",
+                v3Tir: "VHT v3.0 Преживяемост",
+                v4Tir: "v4.0 Биологична Преживяемост",
+                baselineHypo: "Базови Епи-пристъпи",
+                v4Hypo: "v4.0 Епи-пристъпи",
+                groupPediatric: "0-14 (Педиатричен GBM)",
                 groupYouth: "15-44 (Младежка възраст)",
                 groupMiddle: "45-59 (Средна възраст)",
                 groupMature: "60-74 (Зряла възраст)",
                 groupElderly: "75-89 (Старческа възраст)",
                 groupCentenarian: "90+ (Дълголетници)",
                 pillar1Num: "СТЪЛБ 1",
-                pillar1Title: "Фармакотерапевтичен Синхрон",
-                pillar1Desc: "Математическа защита блокира опасни дози при концентрирани форми на прандиален инсулин (U-200, U-300) без съответна механична калибрация.",
+                pillar1Title: "Метаболитен Контрол",
+                pillar1Desc: "Блокиране на глутаминовите и гликолитичните пътища на глиобластомните клетки чрез изключване на Warburg ефекта без системна токсичност.",
                 pillar2Num: "СТЪЛБ 2",
-                pillar2Title: "Диететичен Контрол",
-                pillar2Desc: "Превантивно 15% намаление на въглехидратния коефициент (ICR) сутрин за блокиране на Dawn Phenomenon резистентността.",
+                pillar2Title: "Пропускливост на КМБ",
+                pillar2Desc: "Математическо моделиране на transport-ните протеини за оптимизиране на преминаването на лекарства през Кръвно-Мозъчната Бариера.",
                 pillar3Num: "СТЪЛБ 3",
-                pillar3Title: "Физическа Активност",
-                pillar3Desc: "Моделиране на GLUT4 транслокацията при аеробни спортове. Превантивно 30% до 50% свиване на болуса за предотвратяване на хипогликемии.",
+                pillar3Title: "Невропластичен Резонанс",
+                pillar3Desc: "Активиране на AMPK и CaMKII сигнализацията за предпазване на здравата съседна мозъчна тъкан от ексайтотоксична дегенерация.",
                 pillar4Num: "СТЪЛБ 4",
                 pillar4Title: "AURA Integrity Guard",
-                pillar4Desc: "Реалновремево изчисляване на Z-Score за pH и кислородно насищане. Превишаването на 3.0σ прага задейства TEE Knox lockout.",
-                soulCodeTitle: "Физиологичен код на безопасност (SOUL Safety Gate)",
-                fesTitle: "4-Канален Teslasuit Локомоторен Режим",
-                fesDesc: "Динамично картографиране на биоелектрическа стимулация за периферно мускулно активиране и Hebbian pairing.",
-                gaitTimelineTitle: "Времева скала на стъпката (Gait Cycle Phase)",
-                heelStrike: "Удар на пета (0%)",
-                heelOff: "Вдигане на пета (48% spastic check)",
-                swingStart: "Начало на замах (60%)",
-                terminalSwing: "Терминален замах (100%)",
-                neurometabolicEvidence: "Невро-метаболитни доказателства & биомаркери",
-                hebbianPairingTitle: "Биомеханичен трансфер и Hebbian pairing:",
-                hebbianPairingDesc: "Чрез синхронизиране на когнитивното намерение на пациента (BCI) с електрическото задействане на Teslasuit (под 50 ms латентност), системата отключва Hebbian пластичност. Увеличената сила на съкращението задейства AMPK/CaMKII пътищата в скелетните мускули, заставяйки GLUT4 везикулите да се преместят към клетъчната мембрана и да почистят глюкозата самостоятелно.",
-                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & MOTOR RESOLVER",
+                pillar4Desc: "Реалновремево изчисляване на Z-Score за перитуморален глутамат и seizure risk. Превишаването на 3.0σ прага задейства TEE Knox lockout.",
+                soulCodeTitle: "Физиологичен онкологичен код на безопасност (SOUL Safety Gate)",
+                fesTitle: "4-Канален closed-loop EEG Невро-Модулатор",
+                fesDesc: "Реалновремево BCI засичане на епелиптиформени пикове в кората с цел моментално closed-loop предотвратяване на пристъпи.",
+                gaitTimelineTitle: "Времева скала на ЕЕГ ритъма (EEG Wave Cycles)",
+                heelStrike: "Делта Ритъм (0.5 - 4 Hz)",
+                heelOff: "Тета Ритъм (4 - 8 Hz)",
+                swingStart: "Алфа Ритъм (8 - 12 Hz)",
+                terminalSwing: "Бета Ритъм (12 - 30 Hz)",
+                neurometabolicEvidence: "Невро-онкологични биомаркери & доказателства",
+                hebbianPairingTitle: "Невропластичен трансфер и Hebbian pairing:",
+                hebbianPairingDesc: "Чрез синхронизиране на когнитивните вълни с closed-loop BCI стимулация, системата стимулира невронните мрежи да се преконфигурират около туморната зона, ограничавайки огнищата на свръхвъзбудимост и блокирайки пристъпите.",
+                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & SEIZURE RESOLVER",
                 predictiveStatus: "Предиктивен статус:",
                 shieldIntact: "SHIELD INTACT (ACTIVE)",
                 shieldDampened: "DAMPENED (SAFE LOCKOUT)",
-                hebbianConfidenceLabel: "Hebbian BCI Confidence:",
+                hebbianConfidenceLabel: "Hebbian EEG Coherence:",
                 chronosPidLabel: "Chronos PID Gains:",
                 catuskotiStateLabel: "CATUSKOTI STATE",
-                gaitStatusStandby: "STANDBY",
-                gaitStatusStance: "STANCE_PHASE",
-                gaitStatusSwing: "SWING_PHASE",
+                gaitStatusStandby: "EEG_STANDBY",
+                gaitStatusStance: "SYNCHRONIZED",
+                gaitStatusSwing: "SPIKE_SUPPRESSION",
                 vivisectorTitle: "Синтетична Леталност (Vivisector)",
-                vivisectorDesc: "Алгоритъмът GENOME_VIVISECTOR извършва O(1) Inter-Procedural Taint Traversal през метаболитните графове, идентифицирайки критични уязвимости в туморния метаболизъм (Synthetic Lethality) и изолирайки фалшивите сигнали. Математически валидиран върху кохорта от 5,000 публични клинични доклада на онкоболни (C-index: 0.9713).",
+                vivisectorDesc: "Алгоритъмът GENOME_VIVISECTOR извършва O(1) Inter-Procedural Taint Traversal през метаболитните графове, идентифицирайки критични уязвимости в туморния метаболизъм (Synthetic Lethality) и изолирайки фалшивите сигнали.",
                 state1Title: "STATE 1: TRUE",
                 state1Desc: "Истински клиничен експлоит (Synthetic Lethality) открит.",
                 state2Title: "STATE 2: FALSE",
                 state2Desc: "Токсичен фалшив сигнал. Метаболитният път е защитен.",
                 state3Title: "STATE 3: PARADOX",
-                state3Desc: "Туморен байпас. Сигналът е пренасочен през алтернативен път.",
-                btnVivisector: "СТАРТ НА VIVISECTOR"
+                state3Desc: "Tumor bypass. Сигналът е пренасочен през алтернативен път.",
+                btnVivisector: "СТАРТ НА VIVISECTOR",
+                scalpelTitle: "3D ДИГИТАЛЕН СКАЛПЕЛ",
+                renderModeLabel: "РЕЖИМ НА РЕНДЕРИРАНЕ",
+                anatomicalVolume: "АНАТОМИЧЕН ОБЕМ",
+                bdnfNeuroplasticity: "BDNF НЕВРОПЛАСТИЧНОСТ",
+                dtiTractography: "DTI ТРАКТОГРАФИЯ (3D ЛИНИИ)",
+                autoSpin: "АВТО-РОТАЦИЯ (60 FPS)",
+                densityWindow: "ПЛЪТНОСТЕН ПРОЗОРЕЦ (КОНТРАСТ)",
+                densityLevel: "НИВО НА ПЛЪТНОСТ (ЯРКОСТ)",
+                sagittalClip: "САГИТАЛЕН СРЕЗ (X-ОС)",
+                coronalClip: "КОРОНАЛЕН СРЕЗ (Y-ОС)",
+                axialClip: "АКСИАЛЕН СРЕЗ (Z-ОС)",
+                clearSelection: "ИЗЧИСТИ ИЗБОРА",
+                voxelDensity: "ПЛЪТНОСТ НА ВОКСЕЛА:",
+                clinicalRef: "КЛИНИЧНА РЕФЕРЕНЦИЯ:",
+                isocenter: "ИЗОЦЕНТЪР",
+                affineLockCoords: "AFFINE LOCK КООРДИНАТИ",
+                hideTelemetry: "Скрий Телеметрията",
+                showTelemetry: "Покажи Телеметрията",
+                tabGrants: "EU Финансиране & Партньори",
+                searchPicLabel: "Търсене на организация по PIC номер:",
+                grantsListTitle: "Активни Грантове (Хоризонт Европа)",
+                picSearchBtn: "ИЗВЛЕЧИ ПРОФИЛ",
+                noGrantsFound: "Няма намерени отворени грантове.",
+                picDetailsTitle: "Профил на легалния субект",
+                picDetailsOrgName: "Организация:",
+                picDetailsCountry: "Държава:",
+                picDetailsStatus: "Статус:",
+                picDetailsVat: "ДДС номер:",
+                picDetailsWebsite: "Уебсайт:",
+                picDetailsProjects: "Активни проекти:",
+                grantsKeywordLabel: "Филтриране по ключова дума:",
+                btnSearchGrants: "ТЪРСЕНЕ НА ГРАНТОВЕ",
+                grantTitle: "Заглавие:",
+                grantDeadline: "Краен срок:",
+                grantBudget: "Бюджет на поканата:",
+                grantLink: "Към ЕС портал",
+                tabNeuro: "Невро-Навигатор",
+                neuroTitle: "Глимфатичен Дренажен Баланс",
+                neuroDesc: "Моделиране на масовия баланс на Амилоид-β и Тау в интерстициалното пространство по време на NREM сън.",
+                aqp4Label: "AQP4 Поляризация (Аквапорин-4)",
+                deltaWaveLabel: "EEG Делта-Вълни (Амплитуда)",
+                synthesisRateLabel: "Базова скорост на синтез (K_synthesis)",
+                clearanceFlowLabel: "Глимфатичен Дебит (Phi)",
+                massBalanceLabel: "Масов Баланс (d[Aβ]/dt)",
+                statusLabel: "СТАТУС НА СУБСТРАТА:",
+                homeostasisGuaranteed: "🟢 HOMEOSTASIS_GUARANTEED",
+                toxicEntropy: "🔴 TOXIC_ENTROPY_ACCUMULATION",
+                verdictLabel: "КЛИНИЧЕН ВЕРДИКТ:",
+                verdictHomeostasis: "Спирането на когнитивния упадък е детерминистично доказано. Активен CSF дренаж.",
+                verdictToxic: "Патологично натрупване на протеопатия в церебралния субстрат. Риск от когнитивен упадък.",
+                aqp4PolarizationDesc: "Поляризацията на AQP4 водни канали по крайните крачета на астроцитите е хидравличната помпа на мозъка. Падането под 0.60 води до разпръскване на каналите и срив на флуидния поток.",
+                deltaWaveDesc: "EEG делта-вълни с голяма амплитуда (>75 µV) по време на NREM сън координират масивните CSF пулсации за разширяване на интерстициалното пространство с 60%.",
+                synthesisRateDesc: "Скорост на базовия патологичен синтез на амилоид-β протеини.",
+                scenariosTitle: "Клинични Сценарии (Mojo Тест)",
+                scenario1Btn: "Сценарий 1: Дълбок NREM сън",
+                scenario2Btn: "Сценарий 2: AQP4 Деполяризация",
+                scenario3Btn: "Сценарий 3: Повърхностен NREM сън"
             },
             en: {
-                hudTitle: "AETERNA // SOVEREIGN VHT HUD",
+                hudTitle: "AETERNA // SOVEREIGN NEURO-ONCOLOGY HUD",
                 neuralLink: "NEURAL LINK:",
                 connected: "CONNECTED",
                 severed: "SEVERED",
                 knoxHeartbeat: "KNOX HEARTBEAT:",
-                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026",
-                tabScientific: "Scientific Panel (Physicians)",
+                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY ONCOLOGICAL CURE PROTOCOL // 2026",
+                tabScientific: "Scientific Panel (Oncologists)",
                 tabCohort: "Cohort Study (900 Twins)",
                 tabPillars: "Four Pillars of Security",
-                tabFes: "BCI-FES Neuro-Locomotion",
-                btnInduceCure: "INDUCE BIOLOGICAL CURE",
-                btnRestoreChaos: "RESTORE METABOLIC CHAOS",
+                tabFes: "BCI-EEG Neuro-Modulation",
+                btnInduceCure: "INDUCE TUMOR REVERSION",
+                btnRestoreChaos: "RESTORE NEOPLASMATIC CHAOS",
                 btnResetSimulation: "RESET SIMULATION",
-                btnInjectSpasm: "INJECT MUSCLE SPASM",
-                btnInjectAnomaly: "INJECT METABOLIC ANOMALY",
-                btnStartFes: "START CLOSED-LOOP FES",
-                btnStopFes: "STOP CLOSED-LOOP FES",
+                btnInjectSpasm: "INJECT EPILEPTIC SEIZURE",
+                btnInjectAnomaly: "INJECT GLUTAMATE ANOMALY",
+                btnStartFes: "START CLOSED-LOOP EEG",
+                btnStopFes: "STOP CLOSED-LOOP EEG",
                 criticalAlert: "⚠️ CRITICAL ALERT",
-                lockoutEnforced: "AURA SOVEREIGN METABOLIC LOCKOUT ENFORCED",
-                lockoutDesc: "Detected critical deviation of <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> in the patient's substrate (Layer 4 Z-score Limit).<br><br>Automatic insulin/peptide pumps are <span style=\"color: #ff0055; font-weight: bold;\">HARDWARE LOCKED</span> via Samsung Knox TEE cryptographic signature at the silicon level to prevent fatal medical outcomes.",
-                emergencyModeActive: "EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED",
-                emergencyBannerDesc: "The system has transitioned to emergency offline mode. All commands are hardware-signed by **Samsung Knox TEE** directly on the silicon, ensuring safe dosages and preventing metabolic accidents.",
-                auraShieldActive: "🛡️ AURA INTEGRITY SHIELD ACTIVE",
-                auraShieldCompromised: "🛡️ AURA INTEGRITY SHIELD COMPROMISED",
+                lockoutEnforced: "AURA SOVEREIGN SEIZURE LOCKOUT ENFORCED",
+                lockoutDesc: "Detected critical deviation of <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> in peritumoral glutamate levels (Layer 4 Z-score Limit).<br><br>Automatic neuro-modulators are <span style=\"color: #ff0055; font-weight: bold;\">HARDWARE LOCKED</span> via Samsung Knox TEE signature to prevent excitotoxicity and fatal status epilepticus.",
+                emergencyModeActive: "EMERGENCY LOCAL ONCOLOGY MODE ACTIVE // NEURAL LINK SEVERED",
+                emergencyBannerDesc: "The system transitioned to emergency local mode. All neuro-stimulation commands are hardware-signed by **Samsung Knox TEE** directly on the silicon to prevent tumor-induced hyperexcitability.",
+                auraShieldActive: "🛡️ AURA ONCOLOGY SHIELD ACTIVE",
+                auraShieldCompromised: "🛡️ AURA ONCOLOGY SHIELD COMPROMISED",
                 shieldEnforced: "LAYER 4 ENFORCED",
                 shieldLockout: "LOCKOUT ACTIVE",
-                statusActiveDesc: "All vital metrics are mathematically verified and confirmed against the critical threshold of <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
-                statusCompromisedDesc: "Critical safety deviation detected. Automatic dosing has been cryptographically suspended.",
+                statusActiveDesc: "All neuro-oncological vital metrics are mathematically verified and confirmed against the critical threshold of <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
+                statusCompromisedDesc: "Critical safety deviation detected. Automatic stimulation dosing has been cryptographically suspended.",
                 bloodPh: "BLOOD pH",
                 normalPh: "Normal: 7.35 - 7.45",
                 oxygenSat: "OXYGEN SATURATION (O₂)",
                 normalO2: "Normal: 95% - 100%",
-                metabolicZscore: "METABOLIC Z-SCORE",
+                metabolicZscore: "Z-SCORE SEIZURE RISK",
                 criticalZscore: "Critical threshold: >3.0σ",
-                glycemicTrajectory: "Glycemic Trajectory Day 2 (Steady-State)",
-                glycemicDesc: "Simulated metabolic curve of patient P-402. The green zone (4.0 - 10.0 mmol/L) represents the clinical norm.",
+                glycemicTrajectory: "Tumor Regression Curve Day 2 (Steady-State)",
+                glycemicDesc: "Simulated glioblastoma (GBM) volume under metabolic block therapy. The norm is complete reversion (0.00 cm³).",
                 globalEntropy: "GLOBAL ENTROPY",
-                glucoseLabel: "Glucose",
-                normalGlucose: "Normal: 4.5 - 6.0 mmol/L",
-                endogenousCpeptide: "Endogenous C-Peptide",
-                normalCpeptide: "Normal: 0.26 - 1.39 nmol/L",
-                homaIrIndex: "HOMA-IR Index",
-                normalHomaIr: "Normal: < 1.0 (Sensitivity)",
+                glucoseLabel: "Tumor Volume (GBM)",
+                normalGlucose: "Normal: 0.00 cm³",
+                endogenousCpeptide: "BBB Integrity",
+                normalCpeptide: "Normal: >90% (Protected)",
+                homaIrIndex: "Glutamate Toxicity",
+                normalHomaIr: "Normal: < 1.00 mM",
                 patientProfile: "Patient Profile",
                 patientLabel: "PATIENT:",
-                ageWeightLabel: "AGE / WEIGHT:",
-                ageWeightVal: "9 years / 32 kg",
-                bypassStateLabel: "BYPASS STATE:",
-                bypassAtrophy: "SEVERE_PANCREATIC_ATROPHY",
-                bypassReversion: "BIOLOGICAL_REVERSION",
-                activeInsulinLabel: "ACTIVE INSULIN:",
-                insulinAuto: "0.00 U (Autologous regulation)",
-                insulinExternal: "4.50 U (External pump)",
+                ageWeightLabel: "AGE / DIAGNOSIS:",
+                ageWeightVal: "42 years / Glioblastoma Multiforme (GBM)",
+                bypassStateLabel: "THERAPEUTIC BYPASS:",
+                bypassAtrophy: "TUMOR_NEOPLASM_ACTIVE",
+                bypassReversion: "ONCOLOGICAL_REVERSION",
+                activeInsulinLabel: "ACTIVE INHIBITOR:",
+                insulinAuto: "Pax4-Sovereign Block (0.00 cm³)",
+                insulinExternal: "Temozolomide + Metabolic Block",
                 clinicalConclusion: "CLINICAL CONCLUSION:",
-                conclusionCured: "The appearance of endogenous C-peptide (0.90 nmol/L) in combination with complete peripheral restoration of insulin sensitivity (HOMA-IR = 1.0) marks successful Pax4-induced beta-cell regeneration and autologous therapy.",
-                conclusionChaos: "The patient is in chaotic metabolic decompensation with absolute insulin deficiency. Induce the biological restart via the main recovery button.",
-                telemetryLog: "LIVE_SUBSTRATE_TELEMETRY_LOG",
-                engConsole: "ENGINEERING CONSOLE // TEST INJECTORS",
-                engConsoleDesc: "Simulate critical metabolic decompensation to stress-test Layer 4 safety protocols.",
-                cohortTitle: "Comparative Cohort Screen (900 Virtual Twins)",
-                cohortDesc: "Scaling the autologous cure v4.0 across the entire demographic sample of the 2015 National Registry.",
+                conclusionCured: "Successful blocking of tumor metabolism (0.00 cm³) in combination with complete peripheral restoration of neural stability marks successful Sovereign-induced oncological reversion and autologous therapy.",
+                conclusionChaos: "The patient is in a state of progressive neoplasm with active glutamate toxicity and high risk of seizures. Induce the biological restart via the main recovery button.",
+                telemetryLog: "LIVE_ONCOLOGY_TELEMETRY_LOG",
+                engConsole: "CLINICAL CONSOLE // TUMOR TEST INJECTORS",
+                engConsoleDesc: "Simulate critical glutamate excursion and tumor-induced epileptic spasm to stress-test Layer 4 safety protocols.",
+                cohortTitle: "Comparative Cohort Screen (900 Virtual Oncological Twins)",
+                cohortDesc: "Scaling the autologous cure v4.0 across the entire demographic sample of Glioblastoma cohorts for 2015-2026.",
                 ageGroup: "Age Group",
                 count: "Count",
-                baselineTir: "Baseline TIR (2015)",
-                conventionalTir: "Conventional TIR",
-                v3Tir: "VHT v3.0 TIR",
-                v4Tir: "v4.0 Biological TIR",
-                baselineHypo: "Baseline Hypoglycemic Events",
-                v4Hypo: "v4.0 Hypoglycemic Events",
-                groupPediatric: "0-14 (Pediatric)",
-                groupYouth: "15-44 (Youth)",
-                groupMiddle: "45-59 (Middle Age)",
-                groupMature: "60-74 (Mature Age)",
-                groupElderly: "75-89 (Elderly)",
-                groupCentenarian: "90+ (Centenarians)",
+                baselineTir: "Baseline Survival",
+                conventionalTir: "Conventional Survival",
+                v3Tir: "VHT v3.0 Survival",
+                v4Tir: "v4.0 Biological Survival",
+                baselineHypo: "Baseline Seizures",
+                v4Hypo: "v4.0 Seizures",
+                groupPediatric: "0-14 (Pediatric GBM)",
+                groupYouth: "Youth",
+                groupMiddle: "Middle Age",
+                groupMature: "Mature Age",
+                groupElderly: "Elderly",
+                groupCentenarian: "Centenarians",
                 pillar1Num: "PILLAR 1",
-                pillar1Title: "Pharmacotherapeutic Synchrony",
-                pillar1Desc: "Mathematical safety locks block dangerous doses of concentrated prandial insulin (U-200, U-300) without corresponding mechanical calibration.",
+                pillar1Title: "Metabolic Control",
+                pillar1Desc: "Blocking glutamine and glycolytic pathways of glioblastoma cells by turning off the Warburg effect without systemic toxicity.",
                 pillar2Num: "PILLAR 2",
-                pillar2Title: "Dietary Control",
-                pillar2Desc: "Preemptive 15% reduction of the insulin-to-carbohydrate ratio (ICR) in the morning to block Dawn Phenomenon resistance.",
+                pillar2Title: "BBB Permeability",
+                pillar2Desc: "Mathematical modeling of transport proteins to optimize drug delivery across the Blood-Brain Barrier.",
                 pillar3Num: "PILLAR 3",
-                pillar3Title: "Physical Activity",
-                pillar3Desc: "Modeling of GLUT4 translocation during aerobic sports. Preemptive 30% to 50% reduction of the bolus to prevent hypoglycemic events.",
+                pillar3Title: "Neuroplastic Resonance",
+                pillar3Desc: "Activating AMPK and CaMKII signaling to protect healthy adjacent brain tissue from excitotoxic degeneration.",
                 pillar4Num: "PILLAR 4",
                 pillar4Title: "AURA Integrity Guard",
                 pillar4Desc: "Real-time calculation of Z-Score for pH and oxygen saturation. Exceeding the 3.0σ threshold triggers the TEE Knox lockout.",
@@ -766,14 +811,71 @@
                 gaitStatusStance: "STANCE_PHASE",
                 gaitStatusSwing: "SWING_PHASE",
                 vivisectorTitle: "Synthetic Lethality (Vivisector)",
-                vivisectorDesc: "The GENOME_VIVISECTOR algorithm performs an O(1) Inter-Procedural Taint Traversal through metabolic graphs, identifying critical vulnerabilities in tumor metabolism (Synthetic Lethality) and isolating false signals. Rigorously validated against a cohort of 5,000 public clinical oncology reports (C-index: 0.9713).",
+                vivisectorDesc: "The GENOME_VIVISECTOR algorithm performs an O(1) Inter-Procedural Taint Traversal through metabolic graphs, identifying critical vulnerabilities in tumor metabolism (Synthetic Lethality) and isolating false signals.",
                 state1Title: "STATE 1: TRUE",
                 state1Desc: "True clinical exploit (Synthetic Lethality) detected.",
                 state2Title: "STATE 2: FALSE",
                 state2Desc: "Toxic false signal. The metabolic pathway is protected.",
                 state3Title: "STATE 3: PARADOX",
                 state3Desc: "Tumor bypass. The signal is rerouted through an alternative pathway.",
-                btnVivisector: "START VIVISECTOR"
+                btnVivisector: "START VIVISECTOR",
+                scalpelTitle: "3D DIGITAL SCALPEL",
+                renderModeLabel: "RENDER MODE",
+                anatomicalVolume: "ANATOMICAL VOLUME",
+                bdnfNeuroplasticity: "BDNF NEUROPLASTICITY",
+                dtiTractography: "DTI TRACTOGRAPHY (3D LINES)",
+                autoSpin: "AUTO-SPIN (60 FPS)",
+                densityWindow: "DENSITY WINDOW (CONTRAST)",
+                densityLevel: "DENSITY LEVEL (BRIGHTNESS)",
+                sagittalClip: "SAGITTAL CLIP (X-AXIS)",
+                coronalClip: "CORONAL CLIP (Y-AXIS)",
+                axialClip: "AXIAL CLIP (Z-AXIS)",
+                clearSelection: "CLEAR SELECTION",
+                voxelDensity: "VOXEL DENSITY:",
+                clinicalRef: "CLINICAL REF:",
+                isocenter: "ISOCENTER",
+                affineLockCoords: "AFFINE LOCK COORDINATES",
+                hideTelemetry: "Hide Telemetry HUD",
+                showTelemetry: "Show Telemetry HUD",
+                tabGrants: "EU Funding & Partners",
+                searchPicLabel: "Search Organisation by PIC Number:",
+                grantsListTitle: "Active Horizon Europe Grants",
+                picSearchBtn: "FETCH PROFILE",
+                noGrantsFound: "No open grants found.",
+                picDetailsTitle: "Legal Entity Profile",
+                picDetailsOrgName: "Organisation:",
+                picDetailsCountry: "Country:",
+                picDetailsStatus: "Status:",
+                picDetailsVat: "VAT Number:",
+                picDetailsWebsite: "Website:",
+                picDetailsProjects: "Active Projects:",
+                grantsKeywordLabel: "Filter by Keyword:",
+                btnSearchGrants: "SEARCH GRANTS",
+                grantTitle: "Title:",
+                grantDeadline: "Deadline:",
+                grantBudget: "Call Budget:",
+                grantLink: "Go to Opportunity",
+                tabNeuro: "Neuro-Navigator",
+                neuroTitle: "Glymphatic Drainage Balance",
+                neuroDesc: "Modeling the mass balance of Amyloid-β and Tau proteins in the interstitial space during NREM sleep.",
+                aqp4Label: "AQP4 Polarization (Aquaporin-4)",
+                deltaWaveLabel: "EEG Delta Wave (Amplitude)",
+                synthesisRateLabel: "Base Synthesis Rate (K_synthesis)",
+                clearanceFlowLabel: "Glymphatic Flow Rate (Phi)",
+                massBalanceLabel: "Mass Balance (d[Aβ]/dt)",
+                statusLabel: "SUBSTRATE STATUS:",
+                homeostasisGuaranteed: "🟢 HOMEOSTASIS_GUARANTEED",
+                toxicEntropy: "🔴 TOXIC_ENTROPY_ACCUMULATION",
+                verdictLabel: "CLINICAL VERDICT:",
+                verdictHomeostasis: "Cognitive decline halt is deterministically proven. Active CSF drainage.",
+                verdictToxic: "Pathological accumulation of proteopathy in the cerebral substrate. Risk of cognitive decline.",
+                aqp4PolarizationDesc: "AQP4 channel polarization at astrocyte endfeet acts as the brain's hydraulic pump. Falling below 0.60 causes channels to scatter, collapsing directional CSF flow.",
+                deltaWaveDesc: "High-amplitude EEG delta waves (>75 µV) during NREM sleep coordinate massive CSF pulsations to expand the interstitial space by 60%.",
+                synthesisRateDesc: "The rate of base pathological synthesis of amyloid-β proteins.",
+                scenariosTitle: "Clinical Scenarios (Mojo Test)",
+                scenario1Btn: "Scenario 1: Deep NREM Sleep",
+                scenario2Btn: "Scenario 2: AQP4 Depolarization",
+                scenario3Btn: "Scenario 3: Light NREM Sleep"
             }
         };
 
@@ -798,16 +900,40 @@
             renderVanillaHUD();
         }
 
+        function formatLogEntry(log) {
+            const msg = state.language === 'bg' ? log.bg : log.en;
+            
+            // Highlight prefixes dynamically
+            let styledMsg = msg
+                .replace(/^(\[SUCCESS\]|SUCCESS:|BIO_CURE_INIT:|ONLINE:)/g, '<span style="color: var(--neon-emerald); font-weight: 600;">$1</span>')
+                .replace(/^(\[CRITICAL_ALERT\]|CRITICAL_ALERT:|WARNING:)/g, '<span style="color: var(--neon-red); font-weight: 600;">$1</span>')
+                .replace(/^(\[SYSTEM_RESET\]|SYSTEM_RESET:|\[SYSTEM_RESET\])/g, '<span style="color: var(--neon-amber); font-weight: 600;">$1</span>')
+                .replace(/^(\[TEE_LOCKOUT\]|TEE_LOCKOUT:|CHRONOS_LOCKOUT:|KNOX_SAFETY:|KNOX_LOCKOUT:)/g, '<span style="color: var(--neon-purple); font-weight: 600;">$1</span>')
+                .replace(/^(AMPK_GLUT4:|AMPK_GLUT4|VIVISECTOR:)/g, '<span style="color: var(--neon-blue); font-weight: 600;">$1</span>');
+                
+            return `<div style="line-height: 1.5; margin-bottom: 2px;"><span style="color: #4a4a4f; margin-right: 8px;">[${log.time}]</span><span>${styledMsg}</span></div>`;
+        }
+
         function triggerCureRestoration() {
             if (state.isTransitioning || state.curedState) return;
             state.isTransitioning = true;
-            addLogEntry("BIO_CURE_INIT: ИНИЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ...", "BIO_CURE_INIT: INITIATING BIOLOGICAL CURE...");
+            
+            const required_boost = 95.0 - state.deltaWaveAmplitude;
+            
+            addLogEntry("BIO_CURE_INIT: ИНИЦИРАНЕ НА ТУМОРНА РЕВЕРСИЯ / НЕВРО-МОДУЛАЦИЯ...", "BIO_CURE_INIT: INITIATING TUMOR REVERSION / NEURO-MODULATION...");
             addLogEntry("ТРАНСФОРМАЦИЯ: Мобилизиране на Pax4 бета-регенеративен отговор...", "TRANSFORMATION: Mobilizing Pax4 beta-regenerative response...");
+            addLogEntry(
+                `[⚡ BCI-EEG] Induced resonant wave-sweep: +${required_boost.toFixed(1)} µV. Conformal fluid drainage deployed. Delta-accumulation terminated.`,
+                `[⚡ BCI-EEG] Induced resonant wave-sweep: +${required_boost.toFixed(1)} µV. Conformal fluid drainage deployed. Delta-accumulation terminated.`
+            );
 
             let duration = 3000;
             let intervalTime = 50;
             let steps = duration / intervalTime;
             let step = 0;
+
+            const startAQP4 = state.aqp4Polarization;
+            const startDelta = state.deltaWaveAmplitude;
 
             const timer = setInterval(() => {
                 step++;
@@ -816,6 +942,10 @@
                 state.entropy = parseFloat((3.56 - (3.56 - 0.05) * pct).toFixed(2));
                 state.cPeptide = parseFloat((0.01 + (0.90 - 0.01) * pct).toFixed(2));
                 state.homaIr = parseFloat((2.40 - (2.40 - 1.00) * pct).toFixed(2));
+
+                // Animate neurological parameters in closed-loop
+                state.aqp4Polarization = parseFloat((startAQP4 + (0.85 - startAQP4) * pct).toFixed(2));
+                state.deltaWaveAmplitude = parseFloat((startDelta + (95.0 - startDelta) * pct).toFixed(1));
 
                 currentGlucose = rawChaoticData.map((d, i) => {
                     const diff = d.val - curedData[i].val;
@@ -829,10 +959,16 @@
                     state.entropy = 0.05;
                     state.cPeptide = 0.90;
                     state.homaIr = 1.00;
+                    state.aqp4Polarization = 0.85;
+                    state.deltaWaveAmplitude = 95.0;
                     currentGlucose = [...curedData];
                     state.curedState = true;
                     state.isTransitioning = false;
                     addLogEntry("SUCCESS: БИОЛОГИЧНО ИЗЛЕКУВАНЕ: 100% TIR УСПЕШНО ВАЛИДИРАНО.", "SUCCESS: BIOLOGICAL CURE: 100% TIR SUCCESSFULLY VALIDATED.");
+                    
+                    if (typeof evaluateNeuroLogs === 'function') {
+                        evaluateNeuroLogs(true);
+                    }
                 }
                 renderVanillaHUD();
             }, intervalTime);
@@ -866,7 +1002,145 @@
 
         function switchTab(tabId) {
             state.activeTab = tabId;
+            if (tabId === "grants" && state.grantsList.length === 0) {
+                fetchHorizonGrants();
+            }
             renderVanillaHUD();
+        }
+
+        async function fetchHorizonGrants() {
+            if (state.grantsLoading) return;
+            state.grantsLoading = true;
+            renderVanillaHUD();
+            
+            const url = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&text=***';
+            const kw = state.grantsKeyword || "cancer";
+            
+            const queryData = {
+                "bool": {
+                    "must": [
+                        { "terms": { "type": ["1", "2", "8"] } },
+                        { "terms": { "status": ["31094501", "31094502"] } },
+                        { "term": { "programmePeriod": "2021 - 2027" } }
+                    ],
+                    "should": [
+                        { "match": { "title": kw } },
+                        { "match": { "description": kw } }
+                    ],
+                    "minimum_should_match": 1
+                }
+            };
+
+            addLogEntry(
+                `EU_API: Сканиране на Хоризонт Европа грантове за ключова дума: "${kw}"...`,
+                `EU_API: Scanning Horizon Europe grants for keyword: "${kw}"...`
+            );
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(queryData)
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                const results = data.results || [];
+                
+                state.grantsList = results.map(item => {
+                    const meta = item.metadata || {};
+                    return {
+                        identifier: meta.identifier && meta.identifier[0] ? meta.identifier[0] : "No Identifier",
+                        title: meta.title && meta.title[0] ? meta.title[0] : "No Title",
+                        deadline: meta.deadlineDate && meta.deadlineDate[0] ? new Date(meta.deadlineDate[0]).toLocaleDateString() : "No Deadline",
+                        budget: meta.callBudget && meta.callBudget[0] ? `${parseFloat(meta.callBudget[0]).toLocaleString()} EUR` : "Not Specified",
+                        link: `https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/${(meta.ccReference && meta.ccReference[0] ? meta.ccReference[0] : "").toLowerCase()}`
+                    };
+                });
+
+                addLogEntry(
+                    `ONLINE: Заредени ${results.length} отворени гранта от ЕК.`,
+                    `ONLINE: Loaded ${results.length} active EU opportunities.`
+                );
+            } catch (err) {
+                console.error("EU API Error:", err);
+                addLogEntry(
+                    `CRITICAL_ALERT: Срив при комуникацията с ЕК API: ${err.message}`,
+                    `CRITICAL_ALERT: EC API Communication breakdown: ${err.message}`
+                );
+            } finally {
+                state.grantsLoading = false;
+                renderVanillaHUD();
+            }
+        }
+
+        async function fetchOrganisationByPic(picNumber) {
+            const trimmedPic = (picNumber || "").trim();
+            if (!trimmedPic) return;
+            
+            state.picLoading = true;
+            state.picOrgProfile = null;
+            renderVanillaHUD();
+
+            addLogEntry(
+                `EU_API: Извличане на профил за PIC: ${trimmedPic}...`,
+                `EU_API: Fetching legal profile for PIC: ${trimmedPic}...`
+            );
+
+            const url = 'https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA_PERSON&text=***';
+            const queryData = {
+                "bool": {
+                    "must": [
+                        { "terms": { "type": ["ORGANISATION"] } },
+                        { "match": { "pic": trimmedPic } }
+                    ]
+                }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(queryData)
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                const results = data.results || [];
+                
+                if (results.length > 0) {
+                    const org = results[0];
+                    const meta = org.metadata || {};
+                    state.picOrgProfile = {
+                        name: meta.legalName && meta.legalName[0] ? meta.legalName[0] : (meta.name && meta.name[0] ? meta.name[0] : "No Legal Name"),
+                        country: meta.countryName && meta.countryName[0] ? meta.countryName[0] : "Unknown",
+                        website: meta.website && meta.website[0] ? meta.website[0] : "Not Specified",
+                        status: meta.statusName && meta.statusName[0] ? meta.statusName[0] : "Unknown",
+                        vat: meta.vatNumber && meta.vatNumber[0] ? meta.vatNumber[0] : "None",
+                        pic: trimmedPic
+                    };
+                    addLogEntry(
+                        `SUCCESS: Извлечен профил за: ${state.picOrgProfile.name}`,
+                        `SUCCESS: Profile retrieved for: ${state.picOrgProfile.name}`
+                    );
+                } else {
+                    addLogEntry(
+                        `WARNING: Профилът за PIC ${trimmedPic} не бе намерен.`,
+                        `WARNING: Profile for PIC ${trimmedPic} not found.`
+                    );
+                }
+            } catch (err) {
+                console.error("PIC Fetch Error:", err);
+                addLogEntry(
+                    `CRITICAL_ALERT: Грешка при достъп до PIC базата: ${err.message}`,
+                    `CRITICAL_ALERT: Access error to PIC Registry: ${err.message}`
+                );
+            } finally {
+                state.picLoading = false;
+                renderVanillaHUD();
+            }
         }
 
         let gaitTimer = null;
@@ -988,6 +1262,63 @@
             return `${path} L ${last.x.toFixed(1)} ${height - padding} L ${first.x.toFixed(1)} ${height - padding} Z`;
         }
 
+        // --- GLYMPHATIC CLEARANCE ENGINE ---
+        function evaluateGlymphaticClearance(aqp4, deltaWave, synthesisRate) {
+            if (aqp4 < 0.0 || deltaWave < 0.0) {
+                return { phi: 0.0, derivative: synthesisRate, isHomeostasis: false, powerFactor: 0.0 };
+            }
+            const minAqp4 = 0.60;
+            const minDelta = 75.0;
+            const powerFactor = aqp4 * (deltaWave / 100.0);
+            const phiMax = synthesisRate * 2.5;
+            
+            // Non-linear hydraulic resistance (Sigmoid)
+            const exponent = -10.0 * (powerFactor - (minAqp4 * (minDelta / 100.0)));
+            let phi = 0.0;
+            try {
+                phi = phiMax / (1.0 + Math.exp(exponent));
+            } catch (e) {
+                phi = exponent > 0 ? 0.0 : phiMax;
+            }
+            const derivative = synthesisRate - phi;
+            const isHomeostasis = aqp4 >= minAqp4 && deltaWave >= minDelta && derivative < 0.0;
+            return { phi, derivative, isHomeostasis, powerFactor };
+        }
+
+        let lastHomeostasisState = null;
+        function evaluateNeuroLogs(force = false) {
+            const clearance = evaluateGlymphaticClearance(state.aqp4Polarization, state.deltaWaveAmplitude, state.amyloidSynthesisRate);
+            if (lastHomeostasisState === null) {
+                lastHomeostasisState = clearance.isHomeostasis;
+            }
+            if (clearance.isHomeostasis !== lastHomeostasisState || force) {
+                lastHomeostasisState = clearance.isHomeostasis;
+                if (clearance.isHomeostasis) {
+                    addLogEntry(
+                        `ONLINE: [GLYMPHATIC_CLEANING] CSF convective sweep active! AQP4 channels successfully flushing vascular amyloid. d[Aβ]/dt = ${clearance.derivative.toFixed(4)} pg/mL/sec.`,
+                        `ONLINE: [GLYMPHATIC_CLEANING] CSF convective sweep active! AQP4 channels successfully flushing vascular amyloid. d[Aβ]/dt = ${clearance.derivative.toFixed(4)} pg/mL/sec.`
+                    );
+                } else {
+                    addLogEntry(
+                        `CRITICAL_ALERT: [CLINICAL_ALERT] AQP4 channel depolarization or low EEG delta waves! Convective glymphatic flow collapsed. d[Aβ]/dt = +${clearance.derivative.toFixed(4)} pg/mL/sec.`,
+                        `CRITICAL_ALERT: [CLINICAL_ALERT] AQP4 channel depolarization or low EEG delta waves! Convective glymphatic flow collapsed. d[Aβ]/dt = +${clearance.derivative.toFixed(4)} pg/mL/sec.`
+                    );
+                }
+            }
+        }
+
+        function injectNeuroScenario(aqp4, delta, synthesis) {
+            state.aqp4Polarization = aqp4;
+            state.deltaWaveAmplitude = delta;
+            state.amyloidSynthesisRate = synthesis;
+            addLogEntry(
+                `NEURO_SIM: Инжектиране на физиологичен сценарий: AQP4=${aqp4.toFixed(2)}, DeltaWave=${delta.toFixed(1)} µV.`,
+                `NEURO_SIM: Injecting physiological scenario: AQP4=${aqp4.toFixed(2)}, DeltaWave=${delta.toFixed(1)} µV.`
+            );
+            evaluateNeuroLogs(true);
+            renderVanillaHUD();
+        }
+
         function renderVanillaHUD() {
             const root = document.getElementById("app-root");
             if (!root) return;
@@ -1009,6 +1340,12 @@
                         </button>
                         <button class="tab-btn ${state.activeTab === 'vivisector' ? 'active' : ''}" onclick="switchTab('vivisector')">
                             <i data-lucide="dna" class="w-4 h-4 inline-block mr-2 text-indigo-400"></i>${t('vivisectorTitle')}
+                        </button>
+                        <button class="tab-btn ${state.activeTab === 'grants' ? 'active' : ''}" onclick="switchTab('grants')">
+                            <i data-lucide="globe" class="w-4 h-4 inline-block mr-2 text-cyan-400"></i>${t('tabGrants')}
+                        </button>
+                        <button class="tab-btn ${state.activeTab === 'neuro' ? 'active' : ''}" onclick="switchTab('neuro')">
+                            <i data-lucide="brain" class="w-4 h-4 inline-block mr-2 text-rose-400"></i>${t('tabNeuro')}
                         </button>
                     </div>
                     <div>
@@ -1209,7 +1546,7 @@
                                     <i data-lucide="terminal" class="w-4 h-4 inline-block mr-1.5 text-emerald-400"></i>${t('telemetryLog')}
                                 </div>
                                 <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem;" class="mono text-slate-400">
-                                    ${state.logs.map(log => `<div>[${log.time}] ${state.language === 'bg' ? log.bg : log.en}</div>`).join('')}
+                                    ${state.logs.map(log => formatLogEntry(log)).join('')}
                                 </div>
                             </div>
 
@@ -1348,10 +1685,10 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                     <div style="display: grid; grid-template-columns: 1fr; gap: 28px;">
                         <div class="glass-card" style="padding: 32px; border-top: 4px solid var(--neon-purple);">
                             <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 16px; color: #fff; display: flex; align-items: center; gap: 12px;">
-                                <i data-lucide="dna" class="w-8 h-8 text-indigo-400"></i>\${t('vivisectorTitle')}
+                                <i data-lucide="dna" class="w-8 h-8 text-indigo-400"></i>${t('vivisectorTitle')}
                             </h2>
                             <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; font-size: 1rem;">
-                                \${t('vivisectorDesc')}
+                                ${t('vivisectorDesc')}
                             </p>
                             
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 30px;">
@@ -1359,33 +1696,33 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                                 <div class="glass-card glow-emerald" style="padding: 24px; background: rgba(0,255,170,0.05); border-color: rgba(0,255,170,0.3); border-top: 3px solid var(--neon-emerald);">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                                         <i data-lucide="check-circle-2" class="w-6 h-6 text-emerald-400"></i>
-                                        <h3 style="color: var(--neon-emerald); font-weight: 900; font-size: 1.3rem; margin: 0;">\${t('state1Title')}</h3>
+                                        <h3 style="color: var(--neon-emerald); font-weight: 900; font-size: 1.3rem; margin: 0;">${t('state1Title')}</h3>
                                     </div>
-                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">\${t('state1Desc')}</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">${t('state1Desc')}</p>
                                 </div>
                                 
                                 <!-- STATE 2: FALSE -->
                                 <div class="glass-card glow-red" style="padding: 24px; background: rgba(255,0,85,0.05); border-color: rgba(255,0,85,0.3); border-top: 3px solid var(--neon-red);">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                                         <i data-lucide="x-circle" class="w-6 h-6 text-red-400"></i>
-                                        <h3 style="color: var(--neon-red); font-weight: 900; font-size: 1.3rem; margin: 0;">\${t('state2Title')}</h3>
+                                        <h3 style="color: var(--neon-red); font-weight: 900; font-size: 1.3rem; margin: 0;">${t('state2Title')}</h3>
                                     </div>
-                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">\${t('state2Desc')}</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">${t('state2Desc')}</p>
                                 </div>
                                 
                                 <!-- STATE 3: PARADOX -->
                                 <div class="glass-card glow-purple" style="padding: 24px; background: rgba(181,95,230,0.05); border-color: rgba(181,95,230,0.3); border-top: 3px solid var(--neon-purple);">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                                         <i data-lucide="refresh-cw" class="w-6 h-6 text-purple-400"></i>
-                                        <h3 style="color: var(--neon-purple); font-weight: 900; font-size: 1.3rem; margin: 0;">\${t('state3Title')}</h3>
+                                        <h3 style="color: var(--neon-purple); font-weight: 900; font-size: 1.3rem; margin: 0;">${t('state3Title')}</h3>
                                     </div>
-                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">\${t('state3Desc')}</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">${t('state3Desc')}</p>
                                 </div>
                             </div>
 
                             <div style="text-align: center;">
                                 <button class="cure-btn" style="background: linear-gradient(135deg, #4f46e5, #312e81); box-shadow: 0 0 25px rgba(79, 70, 229, 0.4); margin-top: 10px;" onclick="addLogEntry('VIVISECTOR: Инициализиране на Synthetic Lethality Taint Traversal...', 'VIVISECTOR: Initializing Synthetic Lethality Taint Traversal...')">
-                                    <i data-lucide="play" class="w-5 h-5 text-indigo-200"></i>\${t('btnVivisector')}
+                                    <i data-lucide="play" class="w-5 h-5 text-indigo-200"></i>${t('btnVivisector')}
                                 </button>
                             </div>
                         </div>
@@ -1555,12 +1892,325 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                         </div>
                     </div>
                 `;
+            } else if (state.activeTab === "grants") {
+                // Render EU opportunities and PIC searching card
+                let grantsTableBody = "";
+                if (state.grantsLoading) {
+                    grantsTableBody = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 24px;" class="mono text-indigo-300">
+                                <span class="status-dot bg-blue animate-pulse" style="width: 12px; height: 12px;"></span>
+                                ${state.language === 'bg' ? 'Зареждане на оферти от Европейската Комисия...' : 'Fetching active calls from EC Opportunity database...'}
+                            </td>
+                        </tr>
+                    `;
+                } else if (state.grantsList.length === 0) {
+                    grantsTableBody = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 24px; color: var(--text-secondary);" class="mono">
+                                ${t('noGrantsFound')}
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    grantsTableBody = state.grantsList.map(item => `
+                        <tr>
+                            <td style="font-weight: 700;" class="mono">${item.identifier}</td>
+                            <td>${item.title}</td>
+                            <td class="mono">${item.deadline}</td>
+                            <td class="mono" style="color: var(--neon-emerald); font-weight: 600;">${item.budget}</td>
+                            <td style="text-align: right;">
+                                <a href="${item.link}" target="_blank" class="tab-btn" style="padding: 6px 12px; display: inline-block; text-decoration: none; border-color: rgba(14, 165, 233, 0.4); color: var(--neon-blue); text-transform: none; letter-spacing: 0.5px;">
+                                    ${t('grantLink')} <i data-lucide="external-link" class="w-3 h-3 inline-block ml-1"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                let orgProfileHtml = "";
+                if (state.picLoading) {
+                    orgProfileHtml = `
+                        <div style="text-align: center; padding: 24px;" class="mono text-indigo-300">
+                            <span class="status-dot bg-blue animate-pulse" style="width: 12px; height: 12px;"></span>
+                            ${state.language === 'bg' ? 'Свързване с регистъра на ЕК за PIC...' : 'Querying EC PIC registry...'}
+                        </div>
+                    `;
+                } else if (state.picOrgProfile) {
+                    const prof = state.picOrgProfile;
+                    orgProfileHtml = `
+                        <div style="display: flex; flex-direction: column; gap: 12px;" class="mono">
+                            <div style="font-size: 1rem; font-weight: bold; color: var(--neon-emerald); border-bottom: 1px solid rgba(16, 185, 129, 0.15); padding-bottom: 6px; margin-bottom: 8px;">
+                                <i data-lucide="check-circle" class="w-4 h-4 inline-block mr-1 text-emerald-400"></i> ${t('picDetailsTitle')}
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">${t('picDetailsOrgName')}</span>
+                                <span style="font-weight: 700; color: #fff; text-align: right;">${prof.name}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">${t('picDetailsCountry')}</span>
+                                <span style="font-weight: 700; color: #fff;">${prof.country}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">${t('picDetailsStatus')}</span>
+                                <span style="font-weight: 700; color: var(--neon-blue);">${prof.status}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">${t('picDetailsVat')}</span>
+                                <span style="font-weight: 700; color: #fff;">${prof.vat}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">${t('picDetailsWebsite')}</span>
+                                <a href="${prof.website.startsWith('http') ? prof.website : 'https://' + prof.website}" target="_blank" style="font-weight: 700; color: var(--neon-blue); text-decoration: none;">
+                                    ${prof.website} <i data-lucide="external-link" class="w-3 h-3 inline-block ml-0.5"></i>
+                                </a>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--text-secondary);">${t('picDetailsProjects')}</span>
+                                <span style="font-weight: 700; color: var(--neon-purple);">${prof.pic} (PIC verified)</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    orgProfileHtml = `
+                        <div style="text-align: center; padding: 24px; color: var(--text-secondary);" class="mono">
+                            ${state.language === 'bg' ? 'Въведете 9-цифрен PIC номер и натиснете бутона за извличане.' : 'Enter a 9-digit PIC number and click fetch profile.'}
+                        </div>
+                    `;
+                }
+
+                tabContent = `
+                    <div class="dashboard-grid">
+                        <!-- Left Panel: Grants Opportunities Search and List -->
+                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(181,95,230,0.1); padding-bottom: 12px;">
+                                <div>
+                                    <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                        <i data-lucide="globe" class="w-5 h-5 inline-block mr-2 text-cyan-400"></i>${t('grantsListTitle')}
+                                    </h2>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.75rem; color: var(--text-secondary);" class="mono">${t('grantsKeywordLabel')}</span>
+                                    <input type="text" id="grants-keyword-input" value="${state.grantsKeyword}" onchange="state.grantsKeyword = this.value" onkeyup="if(event.key==='Enter') { state.grantsKeyword=this.value; fetchHorizonGrants(); }" style="background: rgba(0,0,0,0.4); border: 1px solid var(--purple-border); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; outline: none; width: 140px;" class="mono" />
+                                    <button onclick="state.grantsKeyword = document.getElementById('grants-keyword-input').value; fetchHorizonGrants()" class="tab-btn" style="padding: 6px 12px; border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(14, 165, 233, 0.05);">
+                                        ${t('btnSearchGrants')}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="overflow-x: auto; flex: 1;">
+                                <table class="sovereign-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>${t('grantTitle')}</th>
+                                            <th>${t('grantDeadline')}</th>
+                                            <th>${t('grantBudget')}</th>
+                                            <th style="text-align: right;">Portal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="mono">
+                                        ${grantsTableBody}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: PIC Organisation Lookup -->
+                        <div class="column-flex">
+                            <div class="glass-card glow-emerald ${state.emergencyMode ? 'emergency-card' : ''}" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(16, 185, 129, 0.1); padding-bottom: 8px;">
+                                    <i data-lucide="building" class="w-5 h-5 text-emerald-400"></i> ${t('searchPicLabel')}
+                                </div>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <input type="text" id="pic-search-input" placeholder="e.g. 999993952" value="${state.picSearchInput}" onchange="state.picSearchInput = this.value" onkeyup="if(event.key==='Enter') { state.picSearchInput=this.value; fetchOrganisationByPic(state.picSearchInput); }" style="background: rgba(0,0,0,0.4); border: 1px solid var(--purple-border); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 0.9rem; outline: none; width: 100%;" class="mono" />
+                                    <button onclick="state.picSearchInput = document.getElementById('pic-search-input').value; fetchOrganisationByPic(state.picSearchInput)" class="cure-btn" style="background: linear-gradient(135deg, var(--neon-emerald), #059669); box-shadow: 0 0 15px var(--neon-emerald-glow); border-radius: 8px; padding: 10px 20px; font-size: 0.8rem; letter-spacing: 0.5px;">
+                                        ${t('picSearchBtn')}
+                                    </button>
+                                </div>
+
+                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; min-height: 180px;">
+                                    ${orgProfileHtml}
+                                </div>
+                            </div>
+
+                            <!-- EU Policy Info -->
+                            <div class="glass-card" style="padding: 20px; font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary);">
+                                <h4 style="font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                    <i data-lucide="info" class="w-4 h-4 text-cyan-400"></i> HORIZON EUROPE & SOVEREIGN VHT
+                                </h4>
+                                <p>
+                                    ${state.language === 'bg' ? 'Тази интеграция позволява реалновремено свързване на нашия Виртуален Близнак с финансиращи и колаборативни схеми от Европейската комисия. Търсете проекти и партньори с едно натискане за ускорено развитие на персонализираната онкологична платформа.' : 'This integration enables real-time synchronization between our Virtual Human Twin and European Commission funding/collaborative frameworks. Search for projects and target partners to accelerate sovereign neuro-oncological clinical validation.'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (state.activeTab === "neuro") {
+                const clearance = evaluateGlymphaticClearance(state.aqp4Polarization, state.deltaWaveAmplitude, state.amyloidSynthesisRate);
+                
+                let statusBadge = "";
+                let verdictText = "";
+                let badgeClass = "";
+                let badgeStyle = "";
+                
+                if (clearance.isHomeostasis) {
+                    statusBadge = t('homeostasisGuaranteed');
+                    badgeClass = "bg-emerald animate-pulse";
+                    badgeStyle = "background: rgba(16, 185, 129, 0.15); border: 1px solid var(--neon-emerald); color: var(--neon-emerald); font-weight: 900; padding: 12px; border-radius: 8px; font-size: 1rem; text-align: center; text-shadow: 0 0 10px rgba(16,185,129,0.3); letter-spacing: 0.5px;";
+                    verdictText = t('verdictHomeostasis');
+                } else {
+                    statusBadge = t('toxicEntropy');
+                    badgeClass = "bg-red animate-pulse";
+                    badgeStyle = "background: rgba(239, 68, 68, 0.15); border: 1px solid var(--neon-red); color: var(--neon-red); font-weight: 900; padding: 12px; border-radius: 8px; font-size: 1rem; text-align: center; text-shadow: 0 0 10px rgba(239,68,68,0.3); letter-spacing: 0.5px;";
+                    verdictText = t('verdictToxic');
+                }
+
+                tabContent = `
+                    <div class="dashboard-grid">
+                        <!-- Left Panel: Sliders & Mechanics -->
+                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="border-bottom: 1px solid rgba(181,95,230,0.15); padding-bottom: 12px;">
+                                <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                    <i data-lucide="brain" class="w-5 h-5 text-rose-400"></i> ${t('neuroTitle')}
+                                </h2>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+                                    ${t('neuroDesc')}
+                                </p>
+                            </div>
+
+                            <!-- Math display block -->
+                            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #a5b4fc;">
+                                <div style="font-weight: 700; color: #fff; margin-bottom: 6px; font-size: 0.9rem;">
+                                    [EQUATION OF EXISTENCE]:
+                                </div>
+                                <div style="font-size: 1.15rem; text-align: center; margin: 12px 0; color: #fff; font-weight: 700;">
+                                    d[Aβ]/dt = K_synthesis - Phi_glymphatic
+                                </div>
+                                <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                                    ${state.language === 'bg' ? '* K_synthesis = Скорост на амилоиден синтез.<br>* Phi = f(AQP4, DeltaWave) - нелинейна сигмоидна функция на изчистване.' : '* K_synthesis = Pathological amyloid synthesis rate.<br>* Phi = f(AQP4, DeltaWave) - non-linear hydraulic resistance curve.'}
+                                </div>
+                            </div>
+
+                            <!-- Sliders -->
+                            <div style="display: flex; flex-direction: column; gap: 18px;">
+                                <!-- AQP4 slider -->
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('aqp4Label')}</span>
+                                        <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.aqp4Polarization >= 0.60 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.aqp4Polarization.toFixed(2)}</span>
+                                    </div>
+                                    <input type="range" min="0.00" max="1.00" step="0.01" value="${state.aqp4Polarization}" 
+                                        oninput="state.aqp4Polarization = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
+                                        style="width: 100%; cursor: pointer;" />
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                        ${t('aqp4PolarizationDesc')}
+                                    </div>
+                                </div>
+
+                                <!-- Delta Wave slider -->
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('deltaWaveLabel')}</span>
+                                        <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.deltaWaveAmplitude >= 75.0 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.deltaWaveAmplitude.toFixed(1)} µV</span>
+                                    </div>
+                                    <input type="range" min="0.0" max="150.0" step="1.0" value="${state.deltaWaveAmplitude}" 
+                                        oninput="state.deltaWaveAmplitude = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
+                                        style="width: 100%; cursor: pointer;" />
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                        ${t('deltaWaveDesc')}
+                                    </div>
+                                </div>
+
+                                <!-- Synthesis Rate slider -->
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('synthesisRateLabel')}</span>
+                                        <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: var(--neon-blue);">${state.amyloidSynthesisRate.toFixed(2)} pg/mL/sec</span>
+                                    </div>
+                                    <input type="range" min="0.50" max="3.00" step="0.10" value="${state.amyloidSynthesisRate}" 
+                                        oninput="state.amyloidSynthesisRate = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
+                                        style="width: 100%; cursor: pointer;" />
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                        ${t('synthesisRateDesc')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Diagnostics, Scenarios, Verdict -->
+                        <div class="column-flex">
+                            <!-- Verdict and Status card -->
+                            <div class="glass-card ${clearance.isHomeostasis ? 'glow-emerald' : 'glow-red'}" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+                                <div style="font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; color: #fff;">
+                                    <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i> ${t('statusLabel')}
+                                </div>
+
+                                <div style="${badgeStyle}" class="${badgeClass}">
+                                    ${statusBadge}
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 8px;" class="mono">
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; font-size: 0.85rem;">
+                                        <span style="color: var(--text-secondary);">${t('synthesisRateLabel')}</span>
+                                        <span style="font-weight: 700; color: #fff;">+${state.amyloidSynthesisRate.toFixed(4)} pg/mL/sec</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; font-size: 0.85rem;">
+                                        <span style="color: var(--text-secondary);">${t('clearanceFlowLabel')}</span>
+                                        <span style="font-weight: 700; color: var(--neon-emerald);">${clearance.phi.toFixed(4)} pg/mL/sec</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom: 6px; font-size: 0.85rem;">
+                                        <span style="color: var(--text-secondary);">Power Factor:</span>
+                                        <span style="font-weight: 700; color: var(--neon-purple);">${clearance.powerFactor.toFixed(4)} (Threshold: 0.4500)</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                                        <span style="color: var(--text-secondary);">${t('massBalanceLabel')}</span>
+                                        <span style="font-weight: 800; color: ${clearance.isHomeostasis ? 'var(--neon-emerald)' : 'var(--neon-red)'}; font-size: 0.95rem;">
+                                            ${clearance.derivative > 0 ? '+' : ''}${clearance.derivative.toFixed(4)} pg/mL/sec
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.02);">
+                                    <span style="font-weight: 700; font-size: 0.8rem; color: #fff; display: block; margin-bottom: 4px;">${t('verdictLabel')}</span>
+                                    <p style="font-size: 0.8rem; line-height: 1.4; color: var(--text-secondary);">
+                                        ${verdictText}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Clickable sleep scenarios -->
+                            <div class="glass-card glow-purple" style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+                                    <i data-lucide="video" class="w-4 h-4 text-purple-400"></i> ${t('scenariosTitle')}
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button onclick="injectNeuroScenario(0.85, 95.0, 1.5)" class="tab-btn" style="text-align: left; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; border-color: rgba(16, 185, 129, 0.2); background: rgba(16, 185, 129, 0.02); color: #fff; width: 100%;">
+                                        <span style="font-weight: 800; font-size: 0.8rem; color: var(--neon-emerald);">${t('scenario1Btn')}</span>
+                                        <span style="font-size: 0.7rem; color: var(--text-secondary);">${state.language === 'bg' ? 'AQP4 = 0.85, Delta = 95 µV. Гарантиран CSF дренаж.' : 'AQP4 = 0.85, Delta = 95 µV. Guaranteed CSF sweep.'}</span>
+                                    </button>
+
+                                    <button onclick="injectNeuroScenario(0.45, 85.0, 1.5)" class="tab-btn" style="text-align: left; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; border-color: rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.02); color: #fff; width: 100%;">
+                                        <span style="font-weight: 800; font-size: 0.8rem; color: var(--neon-red);">${t('scenario2Btn')}</span>
+                                        <span style="font-size: 0.7rem; color: var(--text-secondary);">${state.language === 'bg' ? 'AQP4 = 0.45 (Деполяризация), Delta = 85 µV. Срив на филтрацията.' : 'AQP4 = 0.45 (Depolarized), Delta = 85 µV. Flow collapsed.'}</span>
+                                    </button>
+
+                                    <button onclick="injectNeuroScenario(0.75, 45.0, 1.5)" class="tab-btn" style="text-align: left; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; border-color: rgba(245, 158, 11, 0.2); background: rgba(245, 158, 11, 0.02); color: #fff; width: 100%;">
+                                        <span style="font-weight: 800; font-size: 0.8rem; color: var(--neon-amber);">${t('scenario3Btn')}</span>
+                                        <span style="font-size: 0.7rem; color: var(--text-secondary);">${state.language === 'bg' ? 'AQP4 = 0.75, Delta = 45 µV (Повърхностен сън). Недостатъчен дебит.' : 'AQP4 = 0.75, Delta = 45 µV (Light Sleep). Insufficient flow.'}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
 
             root.innerHTML = `
                 <header class="hud-transition ${state.hudVisible ? '' : 'hud-hidden'}" style="border-bottom: 1px solid var(--purple-border); padding: 18px 40px; background: rgba(5, 2, 12, 0.8); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div class="status-dot ${state.emergencyMode ? 'bg-red' : 'bg-purple'}"></div>
+                        <img src="../assets/aeterna_logo.svg" alt="AETERNA Logo" style="width: 26px; height: 26px;" />
                         <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">${t('hudTitle')}</span></span>
                     </div>
 
@@ -1596,8 +2246,6 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                     ${t('footerText')}
                 </footer>
                 
-                ${renderSurgicalControlsCard()}
-                ${renderSurgicalCoordsCard()}
                 ${renderHudToggleButton()}
             `;
             if (window.lucide) {
@@ -2408,39 +3056,39 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             <div class="glass-card surgical-controls-card hud-transition" style="pointer-events: auto;">
                 <h3 style="font-size: 1.1rem; font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;" class="mono text-purple-300">
                     <i data-lucide="sliders" class="w-4 h-4 text-purple-400"></i>
-                    ${state.language === 'bg' ? '3D ДИГИТАЛЕН СКАЛПЕЛ' : '3D DIGITAL SCALPEL'}
+                    ${t('scalpelTitle')}
                 </h3>
                 
                 <div style="margin-bottom: 16px;">
-                    <div style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 6px;" class="mono">RENDER MODE</div>
+                    <div style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 6px;" class="mono">${t('renderModeLabel')}</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                         <button onclick="setRenderMode(0)" class="tab-btn ${state.renderMode === 0 ? 'active' : ''}" style="padding: 6px 12px; font-size: 0.75rem; text-align: left; width: 100%;">
-                            ANATOMICAL VOLUME
+                            ${t('anatomicalVolume')}
                         </button>
                         <button onclick="setRenderMode(1)" class="tab-btn ${state.renderMode === 1 ? 'active' : ''}" style="padding: 6px 12px; font-size: 0.75rem; text-align: left; width: 100%;">
-                            BDNF NEUROPLASTICITY
+                            ${t('bdnfNeuroplasticity')}
                         </button>
                         <button onclick="setRenderMode(2)" class="tab-btn ${state.renderMode === 2 ? 'active' : ''}" style="padding: 6px 12px; font-size: 0.75rem; text-align: left; width: 100%;">
-                            DTI TRACTOGRAPHY (3D LINES)
+                            ${t('dtiTractography')}
                         </button>
                     </div>
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 8px;">
-                    <span style="font-size: 0.75rem; color: var(--text-secondary);" class="mono">AUTO-SPIN (60 FPS)</span>
+                    <span style="font-size: 0.75rem; color: var(--text-secondary);" class="mono">${t('autoSpin')}</span>
                     <input type="checkbox" ${state.autoRotate ? 'checked' : ''} onchange="toggleAutoRotate(this)" style="cursor: pointer;" />
                 </div>
 
                 <div style="margin-bottom: 12px;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
-                        <span>DENSITY WINDOW (CONTRAST)</span>
+                        <span>${t('densityWindow')}</span>
                         <span style="color: var(--neon-purple);">${state.windowVal.toFixed(2)}</span>
                     </div>
                     <input type="range" min="0.1" max="1.5" step="0.05" value="${state.windowVal}" oninput="updateVolParam('windowVal', this.value)" style="width: 100%; cursor: pointer;" />
                 </div>
                 <div style="margin-bottom: 16px; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 8px;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
-                        <span>DENSITY LEVEL (BRIGHTNESS)</span>
+                        <span>${t('densityLevel')}</span>
                         <span style="color: var(--neon-purple);">${state.levelVal.toFixed(2)}</span>
                     </div>
                     <input type="range" min="0.05" max="0.9" step="0.05" value="${state.levelVal}" oninput="updateVolParam('levelVal', this.value)" style="width: 100%; cursor: pointer;" />
@@ -2448,21 +3096,21 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
 
                 <div style="margin-bottom: 8px;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
-                        <span>SAGITTAL CLIP (X-AXIS)</span>
+                        <span>${t('sagittalClip')}</span>
                         <span style="color: var(--neon-blue);">${state.clipX.toFixed(2)}</span>
                     </div>
                     <input type="range" min="0.0" max="1.0" step="0.02" value="${state.clipX}" oninput="updateVolParam('clipX', this.value)" style="width: 100%; cursor: pointer;" />
                 </div>
                 <div style="margin-bottom: 8px;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
-                        <span>CORONAL CLIP (Y-AXIS)</span>
+                        <span>${t('coronalClip')}</span>
                         <span style="color: var(--neon-pink);">${state.clipY.toFixed(2)}</span>
                     </div>
                     <input type="range" min="0.0" max="1.0" step="0.02" value="${state.clipY}" oninput="updateVolParam('clipY', this.value)" style="width: 100%; cursor: pointer;" />
                 </div>
                 <div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
-                        <span>AXIAL CLIP (Z-AXIS)</span>
+                        <span>${t('axialClip')}</span>
                         <span style="color: var(--neon-amber);">${state.clipZ.toFixed(2)}</span>
                     </div>
                     <input type="range" min="0.0" max="1.0" step="0.02" value="${state.clipZ}" oninput="updateVolParam('clipZ', this.value)" style="width: 100%; cursor: pointer;" />
@@ -2477,7 +3125,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             <div class="glass-card surgical-coords-card scale-in" style="pointer-events: auto;">
                 <h3 style="font-size: 1.0rem; font-weight: 900; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; color: var(--neon-emerald);" class="mono">
                     <i data-lucide="crosshair" class="w-4 h-4 text-emerald-400"></i>
-                    ${state.language === 'bg' ? 'AFFINE LOCK КООРДИНАТИ' : 'AFFINE LOCK COORDINATES'}
+                    ${t('affineLockCoords')}
                 </h3>
                 <div style="display: flex; flex-direction: column; gap: 6px;" class="mono">
                     <div style="display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px solid rgba(0, 255, 170, 0.08); padding-bottom: 4px;">
@@ -2493,16 +3141,16 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                         <span style="font-weight: 700; color: #fff;">${state.clickCoords.z.toFixed(1)} mm</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px solid rgba(0, 255, 170, 0.08); padding-bottom: 4px;">
-                        <span style="color: var(--text-secondary);">VOXEL DENSITY:</span>
+                        <span style="color: var(--text-secondary);">${t('voxelDensity')}</span>
                         <span style="font-weight: 700; color: var(--neon-emerald);">${state.clickCoords.density} HU</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                        <span style="color: var(--text-secondary);">CLINICAL REF:</span>
-                        <span style="font-weight: 700; color: var(--neon-pink);">ISOCENTER</span>
+                        <span style="color: var(--text-secondary);">${t('clinicalRef')}</span>
+                        <span style="font-weight: 700; color: var(--neon-pink);">${t('isocenter')}</span>
                     </div>
                 </div>
                 <button onclick="clearClickCoords()" class="tab-btn" style="border-color: rgba(255,59,111,0.3); color: var(--neon-red); padding: 4px 8px; font-size: 0.65rem; margin-top: 10px; width: 100%;">
-                    CLEAR SELECTION
+                    ${t('clearSelection')}
                 </button>
             </div>
         `;
@@ -2512,15 +3160,68 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             return `
             <button onclick="toggleHudVisibility()" class="tab-btn" style="position: fixed; bottom: 40px; right: 40px; z-index: 100; border-color: var(--neon-purple); background: var(--purple-glass); display: flex; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(181, 95, 230, 0.3); pointer-events: auto;">
                 <i data-lucide="${state.hudVisible ? 'eye-off' : 'eye'}" class="w-4 h-4 text-purple-400"></i>
-                <span>${state.hudVisible ? (state.language === 'bg' ? 'Скрий Телеметрията' : 'Hide Telemetry HUD') : (state.language === 'bg' ? 'Покажи Телеметрията' : 'Show Telemetry HUD')}</span>
+                <span>${state.hudVisible ? t('hideTelemetry') : t('showTelemetry')}</span>
             </button>
         `;
         }
 
+        let targets = {
+            ph: 7.41,
+            oxygen: 98,
+            zScore: 0.42,
+            entropy: 3.56
+        };
+
+        function startTelemetryDrift() {
+            let time = 0;
+            
+            // Slow targets update interval (every 2.5s)
+            setInterval(() => {
+                time += 0.5;
+                if (state.empathyAnomaly) {
+                    targets.ph = 7.12 + Math.sin(time) * 0.015;
+                    targets.oxygen = 88.0 + Math.sin(time * 0.8) * 0.5;
+                    targets.zScore = 3.9167 + Math.cos(time * 0.5) * 0.08;
+                } else if (state.curedState) {
+                    targets.ph = 7.42 + Math.sin(time) * 0.005;
+                    targets.oxygen = 99.0 + Math.sin(time * 0.5) * 0.2;
+                    targets.zScore = 0.22 + Math.cos(time * 0.3) * 0.02;
+                    targets.entropy = 0.05 + Math.sin(time * 0.1) * 0.003;
+                } else {
+                    targets.ph = 7.40 + Math.sin(time) * 0.01;
+                    targets.oxygen = 97.0 + Math.sin(time * 0.6) * 0.4;
+                    targets.zScore = 0.48 + Math.cos(time * 0.4) * 0.05;
+                    targets.entropy = 3.56 + Math.sin(time * 0.1) * 0.04;
+                }
+            }, 2500);
+
+            // High-frequency Lerp interval (every 200ms)
+            setInterval(() => {
+                const lerp = (curr, targ, speed) => curr + (targ - curr) * speed;
+                
+                state.ph = lerp(state.ph, targets.ph, 0.12);
+                state.oxygen = Math.round(lerp(state.oxygen, targets.oxygen, 0.12));
+                state.zScore = lerp(state.zScore, targets.zScore, 0.12);
+                
+                if (!state.isTransitioning) {
+                    state.entropy = lerp(state.entropy, targets.entropy, 0.12);
+                }
+
+                // Smoothly update critical values on screen
+                const phEl = document.getElementById("hud-ph-value");
+                const o2El = document.getElementById("hud-o2-value");
+                const zEl = document.getElementById("hud-zscore-value");
+                
+                if (phEl) phEl.innerText = state.ph.toFixed(2);
+                if (o2El) o2El.innerText = state.oxygen + "%";
+                if (zEl) zEl.innerText = state.zScore.toFixed(2) + "σ";
+            }, 200);
+        }
+
         function injectMetabolicAnomaly() {
-            state.ph = 7.12;
-            state.oxygen = 88;
-            state.zScore = 3.9167;
+            targets.ph = 7.12;
+            targets.oxygen = 88;
+            targets.zScore = 3.9167;
             state.empathyAnomaly = true;
             addLogEntry(
                 "[CRITICAL_ALERT] AURA: Засечено критично отклонение от 3.92σ в pH и O₂ субстратите!",
@@ -2547,9 +3248,9 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             state.glut4Upregulation = 1.0;
             currentGlucose = [...rawChaoticData];
 
-            state.ph = 7.41;
-            state.oxygen = 98;
-            state.zScore = 0.42;
+            targets.ph = 7.41;
+            targets.oxygen = 98;
+            targets.zScore = 0.42;
             state.empathyAnomaly = false;
             addLogEntry(
                 "[SYSTEM_RESET] Метаболитните параметри са нормализирани. Защитната решетка е вдигната.",
@@ -2562,6 +3263,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
         window.addEventListener("DOMContentLoaded", () => {
             renderVanillaHUD();
             initVolumeSubstrate();
+            startTelemetryDrift();
             addLogEntry(
                 "[SUCCESS] Self-Healing инициализацията е завършена. Офлайн режимът е напълно активен.",
                 "[SUCCESS] Self-Healing initialization complete. Offline Mode fully active."
