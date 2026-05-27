@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AETERNA // Sovereign VHT HUD</title>
+    <link rel="icon" type="image/svg+xml" href="assets/aeterna_logo.svg">
     
     <!-- React & Babel Standalone (Fallback-Resilient) -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -1360,7 +1361,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             root.innerHTML = `
                 <header style="border-bottom: 1px solid var(--purple-border); padding: 18px 40px; background: rgba(5, 2, 12, 0.8); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <div class="status-dot ${state.emergencyMode ? 'bg-red' : 'bg-purple'}"></div>
+                        <img src="assets/aeterna_logo.svg" alt="AETERNA Logo" style="width: 26px; height: 26px;" />
                         <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">${t('hudTitle')}</span></span>
                     </div>
 
