@@ -1334,6 +1334,61 @@
             renderVanillaHUD();
         }
 
+        function runPatientSimulation() {
+            const aqp4 = parseFloat(document.getElementById('customAqp4').value);
+            const delta = parseFloat(document.getElementById('customDelta').value);
+            const K_synthesis = parseFloat(document.getElementById('customSynthesis').value);
+            const outputZone = document.getElementById('patientReportOutput');
+
+            if (isNaN(aqp4) || isNaN(delta) || isNaN(K_synthesis)) {
+                addLogEntry("⚠️ [WARNING] Непълни или невалидни пациентски данни за симулацията.", "⚠️ [WARNING] Incomplete or invalid custom patient parameters.");
+                return;
+            }
+
+            addLogEntry(`[SYSTEM] Стартиране на потребителски клиничен одит...`, `[SYSTEM] Launching custom patient clinical audit...`);
+
+            // Nonlinear Glymphatic sweep equation
+            const powerFactor = aqp4 * (delta / 100.0);
+            const phiMax = K_synthesis * 2.5;
+            const minAqp4 = 0.60;
+            const minDelta = 75.0;
+            const exponent = -10.0 * (powerFactor - (minAqp4 * (minDelta / 100.0)));
+            let phi = 0.0;
+            try {
+                phi = phiMax / (1.0 + Math.exp(exponent));
+            } catch (e) {
+                phi = exponent > 0 ? 0.0 : phiMax;
+            }
+            const derivative = K_synthesis - phi;
+
+            outputZone.classList.remove('hidden');
+            
+            let verdictStyle = derivative < 0 
+                ? 'color: var(--neon-emerald); font-weight: bold;' 
+                : 'color: var(--neon-red); font-weight: bold;';
+                
+            let verdictText = derivative < 0 
+                ? '✓ HOMEOSTASIS ATTAINED: Clearance velocity exceeds pathological accumulation.' 
+                : '✗ CRITICAL STATUS: Clearance mechanism insufficient. Proteopathy vector is expanding.';
+
+            outputZone.innerHTML = `
+                <div style="border-left: 2px solid var(--neon-purple); padding-left: 10px; font-family: monospace; font-size: 11px; line-height: 1.4;">
+                    <span style="color: #fff; font-weight: 600;">📋 INDIVIDUALIZED CLINICAL REPORT:</span><br>
+                    --------------------------------------------------<br>
+                    • Calculated Fluid Power Factor: <span style="color: #fff;">${powerFactor.toFixed(4)}</span> (Threshold: 0.4500)<br>
+                    • Glymphatic Flow Rate (Phi)   : <span style="color: #fff;">${phi.toFixed(4)} pg/mL/sec</span><br>
+                    • Mass Balance Net Delta       : <span style="${verdictStyle}">${derivative >= 0 ? '+' : ''}${derivative.toFixed(4)} pg/mL/sec</span><br>
+                    --------------------------------------------------<br>
+                    <span style="${verdictStyle}">VERDICT: ${verdictText}</span>
+                </div>
+            `;
+
+            addLogEntry(
+                `[SUCCESS] Изчислен дериват за пациент: d[Aβ]/dt = ${derivative.toFixed(4)}. Репортът е рендиран.`,
+                `[SUCCESS] Custom patient balance compiled: d[Aβ]/dt = ${derivative.toFixed(4)}. Individual report rendered.`
+            );
+        }
+
         function renderVanillaHUD() {
             const root = document.getElementById("app-root");
             if (!root) return;
@@ -2223,6 +2278,42 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                                         <span style="font-weight: 800; font-size: 0.8rem; color: var(--neon-amber);">${t('scenario3Btn')}</span>
                                         <span style="font-size: 0.7rem; color: var(--text-secondary);">${state.language === 'bg' ? 'AQP4 = 0.75, Delta = 45 µV (Повърхностен сън). Недостатъчен дебит.' : 'AQP4 = 0.75, Delta = 45 µV (Light Sleep). Insufficient flow.'}</span>
                                     </button>
+                                </div>
+                            </div>
+
+                            <!-- Patient Data Manual Input Module -->
+                            <div class="glass-card glow-purple" style="padding: 20px; display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+                                    <i data-lucide="user-cog" class="w-4 h-4 text-purple-400"></i> Custom Patient Diagnostics Input
+                                </div>
+                                <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4;">
+                                    Enter extracted clinical telemetry from patient sleep EEG and biomarkers to calculate custom mass balance trajectories.
+                                </p>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <div>
+                                        <label style="display: block; font-size: 0.7rem; font-family: monospace; color: var(--text-secondary); margin-bottom: 4px;">PATIENT AQP4 INDEX (0.0 - 1.0):</label>
+                                        <input type="number" id="customAqp4" step="0.01" min="0" max="1" value="0.50" 
+                                               style="width: 100%; bg: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; font-size: 0.75rem; font-family: monospace; color: #fff; background: #000; outline: none;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-size: 0.7rem; font-family: monospace; color: var(--text-secondary); margin-bottom: 4px;">EEG DELTA WAVE AMPLITUDE (µV):</label>
+                                        <input type="number" id="customDelta" step="0.1" min="0" value="70.0" 
+                                               style="width: 100%; bg: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; font-size: 0.75rem; font-family: monospace; color: #fff; background: #000; outline: none;">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-size: 0.7rem; font-family: monospace; color: var(--text-secondary); margin-bottom: 4px;">SYNTHESIS RATE K (pg/mL/sec):</label>
+                                        <input type="number" id="customSynthesis" step="0.01" min="0" value="1.50" 
+                                               style="width: 100%; bg: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; font-size: 0.75rem; font-family: monospace; color: #fff; background: #000; outline: none;">
+                                    </div>
+                                </div>
+                                
+                                <button onclick="runPatientSimulation()" class="cure-btn" style="width: 100%; justify-content: center; font-size: 0.75rem; font-weight: 700; padding: 10px; border-radius: 8px; background: rgba(181, 95, 230, 0.2); border: 1px solid rgba(181, 95, 230, 0.3); color: #fff; cursor: pointer; transition: all 0.3s;">
+                                    <i data-lucide="activity" class="w-4 h-4 mr-2"></i> Run Patient Simulation
+                                </button>
+
+                                <!-- Custom Simulation Output Target -->
+                                <div id="patientReportOutput" class="hidden" style="margin-top: 10px; padding: 12px; background: rgba(0,0,0,0.4); rounded: 8px; border: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.75rem; color: #94a3b8;">
                                 </div>
                             </div>
                         </div>
