@@ -411,8 +411,56 @@
         header>div,
         footer>div,
         .surgical-controls-card,
-        .surgical-coords-card {
-            pointer-events: auto;
+        .surgical-coords-card,
+        .guide-avatar-btn,
+        .guide-dialog-box {
+            pointer-events: auto !important;
+        }
+
+        /* Interactive digital assistant styles */
+        .guide-avatar-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 10000;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.2);
+            border: 2px solid #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+        }
+        .guide-avatar-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.8);
+        }
+        .guide-dialog-box {
+            position: fixed;
+            bottom: 95px;
+            right: 25px;
+            z-index: 10000;
+            width: 320px;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            font-size: 0.85rem;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+        .guide-highlight-active {
+            border: 2px solid #a855f7 !important;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5) !important;
+            transform: scale(1.01);
+            transition: all 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -499,7 +547,14 @@
             cohortSimulated: false,
             cohortCIndex: 97.13,
             epigeneticBreakerTripped: false,
-            mtdnaMutationLoad: 1.20
+            mtdnaMutationLoad: 1.20,
+            crbAlphaCoherence: 0.75,
+            crbDmnNoise: 1.20,
+            crbTaskPower: 4.50,
+            crbHz: 4.0,
+            crbBoosting: false,
+            guideStep: 0,
+            guideActive: false
         };
 
         const rawChaoticData = [
@@ -704,7 +759,29 @@
                 scenariosTitle: "Клинични Сценарии (Mojo Тест)",
                 scenario1Btn: "Сценарий 1: Дълбок NREM сън",
                 scenario2Btn: "Сценарий 2: AQP4 Деполяризация",
-                scenario3Btn: "Сценарий 3: Повърхностен NREM сън"
+                scenario3Btn: "Сценарий 3: Повърхностен NREM сън",
+                crbTitle: "Когнитивен Резонансен Ускорител (CRB)",
+                crbDesc: "Анализ и управление на когнитивната мощност в будно състояние чрез контролирана фазова кохерентност.",
+                crbAlphaLabel: "Alpha Cross-Coherence (0.1 - 1.0)",
+                crbAlphaDesc: "Степен на фазова синхронизация между ЕЕГ сензорите в Алфа спектъра (7-10 Hz).",
+                crbDmnLabel: "DMN Intrusive Noise (dB)",
+                crbDmnDesc: "Фонов шум на Default Mode Network (разсейване и его шум).",
+                crbTaskLabel: "Waking Task Power (µV²)",
+                crbTaskDesc: "Мощност на Task-Positive Network при активно решаване на задачи.",
+                crbControllable: "Контролируема Мощност:",
+                crbEntropy: "Ландауерова Ентропия:",
+                crbBoostBtn: "АКТИВИРАНЕ НА ФОКУСЕН ТЛАСЪК (BOOST)",
+                crbActiveResonance: "Резонансна Честота на BCI:",
+                guideWelcome: "Здравейте, Доктор! Аз съм вашият когнитивен навигатор в AETERNA. Желаете ли въвеждащ тур?",
+                guideStep1: "Добре дошли в AETERNA Clinical HUD! Този главен панел показва реалновремевите показатели за pH, O₂ и Z-Score риск от пристъпи. Можете да индуцирате туморна реверсия и излекуване чрез бутона ИНДУЦИРАНЕ НА ТУМОРНА РЕВЕРСИЯ.",
+                guideStep2: "В Невро-Навигатора симулирате глимфатичното очистване при Алцхаймер. Настройте astrocyte AQP4 поляризацията ≥ 0.60 и EEG NREM делта-вълните ≥ 75.0 µV за гарантиране на очистващия баланс.",
+                guideStep3: "Това е Когнитивният Ускорител (CRB). Той изчислява будната ефективност по модела на Ландауер. Натиснете BOOST за фазова кохерентност в 8 Hz спектъра и ограничаване на DMN шума.",
+                guideStep4: "В Кохортния Симулатор можете да валидирате биологичния детерминизъм на VHT върху 5,000 онкологични пациенти от TCGA-GBM. Наблюдавайте как Kaplan-Meier кривата на преживяемост достига 100% C-Index.",
+                guideStep5: "Епигенетичният прекъсвач следи за критичен mtDNA мутационен товар. При стойности ≥ 2.10% системата автоматично форсира клетъчна смърт (апоптоза) за 100% прецизност на лечението.",
+                guideStep6: "В таба BCI-EEG Невро-Модулация управлявате 4-каналния Teslasuit костюм. Синхронизирането на намерението със стимулация отключва Hebbian невропластичност за инсулин-независимо изчистване на глюкозата.",
+                guideStep7: "Чрез Хоризонт Европа портала можете да извършвате търсене на активни ЕС проекти и извличане на легални профили (PIC) директно от официалните регистри на ЕК. Желаем Ви успешен одит с AETERNA!",
+                guideNext: "НАПРЕД",
+                guideClose: "ЗАТВОРИ"
             },
             en: {
                 hudTitle: "AETERNA // SOVEREIGN NEURO-ONCOLOGY HUD",
@@ -880,7 +957,29 @@
                 scenariosTitle: "Clinical Scenarios (Mojo Test)",
                 scenario1Btn: "Scenario 1: Deep NREM Sleep",
                 scenario2Btn: "Scenario 2: AQP4 Depolarization",
-                scenario3Btn: "Scenario 3: Light NREM Sleep"
+                scenario3Btn: "Scenario 3: Light NREM Sleep",
+                crbTitle: "Cognitive Resonance Booster (CRB)",
+                crbDesc: "Real-time waking cognitive capacity & focus efficiency solver based on controlled EEG phase coherence.",
+                crbAlphaLabel: "Alpha Cross-Coherence (0.1 - 1.0)",
+                crbAlphaDesc: "EEG sensor phase synchronization level in the alpha spectrum (7-10 Hz).",
+                crbDmnLabel: "DMN Intrusive Noise (dB)",
+                crbDmnDesc: "Default Mode Network background activity level (ego noise/distraction).",
+                crbTaskLabel: "Waking Task Power (µV²)",
+                crbTaskDesc: "Task-Positive Network signal power during active task execution.",
+                crbControllable: "Controllable Power Capacity:",
+                crbEntropy: "Landauer Entropy Factor:",
+                crbBoostBtn: "ENGAGE COGNITIVE FOCUS BOOST",
+                crbActiveResonance: "BCI Resonant Modulation:",
+                guideWelcome: "Hello, Doctor! I am your AETERNA cognitive navigator. Would you like a system onboarding tour?",
+                guideStep1: "Welcome to AETERNA Clinical HUD! This primary dashboard displays real-time vital telemetry streams (pH, O₂, seizure risk). You can trigger Pax4-driven tumor reversion and autologous healing using the central purple INDUCE TUMOR REVERSION button.",
+                guideStep2: "In the Neuro-Navigator, you simulate interstitial glymphatic clearance in Alzheimer's. Maintain astrocytic AQP4 polarization ≥ 0.60 and deep EEG NREM delta waves ≥ 75 µV to ensure clearing homeostasis.",
+                guideStep3: "The Waking Focus Accelerator (CRB) handles cognitive power under controlled alpha phase coherence (8 Hz). Press BOOST to fully suppress Default Mode Network noise under strict Landauer thermodynamic limits.",
+                guideStep4: "This is the 5,000 Patient Cohort Simulator. Here, you validate clinical determinism by simulating Glioblastoma (TCGA-GBM) profiles. Run the simulator to see the Kaplan-Meier curve reach a perfect 100.00% Concordance Index.",
+                guideStep5: "The Epigenetic Circuit Breaker monitors mtDNA mutations. If mutation load exceeds 2.10%, the system overrides stochastic tumor escape and forces immediate cell death (apoptosis) for absolute cure determinism.",
+                guideStep6: "Under BCI-EEG Neuro-Modulation, you orchestrate peripheral muscle activation using the 4-channel Teslasuit. Synchronizing cognitive intent with stimulation triggers GLUT4 translocation to clear glucose independently.",
+                guideStep7: "Finally, the Grants Radar scans Horizon Europe funding and retrieves EC Organisation profiles (PIC) from official registries in real-time. Thank you for exploring the sovereign future with AETERNA!",
+                guideNext: "NEXT",
+                guideClose: "CLOSE"
             }
         };
 
@@ -1338,6 +1437,169 @@
             renderVanillaHUD();
         }
 
+        // --- COGNITIVE RESERVE BOOSTER ENGINE ---
+        function evaluateWakingResonance(taskPower, dmnNoise, coherence) {
+            const float_task = taskPower;
+            const float_dmn = dmnNoise;
+            const float_coherence = coherence;
+            const active_entropy = float_dmn / (float_coherence + 0.001);
+            const total_energy_bound = float_task + float_dmn;
+            let control_ratio = 0.0;
+            if (total_energy_bound > 0) {
+                control_ratio = (float_task * float_coherence) / (total_energy_bound + active_entropy);
+            }
+            const controllablePercentage = control_ratio * 100.0;
+            const minThreshold = 75.0; // 75.00%
+            let bciModulationFrequency = state.crbHz;
+            let hyperFlowActive = false;
+            
+            if (controllablePercentage < minThreshold) {
+                bciModulationFrequency = 8.0 - bciModulationFrequency;
+                if (bciModulationFrequency < 0) bciModulationFrequency = 0;
+                hyperFlowActive = false;
+            } else {
+                bciModulationFrequency = 0.0;
+                hyperFlowActive = true;
+            }
+            
+            return {
+                controllablePercentage: controllablePercentage,
+                bciModulationFrequency: bciModulationFrequency,
+                hyperFlowActive: hyperFlowActive,
+                activeEntropy: active_entropy
+            };
+        }
+
+        let lastCrbState = null;
+        function evaluateCrbLogs(force = false) {
+            const res = evaluateWakingResonance(state.crbTaskPower, state.crbDmnNoise, state.crbAlphaCoherence);
+            if (lastCrbState === null) {
+                lastCrbState = res.hyperFlowActive;
+            }
+            if (res.hyperFlowActive !== lastCrbState || force) {
+                lastCrbState = res.hyperFlowActive;
+                if (res.hyperFlowActive) {
+                    addLogEntry(
+                        `SUCCESS: [💥 HYPER_FLOW] Brain architecture aligned. Default Mode Network suppressed successfully. Controllable capacity: ${res.controllablePercentage.toFixed(2)}%.`,
+                        `SUCCESS: [💥 HYPER_FLOW] Brain architecture aligned. Default Mode Network suppressed successfully. Controllable capacity: ${res.controllablePercentage.toFixed(2)}%.`
+                    );
+                } else {
+                    addLogEntry(
+                        `WARNING: [⚠️ COGNITIVE DRIFT] Control vector dropped below 75%. Required resonant frequency alignment calculated: ${res.bciModulationFrequency.toFixed(2)} Hz.`,
+                        `WARNING: [⚠️ COGNITIVE DRIFT] Control vector dropped below 75%. Required resonant frequency alignment calculated: ${res.bciModulationFrequency.toFixed(2)} Hz.`
+                    );
+                }
+            }
+        }
+
+        function triggerCrbBoost() {
+            if (state.crbBoosting) return;
+            state.crbBoosting = true;
+            addLogEntry(
+                `[⚡ BCI-LINK] Initiating waking cognitive resonance boost... Optimizing EEG phase coherence towards 8 Hz.`,
+                `[⚡ BCI-LINK] Initiating waking cognitive resonance boost... Optimizing EEG phase coherence towards 8 Hz.`
+            );
+            
+            const duration = 1500; // 1.5 seconds
+            const steps = 30;
+            const interval = duration / steps;
+            let currentStep = 0;
+            
+            const startAlpha = state.crbAlphaCoherence;
+            const startDmn = state.crbDmnNoise;
+            const startTask = state.crbTaskPower;
+            const startHz = state.crbHz;
+            
+            const targetAlpha = 0.95;
+            const targetDmn = 0.40;
+            const targetTask = 8.50;
+            const targetHz = 0.0;
+            
+            const timer = setInterval(() => {
+                currentStep++;
+                const tVal = currentStep / steps;
+                
+                state.crbAlphaCoherence = startAlpha + (targetAlpha - startAlpha) * tVal;
+                state.crbDmnNoise = startDmn + (targetDmn - startDmn) * tVal;
+                state.crbTaskPower = startTask + (targetTask - startTask) * tVal;
+                state.crbHz = startHz + (targetHz - startHz) * tVal;
+                
+                evaluateCrbLogs(currentStep === steps);
+                renderVanillaHUD();
+                
+                if (currentStep >= steps) {
+                    clearInterval(timer);
+                    state.crbBoosting = false;
+                    addLogEntry(
+                        `SUCCESS: [⚡ BCI-LINK] Focus optimization complete. Sovereign TPN lock established at 100% stability.`,
+                        `SUCCESS: [⚡ BCI-LINK] Focus optimization complete. Sovereign TPN lock established at 100% stability.`
+                    );
+                    renderVanillaHUD();
+                }
+            }, interval);
+        }
+
+        // --- INTERACTIVE DIGITAL ASSISTANT LAYER ---
+        function triggerGuideTour() {
+            state.activeTab = 'dashboard';
+            state.guideActive = true;
+            state.guideStep = 1;
+            renderVanillaHUD();
+            highlightElement('.metrics-grid'); // Акцентира жизнените потоци
+        }
+
+        function nextGuideStep() {
+            state.guideStep++;
+            if (state.guideStep === 2) {
+                state.activeTab = 'neuro';
+                renderVanillaHUD();
+                highlightElement('#card-glymphatic');
+            } else if (state.guideStep === 3) {
+                state.activeTab = 'neuro';
+                renderVanillaHUD();
+                highlightElement('#card-crb');
+            } else if (state.guideStep === 4) {
+                state.activeTab = 'cohort';
+                renderVanillaHUD();
+                highlightElement('#card-cohort');
+            } else if (state.guideStep === 5) {
+                state.activeTab = 'cohort';
+                renderVanillaHUD();
+                highlightElement('#card-epigenetic');
+            } else if (state.guideStep === 6) {
+                state.activeTab = 'fes';
+                renderVanillaHUD();
+                highlightElement('#card-fes');
+            } else if (state.guideStep === 7) {
+                state.activeTab = 'grants';
+                renderVanillaHUD();
+                highlightElement('#card-grants');
+            } else {
+                closeGuideTour();
+            }
+        }
+
+        function closeGuideTour() {
+            state.guideActive = false;
+            state.guideStep = 0;
+            const prevHighlight = document.querySelector('.guide-highlight-active');
+            if (prevHighlight) prevHighlight.classList.remove('guide-highlight-active');
+            renderVanillaHUD();
+        }
+
+        function highlightElement(selector) {
+            setTimeout(() => {
+                const prevHighlight = document.querySelector('.guide-highlight-active');
+                if (prevHighlight) prevHighlight.classList.remove('guide-highlight-active');
+                
+                const target = document.querySelector(selector);
+                if (target) {
+                    target.classList.add('guide-highlight-active');
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 50);
+        }
+
         function runPatientSimulation() {
             const aqp4 = parseFloat(document.getElementById('customAqp4').value);
             const delta = parseFloat(document.getElementById('customDelta').value);
@@ -1396,6 +1658,26 @@
         function renderVanillaHUD() {
             const root = document.getElementById("app-root");
             if (!root) return;
+
+            let guideHtml = '';
+            if (state.guideActive) {
+                const currentText = t('guideStep' + state.guideStep);
+                const btnText = state.guideStep === 7 ? (state.language === 'bg' ? 'ГОТОВО' : 'DONE') : t('guideNext');
+                guideHtml = `
+                    <div class="guide-dialog-box animate-fade-in">
+                        <div style="display:flex; align-items:center; gap:8px; font-weight:900; color:#c084fc; margin-bottom:8px;">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> AETERNA AI INTERFACE GUIDE
+                        </div>
+                        <p style="color:var(--text-secondary); line-height:1.4; margin-bottom:12px;">
+                            ${currentText}
+                        </p>
+                        <div style="display:flex; justify-content:flex-end; gap:8px;">
+                            <button onclick="closeGuideTour()" class="btn" style="padding:4px 10px; font-size:0.75rem; background:rgba(255,255,255,0.05); color:#fff; border-radius:4px; border:none; cursor:pointer; font-weight: 700;">${t('guideClose')}</button>
+                            <button onclick="nextGuideStep()" class="btn" style="padding:4px 12px; font-size:0.75rem; background:#a855f7; color:#fff; border-radius:4px; border:none; cursor:pointer; font-weight:700;">${btnText}</button>
+                        </div>
+                    </div>
+                `;
+            }
 
             let tabHeader = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -1653,52 +1935,7 @@
 
                     </div>
                 `;
-            } else if (state.activeTab === "cohort") {
-                tabContent = `
-                    <div class="glass-card glow-emerald ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
-                        <div>
-                            <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                <i data-lucide="users" class="w-5 h-5 inline-block mr-2 text-emerald-400"></i>${t('cohortTitle')}
-                            </h2>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
-                                ${t('cohortDesc')}
-                            </p>
-                        </div>
 
-                        <table class="sovereign-table mono">
-                            <thead>
-                                <tr>
-                                    <th>${t('ageGroup')}</th>
-                                    <th>${t('count')}</th>
-                                    <th>${t('baselineTir')}</th>
-                                    <th>${t('conventionalTir')}</th>
-                                    <th style="color: var(--neon-purple);">${t('v3Tir')}</th>
-                                    <th style="color: var(--neon-emerald);">${t('v4Tir')}</th>
-                                    <th>${t('baselineHypo')}</th>
-                                    <th style="color: var(--neon-emerald);">${t('v4Hypo')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${cohortData.map(row => `
-                                    <tr>
-                                        <td style="font-weight: 700;">${t(row.group)}</td>
-                                        <td>${row.count}</td>
-                                        <td style="color: var(--neon-red);">${row.baseline}</td>
-                                        <td>${row.conv}</td>
-                                        <td style="color: var(--neon-purple);">${row.v3}</td>
-                                        <td style="color: var(--neon-emerald); font-weight: 900;" class="glow-text-emerald">
-                                            ${state.curedState ? row.v4 : '---'}
-                                        </td>
-                                        <td style="color: var(--neon-red);">${row.hypoConv}</td>
-                                        <td style="color: var(--neon-emerald); font-weight: 900;">
-                                            ${state.curedState ? row.hypoV4.toFixed(1) : '---'}
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
             } else if (state.activeTab === "pillars") {
                 tabContent = `
                     <div style="display: flex; flex-direction: column; gap: 24px;">
@@ -1825,7 +2062,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 tabContent = `
                     <div class="dashboard-grid">
                         <!-- Left Panel: 4-Channel Teslasuit Locomotion Controller -->
-                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
+                        <div id="card-fes" class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
                             <div>
                                 <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
                                     <i data-lucide="activity" class="w-5 h-5 inline-block mr-2 text-pink-400"></i>${t('fesTitle')}
@@ -2069,7 +2306,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 tabContent = `
                     <div class="dashboard-grid">
                         <!-- Left Panel: Grants Opportunities Search and List -->
-                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 20px;">
+                        <div id="card-grants" class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 20px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(181,95,230,0.1); padding-bottom: 12px;">
                                 <div>
                                     <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
@@ -2135,6 +2372,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 `;
             } else if (state.activeTab === "neuro") {
                 const clearance = evaluateGlymphaticClearance(state.aqp4Polarization, state.deltaWaveAmplitude, state.amyloidSynthesisRate);
+                const crbResult = evaluateWakingResonance(state.crbTaskPower, state.crbDmnNoise, state.crbAlphaCoherence);
                 
                 let statusBadge = "";
                 let verdictText = "";
@@ -2155,72 +2393,180 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
 
                 tabContent = `
                     <div class="dashboard-grid">
-                        <!-- Left Panel: Sliders & Mechanics -->
-                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 20px;">
-                            <div style="border-bottom: 1px solid rgba(181,95,230,0.15); padding-bottom: 12px;">
-                                <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                    <i data-lucide="brain" class="w-5 h-5 text-rose-400"></i> ${t('neuroTitle')}
-                                </h2>
-                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
-                                    ${t('neuroDesc')}
-                                </p>
+                        <!-- Left Panel: Stacked Cards -->
+                        <div class="column-flex">
+                            <!-- Card 1: Glymphatic Drainage Balance -->
+                            <div id="card-glymphatic" class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 20px;">
+                                <div style="border-bottom: 1px solid rgba(181,95,230,0.15); padding-bottom: 12px;">
+                                    <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                        <i data-lucide="brain" class="w-5 h-5 text-rose-400"></i> ${t('neuroTitle')}
+                                    </h2>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+                                        ${t('neuroDesc')}
+                                    </p>
+                                </div>
+
+                                <!-- Math display block -->
+                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #a5b4fc;">
+                                    <div style="font-weight: 700; color: #fff; margin-bottom: 6px; font-size: 0.9rem;">
+                                        [EQUATION OF EXISTENCE]:
+                                    </div>
+                                    <div style="font-size: 1.15rem; text-align: center; margin: 12px 0; color: #fff; font-weight: 700;">
+                                        d[Aβ]/dt = K_synthesis - Phi_glymphatic
+                                    </div>
+                                    <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                                        ${state.language === 'bg' ? '* K_synthesis = Скорост на амилоиден синтез.<br>* Phi = f(AQP4, DeltaWave) - нелинейна сигмоидна функция на изчистване.' : '* K_synthesis = Pathological amyloid synthesis rate.<br>* Phi = f(AQP4, DeltaWave) - non-linear hydraulic resistance curve.'}
+                                    </div>
+                                </div>
+
+                                <!-- Sliders -->
+                                <div style="display: flex; flex-direction: column; gap: 18px;">
+                                    <!-- AQP4 slider -->
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('aqp4Label')}</span>
+                                            <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.aqp4Polarization >= 0.60 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.aqp4Polarization.toFixed(2)}</span>
+                                        </div>
+                                        <input type="range" min="0.00" max="1.00" step="0.01" value="${state.aqp4Polarization}" 
+                                            oninput="state.aqp4Polarization = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
+                                            style="width: 100%; cursor: pointer;" />
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                            ${t('aqp4PolarizationDesc')}
+                                        </div>
+                                    </div>
+
+                                    <!-- Delta Wave slider -->
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('deltaWaveLabel')}</span>
+                                            <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.deltaWaveAmplitude >= 75.0 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.deltaWaveAmplitude.toFixed(1)} µV</span>
+                                        </div>
+                                        <input type="range" min="0.0" max="150.0" step="1.0" value="${state.deltaWaveAmplitude}" 
+                                            oninput="state.deltaWaveAmplitude = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
+                                            style="width: 100%; cursor: pointer;" />
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                            ${t('deltaWaveDesc')}
+                                        </div>
+                                    </div>
+
+                                    <!-- Synthesis Rate slider -->
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('synthesisRateLabel')}</span>
+                                            <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: var(--neon-blue);">${state.amyloidSynthesisRate.toFixed(2)} pg/mL/sec</span>
+                                        </div>
+                                        <input type="range" min="0.50" max="3.00" step="0.10" value="${state.amyloidSynthesisRate}" 
+                                            oninput="state.amyloidSynthesisRate = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
+                                            style="width: 100%; cursor: pointer;" />
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                            ${t('synthesisRateDesc')}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Math display block -->
-                            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #a5b4fc;">
-                                <div style="font-weight: 700; color: #fff; margin-bottom: 6px; font-size: 0.9rem;">
-                                    [EQUATION OF EXISTENCE]:
+                            <!-- Card 2: Cognitive Reserve Booster (CRB) -->
+                            <div id="card-crb" class="glass-card glow-purple" style="display: flex; flex-direction: column; gap: 20px;">
+                                <div style="border-bottom: 1px solid rgba(181,95,230,0.15); padding-bottom: 12px;">
+                                    <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                        <i data-lucide="zap" class="w-5 h-5 text-purple-400 animate-pulse"></i> ${t('crbTitle')}
+                                    </h2>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+                                        ${t('crbDesc')}
+                                    </p>
                                 </div>
-                                <div style="font-size: 1.15rem; text-align: center; margin: 12px 0; color: #fff; font-weight: 700;">
-                                    d[Aβ]/dt = K_synthesis - Phi_glymphatic
-                                </div>
-                                <div style="color: var(--text-secondary); font-size: 0.8rem;">
-                                    ${state.language === 'bg' ? '* K_synthesis = Скорост на амилоиден синтез.<br>* Phi = f(AQP4, DeltaWave) - нелинейна сигмоидна функция на изчистване.' : '* K_synthesis = Pathological amyloid synthesis rate.<br>* Phi = f(AQP4, DeltaWave) - non-linear hydraulic resistance curve.'}
-                                </div>
-                            </div>
 
-                            <!-- Sliders -->
-                            <div style="display: flex; flex-direction: column; gap: 18px;">
-                                <!-- AQP4 slider -->
-                                <div style="display: flex; flex-direction: column; gap: 6px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('aqp4Label')}</span>
-                                        <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.aqp4Polarization >= 0.60 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.aqp4Polarization.toFixed(2)}</span>
+                                <!-- Math display block -->
+                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.02); border-radius: 12px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #a5b4fc;">
+                                    <div style="font-weight: 700; color: #fff; margin-bottom: 6px; font-size: 0.9rem;">
+                                        [COGNITIVE RESONANCE MODEL]:
                                     </div>
-                                    <input type="range" min="0.00" max="1.00" step="0.01" value="${state.aqp4Polarization}" 
-                                        oninput="state.aqp4Polarization = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
-                                        style="width: 100%; cursor: pointer;" />
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
-                                        ${t('aqp4PolarizationDesc')}
+                                    <div style="font-size: 1.15rem; text-align: center; margin: 12px 0; color: #fff; font-weight: 700;">
+                                        Control % = (Task * Coherence) / (Total + Entropy)
+                                    </div>
+                                    <div style="color: var(--text-secondary); font-size: 0.8rem;">
+                                        * Entropy = Noise_DMN / (Coherence + 0.001) [Landauer Constraint]
                                     </div>
                                 </div>
 
-                                <!-- Delta Wave slider -->
-                                <div style="display: flex; flex-direction: column; gap: 6px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('deltaWaveLabel')}</span>
-                                        <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.deltaWaveAmplitude >= 75.0 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.deltaWaveAmplitude.toFixed(1)} µV</span>
+                                <!-- Sliders -->
+                                <div style="display: flex; flex-direction: column; gap: 18px;">
+                                    <!-- Alpha Coherence slider -->
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('crbAlphaLabel')}</span>
+                                            <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.crbAlphaCoherence >= 0.75 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.crbAlphaCoherence.toFixed(2)}</span>
+                                        </div>
+                                        <input type="range" min="0.10" max="1.00" step="0.01" value="${state.crbAlphaCoherence}" 
+                                            oninput="state.crbAlphaCoherence = parseFloat(this.value); evaluateCrbLogs(); renderVanillaHUD();" 
+                                            style="width: 100%; cursor: pointer;" />
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                            ${t('crbAlphaDesc')}
+                                        </div>
                                     </div>
-                                    <input type="range" min="0.0" max="150.0" step="1.0" value="${state.deltaWaveAmplitude}" 
-                                        oninput="state.deltaWaveAmplitude = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
-                                        style="width: 100%; cursor: pointer;" />
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
-                                        ${t('deltaWaveDesc')}
+
+                                    <!-- DMN Spatial Noise slider -->
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('crbDmnLabel')}</span>
+                                            <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: ${state.crbDmnNoise <= 1.50 ? 'var(--neon-emerald)' : 'var(--neon-red)'};">${state.crbDmnNoise.toFixed(2)} dB</span>
+                                        </div>
+                                        <input type="range" min="0.10" max="5.00" step="0.05" value="${state.crbDmnNoise}" 
+                                            oninput="state.crbDmnNoise = parseFloat(this.value); evaluateCrbLogs(); renderVanillaHUD();" 
+                                            style="width: 100%; cursor: pointer;" />
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                            ${t('crbDmnDesc')}
+                                        </div>
+                                    </div>
+
+                                    <!-- Task Positive Network Power slider -->
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('crbTaskLabel')}</span>
+                                            <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: var(--neon-blue);">${state.crbTaskPower.toFixed(2)} µV²</span>
+                                        </div>
+                                        <input type="range" min="0.50" max="10.00" step="0.10" value="${state.crbTaskPower}" 
+                                            oninput="state.crbTaskPower = parseFloat(this.value); evaluateCrbLogs(); renderVanillaHUD();" 
+                                            style="width: 100%; cursor: pointer;" />
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+                                            ${t('crbTaskDesc')}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Synthesis Rate slider -->
-                                <div style="display: flex; flex-direction: column; gap: 6px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">${t('synthesisRateLabel')}</span>
-                                        <span class="mono" style="font-size: 1.1rem; font-weight: 800; color: var(--neon-blue);">${state.amyloidSynthesisRate.toFixed(2)} pg/mL/sec</span>
+                                <!-- Real-time calculation output inside CRB card -->
+                                <div style="margin-top: 10px; padding: 16px; background: rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid rgba(181,95,230,0.25); display: flex; flex-direction: column; gap: 10px;">
+                                    <div style="font-size: 0.85rem; font-weight: 700; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px;">
+                                        REAL-TIME RESONANCE AUDIT (SOUL CORE)
                                     </div>
-                                    <input type="range" min="0.50" max="3.00" step="0.10" value="${state.amyloidSynthesisRate}" 
-                                        oninput="state.amyloidSynthesisRate = parseFloat(this.value); evaluateNeuroLogs(); renderVanillaHUD();" 
-                                        style="width: 100%; cursor: pointer;" />
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
-                                        ${t('synthesisRateDesc')}
+                                    <div style="display: flex; flex-direction: column; gap: 6px; font-family: monospace; font-size: 0.8rem;">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: var(--text-secondary);">${t('crbControllable')}</span>
+                                            <span style="font-weight: 800; color: ${crbResult.hyperFlowActive ? 'var(--neon-emerald)' : 'var(--neon-amber)'}; font-size: 0.95rem;">
+                                                ${crbResult.controllablePercentage.toFixed(2)}%
+                                            </span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: var(--text-secondary);">${t('crbEntropy')}</span>
+                                            <span style="font-weight: 700; color: #f43f5e;">
+                                                ${crbResult.activeEntropy.toFixed(4)} nat/s
+                                            </span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: var(--text-secondary);">${t('crbActiveResonance')}</span>
+                                            <span style="font-weight: 750; color: #a855f7;">
+                                                ${crbResult.bciModulationFrequency.toFixed(2)} Hz
+                                            </span>
+                                        </div>
                                     </div>
+
+                                    <div style="margin-top: 6px; padding: 8px 12px; border-radius: 6px; text-align: center; font-size: 0.85rem; font-weight: 900; background: ${crbResult.hyperFlowActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'}; border: 1px solid ${crbResult.hyperFlowActive ? 'var(--neon-emerald)' : 'var(--neon-amber)'}; color: ${crbResult.hyperFlowActive ? 'var(--neon-emerald)' : 'var(--neon-amber)'}; text-shadow: 0 0 8px ${crbResult.hyperFlowActive ? 'rgba(16,185,129,0.3)' : 'rgba(245,158,11,0.3)'};">
+                                        ${crbResult.hyperFlowActive ? '💥 HYPER_FLOW_ENGAGED' : '⚠️ COGNITIVE_DRIFT_DETECTED'}
+                                    </div>
+
+                                    <button onclick="triggerCrbBoost()" class="cure-btn" style="width: 100%; justify-content: center; font-size: 0.8rem; font-weight: 900; padding: 12px; border-radius: 8px; background: rgba(181, 95, 230, 0.15); border: 1px solid rgba(181, 95, 230, 0.3); color: var(--neon-purple); cursor: pointer; transition: all 0.3s; margin-top: 8px; text-shadow: 0 0 10px rgba(181,95,230,0.3);" onmouseover="this.style.background='rgba(181, 95, 230, 0.25)'" onmouseout="this.style.background='rgba(181, 95, 230, 0.15)'">
+                                        <i data-lucide="zap" class="w-4 h-4 mr-2"></i> ${t('crbBoostBtn')}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -2338,7 +2684,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 tabContent = `
                     <div class="dashboard-grid">
                         <!-- Left Panel: Kaplan-Meier Canvas and Description -->
-                        <div class="glass-card glow-emerald" style="display: flex; flex-direction: column; gap: 20px;">
+                        <div id="card-cohort" class="glass-card glow-emerald" style="display: flex; flex-direction: column; gap: 20px;">
                             <div style="border-bottom: 1px solid rgba(16, 185, 129, 0.15); padding-bottom: 12px;">
                                 <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
                                     <i data-lucide="users" class="text-emerald-400 w-6 h-6"></i>
@@ -2396,7 +2742,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                             </div>
 
                             <!-- Epigenetic Circuit Breaker & Controls -->
-                            <div class="glass-card ${state.mtdnaMutationLoad >= 2.10 ? 'glow-red border-red-500' : 'glow-purple'}" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+                            <div id="card-epigenetic" class="glass-card ${state.mtdnaMutationLoad >= 2.10 ? 'glow-red border-red-500' : 'glow-purple'}" style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
                                 <div style="font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
                                     <i data-lucide="dna" class="w-5 h-5 text-indigo-400"></i>
                                     ${state.language === 'bg' ? 'Епигенетичен Прекъсвач (Circuit Breaker)' : 'Epigenetic Circuit Breaker'}
@@ -2443,7 +2789,6 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                     </div>
                 `;
             }
-            }
 
             root.innerHTML = `
                 <header class="hud-transition ${state.hudVisible ? '' : 'hud-hidden'}" style="border-bottom: 1px solid var(--purple-border); padding: 18px 40px; background: rgba(5, 2, 12, 0.8); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;">
@@ -2485,6 +2830,13 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 </footer>
                 
                 ${renderHudToggleButton()}
+                
+                <!-- Digital Assistant Avatar and Dialog Overlay -->
+                <div class="guide-avatar-btn" onclick="state.guideActive ? closeGuideTour() : triggerGuideTour()">
+                    <i data-lucide="bot" style="color: #c084fc; width: 26px; height: 26px;" class="animate-pulse"></i>
+                </div>
+
+                ${guideHtml}
             `;
             if (window.lucide) {
                 setTimeout(() => lucide.createIcons(), 0);
