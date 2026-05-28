@@ -904,41 +904,41 @@
                 <!-- Tier 1 -->
                 <div class="glass p-8 md:p-10 flex flex-col border-white/5 hover:border-white/20 transition-all rounded-lg group">
                     <span class="font-mono text-[9px] text-gray-500 mb-6 uppercase tracking-widest" data-i18n="pricing.tier1_proto">Protocol ALPHA</span>
-                    <h4 class="text-2xl font-bold mb-4 uppercase" data-i18n="pricing.tier1_name">NODE</h4>
-                    <div class="text-4xl font-black mb-8 text-white">€29<span class="text-sm font-normal text-gray-500" data-i18n="pricing.mo">/mo</span></div>
+                    <h4 class="text-2xl font-bold mb-4 uppercase" data-i18n="pricing.tier1_name">STARTER</h4>
+                    <div class="text-4xl font-black mb-8 text-white">€50<span class="text-sm font-normal text-gray-500" data-i18n="pricing.onetime">/one-time</span></div>
                     <ul class="text-xs text-gray-500 space-y-4 mb-12 flex-grow">
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier1_feat1">Local Scan Engine</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier1_feat2">Vuln Discovery V1</span></li>
-                        <li class="flex items-center gap-2 text-zinc-700"><i data-lucide="x" size="12"></i> <span data-i18n="pricing.tier1_feat3">Federated Intelligence</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier1_feat1">10,000 API Requests</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier1_feat2">Local Scan Engine</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier1_feat3">Vuln Discovery V1</span></li>
                     </ul>
-                    <button class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest rounded hover:bg-white hover:text-black transition-all font-mono" data-i18n="pricing.tier1_btn">Stripe Link</button>
+                    <button onclick="openPortal('vortex_starter')" class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest rounded hover:bg-white hover:text-black transition-all font-mono" data-i18n="pricing.tier1_btn">Purchase Plan</button>
                 </div>
 
                 <!-- Tier 2 -->
                 <div class="glass-premium p-8 md:p-10 flex flex-col border-accent-cyan/30 bg-accent-cyan/5 relative overflow-hidden rounded-lg group glow-cyan">
                     <div class="absolute top-0 right-0 px-4 py-1.5 bg-accent-cyan text-black font-black text-[9px] uppercase tracking-widest font-mono" data-i18n="pricing.tier2_badge">RECOMMENDED</div>
                     <span class="font-mono text-[9px] text-accent-cyan mb-6 uppercase tracking-widest" data-i18n="pricing.tier2_proto">Protocol BETA</span>
-                    <h4 class="text-2xl font-bold mb-4 uppercase" data-i18n="pricing.tier2_name">EMPIRE</h4>
-                    <div class="text-4xl font-black mb-8 text-white">€99<span class="text-sm font-normal text-gray-500" data-i18n="pricing.mo">/mo</span></div>
+                    <h4 class="text-2xl font-bold mb-4 uppercase" data-i18n="pricing.tier2_name">PRO</h4>
+                    <div class="text-4xl font-black mb-8 text-white">€500<span class="text-sm font-normal text-gray-500" data-i18n="pricing.onetime">/one-time</span></div>
                     <ul class="text-xs text-gray-300 space-y-4 mb-12 flex-grow">
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier2_feat1">Full Self-Healing V2</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier2_feat2">Ghost Protocol Vectors</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier2_feat3">Priority 7.83Hz Sync</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier2_feat1">100,000 API Requests</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier2_feat2">Full Self-Healing V2</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier2_feat3">Ghost Protocol Vectors</span></li>
                     </ul>
-                    <button class="w-full py-4 bg-accent-cyan text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-white transition-all font-mono shadow-md glow-cyan" data-i18n="pricing.tier2_btn">Web3 / USDC</button>
+                    <button onclick="openPortal('vortex_pro')" class="w-full py-4 bg-accent-cyan text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-white transition-all font-mono shadow-md glow-cyan" data-i18n="pricing.tier2_btn">Purchase Plan</button>
                 </div>
 
                 <!-- Tier 3 -->
                 <div class="glass p-8 md:p-10 flex flex-col border-white/5 hover:border-white/20 transition-all rounded-lg group">
                     <span class="font-mono text-[9px] text-gray-500 mb-6 uppercase tracking-widest" data-i18n="pricing.tier3_proto">Protocol OMEGA</span>
-                    <h4 class="text-2xl font-bold mb-4 uppercase" data-i18n="pricing.tier3_name">CORE</h4>
-                    <div class="text-4xl font-black mb-8 text-white">€499<span class="text-sm font-normal text-gray-500" data-i18n="pricing.mo">/mo</span></div>
+                    <h4 class="text-2xl font-bold mb-4 uppercase" data-i18n="pricing.tier3_name">EMPIRE</h4>
+                    <div class="text-4xl font-black mb-8 text-white">€5,000<span class="text-sm font-normal text-gray-500" data-i18n="pricing.onetime">/one-time</span></div>
                     <ul class="text-xs text-gray-500 space-y-4 mb-12 flex-grow">
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier3_feat1">On-Premise Deployment</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier3_feat2">Custom PQC Hardening</span></li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier3_feat3">24/7 Forensic Audit</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier3_feat1">1,000,000 API Requests</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier3_feat2">On-Premise Deployment</span></li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" size="12" class="text-accent-cyan"></i> <span data-i18n="pricing.tier3_feat3">Custom PQC Hardening</span></li>
                     </ul>
-                    <button class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest rounded hover:bg-white hover:text-black transition-all font-mono" data-i18n="pricing.tier3_btn">Tron / TRX</button>
+                    <button onclick="openPortal('vortex_empire')" class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest rounded hover:bg-white hover:text-black transition-all font-mono" data-i18n="pricing.tier3_btn">Purchase Plan</button>
                 </div>
             </div>
         </div>
@@ -1201,25 +1201,26 @@
                 "pricing.title": "СУВЕРЕНЕН ПРОТОКОЛ ЗА ДОСТЪП",
                 "pricing.subtitle": "Гъвкави нива за интеграция на инфраструктурата. 100% предвидими разходи.",
                 "pricing.tier1_proto": "Протокол АЛФА",
-                "pricing.tier1_name": "ВЪЗЕЛ",
-                "pricing.mo": "/мес",
-                "pricing.tier1_feat1": "Суверенен локален скенер: Оценка на уязвимости на устройството с латентност под 100ns.",
-                "pricing.tier1_feat2": "Knox TEE изолация: Хардуерна защита на телеметрията чрез криптографски ключове.",
-                "pricing.tier1_feat3": "GDPR-нативна диагностика: 100% офлайн статичен анализ (SAST) без транзит на данни.",
-                "pricing.tier1_btn": "Stripe Връзка",
+                "pricing.tier1_name": "STARTER",
+                "pricing.mo": "/еднократно",
+                "pricing.onetime": "/еднократно",
+                "pricing.tier1_feat1": "10 000 API Заявки (еднократно)",
+                "pricing.tier1_feat2": "Суверенна локална диагностика под 100ns",
+                "pricing.tier1_feat3": "Пост-квантов криптографски щит",
+                "pricing.tier1_btn": "Купи Пакет",
                 "pricing.tier2_badge": "ПРЕПОРЪЧИТЕЛНО",
                 "pricing.tier2_proto": "Protocol БЕТА",
-                "pricing.tier2_name": "ИМПЕРИЯ",
-                "pricing.tier2_feat1": "Автономно самолечение: 6 интелигентни ML машини за автоматично коригиране на изтичане на памет.",
-                "pricing.tier2_feat2": "Zero-GC Mojo производителност: Пълно елиминиране на паузите от системното почистване на паметта.",
-                "pricing.tier2_feat3": "Schumann Swarm синхронизация: Приоритетна 16-нишкова комуникация през наш собствен 7.83Hz протокол.",
-                "pricing.tier2_btn": "Web3 / USDC",
+                "pricing.tier2_name": "PRO",
+                "pricing.tier2_feat1": "100 000 API Заявки (еднократно)",
+                "pricing.tier2_feat2": "Автономно самолечение с нулева ентропия",
+                "pricing.tier2_feat3": "Ghost Protocol сканиране без облачни следи",
+                "pricing.tier2_btn": "Купи Пакет",
                 "pricing.tier3_proto": "Протокол ОМЕГА",
-                "pricing.tier3_name": "ЯДРО",
-                "pricing.tier3_feat1": "Bare-Metal внедряване On-Premise: Директна инсталация върху хардуера, без VM забавяне.",
-                "pricing.tier3_feat2": "Zero-Copy ABI достъп: Директна C-API компилация с нулева латентност през стандартен WASI/Zig.",
-                "pricing.tier3_feat3": "Криминалистичен Veritas одит: Криптографски подписани, математически доказани логове за сигурност.",
-                "pricing.tier3_btn": "Tron / TRX",
+                "pricing.tier3_name": "EMPIRE",
+                "pricing.tier3_feat1": "1 000 000 API Заявки (еднократно)",
+                "pricing.tier3_feat2": "Bare-metal локално внедряване с нулев дрейф",
+                "pricing.tier3_feat3": "Catuṣkoṭi детерминиран логически контролер",
+                "pricing.tier3_btn": "Купи Пакет",
 
                 "console.btn_clear": "Изчисти логове",
 
@@ -1320,25 +1321,26 @@
                 "pricing.title": "SOVEREIGN ACCESS PROTOCOL",
                 "pricing.subtitle": "Flexible tiers for infrastructure integration. 100% predictable costs.",
                 "pricing.tier1_proto": "Protocol ALPHA",
-                "pricing.tier1_name": "NODE",
-                "pricing.mo": "/mo",
-                "pricing.tier1_feat1": "Sovereign Local Scanner: Edge vulnerability evaluation at sub-100ns cache latency.",
-                "pricing.tier1_feat2": "Knox TEE Isolation: Hardware-level telemetry protection using secure enclave keys.",
-                "pricing.tier1_feat3": "GDPR-Native Diagnostics: 100% offline local static analysis (SAST) with zero data transit.",
-                "pricing.tier1_btn": "Stripe Link",
+                "pricing.tier1_name": "STARTER",
+                "pricing.mo": "/one-time",
+                "pricing.onetime": "/one-time",
+                "pricing.tier1_feat1": "10,000 API Requests (one-time)",
+                "pricing.tier1_feat2": "Sovereign Local Scanner (sub-100ns)",
+                "pricing.tier1_feat3": "Post-Quantum Cryptographic Shield",
+                "pricing.tier1_btn": "Purchase Plan",
                 "pricing.tier2_badge": "RECOMMENDED",
                 "pricing.tier2_proto": "Protocol BETA",
-                "pricing.tier2_name": "EMPIRE",
-                "pricing.tier2_feat1": "Autonomous Self-Healing: 6 predictive ML engines to dynamically repair memory leaks.",
-                "pricing.tier2_feat2": "Zero-GC Mojo Runtime: Complete bypass of non-deterministic garbage collection pauses.",
-                "pricing.tier2_feat3": "Schumann Swarm Sync: 16-core thread synchronization using our custom 7.83Hz protocol.",
-                "pricing.tier2_btn": "Web3 / USDC",
+                "pricing.tier2_name": "PRO",
+                "pricing.tier2_feat1": "100,000 API Requests (one-time)",
+                "pricing.tier2_feat2": "Zero-Entropy Autonomous Self-Healing",
+                "pricing.tier2_feat3": "Ghost Protocol stealth scanning (no cloud)",
+                "pricing.tier2_btn": "Purchase Plan",
                 "pricing.tier3_proto": "Protocol OMEGA",
-                "pricing.tier3_name": "CORE",
-                "pricing.tier3_feat1": "On-Premise Bare-Metal: Direct host integration, completely bypassing VM overhead.",
-                "pricing.tier3_feat2": "Zero-Copy ABI Access: Direct high-performance C-API compilation using standard WASI/Zig.",
-                "pricing.tier3_feat3": "Veritas Forensic Audit: Cryptographically signed, mathematical audit logs for absolute proof.",
-                "pricing.tier3_btn": "Tron / TRX",
+                "pricing.tier3_name": "EMPIRE",
+                "pricing.tier3_feat1": "1,000,000 API Requests (one-time)",
+                "pricing.tier3_feat2": "Bare-metal local deployment (zero drift)",
+                "pricing.tier3_feat3": "Catuṣkoṭi deterministic logic controller",
+                "pricing.tier3_btn": "Purchase Plan",
                 
                 "console.btn_clear": "Clear Logs",
 
@@ -2191,10 +2193,756 @@
             }, 2200);
         }
 
+        // Global Portal State
+        state.client = null;
+        state.clientPassword = "";
+        state.selectedProduct = null;
+
+        window.openPortal = function(productId = null) {
+            state.selectedProduct = productId;
+            const modal = document.getElementById('billing-portal-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            if (state.client) {
+                showDashboardView();
+            } else {
+                showAuthView();
+            }
+        }
+
+        window.closePortal = function() {
+            const modal = document.getElementById('billing-portal-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('transak-container').classList.add('hidden');
+            document.getElementById('portal-dashboard-content').classList.remove('hidden');
+        }
+
+        function showAuthView() {
+            document.getElementById('portal-auth-section').classList.remove('hidden');
+            document.getElementById('portal-dashboard-section').classList.add('hidden');
+            document.getElementById('auth-error-msg').textContent = '';
+        }
+
+        function showDashboardView() {
+            document.getElementById('portal-auth-section').classList.add('hidden');
+            document.getElementById('portal-dashboard-section').classList.remove('hidden');
+            document.getElementById('user-display-name').textContent = state.client.name;
+            document.getElementById('user-display-email').textContent = state.client.email;
+            document.getElementById('user-display-plan').textContent = state.client.plan;
+            document.getElementById('user-display-quota').textContent = Number(state.client.quota_requests).toLocaleString();
+            document.getElementById('user-api-key').value = state.client.apiKey;
+            
+            if (state.selectedProduct) {
+                document.getElementById('selected-checkout-product').textContent = state.selectedProduct.replace('vortex_', '').toUpperCase();
+            } else {
+                document.getElementById('selected-checkout-product').textContent = 'NONE';
+            }
+            
+            // Update documentation keys dynamically
+            const keyText = state.client.apiKey;
+            document.querySelectorAll('#right-tab-docs span, #right-tab-docs pre, #right-tab-docs code').forEach(el => {
+                if (el.textContent.includes('YOUR_API_KEY') || el.textContent.includes('sk_vortex_')) {
+                    el.innerHTML = el.innerHTML.replace(/YOUR_API_KEY/g, keyText).replace(/sk_vortex_[0-9a-fA-F]+/g, keyText);
+                }
+            });
+            
+            lucide.createIcons();
+        }
+
+        window.switchRightTab = function(tabId) {
+            const playBtn = document.getElementById('tab-btn-playground');
+            const docsBtn = document.getElementById('tab-btn-docs');
+            const playContent = document.getElementById('right-tab-playground');
+            const docsContent = document.getElementById('right-tab-docs');
+            const clearBtn = document.getElementById('clear-console-btn');
+            
+            if (tabId === 'playground') {
+                playBtn.classList.add('border-accent-cyan', 'text-accent-cyan');
+                playBtn.classList.remove('border-transparent', 'text-gray-500');
+                docsBtn.classList.add('border-transparent', 'text-gray-500');
+                docsBtn.classList.remove('border-accent-cyan', 'text-accent-cyan');
+                
+                playContent.classList.remove('hidden');
+                docsContent.classList.add('hidden');
+                clearBtn.style.display = 'block';
+            } else {
+                docsBtn.classList.add('border-accent-cyan', 'text-accent-cyan');
+                docsBtn.classList.remove('border-transparent', 'text-gray-500');
+                playBtn.classList.add('border-transparent', 'text-gray-500');
+                playBtn.classList.remove('border-accent-cyan', 'text-accent-cyan');
+                
+                docsContent.classList.remove('hidden');
+                playContent.classList.add('hidden');
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        let isRegisterMode = false;
+        window.toggleAuthMode = function() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('auth-submit-btn').textContent = isRegisterMode ? 'Register Account' : 'Login';
+            document.getElementById('auth-toggle-link').textContent = isRegisterMode ? 'Already have an account? Login' : 'Need an account? Register';
+            document.getElementById('auth-name-group').style.display = isRegisterMode ? 'block' : 'none';
+            document.getElementById('auth-title').textContent = isRegisterMode ? 'Create Sovereign Account' : 'Authenticate Credentials';
+        }
+
+        window.handlePortalAuth = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const name = document.getElementById('auth-name').value;
+            
+            const endpoint = isRegisterMode ? '/api/client/register' : '/api/client/login';
+            const body = isRegisterMode ? { email, name, password } : { email, password };
+            
+            try {
+                const response = await fetch(`http://localhost:3000${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                
+                const data = await response.json();
+                if (data.error) {
+                    document.getElementById('auth-error-msg').textContent = data.error;
+                } else if (data.success || data.client) {
+                    state.client = data.client;
+                    state.clientPassword = password;
+                    showDashboardView();
+                }
+            } catch (err) {
+                document.getElementById('auth-error-msg').textContent = "Failed to connect to local backend (http://localhost:3000)";
+            }
+        }
+
+        window.copyApiKey = function() {
+            const keyInput = document.getElementById('user-api-key');
+            keyInput.select();
+            keyInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(keyInput.value);
+            
+            const btn = document.getElementById('copy-key-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-accent-emerald"></i> Copied!`;
+            lucide.createIcons();
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        window.selectCheckoutProduct = function(prodId) {
+            state.selectedProduct = prodId;
+            document.getElementById('selected-checkout-product').textContent = prodId.replace('vortex_', '').toUpperCase();
+        }
+
+        window.startTransakCheckout = function() {
+            if (!state.client) {
+                alert("Please register or log in first.");
+                return;
+            }
+            if (!state.selectedProduct) {
+                alert("Please select a package first.");
+                return;
+            }
+            
+            let fiatAmount = 500;
+            let helioLinkId = "6656209de4b008d5cf051111"; // Replace with your actual Helio link ID
+            if (state.selectedProduct === 'vortex_pro') {
+                fiatAmount = 5000;
+                helioLinkId = "6656209de4b008d5cf052222"; // Replace with your actual Helio link ID
+            } else if (state.selectedProduct === 'vortex_empire') {
+                fiatAmount = 50000;
+                helioLinkId = "6656209de4b008d5cf053333"; // Replace with your actual Helio link ID
+            }
+            
+            // Helio Pay Link redirect format
+            const helioUrl = `https://pay.hel.io/${helioLinkId}?email=${encodeURIComponent(state.client.email)}&amount=${fiatAmount}`;
+            
+            logPlaygroundTerminal(`[SYSTEM] Initialized Helio Web3 Card-to-Fantom checkout for €${fiatAmount} EUR.`);
+            logPlaygroundTerminal(`[SYSTEM] Funds will be routed as USDC/SOL to: HkCqPRQ8E9SrsemNyRWbzvA2ixzv7NWXTnYpoN3AGpyR`);
+            logPlaygroundTerminal(`[SYSTEM] Opening Helio gateway: ${helioUrl}`);
+            
+            window.open(helioUrl, '_blank');
+            
+            logPlaygroundTerminal(`[SYSTEM] Helio Pay checkout opened in a new tab. Click "Simulate Credit" below to verify & credit your account.`);
+        }
+
+        window.startPayPalCheckout = function() {
+            if (!state.client) {
+                alert("Please register or log in first.");
+                return;
+            }
+            if (!state.selectedProduct) {
+                alert("Please select a package first.");
+                return;
+            }
+            
+            let fiatAmount = 500;
+            if (state.selectedProduct === 'vortex_pro') fiatAmount = 5000;
+            else if (state.selectedProduct === 'vortex_empire') fiatAmount = 50000;
+            
+            const payPalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=papica777%40gmail.com&amount=${fiatAmount}&currency_code=EUR`;
+            
+            logPlaygroundTerminal(`[SYSTEM] Initialized PayPal Payment Link for €${fiatAmount} EUR.`);
+            logPlaygroundTerminal(`[SYSTEM] Opening gateway: ${payPalUrl}`);
+            
+            window.open(payPalUrl, '_blank');
+            
+            logPlaygroundTerminal(`[SYSTEM] PayPal gateway opened in new tab. Click "Simulate Credit" to verify.`);
+        }
+
+        window.closeCheckout = function() {
+            document.getElementById('transak-container').classList.add('hidden');
+            document.getElementById('portal-dashboard-content').classList.remove('hidden');
+            document.getElementById('transak-iframe').src = '';
+        }
+
+        window.openSolanaPayment = function() {
+            const PHANTOM_WALLET = 'HkCqPRQ8E9SrsemNyRWbzvA2ixzv7NWXTnYpoN3AGpyR';
+            const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'; // USDC on Solana
+            
+            let amount = 500;
+            let label = 'AETERNA Starter';
+            if (state.selectedProduct === 'vortex_pro') {
+                amount = 5000;
+                label = 'AETERNA Pro';
+            } else if (state.selectedProduct === 'vortex_empire') {
+                amount = 50000;
+                label = 'AETERNA Empire';
+            }
+
+            // Solana Pay Transfer Request URL (supported by Phantom, Solflare, etc.)
+            const solanaPayUrl = `solana:${PHANTOM_WALLET}?amount=${amount}&spl-token=${USDC_MINT}&label=${encodeURIComponent(label)}&message=${encodeURIComponent('AETERNA Sovereign License — ' + label)}`;
+            
+            // Also provide a Solana Explorer fallback link for desktop
+            const explorerUrl = `https://explorer.solana.com/address/${PHANTOM_WALLET}`;
+
+            if (typeof logPlaygroundTerminal === 'function') {
+                logPlaygroundTerminal(`[SOLANA PAY] Transfer ${amount} USDC to Phantom wallet:`);
+                logPlaygroundTerminal(`[WALLET] ${PHANTOM_WALLET}`);
+                logPlaygroundTerminal(`[TOKEN] USDC (${USDC_MINT.substring(0,8)}...)`);
+                logPlaygroundTerminal(`[PACKAGE] ${label} — €${amount.toLocaleString()}`);
+            }
+
+            // Try to open Solana Pay URI (Phantom will catch it on mobile)
+            window.open(solanaPayUrl, '_blank');
+            
+            // Show copy-paste modal for desktop users
+            const copyMsg = `Send ${amount} USDC on Solana to:\n\n${PHANTOM_WALLET}\n\nOpen Phantom → Send → Paste address → ${amount} USDC`;
+            if (!navigator.userAgent.includes('Mobile')) {
+                setTimeout(() => {
+                    if (confirm(copyMsg + '\n\nCopy wallet address to clipboard?')) {
+                        navigator.clipboard.writeText(PHANTOM_WALLET);
+                        if (typeof logPlaygroundTerminal === 'function') {
+                            logPlaygroundTerminal(`[SYSTEM] Wallet address copied to clipboard!`);
+                        }
+                    }
+                }, 500);
+            }
+        }
+
+        window.simulateSuccessfulPayment = async function() {
+            if (!state.client || !state.selectedProduct) {
+                alert("Please select a package first.");
+                return;
+            }
+            
+            logPlaygroundTerminal(`[SIMULATOR] Mocking Transak payment completion...`);
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/client/purchase`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: state.client.email,
+                        productId: state.selectedProduct
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    state.client = data.client;
+                    showDashboardView();
+                    logPlaygroundTerminal(`[SUCCESS] Quota credited! Added +${data.client.plan === 'VORTEX_EMPIRE' ? '1,000,000' : data.client.plan === 'VORTEX_PRO' ? '100,000' : '10,000'} requests.`);
+                    logPlaygroundTerminal(`[SYSTEM] New total quota: ${data.client.quota_requests} requests.`);
+                    closeCheckout();
+                } else {
+                    logPlaygroundTerminal(`[ERROR] Quota credit failed: ${data.error}`);
+                }
+            } catch (err) {
+                logPlaygroundTerminal(`[ERROR] Connection error to http://localhost:3000/api/client/purchase`);
+            }
+        }
+
+        function logPlaygroundTerminal(msg) {
+            const screen = document.getElementById('playground-terminal-screen');
+            const div = document.createElement('div');
+            
+            if (msg.includes('[SUCCESS]') || msg.includes('"choices"')) {
+                div.className = 'text-accent-emerald';
+            } else if (msg.includes('[ERROR]') || msg.includes('402') || msg.includes('401')) {
+                div.className = 'text-red-500 font-bold';
+            } else if (msg.includes('[SYSTEM]') || msg.includes('Authorization')) {
+                div.className = 'text-accent-cyan';
+            } else {
+                div.className = 'text-gray-300';
+            }
+            
+            div.textContent = msg;
+            screen.appendChild(div);
+            screen.scrollTop = screen.scrollHeight;
+        }
+
+        window.executePlaygroundRequest = async function() {
+            if (!state.client) return;
+            
+            const promptInput = document.getElementById('playground-prompt-input');
+            const prompt = promptInput.value.trim() || "Explain glioblastoma modeling";
+            promptInput.value = '';
+            
+            const time = new Date().toLocaleTimeString();
+            logPlaygroundTerminal(`\n[${time}] ▸ POST http://localhost:3000/v1/chat/completions`);
+            logPlaygroundTerminal(`[HEADERS] Authorization: Bearer ${state.client.apiKey.substring(0, 15)}...`);
+            logPlaygroundTerminal(`[BODY] { model: "aeterna-cognitive-v1", prompt: "${prompt}" }`);
+            
+            try {
+                const startTime = Date.now();
+                const response = await fetch(`http://localhost:3000/v1/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${state.client.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "aeterna-cognitive-v1",
+                        messages: [
+                            { role: "user", content: prompt }
+                        ]
+                    })
+                });
+                
+                const duration = Date.now() - startTime;
+                
+                if (response.status === 200) {
+                    const data = await response.json();
+                    logPlaygroundTerminal(`[SUCCESS] 200 OK (${duration}ms)`);
+                    logPlaygroundTerminal(JSON.stringify(data, null, 2));
+                    refreshUserQuota();
+                } else if (response.status === 402) {
+                    const err = await response.json();
+                    logPlaygroundTerminal(`[ERROR] 402 Payment Required (${duration}ms)`);
+                    logPlaygroundTerminal(`[RESPONSE] ${err.error}`);
+                } else if (response.status === 401) {
+                    const err = await response.json();
+                    logPlaygroundTerminal(`[ERROR] 401 Unauthorized (${duration}ms)`);
+                    logPlaygroundTerminal(`[RESPONSE] ${err.error}`);
+                } else {
+                    logPlaygroundTerminal(`[ERROR] ${response.status} Error`);
+                }
+            } catch (err) {
+                logPlaygroundTerminal(`[ERROR] Failed to execute API call. Ensure backend server is running.`);
+            }
+        }
+
+        async function refreshUserQuota() {
+            try {
+                if (!state.client || !state.clientPassword) return;
+                
+                const response = await fetch(`http://localhost:3000/api/client/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: state.client.email,
+                        password: state.clientPassword
+                    })
+                });
+                const data = await response.json();
+                if (data.client) {
+                    state.client = data.client;
+                    showDashboardView();
+                }
+            } catch (e) {}
+        }
+
+        window.submitDonation = async function() {
+            if (!state.client) {
+                alert("Please log in or register to credit donations to your account.");
+                return;
+            }
+            const amountInput = document.getElementById('donate-amount-input');
+            const currencySelect = document.getElementById('donate-currency-select');
+            const providerSelect = document.getElementById('donate-provider-select');
+            const messageInput = document.getElementById('donate-message-input');
+            const statusMsg = document.getElementById('donate-status-msg');
+            
+            const amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid donation amount.");
+                return;
+            }
+            
+            const currency = currencySelect.value;
+            const provider = providerSelect.value;
+            const message = messageInput.value;
+            
+            statusMsg.classList.remove('hidden', 'text-red-500', 'text-accent-emerald');
+            statusMsg.classList.add('text-accent-cyan');
+            statusMsg.textContent = "Processing donation...";
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/donate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: state.client.email,
+                        amount,
+                        currency,
+                        provider,
+                        message
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    statusMsg.classList.remove('text-accent-cyan');
+                    statusMsg.classList.add('text-accent-emerald');
+                    statusMsg.textContent = `Thank you! Added +${data.extraQuotaAdded.toLocaleString()} requests to your quota.`;
+                    
+                    // Refresh client state
+                    await refreshUserQuota();
+                    
+                    logPlaygroundTerminal(`[DONATION] Received $${amount} ${currency} via ${provider.toUpperCase()}.`);
+                    logPlaygroundTerminal(`[DONATION] Message: "${message || 'None'}"`);
+                    logPlaygroundTerminal(`[SUCCESS] Quota updated! New total: ${state.client.quota_requests} requests.`);
+                    
+                    // Reset fields
+                    amountInput.value = '10';
+                    messageInput.value = '';
+                } else {
+                    statusMsg.classList.remove('text-accent-cyan');
+                    statusMsg.classList.add('text-red-500');
+                    statusMsg.textContent = `Donation failed: ${data.error}`;
+                }
+            } catch (err) {
+                statusMsg.classList.remove('text-accent-cyan');
+                statusMsg.classList.add('text-red-500');
+                statusMsg.textContent = "Connection error to donation endpoint.";
+            }
+        }
+
         // Initialize App on Page Load
         window.addEventListener('DOMContentLoaded', () => {
             setLanguage('en');
         });
     </script>
+
+    <!-- Sovereign Billing & Client Portal Modal -->
+    <div id="billing-portal-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/85 backdrop-blur-md p-4">
+        <div class="glass-premium w-full max-w-4xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="bg-black/40 px-6 py-4 border-b border-white/10 flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="terminal" class="text-accent-cyan w-5 h-5"></i>
+                    <span class="font-mono text-xs text-accent-cyan font-bold tracking-widest uppercase">AETERNA_CLIENT_BILLING_PORTAL.exe</span>
+                </div>
+                <button onclick="closePortal()" class="text-gray-400 hover:text-white transition-colors p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 md:p-8 overflow-y-auto flex-grow terminal-scroll">
+                
+                <!-- 1. Authentication Section -->
+                <div id="portal-auth-section" class="max-w-md mx-auto py-8">
+                    <div class="text-center mb-8">
+                        <h3 id="auth-title" class="text-2xl font-black tracking-tight uppercase mb-2">Authenticate Credentials</h3>
+                        <p class="text-gray-400 text-xs font-mono">SOVEREIGN ACCESS HANDSHAKE REQUIRED</p>
+                    </div>
+                    
+                    <form onsubmit="handlePortalAuth(event)" class="space-y-5">
+                        <div id="auth-name-group" class="space-y-2" style="display: none;">
+                            <label class="block text-[10px] font-bold tracking-wider uppercase text-gray-500 font-mono">Full Name</label>
+                            <input id="auth-name" type="text" placeholder="Dimitar Prodromov" class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-bold tracking-wider uppercase text-gray-500 font-mono">Email Address</label>
+                            <input id="auth-email" type="email" required placeholder="architect@aeterna.site" class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-bold tracking-wider uppercase text-gray-500 font-mono">Password</label>
+                            <input id="auth-password" type="password" required placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
+                        </div>
+                        
+                        <div id="auth-error-msg" class="text-red-500 text-xs font-mono text-center mb-4"></div>
+                        
+                        <button id="auth-submit-btn" type="submit" class="w-full py-4 bg-accent-cyan hover:bg-white text-black font-extrabold text-xs uppercase tracking-widest rounded transition-colors font-mono shadow-md glow-cyan">Login</button>
+                    </form>
+                    
+                    <div class="text-center mt-6">
+                        <button onclick="toggleAuthMode()" id="auth-toggle-link" class="text-xs text-accent-purple hover:underline font-mono">Need an account? Register</button>
+                    </div>
+                </div>
+                
+                <!-- 2. Dashboard Section (Logged In) -->
+                <div id="portal-dashboard-section" class="hidden space-y-8">
+                    
+                    <!-- Transak Iframe Checkout Container -->
+                    <div id="transak-container" class="hidden flex flex-col items-center justify-center p-4 space-y-4">
+                        <div class="flex justify-between items-center w-full max-w-lg">
+                            <span class="text-xs font-mono text-accent-cyan">💳 SECURE FIAT-TO-CRYPTO CARD CHECKOUT</span>
+                            <button onclick="closeCheckout()" class="text-xs text-red-500 hover:underline font-mono">Cancel Checkout</button>
+                        </div>
+                        <div class="w-full max-w-lg aspect-[3/4] md:aspect-[4/5] bg-white/5 border border-white/10 rounded-xl overflow-hidden relative">
+                            <iframe id="transak-iframe" class="w-full h-full border-none bg-transparent" src=""></iframe>
+                        </div>
+                        <div class="flex gap-4">
+                            <button onclick="simulateSuccessfulPayment()" class="px-5 py-2.5 bg-accent-emerald text-black font-extrabold text-[10px] tracking-widest font-mono uppercase rounded transition-colors hover:bg-white">
+                                Simulate Success (Sandbox Bypass)
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Dashboard Normal Content -->
+                    <div id="portal-dashboard-content" class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+                        <!-- Left Side: User profile, select product, buy -->
+                        <div class="space-y-6">
+                            <!-- Profile Status Summary -->
+                            <div class="glass p-5 rounded-xl border-white/5 grid grid-cols-2 gap-4">
+                                <div>
+                                    <span class="block text-[8px] font-bold text-gray-500 uppercase tracking-widest font-mono">Client Name</span>
+                                    <span id="user-display-name" class="text-white font-extrabold text-sm"></span>
+                                </div>
+                                <div>
+                                    <span class="block text-[8px] font-bold text-gray-500 uppercase tracking-widest font-mono">Email</span>
+                                    <span id="user-display-email" class="text-white text-xs truncate block font-mono"></span>
+                                </div>
+                                <div>
+                                    <span class="block text-[8px] font-bold text-gray-500 uppercase tracking-widest font-mono">Tier Level</span>
+                                    <span id="user-display-plan" class="text-accent-purple font-extrabold text-sm uppercase"></span>
+                                </div>
+                                <div>
+                                    <span class="block text-[8px] font-bold text-gray-500 uppercase tracking-widest font-mono">Remaining Quota</span>
+                                    <span id="user-display-quota" class="text-accent-emerald font-black text-sm font-mono"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- API Key field -->
+                            <div class="glass p-5 rounded-xl border-white/5 space-y-2">
+                                <span class="block text-[8px] font-bold text-gray-500 uppercase tracking-widest font-mono">Sovereign API Key (keep secret)</span>
+                                <div class="flex gap-2">
+                                    <input id="user-api-key" type="text" readonly value="" class="flex-grow bg-black/40 border border-white/10 rounded px-3 py-2 text-xs font-mono text-accent-cyan focus:outline-none select-all">
+                                    <button onclick="copyApiKey()" id="copy-key-btn" class="px-4 py-2 border border-white/10 rounded text-[10px] font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-colors font-mono flex items-center gap-1.5 shrink-0">
+                                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Buy Quota Section -->
+                            <div class="glass p-5 rounded-xl border-white/5 space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Purchase Additional Quota</h4>
+                                    <p class="text-gray-500 text-[10px] font-mono mt-1">DIRECT SOVEREIGN PAYMENT LINKS & INSTANT ACCREDITATION</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button onclick="selectCheckoutProduct('vortex_starter')" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan rounded text-left transition-all">
+                                        <span class="block text-[8px] text-gray-500 font-mono">STARTER</span>
+                                        <span class="block text-white font-black text-xs mt-1">€500</span>
+                                        <span class="block text-[8px] text-accent-cyan font-mono mt-1">+10K req</span>
+                                    </button>
+                                    <button onclick="selectCheckoutProduct('vortex_pro')" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan rounded text-left transition-all">
+                                        <span class="block text-[8px] text-gray-500 font-mono">PRO</span>
+                                        <span class="block text-white font-black text-xs mt-1">€5,000</span>
+                                        <span class="block text-[8px] text-accent-cyan font-mono mt-1">+100K req</span>
+                                    </button>
+                                    <button onclick="selectCheckoutProduct('vortex_empire')" class="p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan rounded text-left transition-all">
+                                        <span class="block text-[8px] text-gray-500 font-mono">EMPIRE</span>
+                                        <span class="block text-white font-black text-xs mt-1">€50,000</span>
+                                        <span class="block text-[8px] text-accent-cyan font-mono mt-1">+1M req</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/40 p-3 rounded border border-white/5">
+                                    <div class="font-mono text-[9px] text-gray-400">
+                                        Selected: <span id="selected-checkout-product" class="text-accent-cyan font-bold">NONE</span>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="px-4 py-2.5 bg-gradient-to-r from-[#6e40c9] to-[#ea4aaa] hover:from-[#8b5cf6] hover:to-[#f472b6] text-white font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-all shadow-lg hover:shadow-[#6e40c9]/30 flex items-center gap-1.5 animate-pulse">
+                                            💳 PAY WITH CARD (STRIPE)
+                                        </a>
+                                        <button onclick="openSolanaPayment()" class="px-3 py-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:opacity-90 text-white font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-colors shadow-sm flex items-center gap-1.5">
+                                            👻 SEND TO PHANTOM
+                                        </button>
+                                        <button onclick="startPayPalCheckout()" class="px-3 py-2 bg-accent-purple hover:bg-white text-black font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-colors shadow-sm glow-purple">
+                                            🅿️ PayPal
+                                        </button>
+                                        <button onclick="simulateSuccessfulPayment()" class="px-3 py-2 bg-accent-emerald hover:bg-white text-black font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-colors">
+                                            ✨ Simulate Credit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                            <!-- ✨ Support the Project — Donate Section -->
+                            <div class="glass p-5 rounded-xl border border-white/5 space-y-4 mt-0">
+                                <div>
+                                    <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                        <span>💖</span> Support the Project
+                                    </h4>
+                                    <p class="text-gray-500 text-[10px] font-mono mt-1">DONATIONS BOOST YOUR QUOTA — 1 USD = +200 REQUESTS</p>
+                                </div>
+
+                                <!-- Quick Donate Buttons -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <a href="https://www.paypal.com/donate/?business=papica777%40gmail.com&currency_code=USD"
+                                       target="_blank"
+                                       class="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-[#003087]/40 hover:bg-[#003087]/70 border border-[#009cde]/30 hover:border-[#009cde] transition-all group">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7.144 19.532l1.049-5.971-.66-.003H4.982l2.162-13.29h7.267c2.492 0 4.212.518 5.101 1.541.424.488.694 1.006.826 1.585.137.607.14 1.329.006 2.208l-.01.064v.56l.526.298a3.508 3.508 0 011.042.888c.441.534.724 1.214.84 2.019.12.826.08 1.812-.117 2.93-.227 1.293-.596 2.419-1.096 3.345a6.732 6.732 0 01-1.726 2.168c-.672.556-1.47.978-2.371 1.254-.873.268-1.871.405-2.962.405h-.703c-.502 0-.99.181-1.374.507a2.21 2.21 0 00-.74 1.28l-.055.297-.876 5.555-.04.203c-.01.056-.027.084-.05.103a.132.132 0 01-.083.03H7.144z" fill="#009cde"/>
+                                            <path d="M20.25 7.77c-.017.1-.036.202-.057.305C19.4 11.85 17.178 13.5 13.771 13.5h-1.987a.799.799 0 00-.79.676l-.843 5.348-.239 1.517a.42.42 0 00.415.485h2.912c.35 0 .648-.254.703-.601l.029-.151.557-3.532.036-.194a.714.714 0 01.704-.601h.444c2.87 0 5.117-1.165 5.776-4.536.275-1.41.133-2.588-.594-3.417a2.833 2.833 0 00-.644-.524z" fill="#012169"/>
+                                        </svg>
+                                        <span class="text-[8px] font-bold font-mono text-[#009cde] group-hover:text-white tracking-widest uppercase">PayPal</span>
+                                    </a>
+                                    <a href="https://github.com/sponsors/papica777-eng"
+                                       target="_blank"
+                                       class="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-[#6e5494]/20 hover:bg-[#6e5494]/50 border border-[#6e5494]/30 hover:border-[#6e5494] transition-all group">
+                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="#f8a8c8" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                        <span class="text-[8px] font-bold font-mono text-[#f8a8c8] group-hover:text-white tracking-widest uppercase">Sponsors</span>
+                                    </a>
+                                    <a href="https://buymeacoffee.com/aeterna"
+                                       target="_blank"
+                                       class="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-[#ffdd00]/10 hover:bg-[#ffdd00]/25 border border-[#ffdd00]/30 hover:border-[#ffdd00] transition-all group">
+                                        <span class="text-xl leading-none">☕</span>
+                                        <span class="text-[8px] font-bold font-mono text-[#ffdd00] group-hover:text-white tracking-widest uppercase">Coffee</span>
+                                    </a>
+                                </div>
+
+                                <!-- Custom Donate Form -->
+                                <div class="bg-black/40 rounded-lg border border-white/5 p-3 space-y-2">
+                                    <p class="text-[8px] font-mono text-gray-500 uppercase tracking-wider">Custom Donation (auto-credits quota)</p>
+                                    <div class="flex gap-2">
+                                        <div class="relative flex-grow">
+                                            <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono">$</span>
+                                            <input id="donate-amount-input" type="number" min="1" value="10" placeholder="10"
+                                                class="w-full pl-6 pr-2 py-2 bg-white/5 border border-white/10 rounded text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
+                                        </div>
+                                        <select id="donate-currency-select" class="bg-white/5 border border-white/10 rounded px-2 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                            <option value="GBP">GBP</option>
+                                        </select>
+                                        <select id="donate-provider-select" class="bg-white/5 border border-white/10 rounded px-2 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
+                                            <option value="paypal">PayPal</option>
+                                            <option value="github">GitHub</option>
+                                            <option value="stripe">Stripe</option>
+                                            <option value="crypto">Crypto</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex gap-2 items-center">
+                                        <input id="donate-message-input" type="text" placeholder="Optional message..."
+                                            class="flex-grow bg-white/5 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
+                                        <button onclick="submitDonation()"
+                                            class="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-400 hover:to-purple-400 text-white font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-all shrink-0 shadow-lg shadow-purple-900/40">
+                                            💖 Donate
+                                        </button>
+                                    </div>
+                                    <p id="donate-status-msg" class="text-[9px] font-mono text-accent-emerald hidden"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Side: API Tabbed Container -->
+                        <div class="glass rounded-xl overflow-hidden border border-white/10 flex flex-col h-[400px]">
+                            <!-- Tabs Header -->
+                            <div class="bg-black/60 px-4 border-b border-white/5 flex justify-between items-center shrink-0">
+                                <div class="flex gap-4">
+                                    <button id="tab-btn-playground" onclick="switchRightTab('playground')" class="py-2.5 text-[9px] font-mono font-bold tracking-wider uppercase border-b-2 border-accent-cyan text-accent-cyan">
+                                        Console / Playground
+                                    </button>
+                                    <button id="tab-btn-docs" onclick="switchRightTab('docs')" class="py-2.5 text-[9px] font-mono font-bold tracking-wider uppercase border-b-2 border-transparent text-gray-500 hover:text-white">
+                                        API Reference Docs
+                                    </button>
+                                </div>
+                                <button id="clear-console-btn" onclick="document.getElementById('playground-terminal-screen').innerHTML=''" class="text-[8px] font-mono text-gray-500 hover:text-white uppercase">Clear Console</button>
+                            </div>
+                            
+                            <!-- Tab Content: Playground -->
+                            <div id="right-tab-playground" class="flex flex-col flex-grow overflow-hidden">
+                                <!-- Terminal Logs -->
+                                <div id="playground-terminal-screen" class="p-4 bg-black/40 font-mono text-[10px] leading-relaxed text-gray-400 overflow-y-auto flex-grow terminal-scroll space-y-1">
+                                    <div>[READY] Aeterna local testing console active.</div>
+                                    <div>[INFO] Enter a query below and execute using your API key.</div>
+                                </div>
+                                
+                                <!-- Prompt Input -->
+                                <div class="p-3 bg-black/60 border-t border-white/5 flex gap-2 shrink-0">
+                                    <input id="playground-prompt-input" type="text" placeholder="Explain glioblastoma modeling..." class="flex-grow bg-white/5 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
+                                    <button onclick="executePlaygroundRequest()" class="px-4 py-2 bg-accent-cyan hover:bg-white text-black font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-colors shrink-0 flex items-center gap-1">
+                                        <i data-lucide="play" class="w-3 h-3"></i> Send
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Tab Content: API Documentation -->
+                            <div id="right-tab-docs" class="hidden p-4 bg-black/40 font-mono text-[10px] leading-relaxed text-gray-400 overflow-y-auto flex-grow terminal-scroll space-y-4">
+                                <div>
+                                    <span class="text-accent-cyan font-bold block mb-1">🔗 BASE URL</span>
+                                    <code class="bg-white/5 px-2 py-1 rounded border border-white/10 block text-white select-all">http://localhost:3000</code>
+                                </div>
+                                
+                                <div class="w-full border-t border-white/5 my-2"></div>
+                                
+                                <div>
+                                    <span class="text-accent-cyan font-bold block mb-1">🔑 AUTHENTICATION</span>
+                                    <p class="text-gray-500 mb-1">Include your API Key in the headers of all requests:</p>
+                                    <code class="bg-white/5 px-2 py-1 rounded border border-white/10 block text-white">Authorization: Bearer YOUR_API_KEY</code>
+                                    <code class="bg-white/5 px-2 py-1 rounded border border-white/10 block text-white mt-1">X-API-Key: YOUR_API_KEY</code>
+                                </div>
+                                
+                                <div class="w-full border-t border-white/5 my-2"></div>
+                                
+                                <div>
+                                    <span class="text-accent-emerald font-bold block mb-1">🤖 1. CHAT COMPLETIONS (OpenAI-compatible)</span>
+                                    <p class="text-gray-500 mb-2">POST /v1/chat/completions (Deducts 1 Request)</p>
+                                    
+                                    <span class="text-gray-500 block mb-1">cURL Example:</span>
+                                    <pre class="bg-white/5 p-2 rounded border border-white/10 text-white overflow-x-auto select-all">curl -X POST http://localhost:3000/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "aeterna-cognitive-v1",
+    "messages": [{"role": "user", "content": "Explain Glioblastoma"}]
+  }'</pre>
+                                </div>
+                                
+                                <div class="w-full border-t border-white/5 my-2"></div>
+                                
+                                <div>
+                                    <span class="text-accent-emerald font-bold block mb-1">⚡ 2. SUBMIT COMPUTE JOB</span>
+                                    <p class="text-gray-500 mb-2">POST /compute/submit (Deducts 1 Request)</p>
+                                    
+                                    <span class="text-gray-500 block mb-1">cURL Example:</span>
+                                    <pre class="bg-white/5 p-2 rounded border border-white/10 text-white overflow-x-auto select-all">curl -X POST http://localhost:3000/compute/submit \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "region": "SOVEREIGN_EU",
+    "cost_limit_cents": 29
+  }'</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
