@@ -941,6 +941,45 @@
                     <button onclick="openPortal('vortex_empire')" class="w-full py-4 border border-white/10 font-bold text-xs uppercase tracking-widest rounded hover:bg-white hover:text-black transition-all font-mono" data-i18n="pricing.tier3_btn">Purchase Plan</button>
                 </div>
             </div>
+
+            <!-- DIRECT PAYMENT — NO LOGIN REQUIRED -->
+            <div class="mt-16 max-w-2xl mx-auto">
+                <div class="glass-premium p-8 rounded-2xl border border-accent-cyan/20 text-center space-y-6">
+                    <div>
+                        <h3 class="text-xl font-black uppercase tracking-wider text-white mb-2">💳 Instant Payment</h3>
+                        <p class="text-gray-400 text-xs font-mono">NO ACCOUNT REQUIRED — PAY DIRECTLY WITH CARD, PHANTOM, OR PAYPAL</p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <!-- Stripe / Card via GitHub Sponsors -->
+                        <a href="https://github.com/sponsors/papica777-eng" target="_blank" 
+                           class="px-8 py-4 bg-gradient-to-r from-[#6e40c9] to-[#ea4aaa] hover:from-[#8b5cf6] hover:to-[#f472b6] text-white font-black text-sm tracking-widest uppercase rounded-xl transition-all shadow-lg hover:shadow-[#6e40c9]/40 hover:scale-105 flex items-center gap-3 group">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            PAY WITH CARD
+                        </a>
+
+                        <!-- Phantom / Solana Pay -->
+                        <button onclick="directSolanaPayment()" 
+                           class="px-8 py-4 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:opacity-90 text-white font-black text-sm tracking-widest uppercase rounded-xl transition-all shadow-lg hover:shadow-[#9945FF]/40 hover:scale-105 flex items-center gap-3">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19.1 4.9C18.3 4.1 17.2 3.6 16 3.6H8c-1.2 0-2.3.5-3.1 1.3L2 7.8c-.3.3-.3.7 0 1l2.9 2.9c.8.8 1.9 1.3 3.1 1.3h8c1.2 0 2.3-.5 3.1-1.3l2.9-2.9c.3-.3.3-.7 0-1L19.1 4.9zM19.1 14.3c-.8-.8-1.9-1.3-3.1-1.3H8c-1.2 0-2.3.5-3.1 1.3L2 17.2c-.3.3-.3.7 0 1l2.9 2.9c.8.8 1.9 1.3 3.1 1.3h8c1.2 0 2.3-.5 3.1-1.3l2.9-2.9c.3-.3.3-.7 0-1l-2.9-2.9z"/></svg>
+                            SEND TO PHANTOM
+                        </button>
+
+                        <!-- PayPal -->
+                        <a href="https://www.paypal.com/donate/?business=papica777%40gmail.com&currency_code=EUR" target="_blank"
+                           class="px-8 py-4 bg-[#003087] hover:bg-[#001a4d] text-white font-black text-sm tracking-widest uppercase rounded-xl transition-all shadow-lg hover:shadow-[#003087]/40 hover:scale-105 flex items-center gap-3">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M7.144 19.532l1.049-5.971-.66-.003H4.982l2.162-13.29h7.267c2.492 0 4.212.518 5.101 1.541.424.488.694 1.006.826 1.585.137.607.14 1.329.006 2.208l-.01.064v.56l.526.298a3.508 3.508 0 011.042.888c.441.534.724 1.214.84 2.019.12.826.08 1.812-.117 2.93-.227 1.293-.596 2.419-1.096 3.345a6.732 6.732 0 01-1.726 2.168c-.672.556-1.47.978-2.371 1.254-.873.268-1.871.405-2.962.405h-.703c-.502 0-.99.181-1.374.507a2.21 2.21 0 00-.74 1.28l-.055.297-.876 5.555-.04.203c-.01.056-.027.084-.05.103a.132.132 0 01-.083.03H7.144z"/></svg>
+                            PAYPAL
+                        </a>
+                    </div>
+
+                    <div class="text-[9px] font-mono text-gray-600 space-y-1">
+                        <p>STRIPE: Visa / Mastercard / Apple Pay → EUR → Verified Stripe Connect</p>
+                        <p>PHANTOM: USDC on Solana → <span class="text-accent-cyan">HkCqPRQ8...pyR</span></p>
+                        <p>PAYPAL: EUR → papica777@gmail.com</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -2442,6 +2481,26 @@
                     }
                 }, 500);
             }
+        }
+
+        // Direct payment from main page (no login required)
+        window.directSolanaPayment = function() {
+            const PHANTOM_WALLET = 'HkCqPRQ8E9SrsemNyRWbzvA2ixzv7NWXTnYpoN3AGpyR';
+            const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+            
+            // Solana Pay URI
+            const solanaPayUrl = `solana:${PHANTOM_WALLET}?spl-token=${USDC_MINT}&label=${encodeURIComponent('AETERNA License')}&message=${encodeURIComponent('AETERNA Sovereign License Payment')}`;
+            
+            // Try Solana Pay URI first (works on mobile with Phantom installed)
+            window.open(solanaPayUrl, '_blank');
+            
+            // Desktop fallback: copy address
+            setTimeout(() => {
+                if (confirm(`Send USDC on Solana to:\n\n${PHANTOM_WALLET}\n\nCopy wallet address to clipboard?`)) {
+                    navigator.clipboard.writeText(PHANTOM_WALLET);
+                    alert('✅ Wallet address copied!');
+                }
+            }, 500);
         }
 
         window.simulateSuccessfulPayment = async function() {
