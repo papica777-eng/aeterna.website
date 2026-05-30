@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="bg" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QAntum Prime | Sovereign Mailer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'accent-cyan': '#00f3ff',
+                        'accent-purple': '#b026ff',
+                        'space-900': '#050b14',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050b14; color: white; font-family: 'Inter', monospace; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-space-900 via-[#0a1526] to-black">
+    
+    <div class="w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden border border-accent-cyan/20">
+        <div class="bg-black/50 p-6 border-b border-white/10 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i data-lucide="send" class="text-accent-cyan w-6 h-6"></i>
+                <h1 class="text-xl font-bold tracking-widest uppercase">QAntum Sovereign Mailer</h1>
+            </div>
+            <span class="text-xs text-accent-purple border border-accent-purple/30 px-2 py-1 rounded">VORTEX LINK ACTIVE</span>
+        </div>
+
+        <form id="mailerForm" class="p-6 space-y-5">
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Recipient (Email)</label>
+                <input type="email" id="toEmail" required placeholder="target@domain.com" class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
+            </div>
+
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Subject</label>
+                <input type="text" id="subject" required placeholder="AETERNA Sovereign Proposal" class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
+            </div>
+
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Message Body</label>
+                <textarea id="messageBody" required rows="8" placeholder="Enter transmission payload here..." class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono resize-y"></textarea>
+            </div>
+
+            <div class="pt-4 flex justify-between items-center">
+                <div id="statusMsg" class="text-sm font-mono opacity-0 transition-opacity"></div>
+                <button type="submit" class="bg-accent-cyan/10 hover:bg-accent-cyan/20 border border-accent-cyan text-accent-cyan px-8 py-3 rounded uppercase text-sm font-bold tracking-widest transition-all flex items-center gap-2">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                    Dispatch Payload
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('mailerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const status = document.getElementById('statusMsg');
+            
+            const toEmail = document.getElementById('toEmail').value;
+            const subject = document.getElementById('subject').value;
+            const messageBody = document.getElementById('messageBody').value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Dispatching...';
+            lucide.createIcons();
+
+            try {
+                const response = await fetch('http://localhost:3000/api/send-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ to: toEmail, subject, text: messageBody })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    status.className = 'text-sm font-mono text-emerald-400 opacity-100';
+                    status.innerHTML = `[SUCCESS] Payload delivered to ${toEmail}`;
+                    e.target.reset();
+                } else {
+                    status.className = 'text-sm font-mono text-red-400 opacity-100';
+                    status.innerHTML = `[ERROR] ${data.error}`;
+                }
+            } catch (err) {
+                status.className = 'text-sm font-mono text-red-400 opacity-100';
+                status.innerHTML = `[NETWORK_FAULT] Vortex Server Unreachable`;
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4"></i> Dispatch Payload';
+            lucide.createIcons();
+            
+            setTimeout(() => { status.style.opacity = '0'; }, 5000);
+        });
+    </script>
+</body>
+</html>

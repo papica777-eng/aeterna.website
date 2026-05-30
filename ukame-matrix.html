@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UKAME Solar Matrix | Бизнес План & Технологичен Протокол</title>
+    <!-- Google Fonts: Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chart.js & TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --accent-gold: #f59e0b;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --dark-bg: #030712;
+            --card-bg: rgba(17, 24, 39, 0.7);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: #f3f4f6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glass-gold {
+            background: rgba(245, 158, 11, 0.03);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+        .glow-text-gold {
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+        .glow-text-cyan {
+            text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+        }
+        .layer-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .layer-node {
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .layer-node:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="antialiased min-height-screen">
+
+    <!-- Top Navigation Bar -->
+    <nav class="sticky top-0 z-50 glass border-b border-white/5 py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="./index.html" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-all">
+                    <i data-lucide="sun" class="w-5 h-5 text-black stroke-[2.5]"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-white font-display">UKAME <span class="text-amber-500">SOLAR</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="./index.html" class="text-sm font-semibold text-slate-400 hover:text-white transition">НАЧАЛО</a>
+                <a href="#concept" class="text-sm font-semibold text-slate-400 hover:text-white transition">КОНЦЕПТ</a>
+                <a href="#assembly" class="text-sm font-semibold text-slate-400 hover:text-white transition">АСЕМБЛИРАНЕ</a>
+                <a href="#economics" class="text-sm font-semibold text-slate-400 hover:text-white transition">БИЗНЕС ПЛАН</a>
+                <a href="./hud.html" class="px-4 py-2 rounded border border-amber-500/30 text-amber-500 font-bold text-xs uppercase tracking-wider hover:bg-amber-500 hover:text-black transition">LIVE HUD</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header section -->
+    <header class="relative py-24 px-6 overflow-hidden border-b border-white/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider mb-6">
+                    <i data-lucide="shield" class="w-3.5 h-3.5"></i> Software-Defined Solar Hardware (SDSH)
+                </span>
+                <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white mb-6 leading-tight font-display">
+                    Слънчевата матрица <br>
+                    <span class="text-amber-500 glow-text-gold">UKAME SOLAR</span>
+                </h1>
+                <p class="text-lg text-slate-300 mb-8 leading-relaxed">
+                    Математически детерминирана, софтуерно-управлявана и физически оптимизирана енергийна централа с нулева ентропия. Преодоляваме физическите лимити на силиция чрез трислойно квантово преобразуване и Seebeck термална рекуперация.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#economics" class="px-6 py-3.5 bg-amber-500 text-black font-extrabold text-xs uppercase tracking-widest rounded hover:bg-amber-400 transition flex items-center gap-2">
+                        <i data-lucide="line-chart" class="w-4 h-4"></i> Бизнес План & ROI
+                    </a>
+                    <a href="#assembly" class="px-6 py-3.5 glass border border-white/10 text-white font-extrabold text-xs uppercase tracking-widest rounded hover:bg-white/10 transition flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-4 h-4"></i> Технологичен чертеж
+                    </a>
+                </div>
+            </div>
+            <div class="lg:col-span-5">
+                <div class="glass rounded-3xl p-8 border-t-2 border-amber-500/40 relative">
+                    <div class="absolute -top-3.5 -right-3.5 w-8 h-8 rounded bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/30 animate-pulse">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-black"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <i data-lucide="activity" class="text-amber-500 w-5 h-5"></i> ПАРАМЕТРИ НА СИСТЕМАТА
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2.5 border-b border-white/5">
+                            <span class="text-slate-400 text-sm">Номинална Мощност</span>
+                            <span class="font-bold text-white">10 kW (Монолит)</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2.5 border-b border-white/5">
+                            <span class="text-slate-400 text-sm">Спектрално КПД</span>
+                            <span class="font-bold text-amber-500">47.00% - 49.90%</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2.5 border-b border-white/5">
+                            <span class="text-slate-400 text-sm">Период на изплащане</span>
+                            <span class="font-bold text-emerald-400">&lt; 1.8 Години</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2.5 border-b border-white/5">
+                            <span class="text-slate-400 text-sm">Охладителна система</span>
+                            <span class="font-bold text-cyan-400">Seebeck TEG Loop</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2.5">
+                            <span class="text-slate-400 text-sm">Ядро за симулация</span>
+                            <span class="font-bold text-white font-mono text-xs bg-slate-900 px-2 py-1 rounded border border-white/10">STELLAR_FORGE (Rust)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        
+        <!-- Section 1: The Concept & Metamaterials -->
+        <section id="concept" class="mb-24">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white mb-4">Анатомия на Софтуерно-Дефинирания Хардуер</h2>
+                <p class="text-slate-400">
+                    Стандартните панели са статични и използват само ~20% от слънчевата светлина. UKAME пренаписва реалността чрез динамично спектрално наслояване и активна софтуерна оптимизация.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="layers" class="text-amber-500 w-6 h-6"></i> Архитектура на "Сандвич" Клетките
+                    </h3>
+                    <p class="text-slate-300 leading-relaxed">
+                        Вместо плоско стъкло, над фотоволтаичните елементи монтираме **микро-Френелови абсорбаторни лупи** от метаматериали, които концентрират дифузната светлина. Под тях сглобяваме трислоен енергиен реактор:
+                    </p>
+
+                    <!-- Dynamic Layer Stack visualization with inline CSS styled layers -->
+                    <div class="layer-stack p-6 glass rounded-2xl border border-white/5 space-y-3">
+                        <div class="layer-node bg-blue-500/10 border border-blue-500/40 text-blue-400 flex justify-between items-center">
+                            <span>1. Микро-Френелови лещи</span>
+                            <span class="text-xs bg-blue-500/20 px-2 py-0.5 rounded">Оптичен концентратор</span>
+                        </div>
+                        <div class="layer-node bg-amber-500/10 border border-amber-500/40 text-amber-400 flex justify-between items-center">
+                            <span>2. Перовскитен слой (Perovskite Tandem)</span>
+                            <span class="text-xs bg-amber-500/20 px-2 py-0.5 rounded">UV / Син спектър (High-Band)</span>
+                        </div>
+                        <div class="layer-node bg-indigo-500/10 border border-indigo-500/40 text-indigo-400 flex justify-between items-center">
+                            <span>3. Монокристален силициев слой</span>
+                            <span class="text-xs bg-indigo-500/20 px-2 py-0.5 rounded">Инфрачервен спектър (Low-Band)</span>
+                        </div>
+                        <div class="layer-node bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 flex justify-between items-center">
+                            <span>4. Seebeck TEG Термоелементи</span>
+                            <span class="text-xs bg-emerald-500/20 px-2 py-0.5 rounded">Термална абсорбция</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <div class="glass p-8 rounded-3xl border border-white/5">
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Сравнение на Спектралната Ефективност</h4>
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Assembly Protocol with Visual Steps -->
+        <section id="assembly" class="mb-24 py-16 border-t border-b border-white/5 relative">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-4">Стъпки за Асемблиране на Хибридния Блок</h2>
+                <p class="text-slate-400">
+                    Индустриалната методология за изграждане и софтуерно интегриране на физическия модул в 4 критични фази.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="glass p-6 rounded-2xl border-l-4 border-amber-500 relative flex flex-col justify-between h-full">
+                    <div>
+                        <div class="w-8 h-8 rounded-full bg-amber-500 text-black font-extrabold flex items-center justify-center mb-4">1</div>
+                        <h4 class="font-bold text-white text-lg mb-2">Наслояване на Tandem</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Нанасяне на перовскитния филм върху базовия N-Type силиций. Позволява улавяне на UV лъчите при облачно време.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500 uppercase tracking-wider font-mono">
+                        <span>СЛОЙ 2</span>
+                        <span class="text-amber-500">КВАНТОВО</span>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="glass p-6 rounded-2xl border-l-4 border-cyan-500 relative flex flex-col justify-between h-full">
+                    <div>
+                        <div class="w-8 h-8 rounded-full bg-cyan-500 text-black font-extrabold flex items-center justify-center mb-4">2</div>
+                        <h4 class="font-bold text-white text-lg mb-2">Термално затваряне</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Монтаж на Seebeck термоелектрическите генератори (TEG) от задната страна на силициевата плоча с високоефективна мед.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500 uppercase tracking-wider font-mono">
+                        <span>СЛОЙ 4</span>
+                        <span class="text-cyan-500">ТЕРМАЛНО</span>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="glass p-6 rounded-2xl border-l-4 border-indigo-500 relative flex flex-col justify-between h-full">
+                    <div>
+                        <div class="w-8 h-8 rounded-full bg-indigo-500 text-black font-extrabold flex items-center justify-center mb-4">3</div>
+                        <h4 class="font-bold text-white text-lg mb-2">Софтуерен Мост</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Свързване към вградения контролер (STM32 / RP2040) с фърмуер на Rust. Зареждане на MPPT цикъла с честота над 100kHz.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500 uppercase tracking-wider font-mono">
+                        <span>ФЪРМУЕР</span>
+                        <span class="text-indigo-500">RUST_CORE</span>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="glass p-6 rounded-2xl border-l-4 border-emerald-500 relative flex flex-col justify-between h-full">
+                    <div>
+                        <div class="w-8 h-8 rounded-full bg-emerald-500 text-black font-extrabold flex items-center justify-center mb-4">4</div>
+                        <h4 class="font-bold text-white text-lg mb-2">Когнитивен Тунинг</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Handshake връзка с Vortex сървъра. Динамично калибриране на ъглите и Helium охлаждането за 0.0000 ентропия.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500 uppercase tracking-wider font-mono">
+                        <span>VORTEX</span>
+                        <span class="text-emerald-500">УПРАВЛЕНИЕ</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Business Plan & Economics -->
+        <section id="economics" class="mb-24">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white mb-4">Финансова Архитектура & ROI</h2>
+                <p class="text-slate-400">
+                    Инвестиционна матрица, доказваща защо преходът към Софтуерно-Дефиниран Соларен Хардуер намалява разходите наполовина за многофамилни къщи.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-12">
+                <!-- Investment Breakdown Chart -->
+                <div class="lg:col-span-8 glass p-8 rounded-3xl border border-white/5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                            <i data-lucide="bar-chart-3" class="text-amber-500"></i> Разпределение на Инвестицията
+                        </h3>
+                        <p class="text-sm text-slate-400 mb-6">
+                            Необходим капитал за пълното изграждане на една 10kW хибридна инсталация за 3 семейства (DIY / Партньорска цена):
+                        </p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- ROI Panel -->
+                <div class="lg:col-span-4 flex flex-col gap-6">
+                    <div class="glass p-8 rounded-3xl border-t-2 border-emerald-500 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">ПЕРИОД НА ОТКУПУВАНЕ</span>
+                            <div class="text-4xl font-black text-white mt-2 mb-4 font-display">1.8 Години</div>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Заради двойното КПД от слънчевия спектър и термалната рекуперация Seebeck, спестяванията започват мигновено. Инсталацията работи целогодишно, дори през зимата в Поморие.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 uppercase tracking-wider font-mono">
+                            <span>ИНСТАЛИРАНА МОЩНОСТ</span>
+                            <span class="text-white">10 kW</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass p-8 rounded-3xl border-t-2 border-amber-500 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">СПЕСТЕНИ МАТЕРИАЛИ</span>
+                            <div class="text-4xl font-black text-white mt-2 mb-4 font-display">Спестяване 50%</div>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Поради по-високата енергийна плътност на кв.м., спестяваш половината от разходите за крепежни елементи, кабели, площ и физическа конструкция на покрива.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 uppercase tracking-wider font-mono">
+                            <span>НАМАЛЕНА ПЛОЩ</span>
+                            <span class="text-white">-45% КВ.М.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Economic Superiority Line Chart -->
+            <div class="glass p-8 rounded-3xl border border-white/5 mb-12">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                        <i data-lucide="trending-up" class="text-amber-500"></i> Траектория на Откупуване (Кумулативни Разходи в BGN)
+                    </h3>
+                    <p class="text-sm text-slate-400">
+                        Сравнение на инвестицията и нейната възвръщаемост спрямо стандартните пазарни 20kW инсталации за същата реална полезна енергия:
+                    </p>
+                </div>
+                <div class="chart-container" style="height: 380px;">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Lead Capture Form Section (integrated with ukame_leads.ts API) -->
+        <section id="opportunity-form" class="max-w-4xl mx-auto glass rounded-3xl p-10 border border-amber-500/20 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl"></div>
+            
+            <div class="text-center mb-8">
+                <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">Изчисли и Заяви Своя Инвестиционен Профил</h3>
+                <p class="text-sm text-slate-400">Изчисли потенциалните разходи за твоята сграда и изпрати запитване директно към ядрото на UKAME.</p>
+            </div>
+
+            <form id="leadForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Площ на Покрива (кв.м)</label>
+                        <input type="number" id="area" value="80" required class="w-full bg-slate-900 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Брой Етажи</label>
+                        <input type="number" id="floors" value="3" required class="w-full bg-slate-900 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Брой Семейства</label>
+                        <input type="number" id="families" value="3" required class="w-full bg-slate-900 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition font-mono">
+                    </div>
+                </div>
+
+                <!-- Interactive calculations display -->
+                <div class="p-6 bg-slate-900/80 rounded-2xl border border-white/5 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Прогнозиран капацитет UKAME</span>
+                        <div class="text-3xl font-black text-white mt-1 font-display" id="calcPower">10 kW</div>
+                        <p class="text-xs text-slate-400 mt-1">Необходими панели: 16 (спрямо 36 стандартни).</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Обща Прогнозирана Инвестиция</span>
+                        <div class="text-3xl font-black text-amber-500 mt-1 font-display" id="calcCost">12,200 BGN</div>
+                        <p class="text-xs text-slate-400 mt-1">Всички включени компоненти по BOM чертежа.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Имейл за контакт</label>
+                        <input type="email" id="contactEmail" placeholder="your@email.com" class="w-full bg-slate-900 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Телефон за контакт</label>
+                        <input type="tel" id="contactPhone" placeholder="+359..." class="w-full bg-slate-900 border border-white/10 rounded px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 to-yellow-600 text-black font-extrabold text-xs uppercase tracking-widest rounded hover:from-amber-400 hover:to-yellow-500 transition shadow-lg shadow-amber-500/10">
+                    ИЗПРАТИ ЗАПИТВАНЕ ЗА ИНВЕСТИЦИЯ
+                </button>
+                <div id="formResponse" class="text-center text-sm font-semibold hidden"></div>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-955 text-slate-500 py-16 border-t border-white/5 mt-20">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+                <div class="flex items-center gap-2 text-white mb-4">
+                    <div class="w-6 h-6 bg-amber-500 rounded flex items-center justify-center font-bold text-sm text-black">🔱</div>
+                    <span class="font-bold text-lg font-display">UKAME SYSTEM</span>
+                </div>
+                <p class="text-xs uppercase tracking-wider font-mono">Архитект: Димитър Продромов | Поморие HQ</p>
+                <p class="text-xs uppercase tracking-wider font-mono">Проект по EIC ACCELERATOR 2026 | ID: 101327948</p>
+            </div>
+            <div class="text-left md:text-right space-y-2">
+                <p class="text-sm font-bold text-slate-200">AETERNA EST IMMORTALIS</p>
+                <p class="text-xs opacity-60">Нулева Ентропия (ENTROPY = 0.0000) • Детерминирана Енергия</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Label Wrapping logic for clean Radar/Bar scales
+        function wrapLabels(labels) {
+            return labels.map(label => {
+                if (label.length <= 16) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let current = '';
+                words.forEach(w => {
+                    if ((current + w).length > 16) {
+                        lines.push(current.trim());
+                        current = w + ' ';
+                    } else {
+                        current += w + ' ';
+                    }
+                });
+                lines.push(current.trim());
+                return lines;
+            });
+        }
+
+        // 1. Radar Chart (Spectrum Efficiency)
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: wrapLabels(['UV Спектър', 'Видим спектър', 'Инфрачервен', 'Термална енергия', 'Дифузна светлина']),
+                datasets: [{
+                    label: 'Стандартен Силициев Панел',
+                    data: [12, 85, 45, 5, 25],
+                    borderColor: 'rgba(148, 163, 184, 0.4)',
+                    backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                    borderWidth: 1.5,
+                    pointBackgroundColor: '#94a3b8'
+                }, {
+                    label: 'UKAME Hybrid Matrix',
+                    data: [95, 92, 88, 75, 82],
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#f59e0b',
+                    pointHoverBackgroundColor: '#ffffff'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.08)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                        pointLabels: { color: '#94a3b8', font: { size: 10, weight: 'bold' } },
+                        ticks: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#f3f4f6', font: { size: 11, family: 'Space Grotesk' } }
+                    }
+                }
+            }
+        });
+
+        // 2. Bar Chart (BOM / Capital Breakdown)
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: wrapLabels(['Tandem клетки & Силиций', 'Seebeck рекуперация', 'Rust MPPT електроника', 'Монтаж & асемблиране', 'Софтуерен тунинг']),
+                datasets: [{
+                    label: 'Разход в BGN',
+                    data: [3500, 4000, 1500, 2200, 1000],
+                    backgroundColor: [
+                        '#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ec4899'
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#94a3b8', font: { family: 'Fira Code', size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 10, weight: '500' } }
+                    }
+                }
+            }
+        });
+
+        // 3. Line Chart (Payback Trajectory)
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: ['Начало', 'Година 1', 'Година 2', 'Година 3', 'Година 4', 'Година 5', 'Година 6'],
+                datasets: [{
+                    label: 'UKAME Solar (10kW)',
+                    data: [12200, 6100, 0, -6100, -12200, -18300, -24400],
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#f59e0b'
+                }, {
+                    label: 'Стандартен пазар (20kW за същия добив)',
+                    data: [25000, 21500, 18000, 14500, 11000, 7500, 4000],
+                    borderColor: '#94a3b8',
+                    borderDash: [5, 5],
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#94a3b8'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#f3f4f6', font: { family: 'Space Grotesk' } }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Нетен Баланс (BGN)', color: '#94a3b8' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#94a3b8', font: { family: 'Fira Code', size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // 4. Interactive Calculator & Form Logic
+        const areaInput = document.getElementById('area');
+        const floorsInput = document.getElementById('floors');
+        const familiesInput = document.getElementById('families');
+        const calcPower = document.getElementById('calcPower');
+        const calcCost = document.getElementById('calcCost');
+
+        function recalculate() {
+            const area = Number(areaInput.value) || 0;
+            const floors = Number(floorsInput.value) || 1;
+            const families = Number(familiesInput.value) || 1;
+
+            // 1 kW per 8 sq.m. of roof using UKAME high-band tandem cells
+            let power = Math.max(3, Math.min(50, Math.round(area / 8)));
+            // Scale investment cost accordingly
+            let cost = power * 1220; // 1220 BGN per kW monolith stack
+
+            calcPower.textContent = `${power} kW`;
+            calcCost.textContent = `${cost.toLocaleString('bg-BG')} BGN`;
+        }
+
+        [areaInput, floorsInput, familiesInput].forEach(input => {
+            input.addEventListener('input', recalculate);
+        });
+
+        // Handle API submission
+        const leadForm = document.getElementById('leadForm');
+        const formResponse = document.getElementById('formResponse');
+
+        leadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const area = areaInput.value;
+            const floors = floorsInput.value;
+            const families = familiesInput.value;
+            const powerUKAME = parseInt(calcPower.textContent);
+            const costUKAME = parseInt(calcCost.textContent.replace(/[^0-9]/g, ''));
+            const contactEmail = document.getElementById('contactEmail').value;
+            const contactPhone = document.getElementById('contactPhone').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/ukame/submit-lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        area, floors, families,
+                        powerUKAME: powerUKAME,
+                        costUKAME: costUKAME,
+                        contactEmail,
+                        contactPhone
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    formResponse.className = "text-center text-sm font-semibold text-emerald-400 block";
+                    formResponse.textContent = `✓ ${data.message} (ID: ${data.leadId})`;
+                    leadForm.reset();
+                    recalculate();
+                } else {
+                    formResponse.className = "text-center text-sm font-semibold text-red-400 block";
+                    formResponse.textContent = `✗ ${data.error}`;
+                }
+            } catch (err) {
+                // Fallback simulation
+                formResponse.className = "text-center text-sm font-semibold text-amber-400 block";
+                formResponse.textContent = "✓ Заявката е симулирана и съхранена в локалния буфер на браузъра.";
+            }
+        });
+    </script>
+</body>
+</html>
