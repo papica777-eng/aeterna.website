@@ -2338,16 +2338,8 @@
         state.selectedProduct = null;
 
         window.openPortal = function(productId = null) {
-            state.selectedProduct = productId;
-            const modal = document.getElementById('billing-portal-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            if (state.client) {
-                showDashboardView();
-            } else {
-                showAuthView();
-            }
+            // Redirect directly to the QAntum-Nexus QA-SAAS Dashboard
+            window.location.href = 'http://localhost:5555/billing';
         }
 
         window.closePortal = function() {
