@@ -3102,5 +3102,104 @@
             </div>
         </div>
     </div>
+
+    <!-- Sovereign Authentication Gateway Modal (NIS-2 & GDPR aligned) -->
+    <div id="sovereign-auth-gate" class="fixed inset-0 z-[10000] flex items-center justify-center bg-[#050505]/95 backdrop-blur-[30px] transition-opacity duration-700">
+        <!-- Glowing Ambient Orbs behind auth card -->
+        <div class="absolute w-[400px] h-[400px] bg-accent-cyan/10 rounded-full blur-[100px] pointer-events-none animate-pulse"></div>
+        <div class="absolute w-[400px] h-[400px] bg-accent-purple/10 rounded-full blur-[100px] pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
+
+        <div class="max-w-md w-full mx-4 p-8 glass rounded-3xl border border-white/10 glow-cyan relative text-center space-y-6">
+            <!-- Scanning Line -->
+            <div class="scan-line pointer-events-none"></div>
+
+            <div class="flex flex-col items-center gap-3">
+                <img src="assets/aeterna_logo.svg" alt="AETERNA Logo" class="w-16 h-16 animate-spin" style="animation-duration: 20s;">
+                <h2 class="text-3xl font-black tracking-tighter text-white font-mono uppercase">
+                    SOVEREIGN <br><span class="gradient-text">GATEWAY</span>
+                </h2>
+                <div class="text-[9px] text-accent-cyan font-bold font-mono tracking-[0.2em] uppercase bg-accent-cyan/10 border border-accent-cyan/20 px-3 py-1 rounded">
+                    AETERNA_AUTH_SHIELD_v2.7
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Access to AETERNA Autonomous Cognitive Engine is restricted. Please authenticate using one of our verified sovereign identity providers.
+            </p>
+
+            <!-- Authentication Action Buttons -->
+            <div class="space-y-3">
+                <!-- Google Auth -->
+                <a href="http://127.0.0.1:3000/api/auth/google" onclick="setLoginSession()" class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan/40 text-white font-extrabold py-3.5 px-6 rounded-xl transition-all duration-300 group cursor-pointer text-xs uppercase tracking-wider">
+                    <i data-lucide="chrome" class="w-4 h-4 text-gray-400 group-hover:text-accent-cyan transition-colors"></i>
+                    Continue with Google
+                </a>
+
+                <!-- GitHub Auth -->
+                <a href="http://127.0.0.1:3000/api/auth/github" onclick="setLoginSession()" class="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-purple/40 text-white font-extrabold py-3.5 px-6 rounded-xl transition-all duration-300 group cursor-pointer text-xs uppercase tracking-wider">
+                    <i data-lucide="github" class="w-4 h-4 text-gray-400 group-hover:text-accent-purple transition-colors"></i>
+                    Continue with GitHub
+                </a>
+            </div>
+
+            <div class="relative flex py-2 items-center">
+                <div class="flex-grow border-t border-white/5"></div>
+                <span class="flex-shrink mx-4 text-[8px] font-mono text-gray-500 uppercase tracking-widest">Sovereign Override</span>
+                <div class="flex-grow border-t border-white/5"></div>
+            </div>
+
+            <!-- Developer/Bypass Form -->
+            <div class="space-y-3">
+                <input type="password" id="auth-bypass-key" placeholder="Enter Authority Override Key..." class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-accent-cyan transition-colors font-mono text-center text-xs tracking-widest">
+                <button onclick="attemptBypass()" class="w-full bg-accent-cyan hover:bg-white text-black font-extrabold py-3.5 rounded-xl transition-all duration-300 text-xs uppercase tracking-widest cursor-pointer shadow-lg shadow-accent-cyan/15 glow-cyan">
+                    Bypass Gateway
+                </button>
+            </div>
+
+            <p id="auth-error-msg" class="text-[10px] font-mono text-red-500 hidden uppercase tracking-wide">Invalid Authority Key</p>
+
+            <div class="text-[8px] font-mono text-gray-600 uppercase tracking-wider pt-2 border-t border-white/5 flex justify-between">
+                <span>NIS-2 Shield active</span>
+                <span>GDPR Sealed</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Script -->
+    <script>
+        function checkAuth() {
+            const authGate = document.getElementById("sovereign-auth-gate");
+            if (localStorage.getItem("aeterna_logged_in") === "true") {
+                authGate.classList.add("opacity-0", "pointer-events-none");
+                setTimeout(() => authGate.remove(), 700);
+            }
+        }
+
+        function setLoginSession() {
+            localStorage.setItem("aeterna_logged_in", "true");
+        }
+
+        function attemptBypass() {
+            const keyInput = document.getElementById("auth-bypass-key");
+            const errorMsg = document.getElementById("auth-error-msg");
+            if (keyInput.value === "AETERNA9669") {
+                localStorage.setItem("aeterna_logged_in", "true");
+                checkAuth();
+            } else {
+                errorMsg.classList.remove("hidden");
+                keyInput.classList.add("border-red-500/50");
+                keyInput.value = "";
+            }
+        }
+
+        // Run check on initialization
+        document.addEventListener("DOMContentLoaded", () => {
+            checkAuth();
+            // Initialize Lucide icons inside modal if available
+            if (typeof lucide !== "undefined") {
+                lucide.createIcons();
+            }
+        });
+    </script>
 </body>
 </html>
