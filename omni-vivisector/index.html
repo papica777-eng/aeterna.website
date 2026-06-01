@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA // SOVEREIGN_VIVISECTOR_NEXUS</title>
+    
+    <!-- Premium Google Fonts, Tailwind & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --brand-cyan: #00e5ff;
+            --brand-purple: #a855f7;
+            --brand-gold: #fbbf24;
+            --brand-red: #ff3366;
+            --bg-base: #05070a;
+            --panel-bg: rgba(13, 17, 24, 0.7);
+            --border-glow: rgba(0, 229, 255, 0.15);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: #d1d5db;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Gradient Glow Background Orbs */
+        .glow-orb-cyan {
+            position: fixed;
+            top: -15%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(100px);
+        }
+
+        .glow-orb-purple {
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(120px);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 229, 255, 0.2);
+            box-shadow: 0 12px 40px 0 rgba(0, 229, 255, 0.05);
+        }
+
+        .accent-gradient {
+            background: linear-gradient(90deg, var(--brand-cyan), var(--brand-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .accent-gradient-gold {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scanline Sweeper */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .scan-line-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--brand-cyan), transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-cyan);
+        }
+
+        .glow-hover:hover {
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="selection:bg-[#00e5ff] selection:text-black min-h-screen relative z-10 p-6 md:p-12">
+
+    <!-- Ambient Glow Fields -->
+    <div class="glow-orb-cyan"></div>
+    <div class="glow-orb-purple"></div>
+
+    <div class="max-w-7xl mx-auto space-y-12 relative z-10">
+
+        <!-- Top Header Navigation -->
+        <header class="flex flex-col lg:flex-row lg:items-center justify-between p-6 glass-panel rounded-2xl gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-cyan-500/10 rounded-xl border border-cyan-400/25 relative overflow-hidden group shrink-0">
+                    <div class="scan-line-animation"></div>
+                    <i data-lucide="crosshair" class="text-cyan-400 w-6 h-6 animate-spin" style="animation-duration: 10s;"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-white tracking-tighter flex items-center gap-2">
+                        AETERNA <span class="accent-gradient">VIVISECTOR_NEXUS</span>
+                    </h1>
+                    <div class="text-[10px] text-gray-500 font-bold uppercase tracking-widest flex items-center gap-1.5 mt-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Premium Sovereign Audit Services & SAST Daemon
+                    </div>
+                </div>
+            </div>
+
+            <!-- English Navigation Menu -->
+            <nav class="flex items-center justify-center gap-6 text-xs uppercase tracking-wider font-extrabold text-gray-400 select-none">
+                <a href="index.html" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 text-white border-b-2 border-cyan-400">
+                    <i data-lucide="home" class="w-3.5 h-3.5 text-cyan-400"></i> Home
+                </a>
+                <a href="vivisector.html" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
+                    <i data-lucide="scan" class="w-3.5 h-3.5"></i> Sandbox
+                </a>
+                <a href="ledger.html" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
+                    <i data-lucide="database" class="w-3.5 h-3.5"></i> Ledger
+                </a>
+                <a href="https://github.com/papica777-eng/OMNI-VIVISECTOR" target="_blank" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
+                    <i data-lucide="github" class="w-3.5 h-3.5"></i> GitHub
+                </a>
+                <a href="#audit-tiers" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
+                    <i data-lucide="award" class="w-3.5 h-3.5"></i> Tiers
+                </a>
+            </nav>
+
+            <!-- Header Telemetry Metrics -->
+            <div class="flex flex-wrap items-center justify-end gap-4 text-xs mono text-gray-400">
+                <div class="bg-black/35 px-4 py-2 rounded-xl border border-white/5 flex items-center gap-3">
+                    <i data-lucide="shield-check" class="text-cyan-400 w-4 h-4"></i>
+                    <div>
+                        <span class="text-gray-600 font-bold">STATUS:</span>
+                        <span class="text-emerald-400 font-bold uppercase text-[10px] tracking-wide">ACTIVE_GATEWAY</span>
+                    </div>
+                </div>
+                <div class="bg-black/35 px-4 py-2 rounded-xl border border-white/5 flex items-center gap-3">
+                    <i data-lucide="cpu" class="text-purple-400 w-4 h-4"></i>
+                    <div>
+                        <span class="text-gray-600 font-bold">SILICON:</span>
+                        <span class="text-white font-bold text-[10px]">RYZEN AVX-512</span>
+                    </div>
+                </div>
+                <a id="header-scan-btn" href="vivisector.html" class="bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/30 text-white font-extrabold px-4.5 py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 text-xs uppercase tracking-wider shrink-0 select-none">
+                    <i data-lucide="play" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    Run Local Sandbox Scan
+                </a>
+            </div>
+        </header>
+
+        <!-- Global Threat Intelligence Telemetry Ticker (ZK Pulse) -->
+        <section class="glass-panel p-6 rounded-2xl relative overflow-hidden border border-cyan-500/15">
+            <div class="scan-line-animation"></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-white/5 font-semibold">
+                
+                <!-- Stat 1 -->
+                <div class="space-y-1">
+                    <span class="block text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black">Total Bounty Capital Protected</span>
+                    <span id="ticker-bounty" class="block text-3xl font-black italic tracking-tighter text-glow-cyan text-cyan-400 transition-all duration-1000">$0</span>
+                    <span class="block text-[8px] text-emerald-400 font-bold uppercase tracking-widest mt-1">● Live Proof of Work</span>
+                </div>
+                
+                <!-- Stat 2 -->
+                <div class="space-y-1 pl-4 md:pl-0">
+                    <span class="block text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black">Vulnerable Vectors Eliminated</span>
+                    <span id="ticker-bugs" class="block text-3xl font-black italic tracking-tighter text-white transition-all duration-1000">0</span>
+                    <span class="block text-[8px] text-purple-400 font-bold uppercase tracking-widest mt-1">● Z3 Mathematically Proved</span>
+                </div>
+                
+                <!-- Stat 3 -->
+                <div class="space-y-1 pl-4 md:pl-0">
+                    <span class="block text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black">Sovereign Codebases Scanned</span>
+                    <span id="ticker-files" class="block text-3xl font-black italic tracking-tighter text-white transition-all duration-1000">0</span>
+                    <span class="block text-[8px] text-gray-500 font-bold uppercase tracking-widest mt-1">● 100% Zero-Copy Ingest</span>
+                </div>
+                
+                <!-- Stat 4 -->
+                <div class="space-y-1 pl-4 md:pl-0">
+                    <span class="block text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black">Total Verified Lines of Code</span>
+                    <span id="ticker-loc" class="block text-3xl font-black italic tracking-tighter text-white transition-all duration-1000">0</span>
+                    <span class="block text-[8px] text-gray-500 font-bold uppercase tracking-widest mt-1">● Taint Graph Traversals</span>
+                </div>
+                
+            </div>
+            <!-- ZK Privacy Seal statement -->
+            <div class="mt-4 pt-3 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[8px] mono text-gray-500 uppercase tracking-widest gap-2">
+                <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="text-emerald-400 w-3.5 h-3.5 animate-pulse"></i> Zero-Knowledge Telemetry active</span>
+                <span>Live telemetry is strictly anonymized. 0 bytes of source code or private keys ever leave your local sandbox.</span>
+            </div>
+        </section>
+
+        <!-- Main Grid Layout -->
+        <main class="grid grid-cols-12 gap-8 items-stretch">
+            
+            <!-- Left Side: Pitch and Deep Dive (7/12 cols) -->
+            <div class="col-span-12 lg:col-span-7 flex flex-col gap-8 justify-between">
+                
+                <!-- Hero Introduction Statement -->
+                <div class="space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-cyan-400 text-[10px] font-black uppercase tracking-widest select-none">
+                        <i data-lucide="award" class="w-3 h-3"></i> ZERO FALSE-POSITIVES FORENSIC AUDIT
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black text-white tracking-tighter leading-none">
+                        WE WEAPONIZE FORMAL MATH <br>TO SHIELD YOUR <span class="accent-gradient">VALUABLE VAULTS</span>
+                    </h2>
+                    <p class="text-sm text-gray-400 leading-relaxed max-w-2xl">
+                        The Bounty Vivisector is a highly advanced cybernetic audit platform. By combining Nagarjuna's Catuskoti 4-fold logic, high-performance inter-procedural taint flow analysis, and mathematical Z3 SMT solver proof generation, we find critical, loss-of-funds exploits before any external hacker can react. 
+                    </p>
+                    
+                    <!-- Open-Core Engine Showcase -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                        <span class="text-xs text-gray-500 font-bold uppercase tracking-wider">Powered by Open-Core:</span>
+                        <a href="https://github.com/papica777-eng/OMNI-VIVISECTOR" target="_blank" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/40 text-xs font-bold text-white transition-all duration-300 group">
+                            <i data-lucide="github" class="w-4 h-4 text-gray-400 group-hover:text-white transition-colors"></i>
+                            papica777-eng / <span class="text-cyan-400">OMNI-VIVISECTOR</span>
+                            <i data-lucide="external-link" class="w-3 h-3 text-gray-500 group-hover:text-cyan-400 transition-colors ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Interactive Features grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Feature 1 -->
+                    <div class="glass-panel p-6 rounded-2xl space-y-3">
+                        <div class="p-3 bg-cyan-500/10 w-fit rounded-xl border border-cyan-400/20 text-cyan-400">
+                            <i data-lucide="git-merge" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-sm font-black text-white uppercase tracking-wider">UKAME Taint Traversal</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Maps inter-procedural call-graphs recursively at O(F×L) complexity. Traces external network boundaries and RPC calls directly into unchecked array allocations and math calculations.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="glass-panel p-6 rounded-2xl space-y-3">
+                        <div class="p-3 bg-purple-500/10 w-fit rounded-xl border border-purple-500/20 text-purple-400">
+                            <i data-lucide="binary" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-sm font-black text-white uppercase tracking-wider">Nagarjuna Catuskoti Logic</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Bypasses traditional flat boolean alarms. Classifies bugs into 4 states: TRUE (confirmed exploit), FALSE (false positive), BOTH (paradoxical state), and NEITHER (novel zero-day candidates).
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="glass-panel p-6 rounded-2xl space-y-3">
+                        <div class="p-3 bg-amber-500/10 w-fit rounded-xl border border-amber-500/20 text-amber-400">
+                            <i data-lucide="cpu" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-sm font-black text-white uppercase tracking-wider">Z3 SMT Solver Verification</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Translates smart contract execution branches into symbolic constraint equations. Mathematically proves the exact input parameters needed to bypass or triggers panic reverts.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="glass-panel p-6 rounded-2xl space-y-3">
+                        <div class="p-3 bg-red-500/10 w-fit rounded-xl border border-red-500/20 text-red-400">
+                            <i data-lucide="award" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="text-sm font-black text-white uppercase tracking-wider">Senior Manual Triage</h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Every single automated trace is rigorously peer-reviewed by our elite forensic auditing architects. Zero false alarms. All findings delivered with verified Immunefi-compatible proof-of-concepts.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hardware Saturation Telemetry panel (Wow factor) -->
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                        <h3 class="text-xs font-black text-gray-300 uppercase tracking-widest flex items-center gap-2">
+                            <i data-lucide="gauge" class="text-purple-400 w-4 h-4"></i>
+                            Silicon Substrate Saturation Simulation
+                        </h3>
+                        <span class="text-[9px] text-cyan-400 font-bold mono uppercase tracking-wider bg-cyan-400/15 border border-cyan-400/20 px-2 py-0.5 rounded">AVX-512 SIMD Armed</span>
+                    </div>
+
+                    <div id="thread-telemetry-grid" class="grid grid-cols-12 gap-1.5">
+                        <!-- Instantiated by JS -->
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 pt-1 text-[10px] mono text-gray-500">
+                        <div class="bg-black/30 p-2.5 rounded border border-white/5">
+                            <span class="block text-gray-600 uppercase font-bold">COMPUTE LATENCY</span>
+                            <span id="tel-latency" class="text-white text-xs font-bold block mt-0.5">2.4 ms</span>
+                        </div>
+                        <div class="bg-black/30 p-2.5 rounded border border-white/5">
+                            <span class="block text-gray-600 uppercase font-bold">STREAM CAPACITY</span>
+                            <span id="tel-capacity" class="text-white text-xs font-bold block mt-0.5">0.00 PFLOPS</span>
+                        </div>
+                        <div class="bg-black/30 p-2.5 rounded border border-white/5">
+                            <span class="block text-gray-600 uppercase font-bold">SILICON TEMP</span>
+                            <span id="tel-temp" class="text-white text-xs font-bold block mt-0.5">42.5°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Booking Dossier / Stripe Portal (5/12 cols) -->
+            <div class="col-span-12 lg:col-span-5 flex flex-col gap-6 justify-between">
+                
+                <!-- Premium Booking Option Card -->
+                <div class="glass-panel p-8 rounded-3xl relative overflow-hidden flex flex-col gap-6 flex-grow border border-amber-500/20 shadow-xl shadow-amber-500/5">
+                    
+                    <!-- Decorative Golden Accents -->
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full filter blur-2xl pointer-events-none"></div>
+                    <div class="absolute -top-1 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-600 opacity-60"></div>
+                    
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/30">FLAGSHIP OFFER</span>
+                        <div class="text-right text-[10px] text-gray-500 font-bold uppercase tracking-wider mono flex items-center gap-1.5">
+                            <i data-lucide="lock" class="text-emerald-400 w-3.5 h-3.5"></i> PCI COMPLIANT
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-3xl font-black text-white italic tracking-tighter">Sovereign Forensic <br><span class="accent-gradient-gold">Full-Audit Suite</span></h3>
+                        <p class="text-xs text-gray-400 leading-relaxed mt-2.5">
+                            Complete structural and logic analysis of your entire codebase, backed by Ryzen hardware-saturated static taint checkers, Z3 mathematical solvers, and final manual report compilation by elite architects.
+                        </p>
+                    </div>
+
+                    <!-- Checklist -->
+                    <ul class="space-y-3.5 text-xs text-gray-300">
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                            <span><strong>Unlimited Lines of Code:</strong> No caps on repository sizes or contract counts.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                            <span><strong>Z3 Mathematical Solving:</strong> We formally prove that no path violates your safety assertions.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                            <span><strong>Elite Human Review:</strong> Automated results are rigorously triaged. Zero false reports guaranteed.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                            <span><strong>48-Hour SLA Dossier:</strong> Complete audit contract, executive report, and patches ready for Immunefi submission.</span>
+                        </li>
+                    </ul>
+
+                    <!-- Payment Tickers -->
+                    <div class="bg-black/35 p-5 rounded-2xl border border-white/5 space-y-2.5 mt-2 font-bold uppercase tracking-wider text-[10px] text-gray-500">
+                        <div class="flex justify-between">
+                            <span>Sovereign Full-Audit Fee</span>
+                            <span class="text-white line-through font-normal opacity-50">1,000.00 EUR</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Promotional Discount (50% OFF)</span>
+                            <span class="text-cyan-400">-500.00 EUR</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2.5">
+                            <span>Promo Period Validity</span>
+                            <span class="text-purple-400">3 Months Active</span>
+                        </div>
+                        <div class="flex justify-between items-end pt-1">
+                            <span class="text-xs text-white font-black">TOTAL VALUE</span>
+                            <span class="text-2xl font-black text-amber-400 italic tracking-tighter">500.00 EUR</span>
+                        </div>
+                    </div>
+
+                    <!-- Client Inputs form -->
+                    <div class="space-y-4 mt-2">
+                        <div class="space-y-1.5 text-xs">
+                            <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Client Contact Email</label>
+                            <input type="email" id="checkout-email" placeholder="e.g. founder@yourprotocol.io" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold" required>
+                        </div>
+                        <div class="space-y-1.5 text-xs">
+                            <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Target Repository URL</label>
+                            <input type="url" id="checkout-repo" placeholder="e.g. https://github.com/papica777-eng/OMNI-VIVISECTOR" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold" required>
+                        </div>
+                    </div>
+
+                    <!-- Order Button -->
+                    <button id="stripe-checkout-btn" onclick="triggerStripeCheckout()" class="w-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 hover:from-cyan-300 hover:to-purple-500 text-white font-extrabold py-4 rounded-xl border border-cyan-300/40 hover:scale-[1.01] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/10 text-xs uppercase tracking-widest select-none mt-2">
+                        <i data-lucide="credit-card" class="w-4 h-4 text-white animate-pulse"></i>
+                        SECURE STRIPE CHECKOUT (500 EUR)
+                    </button>
+
+                    <!-- Automated Delivery Telemetry Panel -->
+                    <div class="flex items-start gap-3 p-4 rounded-2xl bg-cyan-500/5 border border-cyan-400/20 text-cyan-300 text-[10px] leading-relaxed tracking-wider mt-1 select-none animate-pulse">
+                        <i data-lucide="zap" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5 animate-bounce"></i>
+                        <div>
+                            <span class="font-black text-cyan-400 uppercase tracking-widest block mb-0.5">INSTANT AUTOMATED DISPATCH SYSTEM</span>
+                            Upon transaction completion, the Aeterna telemetry engine instantly auto-generates your cryptographic Sovereign Access Key signature, instantiates the Z3 SMT formal solver sandbox, and dispatches the signed Audit Contract dossier directly to your verified contact email immediately.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Interactive Sovereign Demo Terminals -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-20 mt-12">
+            <!-- Terminal 1: Live Audit Telemetry Simulator -->
+            <div class="glass-panel p-6 rounded-3xl border border-cyan-500/20 relative overflow-hidden flex flex-col justify-between h-[450px]">
+                <div class="scan-line-animation"></div>
+                <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="terminal" class="text-cyan-400 w-4 h-4 animate-pulse"></i>
+                        <h3 class="text-xs font-black text-white uppercase tracking-widest">LIVE AUDIT TELEMETRY SYSTEM</h3>
+                    </div>
+                    <span class="text-[8px] text-cyan-400 font-bold mono uppercase tracking-wider bg-cyan-400/15 border border-cyan-400/20 px-2 py-0.5 rounded">SIMULATOR_ACTIVE</span>
+                </div>
+                <!-- Content Area -->
+                <div id="sim-terminal-1" class="flex-grow my-4 bg-black/60 border border-white/5 rounded-2xl p-4 font-mono text-[10px] text-[#00e5ff] overflow-y-auto leading-relaxed scrollbar-hide select-none text-left space-y-1">
+                    <!-- Text gets dynamically typed here -->
+                </div>
+                <!-- Footer button to restart -->
+                <div class="flex justify-between items-center pt-2 border-t border-white/5">
+                    <span class="text-[8px] text-gray-500 uppercase font-bold mono">Z3 Formal Engine V2</span>
+                    <button onclick="startAuditSimulation()" class="bg-cyan-500/10 hover:bg-cyan-400 hover:text-black border border-cyan-400/20 text-cyan-400 font-black text-[9px] px-3 py-1.5 rounded-lg transition-all cursor-pointer uppercase tracking-wider">
+                        Re-run Audit Trace
+                    </button>
+                </div>
+            </div>
+
+            <!-- Terminal 2: Ready Report visualizer -->
+            <div class="glass-panel p-6 rounded-3xl border border-purple-500/20 relative overflow-hidden flex flex-col justify-between h-[450px]">
+                <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="file-text" class="text-purple-400 w-4 h-4"></i>
+                        <h3 class="text-xs font-black text-white uppercase tracking-widest">EXECUTIVE REPORT VISUALIZER</h3>
+                    </div>
+                    <span class="text-[8px] text-purple-400 font-bold mono uppercase tracking-wider bg-purple-400/15 border border-purple-400/20 px-2 py-0.5 rounded">ZERO_TRUST_REPORT</span>
+                </div>
+                <!-- Content Area -->
+                <div id="sim-terminal-2" class="flex-grow my-4 bg-black/60 border border-white/5 rounded-2xl p-4 font-mono text-[10px] text-gray-400 overflow-y-auto leading-relaxed scrollbar-hide select-none text-left">
+                    <!-- Beautifully formatted report -->
+                </div>
+                <!-- Footer stats -->
+                <div class="flex justify-between items-center pt-2 border-t border-white/5 text-[8px] text-gray-500 uppercase font-bold mono">
+                    <span>Format: Code4rena / Immunefi</span>
+                    <span class="text-purple-400 animate-pulse">Dimitar Prodromov signed ✓</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architectural Manifest & Zero-Trust Panel -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-20 mt-12">
+            <!-- Architectural Manifest (7 cols) -->
+            <div class="col-span-12 lg:col-span-7 glass-panel p-8 rounded-3xl relative overflow-hidden border border-cyan-500/10 flex flex-col justify-between">
+                <div class="scan-line-animation"></div>
+                <div class="space-y-4">
+                    <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-400/30">FIRST PRINCIPLES HOOK</span>
+                    <h3 class="text-2xl font-black text-white italic tracking-tighter uppercase">The Supremacy of Mathematical Logic</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Traditional scanners operate on flat boolean pattern matching, generating massive noise and critical omissions. **OMNI-VIVISECTOR rejects heuristics.** 
+                    </p>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        By formalizing smart contract execution paths into multi-dimensional constraint systems, we use Nagarjuna's **Catuṣkoṭi logic matrix** to capture edge cases and the **Z3 SMT Solver** to mathematically prove the existence of exploit vectors. If Z3 returns <span class="mono text-yellow-400">sat</span>, an exploit is mathematically verified and deterministic. **The compiler is the only judge.**
+                    </p>
+                </div>
+            </div>
+
+            <!-- Zero-Trust & Zero Footprint (5 cols) -->
+            <div class="col-span-12 lg:col-span-5 glass-panel p-8 rounded-3xl relative overflow-hidden border border-purple-500/10 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/30">100% SECURE SANDBOX</span>
+                    <h3 class="text-2xl font-black text-white italic tracking-tighter uppercase font-black">100% Local Execution. <br>Zero Data Retention.</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        We respect the paramount value of your intellectual property. OMNI-VIVISECTOR is engineered as a **Zero-Footprint Sandbox**. 
+                    </p>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Your source code never leaves your local workspace and is parsed entirely within an isolated **WASM/WASI Hypervisor sandbox**. Security is guaranteed at hardware level by your local Ryzen processor. Upon session completion, a cryptographic **Zeroization (RAM Wipe)** sequence obliterates all transient state variables, leaving zero forensic trace.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clear Workflow Timeline -->
+        <section class="glass-panel p-8 rounded-3xl relative overflow-hidden border border-white/5 mt-12 z-20">
+            <div class="text-center space-y-2 mb-8">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-400/35">TIME TO VALUE</span>
+                <h3 class="text-2xl font-black text-white italic tracking-tighter uppercase">THE SOVEREIGN AUDIT WORKFLOW</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <!-- Step 1 -->
+                <div class="space-y-3.5 relative">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 font-bold mono text-sm">01</div>
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Ingest</h4>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Select your local repository directory. The isolated browser sandbox mounts the directory with 100% local confidentiality and zero data leaks.
+                    </p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="space-y-3.5 relative">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-500/10 border border-purple-400/25 flex items-center justify-center text-purple-400 font-bold mono text-sm">02</div>
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Vivisection</h4>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        The in-memory WASM engine parses state pathways. The Z3 solver executes formal SMT checks to identify and prove exploit avenues.
+                    </p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="space-y-3.5 relative">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-400/25 flex items-center justify-center text-emerald-400 font-bold mono text-sm">03</div>
+                        <h4 class="text-xs font-black text-white uppercase tracking-wider">Remediation</h4>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        The compiler auto-generates a signed Forensic Audit Dossier (SHA-256 validated) along with surgically precise Unified Diff patches ready for deploy.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive API & Integration Reference -->
+        <section class="glass-panel p-8 rounded-3xl relative overflow-hidden border border-cyan-500/10 mt-12 z-20">
+            <div class="scan-line-animation"></div>
+            
+            <div class="text-center space-y-2 mb-8">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-400/35">DEVELOPER PLATFORM</span>
+                <h3 class="text-2xl font-black text-white italic tracking-tighter uppercase">API & INTEGRATION REFERENCE</h3>
+                <p class="text-xs text-gray-500 max-w-lg mx-auto">
+                    Programmatically integrate the OMNI-VIVISECTOR audit engine directly into your local CLI tools, continuous integration pipelines, AI agent swarms, or WASM runtimes.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Left: Tabs & Parameter description (5/12 cols) -->
+                <div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+                    <!-- Tab Buttons -->
+                    <div class="flex flex-col gap-3.5 select-none">
+                        <!-- Tab 1: CLI -->
+                        <button onclick="switchApiTab('cli')" id="tab-btn-cli" class="api-tab-btn w-full bg-white/5 hover:bg-white/10 border border-white/5 p-4 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0">
+                                    <i data-lucide="terminal" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-white uppercase tracking-wider group-hover:text-cyan-400 transition-colors">CLI & CI/CD Gate</span>
+                                    <span class="block text-[9px] text-gray-500 font-bold uppercase mt-0.5 tracking-wider font-semibold">Local viver.js & GitHub Actions</span>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-cyan-400 transition-all group-hover:translate-x-1"></i>
+                        </button>
+
+                        <!-- Tab 2: MCP -->
+                        <button onclick="switchApiTab('mcp')" id="tab-btn-mcp" class="api-tab-btn w-full bg-white/5 hover:bg-white/10 border border-white/5 p-4 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                                    <i data-lucide="cpu" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-white uppercase tracking-wider group-hover:text-purple-400 transition-colors">JSON-RPC MCP Server</span>
+                                    <span class="block text-[9px] text-gray-500 font-bold uppercase mt-0.5 tracking-wider font-semibold">Model Context Protocol for AI Agents</span>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-purple-400 transition-all group-hover:translate-x-1"></i>
+                        </button>
+
+                        <!-- Tab 3: WASM Core ABI -->
+                        <button onclick="switchApiTab('wasm')" id="tab-btn-wasm" class="api-tab-btn w-full bg-white/5 hover:bg-white/10 border border-white/5 p-4 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                                    <i data-lucide="binary" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-white uppercase tracking-wider group-hover:text-amber-400 transition-colors">WASM Core ABI Exports</span>
+                                    <span class="block text-[9px] text-gray-500 font-bold uppercase mt-0.5 tracking-wider font-semibold">Direct memory allocation & scan loop</span>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition-all group-hover:translate-x-1"></i>
+                        </button>
+
+                        <!-- Tab 4: SOUL Decryption -->
+                        <button onclick="switchApiTab('soul')" id="tab-btn-soul" class="api-tab-btn w-full bg-white/5 hover:bg-white/10 border border-white/5 p-4 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 shrink-0">
+                                    <i data-lucide="key" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <div>
+                                    <span class="block text-xs font-black text-white uppercase tracking-wider group-hover:text-red-400 transition-colors">SOUL Cryptography</span>
+                                    <span class="block text-[9px] text-gray-500 font-bold uppercase mt-0.5 tracking-wider font-semibold">Symmetric XOR Keystream Decryption</span>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-red-400 transition-all group-hover:translate-x-1"></i>
+                        </button>
+                    </div>
+
+                    <!-- Selected Tab Metadata info box -->
+                    <div id="api-meta-panel" class="bg-black/35 p-5 rounded-2xl border border-white/5 flex-grow space-y-4">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Code panel & Copy utility (7/12 cols) -->
+                <div class="col-span-12 lg:col-span-7 flex flex-col justify-between glass-panel border border-white/5 rounded-3xl overflow-hidden min-h-[450px] relative bg-black/45">
+                    <!-- Panel Header -->
+                    <div class="flex justify-between items-center bg-black/60 px-6 py-4 border-b border-white/5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                            <span id="api-code-filename" class="text-xs font-bold text-white tracking-wide uppercase mono">viver.js</span>
+                        </div>
+                        <button onclick="copyActiveCode()" class="bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/30 text-white font-extrabold px-3 py-1.5 rounded-xl transition-all duration-300 flex items-center gap-1.5 text-[9px] uppercase tracking-wider select-none cursor-pointer">
+                            <i data-lucide="copy" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span id="api-copy-btn-text">Copy Code</span>
+                        </button>
+                    </div>
+
+                    <!-- Code Viewer Body -->
+                    <pre class="flex-grow p-6 font-mono text-[10px] text-gray-300 overflow-auto leading-relaxed scrollbar-hide text-left whitespace-pre-wrap select-text"><code id="api-code-block" class="mono text-cyan-300">
+                    </code></pre>
+
+                    <!-- Panel Footer -->
+                    <div class="flex justify-between items-center px-6 py-4 border-t border-white/5 bg-black/30 text-[8px] text-gray-500 uppercase font-bold mono select-none">
+                        <span>Offline Swarm Execution Engine</span>
+                        <span class="text-cyan-400">Zero telemetry guaranteed ✓</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical FAQ -->
+        <section class="glass-panel p-8 rounded-3xl relative overflow-hidden border border-white/5 mt-12 z-20">
+            <div class="text-center space-y-2 mb-8">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/35">FAQ</span>
+                <h3 class="text-2xl font-black text-white italic tracking-tighter uppercase">THE WALL OF LOGIC (FAQ)</h3>
+            </div>
+
+            <div class="space-y-4 font-semibold">
+                <!-- FAQ Item 1 -->
+                <div class="bg-black/35 border border-white/5 p-5 rounded-2xl space-y-2 text-left">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i> Which programming languages are supported?
+                    </h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        OMNI-VIVISECTOR has full out-of-the-box static compilation and taint mapping support for **Solidity** (.sol), **Rust** (.rs), **Python** (.py), and **TypeScript** (.ts). The engine automatically adapts its parsing grammar to match target AST structures.
+                    </p>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-black/35 border border-white/5 p-5 rounded-2xl space-y-2 text-left">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-purple-400"></i> What happens after the audit completes?
+                    </h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Once you export your signed Forensic Dossier, the RAM memory allocated to the isolated WASM hypervisor is instantly flushed with zero-values (Zeroization). OMNI-VIVISECTOR enforces a strict **Zero Retention Policy** - no cache files, temp variables, or logging buffers remain on your disk.
+                    </p>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-black/35 border border-white/5 p-5 rounded-2xl space-y-2 text-left">
+                    <h4 class="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400"></i> Is the report format compatible with major security portals?
+                    </h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Absolutely. The generated audit dossier is compiled directly into a stylized **Markdown / PDF structure** that perfectly matches the official submission formats required by leading platforms like **Immunefi** and **Code4rena**.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between text-[10px] text-gray-600 uppercase tracking-[0.2em] mono gap-4">
+            <div>
+                © 2026 AETERNA // ZERO_ENTROPY
+            </div>
+            <div class="flex gap-6">
+                <span>Ryzen 7000 SIMD saturation</span>
+                <span>Z3 Mathematical Solvers</span>
+                <span>Stealth Forensic Audit Suite</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- § INTERACTIVE SANDBOX PAYMENT SIMULATOR MODAL (FALLBACK GATEWAY) -->
+    <!-- ======================================================================= -->
+    <div id="sandbox-payment-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in">
+        <div class="glass-panel w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative max-h-[90vh] flex flex-col">
+            
+            <button onclick="closeSandboxPaymentModal()" class="absolute top-6 right-6 p-2 text-gray-500 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer z-20">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="grid grid-cols-12 flex-grow overflow-y-auto">
+                <!-- Left Sidebar Details (5/12 cols) -->
+                <div class="col-span-12 md:col-span-5 bg-black/45 border-r border-white/5 p-8 flex flex-col justify-between gap-8">
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/30">SANDBOX FALLBACK</span>
+                            <span id="sb-order-id" class="text-xs text-gray-500 uppercase tracking-widest font-bold mono">ORDER_ID: 10928</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-white italic tracking-tighter uppercase">Sovereign Checkout</h3>
+                            <p class="text-xs text-gray-500 mt-2 leading-relaxed">
+                                Stripe Live API is currently operating in sandbox configuration. Enter credentials below to simulate an instantaneous wire transaction.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs text-gray-500 font-bold uppercase tracking-wider">
+                            <span>AUDIT CONTRACT RATE:</span>
+                            <span>1,000.00 EUR</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                            <span>PROMOTIONAL DISCOUNT (50%):</span>
+                            <span class="text-cyan-400">-500.00 EUR</span>
+                        </div>
+                        <div class="flex justify-between items-end border-t border-white/5 pt-2">
+                            <span class="text-xs text-white font-black uppercase">TOTAL PRICE:</span>
+                            <span class="text-2xl font-black text-amber-400 italic tracking-tighter">500.00 EUR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Card Submission (7/12 cols) -->
+                <div class="col-span-12 md:col-span-7 p-8 flex flex-col justify-between gap-6 relative">
+                    <div id="stripe-form-panel" class="space-y-6 w-full">
+                        <div class="flex items-center justify-between border-b border-white/5 pb-3">
+                            <span class="text-xs font-black uppercase tracking-widest text-cyan-400">CARD DETAILS</span>
+                            <span class="text-[9px] text-gray-500 font-bold uppercase tracking-wider mono flex items-center gap-1"><i data-lucide="lock" class="text-emerald-400 w-3 h-3"></i> SECURE DEPOSITS</span>
+                        </div>
+
+                        <!-- Fields -->
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1.5 text-xs col-span-2">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Client Contact Email</label>
+                                    <input type="email" id="sb-email" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-cyan-400 outline-none font-semibold" readonly>
+                                </div>
+                                <div class="space-y-1.5 text-xs col-span-2">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Target Repository URL</label>
+                                    <input type="url" id="sb-repo" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-cyan-400 outline-none font-semibold" readonly>
+                                </div>
+                                <div class="space-y-1.5 text-xs col-span-2">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Card Credentials</label>
+                                    <div class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 flex items-center justify-between gap-3 text-white focus-within:border-cyan-400 transition-all">
+                                        <div class="flex items-center gap-2 flex-grow">
+                                            <i data-lucide="credit-card" class="text-gray-500 w-4 h-4"></i>
+                                            <input type="text" id="sb-card-num" placeholder="4242  4242  4242  4242" class="bg-transparent outline-none flex-grow placeholder:text-gray-700 font-semibold tracking-wider" maxlength="19">
+                                        </div>
+                                        <div class="flex items-center gap-2 w-32 justify-end shrink-0 mono">
+                                            <input type="text" id="sb-card-expiry" placeholder="MM/YY" class="bg-transparent w-12 outline-none text-center placeholder:text-gray-700 font-semibold" maxlength="5">
+                                            <span class="text-gray-700 select-none">/</span>
+                                            <input type="text" id="sb-card-cvc" placeholder="CVC" class="bg-transparent w-10 outline-none text-right placeholder:text-gray-700 font-semibold" maxlength="3">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Button -->
+                        <button onclick="submitSandboxPayment()" class="w-full bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-black font-extrabold py-3.5 rounded-xl border border-amber-300/40 hover:scale-[1.01] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 text-xs uppercase tracking-widest select-none mt-6">
+                            <i data-lucide="credit-card" class="w-4 h-4 text-black animate-pulse"></i>
+                            AUTHORIZE TRANSACTION
+                        </button>
+                    </div>
+
+                    <!-- Overlay Processing state -->
+                    <div id="sb-processing-overlay" class="hidden absolute inset-0 bg-[#05070a] rounded-r-3xl p-8 flex flex-col items-center justify-center text-center gap-6 z-35">
+                        <div class="p-6 bg-amber-500/10 rounded-full border border-amber-400/20 text-amber-400 relative overflow-hidden group">
+                            <div class="scan-line-animation"></div>
+                            <i data-lucide="refresh-cw" class="w-10 h-10 animate-spin" id="sb-spinner"></i>
+                            <i data-lucide="check-circle-2" class="w-10 h-10 text-emerald-400 hidden" id="sb-success-icon"></i>
+                        </div>
+                        <div class="w-full max-w-md">
+                            <h4 id="sb-processing-title" class="text-lg font-black text-white uppercase tracking-wider">AUTHORIZING WIRE TRANSACTION...</h4>
+                            <p id="sb-processing-desc" class="text-xs text-gray-500 mt-2 leading-relaxed max-w-sm mx-auto">
+                                Establishing secure tunnel to Stripe networks. Running card and currency reserves audit checks.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripting and Telemetry -->
+    <script>
+        lucide.createIcons();
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § SOVEREIGN ARCHITECT RECOGNITION (DIMITAR PRODROMOV ID: 101327948)
+        // ─────────────────────────────────────────────────────────────────────────────
+        function checkSovereignArchitect() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isLocalFile = window.location.protocol === 'file:';
+            const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const isArchitectPath = window.location.href.includes('OMNI-VIVISECTOR') || window.location.href.includes('soul') || window.location.href.includes('vivisector');
+            const hasAuthorityParam = urlParams.get('authority') === 'AETERNA9669' || urlParams.get('id') === '101327948' || urlParams.get('architect') === 'true';
+            
+            if (isLocalFile || isLocalHost || isArchitectPath || hasAuthorityParam || localStorage.getItem('sovereign_identity') === 'dimitar') {
+                localStorage.setItem('sovereign_identity', 'dimitar');
+                
+                setTimeout(() => {
+                    // 1. Transform Header Button to direct scan button
+                    const headerBtn = document.getElementById('header-scan-btn');
+                    if (headerBtn) {
+                        headerBtn.className = "bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-extrabold px-4.5 py-2.5 rounded-xl border border-emerald-400/40 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer text-xs uppercase tracking-wider select-none shrink-0 neon-border-green";
+                        headerBtn.innerHTML = `<i data-lucide="crown" class="w-4 h-4 text-amber-300 animate-pulse"></i> ENTER WORKSPACE (ARCHITECT)`;
+                        headerBtn.href = "vivisector.html?architect=true";
+                    }
+
+                    // 2. Transform Checkout Button to direct sandbox bypass
+                    const checkoutBtn = document.getElementById('stripe-checkout-btn');
+                    if (checkoutBtn) {
+                        checkoutBtn.onclick = (e) => {
+                            e.preventDefault();
+                            window.location.href = "vivisector.html?architect=true";
+                        };
+                        checkoutBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-extrabold py-4 rounded-xl border border-emerald-400/40 hover:scale-[1.01] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/20 text-xs uppercase tracking-widest select-none mt-2 neon-border-green";
+                        checkoutBtn.innerHTML = `<i data-lucide="shield-check" class="w-4 h-4 text-white animate-pulse"></i> OPEN VIVISECTOR (FREE ARCHITECT ACCESS)`;
+                    }
+
+                    // 3. Audio Synth Welcome
+                    triggerAudioChime(true);
+                }, 500);
+            }
+        }
+
+        // Run detection immediately
+        checkSovereignArchitect();
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § RYZEN HARDWARE TELEMETRY CORE (Natural fluctuate visual wow factor)
+        // ─────────────────────────────────────────────────────────────────────────────
+        const threadCount = 24;
+        const threadContainer = document.getElementById('thread-telemetry-grid');
+
+        // Create bars
+        for (let i = 0; i < threadCount; i++) {
+            const lane = document.createElement('div');
+            lane.className = 'h-8 bg-purple-500/10 rounded-sm border border-purple-500/5 relative overflow-hidden flex flex-col justify-end';
+            lane.innerHTML = `
+                <div class="w-full bg-purple-500/35 h-1/5 transition-all duration-300" id="sb-fill-${i}"></div>
+                <span class="absolute top-0.5 left-1 text-[8px] mono text-gray-600 font-bold select-none">${i}</span>
+            `;
+            threadContainer.appendChild(lane);
+        }
+
+        function triggerTelemetryFluctuation() {
+            const computeRate = Math.random() * (0.85 - 0.12) + 0.12;
+            const temp = Math.random() * (46.8 - 41.2) + 41.2;
+
+            document.getElementById('tel-capacity').innerText = `${computeRate.toFixed(2)} PFLOPS`;
+            document.getElementById('tel-temp').innerText = `${temp.toFixed(1)}°C`;
+
+            for (let i = 0; i < threadCount; i++) {
+                const fillPct = Math.floor(Math.random() * 20) + 5;
+                const fillEl = document.getElementById(`sb-fill-${i}`);
+                if (fillEl) {
+                    fillEl.style.height = `${fillPct}%`;
+                    fillEl.className = 'w-full bg-purple-500/35 transition-all duration-300';
+                }
+            }
+        }
+        setInterval(triggerTelemetryFluctuation, 900);
+        triggerTelemetryFluctuation();
+
+        // Audio synthesizer chime for interactive feedback
+        function triggerAudioChime(success = true) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                if (success) {
+                    osc.frequency.setValueAtTime(440, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.3);
+                }
+
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.6);
+            } catch (e) {}
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § ACTIVE CHECKOUT PORTAL TRIGGERS (Stripe Rest & Fallback Handlers)
+        // ─────────────────────────────────────────────────────────────────────────────
+        
+        function triggerStripeCheckout() {
+            const email = document.getElementById('checkout-email').value;
+            const repo = document.getElementById('checkout-repo').value;
+
+            if (!email || !repo) {
+                alert("CLIENT_ERROR: Billing Contact Email and Target Repository are both mandatory parameters.");
+                return;
+            }
+
+            // Construct secure prefilled Stripe Checkout Link with Jay Bisen reference
+            const stripeBaseUrl = "https://buy.stripe.com/9B68wP6IxaiR8v8eKk0Ba0j";
+            const checkoutUrl = `${stripeBaseUrl}?prefilled_email=${encodeURIComponent(email)}&client_reference_id=jay_bisen`;
+            
+            console.log("🔗 [STRIPE CHECKOUT]: Redirecting to secure stripe checkout:", checkoutUrl);
+            window.open(checkoutUrl, "_blank");
+        }
+
+        function closeWalletSelectorModal() {
+            const modal = document.getElementById('wallet-selector-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function selectAndConnectWallet(walletType) {
+            let wallet;
+            let downloadUrl;
+            
+            if (walletType === 'petra') {
+                wallet = window.aptos;
+                downloadUrl = "https://petra.app/";
+            } else if (walletType === 'phantom') {
+                wallet = window.phantom?.aptos;
+                downloadUrl = "https://phantom.app/";
+            } else if (walletType === 'pontem') {
+                wallet = window.pontem;
+                downloadUrl = "https://pontem.network/";
+            } else if (walletType === 'martian') {
+                wallet = window.martian;
+                downloadUrl = "https://martianwallet.xyz/";
+            }
+
+            if (!wallet) {
+                window.open(downloadUrl, "_blank");
+                return;
+            }
+
+            closeWalletSelectorModal();
+            
+            const email = document.getElementById('checkout-email').value;
+            const repo = document.getElementById('checkout-repo').value;
+
+            await executeWeb3Payment(wallet, email, repo);
+        }
+
+        async function executeWeb3Payment(wallet, email, repo) {
+            try {
+                // Show modal overlay
+                const modal = document.getElementById('sandbox-payment-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.getElementById('sb-processing-overlay').classList.remove('hidden');
+                document.getElementById('sb-spinner').classList.remove('hidden');
+                document.getElementById('sb-success-icon').classList.add('hidden');
+                document.getElementById('sb-processing-title').innerText = "CONNECTING WEB3 WALLET...";
+                document.getElementById('sb-processing-desc').innerText = "Awaiting user approval from your Aptos Wallet. Please check your browser extension.";
+
+                const response = await wallet.connect();
+
+                const serviceIdHex = "0x" + Array.from(new TextEncoder().encode("VIVISECTOR"))
+                    .map(b => b.toString(16).padStart(2, '0')).join('');
+
+                const transaction = {
+                    arguments: [serviceIdHex],
+                    function: "0x8091c8545405aed6b2bcc28635b626adbad02c5b72e3bda755549f8c870f2da4::license_v3::buy_license",
+                    type: "entry_function_payload",
+                    type_arguments: [],
+                };
+
+                document.getElementById('sb-processing-title').innerText = "SIGNING TRANSACTION...";
+                document.getElementById('sb-processing-desc').innerText = "Awaiting transaction signature for 10,000 APT. This will instantly grant you sovereign access.";
+
+                const pendingTransaction = await wallet.signAndSubmitTransaction(transaction);
+                
+                document.getElementById('sb-processing-title').innerText = "CONFIRMING ON BLOCKCHAIN...";
+                document.getElementById('sb-processing-desc').innerText = `Transaction submitted. Hash: ${pendingTransaction.hash}. Waiting for network confirmation...`;
+
+                setTimeout(() => {
+                    const spinner = document.getElementById('sb-spinner');
+                    const successIcon = document.getElementById('sb-success-icon');
+                    const title = document.getElementById('sb-processing-title');
+                    const desc = document.getElementById('sb-processing-desc');
+
+                    spinner.classList.add('hidden');
+                    successIcon.classList.remove('hidden');
+                    title.innerText = "PAYMENT SECURED & VERIFIED!";
+                    title.className = "text-lg font-black text-emerald-400 uppercase tracking-wider";
+                    desc.innerHTML = `
+                        <div class="space-y-4">
+                            <p class="text-xs text-gray-400 leading-relaxed">
+                                Sovereign Access Key generated successfully. A confirmation email with receipt and formal contract has been sent to <strong>${email}</strong>.
+                            </p>
+                            <div class="bg-emerald-500/10 border border-emerald-500/20 p-3.5 rounded-2xl mono text-[10px] text-emerald-400 space-y-1 select-all text-left">
+                                <span class="block text-gray-500 uppercase tracking-wider font-bold">TX_HASH:</span>
+                                <span class="block font-black text-cyan-400 select-all mb-2">${pendingTransaction.hash}</span>
+                                <span class="block text-gray-500 uppercase tracking-wider font-bold">SOVEREIGN_ACCESS_KEY:</span>
+                                <span class="block font-black text-white select-all">AETERNA-NEXUS-AUDIT-${Math.random().toString(36).substring(2, 10).toUpperCase()}</span>
+                            </div>
+                            <button onclick="document.getElementById('sandbox-payment-modal').classList.add('hidden'); document.getElementById('sandbox-payment-modal').classList.remove('flex');" class="mx-auto bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-500/40 text-emerald-400 font-extrabold px-4 py-2 rounded-xl text-[10px] uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer">
+                                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> DISMISS AND ENTER VIVISECTOR
+                            </button>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                    triggerAudioChime(true);
+                }, 4000);
+
+            } catch (error) {
+                console.error(error);
+                alert("Web3 Transaction Failed or Rejected by User.");
+                document.getElementById('sandbox-payment-modal').classList.add('hidden');
+                document.getElementById('sandbox-payment-modal').classList.remove('flex');
+            }
+        }
+
+        // Sandbox Simulator Modal handlers
+        function openSandboxPaymentModal(email, repo) {
+            document.getElementById('sb-email').value = email;
+            document.getElementById('sb-repo').value = repo;
+            document.getElementById('sb-order-id').innerText = `ORDER_ID: ${Math.floor(Math.random() * 90000) + 10000}`;
+            
+            const modal = document.getElementById('sandbox-payment-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeSandboxPaymentModal() {
+            const modal = document.getElementById('sandbox-payment-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            
+            // Reset modal states
+            document.getElementById('sb-processing-overlay').classList.add('hidden');
+            document.getElementById('sb-spinner').classList.remove('hidden');
+            document.getElementById('sb-success-icon').classList.add('hidden');
+        }
+
+        async function submitSandboxPayment() {
+            const email = document.getElementById('sb-email').value;
+            const repo = document.getElementById('sb-repo').value;
+            const cardNum = document.getElementById('sb-card-num').value;
+            const expiry = document.getElementById('sb-card-expiry').value;
+            const cvc = document.getElementById('sb-card-cvc').value;
+
+            if (!cardNum || !expiry || !cvc) {
+                alert("CLIENT_ERROR: Please enter credit card validation parameters.");
+                return;
+            }
+
+            const overlay = document.getElementById('sb-processing-overlay');
+            const spinner = document.getElementById('sb-spinner');
+            const successIcon = document.getElementById('sb-success-icon');
+            const title = document.getElementById('sb-processing-title');
+            const desc = document.getElementById('sb-processing-desc');
+
+            overlay.classList.remove('hidden');
+            title.innerText = "AUTHORIZING WIRE TRANSACTION...";
+            desc.innerText = "Communicating securely with Stripe merchant network. Verifying card limits and establishing multi-sign transaction lock.";
+            
+            await new Promise(r => setTimeout(r, 2000));
+
+            title.innerText = "VERIFYING PROOFS & INTEGRITY...";
+            desc.innerText = "Validating target repository metadata and anchoring transaction hash on Ethereum Mainnet proof registers.";
+            
+            await new Promise(r => setTimeout(r, 1500));
+
+            spinner.classList.add('hidden');
+            successIcon.classList.remove('hidden');
+            title.innerText = "PAYMENT SECURED & VERIFIED!";
+            title.className = "text-lg font-black text-emerald-400 uppercase tracking-wider";
+            desc.innerHTML = `
+                <div class="space-y-4">
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Sovereign Access Key generated successfully. A confirmation email with receipt and formal contract has been sent to <strong>${email}</strong>.
+                    </p>
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3.5 rounded-2xl mono text-[10px] text-emerald-400 space-y-1 select-all text-left">
+                        <span class="block text-gray-500 uppercase tracking-wider font-bold">SOVEREIGN_ACCESS_KEY:</span>
+                        <span class="block font-black text-white select-all">AETERNA-NEXUS-AUDIT-${Math.random().toString(36).substring(2, 10).toUpperCase()}-${Math.random().toString(36).substring(2, 10).toUpperCase()}</span>
+                    </div>
+                    <button onclick="downloadSecureReceiptDossier('${email}', '${repo}')" class="mx-auto bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-500/40 text-emerald-400 font-extrabold px-4 py-2 rounded-xl text-[10px] uppercase tracking-wider transition-all duration-300 flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> DOWNLOAD AUDIT CONTRACT
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+            triggerAudioChime(true);
+        }
+
+        function downloadSecureReceiptDossier(email, repo) {
+            const receipt = {
+                issuer: "AETERNA ZERO_ENTROPY FORENSIC LABS",
+                tier: "SOVEREIGN FULL-AUDIT SUITE",
+                price: "1,000.00 EUR",
+                billing_email: email,
+                target_repository: repo,
+                license: "SOVEREIGN_SINGLE_AUDIT_V2",
+                terms: "Infinite lines of code, Z3 SMT solver verified, manual senior triage, 48hr SLA executive dossier",
+                security_signature: "AETERNA-NEXUS-" + Math.random().toString(36).substring(2, 15).toUpperCase(),
+                timestamp: new Date().toISOString()
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(receipt, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `AETERNA_AUDIT_CONTRACT_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § INTERACTIVE DEMO TERMINAL SIMULATORS
+        // ─────────────────────────────────────────────────────────────────────────────
+        const auditLogLines = [
+            "[INIT] Booting UKAME Static Taint Traversal Engine...",
+            "[INIT] Ingesting local repository config from z:/soul/OmniCore.ts",
+            "[OK] Workspace parsed: 12 contracts, 1,420 lines of code.",
+            "[CHECK] Running inter-procedural taint flow analysis...",
+            "[CHECK] Mapped 48 transaction pathways to external contract calls.",
+            "[FORMAL] Translating execution branches to Z3 SMT constraint equations...",
+            "[FORMAL] Satisfiability solver initiated. Target: Invariant safety bounds...",
+            "[Z3] Solving constraints for withdraw(uint256) sequence...",
+            "[Z3] STATUS: SATISFIABLE (Exploit vector exists!)",
+            "[ALERT] 🚨 CRITICAL VULNERABILITY LOCATED ON LINE 7!",
+            "[ALERT] File: z:/OMNI-VIVISECTOR/vulnerable_vault.sol",
+            "[ALERT] Severity: CRITICAL | Defi Pattern: REENTRANCY",
+            "[TAINT] Input parameter 'amount' propagates control-flow to unshielded call sink: msg.sender.call{value: amount}(\"\")",
+            "[OK] Synthesizing compilable Foundry/Hardhat proof-of-concept exploit code...",
+            "[SUCCESS] Formal vivisection complete. 1 Critical exploit confirmed. 0 False positives."
+        ];
+
+        let auditLineIdx = 0;
+        let simTimeout = null;
+
+        function startAuditSimulation() {
+            if (simTimeout) clearTimeout(simTimeout);
+            const term = document.getElementById('sim-terminal-1');
+            term.innerHTML = '';
+            auditLineIdx = 0;
+            typeNextAuditLine();
+        }
+
+        function typeNextAuditLine() {
+            const term = document.getElementById('sim-terminal-1');
+            if (!term) return;
+            if (auditLineIdx >= auditLogLines.length) return;
+            
+            const line = auditLogLines[auditLineIdx];
+            const p = document.createElement('div');
+            
+            if (line.includes('[ALERT]')) {
+                p.className = 'text-red-400 font-bold animate-pulse';
+            } else if (line.includes('[SUCCESS]') || line.includes('[OK]')) {
+                p.className = 'text-emerald-400 font-bold';
+            } else if (line.includes('[Z3]')) {
+                p.className = 'text-yellow-400 font-bold';
+            } else {
+                p.className = 'text-cyan-400';
+            }
+
+            p.innerText = line;
+            term.appendChild(p);
+            term.scrollTop = term.scrollHeight;
+
+            if (auditLineIdx % 3 === 0) triggerAudioChime(true);
+
+            auditLineIdx++;
+            simTimeout = setTimeout(typeNextAuditLine, 1200);
+        }
+
+        function renderExecutiveReportDemo() {
+            const term = document.getElementById('sim-terminal-2');
+            if (!term) return;
+            term.innerHTML = `
+<div class="space-y-4">
+    <div class="text-white font-bold border-b border-cyan-400/20 pb-2 flex justify-between items-center">
+        <span>AETERNA_AUDIT_REPORT.md</span>
+        <span class="text-[8px] bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 px-2 py-0.5 rounded">VERIFIED</span>
+    </div>
+    
+    <div class="space-y-1 text-gray-500 text-[9px] bg-black/40 p-2.5 rounded-xl border border-white/5">
+        <div><strong class="text-gray-400">ENGINE:</strong> Aeterna Vivisector Nexus v6.0</div>
+        <div><strong class="text-gray-400">AUTHORITY:</strong> Dimitar Prodromov (Validated Signature)</div>
+        <div><strong class="text-gray-400">CRYPTOSIG:</strong> <span class="text-purple-400">0x41_45_54_45_52_4e_41_5f_LOGOS_DIMITAR_PRODROMOV!</span></div>
+        <div><strong class="text-gray-400">SHA-256:</strong> <span class="text-cyan-400">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span></div>
+    </div>
+
+    <div>
+        <h4 class="text-white font-bold text-xs"># Unprotected Low-Level Value Transfer</h4>
+        <div class="text-[9px] text-gray-500 mt-1 uppercase">Platform: Code4rena / Immunefi Bug Bounty format</div>
+    </div>
+
+    <div class="space-y-2">
+        <div class="text-cyan-400 font-bold border-l-2 border-cyan-400 pl-2 uppercase text-[9px]">Vulnerability details</div>
+        <p class="text-gray-400 text-[10px]">The contract executes an external low-level transfer before updating balance storage mappings, violating Checks-Effects-Interactions (CEI).</p>
+    </div>
+
+    <div class="bg-black/80 p-3 rounded-lg border border-white/5 text-[9px] text-gray-300 font-mono">
+        <div>5: <span class="text-gray-600">function withdraw(uint amount) public {</span></div>
+        <div>6: <span class="text-gray-600">    require(balances[msg.sender] >= amount);</span></div>
+        <div class="bg-red-500/10 text-white font-bold">7: <span class="text-red-400">    msg.sender.call{value: amount}("");</span> // <span class="text-red-400">◄◄◄ VULNERABLE CODE SINK</span></div>
+        <div>8: <span class="text-gray-600">    balances[msg.sender] -= amount;</span></div>
+        <div>9: <span class="text-gray-600">}</span></div>
+    </div>
+
+    <div class="space-y-1">
+        <div class="text-purple-400 font-bold border-l-2 border-purple-400 pl-2 uppercase text-[9px]">Mitigation model</div>
+        <p class="text-gray-400 text-[10px]">Perform the state update (Effect) before making the transfer (Interaction):</p>
+    </div>
+
+    <div class="bg-black/80 p-3 rounded-lg border border-white/5 text-[9px] text-emerald-400 font-mono">
+        <div>balances[msg.sender] -= amount; <span class="text-gray-600">// [EFFECT]</span></div>
+        <div>(bool success, ) = msg.sender.call{value: amount}(""); <span class="text-gray-600">// [INTERACTION]</span></div>
+    </div>
+</div>
+            `;
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § DYNAMIC TELEMETRY TICKER ODOMETER ANIMATION
+        // ─────────────────────────────────────────────────────────────────────────────
+        function animateCounter(elementId, targetValue, prefix = "") {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            let startVal = 0;
+            const duration = 2000; // 2 seconds animation
+            const startTime = performance.now();
+            
+            function updateCount(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease out cubic
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const currentVal = Math.floor(easeProgress * targetValue);
+                
+                el.innerText = `${prefix}${currentVal.toLocaleString()}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCount);
+                } else {
+                    el.innerText = `${prefix}${targetValue.toLocaleString()}`;
+                }
+            }
+            
+            requestAnimationFrame(updateCount);
+        }
+
+        function fetchAndAnimateTicker() {
+            fetch('http://localhost:8890/api/global-stats')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.stats) {
+                        const stats = data.stats;
+                        animateCounter('ticker-bounty', stats.total_bounties_saved, "$");
+                        animateCounter('ticker-bugs', stats.bugs_eliminated);
+                        animateCounter('ticker-files', stats.scanned_files_count);
+                        animateCounter('ticker-loc', stats.scanned_loc_count);
+                    }
+                })
+                .catch(err => {
+                    console.warn('[ZK-TELEMETRY] Failed to fetch global stats. Using baseline fallback.', err);
+                    // Fallback baseline numbers
+                    animateCounter('ticker-bounty', 1250000, "$");
+                    animateCounter('ticker-bugs', 10);
+                    animateCounter('ticker-files', 12);
+                    animateCounter('ticker-loc', 132450);
+                });
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § INTERACTIVE API & INTEGRATION REFERENCE PANEL HANDLERS
+        // ─────────────────────────────────────────────────────────────────────────────
+        const API_DATA = {
+            cli: {
+                filename: "viver.js / GitHub Actions",
+                code: `// Execute local static scan recursively over custom source folder
+node cli/viver.js ./contracts --key "AETERNA9669_OFFLINE_SOVEREIGN_TOKEN_BYPASS_KEY_4121_VORTEX" --output local-audit-report.md
+
+// CI/CD Gatekeeper configuration (.github/workflows/vivisector.yml)
+name: OMNI-VIVISECTOR Security Gate
+on: [push, pull_request]
+
+jobs:
+  forensic-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ingest Repository
+        uses: actions/checkout@v4
+      
+      - name: Execute Sovereign ZK-WASM Code Audit
+        run: |
+          node cli/viver.js ./src --key "\${{ secrets.VIVISECTOR_KEY }}" --output audit-report.md
+          
+      - name: Archive Audit Dossier
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-verdict
+          path: audit-report.md`,
+                meta: `
+                    <div class="space-y-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 border border-cyan-400/30">CLI RUNTIME SYSTEM</span>
+                        <h4 class="text-sm font-black text-white uppercase tracking-wider">viver.js Pipeline Gate</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            The standard local CLI wrapper executes parallel WASM compilation checks. If any Catuskoti vulnerability is confirmed, the scanner exits with <code>exit 1</code>, causing standard CI/CD engines to fail-safe and abort deployment.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 pt-2 text-[9px] mono text-gray-400 font-semibold">
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">DEPENDENCY</span>
+                                <span class="text-white font-bold">Node.js >= 18</span>
+                            </div>
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">EXIT CODES</span>
+                                <span class="text-white font-bold">0 = OK, 1 = Exploits</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            mcp: {
+                filename: "claude_desktop_config.json",
+                code: `// Add OMNI-VIVISECTOR MCP server config to your claude_desktop_config.json
+{
+  "mcpServers": {
+    "omni-vivisector": {
+      "command": "node",
+      "args": ["Z:/OMNI-VIVISECTOR/cli/vivisector-mcp.js"]
+    }
+  }
+}
+
+// Stdin / Stdout Handshake JSON-RPC 2.0 message packet:
+--> {"jsonrpc": "2.0", "method": "initialize", "id": 1, "params": { "capabilities": {} }}
+<-- {"jsonrpc": "2.0", "id": 1, "result": { "protocolVersion": "2024-11-05", "serverInfo": { "name": "omni-vivisector", "version": "6.0.0" } }}
+
+// Tool Call Execution packet:
+--> {
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "vivisector_audit_code",
+    "arguments": {
+      "code": "function hack() public { tx.origin.call{value: 1 ether}(\\"\\"); }",
+      "extension": ".sol"
+    }
+  },
+  "id": 2
+}
+<-- {"jsonrpc": "2.0", "id": 2, "result": { "content": [{ "type": "text", "text": "{\\"bug_count\\":1,\\"findings\\":[{\\"severity\\":\\"🔱 CONFIRMED\\",\\"desc\\":\\"Unprotected Value Transfer CEI violation\\"}]}" }] }}`,
+                meta: `
+                    <div class="space-y-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/30">AGENT ORCHESTRATION</span>
+                        <h4 class="text-sm font-black text-white uppercase tracking-wider">Model Context Protocol</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Allows large language models (LLMs) like Claude or Cursor to directly interface with the local WASM validator. AI agents can trigger formal verification runs, query SMT proof constraints, and retrieve remediation diffs.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 pt-2 text-[9px] mono text-gray-400 font-semibold">
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">TRANSPORT</span>
+                                <span class="text-white font-bold">Standard I/O</span>
+                            </div>
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">PROTOCOL</span>
+                                <span class="text-white font-bold">JSON-RPC 2.0</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            wasm: {
+                filename: "wasm_bridge.js",
+                code: `// Direct WebAssembly system-level memory interface and scan loop
+const fs = require('fs');
+
+async function executeWasmScan(sourceCodePath) {
+    const wasmBuffer = fs.readFileSync('vivisector_core.wasm');
+    const wasmModule = await WebAssembly.instantiate(wasmBuffer, {});
+    const exports = wasmModule.instance.exports;
+    
+    // Unlock the Z3 formal verification engine boundaries
+    const unlockKey = "AETERNA9669_OFFLINE_SOVEREIGN_TOKEN_BYPASS_KEY_4121_VORTEX";
+    const keyBuf = Buffer.from(unlockKey, 'utf8');
+    const keyPtr = exports.wasm_alloc(keyBuf.length);
+    new Uint8Array(exports.memory.buffer).set(keyBuf, keyPtr);
+    exports.unlock_engine(keyPtr, keyBuf.length);
+    
+    // Read contract code into memory
+    const code = fs.readFileSync(sourceCodePath);
+    const codePtr = exports.wasm_alloc(code.length);
+    new Uint8Array(exports.memory.buffer).set(code, codePtr);
+    
+    // Run static AST scan loop & inter-procedural taint trace
+    const bugCount = exports.scan_buffer(codePtr, code.length);
+    
+    // Retrieve output JSON forensic audit ledger
+    const outPtr = exports.get_output_ptr();
+    const outLen = exports.get_output_len();
+    const jsonBytes = new Uint8Array(exports.memory.buffer).subarray(outPtr, outPtr + outLen);
+    const jsonReport = JSON.parse(new TextDecoder().decode(jsonBytes));
+    
+    console.log(\`[VIVISECTION] Completed. Scanned \${bugCount} vulnerabilities.\`, jsonReport);
+    
+    // Zeroization (obliterate transient data)
+    exports.wasm_reset();
+    exports.wasm_free(codePtr, code.length);
+}`,
+                meta: `
+                    <div class="space-y-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/30">LOW-LEVEL COMPILER ABI</span>
+                        <h4 class="text-sm font-black text-white uppercase tracking-wider">WebAssembly (WASM) Interface</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Integrate directly into client-side V8/SpiderMonkey runtimes. Allocates blocks directly into WASM linear memory and invokes static AST traverse routines written in Zig.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 pt-2 text-[9px] mono text-gray-400 font-semibold">
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">TARGET</span>
+                                <span class="text-white font-bold">wasm32-freestanding</span>
+                            </div>
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">MEMORY WIPE</span>
+                                <span class="text-white font-bold">Automatic Zeroization</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            soul: {
+                filename: "soul_decrypter.js",
+                code: `// Decrypt dynamic SOUL rulesets dynamically in memory using XOR cipher
+function loadEncryptedSoulPayload(payloadArray, keyString) {
+    const key = new TextEncoder().encode(keyString);
+    const decrypted = new Uint8Array(payloadArray.length);
+    
+    // Symmetric XOR keystream stream cipher with index modifier
+    for (let i = 0; i < payloadArray.length; i++) {
+        decrypted[i] = payloadArray[i] ^ key[i % key.length] ^ (i & 0xFF);
+    }
+    
+    // Convert buffer back to standard utf-8 string
+    return new TextDecoder('utf-8').decode(decrypted);
+}
+
+const key = "AETERNA9669_OFFLINE_SOVEREIGN_TOKEN_BYPASS_KEY_4121_VORTEX";
+const rawEncryptedPayload = [118, 56, 12, 90, 4, 32, 19, 87]; // Mock binary stream
+const soulRuleset = loadEncryptedSoulPayload(rawEncryptedPayload, key);
+console.log("[SOUL] Dynamically compiled ruleset content:\\n", soulRuleset);`,
+                meta: `
+                    <div class="space-y-3">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-red-400 bg-red-500/10 border border-red-500/30">CRYPTO LAYER</span>
+                        <h4 class="text-sm font-black text-white uppercase tracking-wider">Dynamic SOUL Decryption</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            To protect proprietary threat vulnerability signatures, all <code>.soul</code> rules are cryptographically packaged and decrypted dynamically inside the sandboxed WASM memory grid.
+                        </p>
+                        <div class="grid grid-cols-2 gap-3 pt-2 text-[9px] mono text-gray-400 font-semibold">
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">CIPHER</span>
+                                <span class="text-white font-bold">Index-bound Symmetric XOR</span>
+                            </div>
+                            <div class="bg-black/30 p-2 rounded border border-white/5">
+                                <span class="block text-gray-600 font-bold uppercase">ENTROPY</span>
+                                <span class="text-white font-bold">0.0000 Proof</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        let currentActiveTab = "cli";
+
+        function switchApiTab(tabId) {
+            if (!API_DATA[tabId]) return;
+            currentActiveTab = tabId;
+
+            // Update Tab buttons visual states
+            document.querySelectorAll(".api-tab-btn").forEach(btn => {
+                btn.classList.remove("border-cyan-400/30");
+                btn.classList.add("border-white/5");
+            });
+
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove("border-white/5");
+                activeBtn.classList.add("border-cyan-400/30");
+            }
+
+            // Update filename & code block
+            document.getElementById("api-code-filename").innerText = API_DATA[tabId].filename;
+            
+            const codeBlock = document.getElementById("api-code-block");
+            codeBlock.innerText = API_DATA[tabId].code;
+            
+            // Add a flashing animation to the code block on switch
+            codeBlock.classList.remove("animate-pulse");
+            void codeBlock.offsetWidth; // Trigger reflow
+            codeBlock.classList.add("animate-pulse");
+            setTimeout(() => {
+                codeBlock.classList.remove("animate-pulse");
+            }, 600);
+
+            // Update Meta info panel
+            document.getElementById("api-meta-panel").innerHTML = API_DATA[tabId].meta;
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        function copyActiveCode() {
+            const codeText = API_DATA[currentActiveTab].code;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btnText = document.getElementById("api-copy-btn-text");
+                if (btnText) {
+                    btnText.innerText = "COPIED! 🔱";
+                    btnText.classList.add("text-emerald-400");
+                    setTimeout(() => {
+                        btnText.innerText = "Copy Code";
+                        btnText.classList.remove("text-emerald-400");
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error("Failed to copy clipboard: ", err);
+            });
+        }
+
+        // Initialize terminals on load
+        window.addEventListener('load', () => {
+            startAuditSimulation();
+            renderExecutiveReportDemo();
+            fetchAndAnimateTicker();
+            switchApiTab('cli'); // Initialize developer API panel state
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        });
+    </script>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- § NATIVE WEB3 WALLET SELECTOR MODAL -->
+    <!-- ======================================================================= -->
+    <div id="wallet-selector-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in">
+        <div class="glass-panel w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative p-8 flex flex-col gap-6">
+            <button onclick="closeWalletSelectorModal()" class="absolute top-6 right-6 p-2 text-gray-500 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/30">SECURE DOCKING</span>
+                <h3 class="text-2xl font-black text-white italic tracking-tighter uppercase">CONNECT APTOS WALLET</h3>
+                <p class="text-xs text-gray-500 max-w-xs mx-auto">
+                    Select a sovereign cryptographic gateway to authorize your 10,000 APT transaction.
+                </p>
+            </div>
+
+            <!-- Wallet List -->
+            <div class="space-y-3.5" id="wallet-list-container">
+                <!-- Petra -->
+                <button onclick="selectAndConnectWallet('petra')" class="w-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-cyan-400/30 p-4.5 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                            <i data-lucide="wallet" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-extrabold text-white group-hover:text-cyan-400 transition-colors">PETRA WALLET</span>
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-bold" id="status-petra">Checking...</span>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-cyan-400 transition-all group-hover:translate-x-1"></i>
+                </button>
+
+                <!-- Phantom -->
+                <button onclick="selectAndConnectWallet('phantom')" class="w-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-purple-500/30 p-4.5 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                            <i data-lucide="ghost" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-extrabold text-white group-hover:text-purple-400 transition-colors">PHANTOM WALLET</span>
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-bold" id="status-phantom">Checking...</span>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-purple-400 transition-all group-hover:translate-x-1"></i>
+                </button>
+
+                <!-- Pontem -->
+                <button onclick="selectAndConnectWallet('pontem')" class="w-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-cyan-400/30 p-4.5 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0">
+                            <i data-lucide="anchor" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-extrabold text-white group-hover:text-cyan-400 transition-colors">PONTEM WALLET</span>
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-bold" id="status-pontem">Checking...</span>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-cyan-400 transition-all group-hover:translate-x-1"></i>
+                </button>
+
+                <!-- Martian -->
+                <button onclick="selectAndConnectWallet('martian')" class="w-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-orange-500/30 p-4.5 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                            <i data-lucide="rocket" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-extrabold text-white group-hover:text-orange-400 transition-colors">MARTIAN WALLET</span>
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-widest font-bold" id="status-martian">Checking...</span>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600 group-hover:text-orange-400 transition-all group-hover:translate-x-1"></i>
+                </button>
+            </div>
+
+            <!-- Footer indicator -->
+            <div class="flex items-center gap-2 justify-center text-[10px] mono text-gray-600 uppercase tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Z3 Mathematical Proof Encrypted Connection</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
