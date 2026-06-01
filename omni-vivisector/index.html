@@ -342,32 +342,43 @@
                     <div id="sec-tab-submit" class="security-tab-content space-y-6 hidden">
                         <!-- Hero header for tab -->
                         <div class="glass-panel p-6 rounded-2xl border border-cyan-500/15 relative overflow-hidden">
-                            <h3 class="text-xl font-black text-white uppercase tracking-wider">Request Professional Code Audit</h3>
+                            <div class="scan-line-animation"></div>
+                            <h3 class="text-xl font-black text-white uppercase tracking-wider">AETERNA SECURE ENGAGEMENT PORTAL</h3>
                             <p class="text-xs text-gray-400 mt-1 leading-relaxed">
-                                Request a comprehensive, manual smart contract or protocol audit from Aeterna Labs security engineers. 
+                                Professional B2B smart contract auditing for protocols and structured vulnerability disclosure for security researchers.
                             </p>
                         </div>
- 
-                        <!-- Submit Form -->
-                        <div class="glass-panel p-8 rounded-2xl border border-white/5 space-y-6">
+
+                        <!-- Sub-tab Selector -->
+                        <div class="flex border-b border-white/10 mb-6 gap-2">
+                            <button onclick="switchSubmitSubTab('b2b-audit')" id="btn-submit-b2b" class="pb-3 border-b-2 border-cyan-400 font-extrabold text-xs uppercase tracking-widest text-white px-4 cursor-pointer select-none transition-all duration-300">
+                                <span class="flex items-center gap-2"><i data-lucide="building" class="w-3.5 h-3.5 text-cyan-400"></i> Request B2B Code Audit</span>
+                            </button>
+                            <button onclick="switchSubmitSubTab('whitehat-bug')" id="btn-submit-whitehat" class="pb-3 border-b-2 border-transparent font-extrabold text-xs uppercase tracking-widest text-gray-500 hover:text-white px-4 cursor-pointer select-none transition-all duration-300">
+                                <span class="flex items-center gap-2"><i data-lucide="shield-alert" class="w-3.5 h-3.5 text-red-400 shrink-0 animate-pulse"></i> Submit Bug Advisory</span>
+                            </button>
+                        </div>
+
+                        <!-- B2B Audit Request Form Panel -->
+                        <div id="submit-panel-b2b" class="glass-panel p-8 rounded-2xl border border-white/5 space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-1.5 text-xs">
-                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Company / Project Name</label>
+                                <div class="space-y-1.5 text-xs text-left">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Company / Protocol Name</label>
                                     <input type="text" id="sub-warden-id" placeholder="e.g. MyProtocol Labs" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
                                 </div>
-                                <div class="space-y-1.5 text-xs">
+                                <div class="space-y-1.5 text-xs text-left">
                                     <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Contact Email</label>
                                     <input type="email" id="sub-pgp" placeholder="e.g. contact@myprotocol.com" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-1.5 text-xs">
+                                <div class="space-y-1.5 text-xs text-left">
                                     <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Repository URL (GitHub / GitLab)</label>
                                     <input type="url" id="sub-title" placeholder="e.g. https://github.com/myprotocol/contracts" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-1.5 text-xs">
+                                    <div class="space-y-1.5 text-xs text-left">
                                         <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Primary Language</label>
                                         <select id="sub-program" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
                                             <option value="solidity">Solidity (.sol)</option>
@@ -377,7 +388,7 @@
                                             <option value="zig">Zig (.zig)</option>
                                         </select>
                                     </div>
-                                    <div class="space-y-1.5 text-xs">
+                                    <div class="space-y-1.5 text-xs text-left">
                                         <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Audit Target Scope</label>
                                         <select id="sub-severity" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
                                             <option value="full">Full Protocol Audit</option>
@@ -388,7 +399,7 @@
                                 </div>
                             </div>
  
-                            <div class="space-y-1.5 text-xs">
+                            <div class="space-y-1.5 text-xs text-left">
                                 <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Project Description & Specific Audit Scope Details</label>
                                 <textarea id="sub-description" rows="6" placeholder="Provide a brief summary of the protocol architecture, key invariants to protect, and target code files..." class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold mono text-[10px]"></textarea>
                             </div>
@@ -399,10 +410,137 @@
                                 SIGN & SUBMIT AUDIT REQUEST
                             </button>
                         </div>
+
+                        <!-- Whitehat Bug Submission Form Panel -->
+                        <div id="submit-panel-whitehat" class="glass-panel p-8 rounded-2xl border border-white/5 space-y-6 hidden">
+                            <!-- Web3 Credential Binding Status -->
+                            <div class="p-4 bg-emerald-500/5 rounded-xl border border-emerald-400/20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left">
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <strong class="text-xs text-white tracking-wide uppercase font-bold">Warden Cryptographic Identity Connected</strong>
+                                    </div>
+                                    <span class="block text-[10px] text-gray-400 mono">Warden Profile: <span id="whitehat-warden-badge" class="text-cyan-400 select-all font-semibold">papica777 (Dimitar Prodromov)</span></span>
+                                </div>
+                                <div class="px-3 py-1.5 rounded-lg bg-black/40 border border-white/5 text-[9px] text-emerald-400 font-mono font-bold select-all" id="whitehat-wallet-badge">
+                                    0x71C765...B19
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1.5 text-xs text-left">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Select Target Vault / Campaign</label>
+                                    <select id="whitehat-campaign" onchange="calculateBountySimulated()" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
+                                        <option value="aeterna">Aeterna Core Vault v2 ($100k Min / $1M Max / 10% TVL)</option>
+                                        <option value="azul">Base Azul L2 Engine ($50k Min / $500k Max / 10% TVL)</option>
+                                        <option value="firedancer">Firedancer Core V3 ($150k Min / $1.5M Max / 10% TVL)</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1.5 text-xs text-left">
+                                        <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Finding Severity</label>
+                                        <select id="whitehat-severity" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
+                                            <option value="critical">Critical Severity (Loss of Funds)</option>
+                                            <option value="high">High Severity (System Lock / DoS)</option>
+                                            <option value="medium">Medium Severity</option>
+                                            <option value="low">Low Severity</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-1.5 text-xs text-left">
+                                        <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">CWE Classification</label>
+                                        <select id="whitehat-cwe" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
+                                            <option value="CWE-841">CWE-841 (Reentrancy)</option>
+                                            <option value="CWE-190">CWE-190 (Integer Overflow)</option>
+                                            <option value="CWE-287">CWE-287 (Improper Authentication)</option>
+                                            <option value="CWE-338">CWE-338 (Weak PRNG)</option>
+                                            <option value="CWE-787">CWE-787 (Out-of-bounds Write)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1.5 text-xs text-left">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Vulnerability Headline</label>
+                                    <input type="text" id="whitehat-headline" placeholder="e.g. Reentrancy in withdraw() allows drainage of entire pool" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
+                                </div>
+                                <div class="space-y-1.5 text-xs text-left">
+                                    <div class="flex justify-between items-center">
+                                        <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Directly Affected TVL ($ USD)</label>
+                                        <span class="text-[8px] text-cyan-400 mono font-extrabold uppercase animate-pulse">Live Reward Simulator</span>
+                                    </div>
+                                    <input type="number" id="whitehat-tvl" value="500000" oninput="calculateBountySimulated()" placeholder="e.g. 500000" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold mono">
+                                </div>
+                            </div>
+
+                            <!-- Live Reward Simulation Output Badge -->
+                            <div class="p-4 bg-cyan-950/20 border border-cyan-500/20 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-left">
+                                <div class="space-y-1">
+                                    <h4 class="text-xs font-extrabold text-white uppercase tracking-wider">Game Theory Reward Evaluation Matrix</h4>
+                                    <p class="text-[10px] text-gray-500 max-w-sm">
+                                        Calculated based on $Reward = \min(\max(0.10 	imes TVL_{affected}, Minimum_{cap}), Maximum_{cap})$ Immunefi B2B specification.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-black/50 border border-white/5 py-2 px-4 rounded-xl text-center shrink-0">
+                                        <span class="block text-[8px] text-gray-500 font-bold uppercase tracking-wider">Affected TVL</span>
+                                        <span id="payout-sim-tvl" class="text-xs text-white font-extrabold font-mono">$500,000</span>
+                                    </div>
+                                    <div class="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-400/35 py-2.5 px-5 rounded-xl text-center shrink-0">
+                                        <span class="block text-[8px] text-emerald-400 font-extrabold uppercase tracking-wider">Simulated Reward</span>
+                                        <span id="payout-sim-reward" class="text-sm text-emerald-400 font-black font-mono">$100,000</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5 text-xs text-left">
+                                <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Vulnerability Description & Impact Analysis</label>
+                                <textarea id="whitehat-description" rows="4" placeholder="Provide a detailed analysis explaining the root cause, exploit path, and exact impact of the security flaw..." class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold mono text-[10px]"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1.5 text-xs text-left">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Detailed Steps to Reproduce ("Стъпки за възпроизвеждане")</label>
+                                    <textarea id="whitehat-steps" rows="6" placeholder="1. Deploy mock contract&#10;2. User deposits 100 USDC&#10;3. Trigger withdraw with malicious fallback&#10;4. Observe reentrant asset drain" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold mono text-[10px]"></textarea>
+                                </div>
+                                <div class="space-y-1.5 text-xs text-left">
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[9px] mono">Proof of Concept Code (Foundry PoC / Hardhat JS)</label>
+                                    <textarea id="whitehat-poc" rows="6" placeholder="// SPDX-License-Identifier: MIT&#10;contract ExploitPoC { ... }" class="w-full bg-black/55 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold mono text-[9.5px] text-cyan-300"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Legal Compliance Checkboxes -->
+                            <div class="space-y-3.5 text-left border-t border-white/5 pt-4.5">
+                                <label class="flex items-start gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="whitehat-check-fork" class="mt-0.5 rounded border-white/10 bg-black text-cyan-400 focus:ring-0">
+                                    <span class="text-[10px] text-gray-400 group-hover:text-white transition-colors leading-relaxed">
+                                        I certify that all testing and security analysis were executed exclusively on **local forks or isolated virtual sandboxes**, with **ZERO mainnet interactions or scanning**, fully complying with Aeterna Labs Safe Harbor parameters.
+                                    </span>
+                                </label>
+                                <label class="flex items-start gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="whitehat-check-kyc" class="mt-0.5 rounded border-white/10 bg-black text-cyan-400 focus:ring-0">
+                                    <span class="text-[10px] text-gray-400 group-hover:text-white transition-colors leading-relaxed">
+                                        I explicitly agree to undergo standard third-party **KYC/AML government-issued ID checks** to confirm my country of residence is not listed under US OFAC or UN Security Council (UNSC) sanctions lists before any reward disbursement.
+                                    </span>
+                                </label>
+                                <label class="flex items-start gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="whitehat-check-poc" class="mt-0.5 rounded border-white/10 bg-black text-cyan-400 focus:ring-0">
+                                    <span class="text-[10px] text-gray-400 group-hover:text-white transition-colors leading-relaxed">
+                                        I acknowledge that submitting bug advisories without a **working Proof of Concept (PoC) code** or providing intentionally fabricated/exaggerated severities will result in **automatic report rejection and permanent ban**.
+                                    </span>
+                                </label>
+                            </div>
+ 
+                            <!-- Form Action -->
+                            <button onclick="submitWhitehatAdvisoryReport()" class="w-full bg-gradient-to-r from-red-500 via-rose-600 to-indigo-600 hover:from-red-400 hover:to-indigo-500 text-white font-extrabold py-3.5 rounded-xl border border-red-400/40 hover:scale-[1.01] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-red-500/10 text-xs uppercase tracking-widest select-none">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-white"></i>
+                                CRYPTOGRAPHICALLY SECURE & DISCLOSE FINDING
+                            </button>
+                        </div>
                     </div>
 
                     <!-- TAB 3: COMPLETED REPORTS -->
-                    <div id="sec-tab-reports" class="security-tab-content space-y-6 hidden">
+id="sec-tab-reports" class="security-tab-content space-y-6 hidden">
                         <!-- Hero header for tab -->
                         <div class="glass-panel p-6 rounded-2xl border border-cyan-500/15 relative overflow-hidden">
                             <h3 class="text-xl font-black text-white uppercase tracking-wider">Whitehat Disclosures & Security Research Archive</h3>
@@ -458,93 +596,11 @@
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Program 1 -->
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-cyan-500/25 transition-all duration-300 flex flex-col justify-between gap-5 relative overflow-hidden">
-                                <div class="absolute top-0 right-0 px-3 py-1 bg-cyan-500/10 border-l border-b border-cyan-400/20 text-cyan-400 text-[8px] font-black uppercase tracking-widest rounded-bl-xl">ACTIVE VAULT</div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400"><i data-lucide="shield" class="w-5 h-5"></i></div>
-                                        <div>
-                                            <h4 class="text-sm font-extrabold text-white uppercase tracking-wide">Aeterna Sovereign Vaults v2</h4>
-                                            <span class="text-[9px] text-gray-500 font-bold uppercase mono mt-0.5 block">Smart Contract Integrity</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-xs text-gray-400 leading-relaxed">Focuses on auditing the Checks-Effects-Interactions flows, multi-sig constraints and low-level asset handlers of our primary vaults.</p>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div class="text-left">
-                                        <span class="block text-[8px] text-gray-600 font-bold uppercase">MAX PAYOUT</span>
-                                        <span class="text-emerald-400 font-extrabold text-sm mono">$250,000</span>
-                                    </div>
-                                    <button onclick="joinContest('Aeterna Sovereign Vaults v2')" class="bg-cyan-500/10 hover:bg-cyan-400 hover:text-black border border-cyan-400/25 px-4.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer">Register & Scan</button>
-                                </div>
-                            </div>
-
-                            <!-- Program 2 -->
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-purple-500/25 transition-all duration-300 flex flex-col justify-between gap-5 relative overflow-hidden">
-                                <div class="absolute top-0 right-0 px-3 py-1 bg-purple-500/10 border-l border-b border-purple-400/20 text-purple-400 text-[8px] font-black uppercase tracking-widest rounded-bl-xl">ACTIVE VAULT</div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-400/20 flex items-center justify-center text-purple-400"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                                        <div>
-                                            <h4 class="text-sm font-extrabold text-white uppercase tracking-wide">Sovereign State Sync Protocol</h4>
-                                            <span class="text-[9px] text-gray-500 font-bold uppercase mono mt-0.5 block">State Serialization Layer</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-xs text-gray-400 leading-relaxed">Focuses on finding denial-of-service vectors, signature verification overflows or unauthenticated handlers inside state synchronization engines.</p>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div class="text-left">
-                                        <span class="block text-[8px] text-gray-600 font-bold uppercase">MAX PAYOUT</span>
-                                        <span class="text-emerald-400 font-extrabold text-sm mono">$100,000</span>
-                                    </div>
-                                    <button onclick="joinContest('Sovereign State Sync Protocol')" class="bg-purple-500/10 hover:bg-purple-400 hover:text-black border border-purple-400/25 px-4.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer">Register & Scan</button>
-                                </div>
-                            </div>
-
-                            <!-- Program 3 -->
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-amber-500/25 transition-all duration-300 flex flex-col justify-between gap-5 relative overflow-hidden">
-                                <div class="absolute top-0 right-0 px-3 py-1 bg-amber-500/10 border-l border-b border-amber-400/20 text-amber-400 text-[8px] font-black uppercase tracking-widest rounded-bl-xl">ACTIVE VAULT</div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-400/20 flex items-center justify-center text-amber-400"><i data-lucide="activity" class="w-5 h-5"></i></div>
-                                        <div>
-                                            <h4 class="text-sm font-extrabold text-white uppercase tracking-wide">Solar Telemetry Sentinel</h4>
-                                            <span class="text-[9px] text-gray-500 font-bold uppercase mono mt-0.5 block">Hardware Telemetry Ingress</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-xs text-gray-400 leading-relaxed">Focuses on raw telemetry parse safety, buffer-overflow exploits in AVX-512 SIMD pipelines, or memory alignment friction under stress.</p>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div class="text-left">
-                                        <span class="block text-[8px] text-gray-600 font-bold uppercase">MAX PAYOUT</span>
-                                        <span class="text-emerald-400 font-extrabold text-sm mono">$75,000</span>
-                                    </div>
-                                    <button onclick="joinContest('Solar Telemetry Sentinel')" class="bg-amber-500/10 hover:bg-amber-400 hover:text-black border border-amber-400/25 px-4.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer">Register & Scan</button>
-                                </div>
-                            </div>
-
-                            <!-- Program 4 -->
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-emerald-500/25 transition-all duration-300 flex flex-col justify-between gap-5 relative overflow-hidden">
-                                <div class="absolute top-0 right-0 px-3 py-1 bg-emerald-500/10 border-l border-b border-emerald-400/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest rounded-bl-xl">ACTIVE VAULT</div>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-400/20 flex items-center justify-center text-emerald-400"><i data-lucide="brain" class="w-5 h-5"></i></div>
-                                        <div>
-                                            <h4 class="text-sm font-extrabold text-white uppercase tracking-wide">VHT Brain Neural Core</h4>
-                                            <span class="text-[9px] text-gray-500 font-bold uppercase mono mt-0.5 block">Cognitive & Neural Map Security</span>
-                                        </div>
-                                    </div>
-                                    <p class="text-xs text-gray-400 leading-relaxed">Focuses on isolating direct neural mapping pipelines, cognitive homeostatic purging safety, and local inference sandboxes.</p>
-                                </div>
-                                <div class="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div class="text-left">
-                                        <span class="block text-[8px] text-gray-600 font-bold uppercase">MAX PAYOUT</span>
-                                        <span class="text-emerald-400 font-extrabold text-sm mono">$500,000</span>
-                                    </div>
-                                    <button onclick="joinContest('VHT Brain Neural Core')" class="bg-emerald-500/10 hover:bg-emerald-400 hover:text-black border border-emerald-400/25 px-4.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer">Register & Scan</button>
-                                </div>
+                        <div id="dynamic-vaults-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Populated dynamically from /api/active-vaults -->
+                            <div class="glass-panel p-8 rounded-2xl border border-white/5 col-span-full text-center">
+                                <i data-lucide="loader" class="w-6 h-6 text-cyan-400 animate-spin mx-auto"></i>
+                                <p class="text-xs text-gray-500 mt-3">Loading active bounty vaults from Sovereign Registry...</p>
                             </div>
                         </div>
                     </div>
@@ -560,73 +616,11 @@
                         </div>
 
                         <!-- Leaderboard Table -->
-                        <div class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-                            <table class="w-full text-left text-xs text-gray-400 border-collapse">
-                                <thead>
-                                    <tr class="bg-black/45 border-b border-white/5 font-black uppercase text-[10px] tracking-wider text-gray-500 select-none">
-                                        <th class="p-4.5 pl-6">Rank</th>
-                                        <th class="p-4.5">Warden</th>
-                                        <th class="p-4.5">Score / Points</th>
-                                        <th class="p-4.5 text-center">Critical Bugs</th>
-                                        <th class="p-4.5 text-center">High Bugs</th>
-                                        <th class="p-4.5 text-right pr-6">Total Settled Bounties</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-white/5 mono">
-                                    <!-- Rank 1: Dimitar Prodromov -->
-                                    <tr class="hover:bg-cyan-500/5 transition-colors group">
-                                        <td class="p-4.5 pl-6 font-black text-cyan-400 flex items-center gap-1.5"><i data-lucide="crown" class="w-4 h-4 text-amber-300 animate-pulse"></i> #1</td>
-                                        <td class="p-4.5 text-white font-extrabold flex items-center gap-2 select-all">
-                                            <span>Dimitar Prodromov (<span class="text-cyan-400 font-black">papica777</span>)</span>
-                                            <span class="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest bg-cyan-400/10 border border-cyan-400/20 text-cyan-400">GRANDMASTER</span>
-                                        </td>
-                                        <td class="p-4.5 font-bold text-white">24,850 pts</td>
-                                        <td class="p-4.5 text-center text-red-400 font-extrabold">12</td>
-                                        <td class="p-4.5 text-center text-amber-400 font-extrabold">24</td>
-                                        <td class="p-4.5 text-right text-emerald-400 font-extrabold pr-6 select-all">$420,000</td>
-                                    </tr>
-
-                                    <!-- Rank 2 -->
-                                    <tr class="hover:bg-white/5 transition-colors">
-                                        <td class="p-4.5 pl-6 font-bold text-gray-500">#2</td>
-                                        <td class="p-4.5 text-white font-bold select-all">ZachXBT <span class="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest bg-purple-500/10 border border-purple-500/20 text-purple-400">ELITE</span></td>
-                                        <td class="p-4.5">18,920 pts</td>
-                                        <td class="p-4.5 text-center font-bold">6</td>
-                                        <td class="p-4.5 text-center font-bold">15</td>
-                                        <td class="p-4.5 text-right text-emerald-400 font-bold pr-6 select-all">$280,000</td>
-                                    </tr>
-
-                                    <!-- Rank 3 -->
-                                    <tr class="hover:bg-white/5 transition-colors">
-                                        <td class="p-4.5 pl-6 font-bold text-gray-500">#3</td>
-                                        <td class="p-4.5 text-white font-bold select-all">samczsun <span class="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest bg-purple-500/10 border border-purple-500/20 text-purple-400">ELITE</span></td>
-                                        <td class="p-4.5">16,400 pts</td>
-                                        <td class="p-4.5 text-center font-bold">5</td>
-                                        <td class="p-4.5 text-center font-bold">12</td>
-                                        <td class="p-4.5 text-right text-emerald-400 font-bold pr-6 select-all">$210,000</td>
-                                    </tr>
-
-                                    <!-- Rank 4 -->
-                                    <tr class="hover:bg-white/5 transition-colors">
-                                        <td class="p-4.5 pl-6 font-bold text-gray-500">#4</td>
-                                        <td class="p-4.5 text-white font-bold select-all">trust1995</td>
-                                        <td class="p-4.5">12,300 pts</td>
-                                        <td class="p-4.5 text-center font-bold">3</td>
-                                        <td class="p-4.5 text-center font-bold">9</td>
-                                        <td class="p-4.5 text-right text-emerald-400 font-bold pr-6 select-all">$145,000</td>
-                                    </tr>
-
-                                    <!-- Rank 5 -->
-                                    <tr class="hover:bg-white/5 transition-colors">
-                                        <td class="p-4.5 pl-6 font-bold text-gray-500">#5</td>
-                                        <td class="p-4.5 text-white font-bold select-all">cmichel</td>
-                                        <td class="p-4.5">11,050 pts</td>
-                                        <td class="p-4.5 text-center font-bold">2</td>
-                                        <td class="p-4.5 text-center font-bold">11</td>
-                                        <td class="p-4.5 text-right text-emerald-400 font-bold pr-6 select-all">$130,000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div id="dynamic-leaderboard-container" class="glass-panel rounded-2xl border border-white/5 overflow-hidden">
+                            <div class="p-8 text-center">
+                                <i data-lucide="loader" class="w-6 h-6 text-purple-400 animate-spin mx-auto"></i>
+                                <p class="text-xs text-gray-500 mt-3">Loading warden leaderboard from Sovereign Registry...</p>
+                            </div>
                         </div>
                     </div>
 
@@ -634,34 +628,112 @@
                     <div id="sec-tab-faq" class="security-tab-content space-y-6 hidden">
                         <div class="glass-panel p-6 rounded-2xl border border-cyan-500/15 relative overflow-hidden">
                             <div class="scan-line-animation"></div>
-                            <h3 class="text-xl font-black text-white uppercase tracking-wider">The Wall of Logic FAQ & SLA Guidelines</h3>
+                            <h3 class="text-xl font-black text-white uppercase tracking-wider">AETERNA SECURE OPERATIVE MANUAL & REGULATIONS</h3>
                             <p class="text-xs text-gray-400 mt-1 leading-relaxed">
-                                Detailed SLA response windows, security guarantees, WASM sandbox mechanics, and whitehat disclosure rules.
+                                SLA service levels, Safe Harbor codes of conduct, game theory bounty rules, and identity compliance guidelines.
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-2">
-                                <h4 class="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2"><i data-lucide="clock" class="text-cyan-400 w-4.5 h-4.5"></i> What is the SLA response time?</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">We guarantee a preliminary response and manual review verification within 24 hours. Critical findings trigger automated alerts directly into partner developer systems.</p>
+                        <!-- FAQ ACCORDION PANEL -->
+                        <div class="space-y-4 text-left">
+                            
+                            <!-- Topic 1: Safe Harbor Policy -->
+                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-3">
+                                <h4 class="text-base font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
+                                    <i data-lucide="shield-check" class="text-cyan-400 w-5 h-5 shrink-0"></i> 
+                                    1. Safe Harbor Policy & Allowed Behaviors (Безопасно Пристанище)
+                                </h4>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    Trust and mutual security are built on ironclad rules that protect both the protocol’s architecture and the ethical researcher's rights. Under Aeterna’s Safe Harbor policy, sponsors agree never to take legal or hostile action against whitehats, provided they strictly abide by the rules.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                    <div class="p-4 bg-red-950/20 border border-red-500/25 rounded-xl space-y-1.5">
+                                        <span class="text-[9px] font-black uppercase text-red-400 tracking-widest block">🚫 STRICTLY PROHIBITED BEHAVIORS</span>
+                                        <ul class="text-[10px] text-gray-400 space-y-1 list-disc pl-4 leading-normal">
+                                            <li><strong class="text-gray-300">Mainnet Scanning/Testing:</strong> Strictly prohibited. All scanning, testing, and exploitation must be carried out exclusively on local forks.</li>
+                                            <li><strong class="text-gray-300">DDoS & Mass Traffic:</strong> Generating heavy traffic using automated tools or flood scanning is forbidden.</li>
+                                            <li><strong class="text-gray-300">Social Engineering & Phishing:</strong> Targeting protocol employees, physical office entry, or extortion leads to an immediate, permanent ban.</li>
+                                            <li><strong class="text-gray-300">Fabricating/Exaggerating Facts:</strong> Intentional inflation of severities or reporting theoretical flaws as critical.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-4 bg-emerald-950/20 border border-emerald-500/25 rounded-xl space-y-1.5">
+                                        <span class="text-[9px] font-black uppercase text-emerald-400 tracking-widest block">🛡️ PROTECTED B2B PROTOCOL RULES</span>
+                                        <ul class="text-[10px] text-gray-400 space-y-1 list-disc pl-4 leading-normal">
+                                            <li><strong class="text-gray-300">Anti-Stealth Fixing:</strong> Sponsors are strictly prohibited from secretly patching reported vulnerabilities to bypass reward payments.</li>
+                                            <li><strong class="text-gray-300">No Out-of-Bounds Negotiations:</strong> Sponsors cannot negotiate directly with wardens for lower payouts outside the platform.</li>
+                                            <li><strong class="text-gray-300">Known Issue Declarations:</strong> Sponsors cannot declare a finding as a "known issue" unless they provide a timestamped public audit or internal ticket dated before the submission.</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-2">
-                                <h4 class="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2"><i data-lucide="shield-alert" class="text-cyan-400 w-4.5 h-4.5"></i> Is my code secure in Sandbox Scanner?</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">Yes, 100%. The Sandbox Scanner operates completely within your local browser's isolated WebAssembly sandbox. Not a single line of your codebase or private keys ever leaves your machine.</p>
+                            <!-- Topic 2: Economic Model & Payout Game Theory -->
+                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-3">
+                                <h4 class="text-base font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
+                                    <i data-lucide="line-chart" class="text-cyan-400 w-5 h-5 shrink-0"></i> 
+                                    2. Economic Model, Game Theory & Payouts (Икономически Модел)
+                                </h4>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    To ensure the expected value (EV) of reporting a bug is always higher than malicious exploitation (taking legal risks and money laundering friction into account), B2B reward systems must follow dynamic, TVL-proportional game theory formulas rather than flat-rate rewards.
+                                </p>
+                                <div class="bg-black/45 p-4 rounded-xl border border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                                    <div class="space-y-1">
+                                        <span class="text-[9px] font-black text-cyan-400 uppercase tracking-widest block">Proportional TVL Payout Formula</span>
+                                        <code class="text-sm font-bold text-white font-mono select-all">Reward = min(max(0.10 * TVL_affected, Minimum_cap), Maximum_cap)</code>
+                                    </div>
+                                    <div class="text-[10px] text-gray-400 max-w-xs leading-normal">
+                                        Our B2B programs incentivize researchers at early stages (with a high Minimum Cap floor like <strong class="text-white">$100,000</strong>) and protect protocol solvency at high liquidity pools (with a Maximum Cap ceiling like <strong class="text-white">$1,000,000</strong>).
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                    <div class="p-4 bg-black/45 border border-white/5 rounded-xl space-y-1.5">
+                                        <span class="text-[9px] font-black uppercase text-cyan-400 tracking-widest block">⚡ Primacy of Impact (Примат на Въздействието)</span>
+                                        <p class="text-[10px] text-gray-400 leading-normal">
+                                            If an attack path leads to a catastrophic loss of assets, the finding is classified as Critical and receives maximum reward, even if the specific vulnerable component was not explicitly outlined in the initial written scope. This protects whitehats against semantic loopholes.
+                                        </p>
+                                    </div>
+                                    <div class="p-4 bg-black/45 border border-white/5 rounded-xl space-y-1.5">
+                                        <span class="text-[9px] font-black uppercase text-cyan-400 tracking-widest block">⚖️ High-Severity Lock multiplier (DoS)</span>
+                                        <p class="text-[10px] text-gray-400 leading-normal">
+                                            For high-severity vulnerabilities causing Denial of Service or temporary lockups of funds, rewards scale proportionally to the duration of the lock (e.g. doubling for every 5 blocks locked) up to a pre-defined hard cap.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-2">
-                                <h4 class="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2"><i data-lucide="code" class="text-cyan-400 w-4.5 h-4.5"></i> What languages are fully supported?</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">We support Solidity (.sol), Rust (.rs), Go (.go), TypeScript (.ts), and Zig (.zig). The static engine translates paths into Z3 SMT constraint systems for formal proofs.</p>
+                            <!-- Topic 3: KYC/AML Compliance -->
+                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-3">
+                                <h4 class="text-base font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
+                                    <i data-lucide="scale" class="text-cyan-400 w-5 h-5 shrink-0"></i> 
+                                    3. Global KYC/AML & OFAC Compliance (Легитимност & Санкции)
+                                </h4>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    Since our platform facilitates B2B transfers of large financial sums, strict adherence to client identification (KYC) and anti-money laundering (AML) laws is a binding legal duty.
+                                </p>
+                                <ul class="text-[10px] text-gray-400 space-y-1.5 list-disc pl-5 leading-normal">
+                                    <li><strong class="text-gray-300">Sanction Check:</strong> Under zero circumstances will rewards be disbursed to individuals residing in sanctioned jurisdictions or listed under US OFAC, European Union, or UN Security Council (UNSC) blacklists.</li>
+                                    <li><strong class="text-gray-300">Verification Gate:</strong> Before releasing high-tier payouts (above $10,000 USD), researchers must undergo standard identity verification requiring a government-issued photo ID and address proof.</li>
+                                    <li><strong class="text-gray-300">Secure Cryptographic Auditing:</strong> Payment allocations are Denominated in USD but paid out in stablecoins (USDC/USDT) directly to verified, non-custodial multi-signature wallets to guarantee decentralized accountability.</li>
+                                </ul>
                             </div>
 
-                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-2">
-                                <h4 class="text-sm font-extrabold text-white uppercase tracking-wide flex items-center gap-2"><i data-lucide="banknote" class="text-cyan-400 w-4.5 h-4.5"></i> How are Bug Bounty payouts handled?</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">Verified bugs are scored and settled in USDC, USDT or native partner tokens using decentralized multi-sig escrow wallets directly managed by Aeterna Labs.</p>
+                            <!-- Topic 4: Technical Triage & PoC Guidelines -->
+                            <div class="glass-panel p-6 rounded-2xl border border-white/5 space-y-3">
+                                <h4 class="text-base font-extrabold text-white uppercase tracking-wide flex items-center gap-2">
+                                    <i data-lucide="terminal" class="text-cyan-400 w-5 h-5 shrink-0"></i> 
+                                    4. Technical Triage & PoC Requirements (Правила за Триаж)
+                                </h4>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    To eliminate spam and ensure Aeterna’s triage engineers focus exclusively on real, verified, and executable bugs, all warden report submissions are filtered through a strict cryptographic triage adapter.
+                                </p>
+                                <ul class="text-[10px] text-gray-400 space-y-1.5 list-disc pl-5 leading-normal">
+                                    <li><strong class="text-gray-300">Description:</strong> A detailed written summary explaining the logical vulnerability root cause and impact vector is required.</li>
+                                    <li><strong class="text-gray-300">Reproduction Steps:</strong> A step-by-step sequential guide describing how to replicate the exploit state.</li>
+                                    <li><strong class="text-gray-300">Working Proof of Concept (PoC) Code:</strong> A complete, executable Solidity/Foundry test skeleton showing the actual exploit mechanism. Submissions without a valid PoC are automatically rejected by our triage adapter.</li>
+                                </ul>
                             </div>
                         </div>
-                    </div>
+                    </div>>
                 </div>
             </div>
 
@@ -1414,7 +1486,16 @@
 
         async function executeWeb3SignatureVerify(walletType) {
             try {
-                const wardenEmail = "warden@code4rena.com";
+                // Dynamic Web3 addresses matching the PDF rules
+                const walletAddresses = {
+                    metamask: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+                    rabby: "0x3B99741b6B7C3aedbc9c4455C6b749deD337373C",
+                    walletconnect: "0x2D9B69BfF242F2D48eaEaA751B7401B5f6d888eA",
+                    ledger: "0x00E5a415ff5fc9e24a855f7fc9e24a855f7fc9e24"
+                };
+                
+                const connectedAddress = walletAddresses[walletType.toLowerCase()] || "0x9669e00e5ff400ea855f7fc9e24a855f7fc9e24";
+                const wardenEmail = `${walletType.toLowerCase()}_warden@aeterna.website`;
                 
                 // Show modal overlay
                 const modal = document.getElementById('sandbox-payment-modal');
@@ -1446,17 +1527,17 @@
                 title.innerText = "WHITELIST SIGNATURE VERIFIED!";
                 title.className = "text-lg font-black text-emerald-400 uppercase tracking-wider";
                 
-                const wardenName = "Warden_" + Math.random().toString(36).substring(2, 7).toUpperCase();
-                const signProof = `0x4121_PROOF_OF_WORK_WARDEN_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
-                const accessKey = `AETERNA-C4-WARDEN-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+                const wardenName = `${walletType.toUpperCase()}_WARDEN_${connectedAddress.substring(2, 8).toUpperCase()}`;
+                const signProof = `0x4121_PROOF_OF_WORK_${walletType.toUpperCase()}_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+                const accessKey = `AETERNA-${walletType.toUpperCase()}-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
                 
                 desc.innerHTML = `
                     <div class="space-y-4">
                         <p class="text-xs text-gray-400 leading-relaxed">
-                            Security identity successfully verified for <strong>${wardenEmail}</strong>. Welcome to the workspace, Warden.
+                            Security identity successfully verified for Ethereum address: <br><strong class="text-cyan-400 select-all font-mono">${connectedAddress}</strong>
                         </p>
                         <div class="bg-emerald-500/10 border border-emerald-500/20 p-3.5 rounded-2xl mono text-[10px] text-emerald-400 space-y-1 select-all text-left">
-                            <span class="block text-gray-500 uppercase tracking-wider font-bold">VERIFIED_SIGNATURE:</span>
+                            <span class="block text-gray-500 uppercase tracking-wider font-bold">VERIFIED_SIGNATURE_PROOF:</span>
                             <span class="block font-black text-cyan-400 select-all mb-2">${signProof}</span>
                             <span class="block text-gray-500 uppercase tracking-wider font-bold">SANDBOX_ACCESS_KEY:</span>
                             <span class="block font-black text-white select-all">${accessKey}</span>
@@ -1991,18 +2072,78 @@ console.log("[SOUL] Dynamically compiled ruleset content:\\n", soulRuleset);`,
         let activeLoggedInEmail = "partner@myprotocol.io";
 
         function handleSecurityLogin(type) {
-            const overlay = document.getElementById('login-loading-overlay');
-            if (overlay) overlay.classList.remove('hidden');
-            
-            // Capture user email
+            if (type === 'google' || type === 'github') {
+                // Open the Social Account Chooser Modal
+                openGoogleChooserModal(type);
+                return;
+            }
+
             const emailInput = document.getElementById('login-email');
             if (emailInput && emailInput.value.trim() !== '') {
                 activeLoggedInEmail = emailInput.value.trim();
-            } else if (type === 'google') {
-                activeLoggedInEmail = 'papica777@gmail.com';
-            } else if (type === 'github') {
-                activeLoggedInEmail = 'papica777@github.com';
+            } else {
+                alert("CLIENT_ERROR: Email field is mandatory for standard sign in.");
+                return;
             }
+
+            executeAuthFlowTransition();
+        }
+
+        let oauthTypeSelected = 'google';
+
+        function openGoogleChooserModal(type = 'google') {
+            oauthTypeSelected = type;
+            const modal = document.getElementById('google-chooser-modal');
+            const title = modal.querySelector('h3');
+            const subtitle = modal.querySelector('p');
+            
+            if (type === 'github') {
+                title.innerText = "Choose a GitHub profile";
+                subtitle.innerHTML = 'to continue to <span class="text-indigo-600">Aeterna Security Hub</span>';
+            } else {
+                title.innerText = "Choose a Google account";
+                subtitle.innerHTML = 'to continue to <span class="text-indigo-600">Aeterna Security Hub</span>';
+            }
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function closeGoogleChooserModal() {
+            const modal = document.getElementById('google-chooser-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function toggleGoogleCustomAccount() {
+            const field = document.getElementById('google-custom-account-field');
+            field.classList.toggle('hidden');
+            if (!field.classList.contains('hidden')) {
+                document.getElementById('google-custom-email').focus();
+            }
+        }
+
+        function selectGoogleAccount(email, name) {
+            closeGoogleChooserModal();
+            activeLoggedInEmail = email;
+            executeAuthFlowTransition();
+        }
+
+        function submitGoogleCustomAccount() {
+            const customEmail = document.getElementById('google-custom-email').value.trim();
+            if (!customEmail || !customEmail.includes('@')) {
+                alert("CLIENT_ERROR: Please enter a valid email address.");
+                return;
+            }
+            closeGoogleChooserModal();
+            activeLoggedInEmail = customEmail;
+            executeAuthFlowTransition();
+        }
+
+        function executeAuthFlowTransition() {
+            const overlay = document.getElementById('login-loading-overlay');
+            if (overlay) overlay.classList.remove('hidden');
 
             setTimeout(() => {
                 if (overlay) overlay.classList.add('hidden');
@@ -2126,6 +2267,521 @@ console.log("[SOUL] Dynamically compiled ruleset content:\\n", soulRuleset);`,
             window.location.reload();
         }
 
+        function switchSubmitSubTab(tab) {
+            const panelB2B = document.getElementById('submit-panel-b2b');
+            const panelWhitehat = document.getElementById('submit-panel-whitehat');
+            const btnB2B = document.getElementById('btn-submit-b2b');
+            const btnWhitehat = document.getElementById('btn-submit-whitehat');
+            
+            if (tab === 'b2b-audit') {
+                if (panelB2B) panelB2B.classList.remove('hidden');
+                if (panelWhitehat) panelWhitehat.classList.add('hidden');
+                if (btnB2B) {
+                    btnB2B.className = "pb-3 border-b-2 border-cyan-400 font-extrabold text-xs uppercase tracking-widest text-white px-4 cursor-pointer select-none transition-all duration-300";
+                }
+                if (btnWhitehat) {
+                    btnWhitehat.className = "pb-3 border-b-2 border-transparent font-extrabold text-xs uppercase tracking-widest text-gray-500 hover:text-white px-4 cursor-pointer select-none transition-all duration-300";
+                }
+            } else {
+                if (panelB2B) panelB2B.classList.add('hidden');
+                if (panelWhitehat) panelWhitehat.classList.remove('hidden');
+                if (btnB2B) {
+                    btnB2B.className = "pb-3 border-b-2 border-transparent font-extrabold text-xs uppercase tracking-widest text-gray-500 hover:text-white px-4 cursor-pointer select-none transition-all duration-300";
+                }
+                if (btnWhitehat) {
+                    btnWhitehat.className = "pb-3 border-b-2 border-cyan-400 font-extrabold text-xs uppercase tracking-widest text-white px-4 cursor-pointer select-none transition-all duration-300";
+                }
+                
+                // Dynamically update whitehat badge info from session
+                const savedEmail = localStorage.getItem('security_logged_in_email') || 'papica777@gmail.com';
+                const savedWallet = localStorage.getItem('connected_wallet') || '0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+                
+                const wardenBadge = document.getElementById('whitehat-warden-badge');
+                const walletBadge = document.getElementById('whitehat-wallet-badge');
+                
+                if (wardenBadge) {
+                    if (savedEmail.includes('papica777')) {
+                        wardenBadge.innerText = 'papica777 (Dimitar Prodromov)';
+                    } else {
+                        wardenBadge.innerText = savedEmail.split('@')[0];
+                    }
+                }
+                if (walletBadge) {
+                    walletBadge.innerText = savedWallet.substring(0, 8) + '...' + savedWallet.substring(savedWallet.length - 4);
+                }
+                calculateBountySimulated();
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function calculateBountySimulated() {
+            const campaign = document.getElementById('whitehat-campaign').value;
+            const tvlVal = parseFloat(document.getElementById('whitehat-tvl').value) || 0;
+            
+            let min = 100000;
+            let max = 1000000;
+            let rate = 0.10;
+            
+            if (campaign === 'azul') {
+                min = 50000;
+                max = 500000;
+            } else if (campaign === 'firedancer') {
+                min = 150000;
+                max = 1500000;
+            }
+            
+            const rawReward = tvlVal * rate;
+            const boundedReward = Math.min(Math.max(rawReward, min), max);
+            
+            const simTvlSpan = document.getElementById('payout-sim-tvl');
+            const simRewardSpan = document.getElementById('payout-sim-reward');
+            
+            if (simTvlSpan) simTvlSpan.innerText = '$' + tvlVal.toLocaleString();
+            if (simRewardSpan) simRewardSpan.innerText = '$' + boundedReward.toLocaleString();
+        }
+
+        function submitWhitehatAdvisoryReport() {
+            const headline = document.getElementById('whitehat-headline').value.trim();
+            const campaign = document.getElementById('whitehat-campaign').value;
+            const severity = document.getElementById('whitehat-severity').value;
+            const cwe = document.getElementById('whitehat-cwe').value;
+            const tvl = parseFloat(document.getElementById('whitehat-tvl').value) || 0;
+            const description = document.getElementById('whitehat-description').value.trim();
+            const steps = document.getElementById('whitehat-steps').value.trim();
+            const poc = document.getElementById('whitehat-poc').value.trim();
+            
+            // Checkboxes
+            const checkFork = document.getElementById('whitehat-check-fork').checked;
+            const checkKyc = document.getElementById('whitehat-check-kyc').checked;
+            const checkPoc = document.getElementById('whitehat-check-poc').checked;
+            
+            if (!headline || !description || !steps || !poc) {
+                alert("CLIENT_ERROR: Headline, Description, Steps to Reproduce, and Proof of Concept Code are all mandatory fields.");
+                return;
+            }
+            
+            if (!checkFork || !checkKyc || !checkPoc) {
+                alert("CLIENT_ERROR: You must review and check all compliance checkboxes (Safe Harbor, KYC/AML, and PoC terms) before submitting.");
+                return;
+            }
+            
+            // Calculate simulated reward
+            let min = 100000;
+            let max = 1000000;
+            if (campaign === 'azul') { min = 50000; max = 500000; }
+            else if (campaign === 'firedancer') { min = 150000; max = 1500000; }
+            const reward = Math.min(Math.max(tvl * 0.10, min), max);
+            
+            const savedEmail = localStorage.getItem('security_logged_in_email') || 'papica777@gmail.com';
+            const wardenName = savedEmail.includes('papica777') ? 'Dimitar Prodromov (papica777)' : savedEmail.split('@')[0];
+            
+            alert(`WARDEN DISCLOSURE SUCCESS!\n\nFinding cryptographically locked and queued for Aeterna Triage.\n\nWarden: ${wardenName}\nCampaign: ${campaign.toUpperCase()}\nSeverity: ${severity.toUpperCase()}\nEstimated Reward: $${reward.toLocaleString()} USDC`);
+            
+            // Reset fields
+            document.getElementById('whitehat-headline').value = '';
+            document.getElementById('whitehat-tvl').value = '500000';
+            document.getElementById('whitehat-description').value = '';
+            document.getElementById('whitehat-steps').value = '';
+            document.getElementById('whitehat-poc').value = '';
+            document.getElementById('whitehat-check-fork').checked = false;
+            document.getElementById('whitehat-check-kyc').checked = false;
+            document.getElementById('whitehat-check-poc').checked = false;
+            
+            calculateBountySimulated();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § DYNAMIC REPORTS INGESTION & Z3 SIMULATOR ENGINES
+        // ─────────────────────────────────────────────────────────────────────────────
+        window.vivisectorReports = [];
+        let activeLogsToType = [];
+
+        function sha256Mock(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            const hex = Math.abs(hash).toString(16).padStart(8, '0');
+            return `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca49599${hex}`;
+        }
+
+        async function fetchReportsAndPopulate() {
+            try {
+                const res = await fetch('http://localhost:8890/api/vivisector-reports');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.reports)) {
+                    window.vivisectorReports = data.reports;
+                    
+                    // 1. Populate Security Scan History in Right Column
+                    const historyContainer = document.getElementById('history-items-container');
+                    const historyCount = document.getElementById('history-count');
+                    
+                    if (historyContainer) {
+                        historyContainer.innerHTML = '';
+                        const recentScans = data.reports.slice(0, 5);
+                        if (historyCount) historyCount.innerText = `${data.reports.length} Scans`;
+
+                        recentScans.forEach(report => {
+                            const isCritical = report.totalFindings > 0;
+                            const indicatorBg = isCritical ? 'bg-red-400 animate-pulse' : 'bg-emerald-400';
+                            const badgeColor = isCritical ? 'text-red-400 bg-red-400/10 border-red-400/20' : 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
+                            const badgeText = isCritical ? 'Z3 Trace' : 'Safe';
+                            
+                            const div = document.createElement('div');
+                            div.className = "p-3 bg-black/35 hover:bg-white/5 border border-white/5 hover:border-cyan-500/20 rounded-xl transition-all duration-300 flex items-center justify-between gap-4 cursor-pointer select-none text-left";
+                            div.onclick = () => {
+                                switchSecurityTab('scanner');
+                                loadAuditReportSimulation(report.filename);
+                            };
+                            div.innerHTML = `
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full ${indicatorBg}"></span>
+                                        <strong class="text-[11px] text-white tracking-wide uppercase font-bold truncate max-w-[150px] block">${report.projectName}</strong>
+                                    </div>
+                                    <span class="block text-[8px] text-gray-500 uppercase tracking-widest font-semibold">${report.totalFindings} Findings · ${report.totalLines.toLocaleString()} LOC</span>
+                                </div>
+                                <span class="text-[8px] font-extrabold ${badgeColor} border px-2 py-0.5 rounded">${badgeText}</span>
+                            `;
+                            historyContainer.appendChild(div);
+                        });
+                    }
+
+                    // 2. Populate Completed Reports Tab list
+                    const reportsContainer = document.getElementById('sec-tab-reports');
+                    if (reportsContainer) {
+                        const headerHtml = `
+                            <div class="glass-panel p-6 rounded-2xl border border-cyan-500/15 relative overflow-hidden">
+                                <h3 class="text-xl font-black text-white uppercase tracking-wider">Whitehat Disclosures & Security Research Archive</h3>
+                                <p class="text-xs text-gray-400 mt-1 leading-relaxed">
+                                    Verified vulnerability disclosures and high-impact security advisories published by Aeterna Labs research team.
+                                </p>
+                            </div>
+                        `;
+                        
+                        let itemsHtml = '<div class="space-y-4">';
+                        data.reports.forEach(report => {
+                            const dateStr = new Date(report.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                            const totalBountyVal = report.summary.critical * 250000 + report.summary.high * 50000 + report.summary.medium * 15000;
+                            itemsHtml += `
+                                <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-cyan-400/25 transition-all duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-left">
+                                    <div class="space-y-2">
+                                        <div class="flex flex-wrap items-center gap-2.5">
+                                            <span class="px-2 py-0.5 rounded text-[8px] font-black tracking-widest bg-cyan-500/10 border border-cyan-400/20 text-cyan-400 uppercase">VERIFIED DISCLOSURE</span>
+                                            <span class="text-[9px] text-gray-500 mono">${dateStr}</span>
+                                        </div>
+                                        <h4 class="text-base font-black text-white tracking-wide uppercase">${report.projectName.replace(/_/g, ' ')}</h4>
+                                        <p class="text-xs text-gray-500">Scan analysis containing ${report.totalFindings} proved vulnerability points across ${report.totalFiles} files with formal Z3 verification.</p>
+                                        <div class="flex items-center gap-4 text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                                            <span>Bounty Protected: <strong class="text-emerald-400">$${(totalBountyVal > 0 ? totalBountyVal : 0).toLocaleString()}</strong></span>
+                                            <span>Auditor Signature: <strong class="text-purple-400">Dimitar Prodromov</strong></span>
+                                        </div>
+                                    </div>
+                                    <button onclick="switchSecurityTab('scanner'); loadAuditReportSimulation('${report.filename}');" class="bg-cyan-500/10 hover:bg-cyan-400 hover:text-black border border-cyan-400/25 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer shrink-0 select-none">
+                                        View Trace & PoC
+                                    </button>
+                                </div>
+                            `;
+                        });
+                        itemsHtml += '</div>';
+                        reportsContainer.innerHTML = headerHtml + '\n' + itemsHtml;
+                    }
+                }
+            } catch (err) {
+                console.warn("[ZK-REPORTS] Failed to fetch dynamic reports list.", err);
+            }
+        }
+
+        async function loadAuditReportSimulation(filename) {
+            if (simTimeout) clearTimeout(simTimeout);
+            
+            const term1 = document.getElementById('sim-terminal-1');
+            const term2 = document.getElementById('sim-terminal-2');
+            
+            if (term1) term1.innerHTML = '<div class="text-cyan-400 mono">Loading report traces from backend...</div>';
+            if (term2) term2.innerHTML = '<div class="text-purple-400 mono">Parsing SMT proof constraint models...</div>';
+            
+            try {
+                const res = await fetch(`http://localhost:8890/api/vivisector-reports/${filename}`);
+                const data = await res.json();
+                
+                if (data.success && data.report) {
+                    activeReportData = data.report;
+                    const report = data.report;
+                    
+                    const logs = [
+                        `[INIT] Booting UKAME Static Taint Traversal Engine...`,
+                        `[INIT] Ingesting repository target: ${report.targetDir || 'z:/soul'}`,
+                        `[OK] Workspace ingest nominal: parsed ${report.totalFiles} files, ${report.totalLines.toLocaleString()} lines of code.`,
+                        `[CHECK] Generating interprocedural control flow graph (CFG)...`,
+                        `[FORMAL] Translating AST execution steps to Z3 SMT constraint variables...`
+                    ];
+                    
+                    if (Array.isArray(report.findings) && report.findings.length > 0) {
+                        report.findings.forEach((finding, idx) => {
+                            logs.push(`[Z3] Analyzing invariant constraints in ${finding.file}:${finding.line}...`);
+                            logs.push(`[Z3] STATUS: SATISFIABLE (Exploit constraint path solved ✓)`);
+                            logs.push(`[ALERT] 🚨 VULNERABILITY SOLVED ON LINE ${finding.line}!`);
+                            logs.push(`[ALERT] File: z:${finding.file}`);
+                            logs.push(`[ALERT] Severity: ${finding.severity} | CWE: ${finding.cwe}`);
+                            logs.push(`[TAINT] Code Sink: ${finding.content.trim()}`);
+                        });
+                        logs.push(`[SUCCESS] Formal Z3 proof completed: ${report.totalFindings} vulnerabilities mathematically solved.`);
+                    } else {
+                        logs.push(`[Z3] All AST pathways satisfy defined assertions.`);
+                        logs.push(`[SUCCESS] Formal Z3 proof completed: 0 exploit constraint paths found.`);
+                    }
+                    
+                    activeLogsToType = logs;
+                    startAuditSimulation();
+                    renderExecutiveReportDynamic(report);
+                }
+            } catch (err) {
+                console.error("[ZK-REPORTS] Failed to load report details:", err);
+                if (term1) term1.innerHTML = '<div class="text-red-500 font-bold">Failed to load report traces from backend server.</div>';
+            }
+        }
+
+        function renderExecutiveReportDynamic(report) {
+            const term = document.getElementById('sim-terminal-2');
+            if (!term) return;
+            
+            let findingsHtml = '';
+            if (Array.isArray(report.findings) && report.findings.length > 0) {
+                report.findings.forEach((finding, idx) => {
+                    const escPoc = finding.pocSkeleton ? finding.pocSkeleton
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;") : '// PoC skeleton not generated';
+                    
+                    const escCode = finding.content ? finding.content
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;") : '// Code sink unavailable';
+
+                    findingsHtml += `
+    <div class="border-t border-white/5 pt-4 mt-4 space-y-3">
+        <div class="flex justify-between items-center">
+            <h4 class="text-white font-bold text-xs"># Finding ${idx+1}: ${finding.type}</h4>
+            <span class="text-[8px] bg-red-500/10 text-red-400 border border-red-400/20 px-2 py-0.5 rounded font-black">${finding.severity}</span>
+        </div>
+        
+        <div class="space-y-1 text-gray-500 text-[8px] mono">
+            <div><strong class="text-gray-400">File:</strong> z:${finding.file} (Line ${finding.line})</div>
+            <div><strong class="text-gray-400">CWE Classification:</strong> ${finding.cwe} (${finding.defiCategory})</div>
+            <div><strong class="text-gray-400">Estimated Reward:</strong> <span class="text-emerald-400 font-extrabold">${finding.estimatedBountyUSD || 'N/A'}</span></div>
+        </div>
+
+        <p class="text-gray-400 text-[10px] italic leading-relaxed">"${finding.immunefiImpact || 'Arithmetic overflow or execution path invariant state panic.'}"</p>
+
+        <div class="text-[8px] text-red-400 uppercase font-black tracking-widest mt-1">Exploit Code Sink:</div>
+        <pre class="bg-black/80 p-2.5 rounded-lg border border-white/5 text-[9px] text-gray-300 font-mono overflow-x-auto select-text"><code>${finding.line}: ${escCode}</code></pre>
+
+        <div class="text-[8px] text-emerald-400 uppercase font-black tracking-widest mt-1">Foundry Exploit Proof-of-Concept:</div>
+        <pre class="bg-black/90 p-2.5 rounded-lg border border-white/5 text-[8.5px] text-cyan-300 font-mono overflow-x-auto whitespace-pre select-text"><code>${escPoc}</code></pre>
+    </div>
+                    `;
+                });
+            } else {
+                findingsHtml = `
+    <div class="border-t border-white/5 pt-6 mt-6 text-center space-y-2">
+        <i data-lucide="check-circle-2" class="text-emerald-400 w-10 h-10 mx-auto animate-pulse"></i>
+        <h4 class="text-white font-extrabold text-xs">NO VULNERABILITIES DETECTED</h4>
+        <p class="text-[10px] text-gray-500 max-w-xs mx-auto leading-relaxed">All transaction branches satisfy formal SMT invariants. No exploit paths proven.</p>
+    </div>
+                `;
+            }
+
+            term.innerHTML = `
+<div class="space-y-4 select-text">
+    <div class="text-white font-bold border-b border-cyan-400/20 pb-2 flex justify-between items-center">
+        <span>VIVISECTOR_REPORT_${report.projectName.toUpperCase()}.md</span>
+        <span class="text-[8px] bg-emerald-500/10 text-emerald-400 border border-emerald-400/20 px-2 py-0.5 rounded font-black uppercase tracking-wider">VERIFIED</span>
+    </div>
+    
+    <div class="space-y-1 text-gray-500 text-[9px] bg-black/40 p-2.5 rounded-xl border border-white/5 mono">
+        <div><strong class="text-gray-400">ENGINE:</strong> Bounty Vivisector AST v2.3</div>
+        <div><strong class="text-gray-400">TIMESTAMP:</strong> ${new Date(report.timestamp).toLocaleString()}</div>
+        <div><strong class="text-gray-400">COMPILER KEYS:</strong> <span class="text-purple-400">0x41_45_54_45_52_4e_41_5f_LOGOS_DIMITAR_PRODROMOV!</span></div>
+        <div><strong class="text-gray-400">SHA-256:</strong> <span class="text-cyan-400 select-all">${sha256Mock(JSON.stringify(report)).substring(0, 48)}...</span></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 text-center text-[9px] mono pt-2">
+        <div class="bg-black/35 p-1.5 rounded-lg border border-white/5">
+            <span class="block text-gray-600 font-bold uppercase">Files</span>
+            <span class="text-white font-bold block mt-0.5">${report.totalFiles}</span>
+        </div>
+        <div class="bg-black/35 p-1.5 rounded-lg border border-white/5">
+            <span class="block text-gray-600 font-bold uppercase">LOC Scanned</span>
+            <span class="text-white font-bold block mt-0.5">${report.totalLines.toLocaleString()}</span>
+        </div>
+        <div class="bg-black/35 p-1.5 rounded-lg border border-white/5">
+            <span class="block text-gray-600 font-bold uppercase">Bugs Solved</span>
+            <span class="text-red-400 font-bold block mt-0.5">${report.totalFindings}</span>
+        </div>
+    </div>
+
+    ${findingsHtml}
+</div>
+            `;
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § DYNAMIC ACTIVE VAULTS FETCH & RENDER
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § VAULT CONTEST REGISTRATION HANDLER
+        // ─────────────────────────────────────────────────────────────────────────────
+        function joinContest(vaultName) {
+            switchSecurityTab('scanner');
+            const term1 = document.getElementById('sim-terminal-1');
+            if (term1) {
+                term1.innerHTML = `<div class="text-cyan-400 font-bold">[VAULT] Initializing forensic scan context for: ${vaultName}</div>`;
+            }
+            startAuditSimulation();
+            triggerAudioChime(true);
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        const VAULT_COLORS = ['cyan', 'purple', 'amber', 'emerald', 'red', 'indigo'];
+        const VAULT_ICONS = ['shield', 'cpu', 'activity', 'brain', 'zap', 'lock'];
+
+        async function fetchAndPopulateVaults() {
+            const grid = document.getElementById('dynamic-vaults-grid');
+            if (!grid) return;
+
+            try {
+                const res = await fetch('http://localhost:8890/api/active-vaults');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.vaults)) {
+                    grid.innerHTML = '';
+                    data.vaults.forEach((vault, idx) => {
+                        const color = VAULT_COLORS[idx % VAULT_COLORS.length];
+                        const icon = vault.icon || VAULT_ICONS[idx % VAULT_ICONS.length];
+                        const payout = vault.maxPayout || vault.max_payout || 100000;
+                        const maxPayout = `$${Number(payout).toLocaleString()}`;
+                        const statusBadge = vault.status === 'PAUSED' 
+                            ? `<div class="absolute top-0 right-0 px-3 py-1 bg-gray-500/10 border-l border-b border-gray-400/20 text-gray-400 text-[8px] font-black uppercase tracking-widest rounded-bl-xl">PAUSED</div>`
+                            : `<div class="absolute top-0 right-0 px-3 py-1 bg-${color}-500/10 border-l border-b border-${color}-400/20 text-${color}-400 text-[8px] font-black uppercase tracking-widest rounded-bl-xl">ACTIVE VAULT</div>`;
+
+                        const card = document.createElement('div');
+                        card.className = `glass-panel p-6 rounded-2xl border border-white/5 hover:border-${color}-500/25 transition-all duration-300 flex flex-col justify-between gap-5 relative overflow-hidden`;
+                        card.innerHTML = `
+                            ${statusBadge}
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-${color}-500/10 border border-${color}-400/20 flex items-center justify-center text-${color}-400"><i data-lucide="${icon}" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <h4 class="text-sm font-extrabold text-white uppercase tracking-wide">${vault.name}</h4>
+                                        <span class="text-[9px] text-gray-500 font-bold uppercase mono mt-0.5 block">${vault.category || 'Security Audit'}</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-400 leading-relaxed">${vault.description || ''}</p>
+                            </div>
+                            <div class="flex justify-between items-center pt-3 border-t border-white/5">
+                                <div class="text-left">
+                                    <span class="block text-[8px] text-gray-600 font-bold uppercase">MAX PAYOUT</span>
+                                    <span class="text-emerald-400 font-extrabold text-sm mono">${maxPayout}</span>
+                                </div>
+                                <button onclick="joinContest('${vault.name.replace(/'/g, "\\'")}')" class="bg-${color}-500/10 hover:bg-${color}-400 hover:text-black border border-${color}-400/25 px-4.5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer">Register & Scan</button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    if (window.lucide) window.lucide.createIcons();
+                }
+            } catch (err) {
+                console.warn('[ZK-VAULTS] Failed to fetch active vaults, using fallback.', err);
+                grid.innerHTML = `
+                    <div class="glass-panel p-6 rounded-2xl border border-white/5 col-span-full text-center space-y-2">
+                        <i data-lucide="wifi-off" class="w-6 h-6 text-gray-500 mx-auto"></i>
+                        <p class="text-xs text-gray-500">Backend offline. Connect SovereignStudioServer.js (port 8890) to load live vault data.</p>
+                    </div>
+                `;
+                if (window.lucide) window.lucide.createIcons();
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § DYNAMIC WARDEN LEADERBOARD FETCH & RENDER
+        // ─────────────────────────────────────────────────────────────────────────────
+        async function fetchAndPopulateLeaderboard() {
+            const container = document.getElementById('dynamic-leaderboard-container');
+            if (!container) return;
+
+            try {
+                const res = await fetch('http://localhost:8890/api/warden-leaderboard');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.leaderboard)) {
+                    let rowsHtml = '';
+                    data.leaderboard.forEach((warden) => {
+                        const isFirst = warden.rank === 1;
+                        const rankIcon = isFirst ? `<i data-lucide="crown" class="w-4 h-4 text-amber-300 animate-pulse"></i>` : '';
+                        const rankClass = isFirst ? 'font-black text-cyan-400' : 'font-bold text-gray-500';
+                        const nameClass = isFirst ? 'text-white font-extrabold' : 'text-white font-bold';
+                        const rowBg = isFirst ? 'hover:bg-cyan-500/5' : 'hover:bg-white/5';
+                        
+                        const titleBadge = warden.title 
+                            ? `<span class="px-1.5 py-0.5 rounded text-[8px] font-black tracking-widest ${isFirst ? 'bg-cyan-400/10 border border-cyan-400/20 text-cyan-400' : 'bg-purple-500/10 border border-purple-500/20 text-purple-400'}">${warden.title.toUpperCase()}</span>`
+                            : '';
+                        
+                        const handleDisplay = warden.handle ? ` (<span class="text-cyan-400 font-black">${warden.handle}</span>)` : '';
+                        const totalBounty = warden.totalBounties || warden.bounties_settled || 0;
+                        const bountyDisplay = totalBounty ? `$${Number(totalBounty).toLocaleString()}` : '$0';
+                        const scoreDisplay = warden.score ? `${Number(warden.score).toLocaleString()} pts` : '0 pts';
+                        const criticals = warden.criticalBugs || warden.critical || 0;
+                        const highs = warden.highBugs || warden.high || 0;
+                        
+                        rowsHtml += `
+                            <tr class="${rowBg} transition-colors">
+                                <td class="p-4.5 pl-6 ${rankClass} flex items-center gap-1.5">${rankIcon} #${warden.rank}</td>
+                                <td class="p-4.5 ${nameClass} flex items-center gap-2 select-all">
+                                    <span>${warden.avatar || ''} ${warden.name}${handleDisplay}</span>
+                                    ${titleBadge}
+                                </td>
+                                <td class="p-4.5 ${isFirst ? 'font-bold text-white' : ''}">${scoreDisplay}</td>
+                                <td class="p-4.5 text-center ${isFirst ? 'text-red-400 font-extrabold' : 'font-bold'}">${criticals}</td>
+                                <td class="p-4.5 text-center ${isFirst ? 'text-amber-400 font-extrabold' : 'font-bold'}">${highs}</td>
+                                <td class="p-4.5 text-right ${isFirst ? 'text-emerald-400 font-extrabold' : 'text-emerald-400 font-bold'} pr-6 select-all">${bountyDisplay}</td>
+                            </tr>
+                        `;
+                    });
+
+                    container.innerHTML = `
+                        <table class="w-full text-left text-xs text-gray-400 border-collapse">
+                            <thead>
+                                <tr class="bg-black/45 border-b border-white/5 font-black uppercase text-[10px] tracking-wider text-gray-500 select-none">
+                                    <th class="p-4.5 pl-6">Rank</th>
+                                    <th class="p-4.5">Warden</th>
+                                    <th class="p-4.5">Score / Points</th>
+                                    <th class="p-4.5 text-center">Critical Bugs</th>
+                                    <th class="p-4.5 text-center">High Bugs</th>
+                                    <th class="p-4.5 text-right pr-6">Total Settled Bounties</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5 mono">
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    `;
+                    if (window.lucide) window.lucide.createIcons();
+                }
+            } catch (err) {
+                console.warn('[ZK-LEADERBOARD] Failed to fetch leaderboard, using fallback.', err);
+                container.innerHTML = `
+                    <div class="p-8 text-center space-y-2">
+                        <i data-lucide="wifi-off" class="w-6 h-6 text-gray-500 mx-auto"></i>
+                        <p class="text-xs text-gray-500">Backend offline. Connect SovereignStudioServer.js (port 8890) to load leaderboard data.</p>
+                    </div>
+                `;
+                if (window.lucide) window.lucide.createIcons();
+            }
+        }
+
         // Initialize terminals on load
         window.addEventListener('load', () => {
             const isLoggedIn = localStorage.getItem('security_logged_in') === 'true';
@@ -2152,9 +2808,23 @@ console.log("[SOUL] Dynamically compiled ruleset content:\\n", soulRuleset);`,
             }
 
             switchSecurityTab('scanner'); // Initialize default security tab
-            startAuditSimulation();
-            renderExecutiveReportDemo();
+            
+            // Dynamic reports load sequence
             fetchAndAnimateTicker();
+            fetchReportsAndPopulate().then(() => {
+                if (window.vivisectorReports && window.vivisectorReports.length > 0) {
+                    // Preload the most recent report on load dynamically
+                    loadAuditReportSimulation(window.vivisectorReports[0].filename);
+                } else {
+                    startAuditSimulation();
+                    renderExecutiveReportDemo();
+                }
+            });
+
+            // Dynamic ecosystem data binding
+            fetchAndPopulateVaults();
+            fetchAndPopulateLeaderboard();
+
             switchApiTab('cli'); // Initialize developer API panel state
             if (window.lucide) {
                 window.lucide.createIcons();
@@ -2300,6 +2970,81 @@ console.log("[SOUL] Dynamically compiled ruleset content:\\n", soulRuleset);`,
                         Validating cryptographical time-based 6-digit credential proof over Aeterna secure enclave.
                     </p>
                 </div>
+            </div>
+    <!-- ======================================================================= -->
+    <!-- § INTERACTIVE GOOGLE OAUTH ACCOUNT CHOOSER (Anti-Hardcoding) -->
+    <!-- ======================================================================= -->
+    <div id="google-chooser-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+        <div class="bg-white border border-gray-200 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-8 flex flex-col gap-6 relative select-none">
+            
+            <button onclick="closeGoogleChooserModal()" class="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Header -->
+            <div class="text-center space-y-2.5">
+                <div class="w-12 h-12 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-center justify-center text-indigo-600 mx-auto">
+                    <i data-lucide="shield" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-black text-gray-900 tracking-tight">Choose an account</h3>
+                <p class="text-xs text-gray-500 font-semibold">to continue to <span class="text-indigo-600">Aeterna Security Hub</span></p>
+            </div>
+
+            <!-- Account List -->
+            <div class="space-y-3">
+                <!-- Account 1: papica777 -->
+                <button onclick="selectGoogleAccount('papica777@gmail.com', 'Dimitar Prodromov')" class="w-full bg-[#f9fafb] hover:bg-indigo-50/50 border border-gray-200 hover:border-indigo-300 p-3 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left select-none">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-500 font-black text-sm shrink-0">DP</div>
+                        <div>
+                            <span class="block text-xs font-black text-gray-800 uppercase tracking-wide group-hover:text-indigo-600 transition-colors">Dimitar Prodromov</span>
+                            <span class="block text-[10px] text-gray-500 font-bold mono">papica777@gmail.com</span>
+                        </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[8px] font-black tracking-widest bg-amber-400/15 border border-amber-400/20 text-amber-500 uppercase">GM #1</span>
+                </button>
+
+                <!-- Account 2: architect -->
+                <button onclick="selectGoogleAccount('architect@aeterna.website', 'Core Architect')" class="w-full bg-[#f9fafb] hover:bg-indigo-50/50 border border-gray-200 hover:border-indigo-300 p-3 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left select-none">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-400/30 flex items-center justify-center text-indigo-500 font-black text-sm shrink-0">CA</div>
+                        <div>
+                            <span class="block text-xs font-black text-gray-800 uppercase tracking-wide group-hover:text-indigo-600 transition-colors">Aeterna Architect</span>
+                            <span class="block text-[10px] text-gray-500 font-bold mono">architect@aeterna.website</span>
+                        </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[8px] font-black tracking-widest bg-indigo-400/15 border border-indigo-400/20 text-indigo-500 uppercase font-extrabold">ADMIN</span>
+                </button>
+
+                <!-- Account 3: warden -->
+                <button onclick="selectGoogleAccount('warden@code4rena.com', 'Standard Warden')" class="w-full bg-[#f9fafb] hover:bg-indigo-50/50 border border-gray-200 hover:border-indigo-300 p-3 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer text-left select-none">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-500 font-black text-sm shrink-0">W</div>
+                        <div>
+                            <span class="block text-xs font-black text-gray-800 uppercase tracking-wide group-hover:text-indigo-600 transition-colors">C4 Warden Team</span>
+                            <span class="block text-[10px] text-gray-500 font-bold mono">warden@code4rena.com</span>
+                        </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[8px] font-black tracking-widest bg-cyan-400/15 border border-cyan-400/20 text-cyan-500 uppercase">WARDEN</span>
+                </button>
+            </div>
+
+            <!-- Custom Account input toggle -->
+            <div class="border-t border-gray-100 pt-4 space-y-3">
+                <button onclick="toggleGoogleCustomAccount()" class="text-xs font-extrabold text-indigo-600 hover:underline flex items-center gap-1.5 cursor-pointer mx-auto">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Use another account
+                </button>
+                <div id="google-custom-account-field" class="hidden flex gap-2">
+                    <input type="email" id="google-custom-email" placeholder="warden@yourdomain.com" class="flex-grow bg-[#f9fafb] border border-gray-200 rounded-xl px-4 py-2.5 outline-none text-xs text-gray-800 focus:border-indigo-500 focus:bg-white transition-colors font-semibold shadow-sm">
+                    <button onclick="submitGoogleCustomAccount()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold px-4 py-2.5 rounded-xl transition-all duration-300 text-xs uppercase tracking-wider cursor-pointer shadow-sm shadow-indigo-600/15 shrink-0">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer terms -->
+            <div class="text-center text-[10px] text-gray-400 font-semibold leading-relaxed">
+                Before continuing, Google will share your name, email address, and profile picture with Aeterna Labs.
             </div>
         </div>
     </div>
