@@ -4936,7 +4936,8 @@ app.post('/create-checkout-session', async (req, res) => {
                 
                 const models = await healthCheck.json();
                 const availableModels = (models.models || []).map(m => m.name);
-                const model = availableModels.find(m => m.includes('gemma4')) || availableModels.find(m => m.includes('gemma3')) || availableModels.find(m => m.includes('gemma')) || availableModels[0] || 'gemma4';
+                const model = availableModels[0] || 'qwen2.5-coder:3b';
+                console.log(`[AGENT] Using Ollama model: ${model} (${availableModels.length} available)`);
 
                 // Create placeholder bubble for streaming
                 const stream = document.getElementById('agent-messages');
@@ -4968,7 +4969,7 @@ Keep responses concise, technical, and actionable. Use markdown formatting.`;
                         prompt: query,
                         system: systemPrompt,
                         stream: true,
-                        options: { temperature: 0.4, num_predict: 1024 }
+                        options: { temperature: 0.5, num_predict: 512 }
                     })
                 });
 
