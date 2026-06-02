@@ -1389,48 +1389,52 @@
         lucide.createIcons();
 
         // ─────────────────────────────────────────────────────────────────────────────
+        // § SOVEREIGN API BASE — env-aware (localhost:8890 dev / prod aeterna.website)
+        // ─────────────────────────────────────────────────────────────────────────────
+        const _API_BASE = (
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1' ||
+            window.location.protocol === 'file:'
+        ) ? 'http://localhost:8890' : '';
+        // NOTE: On production (aeterna.website), API calls use same-origin relative paths
+        // because the Nginx reverse proxy at /api/* routes to SovereignStudioServer.
+
+        // ─────────────────────────────────────────────────────────────────────────────
         // § DYNAMIC TELEMETRY TICKER ODOMETER ANIMATION
         // ─────────────────────────────────────────────────────────────────────────────
         function animateCounter(elementId, targetValue, prefix = "") {
             const el = document.getElementById(elementId);
             if (!el) return;
-            
-            let startVal = 0;
             const duration = 2000;
             const startTime = performance.now();
-            
             function updateCount(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 const easeProgress = 1 - Math.pow(1 - progress, 3);
                 const currentVal = Math.floor(easeProgress * targetValue);
-                
                 el.innerText = `${prefix}${currentVal.toLocaleString()}`;
-                
                 if (progress < 1) {
                     requestAnimationFrame(updateCount);
                 } else {
                     el.innerText = `${prefix}${targetValue.toLocaleString()}`;
                 }
             }
-            
             requestAnimationFrame(updateCount);
         }
 
         function fetchAndAnimateTicker() {
-            fetch('http://localhost:8890/api/global-stats')
+            fetch(`${_API_BASE}/api/global-stats`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success && data.stats) {
-                        const stats = data.stats;
-                        animateCounter('ticker-bounty', stats.total_bounties_saved, "$");
-                        animateCounter('ticker-bugs', stats.bugs_eliminated);
-                        animateCounter('ticker-files', stats.scanned_files_count);
-                        animateCounter('ticker-loc', stats.scanned_loc_count);
+                        const s = data.stats;
+                        animateCounter('ticker-bounty', s.total_bounties_saved, "$");
+                        animateCounter('ticker-bugs', s.bugs_eliminated);
+                        animateCounter('ticker-files', s.scanned_files_count);
+                        animateCounter('ticker-loc', s.scanned_loc_count);
                     }
                 })
-                .catch(err => {
-                    console.warn('[ZK-TELEMETRY] Failed to fetch global stats. Using baseline fallback.', err);
+                .catch(() => {
                     animateCounter('ticker-bounty', 1250000, "$");
                     animateCounter('ticker-bugs', 10);
                     animateCounter('ticker-files', 12);
@@ -1541,58 +1545,7 @@
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────────────
-        // § DYNAMIC TELEMETRY TICKER ODOMETER ANIMATION
-        // ─────────────────────────────────────────────────────────────────────────────
-        function animateCounter(elementId, targetValue, prefix = "") {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            
-            let startVal = 0;
-            const duration = 2000;
-            const startTime = performance.now();
-            
-            function updateCount(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeProgress = 1 - Math.pow(1 - progress, 3);
-                const currentVal = Math.floor(easeProgress * targetValue);
-                
-                el.innerText = `${prefix}${currentVal.toLocaleString()}`;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(updateCount);
-                } else {
-                    el.innerText = `${prefix}${targetValue.toLocaleString()}`;
-                }
-            }
-            
-            requestAnimationFrame(updateCount);
-        }
-
-        function fetchAndAnimateTicker() {
-            fetch('http://localhost:8890/api/global-stats')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success && data.stats) {
-                        const stats = data.stats;
-                        animateCounter('ticker-bounty', stats.total_bounties_saved, "$");
-                        animateCounter('ticker-bugs', stats.bugs_eliminated);
-                        animateCounter('ticker-files', stats.scanned_files_count);
-                        animateCounter('ticker-loc', stats.scanned_loc_count);
-                    }
-                })
-                .catch(err => {
-                    console.warn('[ZK-TELEMETRY] Failed to fetch global stats. Using baseline fallback.', err);
-                    animateCounter('ticker-bounty', 1250000, "$");
-                    animateCounter('ticker-bugs', 10);
-                    animateCounter('ticker-files', 12);
-                    animateCounter('ticker-loc', 132450);
-                });
-        }
-
-        // Boot ticker animation
-        fetchAndAnimateTicker();
+        // [DUPLICATE BLOCK REMOVED — single source of truth above]
 
         // ─────────────────────────────────────────────────────────────────────────────
         // § SOVEREIGN ARCHITECT MODE (DUAL-MODE: CLIENT vs ARCHITECT)
@@ -2889,7 +2842,7 @@
                 };
                 console.log('[ZK-TELEMETRY] Dispatching anonymous telemetry pulse...', telemetryPayload);
                 
-                fetch('http://localhost:8890/api/telemetry-pulse', {
+                fetch(`${_API_BASE}/api/telemetry-pulse`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -3342,7 +3295,7 @@
 
             writeLog('[PDF] Attempting compilation via Sovereign PDF Studio (Headless Puppeteer)...', 'text-cyan-400');
             try {
-                const response = await fetch('http://localhost:8890/api/convert', {
+                const response = await fetch(`${_API_BASE}/api/convert`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
