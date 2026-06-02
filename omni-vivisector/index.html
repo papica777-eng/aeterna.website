@@ -2784,28 +2784,19 @@ console.log("[SOUL] Dynamically compiled ruleset content:\\n", soulRuleset);`,
 
         // Initialize terminals on load
         window.addEventListener('load', () => {
-            const isLoggedIn = localStorage.getItem('security_logged_in') === 'true';
+            // Auto-bypass login and log in as partner by default
+            localStorage.setItem('security_logged_in', 'true');
+            localStorage.setItem('security_logged_in_email', 'papica777@gmail.com');
             const portal = document.getElementById('login-portal-wrapper');
             const hub = document.getElementById('main-hub-wrapper');
-            const savedEmail = localStorage.getItem('security_logged_in_email') || 'partner@myprotocol.io';
+            if (portal) portal.classList.add('hidden');
+            if (hub) hub.classList.remove('hidden');
             
-            if (isLoggedIn) {
-                if (portal) portal.classList.add('hidden');
-                if (hub) hub.classList.remove('hidden');
-                
-                // Restore profile email
-                const profileName = document.getElementById('profile-client-name');
-                const profileEmail = document.getElementById('profile-client-email');
-                if (profileEmail) {
-                    profileEmail.innerText = savedEmail;
-                }
-                if (profileName) {
-                    profileName.innerText = savedEmail.split('@')[0].toUpperCase();
-                }
-            } else {
-                if (portal) portal.classList.remove('hidden');
-                if (hub) hub.classList.add('hidden');
-            }
+            const profileName = document.getElementById('profile-client-name');
+            const profileEmail = document.getElementById('profile-client-email');
+            if (profileEmail) profileEmail.innerText = 'papica777@gmail.com';
+            if (profileName) profileName.innerText = 'PAPICA777';
+        });
 
             switchSecurityTab('scanner'); // Initialize default security tab
             
