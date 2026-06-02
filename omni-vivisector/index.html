@@ -4921,45 +4921,92 @@ app.post('/create-checkout-session', async (req, res) => {
             }
         }
 
-        function sendAgentMessage() {
+        async function sendAgentMessage() {
             const input = document.getElementById('agent-input');
             const query = input.value.trim();
             if (!query) return;
 
             input.value = '';
-            
-            // Add user message
             addMessageToStream(query, 'user');
-            
-            // Simulate Ollama local model thinking & responding
-            setTimeout(() => {
-                const response = getAgentResponse(query);
-                addMessageToStream(response, 'agent');
-                playChime(true);
-            }, 1000);
-        }
 
-        function addMessageToStream(text, sender) {
-            const stream = document.getElementById('agent-messages');
-            const msgRow = document.createElement('div');
-            msgRow.className = "flex items-start gap-2.5 " + (sender === 'user' ? 'justify-end' : '');
-            
-            const avatar = sender === 'agent' 
-                ? `<img src="https://api.dicebear.com/7.x/identicon/svg?seed=Aeterna&backgroundColor=000000" class="w-6 h-6 rounded-full border border-cyan-400/30" alt="Agent">`
-                : '';
+            // Try real Ollama first, fall back to keyword matcher
+            try {
+                const healthCheck = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(2000) });
+                if (!healthCheck.ok) throw new Error('Ollama offline');
                 
-            const bubbleClass = sender === 'agent'
-                ? 'bg-cyan-500/10 border border-cyan-400/15 text-gray-300 rounded-tl-none'
-                : 'bg-indigo-500/15 border border-indigo-400/20 text-white rounded-tr-none';
+                const models = await healthCheck.json();
+                const availableModels = (models.models || []).map(m => m.name);
+                const model = availableModels.find(m => m.includes('gemma')) || availableModels.find(m => m.includes('llama')) || availableModels[0] || 'gemma3';
+
+                // Create placeholder bubble for streaming
+                const stream = document.getElementById('agent-messages');
+                const msgRow = document.createElement('div');
+                msgRow.className = 'flex items-start gap-2.5';
+                msgRow.innerHTML = `
+                    <img src="https://api.dicebear.com/7.x/identicon/svg?seed=Aeterna&backgroundColor=000000" class="w-6 h-6 rounded-full border border-cyan-400/30" alt="Agent">
+                    <div class="bg-cyan-500/10 border border-cyan-400/15 text-gray-300 rounded-2xl rounded-tl-none p-3 max-w-[80%] leading-relaxed font-semibold" id="agent-stream-bubble">
+                        <span class="text-cyan-400 animate-pulse text-xs">● Reasoning...</span>
+                    </div>
+                `;
+                stream.appendChild(msgRow);
+                stream.scrollTop = stream.scrollHeight;
+
+                const bubble = document.getElementById('agent-stream-bubble');
+
+                const systemPrompt = `You are AETERNA_VIVISECTOR_AGENT, an elite smart contract security auditor AI built into the OMNI-VIVISECTOR forensic analysis platform. You specialize in:
+- Vulnerability pattern analysis (reentrancy, oracle manipulation, flash loans, access control)
+- Z3 SMT formal verification of smart contract invariants
+- Catuskoti quadrilemma logic (TRUE/FALSE/BOTH/NEITHER) for zero false-positive classification
+- Immunefi/Code4rena bug bounty submission formatting
+Keep responses concise, technical, and actionable. Use markdown formatting.`;
+
+                const res = await fetch('http://localhost:11434/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: model,
+                        prompt: query,
+                        system: systemPrompt,
+                        stream: true,
+                        options: { temperature: 0.4, num_predict: 1024 }
+                    })
+                });
+
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let fullText = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n').filter(l => l.trim());
+                    
+                    for (const line of lines) {
+                        try {
+                            const json = JSON.parse(line);
+                            if (json.response) {
+                                fullText += json.response;
+                                bubble.innerText = fullText;
+                                stream.scrollTop = stream.scrollHeight;
+                            }
+                        } catch (e) {}
+                    }
+                }
                 
-            msgRow.innerHTML = `
-                ${avatar}
-                <div class="${bubbleClass} p-3 rounded-2xl max-w-[80%] leading-relaxed font-semibold">
-                    ${text}
-                </div>
-            `;
-            stream.appendChild(msgRow);
-            stream.scrollTop = stream.scrollHeight;
+                bubble.removeAttribute('id');
+                if (typeof playChime === 'function') playChime(true);
+
+            } catch (err) {
+                // Ollama offline — use keyword fallback
+                console.warn('[AGENT] Ollama unavailable, using template fallback.', err);
+                setTimeout(() => {
+                    const response = getAgentResponse(query);
+                    addMessageToStream(response, 'agent');
+                    if (typeof playChime === 'function') playChime(true);
+                }, 800);
+            }
         }
 
         function getAgentResponse(query) {
@@ -4979,7 +5026,16 @@ app.post('/create-checkout-session', async (req, res) => {
             if (q.includes('github') || q.includes('google') || q.includes('login')) {
                 return "You can authorize your identity instantly using Google or GitHub login in the top-right header panel. This grants you direct local file picker access and initializes the local Sandbox.";
             }
-            return "Aeterna system integrity nominal (0.0000 Entropy). I am listening to your instruction. Let me know if you would like me to explain specific vulnerability patterns like Reentrancy or Oracle Manipulation.";
+            if (q.includes('reentrancy') || q.includes('reentranc')) {
+                return "**Reentrancy (CEI Violation)** — The contract performs an external call (`.call{value: X}`) BEFORE updating its internal state (balance mapping). An attacker deploys a contract with a `receive()` fallback that recursively calls `withdraw()`, draining the vault. Mitigation: Apply Checks-Effects-Interactions pattern or use `ReentrancyGuard`.";
+            }
+            if (q.includes('oracle') || q.includes('manipulation')) {
+                return "**Oracle Manipulation** — Spot price oracles (e.g. Uniswap TWAP with short window) can be manipulated via flash loans. An attacker borrows large amounts, skews the pool ratio, triggers a price-dependent function, then repays. Mitigation: Use Chainlink or time-weighted oracles with sufficient TWAP windows.";
+            }
+            if (q.includes('option') || q.includes('help') || q.includes('what can')) {
+                return "I can help with: **1)** Vulnerability pattern analysis (reentrancy, oracle manipulation, flash loans) **2)** Z3 formal verification explanations **3)** Catuskoti logic classification **4)** Audit workflow guidance **5)** Pricing & access info. Ask me anything specific!";
+            }
+            return "I am the AETERNA Vivisector Agent. I specialize in smart contract security analysis. Ask me about specific vulnerability patterns (reentrancy, oracle manipulation, flash loans), the Z3 formal verification engine, Catuskoti logic, or how to run a local audit.";
         }
 
         // ─────────────────────────────────────────────────────────────────────────────
