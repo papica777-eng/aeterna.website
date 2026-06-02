@@ -4936,7 +4936,7 @@ app.post('/create-checkout-session', async (req, res) => {
                 
                 const models = await healthCheck.json();
                 const availableModels = (models.models || []).map(m => m.name);
-                const model = availableModels.find(m => m.includes('gemma')) || availableModels.find(m => m.includes('llama')) || availableModels[0] || 'gemma3';
+                const model = availableModels.find(m => m.includes('gemma4')) || availableModels.find(m => m.includes('gemma3')) || availableModels.find(m => m.includes('gemma')) || availableModels[0] || 'gemma4';
 
                 // Create placeholder bubble for streaming
                 const stream = document.getElementById('agent-messages');
@@ -5036,6 +5036,29 @@ Keep responses concise, technical, and actionable. Use markdown formatting.`;
                 return "I can help with: **1)** Vulnerability pattern analysis (reentrancy, oracle manipulation, flash loans) **2)** Z3 formal verification explanations **3)** Catuskoti logic classification **4)** Audit workflow guidance **5)** Pricing & access info. Ask me anything specific!";
             }
             return "I am the AETERNA Vivisector Agent. I specialize in smart contract security analysis. Ask me about specific vulnerability patterns (reentrancy, oracle manipulation, flash loans), the Z3 formal verification engine, Catuskoti logic, or how to run a local audit.";
+        }
+
+        function addMessageToStream(text, sender) {
+            const stream = document.getElementById('agent-messages');
+            const msgRow = document.createElement('div');
+            msgRow.className = "flex items-start gap-2.5 " + (sender === 'user' ? 'justify-end' : '');
+            
+            const avatar = sender === 'agent' 
+                ? `<img src="https://api.dicebear.com/7.x/identicon/svg?seed=Aeterna&backgroundColor=000000" class="w-6 h-6 rounded-full border border-cyan-400/30" alt="Agent">`
+                : '';
+                
+            const bubbleClass = sender === 'agent'
+                ? 'bg-cyan-500/10 border border-cyan-400/15 text-gray-300 rounded-tl-none'
+                : 'bg-indigo-500/15 border border-indigo-400/20 text-white rounded-tr-none';
+                
+            msgRow.innerHTML = `
+                ${avatar}
+                <div class="${bubbleClass} p-3 rounded-2xl max-w-[80%] leading-relaxed font-semibold">
+                    ${text}
+                </div>
+            `;
+            stream.appendChild(msgRow);
+            stream.scrollTop = stream.scrollHeight;
         }
 
         // ─────────────────────────────────────────────────────────────────────────────
