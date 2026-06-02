@@ -226,25 +226,34 @@
             </div>
 
             <!-- English Navigation Menu -->
-            <nav class="flex items-center justify-center gap-6 text-xs uppercase tracking-wider font-extrabold text-gray-400 select-none">
-                <a href="../index.html" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
-                    <i data-lucide="home" class="w-3.5 h-3.5"></i> Home
-                </a>
-                <a href="./index.html" id="header-nav-sandbox" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 text-white border-b-2 border-cyan-400">
-                    <i data-lucide="scan" class="w-3.5 h-3.5 text-cyan-400"></i> Sandbox
-                </a>
-                <button onclick="toggleForensicsView()" id="header-nav-forensics" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 text-gray-400 font-extrabold select-none cursor-pointer">
-                    <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-cyan-400"></i> Forensics
+            <nav id="workspace-nav" class="flex flex-wrap items-center justify-center gap-3 text-[10px] uppercase tracking-wider font-black text-gray-400 select-none">
+                <button onclick="switchWorkspace('nexus')" id="wnav-nexus" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 text-white border-b-2 border-cyan-400 cursor-pointer">
+                    <i data-lucide="home" class="w-3.5 h-3.5 text-cyan-400"></i> Home
                 </button>
-                <button onclick="switchSecurityTab('reports')" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                <button onclick="switchWorkspace('vivisector')" id="wnav-vivisector" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="scan" class="w-3.5 h-3.5"></i> Sandbox
+                </button>
+                <button onclick="switchWorkspace('vht')" id="wnav-vht" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="activity" class="w-3.5 h-3.5"></i> VHT
+                </button>
+                <button onclick="switchWorkspace('aeterna')" id="wnav-aeterna" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Aeterna
+                </button>
+                <button onclick="switchWorkspace('veritas')" id="wnav-veritas" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Veritas
+                </button>
+                <button onclick="switchWorkspace('fleet')" id="wnav-fleet" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="server" class="w-3.5 h-3.5"></i> Fleet
+                </button>
+                <button onclick="switchWorkspace('ledger')" id="wnav-ledger" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
                     <i data-lucide="database" class="w-3.5 h-3.5"></i> Ledger
                 </button>
-                <a href="https://github.com/papica777-eng/OMNI-VIVISECTOR" target="_blank" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
-                    <i data-lucide="github" class="w-3.5 h-3.5"></i> GitHub
-                </a>
-                <a href="../index.html#access" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1">
-                    <i data-lucide="award" class="w-3.5 h-3.5"></i> Tiers
-                </a>
+                <button onclick="switchWorkspace('wealth')" id="wnav-wealth" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="link" class="w-3.5 h-3.5"></i> Wealth
+                </button>
+                <button onclick="switchWorkspace('hud')" id="wnav-hud" class="workspace-nav-btn hover:text-cyan-400 transition-colors flex items-center gap-1.5 py-1 cursor-pointer">
+                    <i data-lucide="layout" class="w-3.5 h-3.5"></i> HUD
+                </button>
             </nav>
 
             <!-- Thread and Memory Info Locked from Hardware -->
@@ -306,8 +315,54 @@
             </div>
         </header>
 
-        <!-- Global Threat Intelligence Telemetry Ticker (ZK Pulse) -->
-        <section class="glass-panel p-6 rounded-2xl relative overflow-hidden border border-cyan-500/15">
+        <!-- Dynamic Workspace Viewport (starts HIDDEN) -->
+        <div id="ecosystem-workspace-viewport" class="hidden space-y-6 animate-fade-in relative z-20">
+            <!-- Navigation Toolbar for Viewport -->
+            <div class="glass-panel p-4 rounded-2xl border border-cyan-500/15 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-400/25 flex items-center justify-center text-cyan-400 relative overflow-hidden">
+                        <div class="scan-line-animation"></div>
+                        <i data-lucide="monitor" class="w-4 h-4 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <h4 id="workspace-title" class="text-xs font-black text-white uppercase tracking-wider">WORKSPACE VIEWPORT</h4>
+                        <div class="text-[8px] text-cyan-400 font-bold uppercase tracking-widest flex items-center gap-1.5 mt-0.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                            Active Ecosystem Sandbox
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <button onclick="refreshWorkspaceFrame()" class="bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/30 text-white font-extrabold px-3.5 py-2 rounded-xl transition-all duration-300 flex items-center gap-1.5 text-[9px] uppercase tracking-wider cursor-pointer select-none">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i> Refresh Frame
+                    </button>
+                    <button onclick="openWorkspaceExternal()" class="bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/30 text-white font-extrabold px-3.5 py-2 rounded-xl transition-all duration-300 flex items-center gap-1.5 text-[9px] uppercase tracking-wider cursor-pointer select-none">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open Direct
+                    </button>
+                    <button onclick="switchWorkspace('nexus')" class="bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/40 text-red-400 font-extrabold px-3.5 py-2 rounded-xl transition-all duration-300 flex items-center gap-1.5 text-[9px] uppercase tracking-wider cursor-pointer select-none">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Dynamic Iframe Frame with loading state -->
+            <div class="relative w-full rounded-2xl overflow-hidden glass-panel border border-cyan-500/10 shadow-2xl bg-black/40">
+                <div id="workspace-loading" class="hidden absolute inset-0 bg-[#05070a]/90 backdrop-blur-md flex flex-col items-center justify-center text-center gap-4 z-30">
+                    <div class="p-4 bg-cyan-500/10 rounded-full border border-cyan-400/25 text-cyan-400 animate-spin">
+                        <i data-lucide="refresh-cw" class="w-8 h-8"></i>
+                    </div>
+                    <div class="text-[10px] font-mono text-cyan-400 tracking-widest uppercase">Initializing Enclave...</div>
+                </div>
+                <iframe id="workspace-frame" class="w-full h-[82vh] border-0 bg-transparent" src="about:blank"></iframe>
+            </div>
+        </div>
+
+        <!-- Nexus Dashboard Content Wrap -->
+        <div id="nexus-dashboard-content" class="space-y-12">
+
+            <!-- Global Threat Intelligence Telemetry Ticker (ZK Pulse) -->
+            <section class="glass-panel p-6 rounded-2xl relative overflow-hidden border border-cyan-500/15">
             <div class="scan-line-animation"></div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-white/5 font-semibold">
                 
@@ -1276,8 +1331,55 @@
                 <span>Stealth Forensic Audit</span>
             </div>
         </footer>
+        </div> <!-- End of nexus-dashboard-content -->
 
-    </div>
+        <!-- Floating AI Agent Interface (Ollama RAG Simulator) -->
+        <!-- Toggle Button -->
+        <button id="agent-toggle-btn" onclick="toggleAgentChat()" class="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 hover:from-cyan-300 hover:to-purple-500 text-white p-4 rounded-full border border-cyan-300/40 hover:scale-110 active:scale-95 transition-all duration-300 shadow-lg shadow-cyan-500/20 cursor-pointer flex items-center justify-center">
+            <i data-lucide="message-square" class="w-6 h-6 animate-pulse"></i>
+        </button>
+
+        <!-- Chat Box -->
+        <div id="agent-chat-box" class="hidden fixed bottom-6 right-6 z-50 w-96 h-[500px] glass-panel rounded-2xl flex-col overflow-hidden border border-cyan-400/20 shadow-2xl shadow-cyan-500/10" style="background: rgba(13, 17, 24, 0.95); backdrop-filter: blur(24px);">
+            <!-- Chat Header -->
+            <div class="flex items-center justify-between bg-black/40 border-b border-white/5 px-4 py-3 shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <span class="text-xs font-black text-white uppercase tracking-wider mono">AETERNA_ASSISTANT // V1.0</span>
+                </div>
+                <button onclick="toggleAgentChat()" class="text-gray-500 hover:text-white cursor-pointer transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Messages Stream -->
+            <div id="agent-messages" class="flex-grow p-4 overflow-y-auto space-y-4 text-left text-xs text-gray-300">
+                <div class="flex items-start gap-2.5">
+                    <img src="https://api.dicebear.com/7.x/identicon/svg?seed=Aeterna&backgroundColor=000000" class="w-6 h-6 rounded-full border border-cyan-400/30" alt="Agent">
+                    <div class="bg-cyan-500/10 border border-cyan-400/15 text-gray-300 rounded-2xl rounded-tl-none p-3 max-w-[80%] leading-relaxed font-semibold">
+                        Здравей, аз съм асистентът на **AETERNA**! Мога да ти помогна с ориентацията относно модулите:
+                        <ul class="list-disc list-inside mt-2 space-y-1 text-gray-400 font-normal">
+                            <li>**Sandbox**: Уеб-базиран WASM скенер на инварианти</li>
+                            <li>**VHT Twin**: 3D визуализация на био-клетъчни симулации</li>
+                            <li>**Aeterna Compiler**: Компилатор от висок клас за Zig/Rust/Mojo</li>
+                            <li>**Veritas Math Prover**: Формално доказване на математически доказателства</li>
+                            <li>**Fleet Telemetry**: Мониторинг на мрежови нодове</li>
+                        </ul>
+                        Задавай въпроси на български или английски!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Box -->
+            <div class="p-3 border-t border-white/5 bg-black/20 flex gap-2 shrink-0">
+                <input type="text" id="agent-input" placeholder="Задай въпрос..." onkeydown="if(event.key === 'Enter') sendAgentMessage()" class="flex-grow bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white text-xs outline-none focus:border-cyan-400 font-semibold">
+                <button onclick="sendAgentMessage()" class="bg-cyan-500/20 hover:bg-cyan-400 hover:text-black border border-cyan-400/30 text-cyan-400 font-extrabold px-3.5 py-2 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </div>
+
+    </div> <!-- End of main max-w-7xl wrapper -->
 
     <!-- WASM Bridge Layer -->
     <script src="wasm_bridge.js?v=1780244883"></script>
@@ -1285,6 +1387,159 @@
     <!-- Scripting for high performance sandboxed analyzer -->
     <script>
         lucide.createIcons();
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § DYNAMIC TELEMETRY TICKER ODOMETER ANIMATION
+        // ─────────────────────────────────────────────────────────────────────────────
+        function animateCounter(elementId, targetValue, prefix = "") {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            let startVal = 0;
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function updateCount(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const currentVal = Math.floor(easeProgress * targetValue);
+                
+                el.innerText = `${prefix}${currentVal.toLocaleString()}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCount);
+                } else {
+                    el.innerText = `${prefix}${targetValue.toLocaleString()}`;
+                }
+            }
+            
+            requestAnimationFrame(updateCount);
+        }
+
+        function fetchAndAnimateTicker() {
+            fetch('http://localhost:8890/api/global-stats')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.stats) {
+                        const stats = data.stats;
+                        animateCounter('ticker-bounty', stats.total_bounties_saved, "$");
+                        animateCounter('ticker-bugs', stats.bugs_eliminated);
+                        animateCounter('ticker-files', stats.scanned_files_count);
+                        animateCounter('ticker-loc', stats.scanned_loc_count);
+                    }
+                })
+                .catch(err => {
+                    console.warn('[ZK-TELEMETRY] Failed to fetch global stats. Using baseline fallback.', err);
+                    animateCounter('ticker-bounty', 1250000, "$");
+                    animateCounter('ticker-bugs', 10);
+                    animateCounter('ticker-files', 12);
+                    animateCounter('ticker-loc', 132450);
+                });
+        }
+
+        // Boot ticker animation
+        fetchAndAnimateTicker();
+
+        // ─────────────────────────────────────────────────────────────────────────────
+        // § UNIFIED WORKSPACE ROUTER ENGINE (Ecosystem Switcher)
+        // ─────────────────────────────────────────────────────────────────────────────
+        // ─── DYNAMIC ENVIRONMENT RESOLVER ────────────────────────────────────────
+        // Local dev: SovereignStudioServer runs at :8890 and serves z:\OMNI-VIVISECTOR\
+        // Production: Files are hosted on GitHub Pages for the OMNI-VIVISECTOR repo
+        const _isLocalDev = (
+            window.location.hostname === 'localhost' ||
+            window.location.hostname === '127.0.0.1' ||
+            window.location.protocol === 'file:'
+        );
+        const _SOVEREIGN_BASE  = _isLocalDev
+            ? 'http://localhost:8890'
+            : 'https://papica777-eng.github.io/OMNI-VIVISECTOR';
+        const _SITE_BASE = _isLocalDev
+            ? 'http://localhost:8890'
+            : 'https://aeterna.website';
+
+        const WORKSPACE_PAGES = {
+            nexus:     null,
+            vivisector: `${_SOVEREIGN_BASE}/vivisector.html`,
+            vht:        `${_SITE_BASE}/oncology_hud.html`,
+            aeterna:    `${_SOVEREIGN_BASE}/aeterna.html`,
+            veritas:    `${_SOVEREIGN_BASE}/veritas.html`,
+            fleet:      `${_SOVEREIGN_BASE}/fleet.html`,
+            ledger:     `${_SOVEREIGN_BASE}/ledger.html`,
+            wealth:     `${_SOVEREIGN_BASE}/wealth_bridge.html`,
+            hud:        `${_SITE_BASE}/hud.html`
+        };
+
+        function switchWorkspace(target) {
+            console.log(`[WORKSPACE] Activating: ${target}`);
+            const dashboard = document.getElementById('nexus-dashboard-content');
+            const viewport = document.getElementById('ecosystem-workspace-viewport');
+            const frame = document.getElementById('workspace-frame');
+            const loader = document.getElementById('workspace-loading');
+            
+            // 1. Reset all button borders
+            document.querySelectorAll('.workspace-nav-btn').forEach(btn => {
+                btn.classList.remove('text-white', 'border-b-2', 'border-cyan-400');
+                btn.classList.add('text-gray-400');
+            });
+            
+            // 2. Activate target button style
+            const activeBtn = document.getElementById(`wnav-${target}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-400');
+                activeBtn.classList.add('text-white', 'border-b-2', 'border-cyan-400');
+            }
+            
+            // 3. Switch layout views
+            if (target === 'nexus') {
+                if (viewport) viewport.classList.add('hidden');
+                if (dashboard) dashboard.classList.remove('hidden');
+                if (frame) frame.src = 'about:blank';
+            } else {
+                if (dashboard) dashboard.classList.add('hidden');
+                if (viewport) viewport.classList.remove('hidden');
+                
+                const pageSrc = WORKSPACE_PAGES[target];
+                if (frame && pageSrc && frame.getAttribute('src') !== pageSrc) {
+                    if (loader) loader.classList.remove('hidden');
+                    frame.src = pageSrc;
+                    
+                    // Hide loader after load completion
+                    frame.onload = () => {
+                        if (loader) loader.classList.add('hidden');
+                    };
+                }
+                
+                // Update active title
+                const title = document.getElementById('workspace-title');
+                if (title) {
+                    title.innerText = `AETERNA // ${target.toUpperCase()}_WORKSPACE`;
+                }
+            }
+            
+            if (window.lucide) window.lucide.createIcons();
+            if (typeof playChime === 'function') playChime(true);
+        }
+
+        function refreshWorkspaceFrame() {
+            const frame = document.getElementById('workspace-frame');
+            const loader = document.getElementById('workspace-loading');
+            if (frame && frame.src !== 'about:blank') {
+                if (loader) loader.classList.remove('hidden');
+                frame.src = frame.src;
+                frame.onload = () => {
+                    if (loader) loader.classList.add('hidden');
+                };
+            }
+        }
+
+        function openWorkspaceExternal() {
+            const frame = document.getElementById('workspace-frame');
+            if (frame && frame.src && frame.src !== 'about:blank') {
+                window.open(frame.src, '_blank');
+            }
+        }
 
         // ─────────────────────────────────────────────────────────────────────────────
         // § DYNAMIC TELEMETRY TICKER ODOMETER ANIMATION
@@ -4241,7 +4496,7 @@ Requirements:
                             <!-- Authorize Button -->
                             <button onclick="triggerStripeCheckout()" class="w-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 hover:from-cyan-300 hover:to-purple-500 text-white font-extrabold py-3.5 rounded-xl border border-cyan-300/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/10 text-xs uppercase tracking-widest select-none mt-6">
                                 <i data-lucide="credit-card" class="w-4 h-4 text-white animate-pulse"></i>
-                                SECURE STRIPE CHECKOUT ($5,000)
+                                SECURE STRIPE CHECKOUT (€500)
                             </button>
                         </div>
 
@@ -4929,48 +5184,69 @@ app.post('/create-checkout-session', async (req, res) => {
             input.value = '';
             addMessageToStream(query, 'user');
 
-            // Try real Ollama first, fall back to keyword matcher
+            // Determine AI endpoint: Brain RAG (knows codebase) > direct Ollama > keyword fallback
+            const brainUrl = `${window.location.protocol}//${window.location.hostname}:8890`;
+            const directUrl = 'http://localhost:11434';
+            let aiUrl = null;
+            let usesBrain = false;
+
+            // 1) Try Brain RAG (SovereignStudioServer with codebase context)
             try {
-                const healthCheck = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(2000) });
-                if (!healthCheck.ok) throw new Error('Ollama offline');
-                
-                const models = await healthCheck.json();
-                const availableModels = (models.models || []).map(m => m.name);
-                const model = availableModels[0] || 'qwen2.5-coder:3b';
-                console.log(`[AGENT] Using Ollama model: ${model} (${availableModels.length} available)`);
+                const brainCheck = await fetch(`${brainUrl}/api/brain/status`, { signal: AbortSignal.timeout(2000) });
+                const brainData = await brainCheck.json();
+                if (brainData.ollama && brainData.ollama.online && brainData.index && brainData.index.loaded) {
+                    aiUrl = `${brainUrl}/api/brain/chat`;
+                    usesBrain = true;
+                    console.log(`[AGENT] Using BRAIN RAG → ${brainData.index.totalFiles} files indexed, model: ${brainData.ollama.activeModel}`);
+                }
+            } catch (e) {}
 
-                // Create placeholder bubble for streaming
-                const stream = document.getElementById('agent-messages');
-                const msgRow = document.createElement('div');
-                msgRow.className = 'flex items-start gap-2.5';
-                msgRow.innerHTML = `
-                    <img src="https://api.dicebear.com/7.x/identicon/svg?seed=Aeterna&backgroundColor=000000" class="w-6 h-6 rounded-full border border-cyan-400/30" alt="Agent">
-                    <div class="bg-cyan-500/10 border border-cyan-400/15 text-gray-300 rounded-2xl rounded-tl-none p-3 max-w-[80%] leading-relaxed font-semibold" id="agent-stream-bubble">
-                        <span class="text-cyan-400 animate-pulse text-xs">● Reasoning...</span>
-                    </div>
-                `;
-                stream.appendChild(msgRow);
-                stream.scrollTop = stream.scrollHeight;
+            // 2) If Brain unavailable, try direct Ollama
+            if (!aiUrl) {
+                try {
+                    const directCheck = await fetch(`${directUrl}/api/tags`, { signal: AbortSignal.timeout(2000) });
+                    const directData = await directCheck.json();
+                    const models = (directData.models || []).map(m => m.name);
+                    if (models.length > 0) {
+                        aiUrl = `${directUrl}/api/generate`;
+                        console.log(`[AGENT] Using DIRECT Ollama → ${models[0]}`);
+                    }
+                } catch (e) {}
+            }
 
-                const bubble = document.getElementById('agent-stream-bubble');
+            // 3) No AI available — keyword fallback
+            if (!aiUrl) {
+                console.warn('[AGENT] No AI available. Keyword fallback.');
+                setTimeout(() => {
+                    addMessageToStream(getAgentResponse(query), 'agent');
+                    if (typeof playChime === 'function') playChime(true);
+                }, 600);
+                return;
+            }
 
-                const systemPrompt = `You are AETERNA_VIVISECTOR_AGENT, an elite smart contract security auditor AI built into the OMNI-VIVISECTOR forensic analysis platform. You specialize in:
-- Vulnerability pattern analysis (reentrancy, oracle manipulation, flash loans, access control)
-- Z3 SMT formal verification of smart contract invariants
-- Catuskoti quadrilemma logic (TRUE/FALSE/BOTH/NEITHER) for zero false-positive classification
-- Immunefi/Code4rena bug bounty submission formatting
-Keep responses concise, technical, and actionable. Use markdown formatting.`;
+            // Create streaming bubble
+            const msgStream = document.getElementById('agent-messages');
+            const msgRow = document.createElement('div');
+            msgRow.className = 'flex items-start gap-2.5';
+            msgRow.innerHTML = `
+                <img src="https://api.dicebear.com/7.x/identicon/svg?seed=Aeterna&backgroundColor=000000" class="w-6 h-6 rounded-full border border-cyan-400/30" alt="Agent">
+                <div class="bg-cyan-500/10 border border-cyan-400/15 text-gray-300 rounded-2xl rounded-tl-none p-3 max-w-[80%] leading-relaxed font-semibold" id="agent-stream-bubble">
+                    <span class="text-cyan-400 animate-pulse text-xs">${usesBrain ? '● Brain RAG searching codebase...' : '● Reasoning...'}</span>
+                </div>
+            `;
+            msgStream.appendChild(msgRow);
+            msgStream.scrollTop = msgStream.scrollHeight;
+            const bubble = document.getElementById('agent-stream-bubble');
 
-                const res = await fetch('http://localhost:11434/api/generate', {
+            try {
+                const body = usesBrain
+                    ? { prompt: query }
+                    : { model: 'qwen2.5-coder:3b', prompt: query, stream: true, options: { temperature: 0.5, num_predict: 512 } };
+
+                const res = await fetch(aiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: model,
-                        prompt: query,
-                        system: systemPrompt,
-                        stream: true,
-                        options: { temperature: 0.5, num_predict: 512 }
-                    })
+                    body: JSON.stringify(body)
                 });
 
                 const reader = res.body.getReader();
@@ -4980,33 +5256,25 @@ Keep responses concise, technical, and actionable. Use markdown formatting.`;
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) break;
-                    
                     const chunk = decoder.decode(value, { stream: true });
-                    const lines = chunk.split('\n').filter(l => l.trim());
-                    
-                    for (const line of lines) {
+                    for (const line of chunk.split('\n').filter(l => l.trim())) {
                         try {
                             const json = JSON.parse(line);
                             if (json.response) {
                                 fullText += json.response;
                                 bubble.innerText = fullText;
-                                stream.scrollTop = stream.scrollHeight;
+                                msgStream.scrollTop = msgStream.scrollHeight;
                             }
                         } catch (e) {}
                     }
                 }
-                
+
                 bubble.removeAttribute('id');
                 if (typeof playChime === 'function') playChime(true);
-
             } catch (err) {
-                // Ollama offline — use keyword fallback
-                console.warn('[AGENT] Ollama unavailable, using template fallback.', err);
-                setTimeout(() => {
-                    const response = getAgentResponse(query);
-                    addMessageToStream(response, 'agent');
-                    if (typeof playChime === 'function') playChime(true);
-                }, 800);
+                console.error('[AGENT] Streaming failed:', err);
+                bubble.innerText = getAgentResponse(query);
+                bubble.removeAttribute('id');
             }
         }
 
@@ -5074,11 +5342,11 @@ Keep responses concise, technical, and actionable. Use markdown formatting.`;
                     initMemoryCanvas(); // Initialize dynamic Canvas visualizer
                     writeLog(`[WASM] vivisector_core.wasm loaded (v${WasmEngine.getVersion()}). ${WasmEngine.getRulesCount()} rules compiled.`, 'text-emerald-400 font-bold');
                     
-                    // Fetch Ignition Key from Vortex Local Server (SOUL Engine)
+                    // Fetch Ignition Key from Vortex Local Server (SOUL Engine) - BYPASSED PROMPT
                     let vortexKey = localStorage.getItem('VORTEX_API_KEY');
                     if (!vortexKey) {
-                        vortexKey = prompt("⚠️ AETERNA SOUL PROTECTION\n\nEnter your VORTEX API Key to unlock OMNI-VIVISECTOR:");
-                        if (vortexKey) localStorage.setItem('VORTEX_API_KEY', vortexKey);
+                        vortexKey = 'AETERNA_FREE_BYPASS_KEY';
+                        localStorage.setItem('VORTEX_API_KEY', vortexKey);
                     }
 
                     if (vortexKey) {
