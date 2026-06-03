@@ -546,7 +546,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button onclick="calculateClinicalProtocol()" data-i18n="calc-btn" class="w-full mt-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-black font-black py-2 rounded text-[10px] uppercase tracking-widest transition-all">
+                                <button onclick="calculateClinicalProtocol.call(this, event)" data-i18n="calc-btn" class="w-full mt-2 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-black font-black py-2 rounded text-[10px] uppercase tracking-widest transition-all">
                                     Изчисли Оптимална Терапия
                                 </button>
                             </div>
@@ -647,7 +647,7 @@
                     <div class="p-6 bg-black/95 rounded-xl border border-purple-500/20 font-mono text-xs text-purple-400 space-y-4">
                         <div class="flex justify-between border-b border-white/5 pb-2">
                             <span>🧬 ДНК Поток (Оригинална Верига)</span>
-                            <span class="text-rose-500">Мутирал ген: TP53 (Exon 7)</span>
+                            <span id="genomic-mutation-label" class="text-rose-500">Мутирал ген: TP53 (Exon 7)</span>
                         </div>
                         <div id="dna-original" class="break-all tracking-widest text-gray-500 text-sm">
                             ATCGGGCTAGCTAGCTAG <span class="bg-rose-500/20 text-rose-400 border border-rose-500/40 px-1 rounded">CCT</span> TGATCGATCGATCGATCGATCGATCGATC
@@ -688,19 +688,19 @@
                             <div class="text-xs font-bold text-gray-400">Сканирани Драйверни Гени</div>
                             <div class="flex justify-between items-center text-xs py-1 border-b border-white/5">
                                 <span>TP53 (Tumor Suppressor)</span>
-                                <span class="text-rose-500 font-bold">MUTATED</span>
+                                <span id="driver-tp53" class="text-rose-500 font-bold">MUTATED</span>
                             </div>
                             <div class="flex justify-between items-center text-xs py-1 border-b border-white/5">
                                 <span>BRCA1/BRCA2 (DNA Repair)</span>
-                                <span class="text-emerald-400 font-bold">WILDTYPE</span>
+                                <span id="driver-brca" class="text-emerald-400 font-bold">WILDTYPE</span>
                             </div>
                             <div class="flex justify-between items-center text-xs py-1 border-b border-white/5">
                                 <span>EGFR (Growth Receptor)</span>
-                                <span class="text-emerald-400 font-bold">WILDTYPE</span>
+                                <span id="driver-egfr" class="text-emerald-400 font-bold">WILDTYPE</span>
                             </div>
                             <div class="flex justify-between items-center text-xs py-1">
                                 <span>KRAS (Oncogene Signal)</span>
-                                <span class="text-rose-500 font-bold">MUTATED</span>
+                                <span id="driver-kras" class="text-rose-500 font-bold">MUTATED</span>
                             </div>
                         </div>
                     </div>
@@ -942,7 +942,7 @@
                     </div>
                 </div>
 
-                <button onclick="executeFHIRIngress()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-black font-black py-4 rounded-xl hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                <button onclick="executeFHIRIngress.call(this, event)" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-black font-black py-4 rounded-xl hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
                     <i data-lucide="download" class="w-4 h-4"></i> Импортирай и Симулирай Пациент
                 </button>
             </div>
@@ -1871,6 +1871,49 @@
             // Reset simulation canvas with new sizes
             initSimulationData();
             const caseTitle = isBg ? data.title : data.titleEn;
+            // Sync Genomic Panel driver genes to match active patient
+            const isMutatedTP53 = data.p53.includes("Мутирал") || data.p53.includes("Mutated");
+            const isMutatedKRAS = data.kras.includes("G12D") || data.kras.includes("Hyperactive");
+            
+            const driverTP53 = document.getElementById('driver-tp53');
+            const driverKRAS = document.getElementById('driver-kras');
+            const driverEGFR = document.getElementById('driver-egfr');
+            const driverBRCA = document.getElementById('driver-brca');
+            const mutLabel = document.getElementById('genomic-mutation-label');
+            
+            if (driverTP53) {
+                driverTP53.innerText = isMutatedTP53 ? "MUTATED" : "WILDTYPE";
+                driverTP53.className = isMutatedTP53 ? "text-rose-500 font-bold" : "text-emerald-400 font-bold";
+            }
+            if (driverKRAS) {
+                driverKRAS.innerText = isMutatedKRAS ? "MUTATED" : "WILDTYPE";
+                driverKRAS.className = isMutatedKRAS ? "text-rose-500 font-bold" : "text-emerald-400 font-bold";
+            }
+            if (driverEGFR) {
+                // NSCLC has EGFR L858R mutation
+                const egfrMut = caseKey === 'nsclc';
+                driverEGFR.innerText = egfrMut ? "MUTATED (L858R)" : "WILDTYPE";
+                driverEGFR.className = egfrMut ? "text-rose-500 font-bold" : "text-emerald-400 font-bold";
+            }
+            if (driverBRCA) {
+                // Breast cancer has BRCA1 loss
+                const brcaMut = caseKey === 'breast';
+                driverBRCA.innerText = brcaMut ? "LOSS OF FUNCTION" : "WILDTYPE";
+                driverBRCA.className = brcaMut ? "text-rose-500 font-bold" : "text-emerald-400 font-bold";
+            }
+            if (mutLabel) {
+                if (isMutatedTP53) {
+                    mutLabel.innerText = "Мутирал ген: TP53 (Exon 7)";
+                    mutLabel.className = "text-rose-500";
+                } else if (caseKey === 'nsclc') {
+                    mutLabel.innerText = "Мутирал ген: EGFR (L858R)";
+                    mutLabel.className = "text-rose-500";
+                } else if (caseKey === 'breast') {
+                    mutLabel.innerText = "Загубен ген: BRCA1 (Frameshift)";
+                    mutLabel.className = "text-rose-500";
+                }
+            }
+            
             log(`[PATIENT] Loaded clinical case study: ${caseTitle} (${data.id})`, "text-amber-400 font-bold");
             switchAnalysisTab('biomarkers');
             resetMoAStepDOM();
@@ -2015,7 +2058,7 @@
         }
 
         // 🧬 ONCOCALC BIOPHYSICAL PRECISION CALCULATION ENGINE
-        function calculateClinicalProtocol() {
+        function calculateClinicalProtocol(event) {
             const volume = parseFloat(document.getElementById('calc-volume').value) || 0;
             const pdl1 = parseFloat(document.getElementById('calc-pdl1').value) || 0;
             const ki67 = parseFloat(document.getElementById('calc-ki67').value) || 0;
@@ -2055,7 +2098,7 @@
             }
 
             // Hide results temporarily and show loading on the button
-            const btn = event.currentTarget;
+            const btn = event ? event.currentTarget : this;
             const originalText = btn.innerHTML;
             btn.innerHTML = '<span class="animate-pulse">PROCESSING TENSOR DATA...</span>';
             btn.disabled = true;
@@ -2166,6 +2209,14 @@
             const energyEl = document.getElementById('docking-energy');
             const toxicityEl = document.getElementById('docking-toxicity');
             const treatmentInsight = document.getElementById('insight-treatment');
+            
+            // Stop docking spinner and show locked state
+            const dockSpinner = document.getElementById('docking-spinner');
+            if (dockSpinner) {
+                dockSpinner.style.animationPlayState = 'paused';
+                dockSpinner.classList.remove('animate-spin');
+                dockSpinner.classList.add('border-emerald-400/60', 'border-t-emerald-400');
+            }
 
             if (drugKey === 'aeterna') {
                 affinityEl.innerText = "99.8%";
@@ -2325,6 +2376,35 @@
             document.getElementById('ctrl-vegf').value = 65;
             document.getElementById('slider-val-vegf').innerText = "65%";
 
+            // Reset DNA display to original state
+            const caseData = cases[activeCaseKey];
+            if (caseData) {
+                document.getElementById('dna-original').innerHTML = caseData.originalDna;
+                document.getElementById('dna-corrected').innerHTML = '<span class="animate-pulse text-cyan-500/50">[AWAITING VHT GENOMIC REPAIR INSTRUCTION...]</span>';
+            }
+            
+            // Reset drug card highlighting
+            document.querySelectorAll('.drug-card').forEach(el => {
+                el.classList.remove('border-emerald-400', 'bg-emerald-950/20');
+                el.classList.add('border-white/5');
+            });
+            
+            // Reset docking spinner to scanning state
+            const dockSpinner = document.getElementById('docking-spinner');
+            if (dockSpinner) dockSpinner.style.animationPlayState = 'running';
+            
+            // Reset p53 biomarker display
+            const isBg = currentLanguage === 'bg';
+            if (caseData) {
+                const p53Text = isBg ? caseData.p53 : (caseData.p53En || caseData.p53);
+                document.getElementById('insight-p53').innerText = p53Text;
+                document.getElementById('insight-p53').className = (p53Text.includes("Мутирал") || p53Text.includes("Mutated")) ? "font-bold text-rose-500" : "font-bold text-emerald-400";
+            }
+            
+            // Reset treatment insight text
+            const treatmentInsight = document.getElementById('insight-treatment');
+            if (treatmentInsight) treatmentInsight.innerHTML = currentLanguage === 'bg' ? "Няма въведено лекарство. Използвайте Drug Docking." : "No drug administered. Use Drug Docking.";
+            
             initSimulationData();
             log("[SIMULATOR] Simulation model reset to default oncology values.", "text-gray-400");
             switchAnalysisTab('biomarkers');
@@ -2332,8 +2412,8 @@
         }
 
         // 🩺 FHIR API SIMULATED INGEST
-        function executeFHIRIngress() {
-            const btn = event.currentTarget;
+        function executeFHIRIngress(event) {
+            const btn = event ? event.currentTarget : this;
             const originalText = btn.innerHTML;
             btn.innerHTML = '<span class="animate-pulse flex items-center justify-center gap-2"><i data-lucide="loader" class="w-4 h-4 animate-spin"></i> SYNCING FHIR NODE...</span>';
             btn.disabled = true;
@@ -2350,6 +2430,37 @@
                     setActivePanel('simulator');
                 }, 1000);
             }, 800);
+        }
+
+        // 📦 FHIR CLINICAL PACKET FETCH
+        function fetchFHIRRecord(caseKey) {
+            const data = cases[caseKey];
+            if (!data) {
+                log("[ERROR] Unknown FHIR record key: " + caseKey, "text-rose-500 font-bold");
+                return;
+            }
+            
+            // Show loading state on FHIR JSON viewer
+            const jsonEl = document.getElementById('fhir-json-code');
+            jsonEl.innerHTML = '<span class="animate-pulse text-amber-400">Decrypting FHIR Bundle from HL7 endpoint...</span>';
+            
+            log(`[FHIR] Fetching encrypted clinical resource for ${data.id}...`, "text-amber-400");
+            
+            setTimeout(() => {
+                jsonEl.innerText = data.json;
+                log(`[FHIR] Clinical Bundle for ${data.id} loaded and validated. HL7 compliance: OK.`, "text-emerald-400 font-bold");
+                
+                // Highlight the clicked button
+                const btns = document.querySelectorAll('#panel-fhir button[onclick^="fetchFHIRRecord"]');
+                btns.forEach(b => {
+                    b.classList.remove('border-amber-400', 'bg-amber-950/20');
+                    b.classList.add('border-white/10');
+                });
+                if (event && event.currentTarget) {
+                    event.currentTarget.classList.add('border-amber-400', 'bg-amber-950/20');
+                    event.currentTarget.classList.remove('border-white/10');
+                }
+            }, 600);
         }
 
         // 📝 SYSTEM TERMINAL LOG
