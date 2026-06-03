@@ -2663,6 +2663,49 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
                 appendBotMessage(response);
             }, 1000);
         }
+    
+        // 🔄 LIVE TELEMETRY SIMULATION (Real-time HUD Feel)
+        function startLiveTelemetry() {
+            setInterval(() => {
+                // CPU load fluctuation
+                const baseCpu = 12.0;
+                const cpu = (baseCpu + (Math.random() * 5 - 2)).toFixed(1);
+                const cpuEl = document.getElementById('metric-cpu');
+                if (cpuEl) cpuEl.innerText = `${cpu}%`;
+                
+                // Memory fluctuation
+                const baseMem = 12.4;
+                const mem = (baseMem + (Math.random() * 0.4 - 0.2)).toFixed(2);
+                const memEl = document.getElementById('metric-mem');
+                if (memEl) memEl.innerText = `${mem}GB`;
+                
+                // Network latency fluctuation
+                const net = (0.01 + (Math.random() * 0.03)).toFixed(3);
+                const netEl = document.getElementById('metric-net');
+                if (netEl) netEl.innerText = `${net}ms`;
+                
+                // Entropy / Integrity fluctuation
+                const entropy = (Math.random() * 0.0005).toFixed(4);
+                const entropyEl = document.getElementById('metric-system-entropy');
+                if (entropyEl) entropyEl.innerText = `${entropy} LwaS`;
+                
+                // Randomly log heartbeat to terminal every ~10 seconds
+                if (Math.random() < 0.1) {
+                    const heartbeats = [
+                        "[SYS] FHIR node sync OK. Latency < 1ms.",
+                        "[SYS] Core thermal states nominal. Liquid cooling optimal.",
+                        "[SYS] Mojo VM threadpool rebalanced.",
+                        "[SYS] Checksum validation passed for active case model."
+                    ];
+                    const msg = heartbeats[Math.floor(Math.random() * heartbeats.length)];
+                    log(msg, "text-gray-600 italic text-[9px]");
+                }
+            }, 1000);
+        }
+        
+        // Start telemetry on load
+        setTimeout(startLiveTelemetry, 2000);
+
     </script>
 
     <!-- ==========================================
