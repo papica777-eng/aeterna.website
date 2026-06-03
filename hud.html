@@ -2852,6 +2852,30 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             const overlay = document.getElementById("emergency-overlay");
             if (overlay) {
                 overlay.style.display = state.empathyAnomaly ? "flex" : "none";
+                if (state.empathyAnomaly) {
+                    overlay.innerHTML = `
+                        <div class="glass-card emergency-card scale-in animate-pulse" style="max-width: 600px; text-align: center; display: flex; flex-direction: column; gap: 24px; padding: 40px; border-color: var(--neon-red);">
+                            <div style="font-size: 3.5rem; color: var(--neon-red);"><i data-lucide="alert-triangle"></i></div>
+                            <div>
+                                <div style="font-size: 0.8rem; font-weight: 800; color: var(--neon-red); letter-spacing: 2px; margin-bottom: 8px;" class="mono">
+                                    ${t('criticalAlert')}
+                                </div>
+                                <h1 style="font-size: 2rem; font-weight: 900; line-height: 1.2; margin-bottom: 16px; color: #fff;">
+                                    ${t('lockoutEnforced')}
+                                </h1>
+                                <p style="color: #fda4af; font-size: 0.95rem; line-height: 1.6;" class="mono">
+                                    ${t('lockoutDesc', { zScore: state.zScore.toFixed(4) })}
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 16px; justify-content: center;">
+                                <button class="cure-btn" style="background: linear-gradient(135deg, #475569, #1e293b); box-shadow: none; border-color: rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 24px;" onclick="resetHUD()">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4 text-slate-300"></i>${t('btnResetSimulation')}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 0);
+                }
             }
         }
 
