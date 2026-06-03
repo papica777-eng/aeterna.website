@@ -1824,7 +1824,7 @@
 
             // DNA updates
             document.getElementById('dna-original').innerHTML = data.originalDna;
-            document.getElementById('dna-corrected').innerHTML = data.correctedDna;
+            document.getElementById('dna-corrected').innerHTML = '<span class="animate-pulse text-cyan-500/50">[AWAITING VHT GENOMIC REPAIR INSTRUCTION...]</span>';
 
             // Details updates
             const isBg = currentLanguage === 'bg';
@@ -1943,6 +1943,31 @@
                 document.getElementById('insight-p53').innerText = "Див тип (Възстановен)";
                 document.getElementById('insight-p53').className = "font-bold text-emerald-400";
                 log("[VHT_CORE] MoA STEP 1: Genomic DNA repair complete. Wildtype p53 protein active.", "text-purple-400 font-bold");
+                
+                // Animate Genomic Correction text
+                const targetDna = cases[activeCaseKey].correctedDna;
+                const dnaCorrectedEl = document.getElementById('dna-corrected');
+                dnaCorrectedEl.innerHTML = '';
+                
+                // Strip HTML tags for character-by-character animation, but we want to keep the styling!
+                // To do this simply, we will just simulate a scanner blink, and then pop the full corrected HTML
+                let scanSteps = 0;
+                const scanInterval = setInterval(() => {
+                    scanSteps++;
+                    let bar = "";
+                    for(let i=0; i<scanSteps%10; i++) bar += "█";
+                    dnaCorrectedEl.innerHTML = `<span class="text-cyan-400">CRISPR/PRIME SCANNING: ${bar}</span>`;
+                    
+                    if(scanSteps > 8) {
+                        clearInterval(scanInterval);
+                        dnaCorrectedEl.innerHTML = targetDna;
+                        // Add flash effect
+                        dnaCorrectedEl.classList.add('glow-green', 'text-[#00ff66]');
+                        setTimeout(() => {
+                            dnaCorrectedEl.classList.remove('glow-green', 'text-[#00ff66]');
+                        }, 1000);
+                    }
+                }, 50);
             } else if (stepNum === 2) {
                 log("[VHT_CORE] MoA STEP 2: PD-L1 tumor escape receptors blocked. Protective shield down.", "text-cyan-400 font-bold");
             } else if (stepNum === 3) {
