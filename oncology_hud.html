@@ -374,7 +374,7 @@
                     <!-- HUD Overlays inside Canvas -->
                     <div class="absolute bottom-4 left-4 p-3 bg-black/60 rounded-lg border border-cyan-500/10 text-[10px] font-mono space-y-1.5 pointer-events-none">
                         <div class="text-cyan-400">[LwaS ENGINE RUNNING: SOUL VM]</div>
-                        <div class="text-gray-400">CELL COUNT: 1250 | VEGFA MAPPED: 785 pg/mL</div>
+                        <div class="text-gray-400">CELL COUNT: <span id="overlay-cellcount">1250</span> | VEGFA: <span id="overlay-vegf-map">785</span> pg/mL</div>
                         <div class="text-emerald-400">T-CELL ACTIVITY: <span id="overlay-tcell">12%</span></div>
                     </div>
                 </div>
@@ -1644,6 +1644,12 @@
 
             // Filter out fully dead cells
             cells = cells.filter(c => c.alpha > 0);
+            
+            // Update live canvas overlay counters
+            const overlayCC = document.getElementById('overlay-cellcount');
+            const overlayVF = document.getElementById('overlay-vegf-map');
+            if (overlayCC) overlayCC.innerText = cells.filter(c => c.type !== 'tcell').length;
+            if (overlayVF) overlayVF.innerText = Math.max(50, Math.floor(780 - (simState.vegfLevel * 5) + (Math.random() * 20 - 10)));
 
             // Request next frame
             requestAnimationFrame(animate);
@@ -1846,8 +1852,21 @@
                 el.classList.remove('border-cyan-400/40', 'bg-cyan-950/20');
                 el.classList.add('border-white/5');
             });
-            event.currentTarget.classList.add('border-cyan-400/40', 'bg-cyan-950/20');
-            event.currentTarget.classList.remove('border-white/5');
+            if (typeof event !== 'undefined' && event && event.currentTarget) {
+                event.currentTarget.classList.add('border-cyan-400/40', 'bg-cyan-950/20');
+                event.currentTarget.classList.remove('border-white/5');
+            }
+
+            // Sync OncoCalc inputs to active case biomarkers
+            document.getElementById('calc-volume').value = (data.tumorMass * 0.54).toFixed(1); // Approx vol from mass
+            document.getElementById('calc-ki67').value = parseFloat(data.ki67);
+            document.getElementById('calc-pdl1').value = data.kras.includes("G12D") || data.kras.includes("Hyperactive") ? 68 : (data.kras.includes("Нормална") || data.kras.includes("Normal") ? 25 : 40);
+            document.getElementById('calc-kras').value = (data.kras.includes("G12D") || data.kras.includes("Hyperactive")) ? "G12D" : "wildtype";
+            document.getElementById('calc-tp53').value = (data.p53.includes("Мутирал") || data.p53.includes("Mutated")) ? "mutated" : "wildtype";
+            
+            // Hide stale OncoCalc results
+            const resCard = document.getElementById('oncocalc-result');
+            if (resCard) resCard.classList.add('hidden');
 
             // Reset simulation canvas with new sizes
             initSimulationData();
@@ -2126,8 +2145,19 @@
             });
 
             // Highlight chosen
-            event.currentTarget.classList.add('border-emerald-400', 'bg-emerald-950/20');
-            event.currentTarget.classList.remove('border-white/5');
+            if (typeof event !== 'undefined' && event && event.currentTarget) {
+                event.currentTarget.classList.add('border-emerald-400', 'bg-emerald-950/20');
+                event.currentTarget.classList.remove('border-white/5');
+            } else {
+                // Programmatic call - highlight by drugKey
+                const drugCards = document.querySelectorAll('.drug-card');
+                drugCards.forEach(el => {
+                    if (el.getAttribute('data-drug') === drugKey || el.innerText.toLowerCase().includes(drugKey === 'aeterna' ? 'ap-90' : drugKey)) {
+                        el.classList.add('border-emerald-400', 'bg-emerald-950/20');
+                        el.classList.remove('border-white/5');
+                    }
+                });
+            }
 
             simState.activeDrug = drugKey;
 
@@ -2236,6 +2266,14 @@
                         if (simState.tumorMass > targetMass + 0.8) {
                             simState.tumorMass -= 1.8;
                             document.getElementById('metric-tumor-mass').innerText = `${simState.tumorMass.toFixed(1)}%`;
+                            // Dynamic color: red > 60%, orange > 30%, green < 30%
+                            if (simState.tumorMass > 60) {
+                                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-rose-500 glow-crimson tracking-tight";
+                            } else if (simState.tumorMass > 30) {
+                                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-amber-400 tracking-tight";
+                            } else {
+                                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-emerald-400 glow-green tracking-tight";
+                            }
                             
                             // Kill canvas cancer cells
                             let cancerCells = cells.filter(c => c.type === 'cancer' && !c.isDying);
@@ -2669,7 +2707,7 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
                 const indicator = document.getElementById('ai-typing-indicator');
                 if (indicator) indicator.remove();
                 
-                let response = `Благодаря за въпроса! Като локален **AETERNA.AIC** ко-пилот на Архитекта Димитър Продромов, извършвам постоянен Real-time мониторинг на Ryzen 7000 хардуерния слой. 
+                let response = `Благодаря за въпроса! Като **AETERNA.AIC** клиничен ко-пилот, извършвам постоянен мониторинг на активния пациентски профил и симулационните параметри. 
 
 За да приложите лечение, препоръчвам да кликнете върху бързите линкове по-горе за авто-симулация, или да заредите пациента и да натиснете **"Изчисли Оптимална Терапия"** в таб OncoCalc.`;
 
@@ -2765,7 +2803,7 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
                     <i data-lucide="bot" class="w-3.5 h-3.5 text-cyan-400"></i>
                 </div>
                 <div class="bg-cyan-950/20 border border-cyan-500/10 rounded-xl p-3 text-gray-300 leading-relaxed shadow-sm">
-                    Здравейте, Архитект! Аз съм Вашият **AETERNA.AIC** ко-пилот. 
+                    Здравейте, Доктор! Аз съм Вашият **AETERNA.AIC** клиничен ко-пилот. 
                     <br><br>
                     Мога да Ви помогна да се ориентирате в **4-стъпковия клиничен протокол**, да анализирате раковите мутации (TP53/KRAS) или да стартирам автоматична симулация.
                 </div>
