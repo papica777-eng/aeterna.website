@@ -1363,6 +1363,7 @@
 
         // Simulation parameters
         let simState = {
+            currentVariant: 'chem',
             tumorMass: 84.2,
             apoptosisRate: 12.4,
             immuneInfiltration: 4.12,
@@ -1955,10 +1956,17 @@
                 document.getElementById('metric-apoptosis-velocity').innerText = "98.4%";
                 log("[VHT_CORE] MoA STEP 4: BAX/BAK pore disruption activates caspase cascade.", "text-rose-500 font-bold");
             } else if (stepNum === 5) {
-                simState.immuneLevel = 90;
-                document.getElementById('ctrl-immune').value = 90;
-                updateImmune(90);
-                log("[VHT_CORE] MoA STEP 5: Hyperactive CD8+ cytolytic T-cell clearance sweep.", "text-[#00ff66] font-bold");
+                if (simState.currentVariant === 'chem') {
+                    simState.immuneLevel = 25;
+                    document.getElementById('ctrl-immune').value = 25;
+                    updateImmune(25);
+                    log("[VHT_CORE] MoA STEP 5: Standard Chemo - minimal immune recruitment.", "text-orange-400 font-bold");
+                } else {
+                    simState.immuneLevel = 90;
+                    document.getElementById('ctrl-immune').value = 90;
+                    updateImmune(90);
+                    log("[VHT_CORE] MoA STEP 5: Hyperactive CD8+ cytolytic T-cell clearance sweep.", "text-[#00ff66] font-bold");
+                }
             }
         }
 
@@ -2187,7 +2195,8 @@
                     // Shrink tumor mass animation sequence
                     log("[APOPTOSIS_ENGINE] Programmed oncology lysis active. Commencing resolution phase...", "text-rose-500 font-bold");
                     const shrinkInterval = setInterval(() => {
-                        if (simState.tumorMass > 0.8) {
+                        let targetMass = (simState.currentVariant === 'chem') ? 45.0 : 0.0;
+                        if (simState.tumorMass > targetMass + 0.8) {
                             simState.tumorMass -= 1.8;
                             document.getElementById('metric-tumor-mass').innerText = `${simState.tumorMass.toFixed(1)}%`;
                             
@@ -2200,11 +2209,16 @@
                                 }
                             }
                         } else {
-                            simState.tumorMass = 0.0;
-                            document.getElementById('metric-tumor-mass').innerText = "0.0%";
-                            document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-emerald-400 glow-green";
+                            simState.tumorMass = targetMass;
+                            document.getElementById('metric-tumor-mass').innerText = `${targetMass.toFixed(1)}%`;
                             clearInterval(shrinkInterval);
-                            log("[COMPLETE] Dynamic Oncology Simulation Complete: Tumor fully resolved. ZERO CANCER CELLS DETECTED.", "text-[#00ff66] font-bold text-base shadow-sm");
+                            if (simState.currentVariant === 'chem') {
+                                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-orange-400 glow-orange";
+                                log("[WARNING] Chemo-resistance detected. Tumor mass stabilized at 45.0%. Partial response only.", "text-orange-400 font-bold text-base shadow-sm");
+                            } else {
+                                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-emerald-400 glow-green";
+                                log("[COMPLETE] Dynamic Oncology Simulation Complete: Tumor fully resolved. ZERO CANCER CELLS DETECTED.", "text-[#00ff66] font-bold text-base shadow-sm");
+                            }
                         }
                     }, 100);
                 }
@@ -2269,6 +2283,7 @@
         // 🖥️ SCENARIO SIMULATION TERMINAL VARIANT SELECTOR
         let termInterval = null;
         function switchTerminalVariant(variant) {
+            simState.currentVariant = variant;
             // Reset existing interval if any
             if (termInterval) clearTimeout(termInterval);
 
