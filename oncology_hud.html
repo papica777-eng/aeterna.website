@@ -2353,8 +2353,11 @@
 
         // 🩺 RESET SIMULATOR
         function resetSimulation() {
-            simState.tumorMass = 84.2;
-            simState.apoptosisRate = 12.4;
+            // Read baseline from active patient (not hardcoded!)
+            const activeData = cases[activeCaseKey] || cases['pancreatic'];
+            
+            simState.tumorMass = activeData.tumorMass;
+            simState.apoptosisRate = activeData.apoptosis;
             simState.immuneLevel = 20;
             simState.vegfLevel = 65;
             simState.drugDose = 0;
@@ -2362,19 +2365,26 @@
             simState.activeDrug = 'none';
             simState.moaStep = 0;
 
-            document.getElementById('metric-tumor-mass').innerText = "84.2%";
-            document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-white glow-cyan tracking-tight";
-            document.getElementById('metric-apoptosis-velocity').innerText = "12.4%";
-            document.getElementById('metric-immune-infiltration').innerText = "4.12%";
+            document.getElementById('metric-tumor-mass').innerText = `${activeData.tumorMass}%`;
+            // Color-code based on tumor severity
+            if (activeData.tumorMass > 60) {
+                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-rose-500 glow-crimson tracking-tight";
+            } else if (activeData.tumorMass > 30) {
+                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-amber-400 tracking-tight";
+            } else {
+                document.getElementById('metric-tumor-mass').className = "text-3xl font-black text-white glow-cyan tracking-tight";
+            }
+            document.getElementById('metric-apoptosis-velocity').innerText = `${activeData.apoptosis}%`;
+            document.getElementById('metric-immune-infiltration').innerText = `${activeData.immune}%`;
             document.getElementById('metric-mutation-correction').innerText = "0.00%";
             document.getElementById('metric-mutation-correction').className = "text-3xl font-black text-white tracking-tight text-purple-400";
 
             document.getElementById('ctrl-dose').value = 0;
             document.getElementById('slider-val-dose').innerText = "0%";
-            document.getElementById('ctrl-immune').value = 20;
-            updateImmune(20);
-            document.getElementById('ctrl-vegf').value = 65;
-            document.getElementById('slider-val-vegf').innerText = "65%";
+            document.getElementById('ctrl-immune').value = simState.immuneLevel;
+            updateImmune(simState.immuneLevel);
+            document.getElementById('ctrl-vegf').value = simState.vegfLevel;
+            document.getElementById('slider-val-vegf').innerText = `${simState.vegfLevel}%`;
 
             // Reset DNA display to original state
             const caseData = cases[activeCaseKey];
