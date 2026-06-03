@@ -2035,16 +2035,28 @@
                 successRate = 65.0;
             }
 
-            // Populate calculations outputs card in real-time
-            document.getElementById('res-ligand').innerText = optimalLigand;
-            document.getElementById('res-dose').innerText = `${calculatedDose} mg/kg iv`;
-            document.getElementById('res-regimen').innerText = regimenText;
-            document.getElementById('res-success').innerText = `${successRate}%`;
-
-            const resultsCard = document.getElementById('oncocalc-result');
-            resultsCard.classList.remove('hidden');
-
-            log(`[ONCOCALC] Computed clinical treatment for Patient Volume ${volume}cm³: Prescribed ${optimalLigand} at ${calculatedDose}mg/kg.`, "text-emerald-400 font-bold");
+            // Hide results temporarily and show loading on the button
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="animate-pulse">PROCESSING TENSOR DATA...</span>';
+            btn.disabled = true;
+            document.getElementById('oncocalc-result').classList.add('hidden');
+            
+            log("[ONCOCALC] Initiating multi-scale tensor computation...", "text-amber-400");
+            
+            setTimeout(() => {
+                // Populate calculations outputs card
+                document.getElementById('res-ligand').innerText = optimalLigand;
+                document.getElementById('res-dose').innerText = `${calculatedDose} mg/kg iv`;
+                document.getElementById('res-regimen').innerText = regimenText;
+                document.getElementById('res-success').innerText = `${successRate}%`;
+    
+                document.getElementById('oncocalc-result').classList.remove('hidden');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+    
+                log(`[ONCOCALC] Computed clinical treatment for Patient Volume ${volume}cm³: Prescribed ${optimalLigand} at ${calculatedDose}mg/kg.`, "text-emerald-400 font-bold");
+            }, 1200);
         }
 
         // Apply OncoCalc results directly into simulator variables
@@ -2283,10 +2295,22 @@
 
         // 🩺 FHIR API SIMULATED INGEST
         function executeFHIRIngress() {
-            log("[FHIR] Ingesting clinical observations from server...", "text-amber-400");
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="animate-pulse flex items-center justify-center gap-2"><i data-lucide="loader" class="w-4 h-4 animate-spin"></i> SYNCING FHIR NODE...</span>';
+            btn.disabled = true;
+            
+            log("[FHIR] Establishing secure handshake with hospital EMR node...", "text-amber-400");
+            
             setTimeout(() => {
-                log("[SUCCESS] FHIR Patient metadata decrypted and synced to VHT_CORE.", "text-emerald-400 font-bold");
-                setActivePanel('simulator');
+                log("[FHIR] Ingesting encrypted clinical observations and lab results...", "text-amber-400");
+                
+                setTimeout(() => {
+                    log("[SUCCESS] FHIR Patient metadata decrypted and synced to VHT_CORE.", "text-emerald-400 font-bold");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    setActivePanel('simulator');
+                }, 1000);
             }, 800);
         }
 
