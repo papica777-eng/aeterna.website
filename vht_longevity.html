@@ -1452,7 +1452,7 @@
 
                 // Node on Strand 2
                 const node2 = new THREE.Mesh(nodeGeo, strand2Mat);
-                node2.userData = { strand: 2, baseAngle: baseAngle + Math.PI, y: y };
+                node2.userData = { strand: 2, baseAngle: baseAngle, y: y };
                 scene.add(node2);
                 strand2Nodes.push(node2);
 
@@ -1552,19 +1552,19 @@
                 helixRadius = 3.5;
             }
 
-            // Shift backbone colors dynamically to represent cellular health state (Vibrant vs Corrupted Red)
-            const healthyColor1 = new THREE.Color(0x00ffaa);
-            const agedColor1 = new THREE.Color(0x9f1239);
-            const healthyColor2 = new THREE.Color(0x00f0ff);
-            const agedColor2 = new THREE.Color(0x581c87);
+            // Shift backbone colors dynamically to represent cellular health state (Medical clinical look)
+            const healthyColor1 = new THREE.Color(0xd0d5db);
+            const agedColor1 = new THREE.Color(0x9ca3af);
+            const healthyColor2 = new THREE.Color(0xe2e8f0);
+            const agedColor2 = new THREE.Color(0xd1d5db);
 
             strand1Mat.color.lerpColors(healthyColor1, agedColor1, ageFactor);
-            strand1Mat.emissive.lerpColors(healthyColor1, agedColor1, ageFactor);
-            strand1Mat.emissiveIntensity = 0.2 + (1.0 - ageFactor) * 0.3;
+            strand1Mat.emissive.setHex(0x000000);
+            strand1Mat.emissiveIntensity = 0;
 
             strand2Mat.color.lerpColors(healthyColor2, agedColor2, ageFactor);
-            strand2Mat.emissive.lerpColors(healthyColor2, agedColor2, ageFactor);
-            strand2Mat.emissiveIntensity = 0.2 + (1.0 - ageFactor) * 0.3;
+            strand2Mat.emissive.setHex(0x000000);
+            strand2Mat.emissiveIntensity = 0;
 
             // 2. Animate and perturb DNA backbone nodes
             strand1Nodes.forEach(node => {
@@ -1582,7 +1582,7 @@
             });
 
             strand2Nodes.forEach(node => {
-                const angle = (node.userData.baseAngle + Math.PI) * (helixTurns / 5.0) + time * speed;
+                const angle = node.userData.baseAngle * (helixTurns / 5.0) + time * speed + Math.PI;
                 const x = Math.cos(angle) * helixRadius;
                 const z = Math.sin(angle) * helixRadius;
                 const y = node.userData.y;
