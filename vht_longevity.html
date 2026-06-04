@@ -1511,9 +1511,9 @@
             mesh.scale.setScalar(0.7 + Math.random() * 0.5);
             mesh.userData = {
                 velocity: new THREE.Vector3(
-                    (Math.random() - 0.5) * 0.015,
-                    (Math.random() - 0.5) * 0.015,
-                    (Math.random() - 0.5) * 0.01
+                    (Math.random() - 0.5) * 0.002,
+                    (Math.random() - 0.5) * 0.002,
+                    (Math.random() - 0.5) * 0.001
                 ),
                 rotationSpeed: new THREE.Vector3(
                     Math.random() * 0.02,
@@ -1541,7 +1541,7 @@
 
             // 1. Calculate dynamic Epigenetic Noise / Structural Decay based on current biologicalAge
             const ageFactor = (biologicalAge - 52.4) / 30.0; // 0.0 (young/clean) to 1.0 (old/corrupted)
-            const noiseScale = ageFactor * 1.5; // Random structural perturbation scale
+            const noiseScale = ageFactor * 0.05; // Random structural perturbation scale (subtle medical tremor)
 
             // Intercept and update helix relaxation/unwinding state parameters
             if (reprogrammingState === 'RELAXING' || reprogrammingState === 'TRANSCRIPTION') {
