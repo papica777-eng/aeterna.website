@@ -1274,21 +1274,21 @@
 
         // Materials with physical glass/metallic parameters
         const strand1Mat = new THREE.MeshPhysicalMaterial({
-            color: 0x00ffaa, emissive: 0x009966, emissiveIntensity: 0.3, metalness: 0.95, roughness: 0.12, clearcoat: 1.0, clearcoatRoughness: 0.1, transmission: 0.2
+            color: 0xd0d5db, emissive: 0x000000, metalness: 0.1, roughness: 0.7, clearcoat: 0.1
         });
         const strand2Mat = new THREE.MeshPhysicalMaterial({
-            color: 0x00f0ff, emissive: 0x0088cc, emissiveIntensity: 0.3, metalness: 0.95, roughness: 0.12, clearcoat: 1.0, clearcoatRoughness: 0.1, transmission: 0.2
+            color: 0xe2e8f0, emissive: 0x000000, metalness: 0.1, roughness: 0.7, clearcoat: 0.1
         });
         const methylMat = new THREE.MeshPhysicalMaterial({
-            color: 0xff3b6f, emissive: 0x990033, emissiveIntensity: 0.6, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
+            color: 0xef4444, emissive: 0x450a0a, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.8
         });
         const zombieMat = new THREE.MeshPhysicalMaterial({
-            color: 0xd97706, emissive: 0x7c2d12, emissiveIntensity: 0.25, metalness: 0.6, roughness: 0.7, flatShading: true
+            color: 0xa8a29e, emissive: 0x44403c, emissiveIntensity: 0.1, metalness: 0.1, roughness: 0.9, flatShading: true
         });
 
-        // Background Holographic Grid / Scanner Bounds
+        // Background Holographic Grid / Scanner Bounds (Hidden for clinical mode)
         const scannerRingMat = new THREE.MeshBasicMaterial({
-            color: 0xb55fe6, transparent: true, opacity: 0.1, wireframe: true
+            color: 0xb55fe6, transparent: true, opacity: 0.0, visible: false
         });
         const ringGeo = new THREE.TorusGeometry(8.5, 0.04, 8, 64);
         
@@ -1460,13 +1460,13 @@
                 const bp = basePairs[i];
                 
                 const mat1 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.4, metalness: 0.85, roughness: 0.15, clearcoat: 0.8, transparent: true, opacity: 0.95
+                    color: bp.color1, emissive: 0x000000, metalness: 0.2, roughness: 0.6
                 });
                 const half1 = new THREE.Mesh(rungCylinderGeo, mat1);
                 scene.add(half1);
 
                 const mat2 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.4, metalness: 0.85, roughness: 0.15, clearcoat: 0.8, transparent: true, opacity: 0.95
+                    color: bp.color2, emissive: 0x000000, metalness: 0.2, roughness: 0.6
                 });
                 const half2 = new THREE.Mesh(rungCylinderGeo, mat2);
                 scene.add(half2);
