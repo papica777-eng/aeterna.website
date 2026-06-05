@@ -608,12 +608,22 @@
             }
 
             root.innerHTML = tabHeader + content;
-            lucide.createIcons();
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } catch (e) {
+                console.error("Lucide icons failed to load:", e);
+            }
         }
 
-        window.onload = function() {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
             renderHUD();
-        };
+        } else {
+            window.onload = function() {
+                renderHUD();
+            };
+        }
 
     </script>
 </body>
