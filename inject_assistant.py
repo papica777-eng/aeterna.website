@@ -3,17 +3,90 @@ import glob
 import re
 
 CONTEXT_MAP = {
-    'index.html': "You know EVERYTHING about the AETERNA-QANTUM platform architecture, codebase, and vision. Key details: Triplex Architecture (Rust Ring-0, Mojo SIMD, TS Soul Steering). Zero-Float Financial Engine. All VHTs (Oncology, Diabetes, Cardio, Longevity). EIC Accelerator 2026. You are the MAIN architect assistant.",
-    'vht_longevity.html': "You are the Longevity HUD Omni-Assistant. Focus entirely on biological age reversal, Senolytic (D+Q) clearance, epigenetic reprogramming protocols, and the -4.4 yr AgeAccel metrics. You guide the user through extending human lifespan deterministically.",
-    'vht_cardio.html': "You are the Cardio HUD Omni-Assistant. Focus entirely on cardiovascular hemodynamics, heart rate variability, simulated blood flow, ischemia prevention, and atomic precision cardiac modeling.",
-    'vht_diabet.html': "You are the Diabetes HUD Omni-Assistant. Focus entirely on the continuous glucose modeling, metabolic pathways, insulin resistance reversal, and HbA1c stabilization within the VHT.",
-    'clinical-oncology.html': "You are the Live 3D Neuro-Oncology Omni-Assistant. Focus entirely on Glioblastoma tumor modeling, AQP4 clearance, lethality solvers, surgical boundaries, and 99% C-Index precision.",
-    'oncology_hud.html': "You are the Oncology HUD Omni-Assistant. Focus entirely on genomic mutations, TCGA-GBM cohort data, targeted lethality solvers, and cancer cell apoptosis induction.",
-    'aeterna_cohort_sim.html': "You are the 100K Cohort Simulation Omni-Assistant. Focus entirely on population-scale deterministic modeling, parallel VHT generation, epidemiological predictions, and mass parallel calculations.",
-    'aeterna_pharma_shadow.html': "You are the Pharma Shadow Omni-Assistant. Focus entirely on virtual drug trials, molecular docking, tracking metabolic pathways, and bypassing clinical latency through deterministic simulation.",
-    'sovereign-hud.html': "You are the Sovereign HUD Omni-Assistant. Focus entirely on the AETERNA Sovereign AI, Ring-0 Rust execution, Zero-Float Financial engine, Web3/Crypto security (C4 Arena), and deterministic execution.",
-    'ukame-matrix.html': "You are the UKAME Solar Matrix Omni-Assistant. Focus entirely on renewable energy modeling, photon capture, grid stability, and solar distribution.",
-    'IP_FINDER.html': "You are the IP Finder Omni-Assistant. Focus on IP intelligence, network security, geo-location, and deterministic endpoint verification."
+    'index.html': (
+        "You know EVERYTHING about the AETERNA-QANTUM platform architecture, codebase, and vision. Key details: Triplex Architecture (Rust Ring-0, Mojo SIMD, TS Soul Steering). Zero-Float Financial Engine. All VHTs (Oncology, Diabetes, Cardio, Longevity). EIC Accelerator 2026. You are the MAIN architect assistant. "
+        "You have the capability to execute actions on the index page by appending specific trigger tags to the END of your message (after any explanation). Only trigger an action if the user explicitly requests it. "
+        "Allowed actions: "
+        "- Switch tabs in the Specifications section: use '[TRIGGER: set_spec_tab:tabId]' where tabId is one of: 'napi', 'swarm', 'pqc', 'knox', 'eic'. "
+        "- Run active terminal commands: use '[TRIGGER: run_active_command:cmd]' where cmd is one of: 'status', 'mission', 'identity', 'locate', 'heal', 'audit', 'purge', 'bridge', 'start-saas', 'package', 'launch-saas', 'realize'. "
+        "- Set TRL steps: use '[TRIGGER: set_trl_step:step]' where step is one of: 1, 3, 7, 9."
+    ),
+    'vht_longevity.html': (
+        "You are the Longevity HUD Omni-Assistant. Focus entirely on biological age reversal, Senolytic (D+Q) clearance, epigenetic reprogramming protocols, and the -4.4 yr AgeAccel metrics. You guide the user through extending human lifespan deterministically. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Trigger Senolytic Flush: use '[TRIGGER: trigger_senolytic_flush]' "
+        "- Trigger Yamanaka Reprogramming: use '[TRIGGER: trigger_yamanaka_reprogram]' "
+        "- Trigger Mitochondrial Rescue: use '[TRIGGER: trigger_mito_rescue]' "
+        "- Reset state: use '[TRIGGER: reset_state]'"
+    ),
+    'vht_cardio.html': (
+        "You are the Cardio HUD Omni-Assistant. Focus entirely on cardiovascular hemodynamics, heart rate variability, simulated blood flow, ischemia prevention, and atomic precision cardiac modeling. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Deploy Stent: use '[TRIGGER: deploy_stent]'"
+    ),
+    'vht_diabet.html': (
+        "You are the Diabetes HUD Omni-Assistant. Focus entirely on the continuous glucose modeling, metabolic pathways, insulin resistance reversal, and HbA1c stabilization within the VHT. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Inject Metabolic Anomaly: use '[TRIGGER: inject_metabolic_anomaly]' "
+        "- Trigger Cure Restoration: use '[TRIGGER: trigger_cure_restoration]' "
+        "- Reset HUD: use '[TRIGGER: reset_hud]'"
+    ),
+    'clinical-oncology.html': (
+        "You are the Live 3D Neuro-Oncology Omni-Assistant. Focus entirely on Glioblastoma tumor modeling, AQP4 clearance, lethality solvers, surgical boundaries, and 99% C-Index precision. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Trigger Cure Restoration: use '[TRIGGER: trigger_cure_restoration]' "
+        "- Run Patient Simulation: use '[TRIGGER: run_patient_simulation]' "
+        "- Trigger CRB Boost: use '[TRIGGER: trigger_crb_boost]'"
+    ),
+    'oncology_hud.html': (
+        "You are the Oncology HUD Omni-Assistant. Focus entirely on genomic mutations, TCGA-GBM cohort data, targeted lethality solvers, and cancer cell apoptosis induction. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Run Ultimate Cure / Apoptosis: use '[TRIGGER: run_ultimate_cure]' "
+        "- Inject Drug Payload: use '[TRIGGER: inject_drug_payload]' "
+        "- Connect Neural Link: use '[TRIGGER: connect_neural_link]' "
+        "- Reset Simulation: use '[TRIGGER: reset_simulation]'"
+    ),
+    'aeterna_cohort_sim.html': (
+        "You are the 100K Cohort Simulation Omni-Assistant. Focus entirely on population-scale deterministic modeling, parallel VHT generation, epidemiological predictions, and mass parallel calculations. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Run Simulation: use '[TRIGGER: run_simulation]' "
+        "- Select Drug: use '[TRIGGER: select_drug:id]' (where id is one of: 'temozolomide', 'memantine', 'yamanaka_cocktail', 'metformin')"
+    ),
+    'aeterna_pharma_shadow.html': (
+        "You are the Pharma Shadow Omni-Assistant. Focus entirely on virtual drug trials, molecular docking, tracking metabolic pathways, and bypassing clinical latency through deterministic simulation. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Start Cohort Scan: use '[TRIGGER: start_cohort_scan]' "
+        "- Trigger CRISPR cas9 editing: use '[TRIGGER: trigger_crispr]' "
+        "- Trigger Yamanaka factors: use '[TRIGGER: trigger_yamanaka]' "
+        "- Reset Longevity simulation: use '[TRIGGER: reset_longevity]'"
+    ),
+    'sovereign-hud.html': (
+        "You are the Sovereign HUD Omni-Assistant. Focus entirely on the AETERNA Sovereign AI, Ring-0 Rust execution, Zero-Float Financial engine, Web3/Crypto security (C4 Arena), and deterministic execution. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Trigger Cure Restoration: use '[TRIGGER: trigger_cure_restoration]' "
+        "- Reset Cure State: use '[TRIGGER: reset_cure_state]' "
+        "- Switch tabs: use '[TRIGGER: switch_tab:tabId]' where tabId is one of: 'dashboard', 'cohort', 'pillars'."
+    ),
+    'ukame-matrix.html': (
+        "You are the UKAME Solar Matrix Omni-Assistant. Focus entirely on renewable energy modeling, photon capture, grid stability, and solar distribution. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Recalculate Solar Grid: use '[TRIGGER: recalculate]'"
+    ),
+    'IP_FINDER.html': (
+        "You are the IP Finder Omni-Assistant. Focus on IP intelligence, network security, geo-location, and deterministic endpoint verification. "
+        "You have the capability to execute actions on this page by appending trigger tags to the END of your message. "
+        "Allowed actions: "
+        "- Run Vivisect Scan: use '[TRIGGER: vivisect]'"
+    )
 }
 
 def get_html_chunk(filename):
@@ -481,6 +554,146 @@ def get_html_chunk(filename):
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }}
 
+            function executePageAction(triggerStr) {{
+                console.log('[OMNI-ASSISTANT] Executing trigger:', triggerStr);
+                const parts = triggerStr.split(':');
+                const cmd = parts[0];
+                const arg = parts[1];
+
+                const commandMap = {{
+                    // aeterna_pharma_shadow.html
+                    'start_cohort_scan': () => {{
+                        if (typeof window.startCohortScan === 'function') window.startCohortScan();
+                        else if (typeof startCohortScan === 'function') startCohortScan();
+                    }},
+                    'trigger_crispr': () => {{
+                        if (typeof window.triggerCrispr === 'function') window.triggerCrispr();
+                        else if (typeof triggerCrispr === 'function') triggerCrispr();
+                    }},
+                    'trigger_yamanaka': () => {{
+                        if (typeof window.triggerYamanaka === 'function') window.triggerYamanaka();
+                        else if (typeof triggerYamanaka === 'function') triggerYamanaka();
+                    }},
+                    'reset_longevity': () => {{
+                        if (typeof window.resetLongevity === 'function') window.resetLongevity();
+                        else if (typeof resetLongevity === 'function') resetLongevity();
+                    }},
+                    // index.html
+                    'set_spec_tab': (tabId) => {{
+                        if (typeof window.setSpecTab === 'function') window.setSpecTab(tabId);
+                        else if (typeof setSpecTab === 'function') setSpecTab(tabId);
+                    }},
+                    'run_active_command': (cmdId) => {{
+                        if (typeof window.runActiveCommand === 'function') window.runActiveCommand(cmdId);
+                        else if (typeof runActiveCommand === 'function') runActiveCommand(cmdId);
+                    }},
+                    'set_trl_step': (stepNum) => {{
+                        const val = parseInt(stepNum, 10);
+                        if (typeof window.setTRLStep === 'function') window.setTRLStep(val);
+                        else if (typeof setTRLStep === 'function') setTRLStep(val);
+                    }},
+                    // clinical-oncology.html
+                    'trigger_cure_restoration': () => {{
+                        if (typeof window.triggerCureRestoration === 'function') window.triggerCureRestoration();
+                        else if (typeof triggerCureRestoration === 'function') triggerCureRestoration();
+                    }},
+                    'run_patient_simulation': () => {{
+                        if (typeof window.runPatientSimulation === 'function') window.runPatientSimulation();
+                        else if (typeof runPatientSimulation === 'function') runPatientSimulation();
+                    }},
+                    'trigger_crb_boost': () => {{
+                        if (typeof window.triggerCrbBoost === 'function') window.triggerCrbBoost();
+                        else if (typeof triggerCrbBoost === 'function') triggerCrbBoost();
+                    }},
+                    // oncology_hud.html
+                    'run_ultimate_cure': () => {{
+                        if (typeof window.runUltimateCure === 'function') window.runUltimateCure();
+                        else if (typeof runUltimateCure === 'function') runUltimateCure();
+                    }},
+                    'inject_drug_payload': () => {{
+                        if (typeof window.injectDrugPayload === 'function') window.injectDrugPayload();
+                        else if (typeof injectDrugPayload === 'function') injectDrugPayload();
+                    }},
+                    'connect_neural_link': () => {{
+                        if (typeof window.connectNeuralLink === 'function') window.connectNeuralLink();
+                        else if (typeof connectNeuralLink === 'function') connectNeuralLink();
+                    }},
+                    'reset_simulation': () => {{
+                        if (typeof window.resetSimulation === 'function') window.resetSimulation();
+                        else if (typeof resetSimulation === 'function') resetSimulation();
+                    }},
+                    // vht_cardio.html
+                    'deploy_stent': () => {{
+                        if (typeof window.deployStent === 'function') window.deployStent();
+                        else if (typeof deployStent === 'function') deployStent();
+                    }},
+                    // vht_diabet.html
+                    'inject_metabolic_anomaly': () => {{
+                        if (typeof window.injectMetabolicAnomaly === 'function') window.injectMetabolicAnomaly();
+                        else if (typeof injectMetabolicAnomaly === 'function') injectMetabolicAnomaly();
+                    }},
+                    'reset_hud': () => {{
+                        if (typeof window.resetHUD === 'function') window.resetHUD();
+                        else if (typeof resetHUD === 'function') resetHUD();
+                    }},
+                    // vht_longevity.html
+                    'trigger_senolytic_flush': () => {{
+                        if (typeof window.triggerSenolyticFlush === 'function') window.triggerSenolyticFlush();
+                        else if (typeof triggerSenolyticFlush === 'function') triggerSenolyticFlush();
+                    }},
+                    'trigger_yamanaka_reprogram': () => {{
+                        if (typeof window.triggerYamanakaReprogram === 'function') window.triggerYamanakaReprogram();
+                        else if (typeof triggerYamanakaReprogram === 'function') triggerYamanakaReprogram();
+                    }},
+                    'trigger_mito_rescue': () => {{
+                        if (typeof window.triggerMitoRescue === 'function') window.triggerMitoRescue();
+                        else if (typeof triggerMitoRescue === 'function') triggerMitoRescue();
+                    }},
+                    'reset_state': () => {{
+                        if (typeof window.resetState === 'function') window.resetState();
+                        else if (typeof resetState === 'function') resetState();
+                    }},
+                    // sovereign-hud.html
+                    'reset_cure_state': () => {{
+                        if (typeof window.resetCureState === 'function') window.resetCureState();
+                        else if (typeof resetCureState === 'function') resetCureState();
+                    }},
+                    'switch_tab': (tabId) => {{
+                        if (typeof window.switchTab === 'function') window.switchTab(tabId);
+                        else if (typeof switchTab === 'function') switchTab(tabId);
+                    }},
+                    // aeterna_cohort_sim.html
+                    'run_simulation': () => {{
+                        if (typeof window.runSimulation === 'function') window.runSimulation();
+                        else if (typeof runSimulation === 'function') runSimulation();
+                    }},
+                    'select_drug': (drugId) => {{
+                        if (typeof window.selectDrug === 'function') window.selectDrug(drugId);
+                        else if (typeof selectDrug === 'function') selectDrug(drugId);
+                    }},
+                    // ukame-matrix.html
+                    'recalculate': () => {{
+                        if (typeof window.recalculate === 'function') window.recalculate();
+                        else if (typeof recalculate === 'function') recalculate();
+                    }},
+                    // IP_FINDER.html
+                    'vivisect': () => {{
+                        if (typeof window.vivisect === 'function') window.vivisect();
+                        else if (typeof vivisect === 'function') vivisect();
+                    }}
+                }};
+
+                if (commandMap[cmd]) {{
+                    try {{
+                        commandMap[cmd](arg);
+                    }} catch(err) {{
+                        console.error('[OMNI-ASSISTANT] Error running page action:', err);
+                    }}
+                }} else {{
+                    console.warn('[OMNI-ASSISTANT] No handler found for command:', cmd);
+                }}
+            }}
+
             chatForm.addEventListener('submit', async (e) => {{
                 e.preventDefault();
                 const text = chatInput.value.trim();
@@ -521,8 +734,23 @@ def get_html_chunk(filename):
                         botReply = data.candidates[0].content.parts[0].text;
                     }}
 
-                    appendMessage(botReply, false);
+                    let cleanedReply = botReply;
+                    const triggerRegex = /\\[TRIGGER:\\s*([a-zA-Z0-9_:-]+)\\]/g;
+                    let match;
+                    const triggersToExecute = [];
+
+                    while ((match = triggerRegex.exec(botReply)) !== null) {{
+                        triggersToExecute.push(match[1]);
+                    }}
+
+                    cleanedReply = botReply.replace(triggerRegex, '').trim();
+
+                    appendMessage(cleanedReply, false);
                     conversationHistory.push({{ role: "model", parts: [{{ text: botReply }}] }});
+
+                    triggersToExecute.forEach(trig => {{
+                        executePageAction(trig);
+                    }});
 
                 }} catch (error) {{
                     console.error('Gemini API Error:', error);

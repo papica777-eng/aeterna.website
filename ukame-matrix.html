@@ -909,6 +909,9 @@
     
     
     
+    
+    
+    
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container">
         <style>
@@ -1279,7 +1282,7 @@
 
             let conversationHistory = [];
 
-            const basePrompt = `You are the UKAME Solar Matrix Omni-Assistant. Focus entirely on renewable energy modeling, photon capture, grid stability, and solar distribution.`;
+            const basePrompt = `You are the UKAME Solar Matrix Omni-Assistant. Focus entirely on renewable energy modeling, photon capture, grid stability, and solar distribution. You have the capability to execute actions on this page by appending trigger tags to the END of your message. Allowed actions: - Recalculate Solar Grid: use '[TRIGGER: recalculate]'`;
 
             const welcomeMessages = {
                 'bg': 'СИСТЕМАТА Е ОНЛАЙН. Аз съм AETERNA Omni-Assistant. Обучен съм специфично за този HUD. Как мога да помогна?',
@@ -1370,6 +1373,146 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
+            function executePageAction(triggerStr) {
+                console.log('[OMNI-ASSISTANT] Executing trigger:', triggerStr);
+                const parts = triggerStr.split(':');
+                const cmd = parts[0];
+                const arg = parts[1];
+
+                const commandMap = {
+                    // aeterna_pharma_shadow.html
+                    'start_cohort_scan': () => {
+                        if (typeof window.startCohortScan === 'function') window.startCohortScan();
+                        else if (typeof startCohortScan === 'function') startCohortScan();
+                    },
+                    'trigger_crispr': () => {
+                        if (typeof window.triggerCrispr === 'function') window.triggerCrispr();
+                        else if (typeof triggerCrispr === 'function') triggerCrispr();
+                    },
+                    'trigger_yamanaka': () => {
+                        if (typeof window.triggerYamanaka === 'function') window.triggerYamanaka();
+                        else if (typeof triggerYamanaka === 'function') triggerYamanaka();
+                    },
+                    'reset_longevity': () => {
+                        if (typeof window.resetLongevity === 'function') window.resetLongevity();
+                        else if (typeof resetLongevity === 'function') resetLongevity();
+                    },
+                    // index.html
+                    'set_spec_tab': (tabId) => {
+                        if (typeof window.setSpecTab === 'function') window.setSpecTab(tabId);
+                        else if (typeof setSpecTab === 'function') setSpecTab(tabId);
+                    },
+                    'run_active_command': (cmdId) => {
+                        if (typeof window.runActiveCommand === 'function') window.runActiveCommand(cmdId);
+                        else if (typeof runActiveCommand === 'function') runActiveCommand(cmdId);
+                    },
+                    'set_trl_step': (stepNum) => {
+                        const val = parseInt(stepNum, 10);
+                        if (typeof window.setTRLStep === 'function') window.setTRLStep(val);
+                        else if (typeof setTRLStep === 'function') setTRLStep(val);
+                    },
+                    // clinical-oncology.html
+                    'trigger_cure_restoration': () => {
+                        if (typeof window.triggerCureRestoration === 'function') window.triggerCureRestoration();
+                        else if (typeof triggerCureRestoration === 'function') triggerCureRestoration();
+                    },
+                    'run_patient_simulation': () => {
+                        if (typeof window.runPatientSimulation === 'function') window.runPatientSimulation();
+                        else if (typeof runPatientSimulation === 'function') runPatientSimulation();
+                    },
+                    'trigger_crb_boost': () => {
+                        if (typeof window.triggerCrbBoost === 'function') window.triggerCrbBoost();
+                        else if (typeof triggerCrbBoost === 'function') triggerCrbBoost();
+                    },
+                    // oncology_hud.html
+                    'run_ultimate_cure': () => {
+                        if (typeof window.runUltimateCure === 'function') window.runUltimateCure();
+                        else if (typeof runUltimateCure === 'function') runUltimateCure();
+                    },
+                    'inject_drug_payload': () => {
+                        if (typeof window.injectDrugPayload === 'function') window.injectDrugPayload();
+                        else if (typeof injectDrugPayload === 'function') injectDrugPayload();
+                    },
+                    'connect_neural_link': () => {
+                        if (typeof window.connectNeuralLink === 'function') window.connectNeuralLink();
+                        else if (typeof connectNeuralLink === 'function') connectNeuralLink();
+                    },
+                    'reset_simulation': () => {
+                        if (typeof window.resetSimulation === 'function') window.resetSimulation();
+                        else if (typeof resetSimulation === 'function') resetSimulation();
+                    },
+                    // vht_cardio.html
+                    'deploy_stent': () => {
+                        if (typeof window.deployStent === 'function') window.deployStent();
+                        else if (typeof deployStent === 'function') deployStent();
+                    },
+                    // vht_diabet.html
+                    'inject_metabolic_anomaly': () => {
+                        if (typeof window.injectMetabolicAnomaly === 'function') window.injectMetabolicAnomaly();
+                        else if (typeof injectMetabolicAnomaly === 'function') injectMetabolicAnomaly();
+                    },
+                    'reset_hud': () => {
+                        if (typeof window.resetHUD === 'function') window.resetHUD();
+                        else if (typeof resetHUD === 'function') resetHUD();
+                    },
+                    // vht_longevity.html
+                    'trigger_senolytic_flush': () => {
+                        if (typeof window.triggerSenolyticFlush === 'function') window.triggerSenolyticFlush();
+                        else if (typeof triggerSenolyticFlush === 'function') triggerSenolyticFlush();
+                    },
+                    'trigger_yamanaka_reprogram': () => {
+                        if (typeof window.triggerYamanakaReprogram === 'function') window.triggerYamanakaReprogram();
+                        else if (typeof triggerYamanakaReprogram === 'function') triggerYamanakaReprogram();
+                    },
+                    'trigger_mito_rescue': () => {
+                        if (typeof window.triggerMitoRescue === 'function') window.triggerMitoRescue();
+                        else if (typeof triggerMitoRescue === 'function') triggerMitoRescue();
+                    },
+                    'reset_state': () => {
+                        if (typeof window.resetState === 'function') window.resetState();
+                        else if (typeof resetState === 'function') resetState();
+                    },
+                    // sovereign-hud.html
+                    'reset_cure_state': () => {
+                        if (typeof window.resetCureState === 'function') window.resetCureState();
+                        else if (typeof resetCureState === 'function') resetCureState();
+                    },
+                    'switch_tab': (tabId) => {
+                        if (typeof window.switchTab === 'function') window.switchTab(tabId);
+                        else if (typeof switchTab === 'function') switchTab(tabId);
+                    },
+                    // aeterna_cohort_sim.html
+                    'run_simulation': () => {
+                        if (typeof window.runSimulation === 'function') window.runSimulation();
+                        else if (typeof runSimulation === 'function') runSimulation();
+                    },
+                    'select_drug': (drugId) => {
+                        if (typeof window.selectDrug === 'function') window.selectDrug(drugId);
+                        else if (typeof selectDrug === 'function') selectDrug(drugId);
+                    },
+                    // ukame-matrix.html
+                    'recalculate': () => {
+                        if (typeof window.recalculate === 'function') window.recalculate();
+                        else if (typeof recalculate === 'function') recalculate();
+                    },
+                    // IP_FINDER.html
+                    'vivisect': () => {
+                        if (typeof window.vivisect === 'function') window.vivisect();
+                        else if (typeof vivisect === 'function') vivisect();
+                    }
+                };
+
+                if (commandMap[cmd]) {
+                    try {
+                        commandMap[cmd](arg);
+                    } catch(err) {
+                        console.error('[OMNI-ASSISTANT] Error running page action:', err);
+                    }
+                } else {
+                    console.warn('[OMNI-ASSISTANT] No handler found for command:', cmd);
+                }
+            }
+
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const text = chatInput.value.trim();
@@ -1410,8 +1553,23 @@
                         botReply = data.candidates[0].content.parts[0].text;
                     }
 
-                    appendMessage(botReply, false);
+                    let cleanedReply = botReply;
+                    const triggerRegex = /\[TRIGGER:\s*([a-zA-Z0-9_:-]+)\]/g;
+                    let match;
+                    const triggersToExecute = [];
+
+                    while ((match = triggerRegex.exec(botReply)) !== null) {
+                        triggersToExecute.push(match[1]);
+                    }
+
+                    cleanedReply = botReply.replace(triggerRegex, '').trim();
+
+                    appendMessage(cleanedReply, false);
                     conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
+
+                    triggersToExecute.forEach(trig => {
+                        executePageAction(trig);
+                    });
 
                 } catch (error) {
                     console.error('Gemini API Error:', error);
