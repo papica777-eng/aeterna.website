@@ -3809,6 +3809,7 @@
     </script>
 
     
+    
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container" class="fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none" style="font-family: 'Outfit', sans-serif;">
         
@@ -3856,9 +3857,32 @@
         </div>
 
         <!-- Toggle Button -->
-        <button id="omni-toggle-btn" class="w-14 h-14 rounded-full glass border hover:scale-110 transition-all pointer-events-auto flex items-center justify-center group relative" style="border-color: rgba(0, 240, 255, 0.5); color: #00f0ff; box-shadow: 0 0 20px rgba(0,240,255,0.3); background: rgba(255,255,255,0.02); backdrop-filter: blur(20px);">
-            <div class="absolute inset-0 rounded-full border animate-ping opacity-20" style="border-color: #00f0ff;"></div>
-            <svg id="omni-icon-bot" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+        <button id="omni-toggle-btn" class="w-14 h-14 rounded-full glass border hover:scale-110 transition-all pointer-events-auto flex items-center justify-center group relative" style="border-color: rgba(181, 95, 230, 0.4); color: #b55fe6; box-shadow: 0 0 20px rgba(181, 95, 230, 0.3); background: rgba(255,255,255,0.02); backdrop-filter: blur(20px);">
+            <div class="absolute inset-0 rounded-full border animate-ping opacity-20" style="border-color: #b55fe6;"></div>
+            
+            <!-- AETERNA Purple Glowing Logo -->
+            <svg id="omni-icon-bot" class="w-8 h-8 transition-transform group-hover:rotate-90 duration-500" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="purpleGlow-omni" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#b55fe6" />
+                        <stop offset="100%" stop-color="#ff2a85" />
+                    </linearGradient>
+                    <filter id="neonShadow-omni" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feColorMatrix type="matrix" values="
+                            1 0 0 0 0.7
+                            0 1 0 0 0.3
+                            0 0 1 0 0.9
+                            0 0 0 1 0
+                        " />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                <rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="2.5" stroke-opacity="0.8" transform="rotate(45 50 50)" filter="url(#neonShadow-omni)" />
+                <rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-omni)" transform="rotate(45 50 50)" />
+                <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+            </svg>
+            
             <svg id="omni-icon-msg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square hidden"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </button>
     </div>
@@ -3913,7 +3937,7 @@
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'flex gap-3';
                 
-                const iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg></div>';
+                const iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(181, 95, 230, 0.1); border: 1px solid rgba(181, 95, 230, 0.2);"><svg class="w-4 h-4" viewBox="0 0 100 100"><defs><linearGradient id="purpleGlow-mini" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b55fe6" /><stop offset="100%" stop-color="#ff2a85" /></linearGradient></defs><rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="4" transform="rotate(45 50 50)" /><rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-mini)" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="5" fill="#ffffff" /></svg></div>';
 
                 const contentHtml = `
                     <div class="border rounded-lg rounded-tl-none p-3 text-sm" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #d1d5db;">
@@ -3981,7 +4005,7 @@
                 if (isUser) {
                     iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
                 } else {
-                    iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg></div>';
+                    iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(181, 95, 230, 0.1); border: 1px solid rgba(181, 95, 230, 0.2);"><svg class="w-4 h-4" viewBox="0 0 100 100"><defs><linearGradient id="purpleGlow-mini2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b55fe6" /><stop offset="100%" stop-color="#ff2a85" /></linearGradient></defs><rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="4" transform="rotate(45 50 50)" /><rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-mini2)" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="5" fill="#ffffff" /></svg></div>';
                 }
 
                 const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
