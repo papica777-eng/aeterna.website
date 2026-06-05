@@ -1,113 +1,25 @@
-<!DOCTYPE html>
-<html lang="bg" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QAntum Prime | Sovereign Mailer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'accent-cyan': '#00f3ff',
-                        'accent-purple': '#b026ff',
-                        'space-900': '#050b14',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #050b14; color: white; font-family: 'Inter', monospace; }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-    </style>
-</head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-space-900 via-[#0a1526] to-black">
-    
-    <div class="w-full max-w-2xl glass-panel rounded-xl shadow-2xl overflow-hidden border border-accent-cyan/20">
-        <div class="bg-black/50 p-6 border-b border-white/10 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i data-lucide="send" class="text-accent-cyan w-6 h-6"></i>
-                <h1 class="text-xl font-bold tracking-widest uppercase">QAntum Sovereign Mailer</h1>
-            </div>
-            <span class="text-xs text-accent-purple border border-accent-purple/30 px-2 py-1 rounded">VORTEX LINK ACTIVE</span>
-        </div>
+import os
+import glob
+import re
 
-        <form id="mailerForm" class="p-6 space-y-5">
-            <div>
-                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Recipient (Email)</label>
-                <input type="email" id="toEmail" required placeholder="target@domain.com" class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
-            </div>
+CONTEXT_MAP = {
+    'index.html': "You know EVERYTHING about the AETERNA-QANTUM platform architecture, codebase, and vision. Key details: Triplex Architecture (Rust Ring-0, Mojo SIMD, TS Soul Steering). Zero-Float Financial Engine. All VHTs (Oncology, Diabetes, Cardio, Longevity). EIC Accelerator 2026. You are the MAIN architect assistant.",
+    'vht_longevity.html': "You are the Longevity HUD Omni-Assistant. Focus entirely on biological age reversal, Senolytic (D+Q) clearance, epigenetic reprogramming protocols, and the -4.4 yr AgeAccel metrics. You guide the user through extending human lifespan deterministically.",
+    'vht_cardio.html': "You are the Cardio HUD Omni-Assistant. Focus entirely on cardiovascular hemodynamics, heart rate variability, simulated blood flow, ischemia prevention, and atomic precision cardiac modeling.",
+    'vht_diabet.html': "You are the Diabetes HUD Omni-Assistant. Focus entirely on the continuous glucose modeling, metabolic pathways, insulin resistance reversal, and HbA1c stabilization within the VHT.",
+    'clinical-oncology.html': "You are the Live 3D Neuro-Oncology Omni-Assistant. Focus entirely on Glioblastoma tumor modeling, AQP4 clearance, lethality solvers, surgical boundaries, and 99% C-Index precision.",
+    'oncology_hud.html': "You are the Oncology HUD Omni-Assistant. Focus entirely on genomic mutations, TCGA-GBM cohort data, targeted lethality solvers, and cancer cell apoptosis induction.",
+    'aeterna_cohort_sim.html': "You are the 100K Cohort Simulation Omni-Assistant. Focus entirely on population-scale deterministic modeling, parallel VHT generation, epidemiological predictions, and mass parallel calculations.",
+    'aeterna_pharma_shadow.html': "You are the Pharma Shadow Omni-Assistant. Focus entirely on virtual drug trials, molecular docking, tracking metabolic pathways, and bypassing clinical latency through deterministic simulation.",
+    'sovereign-hud.html': "You are the Sovereign HUD Omni-Assistant. Focus entirely on the AETERNA Sovereign AI, Ring-0 Rust execution, Zero-Float Financial engine, Web3/Crypto security (C4 Arena), and deterministic execution.",
+    'ukame-matrix.html': "You are the UKAME Solar Matrix Omni-Assistant. Focus entirely on renewable energy modeling, photon capture, grid stability, and solar distribution.",
+    'IP_FINDER.html': "You are the IP Finder Omni-Assistant. Focus on IP intelligence, network security, geo-location, and deterministic endpoint verification."
+}
 
-            <div>
-                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Subject</label>
-                <input type="text" id="subject" required placeholder="AETERNA Sovereign Proposal" class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono">
-            </div>
+def get_html_chunk(filename):
+    context = CONTEXT_MAP.get(filename, "You are an AETERNA Omni-Assistant. Assist the user with this specific module.")
 
-            <div>
-                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Message Body</label>
-                <textarea id="messageBody" required rows="8" placeholder="Enter transmission payload here..." class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-accent-cyan transition-colors text-white font-mono resize-y"></textarea>
-            </div>
-
-            <div class="pt-4 flex justify-between items-center">
-                <div id="statusMsg" class="text-sm font-mono opacity-0 transition-opacity"></div>
-                <button type="submit" class="bg-accent-cyan/10 hover:bg-accent-cyan/20 border border-accent-cyan text-accent-cyan px-8 py-3 rounded uppercase text-sm font-bold tracking-widest transition-all flex items-center gap-2">
-                    <i data-lucide="zap" class="w-4 h-4"></i>
-                    Dispatch Payload
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <script>
-        lucide.createIcons();
-
-        document.getElementById('mailerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const status = document.getElementById('statusMsg');
-            
-            const toEmail = document.getElementById('toEmail').value;
-            const subject = document.getElementById('subject').value;
-            const messageBody = document.getElementById('messageBody').value;
-
-            btn.disabled = true;
-            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Dispatching...';
-            lucide.createIcons();
-
-            try {
-                const response = await fetch('http://localhost:3000/api/send-email', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ to: toEmail, subject, text: messageBody })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    status.className = 'text-sm font-mono text-emerald-400 opacity-100';
-                    status.innerHTML = `[SUCCESS] Payload delivered to ${toEmail}`;
-                    e.target.reset();
-                } else {
-                    status.className = 'text-sm font-mono text-red-400 opacity-100';
-                    status.innerHTML = `[ERROR] ${data.error}`;
-                }
-            } catch (err) {
-                status.className = 'text-sm font-mono text-red-400 opacity-100';
-                status.innerHTML = `[NETWORK_FAULT] Vortex Server Unreachable`;
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i data-lucide="zap" class="w-4 h-4"></i> Dispatch Payload';
-            lucide.createIcons();
-            
-            setTimeout(() => { status.style.opacity = '0'; }, 5000);
-        });
-    </script>
-
+    return f"""
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container" class="fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none" style="font-family: 'Outfit', sans-serif;">
         
@@ -164,7 +76,7 @@
 
     <!-- Omni-Assistant Logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {{
             const toggleBtn = document.getElementById('omni-toggle-btn');
             const closeBtn = document.getElementById('omni-close-btn');
             const chatWindow = document.getElementById('omni-chat-window');
@@ -181,33 +93,33 @@
             let isChatOpen = false;
             let currentLang = 'bg';
 
-            toggleBtn.addEventListener('mouseenter', () => {
+            toggleBtn.addEventListener('mouseenter', () => {{
                 iconBot.classList.add('hidden');
                 iconMsg.classList.remove('hidden');
-            });
-            toggleBtn.addEventListener('mouseleave', () => {
+            }});
+            toggleBtn.addEventListener('mouseleave', () => {{
                 iconBot.classList.remove('hidden');
                 iconMsg.classList.add('hidden');
-            });
+            }});
 
             let conversationHistory = [];
 
-            const basePrompt = `You are an AETERNA Omni-Assistant. Assist the user with this specific module.`;
+            const basePrompt = `{context}`;
 
-            const welcomeMessages = {
+            const welcomeMessages = {{
                 'bg': 'СИСТЕМАТА Е ОНЛАЙН. Аз съм AETERNA Omni-Assistant. Обучен съм специфично за този HUD. Как мога да помогна?',
                 'en': 'SYSTEM ONLINE. I am the AETERNA Omni-Assistant. I am trained specifically for this HUD. How can I assist you today?'
-            };
+            }};
 
-            function getSystemPrompt() {
-                if (currentLang === 'bg') {
-                    return basePrompt + "\n\nIMPORTANT: You must reply strictly in BULGARIAN language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
-                } else {
-                    return basePrompt + "\n\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
-                }
-            }
+            function getSystemPrompt() {{
+                if (currentLang === 'bg') {{
+                    return basePrompt + "\\n\\nIMPORTANT: You must reply strictly in BULGARIAN language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
+                }} else {{
+                    return basePrompt + "\\n\\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
+                }}
+            }}
 
-            function renderWelcomeMessage() {
+            function renderWelcomeMessage() {{
                 chatMessages.innerHTML = '';
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'flex gap-3';
@@ -217,17 +129,17 @@
                 const contentHtml = `
                     <div class="border rounded-lg rounded-tl-none p-3 text-sm" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #d1d5db;">
                         <p class="mb-1 font-bold text-[10px] tracking-widest font-mono" style="color: #ffffff;">AETERNA.AIC</p>
-                        <p class="whitespace-pre-wrap">${welcomeMessages[currentLang]}</p>
+                        <p class="whitespace-pre-wrap">${{welcomeMessages[currentLang]}}</p>
                     </div>
                 `;
 
                 msgDiv.innerHTML = iconHtml + contentHtml;
                 chatMessages.appendChild(msgDiv);
-            }
+            }}
 
             renderWelcomeMessage();
 
-            langBgBtn.addEventListener('click', () => {
+            langBgBtn.addEventListener('click', () => {{
                 currentLang = 'bg';
                 langBgBtn.style.backgroundColor = 'rgba(0, 240, 255, 0.2)';
                 langBgBtn.style.borderColor = 'rgba(0, 240, 255, 0.5)';
@@ -240,9 +152,9 @@
                 chatInput.placeholder = "Задай въпрос за системата...";
                 renderWelcomeMessage();
                 conversationHistory = [];
-            });
+            }});
 
-            langEnBtn.addEventListener('click', () => {
+            langEnBtn.addEventListener('click', () => {{
                 currentLang = 'en';
                 langEnBtn.style.backgroundColor = 'rgba(0, 240, 255, 0.2)';
                 langEnBtn.style.borderColor = 'rgba(0, 240, 255, 0.5)';
@@ -255,51 +167,51 @@
                 chatInput.placeholder = "Ask about the architecture...";
                 renderWelcomeMessage();
                 conversationHistory = [];
-            });
+            }});
 
-            function toggleChat() {
+            function toggleChat() {{
                 isChatOpen = !isChatOpen;
-                if (isChatOpen) {
+                if (isChatOpen) {{
                     chatWindow.classList.remove('scale-0', 'opacity-0');
                     chatWindow.classList.add('scale-100', 'opacity-100');
                     setTimeout(() => chatInput.focus(), 300);
-                } else {
+                }} else {{
                     chatWindow.classList.remove('scale-100', 'opacity-100');
                     chatWindow.classList.add('scale-0', 'opacity-0');
-                }
-            }
+                }}
+            }}
 
             toggleBtn.addEventListener('click', toggleChat);
             closeBtn.addEventListener('click', toggleChat);
 
-            function appendMessage(text, isUser = false) {
+            function appendMessage(text, isUser = false) {{
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'flex gap-3 ' + (isUser ? 'flex-row-reverse' : '');
                 
                 let iconHtml = '';
-                if (isUser) {
+                if (isUser) {{
                     iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
-                } else {
+                }} else {{
                     iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(0,240,255,0.1); border: 1px solid rgba(0,240,255,0.2);"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg></div>';
-                }
+                }}
 
-                const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                const formattedText = text.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/\\n/g, '<br>');
 
                 const bgStyle = isUser ? 'background: rgba(181,95,230,0.2); border-color: rgba(181,95,230,0.3); color: #ffffff;' : 'background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #d1d5db;';
 
                 const contentHtml = `
-                    <div class="border rounded-lg \${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} p-3 text-sm" style="\${bgStyle}">
-                        \${!isUser ? '<p class="mb-1 font-bold text-[10px] tracking-widest font-mono" style="color:#ffffff;">AETERNA.AIC</p>' : ''}
-                        <p class="whitespace-pre-wrap">\${formattedText}</p>
+                    <div class="border rounded-lg \${{isUser ? 'rounded-tr-none' : 'rounded-tl-none'}} p-3 text-sm" style="\${{bgStyle}}">
+                        \${{!isUser ? '<p class="mb-1 font-bold text-[10px] tracking-widest font-mono" style="color:#ffffff;">AETERNA.AIC</p>' : ''}}
+                        <p class="whitespace-pre-wrap">\${{formattedText}}</p>
                     </div>
                 `;
 
                 msgDiv.innerHTML = iconHtml + contentHtml;
                 chatMessages.appendChild(msgDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+            }}
 
-            chatForm.addEventListener('submit', async (e) => {
+            chatForm.addEventListener('submit', async (e) => {{
                 e.preventDefault();
                 const text = chatInput.value.trim();
                 if (!text) return;
@@ -309,47 +221,72 @@
                 loadingIndicator.classList.remove('hidden');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                conversationHistory.push({ role: "user", parts: [{ text: text }] });
+                conversationHistory.push({{ role: "user", parts: [{{ text: text }}] }});
 
                 const payloadContents = [
-                    { role: "user", parts: [{ text: "SYSTEM INSTRUCTION: " + getSystemPrompt() }] },
-                    { role: "model", parts: [{ text: "Understood. Awaiting input." }] },
+                    {{ role: "user", parts: [{{ text: "SYSTEM INSTRUCTION: " + getSystemPrompt() }}] }},
+                    {{ role: "model", parts: [{{ text: "Understood. Awaiting input." }}] }},
                     ...conversationHistory
                 ];
 
-                try {
+                try {{
                     const k1 = 'AQ.Ab8RN6J_y4NgA';
                     const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
-                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
+                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {{
                         method: 'POST',
-                        headers: {
+                        headers: {{
                             'Content-Type': 'application/json',
                             'X-goog-api-key': k1 + k2
-                        },
-                        body: JSON.stringify({
+                        }},
+                        body: JSON.stringify({{
                             contents: payloadContents
-                        })
-                    });
+                        }})
+                    }});
 
                     if (!response.ok) throw new Error('API communication error');
 
                     const data = await response.json();
                     let botReply = "Error processing response.";
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {{
                         botReply = data.candidates[0].content.parts[0].text;
-                    }
+                    }}
 
                     appendMessage(botReply, false);
-                    conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
+                    conversationHistory.push({{ role: "model", parts: [{{ text: botReply }}] }});
 
-                } catch (error) {
+                }} catch (error) {{
                     console.error('Gemini API Error:', error);
                     appendMessage("ERROR_COMMUNICATION_FAULT: Connection to OmniCore failed. Please verify API status.", false);
-                } finally {
+                }} finally {{
                     loadingIndicator.classList.add('hidden');
-                }
-            });
-        });
+                }}
+            }});
+        }});
     </script>
-\n</body>
-</html>
+"""
+
+def inject_to_file(filepath):
+    try:
+        filename = os.path.basename(filepath)
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        if '<!-- AETERNA Omni-Assistant Chat Widget -->' in content:
+            content = re.sub(r'<!-- AETERNA Omni-Assistant Chat Widget -->.*?(?=</body>)', '', content, flags=re.DOTALL)
+
+        if '</body>' in content:
+            chunk = get_html_chunk(filename)
+            new_content = content.replace('</body>', chunk + '\\n</body>')
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            print(f"✅ Injected context-aware assistant into {filename}")
+        else:
+            print(f"❌ </body> tag not found in {filename}")
+    except Exception as e:
+        print(f"❌ Error processing {os.path.basename(filepath)}: {e}")
+
+if __name__ == "__main__":
+    directory = "Z:\\\\aeterna.website"
+    files = glob.glob(os.path.join(directory, "*.html"))
+    for file in files:
+        inject_to_file(file)

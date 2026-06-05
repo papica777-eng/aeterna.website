@@ -1,0 +1,56 @@
+{
+  "resourceType": "Patient",
+  "id": "twin-p-78b",
+  "name": [
+    {
+      "use": "official",
+      "family": "Twin P-78B",
+      "given": [
+        "Horizontal",
+        "Cohort"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1948-06-04",
+  "extension": [
+    {
+      "url": "http://aeterna.longevity/fhir/StructureDefinition/patient-weight",
+      "valueQuantity": {
+        "value": 85.0,
+        "unit": "kg",
+        "system": "http://unitsofmeasure.org",
+        "code": "kg"
+      }
+    },
+    {
+      "url": "http://aeterna.longevity/fhir/StructureDefinition/cpg-methylation",
+      "extension": [
+        {
+          "url": "cg02225647",
+          "valueDecimal": 0.90
+        },
+        {
+          "url": "cg01820374",
+          "valueDecimal": 0.50
+        },
+        {
+          "url": "cg19726354",
+          "valueDecimal": 0.80
+        },
+        {
+          "url": "cg03445892",
+          "valueDecimal": 0.70
+        },
+        {
+          "url": "cg06221484",
+          "valueDecimal": 0.45
+        },
+        {
+          "url": "cg08447361",
+          "valueDecimal": 0.95
+        }
+      ]
+    }
+  ]
+}
