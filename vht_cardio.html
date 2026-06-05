@@ -278,6 +278,25 @@
             font-weight: 600;
             margin-bottom: 3px;
             display: block;
+        /* Language Selector Pill */
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .lang-btn:hover {
+            color: #fff;
+        }
+        .lang-btn.active {
+            background: rgba(74, 144, 217, 0.2);
+            color: var(--accent-blue);
+            box-shadow: 0 0 8px rgba(74, 144, 217, 0.4);
         }
     </style>
 </head>
@@ -294,8 +313,8 @@
             <div class="brand-group">
                 <img src="assets/aeterna_logo.svg" alt="AETERNA">
                 <div>
-                    <h1>AETERNA<span>.</span>VHT &nbsp;<span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 500;">Cardiovascular Module</span></h1>
-                    <div class="subtitle">In-Silico Hemodynamics & Interventional Cardiology</div>
+                    <h1>AETERNA<span>.</span>VHT &nbsp;<span id="module-title-span" style="font-size: 0.7rem; color: var(--text-dim); font-weight: 500;">Cardiovascular Module</span></h1>
+                    <div id="brand-subtitle" class="subtitle">In-Silico Hemodynamics & Interventional Cardiology</div>
                 </div>
             </div>
 
@@ -303,15 +322,20 @@
                 <div class="patient-strip">
                     <span><strong>ID:</strong> VHT-CVD-992</span>
                     <span class="divider"></span>
-                    <span><strong>Пациент:</strong> Мъж, 62 г.</span>
+                    <span id="patient-label-span"><strong>Пациент:</strong> Мъж, 62 г.</span>
                     <span class="divider"></span>
-                    <span><strong>Артерия:</strong> LAD (Left Anterior Descending)</span>
+                    <span id="artery-label-span"><strong>Артерия:</strong> LAD (Left Anterior Descending)</span>
                     <span class="divider"></span>
-                    <span><strong>Диагноза:</strong> Тежка атеросклероза</span>
+                    <span id="diagnosis-label-span"><strong>Диагноза:</strong> Тежка атеросклероза</span>
                 </div>
                 <div class="status-badge critical" id="status-badge">
                     <div class="status-dot"></div>
                     <span id="status-text">Критична стеноза</span>
+                </div>
+                <!-- Glassmorphic Language Selector Pill -->
+                <div style="display: flex; gap: 4px; border: 1px solid var(--border); padding: 4px 8px; border-radius: 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); pointer-events: auto;">
+                    <button onclick="setLanguage('bg')" id="lang-bg" class="lang-btn active">BG</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn">EN</button>
                 </div>
             </div>
         </div>
@@ -326,6 +350,96 @@
     // ===================================================================
     //  AETERNA CARDIOVASCULAR — PROFESSIONAL CLINICAL 3D ENGINE
     // ===================================================================
+    // ===================================================================
+    //  LOCALIZATION SYSTEM (BG / EN)
+    // ===================================================================
+    let currentLang = 'bg';
+
+    const translations = {
+        bg: {
+            brandTitle: "Кардиоваскуларен модул",
+            brandSubtitle: "Ин-силико хемодинамика и интервенционална кардиология",
+            patient: "<strong>Пациент:</strong> Мъж, 62 г.",
+            artery: "<strong>Артерия:</strong> LAD (Left Anterior Descending)",
+            diagnosis: "<strong>Диагноза:</strong> Тежка атеросклероза",
+            statusStenosis: "Критична стеноза",
+            statusDeploying: "Разгъване на стент...",
+            statusClear: "Оптимален поток",
+            metricStenosisTitle: "Степен на стеноза",
+            metricStenosisCrit: "Критично стеснение",
+            metricStenosisNormal: "Нормален лумен",
+            metricGradientTitle: "Градиент на налягане (ΔP)",
+            metricWssTitle: "Wall Shear Stress",
+            metricWssCrit: "Ендотелиална деструкция",
+            metricWssNormal: "Физиологичен диапазон",
+            metricReynoldsTitle: "Reynolds Number",
+            metricReynoldsCrit: "Турбулентен режим",
+            metricReynoldsNormal: "Ламинарен режим",
+            flowCrit: "Турбулентен поток — риск от MI",
+            flowNormal: "Ламинарен поток възстановен",
+            btnDeploy: "Разгъни виртуален стент",
+            btnDeploying: "Разгъване на стент...",
+            btnSuccess: "Стент имплантиран успешно"
+        },
+        en: {
+            brandTitle: "Cardiovascular Module",
+            brandSubtitle: "In-Silico Hemodynamics & Interventional Cardiology",
+            patient: "<strong>Patient:</strong> Male, 62 yr",
+            artery: "<strong>Artery:</strong> LAD (Left Anterior Descending)",
+            diagnosis: "<strong>Diagnosis:</strong> Severe Atherosclerosis",
+            statusStenosis: "Critical Stenosis",
+            statusDeploying: "Deploying stent...",
+            statusClear: "Optimal Flow",
+            metricStenosisTitle: "Stenosis Severity",
+            metricStenosisCrit: "Critical Narrowing",
+            metricStenosisNormal: "Normal Lumen",
+            metricGradientTitle: "Pressure Gradient (ΔP)",
+            metricWssTitle: "Wall Shear Stress",
+            metricWssCrit: "Endothelial Destruction",
+            metricWssNormal: "Physiological Range",
+            metricReynoldsTitle: "Reynolds Number",
+            metricReynoldsCrit: "Turbulent Flow",
+            metricReynoldsNormal: "Laminar Flow",
+            flowCrit: "Turbulent Flow — MI Risk",
+            flowNormal: "Laminar Flow Restored",
+            btnDeploy: "Deploy Virtual Stent",
+            btnDeploying: "Deploying Stent...",
+            btnSuccess: "Stent Successfully Implanted"
+        }
+    };
+
+    function setLanguage(langCode, syncAssistant = true) {
+        currentLang = langCode;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById(`lang-${langCode}`);
+        if (activeBtn) activeBtn.classList.add('active');
+        
+        // Update static DOM elements
+        const patientEl = document.getElementById('patient-label-span');
+        if (patientEl) patientEl.innerHTML = translations[langCode].patient;
+
+        const arteryEl = document.getElementById('artery-label-span');
+        if (arteryEl) arteryEl.innerHTML = translations[langCode].artery;
+        
+        const diagnosisEl = document.getElementById('diagnosis-label-span');
+        if (diagnosisEl) diagnosisEl.innerHTML = translations[langCode].diagnosis;
+
+        const titleEl = document.getElementById('module-title-span');
+        if (titleEl) titleEl.textContent = translations[langCode].brandTitle;
+
+        const subtitleEl = document.getElementById('brand-subtitle');
+        if (subtitleEl) subtitleEl.textContent = translations[langCode].brandSubtitle;
+        
+        updateHUD();
+
+        // Sync assistant if requested
+        if (syncAssistant) {
+            const omniLangBtn = document.getElementById(`omni-lang-${langCode}`);
+            if (omniLangBtn && !omniLangBtn.classList.contains('active')) {
+                omniLangBtn.click();
+            }
+        }
+    }
 
     const state = {
         status: 'STENOSIS',
@@ -599,7 +713,14 @@
 
         const ok = state.status === 'CLEAR';
         badgeEl.className = 'status-badge ' + (ok ? 'normal' : 'critical');
-        statusText.textContent = ok ? 'Оптимален поток' : (state.status === 'DEPLOYING' ? 'Разгъване на стент...' : 'Критична стеноза');
+        
+        let statusString = translations[currentLang].statusStenosis;
+        if (state.status === 'DEPLOYING') {
+            statusString = translations[currentLang].statusDeploying;
+        } else if (state.status === 'CLEAR') {
+            statusString = translations[currentLang].statusClear;
+        }
+        statusText.textContent = statusString;
 
         const deltaP = Math.abs(state.pressurePre - state.pressurePost).toFixed(0);
 
@@ -608,17 +729,17 @@
 
         metricsEl.innerHTML = `
             <div class="metric">
-                <div class="label">Степен на стеноза</div>
+                <div class="label">${translations[currentLang].metricStenosisTitle}</div>
                 <div class="value mono" style="color: ${metricColor(state.stenosis > 50)}">
                     ${state.stenosis.toFixed(1)}<span class="unit">%</span>
                 </div>
                 <div class="range">
                     <span class="indicator" style="background: ${dotColor(state.stenosis > 50)}"></span>
-                    ${state.stenosis > 50 ? 'Критично стеснение' : 'Нормален лумен'}
+                    ${state.stenosis > 50 ? translations[currentLang].metricStenosisCrit : translations[currentLang].metricStenosisNormal}
                 </div>
             </div>
             <div class="metric">
-                <div class="label">Градиент на налягане (ΔP)</div>
+                <div class="label">${translations[currentLang].metricGradientTitle}</div>
                 <div class="value mono" style="color: ${metricColor(deltaP > 30)}">
                     ${deltaP}<span class="unit">mmHg</span>
                 </div>
@@ -628,35 +749,42 @@
                 </div>
             </div>
             <div class="metric">
-                <div class="label">Wall Shear Stress</div>
+                <div class="label">${translations[currentLang].metricWssTitle}</div>
                 <div class="value mono" style="color: ${metricColor(state.wss > 25)}">
                     ${state.wss.toFixed(1)}<span class="unit">Pa</span>
                 </div>
                 <div class="range">
                     <span class="indicator" style="background: ${dotColor(state.wss > 25)}"></span>
-                    ${state.wss > 25 ? 'Ендотелиална деструкция' : 'Физиологичен диапазон'}
+                    ${state.wss > 25 ? translations[currentLang].metricWssCrit : translations[currentLang].metricWssNormal}
                 </div>
             </div>
             <div class="metric">
-                <div class="label">Reynolds Number</div>
+                <div class="label">${translations[currentLang].metricReynoldsTitle}</div>
                 <div class="value mono" style="color: ${metricColor(state.reynolds > 2300)}">
                     ${state.reynolds.toFixed(0)}
                 </div>
                 <div class="range">
                     <span class="indicator" style="background: ${dotColor(state.reynolds > 2300)}"></span>
-                    ${state.reynolds > 2300 ? 'Турбулентен режим' : 'Ламинарен режим'}
+                    ${state.reynolds > 2300 ? translations[currentLang].metricReynoldsCrit : translations[currentLang].metricReynoldsNormal}
                 </div>
             </div>
         `;
 
+        let btnText = translations[currentLang].btnDeploy;
+        if (state.status === 'DEPLOYING') {
+            btnText = translations[currentLang].btnDeploying;
+        } else if (state.status === 'CLEAR') {
+            btnText = translations[currentLang].btnSuccess;
+        }
+
         rightEl.innerHTML = `
             <div class="flow-indicator" style="color: ${ok ? 'var(--success)' : 'var(--critical)'}; border-color: ${ok ? 'rgba(56,161,105,0.2)' : 'rgba(229,62,62,0.15)'};">
                 <i data-lucide="${ok ? 'check-circle' : 'alert-triangle'}" class="w-4 h-4"></i>
-                <span>${ok ? 'Ламинарен поток възстановен' : 'Турбулентен поток — риск от MI'}</span>
+                <span>${ok ? translations[currentLang].flowNormal : translations[currentLang].flowCrit}</span>
             </div>
             <button class="deploy-btn ${ok ? 'success' : 'primary'}" onclick="deployStent()" ${state.status !== 'STENOSIS' ? 'disabled' : ''}>
                 <i data-lucide="${ok ? 'check' : 'crosshair'}" class="w-4 h-4"></i>
-                ${ok ? 'Стент имплантиран успешно' : 'Разгъни виртуален стент'}
+                ${btnText}
             </button>
         `;
 
@@ -1091,6 +1219,9 @@
                 chatInput.placeholder = "Задай въпрос за системата...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('bg', false);
+                }
             });
 
             langEnBtn.addEventListener('click', () => {
@@ -1100,6 +1231,9 @@
                 chatInput.placeholder = "Ask about the architecture...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('en', false);
+                }
             });
 
             function toggleChat() {
