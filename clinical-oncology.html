@@ -4148,6 +4148,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
     
     
     
+    
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container">
         <style>
@@ -4560,6 +4561,9 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 chatInput.placeholder = "Задай въпрос за системата...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('bg', false);
+                }
             });
 
             langEnBtn.addEventListener('click', () => {
@@ -4569,6 +4573,9 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                 chatInput.placeholder = "Ask about the architecture...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('en', false);
+                }
             });
 
             function toggleChat() {

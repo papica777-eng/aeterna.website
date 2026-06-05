@@ -912,6 +912,7 @@
     
     
     
+    
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container">
         <style>
@@ -1324,6 +1325,9 @@
                 chatInput.placeholder = "Задай въпрос за системата...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('bg', false);
+                }
             });
 
             langEnBtn.addEventListener('click', () => {
@@ -1333,6 +1337,9 @@
                 chatInput.placeholder = "Ask about the architecture...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('en', false);
+                }
             });
 
             function toggleChat() {

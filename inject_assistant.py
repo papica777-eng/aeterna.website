@@ -505,6 +505,9 @@ def get_html_chunk(filename):
                 chatInput.placeholder = "Задай въпрос за системата...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {{
+                    window.setLanguage('bg', false);
+                }}
             }});
 
             langEnBtn.addEventListener('click', () => {{
@@ -514,6 +517,9 @@ def get_html_chunk(filename):
                 chatInput.placeholder = "Ask about the architecture...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {{
+                    window.setLanguage('en', false);
+                }}
             }});
 
             function toggleChat() {{

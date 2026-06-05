@@ -2966,6 +2966,7 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
     
     
     
+    
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container">
         <style>
@@ -3378,6 +3379,9 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
                 chatInput.placeholder = "Задай въпрос за системата...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('bg', false);
+                }
             });
 
             langEnBtn.addEventListener('click', () => {
@@ -3387,6 +3391,9 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
                 chatInput.placeholder = "Ask about the architecture...";
                 renderWelcomeMessage();
                 conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('en', false);
+                }
             });
 
             function toggleChat() {
