@@ -1,5 +1,5 @@
 # Section VII: Veritas Substrate Anchor
-## Evaluator Technical Brief — EIC Accelerator (Grant №101327948)
+## Evaluator Technical Brief — EIC Accelerator (Proposal №101327948)
 
 ---
 
