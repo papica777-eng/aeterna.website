@@ -1293,6 +1293,11 @@
         const methylGeo = new THREE.DodecahedronGeometry(0.28, 1);
         const zombieGeo = new THREE.IcosahedronGeometry(0.42, 0); // Decaying spiky cells
 
+        // Custom uniforms to share variables with custom shaders
+        const customUniforms = {
+            uTime: { value: 0 }
+        };
+
         // Materials with physical glass/metallic parameters
         const strand1Mat = new THREE.MeshPhysicalMaterial({
             color: 0xa855f7, emissive: 0xb55fe6, emissiveIntensity: 1.0, metalness: 0.9, roughness: 0.15, clearcoat: 1.0
@@ -1300,6 +1305,49 @@
         const strand2Mat = new THREE.MeshPhysicalMaterial({
             color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 1.0, metalness: 0.9, roughness: 0.15, clearcoat: 1.0
         });
+
+        // Inject custom WebGL shaders to add organic undulations and running energy veins
+        const injectOrganicShader = (material) => {
+            material.onBeforeCompile = (shader) => {
+                shader.uniforms.uTime = customUniforms.uTime;
+                
+                // 1. Inject Varying Local Position & Vertex Undulation
+                shader.vertexShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    `
+                    vLocalPosition = position;
+                    #include <begin_vertex>
+                    // Undulating organic surface waves along the fiber normal
+                    float wave = sin(position.y * 6.0 + uTime * 4.0) * cos(position.x * 3.5 + uTime * 2.5);
+                    transformed.x += normal.x * wave * 0.035;
+                    transformed.z += normal.z * wave * 0.035;
+                    `
+                );
+                
+                // 2. Inject Emissive Pulse Shader
+                shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.fragmentShader;
+                shader.fragmentShader = shader.fragmentShader.replace(
+                    '#include <emissivemap_fragment>',
+                    `
+                    #include <emissivemap_fragment>
+                    // Sharp plasma pulses flowing along the Y-axis of the cylinder
+                    float pulse = sin(vLocalPosition.y * 3.5 - uTime * 5.5) * 0.5 + 0.5;
+                    pulse = pow(pulse, 5.0); // sharp glowing bands
+                    
+                    // Diagonal micro-veins mimicking bio-electrical activity
+                    float veins = sin(vLocalPosition.x * 16.0 + vLocalPosition.y * 22.0 + uTime * 9.0) * 0.5 + 0.5;
+                    veins = pow(veins, 4.0) * 0.6;
+
+                    // Super-boost emissive glow at dynamic hotspots
+                    totalEmissiveRadiance += totalEmissiveRadiance * (pulse * 2.8 + veins * 1.6);
+                    `
+                );
+            };
+        };
+
+        injectOrganicShader(strand1Mat);
+        injectOrganicShader(strand2Mat);
         const methylMat = new THREE.MeshPhysicalMaterial({
             color: 0xef4444, emissive: 0x450a0a, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.8
         });
@@ -1495,14 +1543,48 @@
                 const mat1 = new THREE.MeshPhysicalMaterial({
                     color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
                 });
+                const mat2 = new THREE.MeshPhysicalMaterial({
+                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
+                });
+
+                // Inject WebGL shader for electrical pulse signals traveling down the rungs
+                const injectRungShader = (material) => {
+                    material.onBeforeCompile = (shader) => {
+                        shader.uniforms.uTime = customUniforms.uTime;
+                        
+                        shader.vertexShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.vertexShader;
+                        shader.vertexShader = shader.vertexShader.replace(
+                            '#include <begin_vertex>',
+                            `
+                            vLocalPosition = position;
+                            #include <begin_vertex>
+                            `
+                        );
+                        
+                        shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.fragmentShader;
+                        shader.fragmentShader = shader.fragmentShader.replace(
+                            '#include <emissivemap_fragment>',
+                            `
+                            #include <emissivemap_fragment>
+                            // Bio-electrical pulses traveling from the ends (backbone) to the center (junction)
+                            // vLocalPosition.y of the Cylinder goes from -0.5 (bottom/backbone) to +0.5 (top/junction)
+                            float pulse = sin((vLocalPosition.y + 0.5) * 6.28 - uTime * 7.0) * 0.5 + 0.5;
+                            pulse = pow(pulse, 4.0); // sharp glowing pulses
+                            
+                            totalEmissiveRadiance += totalEmissiveRadiance * (pulse * 2.2);
+                            `
+                        );
+                    };
+                };
+
+                injectRungShader(mat1);
+                injectRungShader(mat2);
+
                 const half1_A = new THREE.Mesh(rungCylinderGeo, mat1);
                 const half1_B = new THREE.Mesh(rungCylinderGeo, mat1);
                 scene.add(half1_A);
                 scene.add(half1_B);
 
-                const mat2 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
-                });
                 const half2_A = new THREE.Mesh(rungCylinderGeo, mat2);
                 const half2_B = new THREE.Mesh(rungCylinderGeo, mat2);
                 scene.add(half2_A);
@@ -1581,6 +1663,9 @@
         function animate() {
             requestAnimationFrame(animate);
             time += 0.015;
+
+            // Update custom shader uniforms
+            customUniforms.uTime.value = time;
 
             // 0. Rotate background starfield
             if (starField) {
