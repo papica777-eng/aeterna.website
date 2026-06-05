@@ -8,6 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js Post-Processing CDN scripts for 8K volumetric bloom -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
     <style>
         :root {
             --bg: #05020c;
@@ -1196,6 +1203,61 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
+        // Generate procedural cubemap in memory for realistic lighting/reflections
+        const generateSpaceCubemap = () => {
+            const canvases = [];
+            for (let i = 0; i < 6; i++) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 128;
+                canvas.height = 128;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#05020c';
+                ctx.fillRect(0, 0, 128, 128);
+                
+                // Stars
+                ctx.fillStyle = '#ffffff';
+                for (let s = 0; s < 30; s++) {
+                    const r = Math.random() * 1.5;
+                    ctx.beginPath();
+                    ctx.arc(Math.random() * 128, Math.random() * 128, r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Nebula glow
+                const grad = ctx.createRadialGradient(64, 64, 5, 64, 64, 60);
+                if (i % 3 === 0) {
+                    grad.addColorStop(0, 'rgba(181, 95, 230, 0.35)'); // Purple
+                } else if (i % 3 === 1) {
+                    grad.addColorStop(0, 'rgba(0, 240, 255, 0.35)');  // Cyan
+                } else {
+                    grad.addColorStop(0, 'rgba(255, 42, 133, 0.25)');  // Pink
+                }
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 128, 128);
+                
+                canvases.push(canvas);
+            }
+            const cubeTex = new THREE.CubeTexture(canvases);
+            cubeTex.needsUpdate = true;
+            return cubeTex;
+        };
+
+        const spaceCubemap = generateSpaceCubemap();
+        scene.environment = spaceCubemap;
+
+        // Effect Composer for cinematic Unreal Volumetric Bloom (8K quality)
+        const renderScene = new THREE.RenderPass(scene, camera);
+        const bloomPass = new THREE.UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            1.8,   // strength
+            0.75,  // radius
+            0.05   // threshold
+        );
+        const composer = new THREE.EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+
         // Add premium studio lighting
         const ambientLight = new THREE.AmbientLight(0x0f0b1e, 0.9);
         scene.add(ambientLight);
@@ -1288,8 +1350,8 @@
 
         // Shared Geometries
         const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
-        const subStrandCylinderGeo = new THREE.CylinderGeometry(0.045, 0.045, 1, 8);
-        const rungCylinderGeo = new THREE.CylinderGeometry(0.04, 0.04, 1, 8);
+        const backboneCylinderGeo = new THREE.CylinderGeometry(0.18, 0.18, 1, 16);
+        const rungCylinderGeo = new THREE.CylinderGeometry(0.09, 0.09, 1, 12);
         const methylGeo = new THREE.DodecahedronGeometry(0.28, 1);
         const zombieGeo = new THREE.IcosahedronGeometry(0.42, 0); // Decaying spiky cells
 
@@ -1298,56 +1360,72 @@
             uTime: { value: 0 }
         };
 
-        // Materials with physical glass/metallic parameters
+        // Materials with biological tissue parameters (more matte, slight subsurface feel)
         const strand1Mat = new THREE.MeshPhysicalMaterial({
-            color: 0xa855f7, emissive: 0xb55fe6, emissiveIntensity: 1.0, metalness: 0.9, roughness: 0.15, clearcoat: 1.0
+            color: 0xa855f7, emissive: 0xb55fe6, emissiveIntensity: 1.0, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
         });
         const strand2Mat = new THREE.MeshPhysicalMaterial({
-            color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 1.0, metalness: 0.9, roughness: 0.15, clearcoat: 1.0
+            color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 1.0, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
         });
 
-        // Inject custom WebGL shaders to add organic undulations and running energy veins
-        const injectOrganicShader = (material) => {
+        // Inject custom WebGL shaders to add biological bumps, rim glowing Fresnel, and subsurface scattering
+        const injectBiologicalShader = (material, isRung = false) => {
             material.onBeforeCompile = (shader) => {
                 shader.uniforms.uTime = customUniforms.uTime;
                 
-                // 1. Inject Varying Local Position & Vertex Undulation
-                shader.vertexShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.vertexShader;
+                // 1. Vertex Shader: Inject varying normal, local position, and high-frequency organic bumps
+                shader.vertexShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\nvarying vec3 vNormalVec;\n' + shader.vertexShader;
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <begin_vertex>',
                     `
                     vLocalPosition = position;
+                    vNormalVec = normal;
                     #include <begin_vertex>
-                    // Undulating organic surface waves along the fiber normal
-                    float wave = sin(position.y * 6.0 + uTime * 4.0) * cos(position.x * 3.5 + uTime * 2.5);
-                    transformed.x += normal.x * wave * 0.035;
-                    transformed.z += normal.z * wave * 0.035;
+                    
+                    // High-frequency sin/cos noise to create bumpy, rough organic surface
+                    float scale = ${isRung ? '24.0' : '14.0'};
+                    float amp = ${isRung ? '0.035' : '0.06'};
+                    float noise = sin(position.y * scale + uTime * 2.0) * cos(position.x * scale + uTime * 1.5) * 0.4
+                                + sin(position.z * scale * 1.3 - uTime * 2.5) * 0.3
+                                + cos(position.y * scale * 2.5) * 0.15;
+                                
+                    transformed += normal * noise * amp;
                     `
                 );
                 
-                // 2. Inject Emissive Pulse Shader
-                shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.fragmentShader;
+                // 2. Fragment Shader: Inject varying, compute Fresnel (Rim glow) and biological color blending
+                shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\nvarying vec3 vNormalVec;\n' + shader.fragmentShader;
                 shader.fragmentShader = shader.fragmentShader.replace(
                     '#include <emissivemap_fragment>',
                     `
                     #include <emissivemap_fragment>
-                    // Sharp plasma pulses flowing along the Y-axis of the cylinder
-                    float pulse = sin(vLocalPosition.y * 3.5 - uTime * 5.5) * 0.5 + 0.5;
-                    pulse = pow(pulse, 5.0); // sharp glowing bands
                     
-                    // Diagonal micro-veins mimicking bio-electrical activity
-                    float veins = sin(vLocalPosition.x * 16.0 + vLocalPosition.y * 22.0 + uTime * 9.0) * 0.5 + 0.5;
-                    veins = pow(veins, 4.0) * 0.6;
-
-                    // Super-boost emissive glow at dynamic hotspots
-                    totalEmissiveRadiance += totalEmissiveRadiance * (pulse * 2.8 + veins * 1.6);
+                    // Calculate view-space normal and view direction for Fresnel
+                    vec3 normalVec = normalize(vNormalVec);
+                    vec3 viewDir = normalize(-vViewPosition);
+                    float fresnel = pow(1.0 - clamp(dot(normalVec, viewDir), 0.0, 1.0), 3.0);
+                    
+                    // Base biological colors (deep purple, glowing magenta rim, warm peach/orange core highlights)
+                    vec3 baseCol = ${isRung ? 'vec3(0.4, 0.08, 0.65)' : 'vec3(0.45, 0.05, 0.7)'}; // Deep violet
+                    vec3 rimCol = vec3(0.95, 0.1, 0.55);  // Translucent glowing pink/magenta
+                    vec3 coreCol = vec3(1.0, 0.65, 0.35); // Warm biological peach/orange
+                    
+                    // Blend based on Fresnel and position-based organic patterns
+                    vec3 bioColor = mix(baseCol, rimCol, fresnel);
+                    
+                    // Organic color variations (Subsurface scattering simulation)
+                    float noisePattern = sin(vLocalPosition.y * 8.0 + uTime * 1.5) * cos(vLocalPosition.x * 6.0) * 0.5 + 0.5;
+                    bioColor = mix(bioColor, coreCol, noisePattern * 0.35);
+                    
+                    // Set emissive color
+                    totalEmissiveRadiance += bioColor * 1.6;
                     `
                 );
             };
         };
 
-        injectOrganicShader(strand1Mat);
-        injectOrganicShader(strand2Mat);
+        injectBiologicalShader(strand1Mat, false);
+        injectBiologicalShader(strand2Mat, false);
         const methylMat = new THREE.MeshPhysicalMaterial({
             color: 0xef4444, emissive: 0x450a0a, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.8
         });
@@ -1537,60 +1615,25 @@
                 scene.add(node2);
                 strand2Nodes.push(node2);
 
-                // Segmented base-pair rungs (Parallel Double Cylinders)
+                // Segmented base-pair rungs (Thick, Organic, Bumpy split cylinders)
                 const bp = basePairs[i];
                 
                 const mat1 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
+                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.8, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
                 });
                 const mat2 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
+                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.8, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
                 });
 
-                // Inject WebGL shader for electrical pulse signals traveling down the rungs
-                const injectRungShader = (material) => {
-                    material.onBeforeCompile = (shader) => {
-                        shader.uniforms.uTime = customUniforms.uTime;
-                        
-                        shader.vertexShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.vertexShader;
-                        shader.vertexShader = shader.vertexShader.replace(
-                            '#include <begin_vertex>',
-                            `
-                            vLocalPosition = position;
-                            #include <begin_vertex>
-                            `
-                        );
-                        
-                        shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\n' + shader.fragmentShader;
-                        shader.fragmentShader = shader.fragmentShader.replace(
-                            '#include <emissivemap_fragment>',
-                            `
-                            #include <emissivemap_fragment>
-                            // Bio-electrical pulses traveling from the ends (backbone) to the center (junction)
-                            // vLocalPosition.y of the Cylinder goes from -0.5 (bottom/backbone) to +0.5 (top/junction)
-                            float pulse = sin((vLocalPosition.y + 0.5) * 6.28 - uTime * 7.0) * 0.5 + 0.5;
-                            pulse = pow(pulse, 4.0); // sharp glowing pulses
-                            
-                            totalEmissiveRadiance += totalEmissiveRadiance * (pulse * 2.2);
-                            `
-                        );
-                    };
-                };
+                injectBiologicalShader(mat1, true);
+                injectBiologicalShader(mat2, true);
 
-                injectRungShader(mat1);
-                injectRungShader(mat2);
+                const half1 = new THREE.Mesh(rungCylinderGeo, mat1);
+                const half2 = new THREE.Mesh(rungCylinderGeo, mat2);
+                scene.add(half1);
+                scene.add(half2);
 
-                const half1_A = new THREE.Mesh(rungCylinderGeo, mat1);
-                const half1_B = new THREE.Mesh(rungCylinderGeo, mat1);
-                scene.add(half1_A);
-                scene.add(half1_B);
-
-                const half2_A = new THREE.Mesh(rungCylinderGeo, mat2);
-                const half2_B = new THREE.Mesh(rungCylinderGeo, mat2);
-                scene.add(half2_A);
-                scene.add(half2_B);
-
-                halfRungs.push({ half1_A, half1_B, half2_A, half2_B, node1, node2 });
+                halfRungs.push({ half1, half2, node1, node2 });
 
                 // Attach methyl markers on Cytosine bases (types 1 and 3)
                 if (i % 3 === 0) {
@@ -1608,21 +1651,15 @@
                 }
             }
 
-            // Create braided backbone connection links (3 sub-strands per segment)
+            // Create single thick connection links (which will be organically deformed by our shader)
             for (let i = 0; i < numNodes - 1; i++) {
-                const segCyls1 = [];
-                const segCyls2 = [];
-                for (let k = 0; k < 3; k++) {
-                    const cyl1 = new THREE.Mesh(subStrandCylinderGeo, strand1Mat);
-                    scene.add(cyl1);
-                    segCyls1.push(cyl1);
+                const cyl1 = new THREE.Mesh(backboneCylinderGeo, strand1Mat);
+                scene.add(cyl1);
+                backboneCylinders1.push(cyl1);
 
-                    const cyl2 = new THREE.Mesh(subStrandCylinderGeo, strand2Mat);
-                    scene.add(cyl2);
-                    segCyls2.push(cyl2);
-                }
-                backboneCylinders1.push(segCyls1);
-                backboneCylinders2.push(segCyls2);
+                const cyl2 = new THREE.Mesh(backboneCylinderGeo, strand2Mat);
+                scene.add(cyl2);
+                backboneCylinders2.push(cyl2);
             }
         }
 
@@ -1728,127 +1765,50 @@
                 node.position.set(x + pX, y + pY, z + pZ);
             });
 
-            // 3. Update backbone connection links (braided twisted rope math)
-            const twistRate = Math.PI / 4; // 45 degrees twist per node segment
-            const R_braid = 0.22; // offset radius for the sub-strands
-            const spinRate = 0.8; // rotation of braids over time
-            const upVec = new THREE.Vector3(0, 1, 0);
-
+            // 3. Update backbone connection links (align single cylinders directly between nodes)
             for (let i = 0; i < numNodes - 1; i++) {
-                const node1_curr = strand1Nodes[i];
-                const node1_next = strand1Nodes[i+1];
-                const node2_curr = strand2Nodes[i];
-                const node2_next = strand2Nodes[i+1];
+                const cyl1 = backboneCylinders1[i];
+                const cyl2 = backboneCylinders2[i];
 
-                const angle1_curr = node1_curr.userData.baseAngle * (helixTurns / 5.0) + time * speed;
-                const angle1_next = node1_next.userData.baseAngle * (helixTurns / 5.0) + time * speed;
-                const angle2_curr = node2_curr.userData.baseAngle * (helixTurns / 5.0) + time * speed + Math.PI;
-                const angle2_next = node2_next.userData.baseAngle * (helixTurns / 5.0) + time * speed + Math.PI;
-
-                const rad1_curr = new THREE.Vector3(Math.cos(angle1_curr), 0, Math.sin(angle1_curr));
-                const rad1_next = new THREE.Vector3(Math.cos(angle1_next), 0, Math.sin(angle1_next));
-                const rad2_curr = new THREE.Vector3(Math.cos(angle2_curr), 0, Math.sin(angle2_curr));
-                const rad2_next = new THREE.Vector3(Math.cos(angle2_next), 0, Math.sin(angle2_next));
-
-                const cylinders1 = backboneCylinders1[i];
-                const cylinders2 = backboneCylinders2[i];
-
-                for (let k = 0; k < 3; k++) {
-                    const twist_curr = i * twistRate + k * (2 * Math.PI / 3) + time * spinRate;
-                    const twist_next = (i + 1) * twistRate + k * (2 * Math.PI / 3) + time * spinRate;
-
-                    const offset1_curr = new THREE.Vector3()
-                        .addScaledVector(rad1_curr, Math.cos(twist_curr))
-                        .addScaledVector(upVec, Math.sin(twist_curr))
-                        .multiplyScalar(R_braid);
-
-                    const offset1_next = new THREE.Vector3()
-                        .addScaledVector(rad1_next, Math.cos(twist_next))
-                        .addScaledVector(upVec, Math.sin(twist_next))
-                        .multiplyScalar(R_braid);
-
-                    const pos1_curr = node1_curr.position.clone().add(offset1_curr);
-                    const pos1_next = node1_next.position.clone().add(offset1_next);
-
-                    alignCylinder(cylinders1[k], pos1_curr, pos1_next);
-
-                    const offset2_curr = new THREE.Vector3()
-                        .addScaledVector(rad2_curr, Math.cos(twist_curr))
-                        .addScaledVector(upVec, Math.sin(twist_curr))
-                        .multiplyScalar(R_braid);
-
-                    const offset2_next = new THREE.Vector3()
-                        .addScaledVector(rad2_next, Math.cos(twist_next))
-                        .addScaledVector(upVec, Math.sin(twist_next))
-                        .multiplyScalar(R_braid);
-
-                    const pos2_curr = node2_curr.position.clone().add(offset2_curr);
-                    const pos2_next = node2_next.position.clone().add(offset2_next);
-
-                    alignCylinder(cylinders2[k], pos2_curr, pos2_next);
-                }
+                alignCylinder(cyl1, strand1Nodes[i].position, strand1Nodes[i+1].position);
+                alignCylinder(cyl2, strand2Nodes[i].position, strand2Nodes[i+1].position);
             }
 
-            // 4. Update segmented rungs (A-T, G-C base pairs meeting in the middle - double parallel cylinders)
-            const rungOffsetVal = 0.16;
+            // 4. Update segmented rungs (A-T, G-C base pairs meeting in the middle)
             halfRungs.forEach((rung, index) => {
                 const pos1 = rung.node1.position;
                 const pos2 = rung.node2.position;
-                
-                const upOffset = new THREE.Vector3(0, rungOffsetVal, 0);
 
-                const pos1_A = pos1.clone().add(upOffset);
-                const pos2_A = pos2.clone().add(upOffset);
-                const midpoint_A = new THREE.Vector3().addVectors(pos1_A, pos2_A).multiplyScalar(0.5);
+                const midpoint = new THREE.Vector3().addVectors(pos1, pos2).multiplyScalar(0.5);
+                const dir = new THREE.Vector3().subVectors(midpoint, pos1).normalize();
 
-                const pos1_B = pos1.clone().sub(upOffset);
-                const pos2_B = pos2.clone().sub(upOffset);
-                const midpoint_B = new THREE.Vector3().addVectors(pos1_B, pos2_B).multiplyScalar(0.5);
+                // Add a tiny gap (0.1 units) at the center junction to look biological and clean
+                const gapMid1 = midpoint.clone().addScaledVector(dir, -0.05);
+                const gapMid2 = midpoint.clone().addScaledVector(dir, 0.05);
 
-                // Add a tiny gap (0.1 units) at the center junction to make it look cybernetic and clean
-                const dir_A = new THREE.Vector3().subVectors(midpoint_A, pos1_A).normalize();
-                const gapMid_1_A = midpoint_A.clone().addScaledVector(dir_A, -0.05);
-                const gapMid_2_A = midpoint_A.clone().addScaledVector(dir_A, 0.05);
+                alignCylinder(rung.half1, pos1, gapMid1);
+                alignCylinder(rung.half2, pos2, gapMid2);
 
-                const dir_B = new THREE.Vector3().subVectors(midpoint_B, pos1_B).normalize();
-                const gapMid_1_B = midpoint_B.clone().addScaledVector(dir_B, -0.05);
-                const gapMid_2_B = midpoint_B.clone().addScaledVector(dir_B, 0.05);
-
-                alignCylinder(rung.half1_A, pos1_A, gapMid_1_A);
-                alignCylinder(rung.half2_A, pos2_A, gapMid_2_A);
-                alignCylinder(rung.half1_B, pos1_B, gapMid_1_B);
-                alignCylinder(rung.half2_B, pos2_B, gapMid_2_B);
-                
                 // Color override during Demethylation Active Wavefront
                 if (reprogrammingState === 'WAVEFRONT') {
                     if (index <= wavePosition && index > wavePosition - 4) {
                         const pulseColor = 0xffffff;
-                        rung.half1_A.material.emissive.setHex(pulseColor);
-                        rung.half1_B.material.emissive.setHex(pulseColor);
-                        rung.half2_A.material.emissive.setHex(pulseColor);
-                        rung.half2_B.material.emissive.setHex(pulseColor);
-                        rung.half1_A.material.emissiveIntensity = 2.0;
-                        rung.half1_B.material.emissiveIntensity = 2.0;
-                        rung.half2_A.material.emissiveIntensity = 2.0;
-                        rung.half2_B.material.emissiveIntensity = 2.0;
+                        rung.half1.material.emissive.setHex(pulseColor);
+                        rung.half2.material.emissive.setHex(pulseColor);
+                        rung.half1.material.emissiveIntensity = 2.0;
+                        rung.half2.material.emissiveIntensity = 2.0;
                     } else {
                         const bp = basePairs[index];
-                        rung.half1_A.material.emissive.setHex(bp.color1);
-                        rung.half1_B.material.emissive.setHex(bp.color1);
-                        rung.half2_A.material.emissive.setHex(bp.color2);
-                        rung.half2_B.material.emissive.setHex(bp.color2);
-                        rung.half1_A.material.emissiveIntensity = 0.8;
-                        rung.half1_B.material.emissiveIntensity = 0.8;
-                        rung.half2_A.material.emissiveIntensity = 0.8;
-                        rung.half2_B.material.emissiveIntensity = 0.8;
+                        rung.half1.material.emissive.setHex(bp.color1);
+                        rung.half2.material.emissive.setHex(bp.color2);
+                        rung.half1.material.emissiveIntensity = 0.8;
+                        rung.half2.material.emissiveIntensity = 0.8;
                     }
                 }
-                
+
                 const opacityVal = 0.4 + (1.0 - ageFactor) * 0.55;
-                rung.half1_A.material.opacity = opacityVal;
-                rung.half1_B.material.opacity = opacityVal;
-                rung.half2_A.material.opacity = opacityVal;
-                rung.half2_B.material.opacity = opacityVal;
+                rung.half1.material.opacity = opacityVal;
+                rung.half2.material.opacity = opacityVal;
             });
 
             // 5. Animate methyl groups (detaching during Yamanaka OSK induction)
@@ -2111,7 +2071,7 @@
             // Slowly rotate scene
             scene.rotation.y = time * 0.1;
 
-            renderer.render(scene, camera);
+            composer.render();
         }
 
         buildDNAHelix();
