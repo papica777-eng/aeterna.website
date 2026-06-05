@@ -1250,9 +1250,9 @@
         const renderScene = new THREE.RenderPass(scene, camera);
         const bloomPass = new THREE.UnrealBloomPass(
             new THREE.Vector2(window.innerWidth, window.innerHeight),
-            1.8,   // strength
-            0.75,  // radius
-            0.05   // threshold
+            0.7,   // strength (subtle glow)
+            0.6,   // radius
+            0.22   // threshold (only brightest highlights glow)
         );
         const composer = new THREE.EffectComposer(renderer);
         composer.addPass(renderScene);
@@ -1362,10 +1362,10 @@
 
         // Materials with biological tissue parameters (more matte, slight subsurface feel)
         const strand1Mat = new THREE.MeshPhysicalMaterial({
-            color: 0xa855f7, emissive: 0xb55fe6, emissiveIntensity: 1.0, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
+            color: 0xa855f7, emissive: 0xb55fe6, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.35, clearcoat: 1.0, clearcoatRoughness: 0.1
         });
         const strand2Mat = new THREE.MeshPhysicalMaterial({
-            color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 1.0, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
+            color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.35, clearcoat: 1.0, clearcoatRoughness: 0.1
         });
 
         // Inject custom WebGL shaders to add biological bumps, rim glowing Fresnel, and subsurface scattering
@@ -1417,8 +1417,8 @@
                     float noisePattern = sin(vLocalPosition.y * 8.0 + uTime * 1.5) * cos(vLocalPosition.x * 6.0) * 0.5 + 0.5;
                     bioColor = mix(bioColor, coreCol, noisePattern * 0.35);
                     
-                    // Set emissive color
-                    totalEmissiveRadiance += bioColor * 1.6;
+                    // Set emissive color (soft, to let diffuse and specular lighting dominate the bumps)
+                    totalEmissiveRadiance += bioColor * 0.15;
                     `
                 );
             };
@@ -1619,10 +1619,10 @@
                 const bp = basePairs[i];
                 
                 const mat1 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.8, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
+                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.15, metalness: 0.15, roughness: 0.35, clearcoat: 0.8, clearcoatRoughness: 0.1
                 });
                 const mat2 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.8, metalness: 0.1, roughness: 0.65, clearcoat: 0.35
+                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.15, metalness: 0.15, roughness: 0.35, clearcoat: 0.8, clearcoatRoughness: 0.1
                 });
 
                 injectBiologicalShader(mat1, true);
@@ -1731,11 +1731,11 @@
 
             strand1Mat.color.lerpColors(healthyColor1, agedColor1, ageFactor);
             strand1Mat.emissive.copy(strand1Mat.color);
-            strand1Mat.emissiveIntensity = 0.35 + 0.65 * (1.0 - ageFactor);
+            strand1Mat.emissiveIntensity = 0.08 + 0.12 * (1.0 - ageFactor);
 
             strand2Mat.color.lerpColors(healthyColor2, agedColor2, ageFactor);
             strand2Mat.emissive.copy(strand2Mat.color);
-            strand2Mat.emissiveIntensity = 0.35 + 0.65 * (1.0 - ageFactor);
+            strand2Mat.emissiveIntensity = 0.08 + 0.12 * (1.0 - ageFactor);
 
             // 2. Animate and perturb DNA backbone nodes
             strand1Nodes.forEach(node => {
