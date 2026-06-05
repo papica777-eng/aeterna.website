@@ -471,8 +471,8 @@ def get_html_chunk(filename):
 
                 const contentHtml = `
                     <div class="omni-msg-bubble">
-                        \${{!isUser ? '<div class="omni-msg-author">AETERNA.AIC</div>' : ''}}
-                        <div style="white-space: pre-wrap;">\${{formattedText}}</div>
+                        ${{!isUser ? '<div class="omni-msg-author">AETERNA.AIC</div>' : ''}}
+                        <div style="white-space: pre-wrap;">${{formattedText}}</div>
                     </div>
                 `;
 
@@ -502,7 +502,7 @@ def get_html_chunk(filename):
                 try {{
                     const k1 = 'AQ.Ab8RN6J_y4NgA';
                     const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
-                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {{
+                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {{
                         method: 'POST',
                         headers: {{
                             'Content-Type': 'application/json',
