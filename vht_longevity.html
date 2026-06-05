@@ -40,8 +40,9 @@
             height: 100vh;
             width: 100vw;
             background-image: 
-                radial-gradient(circle at 50% -20%, rgba(181, 95, 230, 0.12) 0%, transparent 60%),
-                radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.03) 0%, transparent 40%);
+                radial-gradient(circle at 50% -20%, rgba(181, 95, 230, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(255, 42, 133, 0.04) 0%, transparent 40%);
         }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
@@ -1211,6 +1212,26 @@
         glowLight.position.set(0, 0, 10);
         scene.add(glowLight);
 
+        // Rotating background starfield
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 600;
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount * 3; i += 3) {
+            starPositions[i] = (Math.random() - 0.5) * 80;
+            starPositions[i+1] = (Math.random() - 0.5) * 50;
+            starPositions[i+2] = (Math.random() - 0.5) * 40 - 20;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.1,
+            transparent: true,
+            opacity: 0.6,
+            sizeAttenuation: true
+        });
+        const starField = new THREE.Points(starGeo, starMat);
+        scene.add(starField);
+
         // 3D DNA / Chromatin Helix Geometry Construction
         let strand1Nodes = [];
         let strand2Nodes = [];
@@ -1244,40 +1265,40 @@
         let helixTurns = 5.0;       // Starts at 5 turns when aged
         let helixRadius = 3.5;      // Starts at 3.5 when aged
 
-        // Base-pair configurations: AT (yellow/blue), GC (orange/green), TA (blue/yellow), CG (green/orange)
+        // Base-pair configurations: Aeterna Cyber Theme (Purple, Magenta, Cyan, Violet)
         const basePairs = [];
         for (let i = 0; i < numNodes; i++) {
             const type = i % 4;
             let color1, color2;
             if (type === 0) {
-                color1 = 0xeab308; // Adenine - Yellow
-                color2 = 0x3b82f6; // Thymine - Blue
+                color1 = 0xa855f7; // Neon Purple
+                color2 = 0x00f0ff; // Neon Cyan
             } else if (type === 1) {
-                color1 = 0xf97316; // Guanine - Orange
-                color2 = 0x10b981; // Cytosine - Green
+                color1 = 0xff2a85; // Neon Magenta
+                color2 = 0x6366f1; // Neon Violet
             } else if (type === 2) {
-                color1 = 0x3b82f6; // Thymine - Blue
-                color2 = 0xeab308; // Adenine - Yellow
+                color1 = 0x00f0ff; // Neon Cyan
+                color2 = 0xa855f7; // Neon Purple
             } else {
-                color1 = 0x10b981; // Cytosine - Green
-                color2 = 0xf97316; // Guanine - Orange
+                color1 = 0x6366f1; // Neon Violet
+                color2 = 0xff2a85; // Neon Magenta
             }
             basePairs.push({ color1, color2, type });
         }
 
         // Shared Geometries
-        const nodeGeo = new THREE.SphereGeometry(0.24, 16, 16);
-        const backboneCylinderGeo = new THREE.CylinderGeometry(0.12, 0.12, 1, 12);
-        const rungCylinderGeo = new THREE.CylinderGeometry(0.08, 0.08, 1, 12);
+        const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
+        const subStrandCylinderGeo = new THREE.CylinderGeometry(0.045, 0.045, 1, 8);
+        const rungCylinderGeo = new THREE.CylinderGeometry(0.04, 0.04, 1, 8);
         const methylGeo = new THREE.DodecahedronGeometry(0.28, 1);
         const zombieGeo = new THREE.IcosahedronGeometry(0.42, 0); // Decaying spiky cells
 
         // Materials with physical glass/metallic parameters
         const strand1Mat = new THREE.MeshPhysicalMaterial({
-            color: 0xd0d5db, emissive: 0x000000, metalness: 0.1, roughness: 0.7, clearcoat: 0.1
+            color: 0xa855f7, emissive: 0xb55fe6, emissiveIntensity: 1.0, metalness: 0.9, roughness: 0.15, clearcoat: 1.0
         });
         const strand2Mat = new THREE.MeshPhysicalMaterial({
-            color: 0xe2e8f0, emissive: 0x000000, metalness: 0.1, roughness: 0.7, clearcoat: 0.1
+            color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 1.0, metalness: 0.9, roughness: 0.15, clearcoat: 1.0
         });
         const methylMat = new THREE.MeshPhysicalMaterial({
             color: 0xef4444, emissive: 0x450a0a, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.8
@@ -1424,11 +1445,21 @@
             // Remove existing mesh nodes
             strand1Nodes.forEach(n => scene.remove(n));
             strand2Nodes.forEach(n => scene.remove(n));
-            backboneCylinders1.forEach(c => scene.remove(c));
-            backboneCylinders2.forEach(c => scene.remove(c));
+            backboneCylinders1.forEach(c => {
+                if (Array.isArray(c)) c.forEach(sub => scene.remove(sub));
+                else scene.remove(c);
+            });
+            backboneCylinders2.forEach(c => {
+                if (Array.isArray(c)) c.forEach(sub => scene.remove(sub));
+                else scene.remove(c);
+            });
             halfRungs.forEach(r => {
-                scene.remove(r.half1);
-                scene.remove(r.half2);
+                if (r.half1) scene.remove(r.half1);
+                if (r.half2) scene.remove(r.half2);
+                if (r.half1_A) scene.remove(r.half1_A);
+                if (r.half2_A) scene.remove(r.half2_A);
+                if (r.half1_B) scene.remove(r.half1_B);
+                if (r.half2_B) scene.remove(r.half2_B);
             });
             methylMarkers.forEach(m => scene.remove(m));
 
@@ -1444,34 +1475,40 @@
                 const y = (fraction - 0.5) * dnaLength;
                 const baseAngle = fraction * Math.PI * 5; // 2.5 turns initially
 
-                // Node on Strand 1
+                // Node on Strand 1 (Invisible, used for math anchoring)
                 const node1 = new THREE.Mesh(nodeGeo, strand1Mat);
                 node1.userData = { strand: 1, baseAngle: baseAngle, y: y };
+                node1.visible = false;
                 scene.add(node1);
                 strand1Nodes.push(node1);
 
-                // Node on Strand 2
+                // Node on Strand 2 (Invisible, used for math anchoring)
                 const node2 = new THREE.Mesh(nodeGeo, strand2Mat);
                 node2.userData = { strand: 2, baseAngle: baseAngle, y: y };
+                node2.visible = false;
                 scene.add(node2);
                 strand2Nodes.push(node2);
 
-                // Segmented base-pair rungs
+                // Segmented base-pair rungs (Parallel Double Cylinders)
                 const bp = basePairs[i];
                 
                 const mat1 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color1, emissive: 0x000000, metalness: 0.2, roughness: 0.6
+                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
                 });
-                const half1 = new THREE.Mesh(rungCylinderGeo, mat1);
-                scene.add(half1);
+                const half1_A = new THREE.Mesh(rungCylinderGeo, mat1);
+                const half1_B = new THREE.Mesh(rungCylinderGeo, mat1);
+                scene.add(half1_A);
+                scene.add(half1_B);
 
                 const mat2 = new THREE.MeshPhysicalMaterial({
-                    color: bp.color2, emissive: 0x000000, metalness: 0.2, roughness: 0.6
+                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.8, metalness: 0.8, roughness: 0.1, clearcoat: 1.0
                 });
-                const half2 = new THREE.Mesh(rungCylinderGeo, mat2);
-                scene.add(half2);
+                const half2_A = new THREE.Mesh(rungCylinderGeo, mat2);
+                const half2_B = new THREE.Mesh(rungCylinderGeo, mat2);
+                scene.add(half2_A);
+                scene.add(half2_B);
 
-                halfRungs.push({ half1, half2, node1, node2 });
+                halfRungs.push({ half1_A, half1_B, half2_A, half2_B, node1, node2 });
 
                 // Attach methyl markers on Cytosine bases (types 1 and 3)
                 if (i % 3 === 0) {
@@ -1489,15 +1526,21 @@
                 }
             }
 
-            // Create backbone connection links
+            // Create braided backbone connection links (3 sub-strands per segment)
             for (let i = 0; i < numNodes - 1; i++) {
-                const cyl1 = new THREE.Mesh(backboneCylinderGeo, strand1Mat);
-                scene.add(cyl1);
-                backboneCylinders1.push(cyl1);
+                const segCyls1 = [];
+                const segCyls2 = [];
+                for (let k = 0; k < 3; k++) {
+                    const cyl1 = new THREE.Mesh(subStrandCylinderGeo, strand1Mat);
+                    scene.add(cyl1);
+                    segCyls1.push(cyl1);
 
-                const cyl2 = new THREE.Mesh(backboneCylinderGeo, strand2Mat);
-                scene.add(cyl2);
-                backboneCylinders2.push(cyl2);
+                    const cyl2 = new THREE.Mesh(subStrandCylinderGeo, strand2Mat);
+                    scene.add(cyl2);
+                    segCyls2.push(cyl2);
+                }
+                backboneCylinders1.push(segCyls1);
+                backboneCylinders2.push(segCyls2);
             }
         }
 
@@ -1539,6 +1582,12 @@
             requestAnimationFrame(animate);
             time += 0.015;
 
+            // 0. Rotate background starfield
+            if (starField) {
+                starField.rotation.y = time * 0.01;
+                starField.rotation.x = time * 0.005;
+            }
+
             // 1. Calculate dynamic Epigenetic Noise / Structural Decay based on current biologicalAge
             const ageFactor = (biologicalAge - 52.4) / 30.0; // 0.0 (young/clean) to 1.0 (old/corrupted)
             const noiseScale = ageFactor * 0.05; // Random structural perturbation scale (subtle medical tremor)
@@ -1553,18 +1602,18 @@
             }
 
             // Shift backbone colors dynamically to represent cellular health state (Medical clinical look)
-            const healthyColor1 = new THREE.Color(0xd0d5db);
-            const agedColor1 = new THREE.Color(0x9ca3af);
-            const healthyColor2 = new THREE.Color(0xe2e8f0);
-            const agedColor2 = new THREE.Color(0xd1d5db);
+            const healthyColor1 = new THREE.Color(0xa855f7); // Glowing Purple
+            const agedColor1 = new THREE.Color(0x4c1d95);    // Dim Violet
+            const healthyColor2 = new THREE.Color(0x00f0ff); // Glowing Cyan
+            const agedColor2 = new THREE.Color(0x083344);    // Dim Teal
 
             strand1Mat.color.lerpColors(healthyColor1, agedColor1, ageFactor);
-            strand1Mat.emissive.setHex(0x000000);
-            strand1Mat.emissiveIntensity = 0;
+            strand1Mat.emissive.copy(strand1Mat.color);
+            strand1Mat.emissiveIntensity = 0.35 + 0.65 * (1.0 - ageFactor);
 
             strand2Mat.color.lerpColors(healthyColor2, agedColor2, ageFactor);
-            strand2Mat.emissive.setHex(0x000000);
-            strand2Mat.emissiveIntensity = 0;
+            strand2Mat.emissive.copy(strand2Mat.color);
+            strand2Mat.emissiveIntensity = 0.35 + 0.65 * (1.0 - ageFactor);
 
             // 2. Animate and perturb DNA backbone nodes
             strand1Nodes.forEach(node => {
@@ -1594,39 +1643,127 @@
                 node.position.set(x + pX, y + pY, z + pZ);
             });
 
-            // 3. Update backbone cylinder connections
+            // 3. Update backbone connection links (braided twisted rope math)
+            const twistRate = Math.PI / 4; // 45 degrees twist per node segment
+            const R_braid = 0.22; // offset radius for the sub-strands
+            const spinRate = 0.8; // rotation of braids over time
+            const upVec = new THREE.Vector3(0, 1, 0);
+
             for (let i = 0; i < numNodes - 1; i++) {
-                alignCylinder(backboneCylinders1[i], strand1Nodes[i].position, strand1Nodes[i+1].position);
-                alignCylinder(backboneCylinders2[i], strand2Nodes[i].position, strand2Nodes[i+1].position);
+                const node1_curr = strand1Nodes[i];
+                const node1_next = strand1Nodes[i+1];
+                const node2_curr = strand2Nodes[i];
+                const node2_next = strand2Nodes[i+1];
+
+                const angle1_curr = node1_curr.userData.baseAngle * (helixTurns / 5.0) + time * speed;
+                const angle1_next = node1_next.userData.baseAngle * (helixTurns / 5.0) + time * speed;
+                const angle2_curr = node2_curr.userData.baseAngle * (helixTurns / 5.0) + time * speed + Math.PI;
+                const angle2_next = node2_next.userData.baseAngle * (helixTurns / 5.0) + time * speed + Math.PI;
+
+                const rad1_curr = new THREE.Vector3(Math.cos(angle1_curr), 0, Math.sin(angle1_curr));
+                const rad1_next = new THREE.Vector3(Math.cos(angle1_next), 0, Math.sin(angle1_next));
+                const rad2_curr = new THREE.Vector3(Math.cos(angle2_curr), 0, Math.sin(angle2_curr));
+                const rad2_next = new THREE.Vector3(Math.cos(angle2_next), 0, Math.sin(angle2_next));
+
+                const cylinders1 = backboneCylinders1[i];
+                const cylinders2 = backboneCylinders2[i];
+
+                for (let k = 0; k < 3; k++) {
+                    const twist_curr = i * twistRate + k * (2 * Math.PI / 3) + time * spinRate;
+                    const twist_next = (i + 1) * twistRate + k * (2 * Math.PI / 3) + time * spinRate;
+
+                    const offset1_curr = new THREE.Vector3()
+                        .addScaledVector(rad1_curr, Math.cos(twist_curr))
+                        .addScaledVector(upVec, Math.sin(twist_curr))
+                        .multiplyScalar(R_braid);
+
+                    const offset1_next = new THREE.Vector3()
+                        .addScaledVector(rad1_next, Math.cos(twist_next))
+                        .addScaledVector(upVec, Math.sin(twist_next))
+                        .multiplyScalar(R_braid);
+
+                    const pos1_curr = node1_curr.position.clone().add(offset1_curr);
+                    const pos1_next = node1_next.position.clone().add(offset1_next);
+
+                    alignCylinder(cylinders1[k], pos1_curr, pos1_next);
+
+                    const offset2_curr = new THREE.Vector3()
+                        .addScaledVector(rad2_curr, Math.cos(twist_curr))
+                        .addScaledVector(upVec, Math.sin(twist_curr))
+                        .multiplyScalar(R_braid);
+
+                    const offset2_next = new THREE.Vector3()
+                        .addScaledVector(rad2_next, Math.cos(twist_next))
+                        .addScaledVector(upVec, Math.sin(twist_next))
+                        .multiplyScalar(R_braid);
+
+                    const pos2_curr = node2_curr.position.clone().add(offset2_curr);
+                    const pos2_next = node2_next.position.clone().add(offset2_next);
+
+                    alignCylinder(cylinders2[k], pos2_curr, pos2_next);
+                }
             }
 
-            // 4. Update segmented rungs (A-T, G-C base pairs meeting in the middle)
+            // 4. Update segmented rungs (A-T, G-C base pairs meeting in the middle - double parallel cylinders)
+            const rungOffsetVal = 0.16;
             halfRungs.forEach((rung, index) => {
                 const pos1 = rung.node1.position;
                 const pos2 = rung.node2.position;
-                const midpoint = new THREE.Vector3().addVectors(pos1, pos2).multiplyScalar(0.5);
+                
+                const upOffset = new THREE.Vector3(0, rungOffsetVal, 0);
 
-                alignCylinder(rung.half1, pos1, midpoint);
-                alignCylinder(rung.half2, pos2, midpoint);
+                const pos1_A = pos1.clone().add(upOffset);
+                const pos2_A = pos2.clone().add(upOffset);
+                const midpoint_A = new THREE.Vector3().addVectors(pos1_A, pos2_A).multiplyScalar(0.5);
+
+                const pos1_B = pos1.clone().sub(upOffset);
+                const pos2_B = pos2.clone().sub(upOffset);
+                const midpoint_B = new THREE.Vector3().addVectors(pos1_B, pos2_B).multiplyScalar(0.5);
+
+                // Add a tiny gap (0.1 units) at the center junction to make it look cybernetic and clean
+                const dir_A = new THREE.Vector3().subVectors(midpoint_A, pos1_A).normalize();
+                const gapMid_1_A = midpoint_A.clone().addScaledVector(dir_A, -0.05);
+                const gapMid_2_A = midpoint_A.clone().addScaledVector(dir_A, 0.05);
+
+                const dir_B = new THREE.Vector3().subVectors(midpoint_B, pos1_B).normalize();
+                const gapMid_1_B = midpoint_B.clone().addScaledVector(dir_B, -0.05);
+                const gapMid_2_B = midpoint_B.clone().addScaledVector(dir_B, 0.05);
+
+                alignCylinder(rung.half1_A, pos1_A, gapMid_1_A);
+                alignCylinder(rung.half2_A, pos2_A, gapMid_2_A);
+                alignCylinder(rung.half1_B, pos1_B, gapMid_1_B);
+                alignCylinder(rung.half2_B, pos2_B, gapMid_2_B);
                 
                 // Color override during Demethylation Active Wavefront
                 if (reprogrammingState === 'WAVEFRONT') {
                     if (index <= wavePosition && index > wavePosition - 4) {
-                        rung.half1.material.emissive.setHex(0xffffff);
-                        rung.half2.material.emissive.setHex(0xffffff);
-                        rung.half1.material.emissiveIntensity = 2.0;
-                        rung.half2.material.emissiveIntensity = 2.0;
+                        const pulseColor = 0xffffff;
+                        rung.half1_A.material.emissive.setHex(pulseColor);
+                        rung.half1_B.material.emissive.setHex(pulseColor);
+                        rung.half2_A.material.emissive.setHex(pulseColor);
+                        rung.half2_B.material.emissive.setHex(pulseColor);
+                        rung.half1_A.material.emissiveIntensity = 2.0;
+                        rung.half1_B.material.emissiveIntensity = 2.0;
+                        rung.half2_A.material.emissiveIntensity = 2.0;
+                        rung.half2_B.material.emissiveIntensity = 2.0;
                     } else {
                         const bp = basePairs[index];
-                        rung.half1.material.emissive.setHex(bp.color1);
-                        rung.half2.material.emissive.setHex(bp.color2);
-                        rung.half1.material.emissiveIntensity = 0.4;
-                        rung.half2.material.emissiveIntensity = 0.4;
+                        rung.half1_A.material.emissive.setHex(bp.color1);
+                        rung.half1_B.material.emissive.setHex(bp.color1);
+                        rung.half2_A.material.emissive.setHex(bp.color2);
+                        rung.half2_B.material.emissive.setHex(bp.color2);
+                        rung.half1_A.material.emissiveIntensity = 0.8;
+                        rung.half1_B.material.emissiveIntensity = 0.8;
+                        rung.half2_A.material.emissiveIntensity = 0.8;
+                        rung.half2_B.material.emissiveIntensity = 0.8;
                     }
                 }
                 
-                rung.half1.material.opacity = 0.4 + (1.0 - ageFactor) * 0.55;
-                rung.half2.material.opacity = 0.4 + (1.0 - ageFactor) * 0.55;
+                const opacityVal = 0.4 + (1.0 - ageFactor) * 0.55;
+                rung.half1_A.material.opacity = opacityVal;
+                rung.half1_B.material.opacity = opacityVal;
+                rung.half2_A.material.opacity = opacityVal;
+                rung.half2_B.material.opacity = opacityVal;
             });
 
             // 5. Animate methyl groups (detaching during Yamanaka OSK induction)
