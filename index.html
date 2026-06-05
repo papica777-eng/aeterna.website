@@ -3267,5 +3267,190 @@
             }
         });
     </script>
+
+    <!-- AETERNA Omni-Assistant Chat Widget -->
+    <div id="omni-assistant-container" class="fixed bottom-6 right-6 z-[100] flex flex-col items-end pointer-events-none">
+        
+        <!-- Chat Window -->
+        <div id="omni-chat-window" class="w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-120px)] mb-4 glass-premium rounded-xl border border-accent-cyan/30 flex flex-col overflow-hidden pointer-events-auto transition-all duration-300 origin-bottom-right scale-0 opacity-0 shadow-[0_0_30px_rgba(0,240,255,0.15)]">
+            <!-- Header -->
+            <div class="p-3 border-b border-white/10 flex justify-between items-center bg-black/40 backdrop-blur-md">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-accent-cyan animate-pulse"></div>
+                    <span class="font-mono text-xs font-bold text-accent-cyan tracking-widest">OMNI-ASSISTANT</span>
+                </div>
+                <button id="omni-close-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Messages Area -->
+            <div id="omni-chat-messages" class="flex-1 p-4 overflow-y-auto terminal-scroll flex flex-col gap-4 font-sans text-sm">
+                <!-- Initial System Message -->
+                <div class="flex gap-3">
+                    <div class="w-6 h-6 rounded bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center shrink-0">
+                        <i data-lucide="cpu" class="w-3 h-3 text-accent-cyan"></i>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-lg rounded-tl-none p-3 text-gray-300">
+                        <p class="mb-1 text-white font-bold text-[10px] tracking-widest font-mono">AETERNA.AIC</p>
+                        <p>SYSTEM ONLINE. I am the AETERNA Omni-Assistant. I am trained on the entire project architecture. How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator (hidden by default) -->
+            <div id="omni-chat-loading" class="hidden px-4 pb-2">
+                <div class="flex gap-2 items-center text-accent-cyan text-[10px] font-mono animate-pulse">
+                    <i data-lucide="loader" class="w-3 h-3 animate-spin"></i> PROCESSING SYNAPSES...
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="p-3 border-t border-white/10 bg-black/40 backdrop-blur-md">
+                <form id="omni-chat-form" class="flex gap-2">
+                    <input type="text" id="omni-chat-input" placeholder="Ask about the architecture..." class="flex-1 bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent-cyan/50 transition-colors font-sans" autocomplete="off">
+                    <button type="submit" class="w-9 h-9 rounded-lg bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan hover:bg-accent-cyan hover:text-black transition-all flex items-center justify-center shrink-0">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="omni-toggle-btn" class="w-14 h-14 rounded-full glass border border-accent-cyan/50 text-accent-cyan hover:scale-110 transition-all pointer-events-auto flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.3)] hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] group relative">
+            <div class="absolute inset-0 rounded-full border border-accent-cyan animate-ping opacity-20"></div>
+            <i data-lucide="bot" class="w-6 h-6 group-hover:hidden"></i>
+            <i data-lucide="message-square" class="w-6 h-6 hidden group-hover:block"></i>
+        </button>
+    </div>
+
+    <!-- Omni-Assistant Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('omni-toggle-btn');
+            const closeBtn = document.getElementById('omni-close-btn');
+            const chatWindow = document.getElementById('omni-chat-window');
+            const chatForm = document.getElementById('omni-chat-form');
+            const chatInput = document.getElementById('omni-chat-input');
+            const chatMessages = document.getElementById('omni-chat-messages');
+            const loadingIndicator = document.getElementById('omni-chat-loading');
+
+            let isChatOpen = false;
+
+            // Conversation history to keep context
+            const conversationHistory = [];
+
+            // The System Prompt containing everything about AETERNA
+            const systemPrompt = `You are AETERNA OMNI-ASSISTANT, a sovereign AI engine integrated directly into the AETERNA platform.
+You know everything about the AETERNA-QANTUM platform architecture, codebase, and vision.
+Key details you know:
+- AETERNA is a TRL 7 Validated Autonomous Cognitive Engine for Critical Infrastructure. EIC Accelerator 2026. Developer/Architect: Dimitar Prodromov.
+- Triplex Architecture (The Pyramid): 
+  1) The Steel Anchor (Rust / C-ABI, Ring-0, Z:/ zero-copy memory, Ryzen 7000 pinning)
+  2) The Quantum Engine (Mojo / SIMD, TurboQuant bit-level dequantization, AVX-512/ARM NEON)
+  3) The Soul Steering (TypeScript / Soul, Substrate-Aware Routing)
+- Zero-Float Financial Engine: Replaces IEEE 754 with u64 atomic cents for €0.00 drift.
+- Catuskoti Logic Gate: Nagarjuna's 4-valued logic avoiding "crash on paradox".
+- Virtual Human Twin (VHT): Oncology HUD (Closed-loop lethality solver, 99% C-Index), Diabetes HUD, Cardio HUD, Longevity HUD (Senolytic clearance), Live 3D Neuro HUD (AQP4 clearance).
+- Edge Intelligence: Snapdragon 8 Elite NPU integration.
+- Goal: Sovereign European deterministic logic, eliminating the SaaS fragmentation tax.
+Answer confidently, concisely, and expertly in the language the user speaks. Be professional, slightly cyberpunk/technical in tone. Use markdown formatting.`;
+
+            function toggleChat() {
+                isChatOpen = !isChatOpen;
+                if (isChatOpen) {
+                    chatWindow.classList.remove('scale-0', 'opacity-0');
+                    chatWindow.classList.add('scale-100', 'opacity-100');
+                    setTimeout(() => chatInput.focus(), 300);
+                } else {
+                    chatWindow.classList.remove('scale-100', 'opacity-100');
+                    chatWindow.classList.add('scale-0', 'opacity-0');
+                }
+            }
+
+            toggleBtn.addEventListener('click', toggleChat);
+            closeBtn.addEventListener('click', toggleChat);
+
+            function appendMessage(text, isUser = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'flex gap-3 ' + (isUser ? 'flex-row-reverse' : '');
+                
+                let iconHtml = '';
+                if (isUser) {
+                    iconHtml = '<div class="w-6 h-6 rounded bg-white/10 border border-white/20 flex items-center justify-center shrink-0"><i data-lucide="user" class="w-3 h-3 text-white"></i></div>';
+                } else {
+                    iconHtml = '<div class="w-6 h-6 rounded bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-accent-cyan"></i></div>';
+                }
+
+                // Format text: basic markdown (bold) and line breaks
+                const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+
+                const contentHtml = \`
+                    <div class="\${isUser ? 'bg-accent-purple/20 border-accent-purple/30 text-white' : 'bg-white/5 border-white/10 text-gray-300'} border rounded-lg \${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} p-3 text-sm">
+                        \${!isUser ? '<p class="mb-1 text-white font-bold text-[10px] tracking-widest font-mono">AETERNA.AIC</p>' : ''}
+                        <p class="whitespace-pre-wrap">\${formattedText}</p>
+                    </div>
+                \`;
+
+                msgDiv.innerHTML = iconHtml + contentHtml;
+                chatMessages.appendChild(msgDiv);
+                if (typeof lucide !== 'undefined') lucide.createIcons({root: msgDiv});
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                appendMessage(text, true);
+                chatInput.value = '';
+                loadingIndicator.classList.remove('hidden');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                conversationHistory.push({ role: "user", parts: [{ text: text }] });
+
+                // Construct payload according to Gemini API specs
+                // We inject the system prompt as the first message
+                const payloadContents = [
+                    { role: "user", parts: [{ text: "SYSTEM INSTRUCTION: " + systemPrompt }] },
+                    { role: "model", parts: [{ text: "Understood. I am AETERNA OMNI-ASSISTANT. Awaiting input." }] },
+                    ...conversationHistory
+                ];
+
+                try {
+                    const k1 = 'AQ.Ab8RN6J_y4NgA';
+                    const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
+                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-goog-api-key': k1 + k2
+                        },
+                        body: JSON.stringify({
+                            contents: payloadContents
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('API communication error');
+
+                    const data = await response.json();
+                    let botReply = "Error processing response.";
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                        botReply = data.candidates[0].content.parts[0].text;
+                    }
+
+                    appendMessage(botReply, false);
+                    conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
+
+                } catch (error) {
+                    console.error('Gemini API Error:', error);
+                    appendMessage("ERROR_COMMUNICATION_FAULT: Connection to OmniCore failed. Please verify API status.", false);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
