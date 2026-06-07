@@ -7,6 +7,8 @@
     <!-- Институционална Типография и Моноспейс -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/10.4.1/stellar-sdk.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.1.2/index.min.js"></script>
     <style>
         /* =========================================
            ОНТОЛОГИЧНИ ПРАВИЛА (CSS VARIABLES)
@@ -711,6 +713,16 @@
         .terminal-panel.threat-state {
             animation: border-flash 1s infinite;
         }
+
+        .pulse.disconnected {
+            background-color: var(--text-muted) !important;
+            box-shadow: none !important;
+            animation: none !important;
+        }
+
+        @media(max-width: 992px) {
+            .terminal-grid { grid-template-columns: 1fr !important; }
+        }
     </style>
 </head>
 <body>
@@ -735,6 +747,10 @@
             <div id="status-sentinel" class="status-item active">
                 <div id="pulse-sentinel" class="pulse" style="animation-delay: 1s;"></div>
                 SENTINEL COGNITION: <span id="text-sentinel">ACTIVE</span>
+            </div>
+            <div id="status-wallet" class="status-item" style="cursor: pointer;" onclick="toggleWallet()">
+                <div id="pulse-wallet" class="pulse disconnected" style="animation-delay: 1.5s;"></div>
+                PORTFOLIO LINK: <span id="text-wallet">NOT CONNECTED</span>
             </div>
         </div>
     </nav>
@@ -819,22 +835,78 @@
             </div>
         </div>
 
-        <!-- Sniper Activity Feed Terminal Console -->
-        <div class="terminal-panel">
-            <div class="terminal-header">
-                <div class="terminal-title">
-                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-white"></i>
-                    AutoBrokerDaemon :: Live Sniper Kill Log
+        <!-- Sniper Activity Feed & Execution Console Grid -->
+        <div class="terminal-grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; margin-top: 30px;">
+            <!-- Left: Sniper Kill Log -->
+            <div class="terminal-panel" style="margin-top: 0px;">
+                <div class="terminal-header">
+                    <div class="terminal-title">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5 text-white"></i>
+                        AutoBrokerDaemon :: Live Sniper Kill Log
+                    </div>
+                    <div class="terminal-controls">
+                        <span class="term-dot red"></span>
+                        <span class="term-dot"></span>
+                        <span class="term-dot green"></span>
+                    </div>
                 </div>
-                <div class="terminal-controls">
-                    <span class="term-dot red"></span>
-                    <span class="term-dot"></span>
-                    <span class="term-dot green"></span>
+                <div class="terminal-body" id="terminal-log-container">
+                    <div class="term-log"><span class="term-ts">[06/07/2026 22:58:00]</span> <span class="term-tag">DAEMON_START</span> :: AutoBrokerDaemon initialized on mainnet. Sentinel cognition active.</div>
+                    <div class="term-log"><span class="term-ts">[06/07/2026 22:58:05]</span> <span class="term-tag">VERITAS_CHECK</span> :: Substrate SHA-256 binary validation passed. Binary footprint: 4.5KB.</div>
                 </div>
             </div>
-            <div class="terminal-body" id="terminal-log-container">
-                <div class="term-log"><span class="term-ts">[06/07/2026 22:58:00]</span> <span class="term-tag">DAEMON_START</span> :: AutoBrokerDaemon initialized on mainnet. Sentinel cognition active.</div>
-                <div class="term-log"><span class="term-ts">[06/07/2026 22:58:05]</span> <span class="term-tag">VERITAS_CHECK</span> :: Substrate SHA-256 binary validation passed. Binary footprint: 4.5KB.</div>
+
+            <!-- Right: Execution Console -->
+            <div class="terminal-panel" style="background: #020204; margin-top: 0px;">
+                <div class="terminal-header">
+                    <div class="terminal-title">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5 text-white"></i>
+                        AETERNA.K2 :: Execution Console
+                    </div>
+                    <div class="terminal-controls">
+                        <span class="term-dot"></span>
+                        <span class="term-dot"></span>
+                        <span class="term-dot green"></span>
+                    </div>
+                </div>
+                <div class="terminal-body" style="height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-family: var(--font-mono); font-size: 0.72rem; padding: 20px;">
+                    <!-- Connection Status Banner -->
+                    <div id="ops-connection-banner" style="border: 1px solid var(--neon-red); background: rgba(255, 0, 51, 0.03); padding: 8px 12px; color: var(--neon-red); display: flex; justify-content: space-between; align-items: center;">
+                        <span>EXECUTION ENGINE LOCK :: WALLET LINK REQUIRED</span>
+                        <button onclick="connectWallet()" style="background: var(--neon-red); color: #000; border: none; padding: 4px 10px; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; cursor: pointer;">CONNECT</button>
+                    </div>
+                    <div id="ops-active-address" style="display: none; border: 1px solid var(--neon-green); background: rgba(0, 255, 102, 0.03); padding: 8px 12px; color: var(--neon-green); justify-content: space-between; align-items: center;">
+                        <span>LINKED SIGNER: <span id="ops-signer-address">G...</span></span>
+                        <span>BAL: <span id="ops-signer-balance">0.00</span> XLM</span>
+                    </div>
+
+                    <!-- Input Grid -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label style="color: var(--text-muted); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;">Deposit Collateral</label>
+                            <div style="display: flex; border: 1px solid var(--glass-border); background: #000; margin-top: 4px;">
+                                <input type="number" id="k2-deposit-input" value="100" style="width: 100%; background: transparent; border: none; outline: none; padding: 6px; color: #fff; font-family: var(--font-mono); font-size: 0.75rem;">
+                                <button id="k2-deposit-btn" disabled onclick="handleDeposit()" style="background: transparent; color: var(--text-muted); border: none; border-left: 1px solid var(--glass-border); padding: 0 10px; cursor: pointer; font-weight: bold;">DEP</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="color: var(--text-muted); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;">Borrow Amount</label>
+                            <div style="display: flex; border: 1px solid var(--glass-border); background: #000; margin-top: 4px;">
+                                <input type="number" id="k2-borrow-input" value="50" style="width: 100%; background: transparent; border: none; outline: none; padding: 6px; color: #fff; font-family: var(--font-mono); font-size: 0.75rem;">
+                                <button id="k2-borrow-btn" disabled onclick="handleBorrow()" style="background: transparent; color: var(--text-muted); border: none; border-left: 1px solid var(--glass-border); padding: 0 10px; cursor: pointer; font-weight: bold;">BOR</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Liquidation Input -->
+                    <div>
+                        <label style="color: var(--text-muted); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;">Target Liquidation Address (MEV Opportunity)</label>
+                        <div style="display: flex; border: 1px solid var(--glass-border); background: #000; margin-top: 4px;">
+                            <input type="text" id="k2-liquidate-input" placeholder="G..." style="width: 100%; background: transparent; border: none; outline: none; padding: 6px; color: #fff; font-family: var(--font-mono); font-size: 0.7rem;">
+                            <button id="k2-liquidate-btn" disabled onclick="handleLiquidate()" style="background: transparent; color: var(--neon-red); border: none; border-left: 1px solid var(--glass-border); padding: 0 10px; cursor: pointer; font-weight: bold;">LIQ</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -995,6 +1067,96 @@
         </div>
     </section>
 
+    <!-- Section 5: Tactical API Sniper Hub -->
+    <section class="section-container" id="tactical-api" style="padding-top: 40px; padding-bottom: 60px;">
+        <div class="section-header">
+            <h2 class="section-title">AETERNA <span>TACTICAL API</span></h2>
+            <p class="section-subtitle">Connect your quantitative models directly to the K2 Engine. Zero API rate limits on-chain.</p>
+        </div>
+
+        <div class="glass-panel" style="padding: 40px; background: rgba(3, 3, 5, 0.95); border: 1px solid var(--glass-border);">
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="code" class="w-4 h-4 text-white"></i>
+                &gt;_ CORE INTEGRATION SPECIFICATION
+            </div>
+
+            <!-- Contract IDs -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; font-family: var(--font-mono); font-size: 0.7rem;">
+                <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
+                    <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_KINETIC_ROUTER</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5</div>
+                </div>
+                <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
+                    <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_INCENTIVES_CORE</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH</div>
+                </div>
+                <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
+                    <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_TREASURY_RESERVE</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL</div>
+                </div>
+            </div>
+
+            <!-- Tabs header -->
+            <div style="display: flex; gap: 4px; border-bottom: 1px solid var(--glass-border); padding-bottom: 1px; margin-bottom: 15px; font-family: var(--font-mono); font-size: 0.7rem;">
+                <button onclick="switchTab('tab-curl')" id="btn-tab-curl" style="background: #111; color: var(--neon-green); border: 1px solid var(--glass-border); border-bottom: none; padding: 8px 16px; cursor: pointer; font-weight: bold;">cURL</button>
+                <button onclick="switchTab('tab-rust')" id="btn-tab-rust" style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 8px 16px; cursor: pointer; font-weight: bold;">Rust (Soroban SDK)</button>
+                <button onclick="switchTab('tab-ts')" id="btn-tab-ts" style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 8px 16px; cursor: pointer; font-weight: bold;">TypeScript (Stellar SDK)</button>
+            </div>
+
+            <!-- Tab content -->
+            <div id="tab-curl" class="api-tab-content" style="background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
+<span style="color: #626770;"># Query UserCollateral storage entry directly from Soroban RPC</span>
+curl -X POST https://soroban-testnet.stellar.org \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getLedgerEntries",
+    "params": {
+      "keys": [
+        "AAAAAAAAAAMAAAABAAAAAwAAAAgAAAAQ... (XDR base64 for ContractData UserCollateral)"
+      ]
+    }
+  }'
+            </div>
+
+            <div id="tab-rust" class="api-tab-content" style="display: none; background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
+<span style="color: #626770;">// Invoking K2 Router directly within your WASM contract</span>
+use soroban_sdk::{Env, Address, Symbol};
+
+fn trigger_collateral_deposit(env: Env, router: Address, user: Address, amount: i128) {
+    let client = env.register_contract_client(&router);
+    client.invoke::&lt;()&gt;(&amp;
+        Symbol::new(&amp;env, "deposit_collateral"),
+        &amp;(user, amount)
+    );
+}
+            </div>
+
+            <div id="tab-ts" class="api-tab-content" style="display: none; background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
+<span style="color: #626770;">// Programmatic transaction building with Stellar SDK</span>
+import { TransactionBuilder, Operation, Address, xdr, Networks } from 'stellar-sdk';
+
+const op = Operation.invokeContractFunction({
+  contract: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
+  function: 'deposit_collateral',
+  args: [
+    new Address(userAddress).toScVal(),
+    xdr.ScVal.scvI128(new xdr.Int128Parts({
+      lo: xdr.Uint64.fromString(amount),
+      hi: xdr.Int64.fromString("0")
+    }))
+  ]
+});
+            </div>
+
+            <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); border-top: 1px solid var(--glass-border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Liquidation MEV is open for aggressive arbiters. Real-time event subscription via WebSocket is rate-limit free on-chain.</span>
+                <span style="color: var(--neon-green);">API STATUS: UNRESTRICTED</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <span>© 2026 AETERNA K2 Lending Protocol. Developed by Dimitar Prodromov.</span>
@@ -1004,6 +1166,16 @@
     <!-- Scripts Logic -->
     <script>
         lucide.createIcons();
+
+        // Config addresses
+        const CONTRACT_ADDRESSES = {
+            router: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
+            incentives: 'CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH',
+            treasury: 'CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL'
+        };
+
+        let accountPub = '';
+        let server = new StellarSdk.rpc.Server('https://soroban-testnet.stellar.org');
 
         // 3D Particle Canvas Backdrop
         const canvas = document.getElementById('particle-canvas');
@@ -1082,24 +1254,56 @@
 
         // Live HUD Fluctuations
         setInterval(() => {
-            // TVL slight fluctuation
-            const tvlNode = document.getElementById('hud-tvl');
-            const currentTvl = parseFloat(tvlNode.textContent.replace(/[$,]/g, ''));
-            const newTvl = currentTvl + (Math.random() - 0.5) * 1500;
-            tvlNode.textContent = '$' + Math.round(newTvl).toLocaleString();
+            // TVL slight fluctuation only if not connected to wallet
+            if (!accountPub) {
+                const tvlNode = document.getElementById('hud-tvl');
+                const currentTvl = parseFloat(tvlNode.textContent.replace(/[$,]/g, ''));
+                const newTvl = currentTvl + (Math.random() - 0.5) * 1500;
+                tvlNode.textContent = '$' + Math.round(newTvl).toLocaleString();
+
+                // Health Factor
+                const healthNode = document.getElementById('hud-health');
+                const currentHealth = parseFloat(healthNode.textContent.replace('x', ''));
+                const newHealth = Math.max(1.80, Math.min(1.89, currentHealth + (Math.random() - 0.5) * 0.005));
+                healthNode.textContent = newHealth.toFixed(2) + 'x';
+            }
 
             // TPS spike/drop
             const tpsNode = document.getElementById('hud-tps');
             const currentTps = parseInt(tpsNode.textContent.replace(' tps', ''));
             const newTps = Math.max(800, Math.min(2200, currentTps + Math.round((Math.random() - 0.5) * 60)));
             tpsNode.textContent = newTps.toLocaleString() + ' tps';
-
-            // Health Factor
-            const healthNode = document.getElementById('hud-health');
-            const currentHealth = parseFloat(healthNode.textContent.replace('x', ''));
-            const newHealth = Math.max(1.80, Math.min(1.89, currentHealth + (Math.random() - 0.5) * 0.005));
-            healthNode.textContent = newHealth.toFixed(2) + 'x';
         }, 3000);
+
+        // System Log to Console
+        function logToConsole(msg, type = 'info') {
+            const terminalLog = document.getElementById('terminal-log-container');
+            const logItem = document.createElement('div');
+            logItem.className = 'term-log';
+            
+            let color = '#818790';
+            let tag = 'DAEMON';
+            if (type === 'err') {
+                color = 'var(--neon-red)';
+                tag = 'ERROR';
+            } else if (type === 'success') {
+                color = 'var(--neon-green)';
+                tag = 'SUCCESS';
+            } else if (type === 'warning') {
+                color = 'var(--neon-red)';
+                tag = 'WARNING';
+            }
+            
+            logItem.style.color = color;
+            logItem.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: ${color};">${tag}</span> :: ${msg}`;
+            
+            terminalLog.appendChild(logItem);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+            
+            if (terminalLog.children.length > 25) {
+                terminalLog.removeChild(terminalLog.firstChild);
+            }
+        }
 
         // AutoBroker Sniper Live Feed Log Generator
         const terminalLog = document.getElementById('terminal-log-container');
@@ -1224,6 +1428,335 @@
             }
         }
 
+        // Freighter Wallet integration
+        async function connectWallet() {
+            logToConsole("Checking Freighter connection status...");
+            try {
+                if (typeof window.freighterApi === 'undefined' && typeof window.stellar === 'undefined') {
+                    logToConsole("Freighter wallet extension not detected in browser.", "err");
+                    alert("Freighter wallet extension not detected. Please install Freighter to connect.");
+                    return;
+                }
+                
+                const api = window.freighterApi || window.stellar;
+                const isConnected = await api.isConnected();
+                const isConnectedVal = typeof isConnected === 'boolean' ? isConnected : isConnected?.isConnected;
+                
+                if (!isConnectedVal) {
+                    logToConsole("Freighter wallet is not connected. Install or unlock the extension.", "err");
+                    return;
+                }
+                
+                logToConsole("Requesting wallet access permission...");
+                let access;
+                if (window.freighterApi && window.freighterApi.requestAccess) {
+                    access = await window.freighterApi.requestAccess();
+                } else {
+                    access = await window.stellar.getPublicKey();
+                }
+                
+                const address = typeof access === 'string' ? access : (access?.address || access?.publicKey);
+                
+                if (!address || access?.error) {
+                    throw new Error(access?.error || "User denied access.");
+                }
+                
+                accountPub = address;
+                
+                // Update UI state
+                document.getElementById('status-wallet').classList.add('active');
+                document.getElementById('pulse-wallet').classList.remove('disconnected');
+                document.getElementById('text-wallet').textContent = `CONNECTED: ${accountPub.substring(0, 6)}...${accountPub.substring(50)}`;
+                
+                document.getElementById('ops-connection-banner').style.display = 'none';
+                
+                const activeAddressDiv = document.getElementById('ops-active-address');
+                activeAddressDiv.style.display = 'flex';
+                document.getElementById('ops-signer-address').textContent = accountPub.substring(0, 6) + '...' + accountPub.substring(50);
+                
+                // Unlock buttons
+                document.getElementById('k2-deposit-btn').disabled = false;
+                document.getElementById('k2-deposit-btn').style.color = 'var(--neon-green)';
+                document.getElementById('k2-borrow-btn').disabled = false;
+                document.getElementById('k2-borrow-btn').style.color = '#00f6ff';
+                document.getElementById('k2-liquidate-btn').disabled = false;
+                document.getElementById('k2-liquidate-btn').style.color = 'var(--neon-red)';
+                
+                logToConsole(`Wallet link successfully authorized. Active signer: ${accountPub}`, "success");
+                playCyberClick();
+                
+                // Start querying ledger
+                await fetchAccountDetails();
+            } catch (e) {
+                logToConsole(`Authorization failed: ${e.message}`, "err");
+            }
+        }
+
+        function disconnectWallet() {
+            if (!accountPub) return;
+            accountPub = '';
+            
+            document.getElementById('status-wallet').classList.remove('active');
+            document.getElementById('pulse-wallet').classList.add('disconnected');
+            document.getElementById('text-wallet').textContent = 'NOT CONNECTED';
+            
+            document.getElementById('ops-connection-banner').style.display = 'flex';
+            document.getElementById('ops-active-address').style.display = 'none';
+            
+            // Lock buttons
+            document.getElementById('k2-deposit-btn').disabled = true;
+            document.getElementById('k2-deposit-btn').style.color = 'var(--text-muted)';
+            document.getElementById('k2-borrow-btn').disabled = true;
+            document.getElementById('k2-borrow-btn').style.color = 'var(--text-muted)';
+            document.getElementById('k2-liquidate-btn').disabled = true;
+            document.getElementById('k2-liquidate-btn').style.color = 'var(--text-muted)';
+            
+            // Reset HUD cards back to defaults
+            document.getElementById('hud-tvl').textContent = "$14,845,920";
+            document.getElementById('hud-health').textContent = "1.84x";
+            
+            logToConsole("Wallet link severed. Session locked.", "warning");
+            playCyberClick();
+        }
+        
+        async function toggleWallet() {
+            if (accountPub) {
+                disconnectWallet();
+            } else {
+                await connectWallet();
+            }
+        }
+
+        // Fetch user wallet balance & contract states
+        async function fetchAccountDetails() {
+            if (!accountPub) return;
+            try {
+                // Get native balance
+                try {
+                    const accDetails = await server.getAccount(accountPub);
+                    const bal = accDetails.balances.find(b => b.asset_type === 'native');
+                    document.getElementById('ops-signer-balance').textContent = parseFloat(bal.balance).toFixed(2);
+                } catch(e) {
+                    document.getElementById('ops-signer-balance').textContent = '0.00';
+                }
+
+                // Query K2 contract states
+                logToConsole(`Scanning ledger entries for contract user storage...`);
+                
+                // Get user collateral
+                const colRes = await queryContract('UserCollateral', accountPub);
+                const debtRes = await queryContract('UserDebt', accountPub);
+
+                const collateral = colRes ? parseInt(colRes) : 0;
+                const debt = debtRes ? parseInt(debtRes) : 0;
+                
+                let hf = 0;
+                if (debt > 0) {
+                    hf = collateral / debt;
+                } else if (collateral > 0) {
+                    hf = 99.99; // Safe
+                }
+
+                // Update HUD cards
+                if (collateral > 0 || debt > 0) {
+                    document.getElementById('hud-tvl').textContent = "$" + collateral.toLocaleString();
+                    document.getElementById('hud-health').textContent = hf.toFixed(2) + "x";
+                }
+                
+                logToConsole(`State update: Collateral = ${collateral} XLM, Debt = ${debt} XLM, λ Health = ${hf.toFixed(2)}x`, "success");
+
+            } catch (e) {
+                logToConsole(`Ledger scan failed: ${e.message}`, "err");
+            }
+        }
+
+        // Query contract storage (Simulate transaction view)
+        async function queryContract(dataKeyType, addressStr) {
+            try {
+                const ledgKey = StellarSdk.xdr.LedgerKey.ledgerKeyContractData(
+                    new StellarSdk.xdr.LedgerKeyContractData({
+                        contract: new StellarSdk.Address(CONTRACT_ADDRESSES.router).toScAddress(),
+                        key: StellarSdk.xdr.ScVal.scvVec([
+                            StellarSdk.xdr.ScVal.scvSymbol(dataKeyType),
+                            new StellarSdk.Address(addressStr).toScVal()
+                        ]),
+                        durability: StellarSdk.xdr.ContractDataDurability.instance()
+                    })
+                );
+
+                const ledgerState = await server.getLedgerEntries(ledgKey);
+                if (ledgerState.entries && ledgerState.entries.length > 0) {
+                    const entry = ledgerState.entries[0];
+                    const scVal = StellarSdk.xdr.LedgerEntryData.fromXDR(entry.xdr, 'base64').contractData().val();
+                    return scVal.i128().lo().toString();
+                }
+            } catch (e) {
+                // Suppress and return 0
+            }
+            return '0';
+        }
+
+        async function signTxWithFreighter(xdr) {
+            if (typeof window.freighterApi !== 'undefined' && window.freighterApi.signTransaction) {
+                try {
+                    return await window.freighterApi.signTransaction({
+                        transactionXdr: xdr,
+                        network: 'TESTNET'
+                    });
+                } catch (e) {
+                    if (typeof window.stellar !== 'undefined' && window.stellar.signTransaction) {
+                        return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
+                    }
+                    throw e;
+                }
+            } else if (typeof window.stellar !== 'undefined' && window.stellar.signTransaction) {
+                return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
+            }
+            throw new Error("Freighter signTransaction method not found");
+        }
+
+        // Send contract operations
+        async function sendContractTx(op) {
+            if (!accountPub) {
+                logToConsole("Signer connection missing.", "err");
+                return;
+            }
+
+            try {
+                logToConsole("Requesting ledger state sequence numbers...");
+                const account = await server.getAccount(accountPub);
+                
+                // Prepare TransactionBuilder
+                const tx = new StellarSdk.TransactionBuilder(account, {
+                    fee: '1000',
+                    networkPassphrase: 'Test SDF Network ; September 2015'
+                })
+                .addOperation(op)
+                .setTimeout(30)
+                .build();
+
+                logToConsole("Simulating transaction resources (Soroban RPC)...");
+                let prepared = await server.prepareTransaction(tx);
+
+                logToConsole("Requesting Freighter signature approval...");
+                const signedXdr = await signTxWithFreighter(prepared.toXDR());
+                
+                prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Test SDF Network ; September 2015');
+
+                logToConsole("Submitting transaction payload to ledger...");
+                const sendRes = await server.sendTransaction(prepared);
+                if (sendRes.status === 'ERROR') {
+                    throw new Error(`Transaction rejected by nodes: ${JSON.stringify(sendRes.errorResult)}`);
+                }
+
+                logToConsole(`Transaction submitted. Hash: ${sendRes.hash.substring(0, 10)}...`);
+                logToConsole("Polling for transaction consensus status...");
+                
+                let status = null;
+                for (let i = 0; i < 15; i++) {
+                    await new Promise(r => setTimeout(r, 2000));
+                    status = await server.getTransaction(sendRes.hash);
+                    if (status && status.status !== 'NOT_FOUND' && status.status !== 'PENDING') {
+                        break;
+                    }
+                }
+
+                if (status && status.status === 'SUCCESS') {
+                    logToConsole(`Transaction executed successfully in ledger entry!`, "success");
+                    await fetchAccountDetails();
+                } else {
+                    logToConsole(`Execution timeout or node error: ${status?.status}`, "err");
+                }
+
+            } catch (e) {
+                logToConsole(`Transaction failed: ${e.message}`, "err");
+            }
+        }
+
+        async function handleDeposit() {
+            const val = document.getElementById('k2-deposit-input').value;
+            if (!val || parseFloat(val) <= 0) {
+                logToConsole("Invalid deposit amount.", "err");
+                return;
+            }
+
+            logToConsole(`Building deposit_collateral transaction for ${val} XLM...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'deposit_collateral',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    StellarSdk.xdr.ScVal.scvI128(new StellarSdk.xdr.Int128Parts({
+                        lo: StellarSdk.xdr.Uint64.fromString(val),
+                        hi: StellarSdk.xdr.Int64.fromString("0")
+                    }))
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        async function handleBorrow() {
+            const val = document.getElementById('k2-borrow-input').value;
+            if (!val || parseFloat(val) <= 0) {
+                logToConsole("Invalid borrow amount.", "err");
+                return;
+            }
+
+            logToConsole(`Building borrow transaction for ${val} XLM...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'borrow',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    StellarSdk.xdr.ScVal.scvI128(new StellarSdk.xdr.Int128Parts({
+                        lo: StellarSdk.xdr.Uint64.fromString(val),
+                        hi: StellarSdk.xdr.Int64.fromString("0")
+                    }))
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        async function handleLiquidate() {
+            const target = document.getElementById('k2-liquidate-input').value;
+            if (!target) {
+                logToConsole("Liquidation target address required.", "err");
+                return;
+            }
+
+            logToConsole(`Building liquidate transaction for target: ${target.substring(0, 10)}...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'liquidate',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    new StellarSdk.Address(target).toScVal()
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        // Tactical API Tab switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.api-tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+
+            const tabs = ['curl', 'rust', 'ts'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`btn-tab-${t}`);
+                if (`tab-${t}` === tabId) {
+                    btn.style.background = '#111';
+                    btn.style.color = 'var(--neon-green)';
+                    btn.style.borderColor = 'var(--glass-border)';
+                } else {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'var(--text-muted)';
+                    btn.style.borderColor = 'transparent';
+                }
+            });
+            playCyberClick();
+        }
+
         // Threat Simulator Logic
         let isThreatActive = false;
         function simulateThreat() {
@@ -1232,7 +1765,6 @@
 
             playAlarm();
 
-            // 1. Alert indicators in nav
             const physicsStatus = document.getElementById('status-physics');
             const physicsPulse = document.getElementById('pulse-physics');
             const physicsText = document.getElementById('text-physics');
@@ -1251,11 +1783,9 @@
             sentinelPulse.classList.add('alert');
             sentinelText.textContent = "COGNITIVE_PREDICTIVE_FREEZE ENGAGED";
 
-            // 2. Terminal styling flash
             const terminal = document.querySelector('.terminal-panel');
             terminal.classList.add('threat-state');
 
-            // 3. Inject threat logs
             const log1 = document.createElement('div');
             log1.className = 'term-log';
             log1.style.color = 'var(--neon-red)';
@@ -1272,7 +1802,6 @@
                 playAlarm();
             }, 800);
 
-            // 4. Restore after 4 seconds
             setTimeout(() => {
                 physicsStatus.classList.remove('alert');
                 physicsStatus.classList.add('active');
