@@ -1,0 +1,109 @@
+name: AETERNA Trinity Mainnet Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_reason:
+        description: 'Reason for deployment (Audit log)'
+        required: true
+        type: string
+      network:
+        description: 'Target Network'
+        required: true
+        default: 'mainnet'
+        type: choice
+        options:
+          - mainnet
+          - futurenet
+
+env:
+  SOROBAN_RPC_URL: ${{ secrets.SOROBAN_RPC_URL }}
+  SOROBAN_NETWORK_PASSPHRASE: "Public Global Stellar Network ; September 2015"
+  DEPLOYER_SECRET_KEY: ${{ secrets.DEPLOYER_SECRET_KEY }}
+
+jobs:
+  build-optimize-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install Soroban CLI
+        run: cargo install --locked soroban-cli
+
+      - name: Build Contracts (k2_kinetic_router, k2_incentives, k2_treasury)
+        run: |
+          cd soul/contracts
+          soroban contract build
+
+      - name: Optimize WASM Binaries
+        run: |
+          cd soul/contracts
+          soroban contract optimize --wasm target/wasm32-unknown-unknown/release/k2_kinetic_router.wasm
+          soroban contract optimize --wasm target/wasm32-unknown-unknown/release/k2_incentives.wasm
+          soroban contract optimize --wasm target/wasm32-unknown-unknown/release/k2_treasury.wasm
+
+      - name: Validate Deployment Configuration
+        if: github.event.inputs.network == 'mainnet'
+        run: |
+          if [ -z "$DEPLOYER_SECRET_KEY" ]; then
+            echo "::error::DEPLOYER_SECRET_KEY is required for mainnet deployment"
+            exit 1
+          fi
+          echo "Proceeding with Mainnet Deployment. Reason: ${{ github.event.inputs.deployment_reason }}"
+
+      - name: Deploy k2_kinetic_router
+        id: deploy_router
+        run: |
+          ROUTER_ID=$(soroban contract deploy \
+            --wasm soul/contracts/target/wasm32-unknown-unknown/release/k2_kinetic_router.optimized.wasm \
+            --source $DEPLOYER_SECRET_KEY \
+            --rpc-url $SOROBAN_RPC_URL \
+            --network-passphrase "$SOROBAN_NETWORK_PASSPHRASE")
+          echo "ROUTER_ID=$ROUTER_ID" >> $GITHUB_ENV
+          echo "Deployed k2_kinetic_router: $ROUTER_ID"
+
+      - name: Deploy k2_incentives
+        id: deploy_incentives
+        run: |
+          INCENTIVES_ID=$(soroban contract deploy \
+            --wasm soul/contracts/target/wasm32-unknown-unknown/release/k2_incentives.optimized.wasm \
+            --source $DEPLOYER_SECRET_KEY \
+            --rpc-url $SOROBAN_RPC_URL \
+            --network-passphrase "$SOROBAN_NETWORK_PASSPHRASE")
+          echo "INCENTIVES_ID=$INCENTIVES_ID" >> $GITHUB_ENV
+          echo "Deployed k2_incentives: $INCENTIVES_ID"
+
+      - name: Deploy k2_treasury
+        id: deploy_treasury
+        run: |
+          TREASURY_ID=$(soroban contract deploy \
+            --wasm soul/contracts/target/wasm32-unknown-unknown/release/k2_treasury.optimized.wasm \
+            --source $DEPLOYER_SECRET_KEY \
+            --rpc-url $SOROBAN_RPC_URL \
+            --network-passphrase "$SOROBAN_NETWORK_PASSPHRASE")
+          echo "TREASURY_ID=$TREASURY_ID" >> $GITHUB_ENV
+          echo "Deployed k2_treasury: $TREASURY_ID"
+
+      - name: Generate Deployment Artifact
+        run: |
+          echo "AETERNA TRINITY DEPLOYMENT MANIFEST" > deployment_manifest.txt
+          echo "Timestamp: $(date)" >> deployment_manifest.txt
+          echo "Reason: ${{ github.event.inputs.deployment_reason }}" >> deployment_manifest.txt
+          echo "Network: ${{ github.event.inputs.network }}" >> deployment_manifest.txt
+          echo "----------------------------------------" >> deployment_manifest.txt
+          echo "k2_kinetic_router: $ROUTER_ID" >> deployment_manifest.txt
+          echo "k2_incentives: $INCENTIVES_ID" >> deployment_manifest.txt
+          echo "k2_treasury: $TREASURY_ID" >> deployment_manifest.txt
+          cat deployment_manifest.txt
+
+      - name: Upload Manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: aeterna-deployment-manifest
+          path: deployment_manifest.txt
