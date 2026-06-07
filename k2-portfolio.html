@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K2 Kinetic Protocol | Institutional DeFi on Stellar</title>
+    <link rel="icon" type="image/svg+xml" href="assets/aeterna_logo.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #030712;
+            --surface: rgba(17, 24, 39, 0.7);
+            --surface-hover: rgba(31, 41, 55, 0.85);
+            --border: rgba(255, 255, 255, 0.05);
+            --border-accent: rgba(139, 92, 246, 0.25);
+            --text: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-dim: #6b7280;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+        }
+
+        .outfit { font-family: 'Outfit', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Navigation */
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .brand img {
+            width: 38px; height: 38px;
+            filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+        }
+        .brand span {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+        .brand span span {
+            color: var(--accent-purple);
+        }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #fff; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--border-accent);
+        }
+        .btn-outline:hover {
+            background: rgba(139, 92, 246, 0.05);
+            border-color: var(--accent-purple);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 24px 80px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        .badge {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: #fff;
+            max-width: 800px;
+        }
+        .hero h2 span {
+            background: linear-gradient(90deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 12px;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* Grid Sections */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #fff;
+        }
+        .section-title span {
+            color: var(--accent-cyan);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        @media(max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.2);
+            box-shadow: var(--shadow-glow);
+        }
+        .card-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-purple);
+        }
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        /* Architecture Flow */
+        .arch-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+        @media(max-width: 768px) {
+            .arch-container { grid-template-columns: 1fr; }
+        }
+        .arch-text {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .arch-text h3 {
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: 800;
+        }
+        .arch-text p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .arch-spec {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .spec-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .spec-item i {
+            color: var(--accent-cyan);
+        }
+        .spec-item-text h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .spec-item-text p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Technical Specs Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+        @media(max-width: 768px) {
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        .metric-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .metric-item .num {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #fff, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .metric-item .label {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        /* Call To Action */
+        .cta-section {
+            background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.05));
+            border-top: 1px solid var(--border);
+            padding: 80px 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        .cta-section h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+        .cta-section p {
+            color: var(--text-secondary);
+            max-width: 500px;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <a href="#" class="brand outfit">
+            <img src="assets/aeterna_logo.svg" alt="AETERNA">
+            <span>AETERNA<span>.</span>K2</span>
+        </a>
+        <div class="nav-links">
+            <a href="#architecture" class="nav-link">Architecture</a>
+            <a href="#contracts" class="nav-link">Smart Contracts</a>
+            <a href="#specs" class="nav-link">Technical Specs</a>
+            <a href="k2-router.html" class="btn btn-outline">Launch App</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <span class="badge">Next-Gen Stellar/Soroban DeFi</span>
+        <h2 class="outfit">Liquid Lending Architecture with <span>Zero Friction</span></h2>
+        <p>A suite of high-performance, resource-safe smart contracts implementing deterministic lending, credit expansion, and collateral liquidation built on WebAssembly.</p>
+        <div class="hero-actions">
+            <a href="k2-router.html" class="btn btn-primary"><i data-lucide="play"></i> Open Live Portal</a>
+            <a href="#architecture" class="btn btn-outline">Explore Protocol</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section-container" id="contracts">
+        <h2 class="section-title outfit">The <span>Core Contracts</span> Suite</h2>
+        <div class="features-grid">
+            <!-- Router -->
+            <div class="card">
+                <div class="card-icon"><i data-lucide="shuffle"></i></div>
+                <h3 class="outfit">K2 Kinetic Router</h3>
+                <p>Manages smart routing of assets, deposits of collateral assets, credit allocation checks, and triggers undercollateralized liquidations. Implements strict limit checks to enforce network safety.</p>
+            </div>
+            <!-- Incentives -->
+            <div class="card">
+                <div class="card-icon"><i data-lucide="award"></i></div>
+                <h3 class="outfit">K2 Incentives</h3>
+                <p>Distributes protocol reward tokens dynamically based on total locked value (TVL), borrowing rates, and user participation indices. Aligns liquidity providers with network health.</p>
+            </div>
+            <!-- Treasury -->
+            <div class="card">
+                <div class="card-icon"><i data-lucide="shield-check"></i></div>
+                <h3 class="outfit">K2 Treasury Vault</h3>
+                <p>Acts as the secure vault for all protocol reserve assets. Protects funds through multi-sig governance structures, absolute vault isolation, and secure programmatic withdraw rules.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="section-container" id="architecture">
+        <h2 class="section-title outfit">System <span>Architecture</span></h2>
+        <div class="arch-container">
+            <div class="arch-text">
+                <h3 class="outfit">Ports & Adapters Model</h3>
+                <p>Designed with strict domain isolation. The K2 Lending core logic has no direct coupling with specific blockchain state, enabling deterministic mathematical evaluation.</p>
+                <p>Pluggable Soroban and Stellar RPC adapters hook into standard ports, allowing seamless network transitions and local testing integration.</p>
+            </div>
+            <div class="arch-spec">
+                <div class="spec-item">
+                    <i data-lucide="check-circle-2"></i>
+                    <div class="spec-item-text">
+                        <h4>WASM Execution</h4>
+                        <p>Compiled to sandboxed WASM binaries ensuring minimal gas overhead and fast verification.</p>
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <i data-lucide="check-circle-2"></i>
+                    <div class="spec-item-text">
+                        <h4>Zero Magic Constants</h4>
+                        <p>All pricing rates, caps, and safety limits are injected dynamically upon initialization.</p>
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <i data-lucide="check-circle-2"></i>
+                    <div class="spec-item-text">
+                        <h4>Mathematical Bounds</h4>
+                        <p>Mathematical calculations use RAY-precision representation (18 decimals) to guarantee zero calculation drift.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Specs Metrics Section -->
+    <section class="section-container" id="specs">
+        <h2 class="section-title outfit">Technical <span>Specifications</span></h2>
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="num mono">1.25x</div>
+                <div class="label">Min Health Factor</div>
+            </div>
+            <div class="metric-item">
+                <div class="num mono">0%</div>
+                <div class="label">Decimal Rounding Error</div>
+            </div>
+            <div class="metric-item">
+                <div class="num mono">&lt; 1s</div>
+                <div class="label">Stellar Block Time</div>
+            </div>
+            <div class="metric-item">
+                <div class="num mono">4.5KB</div>
+                <div class="label">Optimized Router WASM</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <h3 class="outfit">Ready to Deploy Capital?</h3>
+        <p>Access our live Testnet portal to run simulations, deposit collateral, and verify contract execution speed in real-time.</p>
+        <a href="k2-router.html" class="btn btn-primary"><i data-lucide="external-link"></i> Launch Developer Console</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>© 2026 AETERNA K2 Lending Protocol. Developed by Dimitar Prodromov.</span>
+        <span>Stellar Soroban Network Deployment</span>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
