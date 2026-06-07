@@ -682,6 +682,35 @@
             position: relative;
             z-index: 10;
         }
+
+        /* Alert and Threat states */
+        .status-item.alert {
+            color: var(--neon-red) !important;
+            border-color: rgba(255, 0, 51, 0.2) !important;
+            background: rgba(255, 0, 51, 0.01) !important;
+        }
+        
+        .pulse.alert {
+            background-color: var(--neon-red) !important;
+            box-shadow: 0 0 10px var(--neon-red) !important;
+            animation: pulse-alert-animation 1s infinite !important;
+        }
+        
+        @keyframes pulse-alert-animation {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 0, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
+        }
+
+        @keyframes border-flash {
+            0% { border-color: var(--glass-border); }
+            50% { border-color: rgba(255, 0, 51, 0.5); box-shadow: 0 0 20px rgba(255, 0, 51, 0.15); }
+            100% { border-color: var(--glass-border); }
+        }
+
+        .terminal-panel.threat-state {
+            animation: border-flash 1s infinite;
+        }
     </style>
 </head>
 <body>
@@ -699,13 +728,13 @@
             <div class="logo">AETERNA<span>//</span>K2</div>
         </div>
         <div class="status-container">
-            <div class="status-item active">
-                <div class="pulse"></div>
-                ON-CHAIN PHYSICS: MAINNET SECURED
+            <div id="status-physics" class="status-item active">
+                <div id="pulse-physics" class="pulse"></div>
+                ON-CHAIN PHYSICS: <span id="text-physics">MAINNET SECURED</span>
             </div>
-            <div class="status-item active">
-                <div class="pulse" style="animation-delay: 1s;"></div>
-                SENTINEL COGNITION: ACTIVE
+            <div id="status-sentinel" class="status-item active">
+                <div id="pulse-sentinel" class="pulse" style="animation-delay: 1s;"></div>
+                SENTINEL COGNITION: <span id="text-sentinel">ACTIVE</span>
             </div>
         </div>
     </nav>
@@ -717,12 +746,15 @@
         <p class="hero-subtitle">Institutional HFT infrastructure secured by predictive cognitive agents and quantum-resistant Soroban cryptography. The capital vault is sealed.</p>
         
         <div class="cta-container">
-            <a href="#telemetry" class="btn btn-primary">
+            <a href="#telemetry" class="btn btn-primary" onclick="playCyberClick()">
                 <i data-lucide="activity"></i> INITIALIZE TELEMETRY
             </a>
-            <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline" target="_blank" class="btn btn-secondary">
+            <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline" target="_blank" class="btn btn-secondary" onclick="playCyberClick()">
                 <i data-lucide="git-branch"></i> SECURE REPOSITORY SUBSTRATE
             </a>
+            <button class="btn btn-secondary text-red-500 hover:bg-red-950/20" onclick="simulateThreat()" style="border-color: rgba(255, 0, 51, 0.15); border-radius: 0px !important;">
+                <i data-lucide="shield-alert" class="text-red-500"></i> SIMULATE THREAT
+            </button>
         </div>
     </section>
 
@@ -1131,6 +1163,139 @@
             document.getElementById('arb-bar').style.width = Math.max((arbTotal / max) * 100, 1.2) + '%';
             document.getElementById('sol-bar').style.width = Math.max((solTotal / max) * 100, 0.4) + '%';
             document.getElementById('k2-bar').style.width = Math.max((k2Total / max) * 100, 0.05) + '%';
+        }
+
+        // Web Audio API Click synthesizer
+        function playCyberClick() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(2200, audioCtx.currentTime); // high pitch HFT click
+                oscillator.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.02);
+                
+                gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.02);
+            } catch (e) {
+                console.log("Audio not supported or blocked by policy");
+            }
+        }
+
+        // Web Audio API Alarm synthesizer
+        function playAlarm() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // First tone (low beep)
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(120, audioCtx.currentTime);
+                gain1.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start();
+                osc1.stop(audioCtx.currentTime + 0.3);
+
+                // Second tone (slightly delayed high beep)
+                setTimeout(() => {
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.type = 'sawtooth';
+                    osc2.frequency.setValueAtTime(160, audioCtx.currentTime);
+                    gain2.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.start();
+                    osc2.stop(audioCtx.currentTime + 0.3);
+                }, 150);
+            } catch (e) {
+                console.log("Audio alert blocked");
+            }
+        }
+
+        // Threat Simulator Logic
+        let isThreatActive = false;
+        function simulateThreat() {
+            if (isThreatActive) return;
+            isThreatActive = true;
+
+            playAlarm();
+
+            // 1. Alert indicators in nav
+            const physicsStatus = document.getElementById('status-physics');
+            const physicsPulse = document.getElementById('pulse-physics');
+            const physicsText = document.getElementById('text-physics');
+            
+            const sentinelStatus = document.getElementById('status-sentinel');
+            const sentinelPulse = document.getElementById('pulse-sentinel');
+            const sentinelText = document.getElementById('text-sentinel');
+
+            physicsStatus.classList.remove('active');
+            physicsStatus.classList.add('alert');
+            physicsPulse.classList.add('alert');
+            physicsText.textContent = "THREAT DETECTED (LIQUIDITY DRIFT)";
+
+            sentinelStatus.classList.remove('active');
+            sentinelStatus.classList.add('alert');
+            sentinelPulse.classList.add('alert');
+            sentinelText.textContent = "COGNITIVE_PREDICTIVE_FREEZE ENGAGED";
+
+            // 2. Terminal styling flash
+            const terminal = document.querySelector('.terminal-panel');
+            terminal.classList.add('threat-state');
+
+            // 3. Inject threat logs
+            const log1 = document.createElement('div');
+            log1.className = 'term-log';
+            log1.style.color = 'var(--neon-red)';
+            log1.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: var(--neon-red);">WARNING</span> :: WEALTH_SENTINEL DETECTED 14% LIQUIDITY DRIFT IN POOLS`;
+            terminalLog.appendChild(log1);
+
+            setTimeout(() => {
+                const log2 = document.createElement('div');
+                log2.className = 'term-log';
+                log2.style.color = 'var(--neon-red)';
+                log2.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: var(--neon-red);">SHIELD_ENGAGED</span> :: COGNITIVE_PREDICTIVE_FREEZE ACTIVE | ALL VAULTS SEALED`;
+                terminalLog.appendChild(log2);
+                terminalLog.scrollTop = terminalLog.scrollHeight;
+                playAlarm();
+            }, 800);
+
+            // 4. Restore after 4 seconds
+            setTimeout(() => {
+                physicsStatus.classList.remove('alert');
+                physicsStatus.classList.add('active');
+                physicsPulse.classList.remove('alert');
+                physicsText.textContent = "MAINNET SECURED";
+
+                sentinelStatus.classList.remove('alert');
+                sentinelStatus.classList.add('active');
+                sentinelPulse.classList.remove('alert');
+                sentinelText.textContent = "ACTIVE";
+
+                terminal.classList.remove('threat-state');
+
+                const logRestore = document.createElement('div');
+                logRestore.className = 'term-log';
+                logRestore.style.color = 'var(--neon-green)';
+                logRestore.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: var(--neon-green);">SYSTEM_RESTORED</span> :: Threat neutralised. Ledger realigned with 100% parity.`;
+                terminalLog.appendChild(logRestore);
+                terminalLog.scrollTop = terminalLog.scrollHeight;
+                
+                playCyberClick();
+                isThreatActive = false;
+            }, 5000);
         }
 
         // Init values
