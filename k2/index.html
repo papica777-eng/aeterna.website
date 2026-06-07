@@ -12,20 +12,18 @@
            ОНТОЛОГИЧНИ ПРАВИЛА (CSS VARIABLES)
            ========================================= */
         :root {
-            --obsidian: #020204;
-            --surface: #07070a;
-            --surface-glass: rgba(7, 7, 10, 0.6);
-            --surface-hover: rgba(255, 255, 255, 0.02);
+            --obsidian: #010103;
+            --surface: #050508;
+            --surface-glass: rgba(5, 5, 8, 0.7);
+            --surface-hover: rgba(255, 255, 255, 0.015);
             --neon-green: #00ff66;
             --neon-red: #ff0033;
-            --neon-cyan: #00f0ff;
-            --glass-bg: rgba(255, 255, 255, 0.01);
+            --glass-bg: rgba(255, 255, 255, 0.005);
             --glass-border: rgba(255, 255, 255, 0.03);
-            --glass-border-hover: rgba(255, 255, 255, 0.08);
-            --text-main: #e0e2e5;
-            --text-muted: #70757d;
-            --text-dim: #454950;
-            --shadow-glow: 0 0 35px rgba(0, 240, 255, 0.05);
+            --glass-border-hover: rgba(255, 255, 255, 0.07);
+            --text-main: #d1d4dc;
+            --text-muted: #626770;
+            --text-dim: #32353a;
             --font-mono: 'JetBrains Mono', monospace;
         }
 
@@ -34,6 +32,13 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
+            border-radius: 0px !important; /* Налагане на остри, индустриални ръбове */
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.99; }
+            50% { opacity: 1; }
+            100% { opacity: 0.985; }
         }
 
         body, html {
@@ -43,9 +48,7 @@
             color: var(--text-main);
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.02) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(181, 95, 230, 0.02) 0%, transparent 40%);
+            animation: flicker 0.2s infinite;
         }
 
         /* CRT Scanline Overlay */
@@ -57,12 +60,12 @@
             height: 100%;
             background: linear-gradient(
                 rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.15) 50%
+                rgba(0, 0, 0, 0.12) 50%
             );
             background-size: 100% 4px;
             z-index: 9999;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.35;
         }
 
         /* Canvas Backdrop */
@@ -82,12 +85,12 @@
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
-            border-radius: 4px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .glass-panel:hover {
             border-color: var(--glass-border-hover);
+            background: rgba(5, 5, 8, 0.85);
         }
 
         /* =========================================
@@ -104,7 +107,7 @@
             padding: 24px 40px;
             border-bottom: 1px solid var(--glass-border);
             z-index: 100;
-            background: rgba(2, 2, 4, 0.85);
+            background: rgba(1, 1, 3, 0.95);
             backdrop-filter: blur(15px);
         }
 
@@ -115,12 +118,11 @@
         }
 
         .logo-icon {
-            width: 28px;
-            height: 28px;
-            border: 2px solid var(--neon-cyan);
+            width: 24px;
+            height: 24px;
+            border: 1.5px solid #fff;
             transform: rotate(45deg);
-            box-shadow: 0 0 10px var(--neon-cyan);
-            animation: logo-rotate 8s linear infinite;
+            animation: logo-rotate 12s linear infinite;
         }
 
         @keyframes logo-rotate {
@@ -128,16 +130,15 @@
         }
 
         .logo {
-            font-size: 1.15rem;
+            font-size: 1rem;
             font-weight: 900;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             font-family: var(--font-mono);
             color: #fff;
         }
 
         .logo span {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 8px var(--neon-cyan);
+            color: var(--text-muted);
         }
 
         .status-container {
@@ -145,7 +146,7 @@
             align-items: center;
             gap: 24px;
             font-family: var(--font-mono);
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 600;
             letter-spacing: 1.5px;
         }
@@ -154,10 +155,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.01);
+            background: rgba(255, 255, 255, 0.005);
             border: 1px solid var(--glass-border);
             padding: 6px 14px;
-            border-radius: 2px;
         }
 
         .status-item.active {
@@ -165,17 +165,17 @@
         }
 
         .pulse {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background-color: var(--neon-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--neon-green);
-            animation: pulse-animation 2.5s infinite;
+            border-radius: 50% !important; /* Фиксирано кръгче за индикатор */
+            box-shadow: 0 0 8px var(--neon-green);
+            animation: pulse-animation 2s infinite;
         }
 
         @keyframes pulse-animation {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.8); }
-            70% { box-shadow: 0 0 0 8px rgba(0, 255, 102, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.6); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 255, 102, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
         }
 
@@ -183,8 +183,8 @@
            HERO: ЗАЛАТА НА СУВЕРЕНИТЕТА
            ========================================= */
         .hero-section {
-            height: 85vh;
-            min-height: 550px;
+            height: 82vh;
+            min-height: 500px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -199,15 +199,13 @@
             font-family: var(--font-mono);
             font-size: 0.65rem;
             font-weight: 800;
-            color: var(--neon-cyan);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            background: rgba(0, 240, 255, 0.03);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.01);
             padding: 6px 16px;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             margin-bottom: 24px;
             text-transform: uppercase;
-            border-radius: 2px;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.05);
         }
 
         .hero-title {
@@ -221,15 +219,13 @@
         }
 
         .hero-title span {
-            background: linear-gradient(135deg, #fff 30%, var(--neon-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #8c9099;
         }
 
         .hero-subtitle {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--text-muted);
-            max-width: 620px;
+            max-width: 600px;
             margin-bottom: 48px;
             font-weight: 400;
             line-height: 1.6;
@@ -244,13 +240,12 @@
         .btn {
             font-family: var(--font-mono);
             padding: 18px 36px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 2px;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -259,29 +254,26 @@
 
         .btn-primary {
             background-color: transparent;
-            color: var(--neon-cyan);
-            border: 1px solid var(--neon-cyan);
-            box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.05), 0 0 15px rgba(0, 240, 255, 0.1);
+            color: #fff;
+            border: 1px solid #fff;
         }
 
         .btn-primary:hover {
-            background-color: var(--neon-cyan);
+            background-color: #fff;
             color: var(--obsidian);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
-            background-color: var(--glass-bg);
-            color: var(--text-main);
+            background-color: transparent;
+            color: var(--text-muted);
             border: 1px solid var(--glass-border);
         }
 
         .btn-secondary:hover {
-            background-color: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
             color: #fff;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         /* =========================================
@@ -301,21 +293,20 @@
         }
 
         .section-title {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 900;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
             text-transform: uppercase;
             color: #fff;
             margin-bottom: 12px;
         }
 
         .section-title span {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            color: var(--text-muted);
         }
 
         .section-subtitle {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
             max-width: 500px;
             margin: 0 auto;
@@ -340,6 +331,7 @@
             padding: 30px 24px;
             position: relative;
             overflow: hidden;
+            background: rgba(3, 3, 5, 0.9);
         }
 
         .hud-card::before {
@@ -348,16 +340,15 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-            opacity: 0.3;
+            height: 1.5px;
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .hud-label {
             font-family: var(--font-mono);
             font-size: 0.65rem;
             font-weight: 700;
-            letter-spacing: 2.5px;
+            letter-spacing: 2px;
             color: var(--text-muted);
             text-transform: uppercase;
             margin-bottom: 12px;
@@ -367,15 +358,15 @@
         }
 
         .hud-value {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 900;
             color: #fff;
-            letter-spacing: -1.5px;
+            letter-spacing: -1px;
         }
 
         .hud-trend {
             font-family: var(--font-mono);
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             margin-top: 8px;
             display: flex;
             align-items: center;
@@ -387,14 +378,13 @@
 
         /* Sniper Activity Feed Terminal */
         .terminal-panel {
-            border-radius: 4px;
             overflow: hidden;
             border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
         }
 
         .terminal-header {
-            background: #060608;
+            background: #040406;
             padding: 14px 20px;
             display: flex;
             justify-content: space-between;
@@ -406,8 +396,8 @@
             font-family: var(--font-mono);
             font-size: 0.68rem;
             font-weight: 800;
-            color: var(--neon-cyan);
-            letter-spacing: 2.5px;
+            color: #fff;
+            letter-spacing: 2px;
             text-transform: uppercase;
             display: flex;
             align-items: center;
@@ -420,24 +410,24 @@
         }
 
         .term-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #30343a;
+            width: 6px;
+            height: 6px;
+            background: #202225;
+            border-radius: 50% !important; /* Фиксирано кръгче */
         }
 
         .term-dot.red { background: var(--neon-red); }
         .term-dot.green { background: var(--neon-green); }
 
         .terminal-body {
-            background: #030305;
+            background: #020204;
             height: 220px;
             padding: 20px;
             overflow-y: auto;
             font-family: var(--font-mono);
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             line-height: 1.8;
-            color: #88909c;
+            color: #818790;
         }
 
         .term-log {
@@ -452,7 +442,7 @@
         }
 
         .term-ts { color: var(--text-dim); }
-        .term-tag { color: var(--neon-cyan); font-weight: bold; }
+        .term-tag { color: #8c9099; font-weight: bold; }
         .term-profit { color: var(--neon-green); font-weight: bold; }
         .term-hash { color: var(--text-muted); }
 
@@ -471,24 +461,23 @@
 
         .tech-card {
             padding: 40px 30px;
-            position: relative;
+            background: rgba(3, 3, 5, 0.9);
         }
 
         .tech-card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 2px;
-            background: rgba(0, 240, 255, 0.02);
-            border: 1px solid rgba(0, 240, 255, 0.1);
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.005);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--neon-cyan);
+            color: #fff;
             margin-bottom: 24px;
         }
 
         .tech-card h3 {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: #fff;
             margin-bottom: 16px;
@@ -497,7 +486,7 @@
         }
 
         .tech-card p {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             line-height: 1.6;
         }
@@ -518,13 +507,14 @@
 
         .matrix-table-wrapper {
             padding: 30px;
+            background: rgba(3, 3, 5, 0.9);
         }
 
         .matrix-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
         }
 
         .matrix-table th, .matrix-table td {
@@ -534,7 +524,7 @@
 
         .matrix-table th {
             font-family: var(--font-mono);
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -550,8 +540,8 @@
         }
 
         .matrix-table .hl {
-            color: var(--neon-cyan);
-            font-weight: 600;
+            color: #fff;
+            font-weight: 700;
         }
 
         .calc-panel {
@@ -560,6 +550,7 @@
             grid-template-columns: 1fr 1.2fr;
             gap: 40px;
             align-items: center;
+            background: rgba(3, 3, 5, 0.9);
         }
 
         @media(max-width: 576px) {
@@ -573,10 +564,9 @@
         }
 
         .slider-box {
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.4);
             border: 1px solid var(--glass-border);
             padding: 20px;
-            border-radius: 2px;
         }
 
         .slider-header {
@@ -589,12 +579,12 @@
         }
 
         .slider-header span:first-child { color: var(--text-muted); }
-        .slider-header span:last-child { color: var(--neon-cyan); }
+        .slider-header span:last-child { color: #fff; }
 
         #tx-slider {
             -webkit-appearance: none;
             width: 100%;
-            height: 4px;
+            height: 2px;
             background: rgba(255, 255, 255, 0.05);
             outline: none;
             cursor: pointer;
@@ -602,20 +592,18 @@
 
         #tx-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 10px var(--neon-cyan);
+            width: 12px;
+            height: 12px;
+            background: #fff;
             transition: transform 0.1s;
         }
 
         #tx-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.25);
+            transform: scale(1.2);
         }
 
         .savings-box {
-            border-left: 2px solid var(--neon-cyan);
+            border-left: 2px solid #fff;
             padding-left: 20px;
         }
 
@@ -651,18 +639,17 @@
         .bar-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
         }
 
         .bar-label-name { color: var(--text-muted); }
         .bar-label-val { color: #fff; font-family: var(--font-mono); }
-        .bar-label-val.hl { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4); }
+        .bar-label-val.hl { color: var(--neon-green); font-weight: 800; text-shadow: 0 0 8px rgba(0, 255, 102, 0.3); }
 
         .bar-track {
-            height: 6px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 2px;
+            height: 4px;
+            background: rgba(255,255,255,0.01);
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.01);
         }
@@ -673,10 +660,10 @@
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .bar-fill.eth { background: #3c3c3d; }
-        .bar-fill.arb { background: #28a0f0; }
-        .bar-fill.sol { background: #14f195; }
-        .bar-fill.k2 { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
+        .bar-fill.eth { background: #222; }
+        .bar-fill.arb { background: #444; }
+        .bar-fill.sol { background: #666; }
+        .bar-fill.k2 { background: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
 
         /* =========================================
            FOOTER
@@ -689,7 +676,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--text-dim);
             font-family: var(--font-mono);
             position: relative;
@@ -731,10 +718,10 @@
         
         <div class="cta-container">
             <a href="#telemetry" class="btn btn-primary">
-                <i data-lucide="activity"></i> Enter K2 Dashboard
+                <i data-lucide="activity"></i> INITIALIZE TELEMETRY
             </a>
             <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline" target="_blank" class="btn btn-secondary">
-                <i data-lucide="git-branch"></i> Git Repository
+                <i data-lucide="git-branch"></i> SECURE REPOSITORY SUBSTRATE
             </a>
         </div>
     </section>
@@ -742,16 +729,16 @@
     <!-- Section 2: Live HUD Telemetry -->
     <section class="section-container" id="telemetry">
         <div class="section-header">
-            <h2 class="section-title">Live HUD <span>Telemetry</span></h2>
-            <p class="section-subtitle">Real-time statistics synchronized directly from the on-chain ledger modules.</p>
+            <h2 class="section-title">ON-CHAIN PHYSICS <span>TELEMETRY</span></h2>
+            <p class="section-subtitle">Telemetry matrix synchronized directly from the on-chain ledger modules.</p>
         </div>
 
         <div class="hud-grid">
             <!-- TVL Card -->
             <div class="hud-card glass-panel">
                 <div class="hud-label">
-                    <span>Total Value Locked</span>
-                    <i data-lucide="lock" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                    <span>COLLATERAL RESERVE SUBSTRATE (USDC)</span>
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-white"></i>
                 </div>
                 <div class="hud-value mono" id="hud-tvl">$14,845,920</div>
                 <div class="hud-trend up">
@@ -763,8 +750,8 @@
             <!-- Health Factor Card -->
             <div class="hud-card glass-panel">
                 <div class="hud-label">
-                    <span>Global Health Factor</span>
-                    <i data-lucide="heart" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                    <span>SYSTEMIC HEALTH VECTOR (λ)</span>
+                    <i data-lucide="heart" class="w-3.5 h-3.5 text-white"></i>
                 </div>
                 <div class="hud-value mono" id="hud-health">1.84x</div>
                 <div class="hud-trend up">
@@ -776,8 +763,8 @@
             <!-- Throughput Card -->
             <div class="hud-card glass-panel">
                 <div class="hud-label">
-                    <span>System Throughput</span>
-                    <i data-lucide="zap" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                    <span>QUANTUM THREAD PROCESS (TPS)</span>
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
                 </div>
                 <div class="hud-value mono" id="hud-tps">1,245 tps</div>
                 <div class="hud-trend up">
@@ -789,8 +776,8 @@
             <!-- MEV Rate Card -->
             <div class="hud-card glass-panel">
                 <div class="hud-label">
-                    <span>Active Liquidation yield</span>
-                    <i data-lucide="coins" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                    <span>REALIZED ARBITRAGE MARGIN (MEV)</span>
+                    <i data-lucide="coins" class="w-3.5 h-3.5 text-white"></i>
                 </div>
                 <div class="hud-value mono" id="hud-yield">14.82%</div>
                 <div class="hud-trend up">
@@ -804,7 +791,7 @@
         <div class="terminal-panel">
             <div class="terminal-header">
                 <div class="terminal-title">
-                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-white"></i>
                     AutoBrokerDaemon :: Live Sniper Kill Log
                 </div>
                 <div class="terminal-controls">
@@ -820,10 +807,10 @@
         </div>
     </section>
 
-    <!-- Section 3: The Tech Moat -->
+    <!-- Section 3: Deterministic Architectural Shield -->
     <section class="section-container" id="tech-moat">
         <div class="section-header">
-            <h2 class="section-title">The Tech <span>Moat</span></h2>
+            <h2 class="section-title">DETERMINISTIC <span>ARCHITECTURAL SHIELD</span></h2>
             <p class="section-subtitle">Three layers of absolute security engineered to withstand any market anomalies.</p>
         </div>
 
@@ -857,18 +844,18 @@
         </div>
     </section>
 
-    <!-- Section 4: Incentives & Cost Simulator -->
+    <!-- Section 4: Yield & Cost Model -->
     <section class="section-container" id="incentives">
         <div class="section-header">
-            <h2 class="section-title">Yield & <span>Cost Model</span></h2>
+            <h2 class="section-title">ECONOMIC <span>EFFICIENCY ENGINE</span></h2>
             <p class="section-subtitle">Comparing the economic scalability of K2 against EVM-based networks.</p>
         </div>
 
         <div class="split-grid">
             <!-- MEV Redistribution Table -->
             <div class="matrix-table-wrapper glass-panel">
-                <div style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; color: var(--neon-cyan); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
-                    MEV Profit Redistribution Matrix
+                <div style="font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                    MEV PROFIT REDISTRIBUTION CORE
                 </div>
                 <table class="matrix-table">
                     <thead>
@@ -906,8 +893,8 @@
             <!-- Interactive Cost Simulator Panel -->
             <div class="calc-panel glass-panel">
                 <div class="calc-settings">
-                    <div style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; color: var(--neon-cyan); letter-spacing: 2px; text-transform: uppercase;">
-                        Transaction Simulator
+                    <div style="font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase;">
+                        TRANSACTION COST EMULATOR
                     </div>
                     <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
                         Simulate transaction volumes to visualize cost metrics across leading blockchain runtimes.
@@ -915,14 +902,14 @@
                     
                     <div class="slider-box">
                         <div class="slider-header">
-                            <span>Monthly Volume:</span>
+                            <span>MONTHLY VOLUME EMULATED:</span>
                             <span id="volume-val">1,000,000 txs</span>
                         </div>
                         <input type="range" id="tx-slider" min="10000" max="10000000" step="10000" value="1000000" oninput="updateSimulator(this.value)">
                     </div>
 
                     <div class="savings-box">
-                        <div class="savings-label">Projected Annual Savings:</div>
+                        <div class="savings-label">REALIZED NET DIFFERENTIAL SAVINGS:</div>
                         <div class="savings-amount mono" id="savings-val">$14,999,990</div>
                     </div>
                 </div>
@@ -1016,7 +1003,7 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
                 ctx.fill();
             }
         }
@@ -1036,7 +1023,7 @@
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.05 * (1 - dist / 120)})`;
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.015 * (1 - dist / 120)})`;
                         ctx.lineWidth = 0.8;
                         ctx.stroke();
                     }
