@@ -313,6 +313,299 @@
             font-weight: 700;
         }
 
+        /* Comparison Tabs */
+        .comparison-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .tab-btn {
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+        }
+        .tab-btn:hover {
+            border-color: var(--border-accent);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+        .tab-content.active-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cost Calculator */
+        .calculator-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: 40px;
+            align-items: center;
+            box-shadow: var(--shadow-glow);
+        }
+        @media(max-width: 768px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+                padding: 24px;
+            }
+        }
+        .calc-control {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .calc-control h3 {
+            font-size: 1.6rem;
+            color: #fff;
+            font-weight: 800;
+        }
+        .calc-control p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .slider-wrapper {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .slider-labels span:first-child {
+            color: var(--text-secondary);
+        }
+        .slider-labels span:last-child {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+        #tx-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            cursor: pointer;
+        }
+        #tx-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+            transition: transform 0.1s;
+        }
+        #tx-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+        .saving-highlight {
+            border-left: 3px solid var(--accent-cyan);
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .saving-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-dim);
+            font-weight: 700;
+        }
+        .saving-amount {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #22d3ee, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 4px;
+        }
+
+        .calc-results {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .network-bar-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .network-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .network-name {
+            color: var(--text-secondary);
+        }
+        .network-cost {
+            color: #fff;
+        }
+        .network-cost.highlight {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+            font-weight: 800;
+        }
+        .bar-bg {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bar-fill.eth { background: #3c3c3d; box-shadow: 0 0 10px rgba(60, 60, 61, 0.3); }
+        .bar-fill.arb { background: #28a0f0; box-shadow: 0 0 10px rgba(40, 160, 240, 0.3); }
+        .bar-fill.sol { background: #14f195; box-shadow: 0 0 10px rgba(20, 241, 149, 0.3); }
+        .bar-fill.k2 { background: var(--gradient-primary); box-shadow: 0 0 12px rgba(139, 92, 246, 0.5); }
+        .k2-row {
+            background: rgba(139, 92, 246, 0.03);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        /* Comparison Table */
+        .matrix-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            overflow-x: auto;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+        .comparison-table td {
+            color: var(--text-secondary);
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .comparison-table .highlight-col {
+            background: rgba(139, 92, 246, 0.03);
+            color: #fff;
+            font-weight: 500;
+            border-left: 1px solid rgba(139, 92, 246, 0.1);
+            border-right: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .comparison-table th.highlight-col {
+            background: rgba(139, 92, 246, 0.07);
+            border-top: 2px solid var(--accent-purple);
+        }
+        .color-green {
+            color: #10b981 !important;
+        }
+        .color-red {
+            color: #ef4444 !important;
+        }
+
+        /* Security Grid */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        @media(max-width: 768px) {
+            .security-grid { grid-template-columns: 1fr; }
+        }
+        .security-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+        .security-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.2);
+            box-shadow: var(--shadow-glow);
+        }
+        .sec-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            background: rgba(6, 182, 212, 0.08);
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+        }
+        .security-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .security-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
         /* Call To Action */
         .cta-section {
             background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.05));
@@ -357,8 +650,9 @@
             <span>AETERNA<span>.</span>K2</span>
         </a>
         <div class="nav-links">
-            <a href="#architecture" class="nav-link">Architecture</a>
             <a href="#contracts" class="nav-link">Smart Contracts</a>
+            <a href="#architecture" class="nav-link">Architecture</a>
+            <a href="#comparison" class="nav-link">Market Comparison</a>
             <a href="#specs" class="nav-link">Technical Specs</a>
             <a href="k2-router.html" class="btn btn-outline">Launch App</a>
         </div>
@@ -435,6 +729,159 @@
         </div>
     </section>
 
+    <!-- Competitive Edge Section -->
+    <section class="section-container" id="comparison">
+        <h2 class="section-title outfit">Market <span>Superiority</span> Matrix</h2>
+        
+        <!-- Interactive Tabs -->
+        <div class="comparison-tabs">
+            <button id="btn-economics" class="tab-btn active" onclick="switchTab('economics')">
+                <i data-lucide="calculator"></i> Economic Efficiency
+            </button>
+            <button id="btn-matrix" class="tab-btn" onclick="switchTab('matrix')">
+                <i data-lucide="table"></i> Competitive Matrix
+            </button>
+            <button id="btn-security" class="tab-btn" onclick="switchTab('security')">
+                <i data-lucide="shield-check"></i> Security Architecture
+            </button>
+        </div>
+
+        <!-- Tab 1: Economic Simulator -->
+        <div id="tab-economics" class="tab-content active-content">
+            <div class="calculator-container">
+                <div class="calc-control">
+                    <h3 class="outfit">Transaction Cost Simulator</h3>
+                    <p>Select your projected monthly transaction volume to see the dramatic cost difference between K2 and EVM-based networks.</p>
+                    
+                    <div class="slider-wrapper">
+                        <div class="slider-labels">
+                            <span>Volume:</span>
+                            <span id="volume-display" class="mono">1,000,000 txs</span>
+                        </div>
+                        <input type="range" id="tx-slider" min="10000" max="10000000" step="10000" value="1000000" oninput="updateCalculator(this.value)">
+                    </div>
+
+                    <div class="saving-highlight">
+                        <div class="saving-title">Projected Annual Savings with K2:</div>
+                        <div id="savings-value" class="saving-amount outfit">$14,999,990</div>
+                    </div>
+                </div>
+
+                <div class="calc-results">
+                    <!-- Ethereum -->
+                    <div class="network-bar-row">
+                        <div class="network-info">
+                            <span class="network-name">Ethereum Mainnet</span>
+                            <span id="eth-cost" class="network-cost mono">$15,000,000</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div id="eth-bar" class="bar-fill eth" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <!-- Arbitrum -->
+                    <div class="network-bar-row">
+                        <div class="network-info">
+                            <span class="network-name">Arbitrum L2 Rollup</span>
+                            <span id="arb-cost" class="network-cost mono">$150,000</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div id="arb-bar" class="bar-fill arb" style="width: 1.0%;"></div>
+                        </div>
+                    </div>
+                    <!-- Solana -->
+                    <div class="network-bar-row">
+                        <div class="network-info">
+                            <span class="network-name">Solana L1</span>
+                            <span id="sol-cost" class="network-cost mono">$3,000</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div id="sol-bar" class="bar-fill sol" style="width: 0.1%;"></div>
+                        </div>
+                    </div>
+                    <!-- K2 Soroban -->
+                    <div class="network-bar-row k2-row">
+                        <div class="network-info">
+                            <span class="network-name">K2 (Stellar/Soroban)</span>
+                            <span id="k2-cost" class="network-cost mono highlight">$10</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div id="k2-bar" class="bar-fill k2" style="width: 0.0001%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Comparison Matrix -->
+        <div id="tab-matrix" class="tab-content">
+            <div class="matrix-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th class="highlight-col">K2 (Soroban)</th>
+                            <th>Ethereum EVM</th>
+                            <th>Arbitrum L2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Base Fee</strong></td>
+                            <td class="highlight-col color-green">Sub-millicent (~$0.00001)</td>
+                            <td class="color-red">High Volatile (~$15.00)</td>
+                            <td>Moderate (~$0.15)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>VM Sandbox Model</strong></td>
+                            <td class="highlight-col color-green">WASM sandboxing with explicit inputs</td>
+                            <td class="color-red">EVM bytecode, implicit state mutation</td>
+                            <td>EVM compatible sandboxing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reentrancy Vectors</strong></td>
+                            <td class="highlight-col color-green">Non-existent (no dynamic cross-calls)</td>
+                            <td class="color-red">High Risk (Vulnerable to reentrancy)</td>
+                            <td class="color-red">High Risk (Inherited EVM structure)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Memory Optimization</strong></td>
+                            <td class="highlight-col color-green">Rust-enforced zero-copy / mmap ABI</td>
+                            <td class="color-red">Unoptimized stack/memory operations</td>
+                            <td>Slightly optimized L2 stack</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Size Footprint</strong></td>
+                            <td class="highlight-col color-green">~4.5KB compiled WASM</td>
+                            <td>200KB+ compiled bytecode</td>
+                            <td>150KB+ compiled bytecode</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 3: Security Architecture -->
+        <div id="tab-security" class="tab-content">
+            <div class="security-grid">
+                <div class="security-card">
+                    <div class="sec-icon"><i data-lucide="shield-check"></i></div>
+                    <h4 class="outfit">Reentrancy Shield</h4>
+                    <p>Soroban's architecture completely prevents dynamic cross-contract execution loops. Contracts cannot dynamically call other contracts in a way that allows re-entering a function prior to state update, eliminating the vector responsible for 80% of EVM exploits.</p>
+                </div>
+                <div class="security-card">
+                    <div class="sec-icon"><i data-lucide="binary"></i></div>
+                    <h4 class="outfit">Deterministic Gas Bounds</h4>
+                    <p>Gas constraints and resource footprints (CPU instructions, memory pages) are strictly validated before execution. There are no dynamic "out-of-gas" surprises or transaction frontrunning via gas price manipulation.</p>
+                </div>
+                <div class="security-card">
+                    <div class="sec-icon"><i data-lucide="lock"></i></div>
+                    <h4 class="outfit">State Isolation</h4>
+                    <p>Contract data storage is explicitly declared in ports. Adapters map resources statically, which guarantees that external dependencies cannot mutate the internal state ledger without authorization.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Technical Specs Metrics Section -->
     <section class="section-container" id="specs">
         <h2 class="section-title outfit">Technical <span>Specifications</span></h2>
@@ -473,6 +920,72 @@
 
     <script>
         lucide.createIcons();
+
+        // Switch Tabs
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active-content');
+            });
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show target tab content
+            const targetContent = document.getElementById('tab-' + tabId);
+            if (targetContent) {
+                targetContent.classList.add('active-content');
+            }
+            // Activate target button
+            const targetBtn = document.getElementById('btn-' + tabId);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+        }
+
+        // Calculator Logic
+        function updateCalculator(volume) {
+            const formattedVolume = Number(volume).toLocaleString();
+            document.getElementById('volume-display').textContent = formattedVolume + ' txs';
+
+            // Constants for calculation
+            const ethFee = 15.00;
+            const arbFee = 0.15;
+            const solFee = 0.003;
+            const k2Fee = 0.00001;
+
+            const ethTotal = volume * ethFee;
+            const arbTotal = volume * arbFee;
+            const solTotal = volume * solFee;
+            const k2Total = volume * k2Fee;
+
+            // Update text elements
+            document.getElementById('eth-cost').textContent = '$' + Math.round(ethTotal).toLocaleString();
+            document.getElementById('arb-cost').textContent = '$' + Math.round(arbTotal).toLocaleString();
+            document.getElementById('sol-cost').textContent = '$' + Math.round(solTotal).toLocaleString();
+            document.getElementById('k2-cost').textContent = '$' + k2Total.toFixed(2);
+
+            const savings = ethTotal - k2Total;
+            document.getElementById('savings-value').textContent = '$' + Math.round(savings).toLocaleString();
+
+            // Calculate percentage width for visual bars
+            const maxVal = ethTotal;
+            const ethPct = 100;
+            const arbPct = Math.max((arbTotal / maxVal) * 100, 1);
+            const solPct = Math.max((solTotal / maxVal) * 100, 0.1);
+            const k2Pct = Math.max((k2Total / maxVal) * 100, 0.01);
+
+            document.getElementById('eth-bar').style.width = ethPct + '%';
+            document.getElementById('arb-bar').style.width = arbPct + '%';
+            document.getElementById('sol-bar').style.width = solPct + '%';
+            document.getElementById('k2-bar').style.width = k2Pct + '%';
+        }
+
+        // Initialize calculator values on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCalculator(1000000);
+        });
     </script>
 </body>
 </html>

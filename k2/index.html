@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA | K2 Kinetic Terminal</title>
+    <!-- Институционална Типография и Моноспейс -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* =========================================
+           ОНТОЛОГИЧНИ ПРАВИЛА (CSS VARIABLES)
+           ========================================= */
+        :root {
+            --obsidian: #020204;
+            --surface: #07070a;
+            --surface-glass: rgba(7, 7, 10, 0.6);
+            --surface-hover: rgba(255, 255, 255, 0.02);
+            --neon-green: #00ff66;
+            --neon-red: #ff0033;
+            --neon-cyan: #00f0ff;
+            --glass-bg: rgba(255, 255, 255, 0.01);
+            --glass-border: rgba(255, 255, 255, 0.03);
+            --glass-border-hover: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e2e5;
+            --text-muted: #70757d;
+            --text-dim: #454950;
+            --shadow-glow: 0 0 35px rgba(0, 240, 255, 0.05);
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.02) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(181, 95, 230, 0.02) 0%, transparent 40%);
+        }
+
+        /* CRT Scanline Overlay */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.15) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Canvas Backdrop */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Glassmorphic Panel */
+        .glass-panel {
+            background: var(--surface-glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-panel:hover {
+            border-color: var(--glass-border-hover);
+        }
+
+        /* =========================================
+           НАВИГАЦИЯ И ЖИВ СТАТУС
+           ========================================= */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            background: rgba(2, 2, 4, 0.85);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--neon-cyan);
+            transform: rotate(45deg);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            animation: logo-rotate 8s linear infinite;
+        }
+
+        @keyframes logo-rotate {
+            100% { transform: rotate(405deg); }
+        }
+
+        .logo {
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: 5px;
+            font-family: var(--font-mono);
+            color: #fff;
+        }
+
+        .logo span {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--glass-border);
+            padding: 6px 14px;
+            border-radius: 2px;
+        }
+
+        .status-item.active {
+            color: var(--neon-green);
+        }
+
+        .pulse {
+            width: 6px;
+            height: 6px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: pulse-animation 2.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.8); }
+            70% { box-shadow: 0 0 0 8px rgba(0, 255, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
+        }
+
+        /* =========================================
+           HERO: ЗАЛАТА НА СУВЕРЕНИТЕТА
+           ========================================= */
+        .hero-section {
+            height: 85vh;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            background: rgba(0, 240, 255, 0.03);
+            padding: 6px 16px;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.05);
+        }
+
+        .hero-title {
+            font-size: 4.8rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #fff 30%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 620px;
+            margin-bottom: 48px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Институционални Бутони */
+        .cta-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            padding: 18px 36px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: transparent;
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.05), 0 0 15px rgba(0, 240, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--neon-cyan);
+            color: var(--obsidian);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--glass-bg);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           ЖИВАТА ТЕЛЕМЕТРИЯ (LIVE HUD)
+           ========================================= */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .section-title span {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media(max-width: 992px) {
+            .hud-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media(max-width: 576px) {
+            .hud-grid { grid-template-columns: 1fr; }
+        }
+
+        .hud-card {
+            padding: 30px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hud-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            opacity: 0.3;
+        }
+
+        .hud-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hud-value {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1.5px;
+        }
+
+        .hud-trend {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hud-trend.up { color: var(--neon-green); }
+        .hud-trend.down { color: var(--neon-red); }
+
+        /* Sniper Activity Feed Terminal */
+        .terminal-panel {
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-header {
+            background: #060608;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .terminal-title {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .term-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #30343a;
+        }
+
+        .term-dot.red { background: var(--neon-red); }
+        .term-dot.green { background: var(--neon-green); }
+
+        .terminal-body {
+            background: #030305;
+            height: 220px;
+            padding: 20px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            line-height: 1.8;
+            color: #88909c;
+        }
+
+        .term-log {
+            margin-bottom: 6px;
+            animation: fadeInLog 0.2s ease-out;
+            white-space: nowrap;
+        }
+
+        @keyframes fadeInLog {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .term-ts { color: var(--text-dim); }
+        .term-tag { color: var(--neon-cyan); font-weight: bold; }
+        .term-profit { color: var(--neon-green); font-weight: bold; }
+        .term-hash { color: var(--text-muted); }
+
+        /* =========================================
+           АРХИТЕКТУРНИЯТ РОВ (TECH MOAT)
+           ========================================= */
+        .grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media(max-width: 768px) {
+            .grid-3col { grid-template-columns: 1fr; }
+        }
+
+        .tech-card {
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .tech-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 2px;
+            background: rgba(0, 240, 255, 0.02);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon-cyan);
+            margin-bottom: 24px;
+        }
+
+        .tech-card h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tech-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           K2 INCENTIVES & COST SIMULATOR
+           ========================================= */
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1.9fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media(max-width: 992px) {
+            .split-grid { grid-template-columns: 1fr; }
+        }
+
+        .matrix-table-wrapper {
+            padding: 30px;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        .matrix-table th, .matrix-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .matrix-table th {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .matrix-table td {
+            color: var(--text-main);
+        }
+
+        .matrix-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .matrix-table .hl {
+            color: var(--neon-cyan);
+            font-weight: 600;
+        }
+
+        .calc-panel {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media(max-width: 576px) {
+            .calc-panel { grid-template-columns: 1fr; padding: 24px; }
+        }
+
+        .calc-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .slider-box {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 2px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .slider-header span:first-child { color: var(--text-muted); }
+        .slider-header span:last-child { color: var(--neon-cyan); }
+
+        #tx-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            outline: none;
+            cursor: pointer;
+        }
+
+        #tx-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            transition: transform 0.1s;
+        }
+
+        #tx-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+        }
+
+        .savings-box {
+            border-left: 2px solid var(--neon-cyan);
+            padding-left: 20px;
+        }
+
+        .savings-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            font-weight: 800;
+        }
+
+        .savings-amount {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1.5px;
+        }
+
+        .calc-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bar-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .bar-label-name { color: var(--text-muted); }
+        .bar-label-val { color: #fff; font-family: var(--font-mono); }
+        .bar-label-val.hl { color: var(--neon-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4); }
+
+        .bar-track {
+            height: 6px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.01);
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bar-fill.eth { background: #3c3c3d; }
+        .bar-fill.arb { background: #28a0f0; }
+        .bar-fill.sol { background: #14f195; }
+        .bar-fill.k2 { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CRT Scanline Effect -->
+    <div class="scan-line"></div>
+
+    <!-- Particle Grid Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <nav class="glass-panel">
+        <div class="logo-container">
+            <div class="logo-icon"></div>
+            <div class="logo">AETERNA<span>//</span>K2</div>
+        </div>
+        <div class="status-container">
+            <div class="status-item active">
+                <div class="pulse"></div>
+                ON-CHAIN PHYSICS: MAINNET SECURED
+            </div>
+            <div class="status-item active">
+                <div class="pulse" style="animation-delay: 1s;"></div>
+                SENTINEL COGNITION: ACTIVE
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <span class="hero-badge">TRL 7 Validated System</span>
+        <h1 class="hero-title">Absolute Sovereignty.<br><span>Zero Entropy.</span></h1>
+        <p class="hero-subtitle">Institutional HFT infrastructure secured by predictive cognitive agents and quantum-resistant Soroban cryptography. The capital vault is sealed.</p>
+        
+        <div class="cta-container">
+            <a href="#telemetry" class="btn btn-primary">
+                <i data-lucide="activity"></i> Enter K2 Dashboard
+            </a>
+            <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline" target="_blank" class="btn btn-secondary">
+                <i data-lucide="git-branch"></i> Git Repository
+            </a>
+        </div>
+    </section>
+
+    <!-- Section 2: Live HUD Telemetry -->
+    <section class="section-container" id="telemetry">
+        <div class="section-header">
+            <h2 class="section-title">Live HUD <span>Telemetry</span></h2>
+            <p class="section-subtitle">Real-time statistics synchronized directly from the on-chain ledger modules.</p>
+        </div>
+
+        <div class="hud-grid">
+            <!-- TVL Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>Total Value Locked</span>
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                </div>
+                <div class="hud-value mono" id="hud-tvl">$14,845,920</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>+2.4% vs 24h</span>
+                </div>
+            </div>
+
+            <!-- Health Factor Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>Global Health Factor</span>
+                    <i data-lucide="heart" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                </div>
+                <div class="hud-value mono" id="hud-health">1.84x</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>STABLE MODEL</span>
+                </div>
+            </div>
+
+            <!-- Throughput Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>System Throughput</span>
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                </div>
+                <div class="hud-value mono" id="hud-tps">1,245 tps</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>ZERO-DELAY QUEUE</span>
+                </div>
+            </div>
+
+            <!-- MEV Rate Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>Active Liquidation yield</span>
+                    <i data-lucide="coins" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                </div>
+                <div class="hud-value mono" id="hud-yield">14.82%</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>MEV INJECTION</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sniper Activity Feed Terminal Console -->
+        <div class="terminal-panel">
+            <div class="terminal-header">
+                <div class="terminal-title">
+                    <i data-lucide="terminal" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                    AutoBrokerDaemon :: Live Sniper Kill Log
+                </div>
+                <div class="terminal-controls">
+                    <span class="term-dot red"></span>
+                    <span class="term-dot"></span>
+                    <span class="term-dot green"></span>
+                </div>
+            </div>
+            <div class="terminal-body" id="terminal-log-container">
+                <div class="term-log"><span class="term-ts">[06/07/2026 22:58:00]</span> <span class="term-tag">DAEMON_START</span> :: AutoBrokerDaemon initialized on mainnet. Sentinel cognition active.</div>
+                <div class="term-log"><span class="term-ts">[06/07/2026 22:58:05]</span> <span class="term-tag">VERITAS_CHECK</span> :: Substrate SHA-256 binary validation passed. Binary footprint: 4.5KB.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: The Tech Moat -->
+    <section class="section-container" id="tech-moat">
+        <div class="section-header">
+            <h2 class="section-title">The Tech <span>Moat</span></h2>
+            <p class="section-subtitle">Three layers of absolute security engineered to withstand any market anomalies.</p>
+        </div>
+
+        <div class="grid-3col">
+            <!-- WASM Contracts -->
+            <div class="tech-card glass-panel">
+                <div class="tech-card-icon">
+                    <i data-lucide="binary" class="w-6 h-6"></i>
+                </div>
+                <h3>WASM Smart Contracts</h3>
+                <p>K2 is built on Stellar Soroban WebAssembly binaries. Strict formal verification of inputs and non-existent reentrancy loops ensure that the contracts are immune to standard EVM exploit vectors.</p>
+            </div>
+
+            <!-- Off-Chain Cognition -->
+            <div class="tech-card glass-panel">
+                <div class="tech-card-icon">
+                    <i data-lucide="eye" class="w-6 h-6"></i>
+                </div>
+                <h3>Off-Chain Cognition</h3>
+                <p>The Wealth_Sentinel daemon continuously monitors global orderbooks and liquidity depths, dynamically applying defensive pauses milliseconds before black swan crashes occur.</p>
+            </div>
+
+            <!-- Zero Human Intervention -->
+            <div class="tech-card glass-panel">
+                <div class="tech-card-icon">
+                    <i data-lucide="cpu" class="w-6 h-6"></i>
+                </div>
+                <h3>Zero Human Bias</h3>
+                <p>From arbitrage opportunity detection to collateral liquidation, execution is driven purely by decentralized mathematical logic, eliminating delay overhead and human errors.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Incentives & Cost Simulator -->
+    <section class="section-container" id="incentives">
+        <div class="section-header">
+            <h2 class="section-title">Yield & <span>Cost Model</span></h2>
+            <p class="section-subtitle">Comparing the economic scalability of K2 against EVM-based networks.</p>
+        </div>
+
+        <div class="split-grid">
+            <!-- MEV Redistribution Table -->
+            <div class="matrix-table-wrapper glass-panel">
+                <div style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; color: var(--neon-cyan); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                    MEV Profit Redistribution Matrix
+                </div>
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>K2 Soroban</th>
+                            <th>EVM Mainnet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="hl">Gas Model</td>
+                            <td>Deterministic Flat</td>
+                            <td>Auction (Gas War)</td>
+                        </tr>
+                        <tr>
+                            <td class="hl">Reentrancy Risk</td>
+                            <td>None (Protected)</td>
+                            <td>High (Re-entry prone)</td>
+                        </tr>
+                        <tr>
+                            <td class="hl">Admin Controls</td>
+                            <td>2-Step Transfer</td>
+                            <td>Direct Ownership</td>
+                        </tr>
+                        <tr>
+                            <td class="hl">Code Size</td>
+                            <td>4.5KB WASM</td>
+                            <td>200KB+ Bytecode</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Interactive Cost Simulator Panel -->
+            <div class="calc-panel glass-panel">
+                <div class="calc-settings">
+                    <div style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; color: var(--neon-cyan); letter-spacing: 2px; text-transform: uppercase;">
+                        Transaction Simulator
+                    </div>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                        Simulate transaction volumes to visualize cost metrics across leading blockchain runtimes.
+                    </p>
+                    
+                    <div class="slider-box">
+                        <div class="slider-header">
+                            <span>Monthly Volume:</span>
+                            <span id="volume-val">1,000,000 txs</span>
+                        </div>
+                        <input type="range" id="tx-slider" min="10000" max="10000000" step="10000" value="1000000" oninput="updateSimulator(this.value)">
+                    </div>
+
+                    <div class="savings-box">
+                        <div class="savings-label">Projected Annual Savings:</div>
+                        <div class="savings-amount mono" id="savings-val">$14,999,990</div>
+                    </div>
+                </div>
+
+                <div class="calc-bars">
+                    <!-- Ethereum -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">Ethereum Mainnet</span>
+                            <span class="bar-label-val" id="eth-cost">$15,000,000</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill eth" id="eth-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Arbitrum -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">Arbitrum L2</span>
+                            <span class="bar-label-val" id="arb-cost">$150,000</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill arb" id="arb-bar" style="width: 1%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Solana -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">Solana L1</span>
+                            <span class="bar-label-val" id="sol-cost">$3,000</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill sol" id="sol-bar" style="width: 0.1%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- K2 -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">K2 (Soroban)</span>
+                            <span class="bar-label-val hl" id="k2-cost">$10.00</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill k2" id="k2-bar" style="width: 0.01%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>© 2026 AETERNA K2 Lending Protocol. Developed by Dimitar Prodromov.</span>
+        <span>Stellar Soroban Mainnet Secured</span>
+    </footer>
+
+    <!-- Scripts Logic -->
+    <script>
+        lucide.createIcons();
+
+        // 3D Particle Canvas Backdrop
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const maxParticles = 60;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
+                ctx.fill();
+            }
+        }
+        
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Particle());
+        }
+        
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${0.05 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            drawLines();
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Live HUD Fluctuations
+        setInterval(() => {
+            // TVL slight fluctuation
+            const tvlNode = document.getElementById('hud-tvl');
+            const currentTvl = parseFloat(tvlNode.textContent.replace(/[$,]/g, ''));
+            const newTvl = currentTvl + (Math.random() - 0.5) * 1500;
+            tvlNode.textContent = '$' + Math.round(newTvl).toLocaleString();
+
+            // TPS spike/drop
+            const tpsNode = document.getElementById('hud-tps');
+            const currentTps = parseInt(tpsNode.textContent.replace(' tps', ''));
+            const newTps = Math.max(800, Math.min(2200, currentTps + Math.round((Math.random() - 0.5) * 60)));
+            tpsNode.textContent = newTps.toLocaleString() + ' tps';
+
+            // Health Factor
+            const healthNode = document.getElementById('hud-health');
+            const currentHealth = parseFloat(healthNode.textContent.replace('x', ''));
+            const newHealth = Math.max(1.80, Math.min(1.89, currentHealth + (Math.random() - 0.5) * 0.005));
+            healthNode.textContent = newHealth.toFixed(2) + 'x';
+        }, 3000);
+
+        // AutoBroker Sniper Live Feed Log Generator
+        const terminalLog = document.getElementById('terminal-log-container');
+        const prefixes = ["GAC5", "GB7R", "GD2S", "GA4V", "GC8P"];
+        const assets = ["USDC", "XLM", "EURC", "AETERNA"];
+        
+        function getTimestamp() {
+            const now = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            return `[${pad(now.getDate())}/${pad(now.getMonth()+1)}/2026 ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}]`;
+        }
+
+        function generateRandomLog() {
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            const asset = assets[Math.floor(Math.random() * assets.length)];
+            const amount = Math.floor(Math.random() * 1200) + 150;
+            const txHash = Math.random().toString(16).substring(2, 10);
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'term-log';
+            logItem.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag">LIQUIDATION_STRIKE_SUCCESS</span> :: Target ${prefix}... | Profit: <span class="term-profit">+${amount} ${asset}</span> | Hash: <span class="term-hash">${txHash}...</span>`;
+            
+            terminalLog.appendChild(logItem);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+            
+            // Cap log elements count to avoid memory bloat
+            if (terminalLog.children.length > 25) {
+                terminalLog.removeChild(terminalLog.firstChild);
+            }
+        }
+
+        // Start high frequency simulation
+        setInterval(generateRandomLog, 4000);
+
+        // Cost Simulator Handler
+        function updateSimulator(volume) {
+            const formatted = Number(volume).toLocaleString();
+            document.getElementById('volume-val').textContent = formatted + ' txs';
+
+            const ethFee = 15.00;
+            const arbFee = 0.15;
+            const solFee = 0.003;
+            const k2Fee = 0.00001;
+
+            const ethTotal = volume * ethFee;
+            const arbTotal = volume * arbFee;
+            const solTotal = volume * solFee;
+            const k2Total = volume * k2Fee;
+
+            document.getElementById('eth-cost').textContent = '$' + Math.round(ethTotal).toLocaleString();
+            document.getElementById('arb-cost').textContent = '$' + Math.round(arbTotal).toLocaleString();
+            document.getElementById('sol-cost').textContent = '$' + Math.round(solTotal).toLocaleString();
+            document.getElementById('k2-cost').textContent = '$' + k2Total.toFixed(2);
+
+            const savings = ethTotal - k2Total;
+            document.getElementById('savings-val').textContent = '$' + Math.round(savings).toLocaleString();
+
+            // Update bars
+            const max = ethTotal;
+            document.getElementById('eth-bar').style.width = '100%';
+            document.getElementById('arb-bar').style.width = Math.max((arbTotal / max) * 100, 1.2) + '%';
+            document.getElementById('sol-bar').style.width = Math.max((solTotal / max) * 100, 0.4) + '%';
+            document.getElementById('k2-bar').style.width = Math.max((k2Total / max) * 100, 0.05) + '%';
+        }
+
+        // Init values
+        updateSimulator(1000000);
+    </script>
+</body>
+</html>
