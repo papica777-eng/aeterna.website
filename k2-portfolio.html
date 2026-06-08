@@ -878,6 +878,21 @@
                     <h4 class="outfit">State Isolation</h4>
                     <p>Contract data storage is explicitly declared in ports. Adapters map resources statically, which guarantees that external dependencies cannot mutate the internal state ledger without authorization.</p>
                 </div>
+                <div class="security-card">
+                    <div class="sec-icon"><i data-lucide="database"></i></div>
+                    <h4 class="outfit">State Rent Immunity</h4>
+                    <p>Unlike Ethereum, Soroban requires state rent. K2 auto-extends persistent storage TTL (Time-To-Live) on every transaction, making user collateral immune to network archival.</p>
+                </div>
+                <div class="security-card">
+                    <div class="sec-icon"><i data-lucide="activity"></i></div>
+                    <h4 class="outfit">Zero-Entropy MEV Shield</h4>
+                    <p>Integrates TWAP (Time-Weighted Average Price) oracles and decoupled liquidation execution to make Flash Loan attacks mathematically unprofitable and deterministically impossible.</p>
+                </div>
+                <div class="security-card">
+                    <div class="sec-icon"><i data-lucide="check-square"></i></div>
+                    <h4 class="outfit">&gt;90% Test Coverage</h4>
+                    <p>Fully covered by native Soroban Rust Unit Tests simulating worst-case collateral scenarios and verifying the safe-math panic thresholds prior to Mainnet deployment.</p>
+                </div>
             </div>
         </div>
     </section>
