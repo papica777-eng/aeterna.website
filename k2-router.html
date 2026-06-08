@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA | K2 Kinetic Router Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="assets/aeterna_logo.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/10.4.1/stellar-sdk.min.js"></script>
+    <style>
+        :root {
+            --bg: #060913;
+            --surface: rgba(10, 16, 30, 0.82);
+            --surface-hover: rgba(16, 26, 48, 0.9);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-accent: rgba(139, 92, 246, 0.25);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-dim: #475569;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --critical: #ef4444;
+            --critical-bg: rgba(239, 68, 68, 0.08);
+            --warning: #f59e0b;
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+
+        /* Container */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 24px 32px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Top Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .brand-group img {
+            width: 42px; height: 42px;
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+        }
+        .brand-group h1 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: #fff;
+        }
+        .brand-group h1 span { color: var(--accent-purple); }
+        .brand-group .subtitle {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: var(--success-bg);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse-dot 2s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Main Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+        @media(max-width: 1024px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Card styles */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: transparent;
+            transition: background 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(139, 92, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        .card.interactive:hover::before {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+        .card-title i {
+            color: var(--accent-purple);
+        }
+
+        /* Wallet Section */
+        .wallet-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .wallet-info {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .wallet-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+        .wallet-info-row span:first-child {
+            color: var(--text-secondary);
+        }
+        .wallet-info-row span:last-child {
+            font-weight: 600;
+        }
+
+        /* Input / Button Groups */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-group label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+        }
+        .btn-primary:hover {
+            background: #9d76fd;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-cyan {
+            background: var(--accent-cyan);
+            color: #000;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.25);
+        }
+        .btn-cyan:hover {
+            background: #22d3ee;
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Action Grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        @media(max-width: 640px) {
+            .actions-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .stat-card .label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+        }
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* Health Factor Indicator */
+        .hf-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .hf-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            position: relative;
+        }
+        .hf-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--success);
+            transition: width 0.5s, background-color 0.5s;
+        }
+
+        /* Console */
+        .console-container {
+            background: #02040a;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 220px;
+        }
+        .console-header {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+        .console-logs {
+            flex-grow: 1;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #38b2ac;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .console-logs .err { color: var(--critical); }
+        .console-logs .info { color: #818cf8; }
+
+        /* Address Badges */
+        .address-badge {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.72rem;
+            color: var(--accent-purple);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .address-badge span:last-child {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Header -->
+        <header>
+            <div class="brand-group">
+                <img src="assets/aeterna_logo.svg" alt="AETERNA">
+                <div>
+                    <h1 class="orbitron">AETERNA<span>.</span>K2</h1>
+                    <div class="subtitle">Kinetic Lending Protocol Portal</div>
+                </div>
+            </div>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span>Testnet Connected</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <div class="dashboard-grid">
+            <!-- Left Side: Interactive actions & Stats -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- User Position State -->
+                <div class="card interactive">
+                    <div class="card-title"><i data-lucide="bar-chart-2"></i> Позиция на Потребителя</div>
+                    
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <span class="label">Депозиран Колатерал</span>
+                            <span class="value mono" id="stat-collateral">0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span></span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="label">Акумулиран Дълг</span>
+                            <span class="value mono" id="stat-debt">0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span></span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="label">Здравен Фактор</span>
+                            <span class="value mono" id="stat-hf">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="hf-container">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
+                            <span style="color: var(--critical);">Ликвидация (< 1.00)</span>
+                            <span style="color: var(--warning);">Минимум (1.25)</span>
+                            <span style="color: var(--success);">Здрав</span>
+                        </div>
+                        <div class="hf-bar">
+                            <div class="hf-bar-fill" id="hf-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions Panel -->
+                <div class="card">
+                    <div class="card-title"><i data-lucide="zap"></i> Операции с Контракта</div>
+                    
+                    <div class="actions-grid">
+                        <!-- Deposit Box -->
+                        <div class="stat-card" style="gap: 16px;">
+                            <div class="input-group">
+                                <label>Депозит на Колатерал (deposit_collateral)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-deposit" placeholder="Количество колатерал..." value="100">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="btn-deposit" onclick="handleDeposit()">
+                                <i data-lucide="download"></i> Депозирай Колатерал
+                            </button>
+                        </div>
+
+                        <!-- Borrow Box -->
+                        <div class="stat-card" style="gap: 16px;">
+                            <div class="input-group">
+                                <label>Вземане на Заем (borrow)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="input-borrow" placeholder="Количество заем..." value="50">
+                                </div>
+                            </div>
+                            <button class="btn btn-cyan" id="btn-borrow" onclick="handleBorrow()">
+                                <i data-lucide="upload"></i> Вземи Заем
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Liquidation Box -->
+                    <div class="stat-card" style="gap: 16px;">
+                        <div class="input-group">
+                            <label>Ликвидация на Позиция (liquidate)</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="input-liquidate-target" placeholder="Адрес на длъжника (G...)" value="">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="border-color: rgba(239, 68, 68, 0.4); color: var(--critical);" id="btn-liquidate" onclick="handleLiquidate()">
+                            <i data-lucide="skull"></i> Ликвидирай Позиция
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Wallet Connection & System Status -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- Wallet Connector -->
+                <div class="card">
+                    <div class="card-title"><i data-lucide="wallet"></i> Портфейл & Сметки</div>
+                    <div class="wallet-controls">
+                        <!-- Mode Selector -->
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;" id="btn-mode-dev" onclick="setMode('dev')">Dev Mode (Mock)</button>
+                            <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;" id="btn-mode-freighter" onclick="setMode('freighter')">Freighter</button>
+                        </div>
+
+                        <div class="wallet-info">
+                            <div class="wallet-info-row">
+                                <span>Активен Адрес</span>
+                                <span class="mono" id="wallet-address" style="font-size: 0.7rem;">Не е свързан</span>
+                            </div>
+                            <div class="wallet-info-row">
+                                <span>Баланс (XLM)</span>
+                                <span class="mono" id="wallet-balance">0.00</span>
+                            </div>
+                        </div>
+
+                        <div id="dev-wallet-actions" style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="btn btn-secondary" onclick="generateDevAccount()">
+                                <i data-lucide="plus-circle"></i> Нов Тестов Акаунт
+                            </button>
+                            <button class="btn btn-secondary" onclick="fundDevAccount()">
+                                <i data-lucide="coins"></i> Зареди от Friendbot
+                            </button>
+                        </div>
+                        <button class="btn btn-primary" id="btn-connect" onclick="connectWallet()">Свържи Портфейл</button>
+                    </div>
+                </div>
+
+                <!-- Contract Addresses info -->
+                <div class="card">
+                    <div class="card-title"><i data-lucide="cpu"></i> Адреси на Контрактите</div>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div class="address-badge">
+                            <span>K2 Router</span>
+                            <span class="mono" id="addr-router">CCZIOKORGUG...</span>
+                        </div>
+                        <div class="address-badge">
+                            <span>Incentives</span>
+                            <span class="mono" id="addr-incentives">CBCZP3YA47...</span>
+                        </div>
+                        <div class="address-badge">
+                            <span>Treasury</span>
+                            <span class="mono" id="addr-treasury">CAMHOK2XBH...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Console Logs -->
+        <div class="card">
+            <div class="console-container">
+                <div class="console-header">
+                    <span>Системен Терминал</span>
+                    <span onclick="clearConsole()" style="cursor: pointer; color: var(--text-secondary);"><i data-lucide="trash-2" style="width: 12px; height: 12px; vertical-align: middle;"></i> Изчисти</span>
+                </div>
+                <div class="console-logs" id="console-logs">
+                    <div>[INFO] Система зареди успешно. Очаква се връзка с портфейл.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lucide Icons
+        lucide.createIcons();
+
+        // Config addresses
+        const CONTRACT_ADDRESSES = {
+            router: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
+            incentives: 'CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH',
+            treasury: 'CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL'
+        };
+
+        // UI Initialization
+        document.getElementById('addr-router').textContent = CONTRACT_ADDRESSES.router.substring(0, 12) + '...';
+        document.getElementById('addr-incentives').textContent = CONTRACT_ADDRESSES.incentives.substring(0, 12) + '...';
+        document.getElementById('addr-treasury').textContent = CONTRACT_ADDRESSES.treasury.substring(0, 12) + '...';
+
+        // State variables
+        let appMode = 'dev'; // 'dev' or 'freighter'
+        let currentAccount = null; // Keypair in Dev, string public key in Freighter
+        let accountPub = '';
+        let server = new StellarSdk.rpc.Server('https://soroban-testnet.stellar.org');
+
+        // Log to console UI
+        function log(msg, type = 'info') {
+            const logs = document.getElementById('console-logs');
+            const item = document.createElement('div');
+            item.className = type;
+            item.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logs.appendChild(item);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('console-logs').innerHTML = '';
+        }
+
+        // Set mode
+        function setMode(mode) {
+            appMode = mode;
+            document.getElementById('btn-mode-dev').className = 'btn btn-secondary' + (mode === 'dev' ? ' btn-primary' : '');
+            document.getElementById('btn-mode-freighter').className = 'btn btn-secondary' + (mode === 'freighter' ? ' btn-primary' : '');
+            
+            document.getElementById('dev-wallet-actions').style.display = mode === 'dev' ? 'flex' : 'none';
+            document.getElementById('btn-connect').style.display = mode === 'freighter' ? 'flex' : 'none';
+
+            log(`Режим променен на: ${mode === 'dev' ? 'Developer (Mock)' : 'Freighter Wallet'}`);
+            
+            // Reset
+            currentAccount = null;
+            accountPub = '';
+            updateWalletUI();
+        }
+
+        // Generate Dev Keypair
+        function generateDevAccount() {
+            if (appMode !== 'dev') return;
+            currentAccount = StellarSdk.Keypair.random();
+            accountPub = currentAccount.publicKey();
+            updateWalletUI();
+            log(`Генериран нов тестов акаунт: ${accountPub}`);
+            log(`ВНИМАНИЕ: Секретният ключ е наличен само в паметта на браузъра.`, 'err');
+        }
+
+        // Fund Dev Account
+        async function fundDevAccount() {
+            if (appMode !== 'dev' || !accountPub) {
+                log('Моля първо генерирайте тестов акаунт.', 'err');
+                return;
+            }
+
+            log(`Заявка към Friendbot за финансиране на ${accountPub.substring(0, 10)}...`);
+            try {
+                const res = await fetch(`https://friendbot.stellar.org/?addr=${accountPub}`);
+                if (res.ok) {
+                    log(`Friendbot успешно зареди акаунта с 10,000 XLM!`);
+                    await fetchAccountDetails();
+                } else {
+                    log(`Грешка при Friendbot финансирането: ${res.status}`, 'err');
+                }
+            } catch (e) {
+                log(`Мрежова грешка: ${e.message}`, 'err');
+            }
+        }
+
+        // Fetch user wallet balance & contract states
+        async function fetchAccountDetails() {
+            if (!accountPub) return;
+            try {
+                // Get native balance
+                try {
+                    const accDetails = await server.getAccount(accountPub);
+                    const bal = accDetails.balances.find(b => b.asset_type === 'native');
+                    document.getElementById('wallet-balance').textContent = parseFloat(bal.balance).toFixed(2);
+                } catch(e) {
+                    document.getElementById('wallet-balance').textContent = '0.00 (Незареден)';
+                }
+
+                // Query K2 contract states
+                log(`Сканиране на данни от леджъра за адрес: ${accountPub.substring(0, 10)}...`);
+                
+                // Get user collateral
+                const colRes = await queryContract('UserCollateral', accountPub);
+                const debtRes = await queryContract('UserDebt', accountPub);
+
+                const collateral = colRes ? parseInt(colRes) : 0;
+                const debt = debtRes ? parseInt(debtRes) : 0;
+                
+                let hf = 0;
+                if (debt > 0) {
+                    hf = (collateral * 10000) / debt / 10000;
+                } else if (collateral > 0) {
+                    hf = 99.99; // Safe
+                }
+
+                document.getElementById('stat-collateral').innerHTML = `${collateral.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span>`;
+                document.getElementById('stat-debt').innerHTML = `${debt.toFixed(2)} <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span>`;
+                document.getElementById('stat-hf').textContent = hf.toFixed(2);
+
+                // Update HF fill bar
+                const barFill = document.getElementById('hf-bar-fill');
+                if (hf <= 0) {
+                    barFill.style.width = '0%';
+                } else if (hf < 1.0) {
+                    barFill.style.width = `${Math.min(100, hf * 40)}%`;
+                    barFill.style.backgroundColor = 'var(--critical)';
+                    log(`ВНИМАНИЕ: Позицията е под лимита за ликвидация!`, 'err');
+                } else if (hf < 1.25) {
+                    barFill.style.width = `${Math.min(100, hf * 50)}%`;
+                    barFill.style.backgroundColor = 'var(--warning)';
+                    log(`Предупреждение: Здравният фактор е нисък.`, 'err');
+                } else {
+                    barFill.style.width = `${Math.min(100, 50 + hf * 10)}%`;
+                    barFill.style.backgroundColor = 'var(--success)';
+                }
+
+            } catch (e) {
+                log(`Грешка при зареждане на леджър данни: ${e.message}`, 'err');
+            }
+        }
+
+        // Query contract storage (Simulate transaction view)
+        async function queryContract(dataKeyType, addressStr) {
+            // Build custom ScVal for query
+            try {
+                // Read from local RPC directly
+                const ledgKey = StellarSdk.xdr.LedgerKey.ledgerKeyContractData(
+                    new StellarSdk.xdr.LedgerKeyContractData({
+                        contract: new StellarSdk.Address(CONTRACT_ADDRESSES.router).toScAddress(),
+                        key: StellarSdk.xdr.ScVal.scvVec([
+                            StellarSdk.xdr.ScVal.scvSymbol(dataKeyType),
+                            new StellarSdk.Address(addressStr).toScVal()
+                        ]),
+                        durability: StellarSdk.xdr.ContractDataDurability.instance()
+                    })
+                );
+
+                const ledgerState = await server.getLedgerEntries(ledgKey);
+                if (ledgerState.entries && ledgerState.entries.length > 0) {
+                    const entry = ledgerState.entries[0];
+                    const scVal = StellarSdk.xdr.LedgerEntryData.fromXDR(entry.xdr, 'base64').contractData().val();
+                    return scVal.i128().lo().toString(); // Return simple lower bits string for collateral/debt
+                }
+            } catch (e) {
+                // Suppress and return 0
+            }
+            return '0';
+        }
+
+        // Update Wallet Card UI
+        function updateWalletUI() {
+            if (accountPub) {
+                document.getElementById('wallet-address').textContent = accountPub.substring(0, 10) + '...' + accountPub.substring(46);
+                fetchAccountDetails();
+            } else {
+                document.getElementById('wallet-address').textContent = 'Не е свързан';
+                document.getElementById('wallet-balance').textContent = '0.00';
+                document.getElementById('stat-collateral').innerHTML = `0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span>`;
+                document.getElementById('stat-debt').innerHTML = `0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span>`;
+                document.getElementById('stat-hf').textContent = '0.00';
+                document.getElementById('hf-bar-fill').style.width = '0%';
+            }
+        }
+
+        // Freighter Connector mock (Simulated since we cannot guarantee browser extension)
+        async function connectWallet() {
+            if (appMode !== 'freighter') return;
+            log("Запитване към Freighter Extension...");
+            try {
+                if (typeof window.stellar === 'undefined') {
+                    log("Freighter не е открит в браузъра.", 'err');
+                    return;
+                }
+                const pubKey = await window.stellar.getPublicKey();
+                accountPub = pubKey;
+                updateWalletUI();
+                log(`Връзката осъществена успешно с Freighter: ${accountPub}`);
+            } catch (e) {
+                log(`Отхвърлено от потребителя: ${e.message}`, 'err');
+            }
+        }
+
+        // Send contract operations
+        async function sendContractTx(op) {
+            if (!accountPub) {
+                log("Моля първо свържете акаунт.", 'err');
+                return;
+            }
+
+            try {
+                log("Извличане на пореден номер на акаунта...");
+                const account = await server.getAccount(accountPub);
+                
+                const tx = new StellarSdk.TransactionBuilder(account, {
+                    fee: '1000',
+                    networkPassphrase: 'Test SDF Network ; September 2015'
+                })
+                .addOperation(op)
+                .setTimeout(30)
+                .build();
+
+                log("Симулиране и подготовка на транзакцията (Soroban RPC)...");
+                const prepared = await server.prepareTransaction(tx);
+
+                if (appMode === 'dev') {
+                    log("Подписване на транзакцията локално (Dev Mode)...");
+                    prepared.sign(currentAccount);
+                } else {
+                    log("Изпращане на транзакцията към Freighter за подпис...");
+                    const signedXdr = await window.stellar.signTransaction(prepared.toXDR(), {
+                        network: 'TESTNET'
+                    });
+                    prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Test SDF Network ; September 2015');
+                }
+
+                log("Изпращане към блокчейна...");
+                const sendRes = await server.sendTransaction(prepared);
+                if (sendRes.status === 'ERROR') {
+                    throw new Error(`Транзакцията беше отхвърлена: ${JSON.stringify(sendRes.errorResult)}`);
+                }
+
+                log(`Транзакцията изпратена успешно. Хеш: ${sendRes.hash}`);
+                log("Изчакване на консенсус и потвърждение...");
+                
+                let status = null;
+                for (let i = 0; i < 15; i++) {
+                    await new Promise(r => setTimeout(r, 2000));
+                    status = await server.getTransaction(sendRes.hash);
+                    if (status && status.status !== 'NOT_FOUND' && status.status !== 'PENDING') {
+                        break;
+                    }
+                }
+
+                if (status && status.status === 'SUCCESS') {
+                    log(`Транзакцията е записана в леджъра успешно!`, 'success');
+                    await fetchAccountDetails();
+                } else {
+                    log(`Грешка при валидацията: статус: ${status?.status}`, 'err');
+                }
+
+            } catch (e) {
+                log(`Транзакцията пропадна: ${e.message}`, 'err');
+            }
+        }
+
+        // Operation handlers
+        async function handleDeposit() {
+            const val = document.getElementById('input-deposit').value;
+            if (!val || parseFloat(val) <= 0) {
+                log("Невалидно количество.", 'err');
+                return;
+            }
+
+            log(`Задействане на депозит на ${val} колатерал...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'deposit_collateral',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    StellarSdk.xdr.ScVal.scvI128(new StellarSdk.xdr.Int128Parts({
+                        lo: StellarSdk.xdr.Uint64.fromString(val),
+                        hi: StellarSdk.xdr.Int64.fromString("0")
+                    }))
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        async function handleBorrow() {
+            const val = document.getElementById('input-borrow').value;
+            if (!val || parseFloat(val) <= 0) {
+                log("Невалидно количество.", 'err');
+                return;
+            }
+
+            log(`Задействане на теглене на ${val} заем...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'borrow',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    StellarSdk.xdr.ScVal.scvI128(new StellarSdk.xdr.Int128Parts({
+                        lo: StellarSdk.xdr.Uint64.fromString(val),
+                        hi: StellarSdk.xdr.Int64.fromString("0")
+                    }))
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        async function handleLiquidate() {
+            const target = document.getElementById('input-liquidate-target').value;
+            if (!target) {
+                log("Моля въведете адрес на длъжник.", 'err');
+                return;
+            }
+
+            log(`Задействане на ликвидация на адрес ${target.substring(0, 10)}...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'liquidate',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    new StellarSdk.Address(target).toScVal()
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        // Start default Mode UI setup
+        setMode('dev');
+    </script>
+</body>
+</html>

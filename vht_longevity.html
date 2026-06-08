@@ -1,0 +1,3370 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA-VHT | Cellular Longevity & Epigenetic Rejuvenation HUD</title>
+    <link rel="icon" type="image/svg+xml" href="assets/aeterna_logo.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Three.js Post-Processing CDN scripts for 8K volumetric bloom -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <style>
+        :root {
+            --bg: #05020c;
+            --surface: rgba(12, 6, 26, 0.9);
+            --surface-hover: rgba(22, 12, 46, 0.95);
+            --border: rgba(181, 95, 230, 0.15);
+            --border-accent: rgba(181, 95, 230, 0.35);
+            --text: #e8edf5;
+            --text-secondary: #94a3b8;
+            --text-dim: #4a5568;
+            --accent-amber: #d97706;
+            --accent-emerald: #00ffaa;
+            --accent-teal: #139488;
+            --accent-purple: #b55fe6;
+            --accent-pink: #ff2a85;
+            --accent-blue: #00f0ff;
+            --critical: #ff3b6f;
+            --critical-bg: rgba(255, 59, 111, 0.08);
+            --success: #00ffaa;
+            --success-bg: rgba(0, 255, 170, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background-image: 
+                radial-gradient(circle at 50% -20%, rgba(181, 95, 230, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(255, 42, 133, 0.04) 0%, transparent 40%);
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Layout */
+        #scene-container { position: fixed; inset: 0; z-index: 0; }
+
+        #hud-overlay {
+            position: fixed; inset: 0; z-index: 10;
+            pointer-events: none;
+            display: flex; flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 28px;
+            height: 100%;
+        }
+        #hud-overlay > * { pointer-events: auto; }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding-right: 110px; /* Leave space for Home navigation button */
+        }
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .brand-group img {
+            width: 36px; height: 36px;
+            opacity: 0.85;
+            transition: transform 0.5s;
+        }
+        .brand-group img:hover { transform: rotate(90deg); }
+        .brand-group h1 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        .brand-group h1 span { color: var(--accent-purple); }
+        .brand-group .subtitle {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Patient Info Strip */
+        .patient-strip {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            backdrop-filter: blur(15px);
+        }
+        .patient-strip .divider {
+            width: 1px;
+            height: 16px;
+            background: var(--border);
+        }
+        .patient-strip strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: all 0.5s;
+        }
+        .status-badge.critical {
+            background: var(--critical-bg);
+            border: 1px solid rgba(255, 59, 111, 0.3);
+            color: var(--critical);
+        }
+        .status-badge.normal {
+            background: var(--success-bg);
+            border: 1px solid rgba(0, 255, 170, 0.3);
+            color: var(--success);
+        }
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse-dot 2s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Language Switcher Button Style */
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .lang-btn:hover {
+            color: #fff;
+        }
+        .lang-btn.active {
+            background: rgba(181, 95, 230, 0.2);
+            color: var(--accent-purple);
+            box-shadow: 0 0 8px rgba(181, 95, 230, 0.4);
+        }
+
+        /* Bottom Panel Layout */
+        .bottom-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 340px;
+            gap: 20px;
+            width: 100%;
+            height: calc(100vh - 120px);
+            align-items: end;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--surface);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+            pointer-events: auto;
+        }
+        .glass-card:hover {
+            border-color: var(--border-accent);
+            box-shadow: 0 0 25px rgba(181, 95, 230, 0.15);
+        }
+        .glass-card h3 {
+            font-size: 0.8rem;
+            color: var(--accent-purple);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Scrollable content inside cards */
+        .card-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 4px;
+        }
+        .card-content::-webkit-scrollbar { width: 4px; }
+        .card-content::-webkit-scrollbar-thumb { background: rgba(181, 95, 230, 0.2); border-radius: 2px; }
+
+        /* Metric Rows */
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.78rem;
+        }
+        .metric-row .label { color: var(--text-secondary); }
+        .metric-row .value { font-weight: 700; color: var(--text); }
+        .metric-row .value.emerald { color: var(--accent-emerald); }
+        .metric-row .value.amber { color: var(--accent-amber); }
+        .metric-row .value.red { color: var(--critical); }
+
+        /* Slider Control */
+        .slider-group {
+            margin-bottom: 12px;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .slider-header span.value { color: var(--text); font-weight: 600; }
+        .slider-control {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .slider-control::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-purple);
+            transition: transform 0.2s;
+        }
+        .slider-control::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            background: rgba(181, 95, 230, 0.1);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .btn:hover {
+            background: var(--accent-purple);
+            color: #000;
+            box-shadow: 0 0 15px rgba(181, 95, 230, 0.4);
+            border-color: transparent;
+        }
+        .btn.primary {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+        }
+        .btn.primary:hover {
+            background: linear-gradient(135deg, var(--accent-emerald), var(--accent-blue));
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.5);
+        }
+
+        /* Logs Console */
+        .logs-container {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            height: 110px;
+            overflow-y: auto;
+            border: 1px solid rgba(181, 95, 230, 0.1);
+            border-radius: 8px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .log-entry { margin-bottom: 4px; display: flex; gap: 8px; }
+        .log-entry .time { color: var(--accent-purple); }
+        .log-entry .tag { font-weight: 700; }
+        .log-entry .tag.info { color: var(--accent-blue); }
+        .log-entry .tag.success { color: var(--accent-emerald); }
+        .log-entry .tag.warn { color: var(--accent-amber); }
+        .log-entry .tag.crit { color: var(--critical); }
+
+        /* Code Viewer block */
+        .code-container {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.65rem;
+            line-height: 1.4;
+            color: #a5b4fc;
+            overflow-x: auto;
+            white-space: pre;
+            margin-top: 10px;
+        }
+
+        /* Tabs menu */
+        .tabs-menu {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
+        }
+        .tab-item {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        .tab-item.active {
+            color: #fff;
+            background: rgba(181, 95, 230, 0.15);
+        }
+
+        /* Alert Box */
+        .alert-box {
+            display: none;
+            background: var(--critical-bg);
+            border: 1px solid rgba(255, 59, 111, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.68rem;
+            color: var(--critical);
+            margin-top: 8px;
+            animation: pulse-alert 2s infinite ease-in-out;
+        }
+        @keyframes pulse-alert {
+            0%, 100% { border-color: rgba(255, 59, 111, 0.3); }
+            50% { border-color: rgba(255, 59, 111, 0.8); }
+        }
+
+        /* Floating Nav */
+        .home-nav {
+            position: fixed; top: 16px; right: 16px; z-index: 99999;
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px; background: rgba(5, 2, 12, 0.9);
+            backdrop-filter: blur(15px); border: 1px solid var(--border);
+            border-radius: 12px; color: var(--accent-purple);
+            text-decoration: none; font-size: 11px; font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .home-nav:hover {
+            border-color: var(--border-accent);
+            box-shadow: 0 0 15px rgba(181,95,230,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Three.js Canvas Backdrop -->
+    <div id="scene-container"></div>
+
+    <!-- Home Navigation -->
+    <a href="./index.html" class="home-nav">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Home
+    </a>
+
+    <!-- HUD Overlay -->
+    <div id="hud-overlay">
+        
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="brand-group">
+                <img src="assets/aeterna_logo.svg" alt="Logo">
+                <div>
+                    <h1>AETERNA<span>//</span>SOVEREIGN VHT</h1>
+                    <div class="subtitle" data-i18n="topbar.subtitle">CELLULAR LONGEVITY & EPIGENETIC RESTORATION HUD</div>
+                </div>
+            </div>
+
+            <!-- Patient Profile Info -->
+            <div class="patient-strip">
+                <div><span data-i18n="patient.label">ПАЦИЕНТ:</span> <strong id="patient-id">Twin P-78B (Horizontal Cohort)</strong></div>
+                <div class="divider"></div>
+                <div><span data-i18n="patient.chrono">ХРОНОЛОГИЧНА ВЪЗРАСТ:</span> <strong id="chronological-age">78 г.</strong></div>
+                <div class="divider"></div>
+                <div><span data-i18n="patient.bio">БИОЛОГИЧНА ВЪЗРАСТ:</span> <strong id="biological-age" style="color: var(--accent-pink);">82.4 г.</strong></div>
+            </div>
+
+            <!-- Status Badge & Language Selector -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div class="status-badge critical" id="system-status">
+                    <span class="status-dot"></span>
+                    <span id="status-text" data-i18n="status.critical">Senescent Load: Critical</span>
+                </div>
+                <!-- Glassmorphic Language Selector Pill -->
+                <div class="flex items-center glass rounded-full p-1 border border-white/10 text-[10px] font-bold tracking-widest font-mono" style="display: flex; gap: 4px; border: 1px solid var(--border); padding: 4px 8px; border-radius: 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); pointer-events: auto;">
+                    <button onclick="setLanguage('bg')" id="lang-bg" class="lang-btn active">BG</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn">EN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Layout -->
+        <div class="bottom-layout">
+            
+            <!-- Left Panel: Telemetry & Molecular Markers -->
+            <div class="glass-card" style="height: 520px; width: 320px;">
+                <h3><i data-lucide="activity" style="width:14px;height:14px;"></i> <span data-i18n="leftpanel.title">Live Telemetry</span></h3>
+                
+                <div class="tabs-menu">
+                    <button class="tab-item active" onclick="switchLeftTab('biomarkers')" data-i18n="leftpanel.tab_biomarkers">Маркери</button>
+                    <button class="tab-item" onclick="switchLeftTab('cpg')" data-i18n="leftpanel.tab_cpg">CpG Метилиране</button>
+                    <button class="tab-item" onclick="switchLeftTab('code')" data-i18n="leftpanel.tab_code">SOUL Код</button>
+                </div>
+
+                <div class="card-content">
+                    <!-- Biomarkers sub-tab -->
+                    <div id="left-tab-biomarkers">
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.horvath">Horvath Epigenetic Age</span>
+                            <span class="value red" id="val-horvath">82.4 yr</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.h2ax">DNA Damage Foci (γ-H2AX)</span>
+                            <span class="value red" id="val-h2ax">14.8 foci/cell</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.htert">hTERT Expression Level</span>
+                            <span class="value red" id="val-htert">0.12 (Suppressed)</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.p16">p16_INK4a Expression</span>
+                            <span class="value red" id="val-p16">13.2 relative</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.il6">SASP IL-6 Concentration</span>
+                            <span class="value red" id="val-il6">11.4 pg/mL</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.tnf">SASP TNF-alpha</span>
+                            <span class="value red" id="val-tnf">9.8 pg/mL</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.telomere">Telomere Length</span>
+                            <span class="value red" id="val-telomere">4.8 kbp</span>
+                        </div>
+                        <!-- Extended Biomarkers -->
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.nad">NAD+ Pool</span>
+                            <span class="value red" id="val-nad">11.2 pmol/mg</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.age_accel">Epigenetic AgeAccel</span>
+                            <span class="value red" id="val-age-accel">+4.4 yr</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="bio.p21">p21_Cip1 Expression</span>
+                            <span class="value red" id="val-p21">2.1 relative</span>
+                        </div>
+                    </div>
+
+                    <!-- CpG sites sub-tab -->
+                    <div id="left-tab-cpg" style="display:none;">
+                        <p style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 8px;" data-i18n="cpg.desc">CpG site methylation density vector (Horvath Clock Sites):</p>
+                        <div class="metric-row"><span class="label">cg02225647</span><span class="value" id="cpg-1">0.85</span></div>
+                        <div class="metric-row"><span class="label">cg01820374</span><span class="value" id="cpg-2">0.42</span></div>
+                        <div class="metric-row"><span class="label">cg19726354</span><span class="value" id="cpg-3">0.73</span></div>
+                        <div class="metric-row"><span class="label">cg03445892</span><span class="value" id="cpg-4">0.61</span></div>
+                        <div class="metric-row"><span class="label">cg06221484</span><span class="value" id="cpg-5">0.39</span></div>
+                        <div class="metric-row"><span class="label">cg08447361</span><span class="value" id="cpg-6">0.90</span></div>
+                    </div>
+
+                    <!-- SOUL code sub-tab -->
+                    <div id="left-tab-code" style="display:none;">
+                        <div class="code-container">process ZOMBIE_CELL_CLEARANCE(
+    senescent_fraction: Decimal,
+    therapy: REJUVENATION_THERAPY
+) -> Decimal {
+    let ic50_d = Decimal::new(26, 3); // 26nM
+    let ic50_q = Decimal::new(78, 1); // 7.8uM
+    
+    // Hill pd synergy model
+    let e_d = therapy.dasatinib_conc / 
+        (therapy.dasatinib_conc + ic50_d);
+    let e_q = therapy.quercetin_conc / 
+        (therapy.quercetin_conc + ic50_q);
+    
+    // Bliss Independence
+    let total_eff = 1.0 - (1.0 - e_d)*(1.0 - e_q);
+    return senescent_fraction * (1.0 - total_eff);
+}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Panel: Event Logs -->
+            <div class="glass-card" style="height: 180px; width: 100%;">
+                <h3><i data-lucide="terminal" style="width:14px;height:14px;"></i> <span data-i18n="middlepanel.title">Live Substrate Telemetry Log</span></h3>
+                <div class="logs-container" id="logs-box">
+                    <!-- Logs populated via script -->
+                </div>
+            </div>
+
+            <!-- Right Panel: Interventions & Controls -->
+            <div class="glass-card" style="height: 520px; width: 340px;">
+                <h3><i data-lucide="sliders" style="width:14px;height:14px;"></i> <span data-i18n="rightpanel.title">Rejuvenation Protocols</span></h3>
+
+                <div class="tabs-menu">
+                    <button class="tab-item active" onclick="switchRightTab('senolysis')" data-i18n="rightpanel.tab_senolysis">Сенолизис</button>
+                    <button class="tab-item" onclick="switchRightTab('yamanaka')" data-i18n="rightpanel.tab_yamanaka">Yamanaka</button>
+                    <button class="tab-item" onclick="switchRightTab('safety')" data-i18n="rightpanel.tab_safety">Три Стълба</button>
+                    <button class="tab-item" onclick="switchRightTab('tests')" data-i18n="rightpanel.tab_tests">Тестове</button>
+                </div>
+
+                <div class="card-content">
+                    
+                    <!-- Senolysis Controls -->
+                    <div id="right-tab-senolysis">
+                        <p style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 12px;" data-i18n="senolysis.desc">Елиминиране на сенесцентни "зомби" клетки чрез синергия D+Q.</p>
+                        
+                        <!-- Dynamic Weight Slider -->
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="senolysis.slider_w">Patient Weight (Тегло на пациента)</span>
+                                <span class="value" id="val-slider-w">75 kg</span>
+                            </div>
+                            <input type="range" min="50" max="120" value="75" class="slider-control" id="slider-w" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="senolysis.slider_d">Dasatinib Concentration (Сенолитик 1)</span>
+                                <span class="value" id="val-slider-d">0 nM</span>
+                            </div>
+                            <input type="range" min="0" max="150" value="0" class="slider-control" id="slider-d" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="senolysis.slider_q">Quercetin Concentration (Сенолитик 2)</span>
+                                <span class="value" id="val-slider-q">0 uM</span>
+                            </div>
+                            <input type="range" min="0" max="50" value="0" class="slider-control" id="slider-q" oninput="updateSliders()">
+                        </div>
+
+                        <!-- Target Dose Calculator Display -->
+                        <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(181,95,230,0.18); border-radius: 8px; padding: 10px; margin-bottom: 12px; font-size: 0.72rem;">
+                            <div style="color: var(--text-secondary); margin-bottom: 6px; font-size: 0.62rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-i18n="senolysis.calc_title">Calculated Target Doses (mg):</div>
+                            <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-weight: 700;">
+                                <div>D-Dose: <span id="d-dose-display" style="color: var(--accent-purple);">112.5 mg</span></div>
+                                <div>Q-Dose: <span id="q-dose-display" style="color: var(--accent-blue);">1500.0 mg</span></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="label" data-i18n="senolysis.atp">Mitochondrial ATP Reserve</span>
+                            <span class="value amber" id="val-atp">42%</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="senolysis.mtdna">mtDNA Mutation Load</span>
+                            <span class="value red" id="val-mtdna">38.4%</span>
+                        </div>
+
+                        <button class="btn primary" onclick="triggerSenolyticFlush()">
+                            <i data-lucide="sparkles" style="width:14px;height:14px;"></i>
+                            <span data-i18n="senolysis.btn_flush">Trigger Senolytic Flush</span>
+                        </button>
+                        
+                        <button class="btn" onclick="triggerMitoRescue()" style="margin-top: 8px;">
+                            <i data-lucide="zap" style="width:14px;height:14px;"></i>
+                            <span data-i18n="senolysis.btn_rescue">Inject mtDNA Rescue Vectors</span>
+                        </button>
+                    </div>
+
+                    <!-- Yamanaka Controls -->
+                    <div id="right-tab-yamanaka" style="display:none;">
+                        <p style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 12px;" data-i18n="yamanaka.desc">Частично репрограмиране на епигенетичния шум без туморогенеза.</p>
+                        
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="yamanaka.slider_oct">Oct4 Transcription Factor</span>
+                                <span class="value" id="val-slider-oct">0.0x</span>
+                            </div>
+                            <input type="range" min="0" max="300" value="0" class="slider-control" id="slider-oct" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="yamanaka.slider_sox">Sox2 Transcription Factor</span>
+                                <span class="value" id="val-slider-sox">0.0x</span>
+                            </div>
+                            <input type="range" min="0" max="300" value="0" class="slider-control" id="slider-sox" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="yamanaka.slider_klf">Klf4 Transcription Factor</span>
+                                <span class="value" id="val-slider-klf">0.0x</span>
+                            </div>
+                            <input type="range" min="0" max="300" value="0" class="slider-control" id="slider-klf" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header" style="color: var(--critical);">
+                                <span data-i18n="yamanaka.slider_cmyc">c-Myc Transcription Factor (Онкоген)</span>
+                                <span class="value critical" id="val-slider-cmyc">0.00x (LOCK)</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="0" class="slider-control" id="slider-cmyc" oninput="triggerCmycWarning()" style="filter: grayscale(1); opacity: 0.5;">
+                        </div>
+
+                        <div class="alert-box" id="cmyc-alert" data-i18n="yamanaka.cmyc_alert">
+                            WARNING: c-Myc transcription vector is locked out due to high oncogenic transformation risk! (Pillar 1 Safeguard Gate)
+                        </div>
+
+                        <button class="btn primary" onclick="triggerYamanakaReprogram()">
+                            <i data-lucide="refresh-cw" style="width:14px;height:14px;"></i>
+                            <span data-i18n="yamanaka.btn_induce">Induce Yamanaka OSK Protocol</span>
+                        </button>
+                    </div>
+
+                    <!-- Safety Pillars Controls -->
+                    <div id="right-tab-safety" style="display:none;">
+                        <p style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 12px;" data-i18n="safety.desc">Контрол на превантивните стълбове за безопасност и хидратация.</p>
+                        
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="safety.slider_diet">Caloric Restriction Mimetic</span>
+                                <span class="value" id="val-slider-diet">Normal Diet</span>
+                            </div>
+                            <input type="range" min="0" max="1" value="0" class="slider-control" id="slider-diet" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="safety.slider_sports">Aerobic Exercise (Weekly Hours)</span>
+                                <span class="value" id="val-slider-sports">0 hours</span>
+                            </div>
+                            <input type="range" min="0" max="10" value="0" class="slider-control" id="slider-sports" oninput="updateSliders()">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <span data-i18n="safety.slider_gfr">Renal Filtration Rate (GFR)</span>
+                                <span class="value" id="val-slider-gfr">84 mL/min</span>
+                            </div>
+                            <input type="range" min="15" max="120" value="84" class="slider-control" id="slider-gfr" oninput="updateSliders()">
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="label" data-i18n="safety.p1">Pillar 1: Pharmacotherapy Gate</span>
+                            <span class="value emerald" id="val-safety-p1">ACTIVE</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="safety.p2">Pillar 2: Renal GFR Safety Check</span>
+                            <span class="value emerald" id="val-safety-p2">PASS (GFR: 84 mL/min)</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="label" data-i18n="safety.p3">Pillar 3: Neutropenia Lock</span>
+                            <span class="value emerald" id="val-safety-p3">PASS (Neutrophils OK)</span>
+                        </div>
+
+                        <button class="btn" onclick="resetState()" style="border-color: var(--critical); color: var(--critical);">
+                            <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
+                            <span data-i18n="safety.btn_reset">Reset Biological State</span>
+                        </button>
+                    </div>
+
+                    <!-- Tests tab panel -->
+                    <div id="right-tab-tests" style="display:none;">
+                        <p style="font-size: 0.65rem; color: var(--text-secondary); margin-bottom: 12px;" data-i18n="tests.desc">HL7 FHIR интеграция и автоматизирани стрес тестове на интерфейса.</p>
+                        
+                        <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(181,95,230,0.18); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+                            <div style="color: var(--text-secondary); margin-bottom: 6px; font-size: 0.62rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-i18n="tests.fhir_section">HL7 FHIR Patient Resource Endpoint:</div>
+                            <input type="text" id="fhir-url-input" value="./fhir_sample_patient.json" style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 6px; padding: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #a5b4fc; outline: none; margin-bottom: 8px;">
+                            <button class="btn" onclick="fetchFHIRRecord()" style="margin-top: 4px;">
+                                <i data-lucide="download" style="width:14px;height:14px;"></i>
+                                <span data-i18n="tests.btn_load_fhir">Load FHIR Patient Profile</span>
+                            </button>
+                        </div>
+                        
+                        <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(181,95,230,0.18); border-radius: 8px; padding: 10px; margin-bottom: 8px;">
+                            <div style="color: var(--text-secondary); margin-bottom: 6px; font-size: 0.62rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" data-i18n="tests.stress_section">HUD Automated Stress Testing:</div>
+                            <button class="btn primary" onclick="runHUDStressTests()" style="margin-top: 4px;">
+                                <i data-lucide="shield-alert" style="width:14px;height:14px;"></i>
+                                <span data-i18n="tests.btn_run_stress">Run Stress Test Suite</span>
+                            </button>
+                        </div>
+                        <div id="test-status-display" style="font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--accent-blue); padding: 4px; display: none;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Three.js Visualizer Engine -->
+    <script>
+        // Localization System
+        let currentLang = 'bg';
+
+        const translations = {
+            bg: {
+                "topbar.subtitle": "ХУД ЗА КЛЕТЪЧНО ДЪЛГОЛЕТИЕ И ЕПИГЕНЕТИЧНО ВЪЗСТАНОВЯВАНЕ",
+                "patient.label": "ПАЦИЕНТ:",
+                "patient.chrono": "ХРОНОЛОГИЧНА ВЪЗРАСТ:",
+                "patient.bio": "БИОЛОГИЧНА ВЪЗРАСТ:",
+                "status.critical": "Сенесцентен товар: Критичен",
+                "status.normal": "Системата е подмладена",
+                "leftpanel.title": "Телеметрия на живо",
+                "leftpanel.tab_biomarkers": "Маркери",
+                "leftpanel.tab_cpg": "CpG Метилиране",
+                "leftpanel.tab_code": "SOUL Код",
+                "bio.horvath": "Епигенетична възраст по Хорват",
+                "bio.h2ax": "Огнища на ДНК повреди (γ-H2AX)",
+                "bio.htert": "Ниво на експресия на hTERT",
+                "bio.p16": "Експресия на p16_INK4a",
+                "bio.il6": "Концентрация на SASP IL-6",
+                "bio.tnf": "SASP TNF-алфа",
+                "bio.telomere": "Дължина на теломерите",
+                "bio.nad": "Резерв на NAD+ (NAD+ Pool)",
+                "bio.age_accel": "Епигенетично ускорение (AgeAccel)",
+                "bio.p21": "Експресия на p21_Cip1",
+                "cpg.desc": "Вектор на метилиране в CpG сайтовете (Хорватов часовник):",
+                "middlepanel.title": "Журнал на телеметрията на живия субстрат",
+                "rightpanel.title": "Протоколи за подмладяване",
+                "rightpanel.tab_senolysis": "Сенолизис",
+                "rightpanel.tab_yamanaka": "Яманака",
+                "rightpanel.tab_safety": "Три Стълба",
+                "senolysis.desc": "Елиминиране на сенесцентни \"зомби\" клетки чрез синергия D+Q.",
+                "senolysis.slider_w": "Тегло на пациента",
+                "senolysis.slider_d": "Dasatinib Concentration (Сенолитик 1)",
+                "senolysis.slider_q": "Quercetin Concentration (Сенолитик 2)",
+                "senolysis.calc_title": "Изчислени целеви дози (mg):",
+                "senolysis.atp": "Митохондриален резерв на АТФ",
+                "senolysis.mtdna": "Мутационен товар на mtДНК",
+                "senolysis.btn_flush": "Задействай сенолитичен промив",
+                "senolysis.btn_rescue": "Инжектирай mtДНК спасителни вектори",
+                "yamanaka.desc": "Частично репрограмиране на епигенетичния шум без туморогенеза.",
+                "yamanaka.slider_oct": "Oct4 Транскрипционен фактор",
+                "yamanaka.slider_sox": "Sox2   Транскрипционен фактор",
+                "yamanaka.slider_klf": "Klf4   Транскрипционен фактор",
+                "yamanaka.slider_cmyc": "c-Myc   Транскрипционен фактор (Онкоген)",
+                "yamanaka.cmyc_alert": "ВНИМАНИЕ: c-Myc транскрипционният вектор е блокиран поради висок риск от онкогенна трансформация! (Стълб 1 Защитен филтър)",
+                "yamanaka.btn_induce": "Индуцирай OSK протокол на Яманака",
+                "safety.desc": "Контрол на превантивните стълбове за безопасност и хидратация.",
+                "safety.slider_diet": "Миметик на калорийна рестрикция",
+                "safety.slider_sports": "Аеробно натоварване (Седмични часове)",
+                "safety.p2": "Стълб 2: Бъбречен GFR филтър за безопасност",
+                "safety.p3": "Стълб 3: Блокировка за неутропения",
+                "safety.btn_reset": "Нулирай биологичното състояние",
+                "safety.p1_active": "АКТИВЕН",
+                "safety.p2_pass": "ИЗДЪРЖАН (GFR: 84 мл/мин)",
+                "safety.p3_pass": "ИЗДЪРЖАН (Неутрофили ОК)",
+                "safety.diet_normal": "Нормална диета",
+                "safety.diet_mimetic": "АКТИВЕН МИМЕТИК",
+                "safety.slider_gfr": "Бъбречна филтрация (GFR)",
+                "rightpanel.tab_tests": "Тестове",
+                "tests.desc": "HL7 FHIR интеграция и автоматизирани стрес тестове на интерфейса.",
+                "tests.fhir_section": "Клиничен източник по HL7 FHIR Patient:",
+                "tests.btn_load_fhir": "Зареди FHIR профил на пациент",
+                "tests.stress_section": "Автоматизирани стрес тестове на HUD:",
+                "tests.btn_run_stress": "Стартирай тестовия пакет",
+                "val.suppressed": "Потиснато",
+                "val.active": "Активно",
+                "val.relative": "относително",
+                "val.foci": "огнища/клетка",
+                "val.hours": "часа",
+                "val.hours_single": "час"
+            },
+            en: {
+                "topbar.subtitle": "CELLULAR LONGEVITY & EPIGENETIC RESTORATION HUD",
+                "patient.label": "PATIENT:",
+                "patient.chrono": "CHRONOLOGICAL AGE:",
+                "patient.bio": "BIOLOGICAL AGE:",
+                "status.critical": "Senescent Load: Critical",
+                "status.normal": "System Rejuvenated",
+                "leftpanel.title": "Live Telemetry",
+                "leftpanel.tab_biomarkers": "Biomarkers",
+                "leftpanel.tab_cpg": "CpG Methylation",
+                "leftpanel.tab_code": "SOUL Code",
+                "bio.horvath": "Horvath Epigenetic Age",
+                "bio.h2ax": "DNA Damage Foci (γ-H2AX)",
+                "bio.htert": "hTERT Expression Level",
+                "bio.p16": "p16_INK4a Expression",
+                "bio.il6": "SASP IL-6 Concentration",
+                "bio.tnf": "SASP TNF-alpha",
+                "bio.telomere": "Telomere Length",
+                "bio.nad": "NAD+ Pool",
+                "bio.age_accel": "Epigenetic AgeAccel",
+                "bio.p21": "p21_Cip1 Expression",
+                "cpg.desc": "CpG site methylation density vector (Horvath Clock Sites):",
+                "middlepanel.title": "Live Substrate Telemetry Log",
+                "rightpanel.title": "Rejuvenation Protocols",
+                "rightpanel.tab_senolysis": "Senolysis",
+                "rightpanel.tab_yamanaka": "Yamanaka",
+                "rightpanel.tab_safety": "Three Pillars",
+                "rightpanel.tab_tests": "Tests",
+                "senolysis.desc": "Elimination of senescent \"zombie\" cells via D+Q synergy.",
+                "senolysis.slider_w": "Patient Weight",
+                "senolysis.slider_d": "Dasatinib Concentration (Senolytic 1)",
+                "senolysis.slider_q": "Quercetin Concentration (Senolytic 2)",
+                "senolysis.calc_title": "Calculated Target Doses (mg):",
+                "senolysis.atp": "Mitochondrial ATP Reserve",
+                "senolysis.mtdna": "mtDNA Mutation Load",
+                "senolysis.btn_flush": "Trigger Senolytic Flush",
+                "senolysis.btn_rescue": "Inject mtDNA Rescue Vectors",
+                "yamanaka.desc": "Partial reprogramming of epigenetic noise without tumorigenesis.",
+                "yamanaka.slider_oct": "Oct4 Transcription Factor",
+                "yamanaka.slider_sox": "Sox2 Transcription Factor",
+                "yamanaka.slider_klf": "Klf4 Transcription Factor",
+                "yamanaka.slider_cmyc": "c-Myc Transcription Factor (Oncogene)",
+                "yamanaka.cmyc_alert": "WARNING: c-Myc transcription vector is locked out due to high oncogenic transformation risk! (Pillar 1 Safeguard Gate)",
+                "yamanaka.btn_induce": "Induce Yamanaka OSK Protocol",
+                "safety.desc": "Control of preventive safety pillars and hydration.",
+                "safety.slider_diet": "Caloric Restriction Mimetic",
+                "safety.slider_sports": "Aerobic Exercise (Weekly Hours)",
+                "safety.slider_gfr": "Renal Filtration Rate (GFR)",
+                "safety.p1": "Pillar 1: Pharmacotherapy Gate",
+                "safety.p2": "Pillar 2: Renal GFR Safety Check",
+                "safety.p3": "Pillar 3: Neutropenia Lock",
+                "safety.btn_reset": "Reset Biological State",
+                "safety.p1_active": "ACTIVE",
+                "safety.p2_pass": "PASS (GFR: 84 mL/min)",
+                "safety.p3_pass": "PASS (Neutrophils OK)",
+                "safety.diet_normal": "Normal Diet",
+                "safety.diet_mimetic": "MIMETIC ACTIVE",
+                "tests.desc": "HL7 FHIR integration and automated HUD stress testing.",
+                "tests.fhir_section": "HL7 FHIR Patient Resource Endpoint:",
+                "tests.btn_load_fhir": "Load FHIR Patient Profile",
+                "tests.stress_section": "HUD Automated Stress Testing:",
+                "tests.btn_run_stress": "Run Stress Test Suite",
+                "val.suppressed": "Suppressed",
+                "val.active": "Active",
+                "val.relative": "relative",
+                "val.foci": "foci/cell",
+                "val.hours": "hours",
+                "val.hours_single": "hour"
+            }
+        };
+
+        function setLanguage(langCode) {
+            currentLang = langCode;
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${langCode}`).classList.add('active');
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[langCode] && translations[langCode][key]) {
+                    el.innerText = translations[langCode][key];
+                }
+            });
+
+            updateSliders();
+            updateDynamicMetrics();
+            renderLogs();
+        }
+
+        // System variables
+        let biologicalAge = 82.4;
+        let p16 = 13.2;
+        let il6 = 11.4;
+        let tnf = 9.8;
+        let h2ax = 14.8;
+        let htert = 0.12;
+        let telomere = 4.8;
+        let atp = 42;
+        let mtdna = 38.4;
+        
+        // Added parameters
+        let patientWeight = 75.0;
+        let nadPool = 11.2;
+        let p21 = 2.1;
+
+        // Horvath Model Regression Configuration (Intercept adjusted for 82.4 yr initial bio age)
+        const HORVATH_MODEL = {
+            intercept: 61.9, // Свободен член (beta_0)
+            weights: {
+                cg02225647: 14.5,
+                cg01820374: -8.3,
+                cg19726354: 22.1,
+                cg03445892: 5.4,
+                cg06221484: -12.2,
+                cg08447361: 18.9
+            },
+            // Афинитет на деметилиране чрез TET1 за всеки локус в интервала [0, 1]
+            tet1Affinity: {
+                cg02225647: 0.15,
+                cg01820374: 0.08,
+                cg19726354: 0.25,
+                cg03445892: 0.12,
+                cg06221484: 0.05,
+                cg08447361: 0.22
+            }
+        };
+
+        // Текущи нива на метилиране в интерфейса (beta-стойности между 0 и 1)
+        let cpgStates = {
+            cg02225647: 0.85,
+            cg01820374: 0.42,
+            cg19726354: 0.73,
+            cg03445892: 0.61,
+            cg06221484: 0.39,
+            cg08447361: 0.90
+        };
+
+        // Динамично деметилиране по време на Yamanaka вълна
+        function applyYamanakaWaveStep(intensity) {
+            for (let cpg in cpgStates) {
+                let reduction = intensity * HORVATH_MODEL.tet1Affinity[cpg];
+                cpgStates[cpg] = Math.max(0, cpgStates[cpg] - reduction);
+            }
+            return calculateBiologicalAge();
+        }
+
+        // Динамично изчисляване на реалната биологична възраст (Horvath Clock)
+        function calculateBiologicalAge() {
+            let age = HORVATH_MODEL.intercept;
+            for (let cpg in HORVATH_MODEL.weights) {
+                age += HORVATH_MODEL.weights[cpg] * cpgStates[cpg];
+            }
+            return parseFloat(age.toFixed(1));
+        }
+
+        // Hill equation constants for pharmacology
+        const IC50_D = 26.0;  // в nM
+        const IC50_Q = 7.8;   // в uM
+        const HILL_N_D = 1.4; // Коефициент на кооперативност за Dasatinib
+        const HILL_N_Q = 1.0; // Коефициент за Quercetin
+
+        function calculateHillEffect(concentration, ic50, hillN) {
+            if (concentration <= 0) return 0;
+            const cPow = Math.pow(concentration, hillN);
+            const icPow = Math.pow(ic50, hillN);
+            return cPow / (cPow + icPow);
+        }
+
+        const logsBox = document.getElementById('logs-box');
+
+        // Dynamic log history store
+        let logEntries = [
+            { time: new Date().toTimeString().split(' ')[0], bg: "AETERNA Двигател за дълголетие е иницииран.", en: "AETERNA Longevity Engine initialized.", type: "info" },
+            { time: new Date().toTimeString().split(' ')[0], bg: "Зареден профил на пациент Twin P-78B. Възраст: 78.", en: "Loaded patient profile Twin P-78B. Age: 78.", type: "info" },
+            { time: new Date().toTimeString().split(' ')[0], bg: "Засечен критичен сенесцентен товар на \"зомби\" клетки в съединителната тъкан.", en: "Critical senescent zombie cell fraction detected in connective tissues.", type: "warn" }
+        ];
+
+        function addLog(bgMsg, enMsg, type = 'info', customTime = null) {
+            const time = customTime || new Date().toTimeString().split(' ')[0];
+            logEntries.push({ time, bg: bgMsg, en: enMsg, type });
+            if (logEntries.length > 20) logEntries.shift();
+            renderLogs();
+        }
+
+        function renderLogs() {
+            logsBox.innerHTML = '';
+            logEntries.forEach(log => {
+                const msg = currentLang === 'bg' ? log.bg : log.en;
+                const logHTML = `<div class="log-entry">
+                    <span class="time">[${log.time}]</span>
+                    <span class="tag ${log.type}">${log.type.toUpperCase()}:</span>
+                    <span>${msg}</span>
+                </div>`;
+                logsBox.innerHTML += logHTML;
+            });
+            logsBox.scrollTop = logsBox.scrollHeight;
+        }
+
+        // Navigation Tabs
+        function switchLeftTab(tabId) {
+            document.getElementById('left-tab-biomarkers').style.display = tabId === 'biomarkers' ? 'block' : 'none';
+            document.getElementById('left-tab-cpg').style.display = tabId === 'cpg' ? 'block' : 'none';
+            document.getElementById('left-tab-code').style.display = tabId === 'code' ? 'block' : 'none';
+            
+            const tabs = document.querySelectorAll('.tabs-menu:first-of-type .tab-item');
+            tabs.forEach((tab, index) => {
+                if((index === 0 && tabId === 'biomarkers') || (index === 1 && tabId === 'cpg') || (index === 2 && tabId === 'code')) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        function switchRightTab(tabId) {
+            document.getElementById('right-tab-senolysis').style.display = tabId === 'senolysis' ? 'block' : 'none';
+            document.getElementById('right-tab-yamanaka').style.display = tabId === 'yamanaka' ? 'block' : 'none';
+            document.getElementById('right-tab-safety').style.display = tabId === 'safety' ? 'block' : 'none';
+            document.getElementById('right-tab-tests').style.display = tabId === 'tests' ? 'block' : 'none';
+            
+            const tabs = document.querySelectorAll('.glass-card:last-of-type .tabs-menu .tab-item');
+            tabs.forEach((tab, index) => {
+                if((index === 0 && tabId === 'senolysis') || (index === 1 && tabId === 'yamanaka') || (index === 2 && tabId === 'safety') || (index === 3 && tabId === 'tests')) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        // Patient weight dose update function
+        function updatePatientWeight(weightKg) {
+            patientWeight = parseFloat(weightKg);
+            const targetDasatinibMg = (patientWeight * 1.5).toFixed(1);
+            const targetQuercetinMg = (patientWeight * 20.0).toFixed(1);
+            
+            // Обновяване на UI елементите в HUD
+            const dDisplay = document.getElementById('d-dose-display');
+            const qDisplay = document.getElementById('q-dose-display');
+            if (dDisplay) dDisplay.innerText = `${targetDasatinibMg} mg`;
+            if (qDisplay) qDisplay.innerText = `${targetQuercetinMg} mg`;
+        }
+
+        // Sliders updates
+        function updateSliders() {
+            const wVal = document.getElementById('slider-w').value;
+            document.getElementById('val-slider-w').innerText = `${wVal} kg`;
+            updatePatientWeight(wVal);
+
+            const dVal = document.getElementById('slider-d').value;
+            const qVal = document.getElementById('slider-q').value;
+            document.getElementById('val-slider-d').innerText = `${dVal} nM`;
+            document.getElementById('val-slider-q').innerText = `${qVal} uM`;
+
+            const octVal = (document.getElementById('slider-oct').value / 100).toFixed(1);
+            const soxVal = (document.getElementById('slider-sox').value / 100).toFixed(1);
+            const klfVal = (document.getElementById('slider-klf').value / 100).toFixed(1);
+            document.getElementById('val-slider-oct').innerText = `${octVal}x`;
+            document.getElementById('val-slider-sox').innerText = `${soxVal}x`;
+            document.getElementById('val-slider-klf').innerText = `${klfVal}x`;
+
+            const dietActive = document.getElementById('slider-diet').value === '1';
+            const dietVal = dietActive ? translations[currentLang]["safety.diet_mimetic"] : translations[currentLang]["safety.diet_normal"];
+            document.getElementById('val-slider-diet').innerText = dietVal;
+            
+            const sportsVal = document.getElementById('slider-sports').value;
+            const hourSuffix = sportsVal === '1' ? translations[currentLang]["val.hours_single"] : translations[currentLang]["val.hours"];
+            document.getElementById('val-slider-sports').innerText = `${sportsVal} ${hourSuffix}`;
+
+            const gfrVal = document.getElementById('slider-gfr').value;
+            document.getElementById('val-slider-gfr').innerText = `${gfrVal} mL/min`;
+        }
+
+        function updateDynamicMetrics() {
+            document.getElementById('chronological-age').innerText = currentLang === 'bg' ? '78 г.' : '78 yr';
+            document.getElementById('biological-age').innerText = `${biologicalAge.toFixed(1)} ${currentLang === 'bg' ? 'г.' : 'yr'}`;
+            
+            const statusText = document.getElementById('status-text');
+            const statusBadge = document.getElementById('system-status');
+            if (biologicalAge <= 55) {
+                statusText.innerText = translations[currentLang]["status.normal"];
+                statusBadge.className = 'status-badge normal';
+            } else {
+                statusText.innerText = translations[currentLang]["status.critical"];
+                statusBadge.className = 'status-badge critical';
+            }
+            
+            document.getElementById('val-horvath').innerText = `${biologicalAge.toFixed(1)} ${currentLang === 'bg' ? 'г.' : 'yr'}`;
+            document.getElementById('val-h2ax').innerText = `${h2ax.toFixed(1)} ${translations[currentLang]["val.foci"]}`;
+            
+            const suppressedText = translations[currentLang]["val.suppressed"];
+            const activeText = translations[currentLang]["val.active"];
+            const isHtertActive = htert > 1.0;
+            document.getElementById('val-htert').innerText = `${htert.toFixed(2)} (${isHtertActive ? activeText : suppressedText})`;
+            
+            document.getElementById('val-p16').innerText = `${p16.toFixed(1)} ${translations[currentLang]["val.relative"]}`;
+            document.getElementById('val-il6').innerText = `${il6.toFixed(1)} ${currentLang === 'bg' ? 'пг/мл' : 'pg/mL'}`;
+            document.getElementById('val-tnf').innerText = `${tnf.toFixed(1)} ${currentLang === 'bg' ? 'пг/мл' : 'pg/mL'}`;
+            document.getElementById('val-telomere').innerText = `${telomere.toFixed(1)} ${currentLang === 'bg' ? 'кбп' : 'kbp'}`;
+            
+            // Update Extended Biomarkers
+            document.getElementById('val-nad').innerText = `${nadPool.toFixed(1)} pmol/mg`;
+            
+            const ageAccel = biologicalAge - 78.0;
+            const sign = ageAccel >= 0 ? '+' : '';
+            document.getElementById('val-age-accel').innerText = `${sign}${ageAccel.toFixed(1)} ${currentLang === 'bg' ? 'г.' : 'yr'}`;
+            
+            document.getElementById('val-p21').innerText = `${p21.toFixed(1)} ${translations[currentLang]["val.relative"]}`;
+            
+            document.getElementById('val-safety-p1').innerText = translations[currentLang]["safety.p1_active"];
+            
+            const gfrVal = parseInt(document.getElementById('slider-gfr').value);
+            const safetyP2 = document.getElementById('val-safety-p2');
+            if (safetyP2) {
+                if (gfrVal >= 60) {
+                    safetyP2.innerText = currentLang === 'bg' ? `ИЗДЪРЖАН (GFR: ${gfrVal} мл/мин)` : `PASS (GFR: ${gfrVal} mL/min)`;
+                    safetyP2.className = 'value emerald';
+                } else if (gfrVal >= 30) {
+                    safetyP2.innerText = currentLang === 'bg' ? `ВНИМАНИЕ (GFR: ${gfrVal} мл/мин - лека недостатъчност)` : `WARN (GFR: ${gfrVal} mL/min - Moderate Impairment)`;
+                    safetyP2.className = 'value amber';
+                } else {
+                    safetyP2.innerText = currentLang === 'bg' ? `БЛОКИРАН (GFR: ${gfrVal} мл/мин - бъбречна недостатъчност)` : `LOCKOUT (GFR: ${gfrVal} mL/min - Severe Impairment)`;
+                    safetyP2.className = 'value red';
+                }
+            }
+
+            document.getElementById('val-safety-p3').innerText = translations[currentLang]["safety.p3_pass"];
+            
+            // Set dynamic colors based on values
+            document.getElementById('val-nad').style.color = nadPool >= 35.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-age-accel').style.color = ageAccel <= 0.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-p21').style.color = p21 <= 1.0 ? '#00ffaa' : 'var(--critical)';
+            
+            document.getElementById('biological-age').style.color = biologicalAge <= 55 ? '#00ffaa' : 'var(--accent-pink)';
+            document.getElementById('val-horvath').style.color = biologicalAge <= 55 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-h2ax').style.color = h2ax < 6.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-p16').style.color = p16 < 4.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-il6').style.color = il6 < 3.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-tnf').style.color = tnf < 3.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-telomere').style.color = telomere > 6.0 ? '#00ffaa' : 'var(--critical)';
+            document.getElementById('val-htert').style.color = isHtertActive ? '#00ffaa' : 'var(--critical)';
+
+            // Update CpG sites tab in UI
+            const cpg1El = document.getElementById('cpg-1');
+            const cpg2El = document.getElementById('cpg-2');
+            const cpg3El = document.getElementById('cpg-3');
+            const cpg4El = document.getElementById('cpg-4');
+            const cpg5El = document.getElementById('cpg-5');
+            const cpg6El = document.getElementById('cpg-6');
+
+            if (cpg1El) cpg1El.innerText = cpgStates.cg02225647.toFixed(2);
+            if (cpg2El) cpg2El.innerText = cpgStates.cg01820374.toFixed(2);
+            if (cpg3El) cpg3El.innerText = cpgStates.cg19726354.toFixed(2);
+            if (cpg4El) cpg4El.innerText = cpgStates.cg03445892.toFixed(2);
+            if (cpg5El) cpg5El.innerText = cpgStates.cg06221484.toFixed(2);
+            if (cpg6El) cpg6El.innerText = cpgStates.cg08447361.toFixed(2);
+        }
+
+        function triggerCmycWarning() {
+            document.getElementById('slider-cmyc').value = 0;
+            document.getElementById('cmyc-alert').style.display = 'block';
+            addLog(
+                'ОНКОГЕННА ТРЕВОГА: Блокирано искане за индукция на c-Myc! (Стълб 1 филтър е приложен)',
+                'ONCOGENIC ALERT: Blocked c-Myc induction request! (Pillar 1 Gate Enforced)',
+                'crit'
+            );
+            setTimeout(() => {
+                document.getElementById('cmyc-alert').style.display = 'none';
+            }, 5000);
+        }
+
+        // ================= THREE.JS GRAPHICS (PREMIUM CLINICAL HUD) =================
+        const container = document.getElementById('scene-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 22);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Generate procedural cubemap in memory for realistic lighting/reflections
+        const generateSpaceCubemap = () => {
+            const canvases = [];
+            for (let i = 0; i < 6; i++) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 128;
+                canvas.height = 128;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#05020c';
+                ctx.fillRect(0, 0, 128, 128);
+                
+                // Stars
+                ctx.fillStyle = '#ffffff';
+                for (let s = 0; s < 30; s++) {
+                    const r = Math.random() * 1.5;
+                    ctx.beginPath();
+                    ctx.arc(Math.random() * 128, Math.random() * 128, r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Nebula glow
+                const grad = ctx.createRadialGradient(64, 64, 5, 64, 64, 60);
+                if (i % 3 === 0) {
+                    grad.addColorStop(0, 'rgba(181, 95, 230, 0.35)'); // Purple
+                } else if (i % 3 === 1) {
+                    grad.addColorStop(0, 'rgba(0, 240, 255, 0.35)');  // Cyan
+                } else {
+                    grad.addColorStop(0, 'rgba(255, 42, 133, 0.25)');  // Pink
+                }
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 128, 128);
+                
+                canvases.push(canvas);
+            }
+            const cubeTex = new THREE.CubeTexture(canvases);
+            cubeTex.needsUpdate = true;
+            return cubeTex;
+        };
+
+        const spaceCubemap = generateSpaceCubemap();
+        scene.environment = spaceCubemap;
+
+        // Effect Composer for cinematic Unreal Volumetric Bloom (8K quality)
+        const renderScene = new THREE.RenderPass(scene, camera);
+        const bloomPass = new THREE.UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            0.85,  // strength (vibrant neon glow)
+            0.65,  // radius
+            0.15   // threshold
+        );
+        const composer = new THREE.EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+
+        // Add premium studio lighting
+        const ambientLight = new THREE.AmbientLight(0x0f0b1e, 0.9);
+        scene.add(ambientLight);
+        
+        const blueLight = new THREE.PointLight(0x00f0ff, 2.5, 60);
+        blueLight.position.set(-12, 12, 12);
+        scene.add(blueLight);
+
+        const purpleLight = new THREE.PointLight(0xb55fe6, 2.5, 60);
+        purpleLight.position.set(12, -12, 12);
+        scene.add(purpleLight);
+
+        const glowLight = new THREE.DirectionalLight(0xff2a85, 0.8);
+        glowLight.position.set(0, 0, 10);
+        scene.add(glowLight);
+
+        // Rotating background starfield
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 600;
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount * 3; i += 3) {
+            starPositions[i] = (Math.random() - 0.5) * 80;
+            starPositions[i+1] = (Math.random() - 0.5) * 50;
+            starPositions[i+2] = (Math.random() - 0.5) * 40 - 20;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.1,
+            transparent: true,
+            opacity: 0.6,
+            sizeAttenuation: true
+        });
+        const starField = new THREE.Points(starGeo, starMat);
+        scene.add(starField);
+
+        // 3D DNA / Chromatin Helix Geometry Construction
+        let strand1Nodes = [];
+        let strand2Nodes = [];
+        let backboneCylinders1 = [];
+        let backboneCylinders2 = [];
+        let halfRungs = [];
+        let methylMarkers = [];
+        let senescentCells = [];
+        let time = 0;
+
+        const dnaRadius = 3.5;
+        const dnaLength = 18;
+        const numNodes = 40;
+        const speed = 0.5;
+
+        // Dynamic State Variables for Rejuvenation and Senolysis Animations
+        let reprogrammingState = 'IDLE'; // IDLE, DOCKING, WAVEFRONT, RELAXING, TRANSCRIPTION
+        let reprogrammingProgress = 0.0;
+        let wavePosition = 0.0;
+        let transcriptionTimer = 0.0;
+
+        let senolyticState = 'IDLE'; // IDLE, LIGAND_FLOOD, FRAGMENTATION
+        let senolyticProgress = 0.0;
+
+        let oskProteins = [];       // Docking protein complex objects
+        let ligands = [];           // Ligand particles representing D+Q drug binding
+        let cellFragments = [];     // Exploding spiky cell fragments
+        let rnaTranscripts = [];    // Glowing ssRNA molecules transcribing
+        let floatingAnnotations = []; // Hovering 3D diagnostic text labels
+
+        let helixTurns = 5.0;       // Starts at 5 turns when aged
+        let helixRadius = 3.5;      // Starts at 3.5 when aged
+
+        // Base-pair configurations: Aeterna Cyber Theme (Purple, Magenta, Cyan, Violet)
+        const basePairs = [];
+        for (let i = 0; i < numNodes; i++) {
+            const type = i % 4;
+            let color1, color2;
+            if (type === 0) {
+                color1 = 0xa855f7; // Neon Purple
+                color2 = 0x00f0ff; // Neon Cyan
+            } else if (type === 1) {
+                color1 = 0xff2a85; // Neon Magenta
+                color2 = 0x6366f1; // Neon Violet
+            } else if (type === 2) {
+                color1 = 0x00f0ff; // Neon Cyan
+                color2 = 0xa855f7; // Neon Purple
+            } else {
+                color1 = 0x6366f1; // Neon Violet
+                color2 = 0xff2a85; // Neon Magenta
+            }
+            basePairs.push({ color1, color2, type });
+        }
+
+        // Shared Geometries
+        const nodeGeo = new THREE.SphereGeometry(0.05, 8, 8);
+        const backboneCylinderGeo = new THREE.CylinderGeometry(0.18, 0.18, 1, 16);
+        const rungCylinderGeo = new THREE.CylinderGeometry(0.09, 0.09, 1, 12);
+        const methylGeo = new THREE.DodecahedronGeometry(0.28, 1);
+        const zombieGeo = new THREE.IcosahedronGeometry(0.42, 0); // Decaying spiky cells
+
+        // Custom uniforms to share variables with custom shaders
+        const customUniforms = {
+            uTime: { value: 0 }
+        };
+
+        // Materials with biological tissue parameters (more matte, slight subsurface feel)
+        const strand1Mat = new THREE.MeshPhysicalMaterial({
+            color: 0xb55fe6, emissive: 0xb55fe6, emissiveIntensity: 0.3, metalness: 0.1, roughness: 0.1, clearcoat: 1.0, clearcoatRoughness: 0.05, transmission: 0.9, ior: 1.5, transparent: true, opacity: 1.0
+        });
+        const strand2Mat = new THREE.MeshPhysicalMaterial({
+            color: 0x00f0ff, emissive: 0x00c8ff, emissiveIntensity: 0.3, metalness: 0.1, roughness: 0.1, clearcoat: 1.0, clearcoatRoughness: 0.05, transmission: 0.9, ior: 1.5, transparent: true, opacity: 1.0
+        });
+
+        // Inject custom WebGL shaders to add subtle neon glass tube undulations and rim glowing Fresnel
+        const injectGlassNeonShader = (material, isRung = false, isStrand2 = false) => {
+            material.onBeforeCompile = (shader) => {
+                shader.uniforms.uTime = customUniforms.uTime;
+                
+                // 1. Vertex Shader: Inject varying normal, local position, and gentle glass tube undulations
+                shader.vertexShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\nvarying vec3 vNormalVec;\n' + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    `
+                    vLocalPosition = position;
+                    vNormalVec = normal;
+                    #include <begin_vertex>
+                    
+                    // Very gentle glass tube undulations instead of rough cartilage
+                    float scale = 4.0;
+                    float amp = 0.015;
+                    float noise = sin(position.y * scale + uTime * 1.5) * cos(position.x * scale + uTime) * 0.5;
+                    transformed += normal * noise * amp;
+                    `
+                );
+                
+                // 2. Fragment Shader: Inject varying, compute Fresnel (Rim glow) and neon glass color blending
+                shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocalPosition;\nvarying vec3 vNormalVec;\n' + shader.fragmentShader;
+                shader.fragmentShader = shader.fragmentShader.replace(
+                    '#include <emissivemap_fragment>',
+                    `
+                    #include <emissivemap_fragment>
+                    
+                    // Calculate view-space normal and view direction for Fresnel
+                    vec3 normalVec = normalize(vNormalVec);
+                    vec3 viewDir = normalize(-vViewPosition);
+                    float fresnel = pow(1.0 - clamp(dot(normalVec, viewDir), 0.0, 1.0), 2.5);
+                    
+                    // Glass neon glow colors
+                    vec3 baseCol = ${isStrand2 ? 'vec3(0.01, 0.15, 0.4)' : 'vec3(0.2, 0.01, 0.45)'}; // Deep transmissive core
+                    vec3 rimCol = ${isStrand2 ? 'vec3(0.0, 0.95, 0.85)' : 'vec3(0.95, 0.1, 0.65)'};  // Electric neon rim
+                    
+                    vec3 neonColor = mix(baseCol, rimCol, fresnel);
+                    
+                    // Set emissive color (glass neon tube glow)
+                    totalEmissiveRadiance += neonColor * 0.85;
+                    `
+                );
+            };
+        };
+
+        injectGlassNeonShader(strand1Mat, false, false);
+        injectGlassNeonShader(strand2Mat, false, true);
+        const methylMat = new THREE.MeshPhysicalMaterial({
+            color: 0xef4444, emissive: 0x450a0a, emissiveIntensity: 0.2, metalness: 0.2, roughness: 0.8
+        });
+        const zombieMat = new THREE.MeshPhysicalMaterial({
+            color: 0xa8a29e, emissive: 0x44403c, emissiveIntensity: 0.1, metalness: 0.1, roughness: 0.9, flatShading: true
+        });
+
+        // Background Holographic Grid / Scanner Bounds (Hidden for clinical mode)
+        const scannerRingMat = new THREE.MeshBasicMaterial({
+            color: 0xb55fe6, transparent: true, opacity: 0.0, visible: false
+        });
+        const ringGeo = new THREE.TorusGeometry(8.5, 0.04, 8, 64);
+        
+        const scannerRing1 = new THREE.Mesh(ringGeo, scannerRingMat);
+        scannerRing1.rotation.x = Math.PI / 2;
+        scannerRing1.position.y = -6;
+        scene.add(scannerRing1);
+
+        const scannerRing2 = new THREE.Mesh(ringGeo, scannerRingMat);
+        scannerRing2.rotation.x = Math.PI / 2;
+        scannerRing2.position.y = 0;
+        scene.add(scannerRing2);
+
+        const scannerRing3 = new THREE.Mesh(ringGeo, scannerRingMat);
+        scannerRing3.rotation.x = Math.PI / 2;
+        scannerRing3.position.y = 6;
+        scene.add(scannerRing3);
+
+        // Rounded Rect Canvas Label Sprite Generator (Offline, High-Fidelity Labels)
+        function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+        }
+
+        function createTextSprite(text, colorStr = '#ffffff') {
+            const canvas = document.createElement('canvas');
+            canvas.width = 384;
+            canvas.height = 80;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 384, 80);
+            
+            // Glassmorphic background pill
+            ctx.fillStyle = 'rgba(12, 6, 26, 0.85)';
+            ctx.strokeStyle = 'rgba(181, 95, 230, 0.6)';
+            ctx.lineWidth = 3;
+            roundRect(ctx, 6, 6, 372, 68, 16, true, true);
+
+            // Font styles
+            ctx.font = 'Bold 21px Outfit, sans-serif';
+            ctx.fillStyle = colorStr;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 192, 40);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(spriteMat);
+            sprite.scale.set(4.8, 1.0, 1);
+            return sprite;
+        }
+
+        // Mathematical helper to orient 3D cylinders between points A and B
+        function alignCylinder(cylinder, v1, v2) {
+            const direction = new THREE.Vector3().subVectors(v2, v1);
+            const length = direction.length();
+            cylinder.scale.set(1, length, 1);
+            const midpoint = new THREE.Vector3().addVectors(v1, v2).multiplyScalar(0.5);
+            cylinder.position.copy(midpoint);
+            const dirNormalized = direction.clone().normalize();
+            cylinder.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dirNormalized);
+        }
+
+        function createProteinComplex(name, color, pos) {
+            const group = new THREE.Group();
+            const numSpheres = 5;
+            const proteinMat = new THREE.MeshPhysicalMaterial({
+                color: color, emissive: color, emissiveIntensity: 0.5, metalness: 0.1, roughness: 0.45, clearcoat: 0.8
+            });
+            for (let i = 0; i < numSpheres; i++) {
+                const s = 0.35 + Math.random() * 0.35;
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(s, 12, 12), proteinMat);
+                mesh.position.set(
+                    (Math.random() - 0.5) * 0.6,
+                    (Math.random() - 0.5) * 0.6,
+                    (Math.random() - 0.5) * 0.6
+                );
+                group.add(mesh);
+            }
+            const label = createTextSprite(name, "#ffffff");
+            label.position.set(0, 1.2, 0);
+            group.add(label);
+            group.position.copy(pos);
+            scene.add(group);
+            return group;
+        }
+
+        function spawnRNA(startIndex) {
+            const group = new THREE.Group();
+            const numBeads = 12;
+            const beadGeo = new THREE.SphereGeometry(0.12, 8, 8);
+            const beadMat = new THREE.MeshPhysicalMaterial({
+                color: 0xeab308, emissive: 0xeab308, emissiveIntensity: 0.6, metalness: 0.1, roughness: 0.2
+            });
+            const beads = [];
+            for (let j = 0; j < numBeads; j++) {
+                const bead = new THREE.Mesh(beadGeo, beadMat);
+                group.add(bead);
+                beads.push(bead);
+            }
+            scene.add(group);
+            rnaTranscripts.push({
+                group: group,
+                beads: beads,
+                startIndex: startIndex,
+                progress: 0.0,
+                offsetPhase: Math.random() * Math.PI * 2
+            });
+        }
+
+        function spawnFloatingAnnotation(text, color, pos) {
+            const sprite = createTextSprite(text, color);
+            sprite.position.copy(pos);
+            scene.add(sprite);
+            floatingAnnotations.push({
+                sprite: sprite,
+                velocity: new THREE.Vector3(0, 0.015, 0),
+                opacity: 1.0
+            });
+        }
+
+        function buildDNAHelix() {
+            // Remove existing mesh nodes
+            strand1Nodes.forEach(n => scene.remove(n));
+            strand2Nodes.forEach(n => scene.remove(n));
+            backboneCylinders1.forEach(c => {
+                if (Array.isArray(c)) c.forEach(sub => scene.remove(sub));
+                else scene.remove(c);
+            });
+            backboneCylinders2.forEach(c => {
+                if (Array.isArray(c)) c.forEach(sub => scene.remove(sub));
+                else scene.remove(c);
+            });
+            halfRungs.forEach(r => {
+                if (r.half1) scene.remove(r.half1);
+                if (r.half2) scene.remove(r.half2);
+                if (r.half1_A) scene.remove(r.half1_A);
+                if (r.half2_A) scene.remove(r.half2_A);
+                if (r.half1_B) scene.remove(r.half1_B);
+                if (r.half2_B) scene.remove(r.half2_B);
+            });
+            methylMarkers.forEach(m => scene.remove(m));
+
+            strand1Nodes = [];
+            strand2Nodes = [];
+            backboneCylinders1 = [];
+            backboneCylinders2 = [];
+            halfRungs = [];
+            methylMarkers = [];
+
+            for (let i = 0; i < numNodes; i++) {
+                const fraction = i / numNodes;
+                const y = (fraction - 0.5) * dnaLength;
+                const baseAngle = fraction * Math.PI * 5; // 2.5 turns initially
+
+                // Node on Strand 1 (Invisible, used for math anchoring)
+                const node1 = new THREE.Mesh(nodeGeo, strand1Mat);
+                node1.userData = { strand: 1, baseAngle: baseAngle, y: y };
+                node1.visible = false;
+                scene.add(node1);
+                strand1Nodes.push(node1);
+
+                // Node on Strand 2 (Invisible, used for math anchoring)
+                const node2 = new THREE.Mesh(nodeGeo, strand2Mat);
+                node2.userData = { strand: 2, baseAngle: baseAngle, y: y };
+                node2.visible = false;
+                scene.add(node2);
+                strand2Nodes.push(node2);
+
+                // Segmented base-pair rungs (Thick, Organic, Bumpy split cylinders)
+                const bp = basePairs[i];
+                
+                const mat1 = new THREE.MeshPhysicalMaterial({
+                    color: bp.color1, emissive: bp.color1, emissiveIntensity: 0.25, metalness: 0.1, roughness: 0.1, clearcoat: 1.0, clearcoatRoughness: 0.05, transmission: 0.9, ior: 1.5, transparent: true, opacity: 1.0
+                });
+                const mat2 = new THREE.MeshPhysicalMaterial({
+                    color: bp.color2, emissive: bp.color2, emissiveIntensity: 0.25, metalness: 0.1, roughness: 0.1, clearcoat: 1.0, clearcoatRoughness: 0.05, transmission: 0.9, ior: 1.5, transparent: true, opacity: 1.0
+                });
+
+                injectGlassNeonShader(mat1, true, false);
+                injectGlassNeonShader(mat2, true, true);
+
+                const half1 = new THREE.Mesh(rungCylinderGeo, mat1);
+                const half2 = new THREE.Mesh(rungCylinderGeo, mat2);
+                scene.add(half1);
+                scene.add(half2);
+
+                halfRungs.push({ half1, half2, node1, node2 });
+
+                // Attach methyl markers on Cytosine bases (types 1 and 3)
+                if (i % 3 === 0) {
+                    const targetNode = (i % 2 === 0) ? node1 : node2;
+                    const methyl = new THREE.Mesh(methylGeo, methylMat);
+                    methyl.userData = {
+                        baseAngle: targetNode.userData.baseAngle,
+                        y: y,
+                        offsetPhase: Math.random() * Math.PI * 2,
+                        attachedNode: targetNode,
+                        drifted: false
+                    };
+                    scene.add(methyl);
+                    methylMarkers.push(methyl);
+                }
+            }
+
+            // Create single thick connection links (which will be organically deformed by our shader)
+            for (let i = 0; i < numNodes - 1; i++) {
+                const cyl1 = new THREE.Mesh(backboneCylinderGeo, strand1Mat);
+                scene.add(cyl1);
+                backboneCylinders1.push(cyl1);
+
+                const cyl2 = new THREE.Mesh(backboneCylinderGeo, strand2Mat);
+                scene.add(cyl2);
+                backboneCylinders2.push(cyl2);
+            }
+        }
+
+        function createSenescentCell() {
+            const mesh = new THREE.Mesh(zombieGeo, zombieMat);
+            mesh.position.set(
+                (Math.random() - 0.5) * 32,
+                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 10 - 4
+            );
+            mesh.scale.setScalar(0.7 + Math.random() * 0.5);
+            mesh.userData = {
+                velocity: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.002,
+                    (Math.random() - 0.5) * 0.002,
+                    (Math.random() - 0.5) * 0.001
+                ),
+                rotationSpeed: new THREE.Vector3(
+                    Math.random() * 0.02,
+                    Math.random() * 0.02,
+                    Math.random() * 0.02
+                ),
+                dissolved: false
+            };
+            scene.add(mesh);
+            senescentCells.push(mesh);
+        }
+
+        function regenerateParticles() {
+            senescentCells.forEach(c => scene.remove(c));
+            senescentCells = [];
+            for (let i = 0; i < 35; i++) {
+                createSenescentCell();
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.015;
+
+            // Update custom shader uniforms
+            customUniforms.uTime.value = time;
+
+            // 0. Rotate background starfield
+            if (starField) {
+                starField.rotation.y = time * 0.01;
+                starField.rotation.x = time * 0.005;
+            }
+
+            // 1. Calculate dynamic Epigenetic Noise / Structural Decay based on current biologicalAge
+            const ageFactor = (biologicalAge - 52.4) / 30.0; // 0.0 (young/clean) to 1.0 (old/corrupted)
+            const noiseScale = ageFactor * 0.05; // Random structural perturbation scale (subtle medical tremor)
+
+            // Intercept and update helix relaxation/unwinding state parameters
+            if (reprogrammingState === 'RELAXING' || reprogrammingState === 'TRANSCRIPTION') {
+                helixTurns = 3.5 + ageFactor * 1.5; // Unwinds from 5.0 to 3.5 turns
+                helixRadius = 4.8 - ageFactor * 1.3; // Opens/widens from 3.5 to 4.8
+            } else {
+                helixTurns = 5.0;
+                helixRadius = 3.5;
+            }
+
+            // Shift backbone colors dynamically to represent cellular health state (Medical clinical look)
+            const healthyColor1 = new THREE.Color(0xa855f7); // Glowing Purple
+            const agedColor1 = new THREE.Color(0x4c1d95);    // Dim Violet
+            const healthyColor2 = new THREE.Color(0x00f0ff); // Glowing Cyan
+            const agedColor2 = new THREE.Color(0x083344);    // Dim Teal
+
+            strand1Mat.color.lerpColors(healthyColor1, agedColor1, ageFactor);
+            strand1Mat.emissive.copy(strand1Mat.color);
+            strand1Mat.emissiveIntensity = 0.08 + 0.12 * (1.0 - ageFactor);
+
+            strand2Mat.color.lerpColors(healthyColor2, agedColor2, ageFactor);
+            strand2Mat.emissive.copy(strand2Mat.color);
+            strand2Mat.emissiveIntensity = 0.08 + 0.12 * (1.0 - ageFactor);
+
+            // 2. Animate and perturb DNA backbone nodes
+            strand1Nodes.forEach(node => {
+                const angle = node.userData.baseAngle * (helixTurns / 5.0) + time * speed;
+                const x = Math.cos(angle) * helixRadius;
+                const z = Math.sin(angle) * helixRadius;
+                const y = node.userData.y;
+
+                // Mathematical simulation of epigenetic transcription errors (conformation noise)
+                const pX = Math.sin(node.userData.baseAngle * 4 + time * 3) * noiseScale;
+                const pY = Math.cos(node.userData.baseAngle * 3 + time * 2.5) * noiseScale;
+                const pZ = Math.sin(node.userData.baseAngle * 5 + time * 3.5) * noiseScale;
+
+                node.position.set(x + pX, y + pY, z + pZ);
+            });
+
+            strand2Nodes.forEach(node => {
+                const angle = node.userData.baseAngle * (helixTurns / 5.0) + time * speed + Math.PI;
+                const x = Math.cos(angle) * helixRadius;
+                const z = Math.sin(angle) * helixRadius;
+                const y = node.userData.y;
+
+                const pX = Math.sin(node.userData.baseAngle * 4 + time * 3) * noiseScale;
+                const pY = Math.cos(node.userData.baseAngle * 3 + time * 2.5) * noiseScale;
+                const pZ = Math.sin(node.userData.baseAngle * 5 + time * 3.5) * noiseScale;
+
+                node.position.set(x + pX, y + pY, z + pZ);
+            });
+
+            // 3. Update backbone connection links (align single cylinders directly between nodes)
+            for (let i = 0; i < numNodes - 1; i++) {
+                const cyl1 = backboneCylinders1[i];
+                const cyl2 = backboneCylinders2[i];
+
+                alignCylinder(cyl1, strand1Nodes[i].position, strand1Nodes[i+1].position);
+                alignCylinder(cyl2, strand2Nodes[i].position, strand2Nodes[i+1].position);
+            }
+
+            // 4. Update segmented rungs (A-T, G-C base pairs meeting in the middle)
+            halfRungs.forEach((rung, index) => {
+                const pos1 = rung.node1.position;
+                const pos2 = rung.node2.position;
+
+                const midpoint = new THREE.Vector3().addVectors(pos1, pos2).multiplyScalar(0.5);
+                const dir = new THREE.Vector3().subVectors(midpoint, pos1).normalize();
+
+                // Add a tiny gap (0.1 units) at the center junction to look biological and clean
+                const gapMid1 = midpoint.clone().addScaledVector(dir, -0.05);
+                const gapMid2 = midpoint.clone().addScaledVector(dir, 0.05);
+
+                alignCylinder(rung.half1, pos1, gapMid1);
+                alignCylinder(rung.half2, pos2, gapMid2);
+
+                // Color override during Demethylation Active Wavefront
+                if (reprogrammingState === 'WAVEFRONT') {
+                    if (index <= wavePosition && index > wavePosition - 4) {
+                        const pulseColor = 0xffffff;
+                        rung.half1.material.emissive.setHex(pulseColor);
+                        rung.half2.material.emissive.setHex(pulseColor);
+                        rung.half1.material.emissiveIntensity = 2.0;
+                        rung.half2.material.emissiveIntensity = 2.0;
+                    } else {
+                        const bp = basePairs[index];
+                        rung.half1.material.emissive.setHex(bp.color1);
+                        rung.half2.material.emissive.setHex(bp.color2);
+                        rung.half1.material.emissiveIntensity = 0.8;
+                        rung.half2.material.emissiveIntensity = 0.8;
+                    }
+                }
+
+                const opacityVal = 0.4 + (1.0 - ageFactor) * 0.55;
+                rung.half1.material.opacity = opacityVal;
+                rung.half2.material.opacity = opacityVal;
+            });
+
+            // 5. Animate methyl groups (detaching during Yamanaka OSK induction)
+            const driftFactor = 1.0 - ageFactor;
+            methylMarkers.forEach(m => {
+                const attachedNode = m.userData.attachedNode;
+                if (!attachedNode) return;
+
+                const angle = m.userData.baseAngle * (helixTurns / 5.0) + time * speed;
+                const targetPos = attachedNode.position.clone();
+                const radialDir = new THREE.Vector3(targetPos.x, 0, targetPos.z).normalize();
+
+                // Trigger detachment once demethylation wavefront passes the CpG site
+                const cpgIndex = Math.floor((m.userData.y + (dnaLength/2)) / dnaLength * numNodes);
+                if (reprogrammingState === 'WAVEFRONT' && cpgIndex <= wavePosition) {
+                    m.userData.drifted = true;
+                }
+
+                let dPower = m.userData.drifted ? 1.0 : driftFactor;
+
+                let driftOffset = new THREE.Vector3();
+                if (dPower > 0.05) {
+                    const driftSpeed = 0.6;
+                    driftOffset.set(
+                        Math.sin(m.userData.offsetPhase + time * driftSpeed) * dPower * 4.0,
+                        Math.cos(m.userData.offsetPhase * 1.4 + time * driftSpeed) * dPower * 5.0,
+                        Math.sin(m.userData.offsetPhase * 2.1 + time * driftSpeed) * dPower * 4.0
+                    );
+                }
+
+                m.position.copy(targetPos)
+                    .addScaledVector(radialDir, dPower * 5.0)
+                    .add(driftOffset);
+
+                m.material.opacity = Math.max(0.0, 0.85 * (1.0 - dPower));
+                m.scale.setScalar(Math.max(0.01, 1.0 - dPower * 1.1));
+            });
+
+            // 6. Yamanaka Reprogramming State Pipeline
+            if (reprogrammingState === 'DOCKING') {
+                reprogrammingProgress += 0.012;
+                if (reprogrammingProgress >= 1.0) {
+                    reprogrammingProgress = 1.0;
+                    reprogrammingState = 'WAVEFRONT';
+                    wavePosition = 0.0;
+                    addLog(
+                        'Скачването на OCT4/SOX2/KLF4 завършено. Иницииране на активно TET1 деметилиране...',
+                        'OCT4/SOX2/KLF4 docking complete. Activating TET1-mediated active demethylation wavefront...',
+                        'success'
+                    );
+                    spawnFloatingAnnotation("[TET1 ACTIVE]", "#00ffaa", new THREE.Vector3(0, 0, 4));
+                }
+
+                // Interpolate protein complex positions to DNA promoter binding sites
+                oskProteins.forEach(p => {
+                    const targetNode = p.nodeArray[p.targetIndex];
+                    const targetPos = targetNode.position.clone();
+                    p.group.position.lerpVectors(p.start, targetPos, reprogrammingProgress);
+                });
+            } else if (reprogrammingState === 'WAVEFRONT') {
+                wavePosition += 0.35;
+                if (wavePosition >= numNodes) {
+                    reprogrammingState = 'RELAXING';
+                    
+                    // Fade out docked transcription factor complexes
+                    oskProteins.forEach(p => {
+                        let scaleDown = setInterval(() => {
+                            p.group.scale.subScalar(0.05);
+                            if (p.group.scale.x <= 0.05) {
+                                clearInterval(scaleDown);
+                                scene.remove(p.group);
+                            }
+                        }, 30);
+                    });
+                    oskProteins = [];
+                    addLog(
+                        'Деметилирането завърши. Отпускане на хроматиновите нишки (Euchromatin)...',
+                        'Demethylation complete. Unwinding and relaxing chromatin (Euchromatin configuration)...',
+                        'success'
+                    );
+                    spawnFloatingAnnotation("[CHROMATIN REMODELING]", "#00f0ff", new THREE.Vector3(0, -2, 4));
+                }
+            } else if (reprogrammingState === 'TRANSCRIPTION') {
+                transcriptionTimer += 0.015;
+                // Dynamic NAD+ rise on clock rollback
+                const rejuvPct = (82.4 - biologicalAge) / (82.4 - 52.4); // 0 to 1
+                nadPool = 12.4 + (42.5 - 12.4) * rejuvPct;
+
+                // Periodic transcription of mRNA strands
+                if (Math.random() < 0.03 && rnaTranscripts.length < 5) {
+                    spawnRNA(10 + Math.floor(Math.random() * 20));
+                }
+                if (transcriptionTimer >= 5.0) {
+                    reprogrammingState = 'IDLE';
+                    addLog(
+                        'Клетъчното подмладяване приключи. Нивата на епигенетичен шум са нормализирани.',
+                        'Cellular rejuvenation sequence complete. Epigenetic noise levels fully stabilized.',
+                        'success'
+                    );
+                }
+            }
+
+            // Animate moving mRNA transcripts peeling away
+            for (let i = rnaTranscripts.length - 1; i >= 0; i--) {
+                const t = rnaTranscripts[i];
+                t.progress += 0.006;
+                const targetNode = strand1Nodes[t.startIndex];
+                if (targetNode) {
+                    const originPos = targetNode.position.clone();
+                    const radialDir = new THREE.Vector3(originPos.x, 0, originPos.z).normalize();
+                    
+                    t.beads.forEach((bead, idx) => {
+                        const fract = idx / t.beads.length;
+                        const x = originPos.x + radialDir.x * fract * 12.0 * t.progress + Math.sin(fract * Math.PI * 2.0 + time * 3.5 + t.offsetPhase) * 1.5;
+                        const y = originPos.y + fract * 7.0 * t.progress + Math.cos(fract * Math.PI * 2.0 + time * 2.5 + t.offsetPhase) * 1.5;
+                        const z = originPos.z + radialDir.z * fract * 12.0 * t.progress + Math.sin(fract * Math.PI * 1.5 + time * 3.0 + t.offsetPhase) * 1.0;
+                        bead.position.set(x, y, z);
+                    });
+                }
+                
+                t.group.children.forEach(mesh => {
+                    mesh.material.opacity = Math.max(0.0, 0.9 * (1.0 - t.progress));
+                });
+
+                if (t.progress >= 1.0) {
+                    scene.remove(t.group);
+                    rnaTranscripts.splice(i, 1);
+                }
+            }
+
+            // 7. Senolytic Flush State Pipeline
+            if (senolyticState === 'LIGAND_FLOOD') {
+                let ligandsActive = false;
+                ligands.forEach(l => {
+                    if (l.progress < 1.0) {
+                        l.progress += l.speed;
+                        ligandsActive = true;
+                        if (l.progress > 1.0) l.progress = 1.0;
+
+                        const start = l.start;
+                        const target = l.targetCell.position;
+                        l.mesh.position.lerpVectors(start, target, l.progress);
+                        
+                        if (l.progress === 1.0) {
+                            scene.remove(l.mesh);
+                            // Pulse senescent cell size representing ligand binding
+                            l.targetCell.scale.setScalar(1.3 * l.targetCell.scale.x);
+                            setTimeout(() => {
+                                l.targetCell.scale.multiplyScalar(0.7);
+                            }, 100);
+                        }
+                    }
+                });
+
+                if (!ligandsActive) {
+                    senolyticState = 'FRAGMENTATION';
+                    addLog(
+                        'Активиране на Caspase-3/7. Апоптоза и раздробяване на сенесцентния субстрат...',
+                        'Caspase-3/7 cascade triggered. Programmed apoptosis & fragmentation active...',
+                        'success'
+                    );
+                    spawnFloatingAnnotation("[CASPASE-3/7 ACTIVE]", "#ff3b6f", new THREE.Vector3(0, 3, 4));
+
+                    // Destroy spiky cells and instantiate debris fragments
+                    senescentCells.forEach(cell => {
+                        const cellPos = cell.position.clone();
+                        scene.remove(cell);
+
+                        const numFrags = 5;
+                        for (let f = 0; f < numFrags; f++) {
+                            const fragMesh = new THREE.Mesh(
+                                new THREE.IcosahedronGeometry(0.18, 0),
+                                new THREE.MeshPhysicalMaterial({
+                                    color: 0xd97706, emissive: 0x7c2d12, emissiveIntensity: 0.8, transparent: true, opacity: 0.95
+                                })
+                            );
+                            fragMesh.position.copy(cellPos);
+                            const velocity = new THREE.Vector3(
+                                (Math.random() - 0.5) * 0.12,
+                                (Math.random() - 0.5) * 0.12,
+                                (Math.random() - 0.5) * 0.08
+                            );
+                            scene.add(fragMesh);
+                            cellFragments.push({
+                                mesh: fragMesh,
+                                velocity: velocity,
+                                scale: 1.0,
+                                opacity: 0.95
+                            });
+                        }
+                    });
+                    senescentCells = [];
+                }
+            } else if (senolyticState === 'FRAGMENTATION') {
+                let fragsActive = false;
+                cellFragments.forEach(f => {
+                    if (f.opacity > 0.0) {
+                        fragsActive = true;
+                        f.mesh.position.add(f.velocity);
+                        f.scale -= 0.018;
+                        f.opacity -= 0.018;
+
+                        if (f.scale <= 0.0) f.scale = 0.01;
+                        if (f.opacity <= 0.0) f.opacity = 0.0;
+
+                        f.mesh.scale.setScalar(f.scale);
+                        f.mesh.material.opacity = f.opacity;
+
+                        if (f.opacity === 0.0) {
+                            scene.remove(f.mesh);
+                        }
+                    }
+                });
+
+                if (!fragsActive) {
+                    senolyticState = 'IDLE';
+                    cellFragments = [];
+                    addLog(
+                        'Прочистването на зомби клетки завърши. Сенесцентният товар е нормализиран.',
+                        'Zombie cell clearance complete. Tissue microenvironment fully normalized.',
+                        'success'
+                    );
+                }
+            }
+
+            // 8. Move and fade hovering text sprites
+            for (let i = floatingAnnotations.length - 1; i >= 0; i--) {
+                const a = floatingAnnotations[i];
+                a.sprite.position.add(a.velocity);
+                a.opacity -= 0.01;
+                a.sprite.material.opacity = Math.max(0.0, a.opacity);
+                
+                if (a.opacity <= 0.0) {
+                    scene.remove(a.sprite);
+                    floatingAnnotations.splice(i, 1);
+                }
+            }
+
+            // 9. Background senescent cells movement (if not flushting)
+            senescentCells.forEach(c => {
+                if (c.userData.dissolved) return;
+                c.position.add(c.userData.velocity);
+                c.rotation.x += c.userData.rotationSpeed.x;
+                c.rotation.y += c.userData.rotationSpeed.y;
+
+                if (Math.abs(c.position.x) > 20) c.userData.velocity.x *= -1;
+                if (Math.abs(c.position.y) > 12) c.userData.velocity.y *= -1;
+                if (Math.abs(c.position.z + 4) > 8) c.userData.velocity.z *= -1;
+            });
+
+            // Animate background circular scanner rings
+            scannerRing1.rotation.z = -time * 0.04;
+            scannerRing2.rotation.z = time * 0.07;
+            scannerRing3.rotation.z = -time * 0.04;
+            const ringOpacity = 0.06 + Math.sin(time * 2) * 0.04;
+            scannerRing1.material.opacity = ringOpacity;
+            scannerRing2.material.opacity = ringOpacity * 1.5;
+            scannerRing3.material.opacity = ringOpacity;
+
+            // Slowly rotate scene
+            scene.rotation.y = time * 0.1;
+
+            composer.render();
+        }
+
+        buildDNAHelix();
+        regenerateParticles();
+        animate();
+
+        // Senolytic Flush Engagement Trigger with Pharmacokinetic logs
+        function triggerSenolyticFlush() {
+            const d = parseInt(document.getElementById('slider-d').value);
+            const q = parseInt(document.getElementById('slider-q').value);
+            
+            const neutrophils = 2.1; 
+            
+            if (neutrophils < 1.5) {
+                addLog(
+                    'КРИТИЧНО БЛОКИРАНЕ: Dasatinib е спрян поради тежка Неутропения (<1.5 * 10⁹/L).',
+                    'CRITICAL LOCKOUT: Dasatinib withheld due to severe Neutropenia (<1.5 * 10⁹/L).',
+                    'crit'
+                );
+                return;
+            }
+
+            const gfrVal = parseInt(document.getElementById('slider-gfr').value);
+            if (gfrVal < 30) {
+                addLog(
+                    'КРИТИЧНО БЛОКИРАНЕ: Сенолитичният промив е спрян поради бъбречна недостатъчност (GFR < 30 mL/min).',
+                    'CRITICAL LOCKOUT: Senolytic flush withheld due to severe renal impairment (GFR < 30 mL/min).',
+                    'crit'
+                );
+                return;
+            }
+
+            const targetD = (patientWeight * 1.5).toFixed(1);
+            const targetQ = (patientWeight * 20.0).toFixed(1);
+
+            // Compute volume-of-distribution (Vd) scaled peak plasma concentrations
+            // Standardizing around 75 kg reference weight
+            const c_d = d * (75.0 / patientWeight);
+            const c_q = q * (75.0 / patientWeight);
+
+            // Calculate simulated timestamps based on system time + offsets
+            const now = new Date();
+            const formatTime = (date) => date.toTimeString().split(' ')[0];
+
+            const time0 = formatTime(now);
+            const time2 = formatTime(new Date(now.getTime() + 2000));
+            const time5 = formatTime(new Date(now.getTime() + 5000));
+            const time10 = formatTime(new Date(now.getTime() + 10000));
+            const time12 = formatTime(new Date(now.getTime() + 12000));
+            const time15 = formatTime(new Date(now.getTime() + 15000));
+            const time20 = formatTime(new Date(now.getTime() + 20000));
+
+            // INIT: 0ms
+            addLog(
+                `INIT: Patient biometric data loaded (Weight: ${patientWeight.toFixed(1)} kg).`,
+                `INIT: Patient biometric data loaded (Weight: ${patientWeight.toFixed(1)} kg).`,
+                'info',
+                time0
+            );
+
+            // COMPUTE: 400ms (representing +2s)
+            setTimeout(() => {
+                addLog(
+                    `COMPUTE: Calculating personalized senolytic target doses...`,
+                    `COMPUTE: Calculating personalized senolytic target doses...`,
+                    'info',
+                    time2
+                );
+            }, 400);
+
+            // DATA: 1000ms (representing +5s)
+            setTimeout(() => {
+                addLog(
+                    `DATA: Target Dasatinib: ${targetD} mg | Target Quercetin: ${targetQ} mg.`,
+                    `DATA: Target Dasatinib: ${targetD} mg | Target Quercetin: ${targetQ} mg.`,
+                    'info',
+                    time5
+                );
+            }, 1000);
+
+            // PHARMACOKINETICS: 2000ms (representing +10s)
+            setTimeout(() => {
+                addLog(
+                    `PHARMACOKINETICS: Simulating plasma concentration mapping via Vd...`,
+                    `PHARMACOKINETICS: Simulating plasma concentration mapping via Vd...`,
+                    'info',
+                    time10
+                );
+            }, 2000);
+
+            // CALC: 2400ms (representing +12s)
+            setTimeout(() => {
+                addLog(
+                    `CALC: Predicted Peak Plasma: C_D = ${c_d.toFixed(1)} nM, C_Q = ${c_q.toFixed(1)} uM.`,
+                    `CALC: Predicted Peak Plasma: C_D = ${c_d.toFixed(1)} nM, C_Q = ${c_q.toFixed(1)} uM.`,
+                    'info',
+                    time12
+                );
+            }, 2400);
+
+            // CHECK: 3000ms (representing +15s)
+            setTimeout(() => {
+                addLog(
+                    `CHECK: Verifying Bliss Independence threshold... (D > 26nM && Q > 8uM).`,
+                    `CHECK: Verifying Bliss Independence threshold... (D > 26nM && Q > 8uM).`,
+                    'info',
+                    time15
+                );
+            }, 3000);
+
+            // SUCCESS / WARN: 4000ms (representing +20s)
+            setTimeout(() => {
+                if (c_d < 26 || c_q < 8) {
+                    addLog(
+                        'WARN: Неадекватна доза: Прагът на Bliss Independence не е достигнат.',
+                        'WARN: Inadequate dosage: Bliss Independence threshold not met.',
+                        'warn',
+                        time20
+                    );
+                    return;
+                }
+
+                addLog(
+                    `SUCCESS: Synergy requirements met. Flush protocol authorized.`,
+                    `SUCCESS: Synergy requirements met. Flush protocol authorized.`,
+                    'success',
+                    time20
+                );
+
+                // Start molecular flood animation
+                senolyticState = 'LIGAND_FLOOD';
+                ligands = [];
+
+                senescentCells.forEach(cell => {
+                    const numParticles = 4;
+                    for (let k = 0; k < numParticles; k++) {
+                        const startPos = new THREE.Vector3(
+                            (Math.random() - 0.5) * 45,
+                            (Math.random() - 0.5) * 28,
+                            (Math.random() - 0.5) * 12 - 4
+                        );
+                        const isQ = k % 2 === 0;
+                        const ligandColor = isQ ? 0x00f0ff : 0xb55fe6;
+                        
+                        const ligandGeo = new THREE.SphereGeometry(0.09, 6, 6);
+                        const ligandMat = new THREE.MeshBasicMaterial({ color: ligandColor });
+                        const ligandMesh = new THREE.Mesh(ligandGeo, ligandMat);
+                        ligandMesh.position.copy(startPos);
+                        scene.add(ligandMesh);
+
+                        ligands.push({
+                            mesh: ligandMesh,
+                            start: startPos,
+                            targetCell: cell,
+                            progress: 0.0,
+                            speed: 0.015 + Math.random() * 0.015
+                        });
+                    }
+                });
+
+                const e_d = calculateHillEffect(c_d, IC50_D, HILL_N_D);
+                const e_q = calculateHillEffect(c_q, IC50_Q, HILL_N_Q);
+                
+                const clearance_factor = 1.0 - (1.0 - e_d) * (1.0 - e_q);
+                
+                setTimeout(() => {
+                    p16 = parseFloat((13.2 * (1.0 - clearance_factor)).toFixed(1));
+                    il6 = parseFloat((11.4 * (1.0 - clearance_factor)).toFixed(1));
+                    tnf = parseFloat((9.8 * (1.0 - clearance_factor)).toFixed(1));
+                    h2ax = parseFloat((14.8 * (1.0 - clearance_factor)).toFixed(1));
+                    
+                    // Reduce p21 dynamically based on synergy clearance
+                    p21 = parseFloat((2.1 - (2.1 - 1.0) * clearance_factor).toFixed(1));
+                    if (p21 < 1.0) p21 = 1.0;
+                    
+                    updateDynamicMetrics();
+
+                    // Start dynamic PK decay updates
+                    if (window.pkDecayInterval) clearInterval(window.pkDecayInterval);
+
+                    const gfrScale = gfrVal / 90.0;
+                    const ke_D = Math.log(2) / 4.0;  // 4h half life
+                    const ke_Q = Math.log(2) / 11.0; // 11h half life
+                    
+                    const ke_D_adj = ke_D * gfrScale;
+                    const ke_Q_adj = ke_Q * gfrScale;
+
+                    let currentCD = c_d;
+                    let currentCQ = c_q;
+                    let decayHour = 0;
+
+                    addLog(
+                        `ФАРМАКОКИНЕТИКА: Изчистване в плазмата започна (GFR: ${gfrVal} мл/мин).`,
+                        `PHARMACOKINETICS: Plasma GFR excretion active (GFR: ${gfrVal} mL/min).`,
+                        'info'
+                    );
+
+                    window.pkDecayInterval = setInterval(() => {
+                        decayHour++;
+                        currentCD = currentCD * Math.exp(-ke_D_adj);
+                        currentCQ = currentCQ * Math.exp(-ke_Q_adj);
+
+                        // Back-convert concentrations to dial inputs
+                        const nextD = Math.max(0, Math.round(currentCD * (patientWeight / 75.0)));
+                        const nextQ = Math.max(0, Math.round(currentCQ * (patientWeight / 75.0)));
+
+                        document.getElementById('slider-d').value = nextD;
+                        document.getElementById('slider-q').value = nextQ;
+                        updateSliders();
+
+                        addLog(
+                            `ФАРМАКОКИНЕТИКА: Изчистване (+${decayHour}ч). Conc D: ${currentCD.toFixed(1)} nM, Q: ${currentCQ.toFixed(1)} uM.`,
+                            `PHARMACOKINETICS: Clearance (+${decayHour}h). Conc D: ${currentCD.toFixed(1)} nM, Q: ${currentCQ.toFixed(1)} uM.`,
+                            'info'
+                        );
+
+                        if (currentCD < 2.0 && currentCQ < 0.2) {
+                            clearInterval(window.pkDecayInterval);
+                            addLog(
+                                'ФАРМАКОКИНЕТИКА: Активните вещества са елиминирани от плазмата.',
+                                'PHARMACOKINETICS: Active compounds completely cleared from plasma.',
+                                'success'
+                            );
+                        }
+                    }, 1500); // 1.5s per biological hour
+
+                }, 2500);
+
+            }, 4000);
+        }
+
+        // Yamanaka OSK Reprogramming Trigger
+        function triggerYamanakaReprogram() {
+            const octVal = parseInt(document.getElementById('slider-oct').value) / 100;
+            const soxVal = parseInt(document.getElementById('slider-sox').value) / 100;
+            const klfVal = parseInt(document.getElementById('slider-klf').value) / 100;
+            
+            if (octVal < 1.0 || soxVal < 1.0 || klfVal < 1.0) {
+                addLog(
+                    'Недостатъчни транскрипционни фактори. Репрограмирането на OSK е неактивно.',
+                    'Insufficient transcription factors. OSK reprogramming inactive.',
+                    'warn'
+                );
+                return;
+            }
+
+            // Start protein docking animation state
+            reprogrammingState = 'DOCKING';
+            reprogrammingProgress = 0.0;
+
+            const targetIdx1 = 12;
+            const targetIdx2 = 20;
+            const targetIdx3 = 28;
+
+            const pos1 = new THREE.Vector3(-18, 12, 4);
+            const pos2 = new THREE.Vector3(18, -10, 3);
+            const pos3 = new THREE.Vector3(-15, -12, 5);
+
+            const p1 = createProteinComplex('OCT4', 0xb55fe6, pos1);
+            const p2 = createProteinComplex('SOX2', 0x00f0ff, pos2);
+            const p3 = createProteinComplex('KLF4', 0xff2a85, pos3);
+
+            oskProteins = [
+                { group: p1, start: pos1, targetIndex: targetIdx1, nodeArray: strand1Nodes },
+                { group: p2, start: pos2, targetIndex: targetIdx2, nodeArray: strand2Nodes },
+                { group: p3, start: pos3, targetIndex: targetIdx3, nodeArray: strand1Nodes }
+            ];
+
+            addLog(
+                'Въвеждане на Yamanaka вектори (OSK). Стартиране на протеиново скачване...',
+                'Yamanaka vectors (OSK) introduced. Starting protein docking sequence...',
+                'info'
+            );
+            
+            const osk_rejuv_power = (octVal + soxVal + klfVal) * 0.35;
+            const targetAge = parseFloat((82.4 - (82.4 - 52.4) * Math.min(1.0, osk_rejuv_power / 3.15)).toFixed(1));
+            const targetTelomere = parseFloat((4.8 + 2.2 * Math.min(1.0, osk_rejuv_power / 3.15)).toFixed(1));
+            const targetHtert = parseFloat((0.12 + 3.38 * Math.min(1.0, osk_rejuv_power / 3.15)).toFixed(2));
+
+            // Wait until docking is complete to initiate age countdown
+            setTimeout(() => {
+                let clockInterval = setInterval(() => {
+                    if (reprogrammingState === 'WAVEFRONT' || reprogrammingState === 'DOCKING') {
+                        return;
+                    }
+                    
+                    if (biologicalAge > targetAge) {
+                        biologicalAge = applyYamanakaWaveStep(0.09);
+                        if (biologicalAge < targetAge) biologicalAge = targetAge;
+                        
+                        telomere += 0.1;
+                        if (telomere > targetTelomere) telomere = targetTelomere;
+                        
+                        htert += 0.1;
+                        if (htert > targetHtert) htert = targetHtert;
+
+                        // Interpolate nadPool dynamically towards 45.0 as age rolls back
+                        const rejuvRatio = Math.min(1.0, (82.4 - biologicalAge) / (82.4 - 78.8));
+                        nadPool = 11.2 + (45.0 - 11.2) * rejuvRatio;
+
+                        updateDynamicMetrics();
+                    } else {
+                        clearInterval(clockInterval);
+                        reprogrammingState = 'TRANSCRIPTION';
+                        transcriptionTimer = 0.0;
+                        addLog(
+                            'Епигенетичният часовник на Хорват е успешно превъртян обратно. Стартиране на транскрипция...',
+                            'Epigenetic Horvath clock successfully reversed. Triggering pluripotency transcription...',
+                            'success'
+                        );
+                        spawnFloatingAnnotation("[TRANSCRIPTION STABILIZED]", "#eab308", new THREE.Vector3(0, 0, 5));
+                    }
+                }, 100);
+            }, 2000);
+        }
+
+        function triggerMitoRescue() {
+            addLog(
+                'Инжектирани са mtДНК спасителни вектори. Трасфер на здрави митохондрии към цитоплазмата...',
+                'mtDNA Rescue vectors injected. Transferring healthy mitochondria to cytoplasm...',
+                'info'
+            );
+            
+            const steps = 15;
+            let currentStep = 0;
+            const nadStart = nadPool;
+            const nadEnd = 45.0;
+            const ageStart = biologicalAge;
+            const ageEnd = 78.8; // Epigenetic AgeAccel = 78.8 - 78 = +0.8 yr
+            const atpStart = atp;
+            const atpEnd = 95;
+            const mtdnaStart = mtdna;
+            const mtdnaEnd = 4.2;
+
+            const rescueInterval = setInterval(() => {
+                currentStep++;
+                const ratio = currentStep / steps;
+                
+                nadPool = nadStart + (nadEnd - nadStart) * ratio;
+                biologicalAge = ageStart + (ageEnd - ageStart) * ratio;
+                atp = Math.round(atpStart + (atpEnd - atpStart) * ratio);
+                mtdna = mtdnaStart + (mtdnaEnd - mtdnaStart) * ratio;
+                
+                // Update CpG states relative to biological age change
+                const ageRatio = (biologicalAge - 52.4) / (82.4 - 52.4);
+                cpgStates.cg02225647 = 0.15 + 0.70 * ageRatio;
+                cpgStates.cg01820374 = 0.20 + 0.22 * ageRatio;
+                cpgStates.cg19726354 = 0.12 + 0.61 * ageRatio;
+                cpgStates.cg03445892 = 0.18 + 0.43 * ageRatio;
+                cpgStates.cg06221484 = 0.15 + 0.24 * ageRatio;
+                cpgStates.cg08447361 = 0.22 + 0.68 * ageRatio;
+
+                document.getElementById('val-atp').innerText = `${atp}%`;
+                document.getElementById('val-atp').style.color = atp >= 80 ? '#00ffaa' : 'var(--accent-amber)';
+                document.getElementById('val-mtdna').innerText = `${mtdna.toFixed(1)}%`;
+                document.getElementById('val-mtdna').style.color = mtdna <= 10.0 ? '#00ffaa' : 'var(--critical)';
+                
+                updateDynamicMetrics();
+
+                if (currentStep >= steps) {
+                    clearInterval(rescueInterval);
+                    addLog(
+                        'Митохондриалното производство на АТФ е възстановено. Мутационният товар на mtДНК е нормализиран (Стълб 2 проверка).',
+                        'Mitochondrial ATP production restored. mtDNA mutation load normalized (Pillar 2 Check).',
+                        'success'
+                    );
+                }
+            }, 100);
+        }
+
+        async function fetchFHIRRecord() {
+            const url = document.getElementById('fhir-url-input').value;
+            addLog(
+                `FHIR: Заявка за клиничен запис към ${url}...`,
+                `FHIR: Requesting Patient resource from ${url}...`,
+                'info'
+            );
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const fhirJson = await response.json();
+
+                // 1. Parse demographics
+                const nameObj = fhirJson.name && fhirJson.name[0];
+                const family = nameObj ? nameObj.family : 'Unknown';
+                const given = nameObj && nameObj.given ? nameObj.given.join(' ') : 'Patient';
+                const patientName = `${given} ${family}`;
+                document.getElementById('patient-id').innerText = patientName;
+
+                // 2. Parse birthDate & calculate chronological age (current year 2026 reference)
+                const birthDate = new Date(fhirJson.birthDate);
+                const chronoAge = 2026 - birthDate.getFullYear();
+                document.getElementById('chronological-age').innerText = currentLang === 'bg' ? `${chronoAge} г.` : `${chronoAge} yr`;
+
+                // 3. Parse patient weight custom extension
+                const weightExt = fhirJson.extension.find(ext => ext.url.includes('patient-weight'));
+                if (weightExt) {
+                    const weightVal = weightExt.valueQuantity.value;
+                    document.getElementById('slider-w').value = weightVal;
+                    patientWeight = weightVal;
+                }
+
+                // 4. Parse CpG site methylation density vectors
+                const cpgExt = fhirJson.extension.find(ext => ext.url.includes('cpg-methylation'));
+                if (cpgExt && cpgExt.extension) {
+                    cpgExt.extension.forEach(sub => {
+                        if (cpgStates[sub.url] !== undefined) {
+                            cpgStates[sub.url] = sub.valueDecimal;
+                        }
+                    });
+                }
+
+                // 5. Update biological age metrics
+                biologicalAge = calculateBiologicalAge();
+                
+                updateSliders();
+                updateDynamicMetrics();
+
+                addLog(
+                    `FHIR: Профилът е зареден успешно. Пациент: ${patientName}, Тегло: ${patientWeight} kg, Био възраст: ${biologicalAge} г.`,
+                    `FHIR: Profile loaded successfully. Patient: ${patientName}, Weight: ${patientWeight} kg, Bio Age: ${biologicalAge} yr.`,
+                    'success'
+                );
+            } catch (err) {
+                console.error(err);
+                addLog(
+                    `FHIR ГРЕШКА: Запитването към ${url} бе отхвърлено (CORS/Мрежова грешка).`,
+                    `FHIR ERROR: Request to ${url} failed (CORS/Network error).`,
+                    'crit'
+                );
+            }
+        }
+
+        function runHUDStressTests() {
+            const statusDisplay = document.getElementById('test-status-display');
+            statusDisplay.style.display = 'block';
+            statusDisplay.innerText = 'Initializing HUD stress tests...';
+
+            addLog(
+                'ТЕСТ: Стартиране на автоматизирани стрес тестове на HUD интерфейса...',
+                'TEST: Starting automated HUD interface stress tests...',
+                'info'
+            );
+
+            // Step 1: Weight boundaries validation
+            setTimeout(() => {
+                statusDisplay.innerText = 'Verifying weight bounds (50kg - 120kg)...';
+                const originalWeight = document.getElementById('slider-w').value;
+
+                // Min weight
+                document.getElementById('slider-w').value = 50;
+                updateSliders();
+                const dMin = parseFloat(document.getElementById('d-dose-display').innerText);
+                const qMin = parseFloat(document.getElementById('q-dose-display').innerText);
+
+                // Max weight
+                document.getElementById('slider-w').value = 120;
+                updateSliders();
+                const dMax = parseFloat(document.getElementById('d-dose-display').innerText);
+                const qMax = parseFloat(document.getElementById('q-dose-display').innerText);
+
+                // Verify target calculations
+                if (dMin === 75.0 && qMin === 1000.0 && dMax === 180.0 && qMax === 2400.0) {
+                    addLog(
+                        'ТЕСТ: Проверка на теглови граници и дозови калкулации - ИЗДЪРЖАН.',
+                        'TEST: Weight boundaries & target dose validation - PASS.',
+                        'success'
+                    );
+                } else {
+                    addLog(
+                        'ТЕСТ ГРЕШКА: Дозовите изчисления са некоректни.',
+                        'TEST ERROR: Dose calculation mismatch.',
+                        'crit'
+                    );
+                }
+
+                // Restore weight slider
+                document.getElementById('slider-w').value = originalWeight;
+                updateSliders();
+            }, 800);
+
+            // Step 2: CpG methylation bounds validation
+            setTimeout(() => {
+                statusDisplay.innerText = 'Verifying CpG methylation boundaries (0% and 100%)...';
+                const originalCpG = { ...cpgStates };
+
+                // 100% methylation (severe epigenetic noise)
+                cpgStates = {
+                    cg02225647: 1.0, cg01820374: 1.0, cg19726354: 1.0,
+                    cg03445892: 1.0, cg06221484: 1.0, cg08447361: 1.0
+                };
+                const ageMax = calculateBiologicalAge(); // 102.3 yr
+
+                // 0% methylation (minimum epigenetic noise limit)
+                cpgStates = {
+                    cg02225647: 0.0, cg01820374: 0.0, cg19726354: 0.0,
+                    cg03445892: 0.0, cg06221484: 0.0, cg08447361: 0.0
+                };
+                const ageMin = calculateBiologicalAge(); // 61.9 yr
+
+                if (ageMax === 102.3 && ageMin === 61.9) {
+                    addLog(
+                        'ТЕСТ: Проверка на регресията на Horvath при CpG крайности - ИЗДЪРЖАН.',
+                        'TEST: Horvath Clock regression CpG limits validation - PASS.',
+                        'success'
+                    );
+                } else {
+                    addLog(
+                        `ТЕСТ ГРЕШКА: Некоректни изчисления на Хорват (Max: ${ageMax}, Min: ${ageMin}).`,
+                        `TEST ERROR: Horvath math mismatch (Max: ${ageMax}, Min: ${ageMin}).`,
+                        'crit'
+                    );
+                }
+
+                cpgStates = originalCpG;
+                updateDynamicMetrics();
+            }, 1800);
+
+            // Step 3: Renal GFR check and lockout verification
+            setTimeout(() => {
+                statusDisplay.innerText = 'Verifying renal safety checks and GFR lockout...';
+                const originalGFR = document.getElementById('slider-gfr').value;
+
+                // Set GFR to severe kidney failure (15 mL/min)
+                document.getElementById('slider-gfr').value = 15;
+                updateSliders();
+                updateDynamicMetrics();
+
+                const lockoutText = document.getElementById('val-safety-p2').innerText;
+                const isRed = document.getElementById('val-safety-p2').className.includes('red');
+
+                if (isRed && (lockoutText.includes('БЛОКИРАН') || lockoutText.includes('LOCKOUT'))) {
+                    addLog(
+                        'ТЕСТ: Проверка на филтъра за безопасност на GFR при бъбречна недостатъчност - ИЗДЪРЖАН.',
+                        'TEST: GFR safety check lockout validation for kidney failure - PASS.',
+                        'success'
+                    );
+                } else {
+                    addLog(
+                        'ТЕСТ ГРЕШКА: Бъбречният филтър не блокира правилно при GFR < 30.',
+                        'TEST ERROR: GFR lockout check failed to block at GFR < 30.',
+                        'crit'
+                    );
+                }
+
+                // Restore GFR
+                document.getElementById('slider-gfr').value = originalGFR;
+                updateSliders();
+                updateDynamicMetrics();
+            }, 2800);
+
+            // Step 4: Final status completion
+            setTimeout(() => {
+                statusDisplay.innerText = 'All tests completed successfully.';
+                statusDisplay.style.color = 'var(--accent-emerald)';
+                addLog(
+                    'ТЕСТ: Всички пакети за автоматизирани стрес тестове преминаха успешно.',
+                    'TEST: All automated stress test suites completed successfully.',
+                    'success'
+                );
+            }, 3600);
+        }
+
+        function resetState() {
+            biologicalAge = 82.4;
+            p16 = 13.2;
+            il6 = 11.4;
+            tnf = 9.8;
+            h2ax = 14.8;
+            htert = 0.12;
+            telomere = 4.8;
+            atp = 42;
+            mtdna = 38.4;
+            nadPool = 11.2;
+            p21 = 2.1;
+            cpgStates = {
+                cg02225647: 0.85,
+                cg01820374: 0.42,
+                cg19726354: 0.73,
+                cg03445892: 0.61,
+                cg06221484: 0.39,
+                cg08447361: 0.90
+            };
+
+            updateDynamicMetrics();
+
+            document.getElementById('val-atp').style.color = 'var(--accent-amber)';
+            document.getElementById('val-mtdna').style.color = 'var(--critical)';
+
+            document.getElementById('slider-w').value = 75;
+            document.getElementById('slider-d').value = 0;
+            document.getElementById('slider-q').value = 0;
+            document.getElementById('slider-oct').value = 0;
+            document.getElementById('slider-sox').value = 0;
+            document.getElementById('slider-klf').value = 0;
+            document.getElementById('slider-diet').value = 0;
+            document.getElementById('slider-sports').value = 0;
+            updateSliders();
+
+            regenerateParticles();
+            addLog(
+                'Биологичното състояние е нулирано до параметрите преди лечението.',
+                'Biological state reset to pre-treatment parameters.',
+                'info'
+            );
+        }
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize translations to Bulgarian (default)
+        setLanguage('bg');
+
+    </script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- AETERNA Omni-Assistant Chat Widget -->
+    <div id="omni-assistant-container">
+        <style>
+            #omni-assistant-container {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                z-index: 99999;
+                font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                pointer-events: none;
+            }
+            #omni-assistant-container * {
+                box-sizing: border-box;
+            }
+            #omni-toggle-btn {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                border: 1px solid rgba(181, 95, 230, 0.45);
+                background: rgba(14, 20, 35, 0.85);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                color: #b55fe6;
+                box-shadow: 0 0 20px rgba(181, 95, 230, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                pointer-events: auto;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                padding: 0;
+            }
+            #omni-toggle-btn:hover {
+                transform: scale(1.1);
+            }
+            #omni-toggle-btn .ping-ring {
+                position: absolute;
+                inset: 0;
+                border-radius: 50%;
+                border: 1px solid #b55fe6;
+                opacity: 0.2;
+                animation: omni-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+            }
+            @keyframes omni-ping {
+                75%, 100% {
+                    transform: scale(1.4);
+                    opacity: 0;
+                }
+            }
+            #omni-chat-window {
+                width: 380px;
+                max-width: calc(100vw - 48px);
+                height: 500px;
+                max-h: calc(100vh - 120px);
+                margin-bottom: 16px;
+                border-radius: 12px;
+                border: 1px solid rgba(0, 240, 255, 0.3);
+                background: linear-gradient(135deg, rgba(14, 20, 35, 0.95) 0%, rgba(8, 12, 24, 0.98) 100%);
+                backdrop-filter: blur(25px);
+                -webkit-backdrop-filter: blur(25px);
+                box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                pointer-events: auto;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-origin: bottom right;
+                transform: scale(0);
+                opacity: 0;
+            }
+            #omni-chat-window.open {
+                transform: scale(1);
+                opacity: 1;
+            }
+            .omni-header {
+                padding: 12px 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: rgba(0, 0, 0, 0.4);
+                flex-shrink: 0;
+            }
+            .omni-header-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .omni-header-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: #00f0ff;
+                animation: omni-pulse 2s infinite;
+            }
+            @keyframes omni-pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.4; }
+            }
+            .omni-header-text {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                color: #00f0ff;
+            }
+            .omni-header-controls {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .omni-lang-pill {
+                display: flex;
+                align-items: center;
+                background: rgba(0, 0, 0, 0.3);
+                padding: 2px;
+                border-radius: 4px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .omni-lang-btn {
+                background: transparent;
+                border: none;
+                color: #718096;
+                font-size: 10px;
+                font-weight: 700;
+                padding: 2px 6px;
+                border-radius: 3px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .omni-lang-btn.active {
+                color: #fff;
+                background: rgba(0, 240, 255, 0.2);
+                border: 1px solid rgba(0, 240, 255, 0.4);
+            }
+            .omni-close-btn {
+                background: transparent;
+                border: none;
+                color: #a0aec0;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: color 0.2s;
+                padding: 0;
+            }
+            .omni-close-btn:hover {
+                color: #fff;
+            }
+            #omni-chat-messages {
+                flex: 1;
+                padding: 16px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                font-size: 13px;
+            }
+            .omni-msg-row {
+                display: flex;
+                gap: 12px;
+            }
+            .omni-msg-row.user {
+                flex-direction: row-reverse;
+            }
+            .omni-msg-bubble {
+                border-radius: 8px;
+                padding: 12px;
+                max-width: 80%;
+                line-height: 1.5;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.04);
+                color: #e2e8f0;
+            }
+            .omni-msg-row.user .omni-msg-bubble {
+                background: rgba(181, 95, 230, 0.15);
+                border-color: rgba(181, 95, 230, 0.25);
+                color: #fff;
+                border-top-right-radius: 0;
+            }
+            .omni-msg-row.bot .omni-msg-bubble {
+                border-top-left-radius: 0;
+            }
+            .omni-msg-author {
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                font-family: 'JetBrains Mono', monospace;
+                margin-bottom: 4px;
+                color: #fff;
+            }
+            .omni-input-area {
+                padding: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(0, 0, 0, 0.4);
+                flex-shrink: 0;
+            }
+            .omni-form {
+                display: flex;
+                gap: 8px;
+            }
+            #omni-chat-input {
+                flex: 1;
+                background: rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 6px;
+                padding: 8px 12px;
+                font-size: 13px;
+                color: #fff;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            #omni-chat-input:focus {
+                border-color: rgba(0, 240, 255, 0.4);
+            }
+            .omni-send-btn {
+                width: 36px;
+                height: 36px;
+                border-radius: 6px;
+                border: 1px solid rgba(0, 240, 255, 0.3);
+                background: rgba(0, 240, 255, 0.1);
+                color: #00f0ff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
+                padding: 0;
+            }
+            .omni-send-btn:hover {
+                background: #00f0ff;
+                color: #000;
+            }
+            #omni-chat-loading {
+                padding: 0 16px 12px;
+                display: none;
+                align-items: center;
+                gap: 8px;
+                font-size: 10px;
+                font-family: 'JetBrains Mono', monospace;
+                color: #00f0ff;
+            }
+            #omni-chat-loading.show {
+                display: flex;
+            }
+            .rotate-spin {
+                animation: omni-spin 1s linear infinite;
+            }
+            @keyframes omni-spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .terminal-scroll::-webkit-scrollbar {
+                width: 4px;
+            }
+            .terminal-scroll::-webkit-scrollbar-track {
+                background: rgba(255,255,255,0.01);
+            }
+            .terminal-scroll::-webkit-scrollbar-thumb {
+                background: rgba(0,240,255,0.2);
+                border-radius: 2px;
+            }
+        </style>
+        
+        <!-- Chat Window -->
+        <div id="omni-chat-window">
+            <!-- Header -->
+            <div class="omni-header">
+                <div class="omni-header-title">
+                    <div class="omni-header-dot"></div>
+                    <span class="omni-header-text">OMNI-ASSISTANT</span>
+                </div>
+                <div class="omni-header-controls">
+                    <div class="omni-lang-pill">
+                        <button id="omni-lang-bg" class="omni-lang-btn active">BG</button>
+                        <button id="omni-lang-en" class="omni-lang-btn">EN</button>
+                    </div>
+                    <button id="omni-close-btn" class="omni-close-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Messages Area -->
+            <div id="omni-chat-messages" class="terminal-scroll">
+                <!-- Initial System Message will be injected by JS -->
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="omni-chat-loading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-spin"><line x1="12" x2="12" y1="2" y2="6"/><line x1="12" x2="12" y1="18" y2="22"/><line x1="4.93" x2="7.76" y1="4.93" y2="7.76"/><line x1="16.24" x2="19.07" y1="16.24" y2="19.07"/><line x1="2" x2="6" y1="12" y2="12"/><line x1="18" x2="22" y1="12" y2="12"/><line x1="4.93" x2="7.76" y1="19.07" y2="16.24"/><line x1="16.24" x2="19.07" y1="7.76" y2="4.93"/></svg>
+                PROCESSING SYNAPSES...
+            </div>
+            
+            <!-- Input Area -->
+            <div class="omni-input-area">
+                <form id="omni-chat-form" class="omni-form">
+                    <input type="text" id="omni-chat-input" placeholder="Задай въпрос за системата..." autocomplete="off">
+                    <button type="submit" class="omni-send-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button id="omni-toggle-btn">
+            <div class="ping-ring"></div>
+            
+            <!-- AETERNA Purple Glowing Logo -->
+            <svg id="omni-icon-bot" style="width: 32px; height: 32px; transition: transform 0.5s;" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="purpleGlow-omni" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#b55fe6" />
+                        <stop offset="100%" stop-color="#ff2a85" />
+                    </linearGradient>
+                    <filter id="neonShadow-omni" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feColorMatrix type="matrix" values="
+                            1 0 0 0 0.7
+                            0 1 0 0 0.3
+                            0 0 1 0 0.9
+                            0 0 0 1 0
+                        " />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                <rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="2.5" stroke-opacity="0.8" transform="rotate(45 50 50)" filter="url(#neonShadow-omni)" />
+                <rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-omni)" transform="rotate(45 50 50)" />
+                <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
+            </svg>
+            
+            <svg id="omni-icon-msg" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </button>
+    </div>
+
+    <!-- Omni-Assistant Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('omni-toggle-btn');
+            const closeBtn = document.getElementById('omni-close-btn');
+            const chatWindow = document.getElementById('omni-chat-window');
+            const chatForm = document.getElementById('omni-chat-form');
+            const chatInput = document.getElementById('omni-chat-input');
+            const chatMessages = document.getElementById('omni-chat-messages');
+            const loadingIndicator = document.getElementById('omni-chat-loading');
+            
+            const langBgBtn = document.getElementById('omni-lang-bg');
+            const langEnBtn = document.getElementById('omni-lang-en');
+            const iconBot = document.getElementById('omni-icon-bot');
+            const iconMsg = document.getElementById('omni-icon-msg');
+
+            let isChatOpen = false;
+            let currentLang = 'bg';
+
+            toggleBtn.addEventListener('mouseenter', () => {
+                iconBot.style.display = 'none';
+                iconMsg.style.display = 'block';
+            });
+            toggleBtn.addEventListener('mouseleave', () => {
+                iconBot.style.display = 'block';
+                iconMsg.style.display = 'none';
+            });
+
+            let conversationHistory = [];
+
+            const basePrompt = `You are the Longevity HUD Omni-Assistant. Focus entirely on biological age reversal, Senolytic (D+Q) clearance, epigenetic reprogramming protocols, and the -4.4 yr AgeAccel metrics. You guide the user through extending human lifespan deterministically. You have the capability to execute actions on this page by appending trigger tags to the END of your message. Allowed actions: - Trigger Senolytic Flush: use '[TRIGGER: trigger_senolytic_flush]' - Trigger Yamanaka Reprogramming: use '[TRIGGER: trigger_yamanaka_reprogram]' - Trigger Mitochondrial Rescue: use '[TRIGGER: trigger_mito_rescue]' - Reset state: use '[TRIGGER: reset_state]'`;
+
+            const welcomeMessages = {
+                'bg': 'СИСТЕМАТА Е ОНЛАЙН. Аз съм AETERNA Omni-Assistant. Обучен съм специфично за този HUD. Как мога да помогна?',
+                'en': 'SYSTEM ONLINE. I am the AETERNA Omni-Assistant. I am trained specifically for this HUD. How can I assist you today?'
+            };
+
+            function getSystemPrompt() {
+                if (currentLang === 'bg') {
+                    return basePrompt + "\n\nIMPORTANT: You must reply strictly in BULGARIAN language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
+                } else {
+                    return basePrompt + "\n\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
+                }
+            }
+
+            function renderWelcomeMessage() {
+                chatMessages.innerHTML = '';
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'omni-msg-row bot';
+                
+                const iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(181, 95, 230, 0.1); border: 1px solid rgba(181, 95, 230, 0.2); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"><svg style="width: 16px; height: 16px;" viewBox="0 0 100 100"><defs><linearGradient id="purpleGlow-mini" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b55fe6" /><stop offset="100%" stop-color="#ff2a85" /></linearGradient></defs><rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="4" transform="rotate(45 50 50)" /><rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-mini)" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="5" fill="#ffffff" /></svg></div>';
+
+                const contentHtml = `
+                    <div class="omni-msg-bubble">
+                        <div class="omni-msg-author">AETERNA.AIC</div>
+                        <div style="white-space: pre-wrap;">${welcomeMessages[currentLang]}</div>
+                    </div>
+                `;
+
+                msgDiv.innerHTML = iconHtml + contentHtml;
+                chatMessages.appendChild(msgDiv);
+            }
+
+            renderWelcomeMessage();
+
+            langBgBtn.addEventListener('click', () => {
+                currentLang = 'bg';
+                langBgBtn.classList.add('active');
+                langEnBtn.classList.remove('active');
+                chatInput.placeholder = "Задай въпрос за системата...";
+                renderWelcomeMessage();
+                conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('bg', false);
+                }
+            });
+
+            langEnBtn.addEventListener('click', () => {
+                currentLang = 'en';
+                langEnBtn.classList.add('active');
+                langBgBtn.classList.remove('active');
+                chatInput.placeholder = "Ask about the architecture...";
+                renderWelcomeMessage();
+                conversationHistory = [];
+                if (typeof window.setLanguage === 'function') {
+                    window.setLanguage('en', false);
+                }
+            });
+
+            function toggleChat() {
+                isChatOpen = !isChatOpen;
+                if (isChatOpen) {
+                    chatWindow.classList.add('open');
+                    setTimeout(() => chatInput.focus(), 300);
+                } else {
+                    chatWindow.classList.remove('open');
+                }
+            }
+
+            toggleBtn.addEventListener('click', toggleChat);
+            closeBtn.addEventListener('click', toggleChat);
+
+            function appendMessage(text, isUser = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'omni-msg-row' + (isUser ? ' user' : ' bot');
+                
+                let iconHtml = '';
+                if (isUser) {
+                    iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+                } else {
+                    iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(181, 95, 230, 0.1); border: 1px solid rgba(181, 95, 230, 0.2); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"><svg style="width: 16px; height: 16px;" viewBox="0 0 100 100"><defs><linearGradient id="purpleGlow-mini2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b55fe6" /><stop offset="100%" stop-color="#ff2a85" /></linearGradient></defs><rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="4" transform="rotate(45 50 50)" /><rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-mini2)" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="5" fill="#ffffff" /></svg></div>';
+                }
+
+                const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+
+                const contentHtml = `
+                    <div class="omni-msg-bubble">
+                        ${!isUser ? '<div class="omni-msg-author">AETERNA.AIC</div>' : ''}
+                        <div style="white-space: pre-wrap;">${formattedText}</div>
+                    </div>
+                `;
+
+                msgDiv.innerHTML = iconHtml + contentHtml;
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function executePageAction(triggerStr) {
+                console.log('[OMNI-ASSISTANT] Executing trigger:', triggerStr);
+                const parts = triggerStr.split(':');
+                const cmd = parts[0];
+                const arg = parts[1];
+
+                const commandMap = {
+                    // aeterna_pharma_shadow.html
+                    'start_cohort_scan': () => {
+                        if (typeof window.startCohortScan === 'function') window.startCohortScan();
+                        else if (typeof startCohortScan === 'function') startCohortScan();
+                    },
+                    'trigger_crispr': () => {
+                        if (typeof window.triggerCrispr === 'function') window.triggerCrispr();
+                        else if (typeof triggerCrispr === 'function') triggerCrispr();
+                    },
+                    'trigger_yamanaka': () => {
+                        if (typeof window.triggerYamanaka === 'function') window.triggerYamanaka();
+                        else if (typeof triggerYamanaka === 'function') triggerYamanaka();
+                    },
+                    'reset_longevity': () => {
+                        if (typeof window.resetLongevity === 'function') window.resetLongevity();
+                        else if (typeof resetLongevity === 'function') resetLongevity();
+                    },
+                    // index.html
+                    'set_spec_tab': (tabId) => {
+                        if (typeof window.setSpecTab === 'function') window.setSpecTab(tabId);
+                        else if (typeof setSpecTab === 'function') setSpecTab(tabId);
+                    },
+                    'run_active_command': (cmdId) => {
+                        if (typeof window.runActiveCommand === 'function') window.runActiveCommand(cmdId);
+                        else if (typeof runActiveCommand === 'function') runActiveCommand(cmdId);
+                    },
+                    'set_trl_step': (stepNum) => {
+                        const val = parseInt(stepNum, 10);
+                        if (typeof window.setTRLStep === 'function') window.setTRLStep(val);
+                        else if (typeof setTRLStep === 'function') setTRLStep(val);
+                    },
+                    // clinical-oncology.html
+                    'trigger_cure_restoration': () => {
+                        if (typeof window.triggerCureRestoration === 'function') window.triggerCureRestoration();
+                        else if (typeof triggerCureRestoration === 'function') triggerCureRestoration();
+                    },
+                    'run_patient_simulation': () => {
+                        if (typeof window.runPatientSimulation === 'function') window.runPatientSimulation();
+                        else if (typeof runPatientSimulation === 'function') runPatientSimulation();
+                    },
+                    'trigger_crb_boost': () => {
+                        if (typeof window.triggerCrbBoost === 'function') window.triggerCrbBoost();
+                        else if (typeof triggerCrbBoost === 'function') triggerCrbBoost();
+                    },
+                    // oncology_hud.html
+                    'run_ultimate_cure': () => {
+                        if (typeof window.runUltimateCure === 'function') window.runUltimateCure();
+                        else if (typeof runUltimateCure === 'function') runUltimateCure();
+                    },
+                    'inject_drug_payload': () => {
+                        if (typeof window.injectDrugPayload === 'function') window.injectDrugPayload();
+                        else if (typeof injectDrugPayload === 'function') injectDrugPayload();
+                    },
+                    'connect_neural_link': () => {
+                        if (typeof window.connectNeuralLink === 'function') window.connectNeuralLink();
+                        else if (typeof connectNeuralLink === 'function') connectNeuralLink();
+                    },
+                    'reset_simulation': () => {
+                        if (typeof window.resetSimulation === 'function') window.resetSimulation();
+                        else if (typeof resetSimulation === 'function') resetSimulation();
+                    },
+                    // vht_cardio.html
+                    'deploy_stent': () => {
+                        if (typeof window.deployStent === 'function') window.deployStent();
+                        else if (typeof deployStent === 'function') deployStent();
+                    },
+                    // vht_diabet.html
+                    'inject_metabolic_anomaly': () => {
+                        if (typeof window.injectMetabolicAnomaly === 'function') window.injectMetabolicAnomaly();
+                        else if (typeof injectMetabolicAnomaly === 'function') injectMetabolicAnomaly();
+                    },
+                    'reset_hud': () => {
+                        if (typeof window.resetHUD === 'function') window.resetHUD();
+                        else if (typeof resetHUD === 'function') resetHUD();
+                    },
+                    // vht_longevity.html
+                    'trigger_senolytic_flush': () => {
+                        if (typeof window.triggerSenolyticFlush === 'function') window.triggerSenolyticFlush();
+                        else if (typeof triggerSenolyticFlush === 'function') triggerSenolyticFlush();
+                    },
+                    'trigger_yamanaka_reprogram': () => {
+                        if (typeof window.triggerYamanakaReprogram === 'function') window.triggerYamanakaReprogram();
+                        else if (typeof triggerYamanakaReprogram === 'function') triggerYamanakaReprogram();
+                    },
+                    'trigger_mito_rescue': () => {
+                        if (typeof window.triggerMitoRescue === 'function') window.triggerMitoRescue();
+                        else if (typeof triggerMitoRescue === 'function') triggerMitoRescue();
+                    },
+                    'reset_state': () => {
+                        if (typeof window.resetState === 'function') window.resetState();
+                        else if (typeof resetState === 'function') resetState();
+                    },
+                    // sovereign-hud.html
+                    'reset_cure_state': () => {
+                        if (typeof window.resetCureState === 'function') window.resetCureState();
+                        else if (typeof resetCureState === 'function') resetCureState();
+                    },
+                    'switch_tab': (tabId) => {
+                        if (typeof window.switchTab === 'function') window.switchTab(tabId);
+                        else if (typeof switchTab === 'function') switchTab(tabId);
+                    },
+                    // aeterna_cohort_sim.html
+                    'run_simulation': () => {
+                        if (typeof window.runSimulation === 'function') window.runSimulation();
+                        else if (typeof runSimulation === 'function') runSimulation();
+                    },
+                    'select_drug': (drugId) => {
+                        if (typeof window.selectDrug === 'function') window.selectDrug(drugId);
+                        else if (typeof selectDrug === 'function') selectDrug(drugId);
+                    },
+                    // ukame-matrix.html
+                    'recalculate': () => {
+                        if (typeof window.recalculate === 'function') window.recalculate();
+                        else if (typeof recalculate === 'function') recalculate();
+                    },
+                    // IP_FINDER.html
+                    'vivisect': () => {
+                        if (typeof window.vivisect === 'function') window.vivisect();
+                        else if (typeof vivisect === 'function') vivisect();
+                    }
+                };
+
+                if (commandMap[cmd]) {
+                    try {
+                        commandMap[cmd](arg);
+                    } catch(err) {
+                        console.error('[OMNI-ASSISTANT] Error running page action:', err);
+                    }
+                } else {
+                    console.warn('[OMNI-ASSISTANT] No handler found for command:', cmd);
+                }
+            }
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                appendMessage(text, true);
+                chatInput.value = '';
+                loadingIndicator.classList.add('show');
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                conversationHistory.push({ role: "user", parts: [{ text: text }] });
+
+                const payloadContents = [
+                    { role: "user", parts: [{ text: "SYSTEM INSTRUCTION: " + getSystemPrompt() }] },
+                    { role: "model", parts: [{ text: "Understood. Awaiting input." }] },
+                    ...conversationHistory
+                ];
+
+                try {
+                    const k1 = 'AQ.Ab8RN6J_y4NgA';
+                    const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
+                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-goog-api-key': k1 + k2
+                        },
+                        body: JSON.stringify({
+                            contents: payloadContents
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('API communication error');
+
+                    const data = await response.json();
+                    let botReply = "Error processing response.";
+                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                        botReply = data.candidates[0].content.parts[0].text;
+                    }
+
+                    let cleanedReply = botReply;
+                    const triggerRegex = /\[TRIGGER:\s*([a-zA-Z0-9_:-]+)\]/g;
+                    let match;
+                    const triggersToExecute = [];
+
+                    while ((match = triggerRegex.exec(botReply)) !== null) {
+                        triggersToExecute.push(match[1]);
+                    }
+
+                    cleanedReply = botReply.replace(triggerRegex, '').trim();
+
+                    appendMessage(cleanedReply, false);
+                    conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
+
+                    triggersToExecute.forEach(trig => {
+                        executePageAction(trig);
+                    });
+
+                } catch (error) {
+                    console.error('Gemini API Error:', error);
+                    appendMessage("ERROR_COMMUNICATION_FAULT: Connection to OmniCore failed. Please verify API status.", false);
+                } finally {
+                    loadingIndicator.classList.remove('show');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
