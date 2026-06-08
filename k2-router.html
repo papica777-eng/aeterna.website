@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -412,28 +412,28 @@
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <!-- User Position State -->
                 <div class="card interactive">
-                    <div class="card-title"><i data-lucide="bar-chart-2"></i> Позиция на Потребителя</div>
+                    <div class="card-title"><i data-lucide="bar-chart-2"></i> User Position</div>
                     
                     <div class="stats-row">
                         <div class="stat-card">
-                            <span class="label">Депозиран Колатерал</span>
+                            <span class="label">Deposited Collateral</span>
                             <span class="value mono" id="stat-collateral">0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span></span>
                         </div>
                         <div class="stat-card">
-                            <span class="label">Акумулиран Дълг</span>
+                            <span class="label">Accumulated Debt</span>
                             <span class="value mono" id="stat-debt">0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span></span>
                         </div>
                         <div class="stat-card">
-                            <span class="label">Здравен Фактор</span>
+                            <span class="label">Health Factor</span>
                             <span class="value mono" id="stat-hf">0.00</span>
                         </div>
                     </div>
 
                     <div class="hf-container">
                         <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
-                            <span style="color: var(--critical);">Ликвидация (< 1.00)</span>
-                            <span style="color: var(--warning);">Минимум (1.25)</span>
-                            <span style="color: var(--success);">Здрав</span>
+                            <span style="color: var(--critical);">Liquidation (< 1.00)</span>
+                            <span style="color: var(--warning);">Minimum (1.25)</span>
+                            <span style="color: var(--success);">Healthy</span>
                         </div>
                         <div class="hf-bar">
                             <div class="hf-bar-fill" id="hf-bar-fill"></div>
@@ -443,32 +443,32 @@
 
                 <!-- Actions Panel -->
                 <div class="card">
-                    <div class="card-title"><i data-lucide="zap"></i> Операции с Контракта</div>
+                    <div class="card-title"><i data-lucide="zap"></i> Contract Operations</div>
                     
                     <div class="actions-grid">
                         <!-- Deposit Box -->
                         <div class="stat-card" style="gap: 16px;">
                             <div class="input-group">
-                                <label>Депозит на Колатерал (deposit_collateral)</label>
+                                <label>Deposit Collateral (deposit_collateral)</label>
                                 <div class="input-wrapper">
-                                    <input type="number" id="input-deposit" placeholder="Количество колатерал..." value="100">
+                                    <input type="number" id="input-deposit" placeholder="Collateral amount..." value="100">
                                 </div>
                             </div>
                             <button class="btn btn-primary" id="btn-deposit" onclick="handleDeposit()">
-                                <i data-lucide="download"></i> Депозирай Колатерал
+                                <i data-lucide="download"></i> Deposit Collateral
                             </button>
                         </div>
 
                         <!-- Borrow Box -->
                         <div class="stat-card" style="gap: 16px;">
                             <div class="input-group">
-                                <label>Вземане на Заем (borrow)</label>
+                                <label>Borrow Assets</label>
                                 <div class="input-wrapper">
-                                    <input type="number" id="input-borrow" placeholder="Количество заем..." value="50">
+                                    <input type="number" id="input-borrow" placeholder="Borrow amount..." value="50">
                                 </div>
                             </div>
                             <button class="btn btn-cyan" id="btn-borrow" onclick="handleBorrow()">
-                                <i data-lucide="upload"></i> Вземи Заем
+                                <i data-lucide="upload"></i> Borrow
                             </button>
                         </div>
                     </div>
@@ -476,13 +476,13 @@
                     <!-- Liquidation Box -->
                     <div class="stat-card" style="gap: 16px;">
                         <div class="input-group">
-                            <label>Ликвидация на Позиция (liquidate)</label>
+                            <label>Liquidate Position</label>
                             <div class="input-wrapper">
-                                <input type="text" id="input-liquidate-target" placeholder="Адрес на длъжника (G...)" value="">
+                                <input type="text" id="input-liquidate-target" placeholder="Debtor address (G...)" value="">
                             </div>
                         </div>
                         <button class="btn btn-secondary" style="border-color: rgba(239, 68, 68, 0.4); color: var(--critical);" id="btn-liquidate" onclick="handleLiquidate()">
-                            <i data-lucide="skull"></i> Ликвидирай Позиция
+                            <i data-lucide="skull"></i> Liquidate Position
                         </button>
                     </div>
                 </div>
@@ -492,7 +492,7 @@
             <div style="display: flex; flex-direction: column; gap: 24px;">
                 <!-- Wallet Connector -->
                 <div class="card">
-                    <div class="card-title"><i data-lucide="wallet"></i> Портфейл & Сметки</div>
+                    <div class="card-title"><i data-lucide="wallet"></i> Wallet & Accounts</div>
                     <div class="wallet-controls">
                         <!-- Mode Selector -->
                         <div style="display: flex; gap: 8px;">
@@ -502,30 +502,30 @@
 
                         <div class="wallet-info">
                             <div class="wallet-info-row">
-                                <span>Активен Адрес</span>
-                                <span class="mono" id="wallet-address" style="font-size: 0.7rem;">Не е свързан</span>
+                                <span>Active Address</span>
+                                <span class="mono" id="wallet-address" style="font-size: 0.7rem;">Not Connected</span>
                             </div>
                             <div class="wallet-info-row">
-                                <span>Баланс (XLM)</span>
+                                <span>Balance (XLM)</span>
                                 <span class="mono" id="wallet-balance">0.00</span>
                             </div>
                         </div>
 
                         <div id="dev-wallet-actions" style="display: flex; flex-direction: column; gap: 10px;">
                             <button class="btn btn-secondary" onclick="generateDevAccount()">
-                                <i data-lucide="plus-circle"></i> Нов Тестов Акаунт
+                                <i data-lucide="plus-circle"></i> New Test Account
                             </button>
                             <button class="btn btn-secondary" onclick="fundDevAccount()">
-                                <i data-lucide="coins"></i> Зареди от Friendbot
+                                <i data-lucide="coins"></i> Fund from Friendbot
                             </button>
                         </div>
-                        <button class="btn btn-primary" id="btn-connect" onclick="connectWallet()">Свържи Портфейл</button>
+                        <button class="btn btn-primary" id="btn-connect" onclick="connectWallet()">Connect Wallet</button>
                     </div>
                 </div>
 
                 <!-- Contract Addresses info -->
                 <div class="card">
-                    <div class="card-title"><i data-lucide="cpu"></i> Адреси на Контрактите</div>
+                    <div class="card-title"><i data-lucide="cpu"></i> Contract Addresses</div>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <div class="address-badge">
                             <span>K2 Router</span>
@@ -548,11 +548,11 @@
         <div class="card">
             <div class="console-container">
                 <div class="console-header">
-                    <span>Системен Терминал</span>
-                    <span onclick="clearConsole()" style="cursor: pointer; color: var(--text-secondary);"><i data-lucide="trash-2" style="width: 12px; height: 12px; vertical-align: middle;"></i> Изчисти</span>
+                    <span>System Console</span>
+                    <span onclick="clearConsole()" style="cursor: pointer; color: var(--text-secondary);"><i data-lucide="trash-2" style="width: 12px; height: 12px; vertical-align: middle;"></i> Clear</span>
                 </div>
                 <div class="console-logs" id="console-logs">
-                    <div>[INFO] Система зареди успешно. Очаква се връзка с портфейл.</div>
+                    <div>[INFO] System loaded successfully. Awaiting wallet connection.</div>
                 </div>
             </div>
         </div>
@@ -603,7 +603,7 @@
             document.getElementById('dev-wallet-actions').style.display = mode === 'dev' ? 'flex' : 'none';
             document.getElementById('btn-connect').style.display = mode === 'freighter' ? 'flex' : 'none';
 
-            log(`Режим променен на: ${mode === 'dev' ? 'Developer (Mock)' : 'Freighter Wallet'}`);
+            log(`Mode changed to: ${mode === 'dev' ? 'Developer (Mock)' : 'Freighter Wallet'}`);
             
             // Reset
             currentAccount = null;
@@ -617,28 +617,28 @@
             currentAccount = StellarSdk.Keypair.random();
             accountPub = currentAccount.publicKey();
             updateWalletUI();
-            log(`Генериран нов тестов акаунт: ${accountPub}`);
-            log(`ВНИМАНИЕ: Секретният ключ е наличен само в паметта на браузъра.`, 'err');
+            log(`Generated new test account: ${accountPub}`);
+            log(`WARNING: Secret key is only available in browser memory.`, 'err');
         }
 
         // Fund Dev Account
         async function fundDevAccount() {
             if (appMode !== 'dev' || !accountPub) {
-                log('Моля първо генерирайте тестов акаунт.', 'err');
+                log('Please generate a test account first.', 'err');
                 return;
             }
 
-            log(`Заявка към Friendbot за финансиране на ${accountPub.substring(0, 10)}...`);
+            log(`Requesting Friendbot funding for ${accountPub.substring(0, 10)}...`);
             try {
                 const res = await fetch(`https://friendbot.stellar.org/?addr=${accountPub}`);
                 if (res.ok) {
-                    log(`Friendbot успешно зареди акаунта с 10,000 XLM!`);
+                    log(`Friendbot successfully funded account with 10,000 XLM!`);
                     await fetchAccountDetails();
                 } else {
-                    log(`Грешка при Friendbot финансирането: ${res.status}`, 'err');
+                    log(`Friendbot funding error: ${res.status}`, 'err');
                 }
             } catch (e) {
-                log(`Мрежова грешка: ${e.message}`, 'err');
+                log(`Network error: ${e.message}`, 'err');
             }
         }
 
@@ -652,11 +652,11 @@
                     const bal = accDetails.balances.find(b => b.asset_type === 'native');
                     document.getElementById('wallet-balance').textContent = parseFloat(bal.balance).toFixed(2);
                 } catch(e) {
-                    document.getElementById('wallet-balance').textContent = '0.00 (Незареден)';
+                    document.getElementById('wallet-balance').textContent = '0.00 (Unfunded)';
                 }
 
                 // Query K2 contract states
-                log(`Сканиране на данни от леджъра за адрес: ${accountPub.substring(0, 10)}...`);
+                log(`Scanning ledger data for address: ${accountPub.substring(0, 10)}...`);
                 
                 // Get user collateral
                 const colRes = await queryContract('UserCollateral', accountPub);
@@ -683,18 +683,18 @@
                 } else if (hf < 1.0) {
                     barFill.style.width = `${Math.min(100, hf * 40)}%`;
                     barFill.style.backgroundColor = 'var(--critical)';
-                    log(`ВНИМАНИЕ: Позицията е под лимита за ликвидация!`, 'err');
+                    log(`WARNING: Position is below liquidation threshold!`, 'err');
                 } else if (hf < 1.25) {
                     barFill.style.width = `${Math.min(100, hf * 50)}%`;
                     barFill.style.backgroundColor = 'var(--warning)';
-                    log(`Предупреждение: Здравният фактор е нисък.`, 'err');
+                    log(`Предупреждение: Healthyният фактор е нисък.`, 'err');
                 } else {
                     barFill.style.width = `${Math.min(100, 50 + hf * 10)}%`;
                     barFill.style.backgroundColor = 'var(--success)';
                 }
 
             } catch (e) {
-                log(`Грешка при зареждане на леджър данни: ${e.message}`, 'err');
+                log(`Error loading ledger data: ${e.message}`, 'err');
             }
         }
 
@@ -732,7 +732,7 @@
                 document.getElementById('wallet-address').textContent = accountPub.substring(0, 10) + '...' + accountPub.substring(46);
                 fetchAccountDetails();
             } else {
-                document.getElementById('wallet-address').textContent = 'Не е свързан';
+                document.getElementById('wallet-address').textContent = 'Not Connected';
                 document.getElementById('wallet-balance').textContent = '0.00';
                 document.getElementById('stat-collateral').innerHTML = `0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span>`;
                 document.getElementById('stat-debt').innerHTML = `0.00 <span style="font-size: 0.8rem; color: var(--text-secondary);">XLM</span>`;
@@ -744,30 +744,30 @@
         // Freighter Connector mock (Simulated since we cannot guarantee browser extension)
         async function connectWallet() {
             if (appMode !== 'freighter') return;
-            log("Запитване към Freighter Extension...");
+            log("Connecting to Freighter Extension...");
             try {
                 if (typeof window.stellar === 'undefined') {
-                    log("Freighter не е открит в браузъра.", 'err');
+                    log("Freighter not detected in browser.", 'err');
                     return;
                 }
                 const pubKey = await window.stellar.getPublicKey();
                 accountPub = pubKey;
                 updateWalletUI();
-                log(`Връзката осъществена успешно с Freighter: ${accountPub}`);
+                log(`Successfully connected to Freighter: ${accountPub}`);
             } catch (e) {
-                log(`Отхвърлено от потребителя: ${e.message}`, 'err');
+                log(`Rejected by user: ${e.message}`, 'err');
             }
         }
 
         // Send contract operations
         async function sendContractTx(op) {
             if (!accountPub) {
-                log("Моля първо свържете акаунт.", 'err');
+                log("Please connect an account first.", 'err');
                 return;
             }
 
             try {
-                log("Извличане на пореден номер на акаунта...");
+                log("Fetching account sequence number...");
                 const account = await server.getAccount(accountPub);
                 
                 const tx = new StellarSdk.TransactionBuilder(account, {
@@ -778,24 +778,24 @@
                 .setTimeout(30)
                 .build();
 
-                log("Симулиране и подготовка на транзакцията (Soroban RPC)...");
+                log("Simulating and preparing transaction (Soroban RPC)...");
                 const prepared = await server.prepareTransaction(tx);
 
                 if (appMode === 'dev') {
-                    log("Подписване на транзакцията локално (Dev Mode)...");
+                    log("Signing transaction locally (Dev Mode)...");
                     prepared.sign(currentAccount);
                 } else {
-                    log("Изпращане на транзакцията към Freighter за подпис...");
+                    log("Sending transaction to Freighter for signature...");
                     const signedXdr = await window.stellar.signTransaction(prepared.toXDR(), {
                         network: 'TESTNET'
                     });
                     prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Test SDF Network ; September 2015');
                 }
 
-                log("Изпращане към блокчейна...");
+                log("Sending to blockchain...");
                 const sendRes = await server.sendTransaction(prepared);
                 if (sendRes.status === 'ERROR') {
-                    throw new Error(`Транзакцията беше отхвърлена: ${JSON.stringify(sendRes.errorResult)}`);
+                    throw new Error(`Transaction was rejected: ${JSON.stringify(sendRes.errorResult)}`);
                 }
 
                 log(`Транзакцията изпратена успешно. Хеш: ${sendRes.hash}`);
