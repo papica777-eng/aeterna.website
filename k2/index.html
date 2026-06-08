@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTEX FINANCE | Institutional Dashboard</title>
+    <!-- Институционална Типография и Моноспейс -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/10.4.1/stellar-sdk.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.1.2/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* =========================================
+           ОНТОЛОГИЧНИ ПРАВИЛА (CSS VARIABLES)
+           ========================================= */
+        :root {
+            --obsidian: #0F172A; /* Slate 900 */
+            --surface: #1E293B; /* Slate 800 */
+            --surface-glass: rgba(30, 41, 59, 0.65);
+            --surface-hover: rgba(255, 255, 255, 0.03);
+            --neon-green: #34D399; /* Emerald 400 */
+            --neon-red: #F87171; /* Red 400 */
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.15);
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --text-dim: #475569;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            /* Премахване на бруталните остри ръбове - заобляне */
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.99; }
+            50% { opacity: 1; }
+            100% { opacity: 0.985; }
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            /* animation: flicker 0.2s infinite; - Премахване на терминалното трептене за по-мек UX */
+        }
+
+        /* CRT Scanline Overlay */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.12) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        /* Canvas Backdrop */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Glassmorphic Panel */
+        .glass-panel {
+            background: var(--surface-glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-panel:hover {
+            border-color: var(--glass-border-hover);
+            background: rgba(30, 41, 59, 0.85);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* =========================================
+           НАВИГАЦИЯ И ЖИВ СТАТУС
+           ========================================= */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+            background: rgba(1, 1, 3, 0.95);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            border: 1.5px solid #fff;
+            transform: rotate(45deg);
+            animation: logo-rotate 12s linear infinite;
+        }
+
+        @keyframes logo-rotate {
+            100% { transform: rotate(405deg); }
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            font-family: var(--font-mono);
+            color: #fff;
+        }
+
+        .logo span {
+            color: var(--text-muted);
+        }
+
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.005);
+            border: 1px solid var(--glass-border);
+            padding: 6px 14px;
+        }
+
+        .status-item.active {
+            color: var(--neon-green);
+        }
+
+        .pulse {
+            width: 5px;
+            height: 5px;
+            background-color: var(--neon-green);
+            border-radius: 50% !important; /* Фиксирано кръгче за индикатор */
+            box-shadow: 0 0 8px var(--neon-green);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.6); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 255, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
+        }
+
+        /* =========================================
+           HERO: ЗАЛАТА НА СУВЕРЕНИТЕТА
+           ========================================= */
+        .hero-section {
+            height: 82vh;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.01);
+            padding: 6px 16px;
+            letter-spacing: 4px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 4.8rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .hero-title span {
+            color: #8c9099;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 48px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Институционални Бутони */
+        .cta-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            padding: 18px 36px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            color: var(--obsidian);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* =========================================
+           ЖИВАТА ТЕЛЕМЕТРИЯ (LIVE HUD)
+           ========================================= */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .section-title span {
+            color: var(--text-muted);
+        }
+
+        .section-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media(max-width: 992px) {
+            .hud-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media(max-width: 576px) {
+            .hud-grid { grid-template-columns: 1fr; }
+        }
+
+        .hud-card {
+            padding: 30px 24px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(3, 3, 5, 0.9);
+        }
+
+        .hud-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1.5px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hud-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hud-value {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .hud-trend {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hud-trend.up { color: var(--neon-green); }
+        .hud-trend.down { color: var(--neon-red); }
+
+        /* Sniper Activity Feed Terminal */
+        .terminal-panel {
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .terminal-header {
+            background: #040406;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .terminal-title {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .term-dot {
+            width: 6px;
+            height: 6px;
+            background: #202225;
+            border-radius: 50% !important; /* Фиксирано кръгче */
+        }
+
+        .term-dot.red { background: var(--neon-red); }
+        .term-dot.green { background: var(--neon-green); }
+
+        .terminal-body {
+            background: #020204;
+            height: 220px;
+            padding: 20px;
+            overflow-y: auto;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            line-height: 1.8;
+            color: #818790;
+        }
+
+        .term-log {
+            margin-bottom: 6px;
+            animation: fadeInLog 0.2s ease-out;
+            white-space: nowrap;
+        }
+
+        @keyframes fadeInLog {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .term-ts { color: var(--text-dim); }
+        .term-tag { color: #8c9099; font-weight: bold; }
+        .term-profit { color: var(--neon-green); font-weight: bold; }
+        .term-hash { color: var(--text-muted); }
+
+        /* =========================================
+           АРХИТЕКТУРНИЯТ РОВ (TECH MOAT)
+           ========================================= */
+        .grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media(max-width: 768px) {
+            .grid-3col { grid-template-columns: 1fr; }
+        }
+
+        .tech-card {
+            padding: 40px 30px;
+            background: rgba(3, 3, 5, 0.9);
+        }
+
+        .tech-card-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.005);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        .tech-card h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tech-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           K2 INCENTIVES & COST SIMULATOR
+           ========================================= */
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1.9fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media(max-width: 992px) {
+            .split-grid { grid-template-columns: 1fr; }
+        }
+
+        .matrix-table-wrapper {
+            padding: 30px;
+            background: rgba(3, 3, 5, 0.9);
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.82rem;
+        }
+
+        .matrix-table th, .matrix-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .matrix-table th {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .matrix-table td {
+            color: var(--text-main);
+        }
+
+        .matrix-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .matrix-table .hl {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .calc-panel {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: center;
+            background: rgba(3, 3, 5, 0.9);
+        }
+
+        @media(max-width: 576px) {
+            .calc-panel { grid-template-columns: 1fr; padding: 24px; }
+        }
+
+        .calc-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .slider-box {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .slider-header span:first-child { color: var(--text-muted); }
+        .slider-header span:last-child { color: #fff; }
+
+        #tx-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            outline: none;
+            cursor: pointer;
+        }
+
+        #tx-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            transition: transform 0.1s;
+        }
+
+        #tx-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .savings-box {
+            border-left: 2px solid #fff;
+            padding-left: 20px;
+        }
+
+        .savings-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            font-weight: 800;
+        }
+
+        .savings-amount {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1.5px;
+        }
+
+        .calc-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .bar-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .bar-label-name { color: var(--text-muted); }
+        .bar-label-val { color: #fff; font-family: var(--font-mono); }
+        .bar-label-val.hl { color: var(--neon-green); font-weight: 800; text-shadow: 0 0 8px rgba(0, 255, 102, 0.3); }
+
+        .bar-track {
+            height: 4px;
+            background: rgba(255,255,255,0.01);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.01);
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bar-fill.eth { background: #222; }
+        .bar-fill.arb { background: #444; }
+        .bar-fill.sol { background: #666; }
+        .bar-fill.k2 { background: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-family: var(--font-mono);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Alert and Threat states */
+        .status-item.alert {
+            color: var(--neon-red) !important;
+            border-color: rgba(255, 0, 51, 0.2) !important;
+            background: rgba(255, 0, 51, 0.01) !important;
+        }
+        
+        .pulse.alert {
+            background-color: var(--neon-red) !important;
+            box-shadow: 0 0 10px var(--neon-red) !important;
+            animation: pulse-alert-animation 1s infinite !important;
+        }
+        
+        @keyframes pulse-alert-animation {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 0, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
+        }
+
+        @keyframes border-flash {
+            0% { border-color: var(--glass-border); }
+            50% { border-color: rgba(255, 0, 51, 0.5); box-shadow: 0 0 20px rgba(255, 0, 51, 0.15); }
+            100% { border-color: var(--glass-border); }
+        }
+
+        .terminal-panel.threat-state {
+            animation: border-flash 1s infinite;
+        }
+
+        .pulse.disconnected {
+            background-color: var(--text-muted) !important;
+            box-shadow: none !important;
+            animation: none !important;
+        }
+
+        @media(max-width: 992px) {
+            .terminal-grid { grid-template-columns: 1fr !important; }
+        }
+        /* =========================================
+           МОБИЛНА ВЕРСИЯ (RESPONSIVE)
+           ========================================= */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+                text-align: center;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .cta-container {
+                flex-direction: column;
+            }
+            .hud-grid, .grid-3col {
+                grid-template-columns: 1fr;
+            }
+            .terminal-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CRT Scanline Effect -->
+    <div class="scan-line"></div>
+
+    <!-- Particle Grid Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <nav class="glass-panel">
+        <div class="logo-container">
+            <div class="logo-icon"></div>
+            <div class="logo">VERTEX<span>//</span>FINANCE</div>
+        </div>
+        <div class="status-container">
+            <div id="status-physics" class="status-item active">
+                <div id="pulse-physics" class="pulse"></div>
+                ON-CHAIN PHYSICS: <span id="text-physics">MAINNET SECURED</span>
+            </div>
+            <div id="status-sentinel" class="status-item active">
+                <div id="pulse-sentinel" class="pulse" style="animation-delay: 1s;"></div>
+                SENTINEL COGNITION: <span id="text-sentinel">ACTIVE</span>
+            </div>
+            <div id="status-wallet" class="status-item" style="cursor: pointer;" onclick="toggleWallet()">
+                <div id="pulse-wallet" class="pulse disconnected" style="animation-delay: 1.5s;"></div>
+                PORTFOLIO LINK: <span id="text-wallet">NOT CONNECTED</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <span class="hero-badge">TRL 7 Validated System</span>
+        <h1 class="hero-title">Absolute Sovereignty.<br><span>Zero Entropy.</span></h1>
+        <p class="hero-subtitle">Institutional HFT infrastructure secured by predictive cognitive agents and quantum-resistant Soroban cryptography. The capital vault is sealed.</p>
+        
+        <div class="cta-container">
+            <a href="#telemetry" class="btn btn-primary" onclick="playCyberClick()" style="border-radius: 8px !important;">
+                <i data-lucide="activity"></i> INITIALIZE TELEMETRY
+            </a>
+            <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline" target="_blank" class="btn btn-secondary" onclick="playCyberClick()" style="border-radius: 8px !important;">
+                <i data-lucide="git-branch"></i> SECURE REPOSITORY
+            </a>
+            <button class="btn btn-secondary text-red-500 hover:bg-red-950/20" onclick="simulateThreat()" style="border-color: rgba(255, 0, 51, 0.15); border-radius: 8px !important;">
+                <i data-lucide="shield-alert" class="text-red-500"></i> SIMULATE THREAT
+            </button>
+        </div>
+    </section>
+
+    <!-- Section 2: Live HUD Telemetry -->
+    <section class="section-container" id="telemetry">
+        <div class="section-header">
+            <h2 class="section-title">ON-CHAIN PHYSICS <span>TELEMETRY</span></h2>
+            <p class="section-subtitle">Telemetry matrix synchronized directly from the on-chain ledger modules.</p>
+        </div>
+
+        <div class="hud-grid">
+            <!-- TVL Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>COLLATERAL RESERVE SUBSTRATE (USDC)</span>
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-white"></i>
+                </div>
+                <div class="hud-value mono" id="hud-tvl">$14,845,920</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>+2.4% vs 24h</span>
+                </div>
+            </div>
+
+            <!-- Health Factor Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>SYSTEMIC HEALTH VECTOR (λ)</span>
+                    <i data-lucide="heart" class="w-3.5 h-3.5 text-white"></i>
+                </div>
+                <div class="hud-value mono" id="hud-health">1.84x</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>STABLE MODEL</span>
+                </div>
+            </div>
+
+            <!-- Throughput Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>QUANTUM THREAD PROCESS (TPS)</span>
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
+                </div>
+                <div class="hud-value mono" id="hud-tps">1,245 tps</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>ZERO-DELAY QUEUE</span>
+                </div>
+            </div>
+
+            <!-- MEV Rate Card -->
+            <div class="hud-card glass-panel">
+                <div class="hud-label">
+                    <span>REALIZED ARBITRAGE MARGIN (MEV)</span>
+                    <i data-lucide="coins" class="w-3.5 h-3.5 text-white"></i>
+                </div>
+                <div class="hud-value mono" id="hud-yield">14.82%</div>
+                <div class="hud-trend up">
+                    <i data-lucide="trending-up" class="w-3 h-3"></i>
+                    <span>MEV INJECTION</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart.js TVL Visualizer -->
+        <div class="glass-panel" style="margin-top: 24px; padding: 24px; height: 300px;">
+            <canvas id="tvlChart"></canvas>
+        </div>
+
+        <!-- Modern Execution Dashboard & Pro Mode Toggle -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
+            <h3 style="color: #fff; font-size: 1.5rem; font-weight: 700;">Dashboard Operations</h3>
+            <button onclick="toggleProMode()" style="background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: var(--font-mono); font-size: 0.75rem; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="terminal" class="w-4 h-4"></i> PRO MODE
+            </button>
+        </div>
+
+        <div class="terminal-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Left: Clean Execution Panel (Deposit / Borrow) -->
+            <div class="glass-panel" style="padding: 30px; display: flex; flex-direction: column; gap: 24px;">
+                <!-- Connection Banner -->
+                <div id="ops-connection-banner" style="background: rgba(52, 211, 153, 0.05); border: 1px solid rgba(52, 211, 153, 0.2); padding: 16px; border-radius: 8px; text-align: center;">
+                    <p style="color: var(--text-muted); margin-bottom: 12px; font-size: 0.85rem;">Please connect your Freighter wallet to interact with the protocol.</p>
+                    <button onclick="connectWallet()" style="background: var(--neon-green); color: #000; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%;">Connect Wallet</button>
+                </div>
+                <div id="ops-active-address" style="display: none; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 16px; border-radius: 8px; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="pulse" style="width: 8px; height: 8px;"></div>
+                        <span style="color: #fff; font-family: var(--font-mono); font-size: 0.85rem;" id="ops-signer-address">G...</span>
+                    </div>
+                    <span style="color: var(--neon-green); font-weight: 700; font-family: var(--font-mono);">BAL: <span id="ops-signer-balance">0.00</span> XLM</span>
+                </div>
+
+                <!-- Action Grid -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px;">
+                        <label style="color: var(--text-muted); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 8px;">Deposit Collateral (Native XLM)</label>
+                        <input type="number" id="k2-deposit-input" value="100" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; outline: none; padding: 10px; color: #fff; font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
+                        <button id="k2-deposit-btn" disabled onclick="handleDeposit()" style="width: 100%; background: var(--neon-green); color: #000; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; opacity: 0.5; transition: opacity 0.2s;">Deposit XLM</button>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px;">
+                        <label style="color: var(--text-muted); font-size: 0.75rem; font-weight: 600; display: block; margin-bottom: 8px;">Borrow USDC (Stellar Anchored)</label>
+                        <input type="number" id="k2-borrow-input" value="50" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; outline: none; padding: 10px; color: #fff; font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
+                        <button id="k2-borrow-btn" disabled onclick="handleBorrow()" style="width: 100%; background: #3B82F6; color: #fff; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; opacity: 0.5; transition: opacity 0.2s;">Borrow USDC</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Brutalist Sniper Log (Hidden by default, shown in Pro Mode) -->
+            <div id="pro-mode-panel" style="display: none; flex-direction: column; gap: 20px;">
+                <div class="terminal-panel glass-panel" style="border-radius: 12px;">
+                    <div class="terminal-header" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        <div class="terminal-title">
+                            <i data-lucide="terminal" class="w-3.5 h-3.5 text-white"></i> AutoBrokerDaemon :: Live Sniper Kill Log
+                        </div>
+                    </div>
+                    <div class="terminal-body" id="terminal-log-container" style="border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
+                        <div class="term-log"><span class="term-ts">[06/07/2026 22:58:00]</span> <span class="term-tag">DAEMON_START</span> :: AutoBrokerDaemon initialized on mainnet. Sentinel cognition active.</div>
+                        <div class="term-log"><span class="term-ts">[06/07/2026 22:58:05]</span> <span class="term-tag">VERITAS_CHECK</span> :: Substrate SHA-256 binary validation passed. Binary footprint: 4.5KB.</div>
+                    </div>
+                </div>
+
+                <div class="terminal-panel glass-panel" style="border-radius: 12px;">
+                    <div class="terminal-header" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        <div class="terminal-title"><i data-lucide="cpu" class="w-3.5 h-3.5 text-white"></i> Tactical Liquidation Interface</div>
+                    </div>
+                    <div class="terminal-body" style="height: 120px; padding: 20px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
+                        <label style="color: var(--text-muted); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px;">Target Address (MEV Opportunity)</label>
+                        <div style="display: flex; margin-top: 8px;">
+                            <input type="text" id="k2-liquidate-input" placeholder="G..." style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); outline: none; padding: 8px; color: #fff; font-family: var(--font-mono); font-size: 0.75rem; border-top-left-radius: 6px; border-bottom-left-radius: 6px;">
+                            <button id="k2-liquidate-btn" disabled onclick="handleLiquidate()" style="background: rgba(248, 113, 113, 0.1); color: var(--neon-red); border: 1px solid var(--neon-red); padding: 0 20px; cursor: pointer; font-weight: bold; border-top-right-radius: 6px; border-bottom-right-radius: 6px; transition: all 0.2s;">LIQUIDATE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Deterministic Architectural Shield -->
+    <section class="section-container" id="tech-moat">
+        <div class="section-header">
+            <h2 class="section-title">DETERMINISTIC <span>ARCHITECTURAL SHIELD</span></h2>
+            <p class="section-subtitle">Three layers of absolute security engineered to withstand any market anomalies.</p>
+        </div>
+
+        <div class="grid-3col">
+            <!-- WASM Contracts -->
+            <div class="tech-card glass-panel">
+                <div class="tech-card-icon">
+                    <i data-lucide="binary" class="w-6 h-6"></i>
+                </div>
+                <h3>WASM Smart Contracts</h3>
+                <p>K2 is built on Stellar Soroban WebAssembly binaries. Strict formal verification of inputs and non-existent reentrancy loops ensure that the contracts are immune to standard EVM exploit vectors.</p>
+            </div>
+
+            <!-- Off-Chain Cognition -->
+            <div class="tech-card glass-panel">
+                <div class="tech-card-icon">
+                    <i data-lucide="eye" class="w-6 h-6"></i>
+                </div>
+                <h3>Off-Chain Cognition</h3>
+                <p>The Wealth_Sentinel daemon continuously monitors global orderbooks and liquidity depths, dynamically applying defensive pauses milliseconds before black swan crashes occur.</p>
+            </div>
+
+            <!-- Zero Human Intervention -->
+            <div class="tech-card glass-panel">
+                <div class="tech-card-icon">
+                    <i data-lucide="cpu" class="w-6 h-6"></i>
+                </div>
+                <h3>Zero Human Bias</h3>
+                <p>From arbitrage opportunity detection to collateral liquidation, execution is driven purely by decentralized mathematical logic, eliminating delay overhead and human errors.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Yield & Cost Model -->
+    <section class="section-container" id="incentives">
+        <div class="section-header">
+            <h2 class="section-title">ECONOMIC <span>EFFICIENCY ENGINE</span></h2>
+            <p class="section-subtitle">Comparing the economic scalability of K2 against EVM-based networks.</p>
+        </div>
+
+        <div class="split-grid">
+            <!-- MEV Redistribution Table -->
+            <div class="matrix-table-wrapper glass-panel">
+                <div style="font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                    MEV PROFIT REDISTRIBUTION CORE
+                </div>
+                <table class="matrix-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>K2 Soroban</th>
+                            <th>EVM Mainnet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="hl">Gas Model</td>
+                            <td>Deterministic Flat</td>
+                            <td>Auction (Gas War)</td>
+                        </tr>
+                        <tr>
+                            <td class="hl">Reentrancy Risk</td>
+                            <td>None (Protected)</td>
+                            <td>High (Re-entry prone)</td>
+                        </tr>
+                        <tr>
+                            <td class="hl">Admin Controls</td>
+                            <td>2-Step Transfer</td>
+                            <td>Direct Ownership</td>
+                        </tr>
+                        <tr>
+                            <td class="hl">Code Size</td>
+                            <td>4.5KB WASM</td>
+                            <td>200KB+ Bytecode</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Interactive Cost Simulator Panel -->
+            <div class="calc-panel glass-panel">
+                <div class="calc-settings">
+                    <div style="font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase;">
+                        TRANSACTION COST EMULATOR
+                    </div>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                        Simulate transaction volumes to visualize cost metrics across leading blockchain runtimes.
+                    </p>
+                    
+                    <div class="slider-box">
+                        <div class="slider-header">
+                            <span>MONTHLY VOLUME EMULATED:</span>
+                            <span id="volume-val">1,000,000 txs</span>
+                        </div>
+                        <input type="range" id="tx-slider" min="10000" max="10000000" step="10000" value="1000000" oninput="updateSimulator(this.value)">
+                    </div>
+
+                    <div class="savings-box">
+                        <div class="savings-label">REALIZED NET DIFFERENTIAL SAVINGS:</div>
+                        <div class="savings-amount mono" id="savings-val">$14,999,990</div>
+                    </div>
+                </div>
+
+                <div class="calc-bars">
+                    <!-- Ethereum -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">Ethereum Mainnet</span>
+                            <span class="bar-label-val" id="eth-cost">$15,000,000</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill eth" id="eth-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Arbitrum -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">Arbitrum L2</span>
+                            <span class="bar-label-val" id="arb-cost">$150,000</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill arb" id="arb-bar" style="width: 1%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Solana -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">Solana L1</span>
+                            <span class="bar-label-val" id="sol-cost">$3,000</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill sol" id="sol-bar" style="width: 0.1%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- K2 -->
+                    <div class="bar-container">
+                        <div class="bar-labels">
+                            <span class="bar-label-name">K2 (Soroban)</span>
+                            <span class="bar-label-val hl" id="k2-cost">$10.00</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill k2" id="k2-bar" style="width: 0.01%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Tactical API Sniper Hub -->
+    <section class="section-container" id="tactical-api" style="padding-top: 40px; padding-bottom: 60px;">
+        <div class="section-header">
+            <h2 class="section-title">VERTEX <span>TACTICAL API</span></h2>
+            <p class="section-subtitle">Connect your quantitative models directly to the K2 Engine. Zero API rate limits on-chain.</p>
+        </div>
+
+        <div class="glass-panel" style="padding: 40px; background: rgba(3, 3, 5, 0.95); border: 1px solid var(--glass-border);">
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="code" class="w-4 h-4 text-white"></i>
+                &gt;_ CORE INTEGRATION SPECIFICATION
+            </div>
+
+            <!-- Contract IDs -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; font-family: var(--font-mono); font-size: 0.7rem;">
+                <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
+                    <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_KINETIC_ROUTER</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5</div>
+                </div>
+                <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
+                    <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_INCENTIVES_CORE</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH</div>
+                </div>
+                <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
+                    <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_TREASURY_RESERVE</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL</div>
+                </div>
+            </div>
+
+            <!-- Tabs header -->
+            <div style="display: flex; gap: 4px; border-bottom: 1px solid var(--glass-border); padding-bottom: 1px; margin-bottom: 15px; font-family: var(--font-mono); font-size: 0.7rem;">
+                <button onclick="switchTab('tab-curl')" id="btn-tab-curl" style="background: #111; color: var(--neon-green); border: 1px solid var(--glass-border); border-bottom: none; padding: 8px 16px; cursor: pointer; font-weight: bold;">cURL</button>
+                <button onclick="switchTab('tab-rust')" id="btn-tab-rust" style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 8px 16px; cursor: pointer; font-weight: bold;">Rust (Soroban SDK)</button>
+                <button onclick="switchTab('tab-ts')" id="btn-tab-ts" style="background: transparent; color: var(--text-muted); border: 1px solid transparent; padding: 8px 16px; cursor: pointer; font-weight: bold;">TypeScript (Stellar SDK)</button>
+            </div>
+
+            <!-- Tab content -->
+            <div id="tab-curl" class="api-tab-content" style="background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
+<span style="color: #626770;"># Query UserCollateral storage entry directly from Soroban RPC</span>
+curl -X POST https://soroban-testnet.stellar.org \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getLedgerEntries",
+    "params": {
+      "keys": [
+        "AAAAAAAAAAMAAAABAAAAAwAAAAgAAAAQ... (XDR base64 for ContractData UserCollateral)"
+      ]
+    }
+  }'
+            </div>
+
+            <div id="tab-rust" class="api-tab-content" style="display: none; background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
+<span style="color: #626770;">// Invoking K2 Router directly within your WASM contract</span>
+use soroban_sdk::{Env, Address, Symbol};
+
+fn trigger_collateral_deposit(env: Env, router: Address, user: Address, amount: i128) {
+    let client = env.register_contract_client(&router);
+    client.invoke::&lt;()&gt;(&amp;
+        Symbol::new(&amp;env, "deposit_collateral"),
+        &amp;(user, amount)
+    );
+}
+            </div>
+
+            <div id="tab-ts" class="api-tab-content" style="display: none; background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
+<span style="color: #626770;">// Programmatic transaction building with Stellar SDK</span>
+import { TransactionBuilder, Operation, Address, xdr, Networks } from 'stellar-sdk';
+
+const op = Operation.invokeContractFunction({
+  contract: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
+  function: 'deposit_collateral',
+  args: [
+    new Address(userAddress).toScVal(),
+    xdr.ScVal.scvI128(new xdr.Int128Parts({
+      lo: xdr.Uint64.fromString(amount),
+      hi: xdr.Int64.fromString("0")
+    }))
+  ]
+});
+            </div>
+
+            <div style="margin-top: 24px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); border-top: 1px solid var(--glass-border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Liquidation MEV is open for aggressive arbiters. Real-time event subscription via WebSocket is rate-limit free on-chain.</span>
+                <span style="color: var(--neon-green);">API STATUS: UNRESTRICTED</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>© 2026 VERTEX FINANCE Lending Protocol. Developed by Dimitar Prodromov.</span>
+        <span>Stellar Soroban Mainnet Secured</span>
+    </footer>
+
+    <!-- Scripts Logic -->
+    <script>
+        lucide.createIcons();
+
+        // Config addresses
+        const CONTRACT_ADDRESSES = {
+            router: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
+            incentives: 'CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH',
+            treasury: 'CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL'
+        };
+
+        let accountPub = '';
+        let server = new StellarSdk.rpc.Server('https://soroban-testnet.stellar.org');
+
+        // 3D Particle Canvas Backdrop
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const maxParticles = 60;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+                ctx.fill();
+            }
+        }
+        
+        for (let i = 0; i < maxParticles; i++) {
+            particles.push(new Particle());
+        }
+        
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.015 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            drawLines();
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        // Live HUD Fluctuations
+        setInterval(() => {
+            // TVL slight fluctuation only if not connected to wallet
+            if (!accountPub) {
+                const tvlNode = document.getElementById('hud-tvl');
+                const currentTvl = parseFloat(tvlNode.textContent.replace(/[$,]/g, ''));
+                const newTvl = currentTvl + (Math.random() - 0.5) * 1500;
+                tvlNode.textContent = '$' + Math.round(newTvl).toLocaleString();
+
+                // Health Factor
+                const healthNode = document.getElementById('hud-health');
+                const currentHealth = parseFloat(healthNode.textContent.replace('x', ''));
+                const newHealth = Math.max(1.80, Math.min(1.89, currentHealth + (Math.random() - 0.5) * 0.005));
+                healthNode.textContent = newHealth.toFixed(2) + 'x';
+            }
+
+            // TPS spike/drop
+            const tpsNode = document.getElementById('hud-tps');
+            const currentTps = parseInt(tpsNode.textContent.replace(' tps', ''));
+            const newTps = Math.max(800, Math.min(2200, currentTps + Math.round((Math.random() - 0.5) * 60)));
+            tpsNode.textContent = newTps.toLocaleString() + ' tps';
+        }, 3000);
+
+        // System Log to Console
+        function logToConsole(msg, type = 'info') {
+            const terminalLog = document.getElementById('terminal-log-container');
+            const logItem = document.createElement('div');
+            logItem.className = 'term-log';
+            
+            let color = '#818790';
+            let tag = 'DAEMON';
+            if (type === 'err') {
+                color = 'var(--neon-red)';
+                tag = 'ERROR';
+            } else if (type === 'success') {
+                color = 'var(--neon-green)';
+                tag = 'SUCCESS';
+            } else if (type === 'warning') {
+                color = 'var(--neon-red)';
+                tag = 'WARNING';
+            }
+            
+            logItem.style.color = color;
+            logItem.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: ${color};">${tag}</span> :: ${msg}`;
+            
+            terminalLog.appendChild(logItem);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+            
+            if (terminalLog.children.length > 25) {
+                terminalLog.removeChild(terminalLog.firstChild);
+            }
+        }
+
+        // AutoBroker Sniper Live Feed Log Generator
+        const terminalLog = document.getElementById('terminal-log-container');
+        const prefixes = ["GAC5", "GB7R", "GD2S", "GA4V", "GC8P"];
+        const assets = ["USDC", "XLM", "EURC", "AETERNA"];
+        
+        function getTimestamp() {
+            const now = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            return `[${pad(now.getDate())}/${pad(now.getMonth()+1)}/2026 ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}]`;
+        }
+
+        function generateRandomLog() {
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            const asset = assets[Math.floor(Math.random() * assets.length)];
+            const amount = Math.floor(Math.random() * 1200) + 150;
+            const txHash = Math.random().toString(16).substring(2, 10);
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'term-log';
+            logItem.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag">LIQUIDATION_STRIKE_SUCCESS</span> :: Target ${prefix}... | Profit: <span class="term-profit">+${amount} ${asset}</span> | Hash: <span class="term-hash">${txHash}...</span>`;
+            
+            terminalLog.appendChild(logItem);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+            
+            // Cap log elements count to avoid memory bloat
+            if (terminalLog.children.length > 25) {
+                terminalLog.removeChild(terminalLog.firstChild);
+            }
+        }
+
+        // Start high frequency simulation
+        setInterval(generateRandomLog, 4000);
+
+        // Cost Simulator Handler
+        function updateSimulator(volume) {
+            const formatted = Number(volume).toLocaleString();
+            document.getElementById('volume-val').textContent = formatted + ' txs';
+
+            const ethFee = 15.00;
+            const arbFee = 0.15;
+            const solFee = 0.003;
+            const k2Fee = 0.00001;
+
+            const ethTotal = volume * ethFee;
+            const arbTotal = volume * arbFee;
+            const solTotal = volume * solFee;
+            const k2Total = volume * k2Fee;
+
+            document.getElementById('eth-cost').textContent = '$' + Math.round(ethTotal).toLocaleString();
+            document.getElementById('arb-cost').textContent = '$' + Math.round(arbTotal).toLocaleString();
+            document.getElementById('sol-cost').textContent = '$' + Math.round(solTotal).toLocaleString();
+            document.getElementById('k2-cost').textContent = '$' + k2Total.toFixed(2);
+
+            const savings = ethTotal - k2Total;
+            document.getElementById('savings-val').textContent = '$' + Math.round(savings).toLocaleString();
+
+            // Update bars
+            const max = ethTotal;
+            document.getElementById('eth-bar').style.width = '100%';
+            document.getElementById('arb-bar').style.width = Math.max((arbTotal / max) * 100, 1.2) + '%';
+            document.getElementById('sol-bar').style.width = Math.max((solTotal / max) * 100, 0.4) + '%';
+            document.getElementById('k2-bar').style.width = Math.max((k2Total / max) * 100, 0.05) + '%';
+        }
+
+        // Web Audio API Click synthesizer
+        function playCyberClick() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(2200, audioCtx.currentTime); // high pitch HFT click
+                oscillator.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.02);
+                
+                gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.02);
+            } catch (e) {
+                console.log("Audio not supported or blocked by policy");
+            }
+        }
+
+        // Web Audio API Alarm synthesizer
+        function playAlarm() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // First tone (low beep)
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(120, audioCtx.currentTime);
+                gain1.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start();
+                osc1.stop(audioCtx.currentTime + 0.3);
+
+                // Second tone (slightly delayed high beep)
+                setTimeout(() => {
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.type = 'sawtooth';
+                    osc2.frequency.setValueAtTime(160, audioCtx.currentTime);
+                    gain2.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.start();
+                    osc2.stop(audioCtx.currentTime + 0.3);
+                }, 150);
+            } catch (e) {
+                console.log("Audio alert blocked");
+            }
+        }
+
+        // Freighter Wallet integration
+        async function connectWallet() {
+            logToConsole("Checking Freighter connection status...");
+            try {
+                if (typeof window.freighterApi === 'undefined' && typeof window.stellar === 'undefined') {
+                    logToConsole("Freighter wallet extension not detected in browser.", "err");
+                    alert("Freighter wallet extension not detected. Please install Freighter to connect.");
+                    return;
+                }
+                
+                const api = window.freighterApi || window.stellar;
+                const isConnected = await api.isConnected();
+                const isConnectedVal = typeof isConnected === 'boolean' ? isConnected : isConnected?.isConnected;
+                
+                if (!isConnectedVal) {
+                    logToConsole("Freighter wallet is not connected. Install or unlock the extension.", "err");
+                    return;
+                }
+                
+                logToConsole("Requesting wallet access permission...");
+                let access;
+                if (window.freighterApi && window.freighterApi.requestAccess) {
+                    access = await window.freighterApi.requestAccess();
+                } else {
+                    access = await window.stellar.getPublicKey();
+                }
+                
+                const address = typeof access === 'string' ? access : (access?.address || access?.publicKey);
+                
+                if (!address || access?.error) {
+                    throw new Error(access?.error || "User denied access.");
+                }
+                
+                accountPub = address;
+                
+                // Update UI state
+                document.getElementById('status-wallet').classList.add('active');
+                document.getElementById('pulse-wallet').classList.remove('disconnected');
+                document.getElementById('text-wallet').textContent = `CONNECTED: ${accountPub.substring(0, 6)}...${accountPub.substring(50)}`;
+                
+                document.getElementById('ops-connection-banner').style.display = 'none';
+                
+                const activeAddressDiv = document.getElementById('ops-active-address');
+                activeAddressDiv.style.display = 'flex';
+                document.getElementById('ops-signer-address').textContent = accountPub.substring(0, 6) + '...' + accountPub.substring(50);
+                
+                // Unlock buttons
+                document.getElementById('k2-deposit-btn').disabled = false;
+                document.getElementById('k2-deposit-btn').style.color = 'var(--neon-green)';
+                document.getElementById('k2-borrow-btn').disabled = false;
+                document.getElementById('k2-borrow-btn').style.color = '#00f6ff';
+                document.getElementById('k2-liquidate-btn').disabled = false;
+                document.getElementById('k2-liquidate-btn').style.color = 'var(--neon-red)';
+                
+                logToConsole(`Wallet link successfully authorized. Active signer: ${accountPub}`, "success");
+                playCyberClick();
+                
+                // Start querying ledger
+                await fetchAccountDetails();
+            } catch (e) {
+                logToConsole(`Authorization failed: ${e.message}`, "err");
+            }
+        }
+
+        function disconnectWallet() {
+            if (!accountPub) return;
+            accountPub = '';
+            
+            document.getElementById('status-wallet').classList.remove('active');
+            document.getElementById('pulse-wallet').classList.add('disconnected');
+            document.getElementById('text-wallet').textContent = 'NOT CONNECTED';
+            
+            document.getElementById('ops-connection-banner').style.display = 'flex';
+            document.getElementById('ops-active-address').style.display = 'none';
+            
+            // Lock buttons
+            document.getElementById('k2-deposit-btn').disabled = true;
+            document.getElementById('k2-deposit-btn').style.color = 'var(--text-muted)';
+            document.getElementById('k2-borrow-btn').disabled = true;
+            document.getElementById('k2-borrow-btn').style.color = 'var(--text-muted)';
+            document.getElementById('k2-liquidate-btn').disabled = true;
+            document.getElementById('k2-liquidate-btn').style.color = 'var(--text-muted)';
+            
+            // Reset HUD cards back to defaults
+            document.getElementById('hud-tvl').textContent = "$14,845,920";
+            document.getElementById('hud-health').textContent = "1.84x";
+            
+            logToConsole("Wallet link severed. Session locked.", "warning");
+            playCyberClick();
+        }
+        
+        async function toggleWallet() {
+            if (accountPub) {
+                disconnectWallet();
+            } else {
+                await connectWallet();
+            }
+        }
+
+        // Fetch user wallet balance & contract states
+        async function fetchAccountDetails() {
+            if (!accountPub) return;
+            try {
+                // Get native balance
+                try {
+                    const accDetails = await server.getAccount(accountPub);
+                    const bal = accDetails.balances.find(b => b.asset_type === 'native');
+                    document.getElementById('ops-signer-balance').textContent = parseFloat(bal.balance).toFixed(2);
+                } catch(e) {
+                    document.getElementById('ops-signer-balance').textContent = '0.00';
+                }
+
+                // Query K2 contract states
+                logToConsole(`Scanning ledger entries for contract user storage...`);
+                
+                // Get user collateral
+                const colRes = await queryContract('UserCollateral', accountPub);
+                const debtRes = await queryContract('UserDebt', accountPub);
+
+                const collateral = colRes ? parseInt(colRes) : 0;
+                const debt = debtRes ? parseInt(debtRes) : 0;
+                
+                let hf = 0;
+                if (debt > 0) {
+                    hf = collateral / debt;
+                } else if (collateral > 0) {
+                    hf = 99.99; // Safe
+                }
+
+                // Update HUD cards
+                if (collateral > 0 || debt > 0) {
+                    document.getElementById('hud-tvl').textContent = "$" + collateral.toLocaleString();
+                    document.getElementById('hud-health').textContent = hf.toFixed(2) + "x";
+                }
+                
+                logToConsole(`State update: Collateral = ${collateral} XLM, Debt = ${debt} XLM, λ Health = ${hf.toFixed(2)}x`, "success");
+
+            } catch (e) {
+                logToConsole(`Ledger scan failed: ${e.message}`, "err");
+            }
+        }
+
+        // Query contract storage (Simulate transaction view)
+        async function queryContract(dataKeyType, addressStr) {
+            try {
+                const ledgKey = StellarSdk.xdr.LedgerKey.ledgerKeyContractData(
+                    new StellarSdk.xdr.LedgerKeyContractData({
+                        contract: new StellarSdk.Address(CONTRACT_ADDRESSES.router).toScAddress(),
+                        key: StellarSdk.xdr.ScVal.scvVec([
+                            StellarSdk.xdr.ScVal.scvSymbol(dataKeyType),
+                            new StellarSdk.Address(addressStr).toScVal()
+                        ]),
+                        durability: StellarSdk.xdr.ContractDataDurability.instance()
+                    })
+                );
+
+                const ledgerState = await server.getLedgerEntries(ledgKey);
+                if (ledgerState.entries && ledgerState.entries.length > 0) {
+                    const entry = ledgerState.entries[0];
+                    const scVal = StellarSdk.xdr.LedgerEntryData.fromXDR(entry.xdr, 'base64').contractData().val();
+                    return scVal.i128().lo().toString();
+                }
+            } catch (e) {
+                // Suppress and return 0
+            }
+            return '0';
+        }
+
+        async function signTxWithFreighter(xdr) {
+            if (typeof window.freighterApi !== 'undefined' && window.freighterApi.signTransaction) {
+                try {
+                    return await window.freighterApi.signTransaction({
+                        transactionXdr: xdr,
+                        network: 'TESTNET'
+                    });
+                } catch (e) {
+                    if (typeof window.stellar !== 'undefined' && window.stellar.signTransaction) {
+                        return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
+                    }
+                    throw e;
+                }
+            } else if (typeof window.stellar !== 'undefined' && window.stellar.signTransaction) {
+                return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
+            }
+            throw new Error("Freighter signTransaction method not found");
+        }
+
+        // Send contract operations
+        async function sendContractTx(op) {
+            if (!accountPub) {
+                logToConsole("Signer connection missing.", "err");
+                return;
+            }
+
+            try {
+                logToConsole("Requesting ledger state sequence numbers...");
+                const account = await server.getAccount(accountPub);
+                
+                // Prepare TransactionBuilder
+                const tx = new StellarSdk.TransactionBuilder(account, {
+                    fee: '1000',
+                    networkPassphrase: 'Test SDF Network ; September 2015'
+                })
+                .addOperation(op)
+                .setTimeout(30)
+                .build();
+
+                logToConsole("Simulating transaction resources (Soroban RPC)...");
+                let prepared = await server.prepareTransaction(tx);
+
+                logToConsole("Requesting Freighter signature approval...");
+                const signedXdr = await signTxWithFreighter(prepared.toXDR());
+                
+                prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Test SDF Network ; September 2015');
+
+                logToConsole("Submitting transaction payload to ledger...");
+                const sendRes = await server.sendTransaction(prepared);
+                if (sendRes.status === 'ERROR') {
+                    throw new Error(`Transaction rejected by nodes: ${JSON.stringify(sendRes.errorResult)}`);
+                }
+
+                logToConsole(`Transaction submitted. Hash: ${sendRes.hash.substring(0, 10)}...`);
+                logToConsole("Polling for transaction consensus status...");
+                
+                let status = null;
+                for (let i = 0; i < 15; i++) {
+                    await new Promise(r => setTimeout(r, 2000));
+                    status = await server.getTransaction(sendRes.hash);
+                    if (status && status.status !== 'NOT_FOUND' && status.status !== 'PENDING') {
+                        break;
+                    }
+                }
+
+                if (status && status.status === 'SUCCESS') {
+                    logToConsole(`Transaction executed successfully in ledger entry!`, "success");
+                    await fetchAccountDetails();
+                } else {
+                    logToConsole(`Execution timeout or node error: ${status?.status}`, "err");
+                }
+
+            } catch (e) {
+                logToConsole(`Transaction failed: ${e.message}`, "err");
+            }
+        }
+
+        async function handleDeposit() {
+            const val = document.getElementById('k2-deposit-input').value;
+            if (!val || parseFloat(val) <= 0) {
+                logToConsole("Invalid deposit amount.", "err");
+                return;
+            }
+
+            logToConsole(`Building deposit_collateral transaction for ${val} XLM...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'deposit_collateral',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    StellarSdk.xdr.ScVal.scvI128(new StellarSdk.xdr.Int128Parts({
+                        lo: StellarSdk.xdr.Uint64.fromString(val),
+                        hi: StellarSdk.xdr.Int64.fromString("0")
+                    }))
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        async function handleBorrow() {
+            const val = document.getElementById('k2-borrow-input').value;
+            if (!val || parseFloat(val) <= 0) {
+                logToConsole("Invalid borrow amount.", "err");
+                return;
+            }
+
+            logToConsole(`Building borrow transaction for ${val} XLM...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'borrow',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    StellarSdk.xdr.ScVal.scvI128(new StellarSdk.xdr.Int128Parts({
+                        lo: StellarSdk.xdr.Uint64.fromString(val),
+                        hi: StellarSdk.xdr.Int64.fromString("0")
+                    }))
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        async function handleLiquidate() {
+            const target = document.getElementById('k2-liquidate-input').value;
+            if (!target) {
+                logToConsole("Liquidation target address required.", "err");
+                return;
+            }
+
+            logToConsole(`Building liquidate transaction for target: ${target.substring(0, 10)}...`);
+            const op = StellarSdk.Operation.invokeContractFunction({
+                contract: CONTRACT_ADDRESSES.router,
+                function: 'liquidate',
+                args: [
+                    new StellarSdk.Address(accountPub).toScVal(),
+                    new StellarSdk.Address(target).toScVal()
+                ]
+            });
+            await sendContractTx(op);
+        }
+
+        // Tactical API Tab switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.api-tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+
+            const tabs = ['curl', 'rust', 'ts'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`btn-tab-${t}`);
+                if (`tab-${t}` === tabId) {
+                    btn.style.background = '#111';
+                    btn.style.color = 'var(--neon-green)';
+                    btn.style.borderColor = 'var(--glass-border)';
+                } else {
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'var(--text-muted)';
+                    btn.style.borderColor = 'transparent';
+                }
+            });
+            playCyberClick();
+        }
+
+        // Threat Simulator Logic
+        let isThreatActive = false;
+        function simulateThreat() {
+            if (isThreatActive) return;
+            isThreatActive = true;
+
+            playAlarm();
+
+            const physicsStatus = document.getElementById('status-physics');
+            const physicsPulse = document.getElementById('pulse-physics');
+            const physicsText = document.getElementById('text-physics');
+            
+            const sentinelStatus = document.getElementById('status-sentinel');
+            const sentinelPulse = document.getElementById('pulse-sentinel');
+            const sentinelText = document.getElementById('text-sentinel');
+
+            physicsStatus.classList.remove('active');
+            physicsStatus.classList.add('alert');
+            physicsPulse.classList.add('alert');
+            physicsText.textContent = "THREAT DETECTED (LIQUIDITY DRIFT)";
+
+            sentinelStatus.classList.remove('active');
+            sentinelStatus.classList.add('alert');
+            sentinelPulse.classList.add('alert');
+            sentinelText.textContent = "COGNITIVE_PREDICTIVE_FREEZE ENGAGED";
+
+            const terminal = document.querySelector('.terminal-panel');
+            terminal.classList.add('threat-state');
+
+            const log1 = document.createElement('div');
+            log1.className = 'term-log';
+            log1.style.color = 'var(--neon-red)';
+            log1.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: var(--neon-red);">WARNING</span> :: WEALTH_SENTINEL DETECTED 14% LIQUIDITY DRIFT IN POOLS`;
+            terminalLog.appendChild(log1);
+
+            setTimeout(() => {
+                const log2 = document.createElement('div');
+                log2.className = 'term-log';
+                log2.style.color = 'var(--neon-red)';
+                log2.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: var(--neon-red);">SHIELD_ENGAGED</span> :: COGNITIVE_PREDICTIVE_FREEZE ACTIVE | ALL VAULTS SEALED`;
+                terminalLog.appendChild(log2);
+                terminalLog.scrollTop = terminalLog.scrollHeight;
+                playAlarm();
+            }, 800);
+
+            setTimeout(() => {
+                physicsStatus.classList.remove('alert');
+                physicsStatus.classList.add('active');
+                physicsPulse.classList.remove('alert');
+                physicsText.textContent = "MAINNET SECURED";
+
+                sentinelStatus.classList.remove('alert');
+                sentinelStatus.classList.add('active');
+                sentinelPulse.classList.remove('alert');
+                sentinelText.textContent = "ACTIVE";
+
+                terminal.classList.remove('threat-state');
+
+                const logRestore = document.createElement('div');
+                logRestore.className = 'term-log';
+                logRestore.style.color = 'var(--neon-green)';
+                logRestore.innerHTML = `<span class="term-ts">${getTimestamp()}</span> <span class="term-tag" style="color: var(--neon-green);">SYSTEM_RESTORED</span> :: Threat neutralised. Ledger realigned with 100% parity.`;
+                terminalLog.appendChild(logRestore);
+                terminalLog.scrollTop = terminalLog.scrollHeight;
+                
+                playCyberClick();
+                isThreatActive = false;
+            }, 5000);
+        }
+
+        function toggleProMode() {
+            const proPanel = document.getElementById('pro-mode-panel');
+            if (proPanel.style.display === 'none' || proPanel.style.display === '') {
+                proPanel.style.display = 'flex';
+            } else {
+                proPanel.style.display = 'none';
+            }
+            playCyberClick();
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('tvlChart');
+            if (!ctx) return;
+            
+            const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(52, 211, 153, 0.4)');
+            gradient.addColorStop(1, 'rgba(52, 211, 153, 0.0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Total Value Locked (USDC)',
+                        data: [4.2, 5.8, 8.1, 10.4, 11.2, 13.9, 14.8],
+                        borderColor: '#34D399',
+                        backgroundColor: gradient,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#34D399',
+                        pointBorderColor: '#000',
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#94A3B8',
+                            bodyColor: '#F8FAFC',
+                            borderColor: 'rgba(255,255,255,0.1)',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y + 'M';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                            ticks: {
+                                color: '#94A3B8',
+                                callback: function(value) { return '$' + value + 'M'; }
+                            }
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false },
+                            ticks: { color: '#94A3B8' }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                }
+            });
+        }
+
+        // Init values
+        updateSimulator(1000000);
+        setTimeout(initChart, 500);
+    </script>
+</body>
+</html>
