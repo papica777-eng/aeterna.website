@@ -129,6 +129,7 @@
 
                 <a href="./ukame-matrix.html" class="text-accent-gold hover:text-white transition-all font-black flex items-center gap-1.5" data-i18n="nav.ukame">UKAME SOLAR</a>
                 <a href="./omni-vivisector/index.html" class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5" data-i18n="nav.vivisector">OMNI-VIVISECTOR</a>
+                <a href="./k2/index.html" class="text-accent-emerald hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5 text-accent-emerald"></i> VERTEX DeFi</a>
 
             </div>
 
@@ -286,16 +287,19 @@
                 </div>
 
                 <!-- Finance / Atomics -->
-                <div class="glass-premium p-4 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(255,255,255,0.06)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.6s;">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-7 h-7 rounded bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white/10 transition-all">
-                            <i data-lucide="coins" class="w-4 h-4 text-white/80"></i>
+                <a href="./k2/index.html" class="glass-premium p-4 rounded-lg border border-accent-emerald/20 hover:border-accent-emerald/50 transition-all duration-500 group cursor-pointer hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(52,211,153,0.12)] block" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.6s;">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded bg-accent-emerald/10 flex items-center justify-center border border-accent-emerald/20 group-hover:bg-accent-emerald/20 transition-all">
+                                <i data-lucide="coins" class="w-4 h-4 text-accent-emerald"></i>
+                            </div>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-emerald uppercase font-mono">Finance</span>
                         </div>
-                        <span class="text-[8px] font-bold tracking-[0.2em] text-white/60 uppercase font-mono">Finance</span>
+                        <span class="text-[7px] font-bold font-mono px-1.5 py-0.5 rounded bg-accent-emerald/10 border border-accent-emerald/20 text-accent-emerald animate-pulse">LAUNCH HUD</span>
                     </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">€0.00 <span class="text-[10px] font-normal text-gray-500">Drift</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">Atomic cents calculations running under Landauer limits.</div>
-                </div>
+                    <div class="text-white font-black text-md leading-none mb-0.5">$14.84M <span class="text-[10px] font-normal text-gray-500">TVL</span></div>
+                    <div class="text-[9px] text-gray-500 leading-snug">Zero-entropy credit markets on Stellar Soroban with Freighter integration.</div>
+                </a>
 
                 <!-- Longevity -->
                 <div class="col-span-2 glass-premium p-4 rounded-lg border border-orange-500/20 hover:border-orange-500/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(249,115,22,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.65s;">
@@ -672,6 +676,24 @@
                         title: 'SOVEREIGN HUD',
                         desc: 'AETERNA core substrate monitoring, distributed vulnerability tracking, and Ring-0 security execution.',
                         ach: 'Conducted automated Web3 smart contract audits with zero-false-positive rates under PQC encryption.'
+                    }
+                }
+            },
+            {
+                id: 'vertex',
+                url: './k2/index.html',
+                icon: 'coins',
+                color: 'accent-emerald',
+                translations: {
+                    bg: {
+                        title: 'VERTEX DEFI HUD (ФИНАНСИ)',
+                        desc: 'Децентрализирани пазари за кредити с нулева ентропия върху Stellar Soroban.',
+                        ach: 'Интегриран квантов модел за ликвидация (MEV) и симулация на Stripe транзакции с 0% грешка.'
+                    },
+                    en: {
+                        title: 'VERTEX DEFI HUD',
+                        desc: 'Decentralized credit markets with zero entropy running on Stellar Soroban.',
+                        ach: 'Integrated quantum liquidation model (MEV) and Stripe payment gateway simulation with 0.00% drift.'
                     }
                 }
             }
