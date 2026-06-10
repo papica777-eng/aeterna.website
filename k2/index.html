@@ -1665,7 +1665,77 @@ const op = Operation.invokeContractFunction({
             } catch (e) {
                 console.log("Audio alert blocked");
             }
-        }        function disconnectWallet() {
+        }
+
+        async function connectWallet() {
+            logToConsole("Initiating handshake protocol with Web3 signer...");
+            
+            let address = '';
+            let isMock = false;
+
+            try {
+                if (typeof window.freighterApi !== 'undefined' && window.freighterApi.isConnected && await window.freighterApi.isConnected()) {
+                    logToConsole("Freighter Wallet detected. Requesting public key...");
+                    address = await window.freighterApi.getPublicKey();
+                } else if (typeof window.stellar !== 'undefined' && window.stellar.isConnected && await window.stellar.isConnected()) {
+                    logToConsole("Stellar Wallet detected. Requesting public key...");
+                    address = await window.stellar.getPublicKey();
+                } else {
+                    isMock = true;
+                    address = "GBK2FINANCEUSDCVAULTSIGNERMOCKTESTNET56789";
+                }
+            } catch (err) {
+                logToConsole(`Web3 Signer error: ${err.message}. Engaging Sandbox Fallback.`, "warning");
+                isMock = true;
+                address = "GBK2FINANCEUSDCVAULTSIGNERMOCKTESTNET56789";
+            }
+
+            if (!address) {
+                isMock = true;
+                address = "GBK2FINANCEUSDCVAULTSIGNERMOCKTESTNET56789";
+            }
+
+            accountPub = address;
+            
+            document.getElementById('status-wallet').classList.add('active');
+            document.getElementById('pulse-wallet').classList.remove('disconnected');
+            document.getElementById('text-wallet').textContent = 'CONNECTED';
+            
+            document.getElementById('ops-connection-banner').style.display = 'none';
+            document.getElementById('ops-active-address').style.display = 'flex';
+            
+            const shortAddr = address.substring(0, 4) + '...' + address.substring(address.length - 5);
+            document.getElementById('ops-signer-address').textContent = shortAddr;
+            
+            const depBtn = document.getElementById('k2-deposit-btn');
+            depBtn.disabled = false;
+            depBtn.style.opacity = '1';
+            depBtn.style.color = '#000';
+            
+            const borBtn = document.getElementById('k2-borrow-btn');
+            borBtn.disabled = false;
+            borBtn.style.opacity = '1';
+            borBtn.style.color = '#fff';
+            
+            const liqBtn = document.getElementById('k2-liquidate-btn');
+            if (liqBtn) {
+                liqBtn.disabled = false;
+                liqBtn.style.opacity = '1';
+                liqBtn.style.color = 'var(--neon-red)';
+            }
+            
+            if (isMock) {
+                logToConsole("[LOCAL SANDBOX] Freighter Wallet not found. Web3 Mock Signer fallback initialized.", "warning");
+                document.getElementById('ops-signer-balance').textContent = '10000.00';
+            } else {
+                logToConsole(`Web3 Signer successfully linked: ${shortAddr}`, "success");
+            }
+            
+            await fetchAccountDetails();
+            playCyberClick();
+        }
+
+        function disconnectWallet() {
             if (!accountPub) return;
             accountPub = '';
             
