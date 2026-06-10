@@ -997,12 +997,12 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                     <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px;">
                         <label style="color: var(--text-muted); font-size: 0.72rem; font-weight: 600; display: block; margin-bottom: 8px;">Deposit Native XLM</label>
-                        <input type="number" id="k2-deposit-input" value="100" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; outline: none; padding: 10px; color: #fff; font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
+                        <input type="number" id="k2-deposit-input" value="100" min="0" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; outline: none; padding: 10px; color: #fff; font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
                         <button id="k2-deposit-btn" disabled onclick="handleDeposit()" style="width: 100%; background: var(--neon-green); color: #000; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; opacity: 0.5; transition: opacity 0.2s;">Deposit XLM</button>
                     </div>
                     <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px;">
                         <label style="color: var(--text-muted); font-size: 0.72rem; font-weight: 600; display: block; margin-bottom: 8px;">Borrow USDC</label>
-                        <input type="number" id="k2-borrow-input" value="50" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; outline: none; padding: 10px; color: #fff; font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
+                        <input type="number" id="k2-borrow-input" value="50" min="0" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; outline: none; padding: 10px; color: #fff; font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
                         <button id="k2-borrow-btn" disabled onclick="handleBorrow()" style="width: 100%; background: #3B82F6; color: #fff; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; opacity: 0.5; transition: opacity 0.2s;">Borrow USDC</button>
                     </div>
                 </div>
@@ -1364,7 +1364,7 @@ const op = Operation.invokeContractFunction({
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <label style="color: var(--text-muted); font-size: 0.68rem; font-family: var(--font-mono); text-transform: uppercase;">Purchase Amount (USDC)</label>
                 <div style="position: relative;">
-                    <input type="number" id="stripe-amount" value="100" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); padding: 12px 16px; border-radius: 8px; color: #fff; font-family: var(--font-mono); font-size: 1.1rem; outline: none;">
+                    <input type="number" id="stripe-amount" value="100" min="0" style="width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); padding: 12px 16px; border-radius: 8px; color: #fff; font-family: var(--font-mono); font-size: 1.1rem; outline: none;">
                     <span style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-weight: bold; color: var(--text-muted); font-size: 0.9rem;">USDC</span>
                 </div>
             </div>
