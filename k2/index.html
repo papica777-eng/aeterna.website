@@ -1271,15 +1271,15 @@
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; font-family: var(--font-mono); font-size: 0.7rem;">
                 <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
                     <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_KINETIC_ROUTER</div>
-                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CARCG5IZ5YSLZ3YMCTU5BURCVZJGGVLSVUO5GFOGVD5JW47JVG7QXJP3</div>
                 </div>
                 <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
                     <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_INCENTIVES_CORE</div>
-                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CDWT632PZRCX2NTCBKRUUD6LUQGFY255GNIAU3C2Z5ZPDHQPCPHD2DGH</div>
                 </div>
                 <div style="border: 1px solid var(--glass-border); padding: 12px 16px; background: #000;">
                     <div style="color: var(--text-muted); margin-bottom: 4px; font-size: 0.6rem;">K2_TREASURY_RESERVE</div>
-                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL</div>
+                    <div style="color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">CBSS675MOJWQYQE2PLEJRFQCAN2WZG2ALCYBEJWKK77PS6WYNQEODPVQ</div>
                 </div>
             </div>
 
@@ -1293,7 +1293,7 @@
             <!-- Tab content -->
             <div id="tab-curl" class="api-tab-content" style="background: #020204; border: 1px solid var(--glass-border); padding: 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6; color: #fff; overflow-x: auto;">
 <span style="color: #626770;"># Query UserCollateral storage entry directly from Soroban RPC</span>
-curl -X POST https://soroban-testnet.stellar.org \
+curl -X POST https://mainnet.sorobanrpc.com \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -1325,7 +1325,7 @@ fn trigger_collateral_deposit(env: Env, router: Address, user: Address, amount: 
 import { TransactionBuilder, Operation, Address, xdr, Networks } from 'stellar-sdk';
 
 const op = Operation.invokeContractFunction({
-  contract: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
+  contract: 'CARCG5IZ5YSLZ3YMCTU5BURCVZJGGVLSVUO5GFOGVD5JW47JVG7QXJP3',
   function: 'deposit_collateral',
   args: [
     new Address(userAddress).toScVal(),
@@ -1436,15 +1436,15 @@ const op = Operation.invokeContractFunction({
     <script>
         lucide.createIcons();
 
-        // Config addresses
+        // Config addresses (Stellar Mainnet)
         const CONTRACT_ADDRESSES = {
-            router: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
-            incentives: 'CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH',
-            treasury: 'CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL'
+            router: 'CARCG5IZ5YSLZ3YMCTU5BURCVZJGGVLSVUO5GFOGVD5JW47JVG7QXJP3',
+            incentives: 'CDWT632PZRCX2NTCBKRUUD6LUQGFY255GNIAU3C2Z5ZPDHQPCPHD2DGH',
+            treasury: 'CBSS675MOJWQYQE2PLEJRFQCAN2WZG2ALCYBEJWKK77PS6WYNQEODPVQ'
         };
 
         let accountPub = '';
-        let server = new StellarSdk.rpc.Server('https://soroban-testnet.stellar.org');
+        let server = new StellarSdk.rpc.Server('https://mainnet.sorobanrpc.com');
 
         // 3D Particle Canvas Backdrop
         const canvas = document.getElementById('particle-canvas');
@@ -1833,7 +1833,7 @@ const op = Operation.invokeContractFunction({
                     const bal = accDetails.balances.find(b => b.asset_type === 'native');
                     document.getElementById('ops-signer-balance').textContent = parseFloat(bal.balance).toFixed(2);
                 } catch(e) {
-                    document.getElementById('ops-signer-balance').textContent = '10000.00'; // testnet demo fallback balance
+                    document.getElementById('ops-signer-balance').textContent = '0.00'; // fallback balance
                 }
 
                 // Query K2 contract states
@@ -1905,7 +1905,7 @@ const op = Operation.invokeContractFunction({
             // 1. Try window.stellar first (Injected Extension)
             if (typeof window.stellar !== 'undefined' && typeof window.stellar.signTransaction === 'function') {
                 try {
-                    return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
+                    return await window.stellar.signTransaction(xdr, { network: 'PUBLIC' });
                 } catch (e) {
                     throw e;
                 }
@@ -1916,12 +1916,12 @@ const op = Operation.invokeContractFunction({
                 if (typeof window.freighterApi.signTransaction === 'function') {
                     return await window.freighterApi.signTransaction({
                         transactionXdr: xdr,
-                        network: 'TESTNET'
+                        network: 'PUBLIC'
                     });
                 } else if (window.freighterApi.default && typeof window.freighterApi.default.signTransaction === 'function') {
                     return await window.freighterApi.default.signTransaction({
                         transactionXdr: xdr,
-                        network: 'TESTNET'
+                        network: 'PUBLIC'
                     });
                 }
             }
@@ -1930,7 +1930,7 @@ const op = Operation.invokeContractFunction({
             if (typeof window.stellarFreighterApi !== 'undefined' && typeof window.stellarFreighterApi.signTransaction === 'function') {
                 return await window.stellarFreighterApi.signTransaction({
                     transactionXdr: xdr,
-                    network: 'TESTNET'
+                    network: 'PUBLIC'
                 });
             }
 
@@ -1951,25 +1951,18 @@ const op = Operation.invokeContractFunction({
                     account = await server.getAccount(accountPub);
                 } catch (err) {
                     if (err.response && err.response.status === 404) {
-                        logToConsole(`Account ${accountPub.substring(0, 8)}... not found on Testnet. Requesting Friendbot XLM funding...`, "warning");
-                        const friendbotUrl = `https://friendbot.stellar.org?addr=${encodeURIComponent(accountPub)}`;
-                        const response = await fetch(friendbotUrl);
-                        if (response.ok) {
-                            logToConsole("Account funded successfully with 10,000 Testnet XLM!", "success");
-                            await new Promise(r => setTimeout(r, 2000));
-                            account = await server.getAccount(accountPub);
-                        } else {
-                            throw new Error("Friendbot funding request failed.");
-                        }
+                        logToConsole(`Account ${accountPub.substring(0, 8)}... not active on Mainnet. Fund it with XLM first.`, "err");
+                        alert(`Account not active on Stellar Mainnet.\n\nPlease send at least 1 XLM to your public key:\n${accountPub}\nto activate the account on-chain.`);
+                        throw new Error("Account not active on Stellar Mainnet.");
                     } else {
                         throw err;
                     }
                 }
                 
-                // Prepare TransactionBuilder
+                // Prepare TransactionBuilder (Stellar Mainnet)
                 const tx = new StellarSdk.TransactionBuilder(account, {
-                    fee: '1000',
-                    networkPassphrase: 'Test SDF Network ; September 2015'
+                    fee: '1500',
+                    networkPassphrase: 'Public Global Stellar Network ; October 2015'
                 })
                 .addOperation(op)
                 .setTimeout(30)
@@ -1981,7 +1974,7 @@ const op = Operation.invokeContractFunction({
                 logToConsole("Requesting Freighter signature approval...");
                 const signedXdr = await signTxWithFreighter(prepared.toXDR());
                 
-                prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Test SDF Network ; September 2015');
+                prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Public Global Stellar Network ; October 2015');
 
                 logToConsole("Submitting transaction payload to ledger...");
                 const sendRes = await server.sendTransaction(prepared);

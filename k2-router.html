@@ -400,9 +400,9 @@
                     <div class="subtitle">Kinetic Lending Protocol Portal</div>
                 </div>
             </div>
-            <div class="status-badge">
-                <div class="status-dot"></div>
-                <span>Testnet Connected</span>
+            <div class="status-badge" style="background: rgba(52, 211, 153, 0.1); border-color: rgba(52, 211, 153, 0.3); color: var(--success);">
+                <div class="status-dot" style="background: var(--success);"></div>
+                <span>Mainnet Secured</span>
             </div>
         </header>
 
@@ -494,12 +494,6 @@
                 <div class="card">
                     <div class="card-title"><i data-lucide="wallet"></i> Wallet & Accounts</div>
                     <div class="wallet-controls">
-                        <!-- Mode Selector -->
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;" id="btn-mode-dev" onclick="setMode('dev')">Dev Mode (Mock)</button>
-                            <button class="btn btn-secondary" style="flex: 1; font-size: 0.7rem;" id="btn-mode-freighter" onclick="setMode('freighter')">Freighter</button>
-                        </div>
-
                         <div class="wallet-info">
                             <div class="wallet-info-row">
                                 <span>Active Address</span>
@@ -511,14 +505,6 @@
                             </div>
                         </div>
 
-                        <div id="dev-wallet-actions" style="display: flex; flex-direction: column; gap: 10px;">
-                            <button class="btn btn-secondary" onclick="generateDevAccount()">
-                                <i data-lucide="plus-circle"></i> New Test Account
-                            </button>
-                            <button class="btn btn-secondary" onclick="fundDevAccount()">
-                                <i data-lucide="coins"></i> Fund from Friendbot
-                            </button>
-                        </div>
                         <button class="btn btn-primary" id="btn-connect" onclick="connectWallet()">Connect Wallet</button>
                     </div>
                 </div>
@@ -562,11 +548,11 @@
         // Lucide Icons
         lucide.createIcons();
 
-        // Config addresses
+        // Config addresses (Stellar Mainnet)
         const CONTRACT_ADDRESSES = {
-            router: 'CCZIOKORGUGT6PHL4PF2DH3ASSJQYAUSLHXDVJLJSGVX4PNIK4O7XRS5',
-            incentives: 'CBCZP3YA473ZSDCMQ6HRT5MS35KCPIXBK55GAZL2DM4AC3TDULDO3KIH',
-            treasury: 'CAMHOK2XBH6SYHFXSFWMJNFYQXLZ4EPYCDUNKSYXUMUWGMB4Y6F4U6EL'
+            router: 'CARCG5IZ5YSLZ3YMCTU5BURCVZJGGVLSVUO5GFOGVD5JW47JVG7QXJP3',
+            incentives: 'CDWT632PZRCX2NTCBKRUUD6LUQGFY255GNIAU3C2Z5ZPDHQPCPHD2DGH',
+            treasury: 'CBSS675MOJWQYQE2PLEJRFQCAN2WZG2ALCYBEJWKK77PS6WYNQEODPVQ'
         };
 
         // UI Initialization
@@ -575,10 +561,10 @@
         document.getElementById('addr-treasury').textContent = CONTRACT_ADDRESSES.treasury.substring(0, 12) + '...';
 
         // State variables
-        let appMode = 'dev'; // 'dev' or 'freighter'
-        let currentAccount = null; // Keypair in Dev, string public key in Freighter
+        let appMode = 'freighter'; // Default to Freighter on Mainnet
+        let currentAccount = null;
         let accountPub = '';
-        let server = new StellarSdk.rpc.Server('https://soroban-testnet.stellar.org');
+        let server = new StellarSdk.rpc.Server('https://mainnet.sorobanrpc.com');
 
         // Log to console UI
         function log(msg, type = 'info') {
@@ -621,25 +607,10 @@
             log(`WARNING: Secret key is only available in browser memory.`, 'err');
         }
 
-        // Fund Dev Account
+        // Fund Dev Account (Disabled on Mainnet)
         async function fundDevAccount() {
-            if (appMode !== 'dev' || !accountPub) {
-                log('Please generate a test account first.', 'err');
-                return;
-            }
-
-            log(`Requesting Friendbot funding for ${accountPub.substring(0, 10)}...`);
-            try {
-                const res = await fetch(`https://friendbot.stellar.org/?addr=${accountPub}`);
-                if (res.ok) {
-                    log(`Friendbot successfully funded account with 10,000 XLM!`);
-                    await fetchAccountDetails();
-                } else {
-                    log(`Friendbot funding error: ${res.status}`, 'err');
-                }
-            } catch (e) {
-                log(`Network error: ${e.message}`, 'err');
-            }
+            log('Friendbot is only available on Testnet. Please fund your account on Stellar Mainnet manually.', 'err');
+            alert(`Stellar Friendbot is disabled on Mainnet.\n\nPlease fund your public key:\n${accountPub}\nwith real XLM to activate it.`);
         }
 
         // Fetch user wallet balance & contract states
@@ -652,7 +623,7 @@
                     const bal = accDetails.balances.find(b => b.asset_type === 'native');
                     document.getElementById('wallet-balance').textContent = parseFloat(bal.balance).toFixed(2);
                 } catch(e) {
-                    document.getElementById('wallet-balance').textContent = '0.00 (Unfunded)';
+                    document.getElementById('wallet-balance').textContent = '0.00 (Inactive)';
                 }
 
                 // Query K2 contract states
@@ -768,18 +739,29 @@
 
             try {
                 log("Fetching account sequence number...");
-                const account = await server.getAccount(accountPub);
+                let account;
+                try {
+                    account = await server.getAccount(accountPub);
+                } catch (err) {
+                    if (err.response && err.response.status === 404) {
+                        log(`Account ${accountPub.substring(0, 8)}... is not active on Mainnet. Fund it with XLM first.`, 'err');
+                        alert(`Account not active on Stellar Mainnet.\n\nPlease send at least 1 XLM to your public key:\n${accountPub}\nto activate the account on-chain.`);
+                        throw new Error("Account not active on Stellar Mainnet.");
+                    } else {
+                        throw err;
+                    }
+                }
                 
                 const tx = new StellarSdk.TransactionBuilder(account, {
-                    fee: '1000',
-                    networkPassphrase: 'Test SDF Network ; September 2015'
+                    fee: '1500',
+                    networkPassphrase: 'Public Global Stellar Network ; October 2015'
                 })
                 .addOperation(op)
                 .setTimeout(30)
                 .build();
 
                 log("Simulating and preparing transaction (Soroban RPC)...");
-                const prepared = await server.prepareTransaction(tx);
+                let prepared = await server.prepareTransaction(tx);
 
                 if (appMode === 'dev') {
                     log("Signing transaction locally (Dev Mode)...");
@@ -787,9 +769,9 @@
                 } else {
                     log("Sending transaction to Freighter for signature...");
                     const signedXdr = await window.stellar.signTransaction(prepared.toXDR(), {
-                        network: 'TESTNET'
+                        network: 'PUBLIC'
                     });
-                    prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Test SDF Network ; September 2015');
+                    prepared = StellarSdk.Transaction.fromXDR(signedXdr, 'Public Global Stellar Network ; October 2015');
                 }
 
                 log("Sending to blockchain...");
@@ -886,8 +868,8 @@
             await sendContractTx(op);
         }
 
-        // Start default Mode UI setup
-        setMode('dev');
+        // Start default Mode UI setup (Freighter for Mainnet)
+        setMode('freighter');
     </script>
 </body>
 </html>

@@ -32,8 +32,8 @@ VERTEX is not a concept; it is a live, running autonomous system. The off-chain 
 ```json
 {
   "status": "SUCCESS",
-  "timestamp": "2026-06-09T20:18:54.382Z",
-  "uptime_seconds": 35.159827019,
+  "timestamp": "2026-06-10T17:58:11.407Z",
+  "uptime_seconds": 77992.18517477199,
   "infrastructure": "10M+ EDGE NODES",
   "pqc_status": "ML-KEM-1024_ACTIVE",
   "entropy": "0.0000",
