@@ -1669,43 +1669,51 @@ const op = Operation.invokeContractFunction({
 
         async function connectWallet() {
             logToConsole("Initiating handshake protocol with Web3 signer...");
-            console.log("Web3 Environment Check:", {
-                freighterApi: typeof window.freighterApi,
-                stellar: typeof window.stellar,
-                stellarFreighterApi: typeof window.stellarFreighterApi
-            });
             
             let address = '';
+            let errorMsg = '';
 
             try {
-                if (typeof window.freighterApi !== 'undefined') {
-                    logToConsole("Freighter API detected. Requesting wallet access...");
-                    address = await window.freighterApi.requestAccess();
-                    if (!address && window.freighterApi.getPublicKey) {
-                        address = await window.freighterApi.getPublicKey();
-                    }
-                } else if (typeof window.stellar !== 'undefined') {
-                    logToConsole("Stellar Injected Wallet detected. Requesting access...");
-                    if (window.stellar.requestAccess) {
+                // 1. Try window.stellar first (Injected directly by the extension)
+                if (typeof window.stellar !== 'undefined') {
+                    logToConsole("Stellar Injected Wallet detected. Requesting wallet access...");
+                    if (typeof window.stellar.requestAccess === 'function') {
                         address = await window.stellar.requestAccess();
-                    } else if (window.stellar.getPublicKey) {
+                    } else if (typeof window.stellar.getPublicKey === 'function') {
                         address = await window.stellar.getPublicKey();
                     }
-                } else if (typeof window.stellarFreighterApi !== 'undefined') {
+                }
+                
+                // 2. Try window.freighterApi (Freighter UMD/CDN helper)
+                if (!address && typeof window.freighterApi !== 'undefined') {
+                    logToConsole("Freighter API detected. Requesting access...");
+                    if (typeof window.freighterApi.requestAccess === 'function') {
+                        address = await window.freighterApi.requestAccess();
+                    } else if (window.freighterApi.default && typeof window.freighterApi.default.requestAccess === 'function') {
+                        address = await window.freighterApi.default.requestAccess();
+                    } else if (typeof window.freighterApi.getPublicKey === 'function') {
+                        address = await window.freighterApi.getPublicKey();
+                    }
+                }
+
+                // 3. Try window.stellarFreighterApi (Alternate CDN helper)
+                if (!address && typeof window.stellarFreighterApi !== 'undefined') {
                     logToConsole("Stellar Freighter API detected. Requesting access...");
-                    if (window.stellarFreighterApi.requestAccess) {
+                    if (typeof window.stellarFreighterApi.requestAccess === 'function') {
                         address = await window.stellarFreighterApi.requestAccess();
+                    } else if (typeof window.stellarFreighterApi.getPublicKey === 'function') {
+                        address = await window.stellarFreighterApi.getPublicKey();
                     }
                 }
             } catch (err) {
-                logToConsole(`Web3 Signer connection failed: ${err.message}`, "err");
-                alert(`Failed to connect wallet: ${err.message}`);
-                return;
+                errorMsg = err.message || err;
+                logToConsole(`Web3 Signer connection failed: ${errorMsg}`, "err");
             }
 
             if (!address) {
-                logToConsole("No Web3 address returned. Is your Freighter extension unlocked?", "warning");
-                alert("Could not retrieve public key. Please unlock your Freighter extension and try again or install it from https://www.freighter.app/");
+                const failReason = errorMsg ? `: ${errorMsg}` : ". Make sure you have installed and unlocked Freighter Extension.";
+                logToConsole(`Wallet connection aborted${failReason}`, "warning");
+                alert(`Failed to connect wallet${failReason}\n\nPlease install Freighter from https://www.freighter.app/ or unlock your extension.`);
                 return;
             }
 
@@ -1864,22 +1872,39 @@ const op = Operation.invokeContractFunction({
         }
 
         async function signTxWithFreighter(xdr) {
-            if (typeof window.freighterApi !== 'undefined' && window.freighterApi.signTransaction) {
+            // 1. Try window.stellar first (Injected Extension)
+            if (typeof window.stellar !== 'undefined' && typeof window.stellar.signTransaction === 'function') {
                 try {
+                    return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
+                } catch (e) {
+                    throw e;
+                }
+            }
+            
+            // 2. Try window.freighterApi (CDN wrapper)
+            if (typeof window.freighterApi !== 'undefined') {
+                if (typeof window.freighterApi.signTransaction === 'function') {
                     return await window.freighterApi.signTransaction({
                         transactionXdr: xdr,
                         network: 'TESTNET'
                     });
-                } catch (e) {
-                    if (typeof window.stellar !== 'undefined' && window.stellar.signTransaction) {
-                        return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
-                    }
-                    throw e;
+                } else if (window.freighterApi.default && typeof window.freighterApi.default.signTransaction === 'function') {
+                    return await window.freighterApi.default.signTransaction({
+                        transactionXdr: xdr,
+                        network: 'TESTNET'
+                    });
                 }
-            } else if (typeof window.stellar !== 'undefined' && window.stellar.signTransaction) {
-                return await window.stellar.signTransaction(xdr, { network: 'TESTNET' });
             }
-            throw new Error("Freighter signTransaction method not found");
+
+            // 3. Try window.stellarFreighterApi (CDN Alternate)
+            if (typeof window.stellarFreighterApi !== 'undefined' && typeof window.stellarFreighterApi.signTransaction === 'function') {
+                return await window.stellarFreighterApi.signTransaction({
+                    transactionXdr: xdr,
+                    network: 'TESTNET'
+                });
+            }
+
+            throw new Error("Freighter signTransaction method not found. Please install or unlock Freighter.");
         }
 
         // Send contract operations
