@@ -1669,30 +1669,44 @@ const op = Operation.invokeContractFunction({
 
         async function connectWallet() {
             logToConsole("Initiating handshake protocol with Web3 signer...");
+            console.log("Web3 Environment Check:", {
+                freighterApi: typeof window.freighterApi,
+                stellar: typeof window.stellar,
+                stellarFreighterApi: typeof window.stellarFreighterApi
+            });
             
             let address = '';
-            let isMock = false;
 
             try {
-                if (typeof window.freighterApi !== 'undefined' && window.freighterApi.isConnected && await window.freighterApi.isConnected()) {
-                    logToConsole("Freighter Wallet detected. Requesting public key...");
-                    address = await window.freighterApi.getPublicKey();
-                } else if (typeof window.stellar !== 'undefined' && window.stellar.isConnected && await window.stellar.isConnected()) {
-                    logToConsole("Stellar Wallet detected. Requesting public key...");
-                    address = await window.stellar.getPublicKey();
-                } else {
-                    isMock = true;
-                    address = "GBK2FINANCEUSDCVAULTSIGNERMOCKTESTNET56789";
+                if (typeof window.freighterApi !== 'undefined') {
+                    logToConsole("Freighter API detected. Requesting wallet access...");
+                    address = await window.freighterApi.requestAccess();
+                    if (!address && window.freighterApi.getPublicKey) {
+                        address = await window.freighterApi.getPublicKey();
+                    }
+                } else if (typeof window.stellar !== 'undefined') {
+                    logToConsole("Stellar Injected Wallet detected. Requesting access...");
+                    if (window.stellar.requestAccess) {
+                        address = await window.stellar.requestAccess();
+                    } else if (window.stellar.getPublicKey) {
+                        address = await window.stellar.getPublicKey();
+                    }
+                } else if (typeof window.stellarFreighterApi !== 'undefined') {
+                    logToConsole("Stellar Freighter API detected. Requesting access...");
+                    if (window.stellarFreighterApi.requestAccess) {
+                        address = await window.stellarFreighterApi.requestAccess();
+                    }
                 }
             } catch (err) {
-                logToConsole(`Web3 Signer error: ${err.message}. Engaging Sandbox Fallback.`, "warning");
-                isMock = true;
-                address = "GBK2FINANCEUSDCVAULTSIGNERMOCKTESTNET56789";
+                logToConsole(`Web3 Signer connection failed: ${err.message}`, "err");
+                alert(`Failed to connect wallet: ${err.message}`);
+                return;
             }
 
             if (!address) {
-                isMock = true;
-                address = "GBK2FINANCEUSDCVAULTSIGNERMOCKTESTNET56789";
+                logToConsole("No Web3 address returned. Is your Freighter extension unlocked?", "warning");
+                alert("Could not retrieve public key. Please unlock your Freighter extension and try again or install it from https://www.freighter.app/");
+                return;
             }
 
             accountPub = address;
@@ -1724,12 +1738,7 @@ const op = Operation.invokeContractFunction({
                 liqBtn.style.color = 'var(--neon-red)';
             }
             
-            if (isMock) {
-                logToConsole("[LOCAL SANDBOX] Freighter Wallet not found. Web3 Mock Signer fallback initialized.", "warning");
-                document.getElementById('ops-signer-balance').textContent = '10000.00';
-            } else {
-                logToConsole(`Web3 Signer successfully linked: ${shortAddr}`, "success");
-            }
+            logToConsole(`Web3 Signer successfully linked: ${shortAddr}`, "success");
             
             await fetchAccountDetails();
             playCyberClick();
@@ -1882,7 +1891,25 @@ const op = Operation.invokeContractFunction({
 
             try {
                 logToConsole("Requesting ledger state sequence numbers...");
-                const account = await server.getAccount(accountPub);
+                let account;
+                try {
+                    account = await server.getAccount(accountPub);
+                } catch (err) {
+                    if (err.response && err.response.status === 404) {
+                        logToConsole(`Account ${accountPub.substring(0, 8)}... not found on Testnet. Requesting Friendbot XLM funding...`, "warning");
+                        const friendbotUrl = `https://friendbot.stellar.org?addr=${encodeURIComponent(accountPub)}`;
+                        const response = await fetch(friendbotUrl);
+                        if (response.ok) {
+                            logToConsole("Account funded successfully with 10,000 Testnet XLM!", "success");
+                            await new Promise(r => setTimeout(r, 2000));
+                            account = await server.getAccount(accountPub);
+                        } else {
+                            throw new Error("Friendbot funding request failed.");
+                        }
+                    } else {
+                        throw err;
+                    }
+                }
                 
                 // Prepare TransactionBuilder
                 const tx = new StellarSdk.TransactionBuilder(account, {
