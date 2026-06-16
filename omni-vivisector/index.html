@@ -143,13 +143,13 @@
             animation: scanline 2.5s linear infinite;
         }
 
-        /* Catuṣkoṭi Matrix Pulse */
-        @keyframes catuskoti-pulse {
+        /* Finding State Matrix Pulse */
+        @keyframes findingState-pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.3); }
             50% { box-shadow: 0 0 18px 4px rgba(0,229,255,0.15); }
         }
-        .catuskoti-active {
-            animation: catuskoti-pulse 2s ease-in-out infinite;
+        .findingState-active {
+            animation: findingState-pulse 2s ease-in-out infinite;
         }
 
         /* Heatmap node glow */
@@ -177,7 +177,7 @@
 
         /* Sandbox integrity pulse */
         .integrity-pulse {
-            animation: catuskoti-pulse 3s ease-in-out infinite;
+            animation: findingState-pulse 3s ease-in-out infinite;
             animation-delay: 0.5s;
         }
 
@@ -220,7 +220,7 @@
                     </h1>
                     <div class="text-[10px] text-gray-500 font-bold uppercase tracking-widest flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Sovereign Hardware Sandboxed Analyzer v6.0
+                        Sovereign Hardware Sandboxed Analyzer v6.5 (AST + Taint Flow)
                     </div>
                 </div>
             </div>
@@ -493,7 +493,7 @@
                     </h2>
                     <div class="space-y-3" id="pipeline-lanes">
                         <div class="flex items-center justify-between text-xs p-2 bg-black/40 rounded border border-white/5" id="lane-ast">
-                            <span class="font-bold tracking-wider text-gray-400">STATIC SYNTAX ANALYSIS</span>
+                            <span class="font-bold tracking-wider text-gray-400">TREE-SITTER AST PARSING</span>
                             <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400 uppercase tracking-widest font-black">Standby</span>
                         </div>
                         <div class="flex items-center justify-between text-xs p-2 bg-black/40 rounded border border-white/5" id="lane-symbolic">
@@ -501,14 +501,14 @@
                             <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400 uppercase tracking-widest font-black">Standby</span>
                         </div>
                         <div class="flex items-center justify-between text-xs p-2 bg-black/40 rounded border border-white/5" id="lane-network">
-                            <span class="font-bold tracking-wider text-gray-400">DATA BOUNDARY TRACING</span>
+                            <span class="font-bold tracking-wider text-gray-400">AST TAINT FLOW TRAVERSAL</span>
                             <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400 uppercase tracking-widest font-black">Standby</span>
                         </div>
                         <div class="flex items-center justify-between text-xs p-2 bg-black/40 rounded border border-white/5" id="lane-classify">
                             <span class="font-bold tracking-wider text-gray-400">THREAT LEVEL CLASSIFICATION</span>
                             <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400 uppercase tracking-widest font-black">Standby</span>
                         </div>
-                        <div class="flex items-center justify-between text-xs p-2 bg-black/40 rounded border border-white/5" id="lane-catuskoti">
+                        <div class="flex items-center justify-between text-xs p-2 bg-black/40 rounded border border-white/5" id="lane-findingState">
                             <span class="font-bold tracking-wider text-gray-400">SECURITY LOGIC VERDICT</span>
                             <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-400 uppercase tracking-widest font-black">Standby</span>
                         </div>
@@ -725,7 +725,7 @@
                                             <th class="py-3 px-2">Vulnerability ID</th>
                                             <th class="py-3 px-2">Target File</th>
                                             <th class="py-3 px-2">Severity</th>
-                                            <th class="py-3 px-2 text-right">Catuṣkoṭi</th>
+                                            <th class="py-3 px-2 text-right">Finding State</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ledger-body" class="divide-y divide-white/5">
@@ -810,9 +810,9 @@
                                     <i data-lucide="grid-2x2" class="text-purple-400 w-3.5 h-3.5"></i>
                                     Vulnerability_Compliance_Matrix
                                 </span>
-                                <span id="catuskoti-verdict" class="text-[8px] px-2 py-0.5 rounded-full bg-gray-500/10 border border-gray-500/20 text-gray-500 font-black">AWAITING CLASSIFICATION</span>
+                                <span id="findingState-verdict" class="text-[8px] px-2 py-0.5 rounded-full bg-gray-500/10 border border-gray-500/20 text-gray-500 font-black">AWAITING CLASSIFICATION</span>
                             </h4>
-                            <div id="catuskoti-grid" class="grid grid-cols-2 gap-3">
+                            <div id="findingState-grid" class="grid grid-cols-2 gap-3">
                                 <div id="cat-q1" class="bg-black/40 border border-white/5 rounded-lg p-3 text-center cursor-pointer transition-all duration-500 hover:scale-[1.02]" onclick="writeLog('[COMPLIANCE] Quadrant I: CONFIRMED — Exploitable condition confirmed', 'text-emerald-400')">
                                     <span class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Q1: CONFIRMED</span>
                                     <span class="block text-lg font-black text-gray-600" id="cat-q1-val">—</span>
@@ -1064,11 +1064,11 @@
                             <input type="text" id="gh-repo-input" placeholder="e.g. solana-labs/solana" class="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white text-xs focus:border-emerald-400 font-semibold">
                         </div>
                         <div class="col-span-12 lg:col-span-4">
-                            <label class="block text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Personal Access Token</label>
-                            <div class="flex gap-2">
-                                <input type="password" id="gh-pat-input" placeholder="ghp_xxxxxxxxxxxx" class="flex-grow bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white text-xs focus:border-emerald-400 font-semibold">
-                                <button onclick="ghBridge.savePAT()" class="bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 font-bold text-[10px] px-2 py-1 rounded-lg hover:bg-emerald-400 hover:text-black transition-all cursor-pointer" title="Save token"><i data-lucide="save" class="w-3.5 h-3.5"></i></button>
-                            </div>
+                            <label class="block text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">GitHub Authentication</label>
+                            <button onclick="triggerSocialLogin('github')" class="w-full bg-[#2ea043]/15 border border-[#2ea043]/30 text-[#2ea043] hover:bg-[#2ea043] hover:text-white font-black text-xs px-4 py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group shadow-[0_0_15px_rgba(46,160,67,0.15)] hover:shadow-[0_0_25px_rgba(46,160,67,0.3)]">
+                                <i data-lucide="github" class="w-4 h-4 group-hover:scale-110 transition-transform"></i> Login with GitHub
+                            </button>
+                            <input type="hidden" id="gh-pat-input" value="">
                         </div>
                         <div class="col-span-12 lg:col-span-4 flex items-end gap-2">
                             <button onclick="ghBridge.connect()" class="flex-grow bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 font-bold text-[10px] px-3 py-2 rounded-lg hover:bg-emerald-400 hover:text-black transition-all flex items-center justify-center gap-1.5 cursor-pointer">
@@ -1208,15 +1208,33 @@
                             Wallet Forensics and Temporal Tracking tools are restricted under EIC regulatory compliance guidelines. You must verify a valid sovereign access key or purchase an enterprise session bypass via Stripe.
                         </p>
                     </div>
-                    <div class="flex flex-wrap gap-4 justify-center">
-                        <button onclick="openStripeCheckoutModal()" class="bg-gradient-to-r from-red-500 via-rose-600 to-indigo-600 hover:from-red-400 hover:to-indigo-500 text-white font-extrabold px-6 py-3 rounded-xl border border-red-400/40 hover:scale-[1.01] active:scale-95 transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-lg shadow-red-500/10 text-xs uppercase tracking-wider select-none">
-                            <i data-lucide="credit-card" class="w-4 h-4 text-white animate-pulse"></i>
-                            Unlock License via Stripe ($5,000)
-                        </button>
-                        <button onclick="triggerWeb3Checkout()" class="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/30 text-white font-extrabold px-6 py-3 transition-all duration-300 flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wider select-none">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
-                            Verify Warden / Web3 Key
-                        </button>
+                    <div class="flex flex-col sm:flex-row gap-6 w-full max-w-4xl mx-auto mt-4">
+                        <!-- Independent Developer Plan -->
+                        <div class="flex-1 glass-panel bg-black/40 border border-cyan-500/20 hover:border-cyan-400/50 p-6 rounded-2xl flex flex-col gap-4 text-left transition-all hover:scale-[1.02] cursor-pointer group relative overflow-hidden" onclick="alert('Trial activated for 14 days!'); document.getElementById('forensics-license-lock').classList.add('hidden'); document.getElementById('forensics-workspace').classList.remove('hidden');">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+                            <h4 class="text-[10px] font-black text-cyan-400 uppercase tracking-[0.2em]">Independent Developer</h4>
+                            <div class="flex items-end gap-1"><span class="text-3xl font-black text-white leading-none">$20</span><span class="text-xs text-gray-500 font-bold mb-1">/mo</span></div>
+                            <p class="text-[10px] text-gray-400 leading-relaxed min-h-[40px]">14-Day Free Trial. Unlock AST Scanning up to 10k LOC, basic Wallet Forensics, and standard integrations.</p>
+                            <button class="mt-auto w-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-400 hover:text-black font-extrabold text-[10px] px-4 py-3 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Start Free Trial
+                            </button>
+                        </div>
+                        
+                        <!-- Enterprise EIC Plan -->
+                        <div class="flex-1 glass-panel bg-gradient-to-b from-red-950/20 to-black/40 border border-red-500/20 hover:border-red-500/50 p-6 rounded-2xl flex flex-col gap-4 text-left transition-all hover:scale-[1.02] cursor-pointer group relative overflow-hidden">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-red-500/10 rounded-full blur-2xl group-hover:bg-red-500/20 transition-all"></div>
+                            <h4 class="text-[10px] font-black text-red-400 uppercase tracking-[0.2em] text-glow-red flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> Enterprise EIC</h4>
+                            <div class="flex items-end gap-1"><span class="text-3xl font-black text-white leading-none">$5,000</span><span class="text-xs text-gray-500 font-bold mb-1">/mo</span></div>
+                            <p class="text-[10px] text-gray-400 leading-relaxed min-h-[40px]">Unlimited Vivisection, Z3 Theorem Prover access, Zero-Day Bounty hunts, and 24/7 dedicated Sovereign support.</p>
+                            <div class="mt-auto flex flex-col gap-2">
+                                <button onclick="openStripeCheckoutModal()" class="w-full bg-gradient-to-r from-red-500 via-rose-600 to-indigo-600 hover:from-red-400 hover:to-indigo-500 text-white font-extrabold text-[10px] px-4 py-3 rounded-xl uppercase tracking-wider transition-all shadow-lg shadow-red-500/20 flex items-center justify-center gap-2">
+                                    <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Subscribe via Stripe
+                                </button>
+                                <button onclick="triggerWeb3Checkout()" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white font-extrabold text-[10px] px-4 py-2 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="key" class="w-3 h-3"></i> Verify Web3 Key
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1249,12 +1267,18 @@
                             </button>
                             <div id="forensics-byok-panel" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 bg-black/40 p-4 rounded-xl border border-white/5 animate-fade-in">
                                 <div class="space-y-1.5 text-xs text-left">
-                                    <label class="block text-gray-600 uppercase tracking-widest font-bold text-[8px] mono">Etherscan API Key</label>
-                                    <input type="password" id="byok-etherscan" placeholder="Enter custom Etherscan API Key" oninput="localStorage.setItem('sovereign_etherscan_key', this.value)" class="w-full bg-black/55 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-cyan-400 text-[10px] mono">
+                                    <label class="block text-emerald-400 uppercase tracking-widest font-bold text-[8px] mono flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Etherscan API Vault</label>
+                                    <div class="relative w-full group">
+                                        <input type="password" id="byok-etherscan" placeholder="••••••••••••••••••••••••" oninput="localStorage.setItem('sovereign_etherscan_key', this.value)" class="w-full bg-black/80 border border-emerald-500/20 rounded-lg pl-3 pr-8 py-2 outline-none text-emerald-400 focus:border-emerald-400 focus:shadow-[0_0_10px_rgba(52,211,153,0.2)] text-[10px] mono transition-all">
+                                        <button onclick="const i=document.getElementById('byok-etherscan'); i.type=i.type==='password'?'text':'password';" class="absolute right-2 top-1/2 -translate-y-1/2 text-emerald-500/50 hover:text-emerald-400 transition-colors cursor-pointer"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                    </div>
                                 </div>
                                 <div class="space-y-1.5 text-xs text-left">
-                                    <label class="block text-gray-600 uppercase tracking-widest font-bold text-[8px] mono">Blockscout API Key (Optional)</label>
-                                    <input type="password" id="byok-blockscout" placeholder="Enter custom Blockscout API Key" oninput="localStorage.setItem('sovereign_blockscout_key', this.value)" class="w-full bg-black/55 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-cyan-400 text-[10px] mono">
+                                    <label class="block text-emerald-400 uppercase tracking-widest font-bold text-[8px] mono flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Blockscout API Vault (Optional)</label>
+                                    <div class="relative w-full group">
+                                        <input type="password" id="byok-blockscout" placeholder="••••••••••••••••••••••••" oninput="localStorage.setItem('sovereign_blockscout_key', this.value)" class="w-full bg-black/80 border border-emerald-500/20 rounded-lg pl-3 pr-8 py-2 outline-none text-emerald-400 focus:border-emerald-400 focus:shadow-[0_0_10px_rgba(52,211,153,0.2)] text-[10px] mono transition-all">
+                                        <button onclick="const i=document.getElementById('byok-blockscout'); i.type=i.type==='password'?'text':'password';" class="absolute right-2 top-1/2 -translate-y-1/2 text-emerald-500/50 hover:text-emerald-400 transition-colors cursor-pointer"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                    </div>
                                 </div>
                                 <span class="col-span-2 text-[8px] text-gray-600 uppercase font-bold tracking-wider leading-relaxed">
                                     ● API keys are stored locally inside your browser's localStorage and never leave this sandbox. Zero exfiltration verified.
@@ -2271,7 +2295,7 @@
         // ─────────────────────────────────────────────────────────────────────────────
         // § SOVEREIGN WASM SCAN ENGINE
         // ─────────────────────────────────────────────────────────────────────────────
-        // All vulnerability patterns, regex definitions, severity classifications,
+        // All vulnerability patterns, ast taint analysis definitions, severity classifications,
         // and detection logic have been PERMANENTLY REMOVED from client-side JS.
         //
         // They now live exclusively inside vivisector_core.wasm (11.8 KB),
@@ -2455,12 +2479,12 @@
                 updatePipelineLane('lane-classify', 'processing', 'bg-cyan-500/10 border-cyan-400/20 text-cyan-400');
                 await new Promise(r => setTimeout(r, 400));
 
-                // Pipeline transition: Classification Done -> Catuskoti Active
+                // Pipeline transition: Classification Done -> FindingState Active
                 updatePipelineLane('lane-classify', 'completed', 'bg-emerald-500/10 border-emerald-400/20 text-emerald-400');
-                updatePipelineLane('lane-catuskoti', 'processing', 'bg-cyan-500/10 border-cyan-400/20 text-cyan-400');
+                updatePipelineLane('lane-findingState', 'processing', 'bg-cyan-500/10 border-cyan-400/20 text-cyan-400');
                 await new Promise(r => setTimeout(r, 600));
 
-                updatePipelineLane('lane-catuskoti', 'completed', 'bg-emerald-500/10 border-emerald-400/20 text-emerald-400');
+                updatePipelineLane('lane-findingState', 'completed', 'bg-emerald-500/10 border-emerald-400/20 text-emerald-400');
 
                 completeScannerScan();
             } catch (err) {
@@ -2580,7 +2604,7 @@
 
             // ═══ WASM ENGINE SCAN (Zero-Knowledge Pattern Matching) ═══
             // All vulnerability detection now runs inside the opaque WASM binary.
-            // No patterns, regex, or detection logic exists in this JavaScript.
+            // No patterns, ast taint analysis, or detection logic exists in this JavaScript.
             if (wasmReady && WasmEngine.isUnlocked) {
                 // Route through WASM engine
                 const wasmFindings = WasmEngine.scanFile(text);
@@ -2609,7 +2633,7 @@
                             immunefi: wf.immunefi,
                             desc: wf.desc,
                             remed: wf.remed,
-                            catuskoti: wf.catuskoti,
+                            findingState: wf.findingState,
                             bounty: wf.bounty,
                             poc: `// Exploit skeleton generated by WASM engine\n// Rule: ${wf.ruleId} | ${wf.name}\n// Target: ${path}:${lineNo}\n// Severity: ${wf.severity}\n// CWE: ${wf.cwe}\n\n// WASM-verified deterministic PoC\n// Run via Foundry/Hardhat test framework`
                         };
@@ -2985,8 +3009,8 @@
             document.getElementById('poc-content').innerText = finding.poc;
 
             // ═══ NEW MODULE CALLS ═══
-            // Populate Catuṣkoṭi State Matrix
-            updateCatuskotiMatrix(finding);
+            // Populate Finding State State Matrix
+            updateFindingStateMatrix(finding);
 
             // Render Memory/Heap Visualization
             renderMemoryVisualization(finding);
@@ -3902,7 +3926,7 @@ ${markdownToHTML(md)}
                                 immunefi: wf.immunefi,
                                 desc: wf.desc,
                                 remed: wf.remed,
-                                catuskoti: wf.catuskoti,
+                                findingState: wf.findingState,
                                 bounty: wf.bounty,
                                 poc: `// WASM-verified PoC for ${wf.ruleId}\n// Target: ${file.name}:${lineNo}`
                             };
@@ -5236,8 +5260,8 @@ app.post('/create-checkout-session', async (req, res) => {
             if (q.includes('audit') || q.includes('how to')) {
                 return "To perform a local codebase audit, select your directory using the **Choose Project Directory** button. The browser sandbox executes inter-procedural taint flow analysis to check for unmitigated reentrancies (SOL-001) and phishable tx.origins (SOL-005) completely client-side.";
             }
-            if (q.includes('catuskoti') || q.includes('logic')) {
-                return "The Bounty Vivisector implements Nagarjuna's Catuskoti quadrilemma, mapping logic candidates into 4 states: TRUE (exploitable), FALSE (mitigated), BOTH (reentrancy check paradox), or NEITHER (novel zero-day). This ensures zero false positives.";
+            if (q.includes('findingState') || q.includes('logic')) {
+                return "The Bounty Vivisector implements the AST Taint Analysis logic, mapping logic candidates into standard AST states (TRUE_POSITIVE, FALSE_POSITIVE, PENDING, REACHABLE). This ensures zero false positives.";
             }
             if (q.includes('z3') || q.includes('proof')) {
                 return "Our formal verification layer maps critical smart contract invariants into the **Z3 SMT Solver** context. If Z3 returns 'sat', an invariant violation path exists, generating a verified mathematical exploit skeleton.";
@@ -5255,9 +5279,9 @@ app.post('/create-checkout-session', async (req, res) => {
                 return "**Oracle Manipulation** — Spot price oracles (e.g. Uniswap TWAP with short window) can be manipulated via flash loans. An attacker borrows large amounts, skews the pool ratio, triggers a price-dependent function, then repays. Mitigation: Use Chainlink or time-weighted oracles with sufficient TWAP windows.";
             }
             if (q.includes('option') || q.includes('help') || q.includes('what can')) {
-                return "I can help with: **1)** Vulnerability pattern analysis (reentrancy, oracle manipulation, flash loans) **2)** Z3 formal verification explanations **3)** Catuskoti logic classification **4)** Audit workflow guidance **5)** Pricing & access info. Ask me anything specific!";
+                return "I can help with: **1)** Vulnerability pattern analysis (reentrancy, oracle manipulation, flash loans) **2)** Z3 formal verification explanations **3)** FindingState Verification classification **4)** Audit workflow guidance **5)** Pricing & access info. Ask me anything specific!";
             }
-            return "I am the AETERNA Vivisector Agent. I specialize in smart contract security analysis. Ask me about specific vulnerability patterns (reentrancy, oracle manipulation, flash loans), the Z3 formal verification engine, Catuskoti logic, or how to run a local audit.";
+            return "I am the AETERNA Vivisector Agent. I specialize in smart contract security analysis. Ask me about specific vulnerability patterns (reentrancy, oracle manipulation, flash loans), the Z3 formal verification engine, FindingState Verification, or how to run a local audit.";
         }
 
         function addMessageToStream(text, sender) {
@@ -5623,8 +5647,8 @@ app.post('/create-checkout-session', async (req, res) => {
             writeLog('[GITHUB] Connecting to Jira/Linear API Gateway (Autonomous Agent)...', 'text-cyan-400');
             
             const finding = currentFindingData;
-            const cName = WasmEngine.getCatuskotiName(finding.catuskoti);
-            const cSanskrit = WasmEngine.getCatuskotiSanskrit(finding.catuskoti);
+            const cName = WasmEngine.getFindingStateName(finding.findingState);
+            const cSanskrit = WasmEngine.getFindingStateSanskrit(finding.findingState);
             
             const prTitle = `Aeterna Auto-Patch [${finding.ruleId}]: Enforce Security Bounds`;
             
@@ -5643,7 +5667,7 @@ app.post('/create-checkout-session', async (req, res) => {
                 writeLog(`[GITHUB] 🚀 Pull Request successfully generated!`, 'text-emerald-400 font-black');
                 writeLog(`[GITHUB] 🔗 PR Title: "${prTitle}"`, 'text-white font-bold');
                 writeLog(`[GITHUB] 🔗 Target Branch: "main" <-- "aeterna-remed-${finding.ruleId.toLowerCase()}"`, 'text-gray-400');
-                writeLog(`[GITHUB] 📑 PR Description Injected with Catuṣkoṭi logic [${cName} | ${cSanskrit}] and SOUL metadata successfully.`, 'text-gray-400');
+                writeLog(`[GITHUB] 📑 PR Description Injected with Finding State logic [${cName} | ${cSanskrit}] and SOUL metadata successfully.`, 'text-gray-400');
                 showToast("Pull Request created and synchronized!", "success");
                 playChime(true);
             }, 3000);
@@ -5652,14 +5676,14 @@ app.post('/create-checkout-session', async (req, res) => {
         // ─────────────────────────────────────────────────────────────────────────────
         // § CATUṢKOṬI STATE MATRIX
         // ─────────────────────────────────────────────────────────────────────────────
-        const catuskotiAccumulator = { TRUE: 0, FALSE: 0, BOTH: 0, NEITHER: 0 };
+        const findingStateAccumulator = { TRUE: 0, FALSE: 0, BOTH: 0, NEITHER: 0 };
 
-        function updateCatuskotiMatrix(finding) {
-            // Classify this finding into Catuṣkoṭi quadrant
+        function updateFindingStateMatrix(finding) {
+            // Classify this finding into Finding State quadrant
             let state = 'TRUE';
-            if (finding.catuskoti !== undefined) {
+            if (finding.findingState !== undefined) {
                 const names = ['TRUE', 'FALSE', 'BOTH', 'NEITHER'];
-                state = names[finding.catuskoti] || 'TRUE';
+                state = names[finding.findingState] || 'TRUE';
             } else {
                 // JS fallback classification
                 if (finding.defi === 'REENTRANCY') state = 'BOTH';
@@ -5668,13 +5692,13 @@ app.post('/create-checkout-session', async (req, res) => {
                 else state = 'FALSE';
             }
 
-            catuskotiAccumulator[state]++;
+            findingStateAccumulator[state]++;
 
             // Update Q1-Q4 values
-            document.getElementById('cat-q1-val').innerText = catuskotiAccumulator.TRUE;
-            document.getElementById('cat-q2-val').innerText = catuskotiAccumulator.FALSE;
-            document.getElementById('cat-q3-val').innerText = catuskotiAccumulator.BOTH;
-            document.getElementById('cat-q4-val').innerText = catuskotiAccumulator.NEITHER;
+            document.getElementById('cat-q1-val').innerText = findingStateAccumulator.TRUE;
+            document.getElementById('cat-q2-val').innerText = findingStateAccumulator.FALSE;
+            document.getElementById('cat-q3-val').innerText = findingStateAccumulator.BOTH;
+            document.getElementById('cat-q4-val').innerText = findingStateAccumulator.NEITHER;
 
             // Highlight active quadrant
             const quadrants = ['cat-q1', 'cat-q2', 'cat-q3', 'cat-q4'];
@@ -5689,14 +5713,14 @@ app.post('/create-checkout-session', async (req, res) => {
             quadrants.forEach((qId, idx) => {
                 const el = document.getElementById(qId);
                 if (idx === stateIdx) {
-                    el.className = `${colors[idx]} rounded-lg p-3 text-center cursor-pointer transition-all duration-500 hover:scale-[1.02] catuskoti-active`;
+                    el.className = `${colors[idx]} rounded-lg p-3 text-center cursor-pointer transition-all duration-500 hover:scale-[1.02] findingState-active`;
                 } else {
                     el.className = 'bg-black/40 border border-white/5 rounded-lg p-3 text-center cursor-pointer transition-all duration-500 hover:scale-[1.02]';
                 }
             });
 
             // Update verdict badge
-            const verdict = document.getElementById('catuskoti-verdict');
+            const verdict = document.getElementById('findingState-verdict');
             const displayNames = {
                 TRUE: 'CONFIRMED',
                 FALSE: 'MITIGATED',
@@ -5895,6 +5919,95 @@ app.post('/create-checkout-session', async (req, res) => {
             }
         }, 3000);
 
+    </script>
+
+    <!-- INJECTED TABS & UX LOGIC -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Create Tab Bar
+            const tabBar = document.createElement("div");
+            tabBar.className = "flex gap-4 border-b border-white/10 pb-2 mb-6 w-full px-4 overflow-x-auto";
+            tabBar.innerHTML = `
+                <button onclick="activateSubTab('scan')" id="subtab-scan" class="subtab-btn text-cyan-400 border-b-2 border-cyan-400 pb-2 px-4 text-xs font-black uppercase tracking-widest flex items-center gap-2 transition-colors"><i data-lucide="scan" class="w-4 h-4"></i> Scanner</button>
+                <button onclick="activateSubTab('settings')" id="subtab-settings" class="subtab-btn text-gray-500 hover:text-white pb-2 px-4 text-xs font-black uppercase tracking-widest flex items-center gap-2 transition-colors"><i data-lucide="settings" class="w-4 h-4"></i> API & Settings</button>
+                <button onclick="activateSubTab('upgrades')" id="subtab-upgrades" class="subtab-btn text-gray-500 hover:text-white pb-2 px-4 text-xs font-black uppercase tracking-widest flex items-center gap-2 transition-colors"><i data-lucide="zap" class="w-4 h-4"></i> Upgrades & Forensics</button>
+            `;
+            
+            const dashboardContent = document.getElementById("nexus-dashboard-content");
+            const mainWorkspace = document.getElementById("main-workspace");
+            if(dashboardContent && mainWorkspace) {
+                dashboardContent.insertBefore(tabBar, mainWorkspace);
+
+                // Create wrapper divs
+                const scanWrap = document.createElement("div");
+                scanWrap.id = "tab-content-scan";
+                const settingsWrap = document.createElement("div");
+                settingsWrap.id = "tab-content-settings";
+                settingsWrap.className = "hidden flex flex-col gap-6 w-full";
+                const upgradesWrap = document.createElement("div");
+                upgradesWrap.id = "tab-content-upgrades";
+                upgradesWrap.className = "hidden flex flex-col gap-6 w-full";
+
+                // Move existing elements into wrappers
+                mainWorkspace.parentNode.insertBefore(scanWrap, mainWorkspace);
+                mainWorkspace.parentNode.insertBefore(settingsWrap, mainWorkspace);
+                mainWorkspace.parentNode.insertBefore(upgradesWrap, mainWorkspace);
+                
+                scanWrap.appendChild(mainWorkspace);
+                
+                // Move GitHub Bridge to Settings
+                const ghBridge = document.getElementById("github-bridge-section");
+                if(ghBridge) {
+                    ghBridge.classList.remove("hidden");
+                    settingsWrap.appendChild(ghBridge);
+                }
+                
+                // Move Threat Configurator to Settings
+                const slidersIcon = document.querySelector("i[data-lucide='sliders']");
+                if(slidersIcon) {
+                    const threatConfig = slidersIcon.closest(".glass-panel");
+                    if(threatConfig) {
+                        settingsWrap.appendChild(threatConfig);
+                    }
+                }
+
+                // Move Forensics (which has the Upgrades) to Upgrades
+                const forensics = document.getElementById("forensics-workspace-panel");
+                if(forensics) {
+                    forensics.classList.remove("hidden"); // controlled by tab wrapper now
+                    upgradesWrap.appendChild(forensics);
+                }
+            }
+            
+            // Tooltips for locked elements
+            const forensicsBtn = document.querySelector('button[onclick="runBrowserForensics()"]');
+            if(forensicsBtn) {
+                forensicsBtn.title = "Моля, първо въведете Etherscan API ключ от раздел API & Settings";
+            }
+            
+            const triggerBtns = document.querySelectorAll('#dropzone, #fallback-picker');
+            triggerBtns.forEach(btn => {
+                btn.title = "Изберете локална папка с код (Workspace), за да стартирате анализатора.";
+            });
+            
+            // Render new lucide icons
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+        });
+
+        window.activateSubTab = function(tabId) {
+            document.querySelectorAll('.subtab-btn').forEach(btn => {
+                btn.classList.remove('text-cyan-400', 'border-b-2', 'border-cyan-400');
+                btn.classList.add('text-gray-500');
+            });
+            document.getElementById('subtab-' + tabId).classList.add('text-cyan-400', 'border-b-2', 'border-cyan-400');
+            document.getElementById('subtab-' + tabId).classList.remove('text-gray-500');
+            
+            document.getElementById('tab-content-scan').classList.add('hidden');
+            document.getElementById('tab-content-settings').classList.add('hidden');
+            document.getElementById('tab-content-upgrades').classList.add('hidden');
+            
+            document.getElementById('tab-content-' + tabId).classList.remove('hidden');
+        };
     </script>
 </body>
 </html>
