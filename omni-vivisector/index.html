@@ -2558,7 +2558,7 @@
                 if (entry.kind === 'file') {
                     // Filter code file extensions to preserve CPU cycles
                     const ext = entry.name.split('.').pop().toLowerCase();
-                    if (['sol', 'rs', 'py', 'ts', 'js', 'vy', 'clar', 'cu', 'cpp', 'h'].includes(ext)) {
+                    if (['sol', 'rs', 'py', 'ts', 'js', 'vy', 'clar', 'cu', 'cpp', 'h', 'soul'].includes(ext)) {
                         arr.push({ fileHandle: entry, path: relativePath });
                     }
                 } else if (entry.kind === 'directory') {
@@ -2603,6 +2603,7 @@
             else if (ext === 'ts' || ext === 'js') lang = 'Typescript';
             else if (ext === 'vy') lang = 'Vyper';
             else if (ext === 'clar') lang = 'Clarity';
+            else if (ext === 'soul') lang = 'Soul';
 
             if (!scanningState.languages[lang]) {
                 scanningState.languages[lang] = { files: 0, loc: 0 };
@@ -2716,6 +2717,7 @@
             if (ext === 'sol') { icon = 'file-code-2'; color = 'text-cyan-400'; }
             else if (ext === 'rs') { icon = 'ferris-wheel'; color = 'text-purple-400'; }
             else if (ext === 'py') { icon = 'braces'; color = 'text-yellow-400'; }
+            else if (ext === 'soul') { icon = 'key'; color = 'text-red-400'; }
             
             fileRow.innerHTML = `
                 <span class="flex items-center gap-2 truncate">
@@ -3187,7 +3189,7 @@
 
             scanningState.findings.forEach((f, idx) => {
                 const ext = f.path.split('.').pop().toLowerCase();
-                const codeLang = ext === 'sol' ? 'solidity' : ext === 'rs' ? 'rust' : ext === 'py' ? 'python' : 'javascript';
+                const codeLang = ext === 'sol' ? 'solidity' : ext === 'rs' ? 'rust' : ext === 'py' ? 'python' : ext === 'soul' ? 'soul' : 'javascript';
                 
                 tempMd += `# ${f.name}\n\n`;
                 tempMd += `**Submitted by:** papica777 | **Platform:** AETERNA BOUNTY_VIVISECTOR v6.0 | **Classification:** SECURE AUDIT DOSSIER\n\n`;
