@@ -4819,12 +4819,20 @@ app.post('/create-checkout-session', async (req, res) => {
                 return;
             }
 
-            // Initialize Firebase App if not initialized
+            // Initialize Firebase App if not initialized (with offline safety check)
+            if (typeof firebase === 'undefined') {
+                writeLog(`[OFFLINE] Firebase CDN unreachable. Re-routing to local bypass authentication...`, "text-amber-400 font-bold");
+                completeSocialLoginBypass(provider);
+                return;
+            }
+
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
 
-            const authProvider = new firebase.auth.GoogleAuthProvider();
+            const authProvider = provider === 'google' 
+                ? new firebase.auth.GoogleAuthProvider() 
+                : new firebase.auth.GithubAuthProvider();
 
             // Beautiful loader progress bar simulation while popup is open
             let width = 0;

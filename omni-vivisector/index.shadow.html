@@ -4542,7 +4542,13 @@ app.post('/create-checkout-session', async (req, res) => {
             }
             lucide.createIcons();
             
-            // Initialize Firebase App if not initialized
+            // Initialize Firebase App if not initialized (with offline safety check)
+            if (typeof firebase === 'undefined') {
+                writeLog(`[OFFLINE] Firebase CDN unreachable. Re-routing to local bypass authentication...`, "text-amber-400 font-bold");
+                completeSocialLoginBypass(provider);
+                return;
+            }
+
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
