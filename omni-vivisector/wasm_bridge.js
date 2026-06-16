@@ -45,6 +45,7 @@ const WasmEngine = (() => {
             };
 
             const result = await WebAssembly.instantiate(bytes, importObject);
+            wasmInstance = result.instance;
             if (typeof window !== 'undefined') {
                 window.debugWasmInstance = wasmInstance;
             } else {

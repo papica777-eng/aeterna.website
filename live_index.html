@@ -14,9 +14,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     
-    <!-- Web Tree-Sitter for AST Parsing -->
-    <script src="https://unpkg.com/web-tree-sitter@0.20.8/tree-sitter.js"></script>
-
     <style>
         :root {
             --brand-cyan: #00e5ff;
@@ -2362,20 +2359,8 @@
             }
         };
 
-        fallbackPicker.onchange = async (e) => {
+        fallbackPicker.onchange = (e) => {
             if (e.target.files.length > 0) {
-                if (!window.TreeSitterLoaded) {
-                    writeLog(`[COMPILER] Initializing TreeSitter WASM engine...`, "text-cyan-400");
-                    try {
-                        await TreeSitter.init({
-                            locateFile: (path) => 'tree-sitter.wasm'
-                        });
-                        window.TreeSitterLoaded = true;
-                        writeLog(`[COMPILER] TreeSitter WASM module active.`, "text-emerald-400 font-bold");
-                    } catch (err) {
-                        writeLog(`[ERROR] TreeSitter init failed: ${err.message}`, "text-red-400");
-                    }
-                }
                 handleFileArrayScan(Array.from(e.target.files));
             }
         };
@@ -3418,12 +3403,12 @@
         ol, ul { padding-left: 20px; margin: 10px 0; }
         li { margin: 6px 0; font-size: 13px; color: #abb2bf; }
         @media print { body { background: #0c0e17 !important; color: #abb2bf !important; } h1, h2 { color: #fff; } h3 { background: rgba(168, 85, 247, 0.1); border-left-color: #a855f7; color: #fff; } th { background: rgba(0, 229, 255, 0.08); color: #00e5ff; } td { color: #abb2bf; } pre, code { background: #07080d !important; color: #abb2bf !important; border-color: rgba(255, 255, 255, 0.05); } blockquote { background: rgba(168,85,247,0.05); } }
-    <\/style>
-<\/head>
+    </style>
+</head>
 <body>
 ${markdownToHTML(md)}
-<\/body>
-<\/html>`;
+</body>
+</html>`;
 
                 const printWindow = window.open('', '_blank');
                 printWindow.document.write(htmlContent);
@@ -4787,44 +4772,19 @@ app.post('/create-checkout-session', async (req, res) => {
             }
             lucide.createIcons();
             
-            if (provider === 'github') {
-                // DEMO MODE: Simulate real GitHub OAuth Popup since no backend is configured
-                const popup = window.open('https://github.com/login', 'GitHub Auth', 'width=500,height=600');
-                
-                let width = 0;
-                const progressInterval = setInterval(() => {
-                    width = Math.min(90, width + 10);
-                    progress.style.width = `${width}%`;
-                    
-                    if (!popup || popup.closed) {
-                        clearInterval(progressInterval);
-                        progress.style.width = '100%';
-                        
-                        // Generate mock token
-                        const fakeToken = 'ghp_' + Math.random().toString(36).substr(2, 10).toUpperCase();
-                        localStorage.setItem('gh_pat', fakeToken);
-                        
-                        const patInput = document.getElementById('gh-pat-input');
-                        if (patInput) patInput.value = '••••••••' + fakeToken.slice(-4);
-                        if (typeof ghBridge !== 'undefined') ghBridge.pat = fakeToken;
-                        
-                        writeLog(`[GITHUB] Auto-loaded Access Token from OAuth credentials.`, "text-emerald-400 font-bold");
-                        
-                        completeSocialLoginBypass('github');
-                    }
-                }, 500);
-                
-                // Fallback close after 3 seconds for demo purposes
-                setTimeout(() => { if (popup) popup.close(); }, 3000);
-                return;
-            }
-
             // Initialize Firebase App if not initialized
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
 
-            const authProvider = new firebase.auth.GoogleAuthProvider();
+            const authProvider = provider === 'google' 
+                ? new firebase.auth.GoogleAuthProvider() 
+                : new firebase.auth.GithubAuthProvider();
+
+            if (provider === 'github') {
+                // Request full repository access scope for our GitHub API Bridge!
+                authProvider.addScope('repo');
+            }
 
             // Beautiful loader progress bar simulation while popup is open
             let width = 0;
@@ -5124,64 +5084,6 @@ app.post('/create-checkout-session', async (req, res) => {
                 }
             }
             showToast(`${isArchitectMode ? 'Architect authority' : 'Client access'} authorized via ${provider.toUpperCase()}`, isArchitectMode ? 'error' : 'success');
-        }
-
-        // Elegant glassmorphic Toast notification system
-        function showToast(message, type = '') {
-            let container = document.getElementById('toast-container');
-            if (!container) {
-                container = document.createElement('div');
-                container.id = 'toast-container';
-                container.className = 'fixed bottom-24 right-6 z-50 flex flex-col gap-3 max-w-sm pointer-events-none';
-                document.body.appendChild(container);
-            }
-
-            const toast = document.createElement('div');
-            toast.className = 'glass-panel p-4 rounded-xl border flex items-center gap-3 shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto select-none';
-            
-            let icon = 'info';
-            let borderClass = 'border-white/10';
-            let textClass = 'text-gray-200';
-            let iconColor = 'text-cyan-400';
-
-            if (type === 'success') {
-                icon = 'check-circle';
-                borderClass = 'border-emerald-500/30 bg-emerald-500/5';
-                iconColor = 'text-emerald-400';
-            } else if (type === 'error') {
-                icon = 'alert-triangle';
-                borderClass = 'border-red-500/30 bg-red-500/5';
-                iconColor = 'text-red-400';
-            } else {
-                icon = 'info';
-                borderClass = 'border-cyan-500/30 bg-cyan-500/5';
-                iconColor = 'text-cyan-400';
-            }
-
-            toast.classList.add(...borderClass.split(' '));
-            toast.innerHTML = `
-                <i data-lucide="${icon}" class="w-4 h-4 ${iconColor} shrink-0"></i>
-                <span class="text-xs font-black uppercase tracking-wider ${textClass}">${message}</span>
-            `;
-
-            container.appendChild(toast);
-            if (window.lucide) window.lucide.createIcons();
-
-            // Trigger animation
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
-            // Hide and remove after delay
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => {
-                    toast.remove();
-                    if (container.childElementCount === 0) {
-                        container.remove();
-                    }
-                }, 300);
-            }, 3000);
         }
 
         function logoutSocial() {

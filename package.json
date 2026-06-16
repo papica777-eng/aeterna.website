@@ -4,6 +4,9 @@
   "description": "AETERNA - Sovereign Autonomous Cognitive Engine for Resilient Cybersecurity and Physical AI Swarm Orchestration",
   "type": "module",
   "scripts": {
+    "dev": "npm run setup:wasm && live-server ./omni-vivisector --port=3000 --cors",
+    "start": "npm run dev",
+    "setup:wasm": "node -e \"const fs = require('fs'); fs.copyFileSync('node_modules/web-tree-sitter/web-tree-sitter.wasm', 'omni-vivisector/tree-sitter.wasm');\"",
     "demo": "npx tsx eic/automation/INTERVIEW_DEMO.ts"
   },
   "dependencies": {
@@ -11,8 +14,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
+    "live-server": "^1.2.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "web-tree-sitter": "^0.26.9"
   }
 }
