@@ -4746,7 +4746,7 @@ app.post('/create-checkout-session', async (req, res) => {
                 <div class="bg-gradient-to-r from-cyan-400 to-purple-500 h-full rounded-full transition-all duration-300" id="social-loader-progress" style="width: 0%;"></div>
             </div>
 
-            <button onclick="closeSocialAuthModal()" class="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer select-none">
+            <button onclick="closeSocialAuthModal(); resetSocialModalDefault();" class="w-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer select-none">
                 Abort Ingress
             </button>
         </div>
@@ -4756,7 +4756,8 @@ app.post('/create-checkout-session', async (req, res) => {
         // ─────────────────────────────────────────────────────────────────────────────
         // § SOCIAL AUTHENTICATION CONTROLLER (REAL FIREBASE OAUTH CONNECTOR)
         // ─────────────────────────────────────────────────────────────────────────────
-        const firebaseConfig = {
+        const savedFb = localStorage.getItem('firebase_config');
+        const firebaseConfig = savedFb ? JSON.parse(savedFb) : {
             apiKey: "AIzaSyAs-AeternaVivisectorPublicApiKeyTest9669",
             authDomain: "aeterna-vivisector.firebaseapp.com",
             projectId: "aeterna-vivisector",
@@ -4822,8 +4823,9 @@ app.post('/create-checkout-session', async (req, res) => {
             }
 
             // Initialize Firebase App if not initialized (with offline safety check)
-            if (typeof firebase === 'undefined') {
-                writeLog(`[OFFLINE] Firebase CDN unreachable. Re-routing to local bypass authentication...`, "text-amber-400 font-bold");
+            if (typeof firebase === 'undefined' || firebaseConfig.apiKey.includes('Test')) {
+                const reason = typeof firebase === 'undefined' ? 'Firebase CDN unreachable' : 'Default test credentials detected';
+                writeLog(`[AUTH] ${reason}. Re-routing to local bypass authentication...`, "text-amber-400 font-bold");
                 completeSocialLoginBypass(provider);
                 return;
             }
@@ -4905,9 +4907,6 @@ app.post('/create-checkout-session', async (req, res) => {
                                 </button>
                                 <button onclick="showFirebaseConfigForm('${provider}')" class="w-full bg-cyan-500/10 hover:bg-cyan-400 hover:text-black border border-cyan-400/20 text-cyan-400 font-extrabold py-2 rounded-xl text-[10px] uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer">
                                     <i data-lucide="settings" class="w-3.5 h-3.5"></i> CONFIGURE OWN FIREBASE
-                                </button>
-                                <button onclick="closeSocialAuthModal(); resetSocialModalDefault();" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold py-1.5 rounded-xl text-[10px] uppercase tracking-wider transition-colors cursor-pointer">
-                                    Abort Ingress
                                 </button>
                             </div>
                         </div>
@@ -5453,7 +5452,12 @@ app.post('/create-checkout-session', async (req, res) => {
                     } else if (vortexKey) {
                         writeLog('[IGNITION] Requesting session token from Vortex Server using API Key...', 'text-yellow-400');
                         try {
-                            const response = await fetch('http://127.0.0.1:3000/api/ignition', {
+                            const _VORTEX_API_BASE = (
+                                window.location.hostname === 'localhost' ||
+                                window.location.hostname === '127.0.0.1' ||
+                                window.location.protocol === 'file:'
+                            ) ? 'http://127.0.0.1:3000' : 'https://aeterna.website';
+                            const response = await fetch(`${_VORTEX_API_BASE}/api/ignition`, {
                                 method: 'POST',
                                 headers: { 
                                     'Content-Type': 'application/json',
