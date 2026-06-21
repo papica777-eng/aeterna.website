@@ -286,8 +286,8 @@
                     </button>
                     <div class="h-6 w-px bg-white/10 shrink-0"></div>
                     <button id="header-checkout-btn" onclick="openStripeCheckoutModal()" class="bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 hover:from-cyan-300 hover:to-purple-500 text-white font-extrabold px-4 py-2.5 rounded-xl border border-cyan-300/40 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-cyan-500/10 cursor-pointer text-xs uppercase tracking-wider select-none shrink-0">
-                        <i data-lucide="credit-card" class="w-4 h-4 text-white animate-pulse"></i>
-                        Stripe ($5,000)
+                        <i data-lucide="heart" class="w-4 h-4 text-white animate-pulse"></i>
+                        GitHub Sponsors ($5,000)
                     </button>
                 </div>
 
@@ -1152,13 +1152,13 @@
                     <div class="space-y-2 max-w-lg">
                         <h3 class="text-lg font-black text-white uppercase tracking-widest text-glow-red">EIC SECURITY COMPLIANCE LICENSING REQUIRED</h3>
                         <p class="text-xs text-gray-400 leading-relaxed">
-                            Wallet Forensics and Temporal Tracking tools are restricted under EIC regulatory compliance guidelines. You must verify a valid sovereign access key or purchase an enterprise session bypass via Stripe.
+                            Wallet Forensics and Temporal Tracking tools are restricted under EIC regulatory compliance guidelines. You must verify a valid sovereign access key or sponsor the project via GitHub Sponsors.
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-4 justify-center">
                         <button onclick="openStripeCheckoutModal()" class="bg-gradient-to-r from-red-500 via-rose-600 to-indigo-600 hover:from-red-400 hover:to-indigo-500 text-white font-extrabold px-6 py-3 rounded-xl border border-red-400/40 hover:scale-[1.01] active:scale-95 transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-lg shadow-red-500/10 text-xs uppercase tracking-wider select-none">
-                            <i data-lucide="credit-card" class="w-4 h-4 text-white animate-pulse"></i>
-                            Unlock License via Stripe ($5,000)
+                            <i data-lucide="heart" class="w-4 h-4 text-white animate-pulse"></i>
+                            Sponsor via GitHub Sponsors ($5,000)
                         </button>
                         <button onclick="triggerWeb3Checkout()" class="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/30 text-white font-extrabold px-6 py-3 transition-all duration-300 flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wider select-none">
                             <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
@@ -1844,15 +1844,12 @@
             const repo = document.getElementById('stripe-repo').value;
 
             if (!email || !repo) {
-                alert("CLIENT_ERROR: Billing Contact Email and Target Repository are both mandatory parameters.");
+                alert("CLIENT_ERROR: Sponsor Contact Email and Target Repository are both mandatory parameters.");
                 return;
             }
 
-            // Construct secure prefilled Stripe Checkout Link with Jay Bisen reference
-            const stripeBaseUrl = "https://buy.stripe.com/9B68wP6IxaiR8v8eKk0Ba0j";
-            const checkoutUrl = `${stripeBaseUrl}?prefilled_email=${encodeURIComponent(email)}&client_reference_id=jay_bisen`;
-            
-            console.log("🔗 [STRIPE CHECKOUT]: Redirecting to secure stripe checkout:", checkoutUrl);
+            const checkoutUrl = "https://github.com/sponsors/papica777-eng";
+            console.log("🔗 [GITHUB SPONSORS]: Redirecting to GitHub Sponsors:", checkoutUrl);
             window.open(checkoutUrl, "_blank");
         }
 
@@ -4201,21 +4198,21 @@ Requirements:
                                 </button>
                             </div>
                             <div class="flex items-center gap-1 text-[10px] text-gray-500 font-bold uppercase mono">
-                                <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400 animate-pulse"></i> SECURE STRIPE CHECKOUT
+                                <i data-lucide="heart" class="w-3.5 h-3.5 text-red-500 animate-pulse"></i> GITHUB SPONSORSHIP
                             </div>
                         </div>
 
                         <!-- Panel 1: Card Checkout Form -->
                         <div id="checkout-form-panel" class="space-y-4">
                             <p class="text-xs text-gray-400 leading-relaxed">
-                                Enter your billing details below. In secure production mode, this panel mounts the standard <strong>Stripe Elements Card Frame</strong> guaranteeing absolute bank-grade PCI-compliance.
+                                Enter your details below. In secure production mode, this panel redirects to the <strong>GitHub Sponsors Portal</strong> guaranteeing absolute cryptographic trust.
                             </p>
 
                             <!-- Inputs Group -->
                             <div class="space-y-3.5 text-xs">
                                 <!-- Email Input -->
                                 <div class="space-y-1.5">
-                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[10px] mono">Client Contact Email</label>
+                                    <label class="block text-gray-500 uppercase tracking-widest font-bold text-[10px] mono">Sponsor Contact Email</label>
                                     <input type="email" id="stripe-email" placeholder="e.g. founder@myprotocol.io" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 outline-none text-white focus:border-cyan-400 transition-colors font-semibold">
                                 </div>
 
@@ -4244,8 +4241,8 @@ Requirements:
 
                             <!-- Authorize Button -->
                             <button onclick="triggerStripeCheckout()" class="w-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-purple-600 hover:from-cyan-300 hover:to-purple-500 text-white font-extrabold py-3.5 rounded-xl border border-cyan-300/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-cyan-500/10 text-xs uppercase tracking-widest select-none mt-6">
-                                <i data-lucide="credit-card" class="w-4 h-4 text-white animate-pulse"></i>
-                                SECURE STRIPE CHECKOUT (€500)
+                                <i data-lucide="heart" class="w-4 h-4 text-white animate-pulse"></i>
+                                SPONSOR VIA GITHUB (€500)
                             </button>
                         </div>
 
