@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        if (location.protocol === 'http:' && !location.hostname.includes('localhost') && !location.hostname.includes('127.0.0.1')) {
+            location.href = location.href.replace('http:', 'https:');
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AETERNA BOUNTY: VIVISECTOR Hall of Fame</title>
@@ -426,8 +431,11 @@
             </div>
         </div>
         <nav class="nav-links">
-            <a href="#" class="nav-link active">Security Audits</a>
-            <a href="https://github.com/paxosglobal" class="nav-link" target="_blank">Target Codebase</a>
+            <a href="./index.html" class="nav-link">Home</a>
+            <a href="./omni-vivisector/index.html" class="nav-link">Dashboard</a>
+            <a href="./aeterna.html" class="nav-link">Forensic Report</a>
+            <a href="./docs.html" class="nav-link">Docs</a>
+            <a href="#" class="nav-link active">3D Hall of Fame</a>
         </nav>
     </header>
 
