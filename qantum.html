@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QAntum Prime - Autonomous AI QA Testing Framework</title>
+    <meta name="description" content="Autonomous AI testing framework that automatically writes, executes, and heals tests to eliminate flaky builds and minimize QA overhead.">
+    <meta name="keywords" content="Autonomous QA, Ghost Protocol, Self-Healing Automation, AI Testing Framework, Bot Detection Bypass, Selenium Alternative, Playwright Alternative, Cypress Alternative, E2E Testing, Test Automation AI, ML Test Healing, Swarm Execution, Parallel Testing, QA Framework Enterprise, Automated Test Generation, Visual Regression Testing, API Testing Framework, Security Testing Automation">
+    <meta name="author" content="Dimitar Prodromov | QAntum Labs">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/aeterna_logo.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: {
+                            cyan: '#00f0ff',
+                            indigo: '#4f46e5',
+                            purple: '#b55fe6',
+                            gold: '#d4af37',
+                            emerald: '#00ffaa',
+                            pink: '#ff2a85'
+                        },
+                        obsidian: '#050505',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Stripe for Payments -->
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-grid"></div>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Navigation Header -->
+    <nav class="fixed w-full z-50 glass py-5 px-6 md:px-12 flex justify-between items-center border-b border-white/5">
+        <div class="flex items-center gap-4 shrink-0">
+            <img src="assets/aeterna_logo.svg" alt="AETERNA Logo" class="w-9 h-9 transition-transform hover:rotate-90 duration-500">
+            <span class="text-2xl font-black tracking-tighter font-mono">AETERNA<span class="text-accent-purple">.</span>AIC</span>
+        </div>
+        
+        <div class="flex items-center gap-4 xl:gap-8 min-w-0">
+            <div class="hidden lg:flex gap-3 xl:gap-5 2xl:gap-8 text-[10px] xl:text-xs font-bold tracking-[0.05em] xl:tracking-[0.15em] uppercase items-center">
+                <a href="./index.html#vision" class="hover:text-accent-cyan transition-all">VISION</a>
+                <a href="./index.html#scientific-achievements" class="hover:text-accent-cyan transition-all">SCIENTIFIC BREAKTHROUGHS</a>
+                <a href="./index.html#specs" class="hover:text-accent-cyan transition-all">SPECIFICATIONS LAB</a>
+                <a href="./index.html#timeline" class="hover:text-accent-cyan transition-all">CHRONOLOGY</a>
+                <a href="./index.html#grants" class="hover:text-accent-cyan transition-all">EU GRANTS</a>
+                <a href="./index.html#access" class="hover:text-accent-cyan transition-all">PRICING</a>
+                
+                <!-- VHT Dropdown -->
+                <div class="relative group">
+                    <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1.5 uppercase cursor-pointer">
+                        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                        VIRTUAL HUMAN TWIN (VHT)
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="absolute left-0 top-full hidden group-hover:block pt-4 z-50">
+                        <div class="flex flex-col gap-3 p-5 glass-premium border border-white/10 rounded-xl min-w-[240px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+                            <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
+                            <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
+                            <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
+                            <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
+                            <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
+                            <div class="w-full h-px bg-white/10 my-1"></div>
+                            <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
+                            <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="./ukame-matrix.html" class="text-accent-gold hover:text-white transition-all font-black flex items-center gap-1.5">UKAME SOLAR</a>
+                <a href="./omni-vivisector/index.html" class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5">OMNI-VIVISECTOR</a>
+                <a href="./k2/index.html" class="text-accent-emerald hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5 text-accent-emerald"></i> VERTEX DeFi</a>
+                <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline/blob/main/docs/ZERO_ENTROPY_MEV_MODEL.md" target="_blank" class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-cyan"></i> WHITEPAPER</a>
+                <a href="./qantum.html" class="text-accent-indigo hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-accent-indigo"></i> QANTUM PRIME</a>
+                <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="book" class="w-3.5 h-3.5 text-accent-purple"></i> DOCS</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero compact-hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse"></span>
+                <span>Autonomous Testing Substrate • Online</span>
+            </div>
+            
+            <h1>The AI That <span class="gradient">Tests Itself</span></h1>
+            
+            <p class="hero-subtitle">
+                QAntum Prime is an autonomous testing agent that eliminates flaky tests, slashes QA costs, and prevents broken builds. It automatically discovers, writes, runs, and self-heals your test suites in real-time.
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="docs.html#quickstart" class="btn btn-primary">🚀 Get Started</a>
+                <a href="#features" class="btn btn-secondary">📖 Learn More</a>
+            </div>
+            
+            <!-- Install Command -->
+            <div class="install-box">
+                <code>npx qantum init my-project</code>
+                <button class="copy-btn" onclick="copyInstall()">📋</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Terminal + Features Side by Side -->
+    <section class="dual-section" id="demo">
+        <div class="container">
+            <div class="dual-grid">
+                <!-- Left: Terminal -->
+                <div class="dual-left">
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <span class="btn-red"></span>
+                                <span class="btn-yellow"></span>
+                                <span class="btn-green"></span>
+                            </div>
+                            <div class="terminal-title">QAntum Prime • Neural Hub</div>
+                            <div class="terminal-status">
+                                <span class="status-dot online"></span>
+                                <span>LIVE</span>
+                            </div>
+                        </div>
+                        <div class="terminal-body" id="terminalOutput"></div>
+                    </div>
+                </div>
+                
+                <!-- Right: Interactive Feature Cards -->
+                <div class="dual-right" id="features">
+                    <h2 class="compact-title">Core <span class="gradient">Powers</span></h2>
+                    <div class="feature-buttons">
+                        <button class="feature-btn active" data-feature="ghost" onclick="showFeatureDemo('ghost')">
+                            <span class="fb-icon">👻</span>
+                            <span class="fb-name">Ghost Protocol</span>
+                            <span class="fb-status">• ACTIVE</span>
+                        </button>
+                        <button class="feature-btn" data-feature="heal" onclick="showFeatureDemo('heal')">
+                            <span class="fb-icon">🔮</span>
+                            <span class="fb-name">Self-Healing</span>
+                            <span class="fb-status">• READY</span>
+                        </button>
+                        <button class="feature-btn" data-feature="swarm" onclick="showFeatureDemo('swarm')">
+                            <span class="fb-icon">🐝</span>
+                            <span class="fb-name">Global Swarm</span>
+                            <span class="fb-status">• 1,247 NODES</span>
+                        </button>
+                        <button class="feature-btn" data-feature="oracle" onclick="showFeatureDemo('oracle')">
+                            <span class="fb-icon">🔍</span>
+                            <span class="fb-name">The Oracle</span>
+                            <span class="fb-status">• SCANNING</span>
+                        </button>
+                        <button class="feature-btn" data-feature="chronos" onclick="showFeatureDemo('chronos')">
+                            <span class="fb-icon">⏱️</span>
+                            <span class="fb-name">Chronos Engine</span>
+                            <span class="fb-status">• PREDICTING</span>
+                        </button>
+                        <button class="feature-btn" data-feature="fortress" onclick="showFeatureDemo('fortress')">
+                            <span class="fb-icon">🛡️</span>
+                            <span class="fb-name">Fortress</span>
+                            <span class="fb-status">• SECURE</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Feature Demo Panel -->
+                    <div class="feature-demo-panel" id="featureDemoPanel">
+                        <div class="fdp-header">
+                            <span class="fdp-title" id="fdpTitle">Ghost Protocol v2</span>
+                            <span class="fdp-badge live">LIVE DEMO</span>
+                        </div>
+                        <div class="fdp-content" id="fdpContent">
+                            <div class="fdp-stat"><span>Detection Bypass</span><span class="fdp-value">100%</span></div>
+                            <div class="fdp-stat"><span>Protected Sites</span><span class="fdp-value">2,847</span></div>
+                            <div class="fdp-stat"><span>Bot Challenges</span><span class="fdp-value">0 Failed</span></div>
+                        </div>
+                        <div class="fdp-visual" id="fdpVisual">
+                            <div class="ghost-visual">
+                                <div class="gv-node cloudflare">Cloudflare</div>
+                                <div class="gv-arrow">→</div>
+                                <div class="gv-node qantum active">QAntum</div>
+                                <div class="gv-arrow">→</div>
+                                <div class="gv-node target">Target</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture + Code Demo Side by Side -->
+    <section class="dual-section dark-bg">
+        <div class="container">
+            <div class="dual-grid">
+                <!-- Left: Architecture -->
+                <div class="dual-left">
+                    <h2 class="compact-title">PANTHEON <span class="gradient">Architecture</span></h2>
+                    <div class="arch-compact">
+                        <div class="arch-row"><span class="arch-icon">🌍</span><strong>REALITY</strong> CLI, Reports, Dashboard</div>
+                        <div class="arch-row"><span class="arch-icon">🧬</span><strong>BIOLOGY</strong> Learning, Healing, Evolution</div>
+                        <div class="arch-row"><span class="arch-icon">⚗️</span><strong>CHEMISTRY</strong> Adapters, Validators, Pipelines</div>
+                        <div class="arch-row"><span class="arch-icon">⚡</span><strong>PHYSICS</strong> Queues, Rate Limiting, Scheduling</div>
+                        <div class="arch-row"><span class="arch-icon">📐</span><strong>MATH</strong> Algorithms, Graph Theory, Probability</div>
+                    </div>
+                    
+                    <!-- Problems Solved -->
+                    <div class="problems-solved mt-6 space-y-4">
+                        <div class="problem-item flex items-start gap-3">
+                            <span class="text-accent-cyan text-lg font-bold">✓</span>
+                            <p class="text-sm text-gray-400"><strong class="text-white">Flaky Tests Eliminated</strong> – Real-time selector healing automatically repairs broken locators during execution.</p>
+                        </div>
+                        <div class="problem-item flex items-start gap-3">
+                            <span class="text-accent-cyan text-lg font-bold">✓</span>
+                            <p class="text-sm text-gray-400"><strong class="text-white">Zero Maintenance QA</strong> – Autonomous discovery maps your app and writes comprehensive E2E tests automatically.</p>
+                        </div>
+                        <div class="problem-item flex items-start gap-3">
+                            <span class="text-accent-cyan text-lg font-bold">✓</span>
+                            <p class="text-sm text-gray-400"><strong class="text-white">Invisible Testing</strong> – Ghost Protocol mimics human behavior to test production environments behind security firewalls.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Code Demo -->
+                <div class="dual-right">
+                    <div class="code-block compact-code">
+                        <div class="code-header">
+                            <div class="code-dots"><span></span><span></span><span></span></div>
+                            <div class="code-filename">ghost-test.ts</div>
+                            <button class="copy-code" onclick="copyCode()">Copy</button>
+                        </div>
+                        <pre class="code-content"><code><span class="keyword">import</span> { QAntum } <span class="keyword">from</span> <span class="string">'qantum-prime'</span>;
+
+<span class="keyword">const</span> qa = <span class="keyword">await</span> QAntum.<span class="function">create</span>({
+  <span class="property">ghost</span>: <span class="boolean">true</span>,
+  <span class="property">selfHeal</span>: <span class="boolean">true</span>,
+  <span class="property">swarm</span>: { <span class="property">workers</span>: <span class="number">100</span> }
+});
+
+<span class="keyword">await</span> qa.<span class="function">test</span>(<span class="string">'Login'</span>, <span class="keyword">async</span> ({ page }) => {
+  <span class="keyword">await</span> page.<span class="function">goto</span>(<span class="string">'https://app.com'</span>);
+  <span class="keyword">await</span> page.<span class="function">fill</span>(<span class="string">'[data-qa="email"]'</span>, <span class="string">'test@example.com'</span>);
+  <span class="keyword">await</span> page.<span class="function">click</span>(<span class="string">'button:has-text("Sign In")'</span>);
+  <span class="keyword">await</span> qa.<span class="function">expect</span>(page).<span class="function">toShowDashboard</span>();
+});</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta compact-cta">
+        <div class="container">
+            <div class="cta-row">
+                <div class="cta-text">
+                    <h2>Ready to <span class="gradient">Dominate</span>?</h2>
+                    <p>Start free, scale infinitely.</p>
+                </div>
+                <div class="cta-buttons">
+                    <a href="demo.html" class="btn btn-primary">Try Live Demo</a>
+                    <a href="pricing.html" class="btn btn-secondary">View Pricing</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 px-12 border-t border-white/5 relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="text-center md:text-left">
+                <span class="text-2xl font-black mono mb-4 block">AETERNA<span class="text-cyan-500">.</span>AIC</span>
+                <p class="text-gray-600 text-[10px] tracking-widest leading-loose">
+                    SECURED BY VERITRAS ENGINE <br>
+                    BUILT IN SOFIA, BULGARIA <br>
+                    EU FUNDING READINESS: 100%
+                </p>
+            </div>
+            <div class="flex gap-12 text-[10px] font-bold tracking-widest uppercase text-gray-400">
+                <a href="https://github.com/papica777-eng" class="hover:text-white transition-all">Github</a>
+                <a href="https://linkedin.com/in/dimitar-prodromov" class="hover:text-white transition-all">Linkedin</a>
+                <a href="mailto:papica777@gmail.com" class="hover:text-white transition-all">Connect</a>
+            </div>
+            <div class="text-[9px] text-cyan-900 font-mono text-right hidden md:block">
+                0x41 0x45 0x54 0x45 0x52 0x4e 0x41 <br>
+                NULL_ENTROPY_DETECTED <br>
+                SYNC_LOCK_7.83HZ
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

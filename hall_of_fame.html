@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA BOUNTY: VIVISECTOR Hall of Fame</title>
+    <meta name="description" content="Visual registry of verified critical vulnerabilities audited by OMNI-VIVISECTOR. Multi-substrate smart contract and memory safety verification.">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #060608;
+            --bg-panel: rgba(14, 15, 23, 0.7);
+            --border-neon: rgba(0, 240, 255, 0.25);
+            --neon-cyan: #00f0ff;
+            --neon-red: #ff0055;
+            --neon-gold: #ffaa00;
+            --font-display: 'Orbitron', sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: #e2e8f0;
+            font-family: var(--font-display);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Ambient scanlines & neon grid background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 1;
+            animation: pulse-bg 20s infinite linear;
+        }
+
+        @keyframes pulse-bg {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-5%, -5%) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        header {
+            position: relative;
+            z-index: 100;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-neon);
+            background: rgba(6, 6, 8, 0.85);
+            backdrop-filter: blur(12px);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-red));
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            position: relative;
+            animation: logo-glow 3s infinite alternate;
+        }
+
+        @keyframes logo-glow {
+            0% { box-shadow: 0 0 10px var(--neon-cyan); }
+            100% { box-shadow: 0 0 25px var(--neon-red); }
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--neon-red);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Layout Grid */
+        main {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            flex-grow: 1;
+            padding: 3rem 4rem;
+            gap: 4rem;
+            z-index: 50;
+            position: relative;
+        }
+
+        /* Left Side: 3D Carousel container */
+        .carousel-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 550px;
+        }
+
+        .carousel-viewport {
+            width: 100%;
+            height: 480px;
+            position: relative;
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-card {
+            position: absolute;
+            width: 320px;
+            height: 450px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease, border-color 0.8s;
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .carousel-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 0.75rem 2rem;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px var(--neon-cyan);
+            text-shadow: 0 0 5px var(--neon-cyan);
+        }
+
+        .control-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Right Side: Exploit Details Panel */
+        .details-section {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-neon);
+            border-radius: 12px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.6);
+            height: fit-content;
+            animation: border-pulse 4s infinite alternate;
+        }
+
+        @keyframes border-pulse {
+            0% { border-color: var(--border-neon); }
+            100% { border-color: rgba(255, 0, 85, 0.3); }
+        }
+
+        .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .id-badge {
+            background: var(--neon-red);
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .severity-badge {
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .severity-badge.critical {
+            color: var(--neon-red);
+            text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+        }
+
+        .bug-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.3;
+            letter-spacing: 1px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .metric-value.cyan {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+        }
+
+        .metric-value.gold {
+            color: var(--neon-gold);
+            text-shadow: 0 0 5px rgba(255, 170, 0, 0.3);
+        }
+
+        .detail-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            font-family: var(--font-mono);
+            line-height: 1.5;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .detail-section-title {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 3px solid var(--neon-cyan);
+            padding: 0.8rem 1rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .detail-box.red-border {
+            border-left-color: var(--neon-red);
+        }
+
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            color: #a7f3d0;
+            white-space: pre-wrap;
+            max-height: 150px;
+        }
+
+        footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-neon);
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            background: rgba(6, 6, 8, 0.95);
+            z-index: 100;
+        }
+
+        footer a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+        }
+
+        /* Scanline scrolling effect */
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: rgba(0, 240, 255, 0.15);
+            box-shadow: 0 0 10px var(--neon-cyan);
+            z-index: 1000;
+            pointer-events: none;
+            animation: scan 6s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanline"></div>
+    <header>
+        <div class="brand-container">
+            <div class="brand-logo"></div>
+            <div class="brand-text">
+                <h1>AETERNA BOUNTY</h1>
+                <p>VIVISECTOR Hall of Fame</p>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-link active">Security Audits</a>
+            <a href="https://github.com/paxosglobal" class="nav-link" target="_blank">Target Codebase</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Left: Carousel Section -->
+        <section class="carousel-section">
+            <div class="carousel-viewport" id="carouselViewport">
+                <!-- Cards will be populated dynamically -->
+            </div>
+            <div class="carousel-controls">
+                <button class="control-btn" id="prevBtn" onclick="rotateCarousel(-1)">PREV</button>
+                <button class="control-btn" id="nextBtn" onclick="rotateCarousel(1)">NEXT</button>
+            </div>
+        </section>
+
+        <!-- Right: Detail Panel -->
+        <section class="details-section" id="detailPanel">
+            <div class="details-header">
+                <div class="id-badge" id="bugId">FINDING-001</div>
+                <div class="severity-badge critical" id="bugSeverity">CRITICAL (CVSS 10.0)</div>
+            </div>
+            <h2 class="bug-title" id="bugTitle">Firedancer VM Sandbox Escape</h2>
+            
+            <div class="metric-grid">
+                <div class="metric-item">
+                    <span class="metric-label">DeFi Category</span>
+                    <span class="metric-value cyan" id="bugCategory">MEMORY_SAFETY</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-label">Verified Payout</span>
+                    <span class="metric-value gold" id="bugPayout">$1,000,000+</span>
+                </div>
+            </div>
+
+            <div class="detail-body">
+                <div>
+                    <h3 class="detail-section-title">Механизъм</h3>
+                    <div class="detail-box red-border" id="bugVector">
+                        fd_ulong_sat_sub(offset, vaddr_offset) когато offset < vaddr_offset → returns 0 → bounds check bypass → offset - vaddr_offset unsigned underflow → write BEFORE account buffer
+                    </div>
+                </div>
+                <div>
+                    <h3 class="detail-section-title">Въздействие</h3>
+                    <p id="bugRootCause">
+                        Attacker overwrites lamports/owner fields → Loss of Funds + Consensus Divergence
+                    </p>
+                </div>
+                <div>
+                    <h3 class="detail-section-title">Решение / Код</h3>
+                    <div class="code-snippet" id="bugCode">
+fd_ulong_sat_sub(offset, vaddr_offset) when offset &lt; vaddr_offset -> returns 0 -> bounds check bypass -> offset underflow -> write BEFORE account buffer.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>AETERNA BOUNTY VIVISECTOR Security Auditing &copy; 2026. All Rights Reserved.</div>
+        <div>Architect: <a href="#">Dimitar P</a></div>
+    </footer>
+
+    <script>
+        // Synthesizer Audio click feedback
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playInterfaceClick() {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {
+                // Audio not allowed yet
+            }
+        }
+
+        const bugs = [
+            {
+                id: 'FINDING-001',
+                title: 'Firedancer VM Sandbox Escape',
+                severity: 'CRITICAL (CVSS 10.0)',
+                category: 'MEMORY_SAFETY',
+                payout: '$1,000,000+ (Max)',
+                vector: 'fd_ulong_sat_sub(offset, vaddr_offset) когато offset < vaddr_offset → returns 0 → bounds check bypass → offset - vaddr_offset unsigned underflow → write BEFORE account buffer',
+                rootCause: 'Attacker overwrites lamports/owner fields → Loss of Funds + Consensus Divergence',
+                code: 'fd_ulong_sat_sub(offset, vaddr_offset) when offset < vaddr_offset -> returns 0 -> bounds check bypass -> offset underflow -> write BEFORE account buffer.',
+                image: '/posters/firedancer_vm_escape.png'
+            },
+            {
+                id: 'FINDING-015',
+                title: 'Base Executor Authentication Bypass',
+                severity: 'CRITICAL (CVSS 9.9)',
+                category: 'ACCESS_CONTROL',
+                payout: '$250,000+ (Cantina)',
+                vector: 'В _onUninstallForReplace липсва проверка на require_auth или валидация на подписа, което позволява на нападателя да подаде празен подпис ("") и да презапише лимитите (напр. до type(uint256).max).',
+                rootCause: 'CRITICAL (CVSS 9.9). Пълен контрол над депозитите/тегленията в интегрирани протоколи (като Morpho Vault V2).',
+                code: 'function _onUninstallForReplace(...) {\n  // Missing require_auth signature validation\n  // Allows empty signature ("") to lift vault limit to type(uint256).max\n}',
+                image: '/posters/base_auth_bypass.png'
+            },
+            {
+                id: 'FINDING-013',
+                title: 'Worldcoin pg_ops Integer Truncation',
+                severity: 'CRITICAL (Identity Collision)',
+                category: 'PRECISION',
+                payout: '$100,000+ (HackerOne)',
+                vector: 'Взема 64-битов BIGINT от Postgres и го cast-ва към 32-битов с serial_id as u32. При надхвърляне на 4.29 милиарда заявки (или при манипулиране на sequence-а), стойността се превърта (wrapping), създавайки колизия с вече съществуващи ID-та (Identity Collision).',
+                rootCause: 'Катастрофална загуба на уникалност в биометричната автентикация (Identity Overwrite) в World ID.',
+                code: 'let serial_id = row.get("id"); // BIGINT (u64)\nlet truncated_id = serial_id as u32; // Overwrite collision wrap',
+                image: '/posters/worldcoin_id_collision.png'
+            },
+            {
+                id: 'FINDING-002',
+                title: 'Base Azul SpanBatch panic DoS',
+                severity: 'CRITICAL (Network Shutdown)',
+                category: 'GENERAL',
+                payout: '$150,000 (Base Azul)',
+                vector: 'Malformed SpanBatch с decreasing timestamps → panic → op-node/sequencer death',
+                rootCause: 'Total network shutdown. Cost: ~0.01 ETH (1 L1 tx). Permissionless.',
+                code: 'if batch.timestamp < last_timestamp {\n    panic!("Batch is not ordered"); // Crashes op-node sequencer\n}',
+                image: '/posters/base_spanbatch_crash.png'
+            },
+            {
+                id: 'FINDING-016',
+                title: 'Worldcoin iris-mpc Insecure Deserialization DoS',
+                severity: 'CRITICAL (CVSS 8.5+)',
+                category: 'MEMORY_SAFETY',
+                payout: '$100,000 (HackerOne)',
+                vector: 'decode_b64 използва bincode::deserialize без да налага лимити на алокираната памет. Нападателят може да изпрати 12-байтов Base64 payload, който задава огромна дължина (напр. 8GB), карайки нода да изчерпи паметта си и да се срине.',
+                rootCause: 'CRITICAL (CVSS 8.5+). Remote Denial of Service на всички MPC нодове чрез изпращане на миниатюрни payload-и, което спира консенсуса.',
+                code: 'pub fn decode_b64<T: DeserializeOwned>(encoded: &str) -> Result<T> {\n    let decoded_bytes = BASE64_STANDARD.decode(encoded)?;\n    Ok(bincode::deserialize(&decoded_bytes)?) // Bincode OOM vector\n}',
+                image: '/posters/worldcoin_deserialization_oom.png'
+            }
+        ];
+
+        let currentIndex = 0;
+        const viewport = document.getElementById('carouselViewport');
+
+        function initCarousel() {
+            viewport.innerHTML = '';
+            bugs.forEach((bug, index) => {
+                const card = document.createElement('div');
+                card.className = 'carousel-card';
+                card.id = `card-${index}`;
+                card.innerHTML = `<img src="${bug.image}" alt="${bug.title}">`;
+                card.addEventListener('click', () => {
+                    playInterfaceClick();
+                    currentIndex = index;
+                    updateCarousel();
+                });
+                viewport.appendChild(card);
+            });
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const cards = document.querySelectorAll('.carousel-card');
+            const total = cards.length;
+            
+            cards.forEach((card, index) => {
+                let offset = index - currentIndex;
+                // Circular carousel offset calculation
+                if (offset < -Math.floor(total / 2)) {
+                    offset += total;
+                } else if (offset > Math.floor(total / 2)) {
+                    offset -= total;
+                }
+
+                // 3D positioning
+                const rotateY = offset * 45;
+                const translateZ = Math.abs(offset) * -150 + 250;
+                const translateX = offset * 180;
+                const scale = offset === 0 ? 1 : 0.85;
+                const opacity = Math.abs(offset) > 2 ? 0 : (offset === 0 ? 1 : 0.6);
+                const pointerEvents = offset === 0 ? 'auto' : 'none';
+
+                card.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+                card.style.opacity = opacity;
+                card.style.pointerEvents = pointerEvents;
+                card.style.zIndex = total - Math.abs(offset);
+
+                if (offset === 0) {
+                    card.style.borderColor = 'var(--neon-red)';
+                    card.style.boxShadow = '0 0 35px rgba(255, 0, 85, 0.4)';
+                } else {
+                    card.style.borderColor = 'var(--neon-cyan)';
+                    card.style.boxShadow = '0 0 15px rgba(0, 240, 255, 0.15)';
+                }
+            });
+
+            // Update details panel with fading transition
+            const currentBug = bugs[currentIndex];
+            const detailPanel = document.getElementById('detailPanel');
+            detailPanel.style.opacity = '0.3';
+            setTimeout(() => {
+                document.getElementById('bugId').textContent = currentBug.id;
+                document.getElementById('bugSeverity').textContent = currentBug.severity;
+                document.getElementById('bugTitle').textContent = currentBug.title;
+                document.getElementById('bugCategory').textContent = currentBug.category;
+                document.getElementById('bugPayout').textContent = currentBug.payout;
+                document.getElementById('bugVector').textContent = currentBug.vector;
+                document.getElementById('bugRootCause').textContent = currentBug.rootCause;
+                document.getElementById('bugCode').textContent = currentBug.code;
+                
+                // Color formatting for severity
+                const sevBadge = document.getElementById('bugSeverity');
+                if (currentBug.severity.includes('10.0') || currentBug.severity.includes('9.9')) {
+                    sevBadge.style.color = 'var(--neon-red)';
+                    sevBadge.style.textShadow = '0 0 10px rgba(255, 0, 85, 0.5)';
+                } else {
+                    sevBadge.style.color = 'var(--neon-gold)';
+                    sevBadge.style.textShadow = '0 0 10px rgba(255, 170, 0, 0.5)';
+                }
+                
+                detailPanel.style.opacity = '1';
+            }, 300);
+        }
+
+        function rotateCarousel(dir) {
+            playInterfaceClick();
+            currentIndex = (currentIndex + dir + bugs.length) % bugs.length;
+            updateCarousel();
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', initCarousel);
+    </script>
+</body>
+</html>
