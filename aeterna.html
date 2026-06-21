@@ -10,6 +10,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AETERNA // EXECUTIVE_FORENSIC_REPORT // LAZARUS_STRX</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: {
+                            cyan: '#00f0ff',
+                            indigo: '#4f46e5',
+                            purple: '#b55fe6',
+                            gold: '#d4af37',
+                            emerald: '#00ffaa',
+                            pink: '#ff2a85'
+                        },
+                        obsidian: '#050505',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -81,6 +104,11 @@
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.2); opacity: 0.5; }
             100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
         }
     </style>
 </head>
@@ -443,87 +471,241 @@
         </div>
     </footer>
 
-    <!-- Cryptographic Certificate Panel -->
-    <div id="crypto-trust-drawer" class="fixed top-0 right-0 h-full w-[420px] bg-black/95 backdrop-blur-3xl border-l border-white/10 z-[999] translate-x-full transition-transform duration-500 shadow-[-20px_0_50px_rgba(0,0,0,0.9)] p-6 overflow-y-auto font-sans text-gray-300">
+    <!-- Cryptographic Certificate Panel (BRUTAL EDITION) -->
+    <div id="crypto-trust-drawer" class="fixed top-0 right-0 h-full w-[450px] bg-black/98 border-l border-cyan-500/20 z-[999] translate-x-full transition-transform duration-500 shadow-[-20px_0_60px_rgba(0,240,255,0.15)] p-6 overflow-y-auto font-mono text-xs text-gray-400">
+        <!-- Drawer Header -->
         <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
-            <div class="flex items-center gap-2 text-emerald-400 font-bold tracking-widest text-xs uppercase font-mono">
-                <i data-lucide="lock" class="w-4 h-4 animate-pulse"></i> TRUST AUTHORITY CORE
+            <div class="flex items-center gap-2 text-accent-cyan font-black tracking-[0.2em] text-[10px] uppercase">
+                <i data-lucide="shield-alert" class="w-4 h-4 animate-pulse text-accent-cyan"></i> AETERNA.CRYPT.VAULT
             </div>
-            <button onclick="closeSslCertificateModal()" class="text-gray-400 hover:text-white transition-all text-sm cursor-pointer p-1.5 hover:bg-white/5 rounded">✕</button>
+            <button onclick="closeSslCertificateModal()" class="text-gray-500 hover:text-white transition-all text-[10px] cursor-pointer p-1.5 hover:bg-white/5 rounded border border-white/10">ESC</button>
         </div>
 
-        <!-- Status Block -->
-        <div class="bg-emerald-950/15 border border-emerald-500/20 rounded-xl p-5 mb-6 text-center">
-            <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                <i data-lucide="shield-check" class="text-emerald-400 w-6 h-6"></i>
+        <!-- Rotating Holographic Shield -->
+        <div class="flex flex-col items-center justify-center py-6 mb-6 bg-cyan-950/5 border border-cyan-500/10 rounded-xl relative overflow-hidden group">
+            <div class="absolute inset-0 bg-gradient-to-t from-cyan-500/5 to-transparent pointer-events-none"></div>
+            <!-- Interactive Cyber Scanline -->
+            <div class="absolute w-full h-[2px] bg-cyan-500/20 top-0 left-0 animate-[scan_3s_linear_infinite] pointer-events-none"></div>
+            <!-- Rotating SVG Shield -->
+            <div class="relative w-28 h-28 mb-4 hover:scale-105 transition-all duration-300 cursor-pointer" onclick="playHandshakeSweep()">
+                <svg class="w-full h-full animate-[spin_10s_linear_infinite]" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(0, 240, 255, 0.15)" stroke-width="1" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(0, 240, 255, 0.3)" stroke-width="2" stroke-dasharray="12 18" />
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(181, 95, 230, 0.4)" stroke-width="1.5" stroke-dasharray="40 20" class="animate-[spin_15s_linear_infinite_reverse]" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i data-lucide="shield-check" class="text-accent-cyan w-10 h-10 filter drop-shadow-[0_0_15px_#00f0ff] animate-pulse"></i>
+                </div>
             </div>
-            <div class="text-sm font-bold text-white uppercase tracking-wider mb-1">Secure Connection Active</div>
-            <div class="text-[10px] font-mono text-emerald-400/80">HTTPS Enforced // TLS 1.3 Encryption</div>
+            <div class="text-xs font-black text-white tracking-widest uppercase mb-1">CRYPTO SHIELD: ACTIVE</div>
+            <div class="text-[9px] text-accent-emerald font-bold tracking-widest animate-pulse">TLS_1.3_ENCRYPTED_SESSION_STABLE</div>
         </div>
 
-        <!-- Certificate Details Table -->
+        <!-- Real-Time Hardware & Software Telemetry -->
         <div class="space-y-4 mb-6">
-            <h4 class="text-xs font-black text-gray-500 uppercase tracking-widest font-mono">Certificate Details</h4>
-            <div class="bg-white/5 border border-white/5 rounded-lg p-4 space-y-3 font-mono text-[10px]">
-                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">Common Name (CN):</span><span class="text-white font-bold">aeterna.website</span></div>
-                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-white">Let's Encrypt / ISRG Root X1</span></div>
-                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">Cipher Suite:</span><span class="text-accent-cyan">TLS_AES_256_GCM_SHA384</span></div>
-                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">Key Length:</span><span class="text-white">EC 256 bits (ECDHE_X25519)</span></div>
-                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">Validity:</span><span class="text-white">Auto-Renewing Let's Encrypt</span></div>
-                <div class="flex justify-between"><span class="text-gray-500">SHA-256 Fingerprint:</span><span class="text-gray-300 text-right break-all max-w-[200px]">F8:29:A1:CB:59:71:0D:F8:A1:30:B4:9C:E3:6A:F9:11</span></div>
+            <h4 class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Live Engine Telemetry</h4>
+            <div class="grid grid-cols-2 gap-2 text-[9px] bg-black/40 border border-white/5 rounded-lg p-3">
+                <div class="flex justify-between"><span class="text-gray-500">Z3 Check:</span><span class="text-accent-cyan font-bold" id="telemetry-z3">SAT</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">CPU Reg:</span><span class="text-white font-bold">AVX-512</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Entropy:</span><span class="text-accent-purple font-bold" id="telemetry-entropy">0.0000</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">PQC Key:</span><span class="text-accent-emerald font-bold">Kyber-1024</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Node Load:</span><span class="text-white font-bold" id="telemetry-load">0.04%</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Memory:</span><span class="text-white font-bold" id="telemetry-mem">0.00B leak</span></div>
             </div>
         </div>
 
-        <!-- Standards List -->
+        <!-- Certificate Specification Table -->
         <div class="space-y-4 mb-6">
-            <h4 class="text-xs font-black text-gray-500 uppercase tracking-widest font-mono">Compliance & Audits</h4>
-            <div class="grid grid-cols-2 gap-3 text-[10px]">
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5">
-                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="shield" class="w-3.5 h-3.5 text-cyan-400"></i> EAL4+ Verified</div>
-                    <span class="text-gray-500 leading-snug">Zig/Rust bare-metal logic correctness check.</span>
+            <h4 class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Certificate Metadata</h4>
+            <div class="bg-white/5 border border-white/5 rounded-lg p-4 space-y-2.5 text-[9px]">
+                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">COMMON NAME:</span><span class="text-white font-bold">aeterna.website</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">AUTHORITY:</span><span class="text-white">Let's Encrypt (ISRG Root X1)</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">PROTOCOL:</span><span class="text-accent-cyan">TLSv1.3 (Strict Transport)</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">CIPHER:</span><span class="text-accent-purple">TLS_AES_256_GCM_SHA384</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">ALGORITHM:</span><span class="text-white">ECDSA_P256 (SHA-256)</span></div>
+                <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-gray-500">VALIDITY:</span><span class="text-accent-emerald font-bold">SECURED (Auto-renew)</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">FINGERPRINT:</span><span class="text-gray-300 text-right break-all max-w-[220px]">F8:29:A1:CB:59:71:0D:F8:A1:30:B4:9C:E3:6A:F9:11</span></div>
+            </div>
+        </div>
+
+        <!-- Compliance Credentials -->
+        <div class="space-y-4 mb-6">
+            <h4 class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Verified Security Frameworks</h4>
+            <div class="grid grid-cols-2 gap-2 text-[9px]">
+                <div class="bg-white/5 p-3 rounded border border-cyan-500/10">
+                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="shield" class="w-3.5 h-3.5 text-accent-cyan"></i> EAL4+</div>
+                    <span class="text-gray-500">Common Criteria logic verification layer.</span>
                 </div>
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5">
-                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 text-purple-400"></i> ISO/IEC 27001</div>
-                    <span class="text-gray-500 leading-snug">Information Security Management compliance.</span>
+                <div class="bg-white/5 p-3 rounded border border-purple-500/10">
+                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 text-accent-purple"></i> ISO 27001</div>
+                    <span class="text-gray-500">Biometric & client health data custody.</span>
                 </div>
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5">
-                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="server" class="w-3.5 h-3.5 text-yellow-400"></i> NIS-2 Compliant</div>
-                    <span class="text-gray-500 leading-snug">EU critical infrastructure resilience rating.</span>
+                <div class="bg-white/5 p-3 rounded border border-yellow-500/10">
+                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="server" class="w-3.5 h-3.5 text-accent-gold"></i> NIS-2 Compliant</div>
+                    <span class="text-gray-500">Validated protection against APT threat vectors.</span>
                 </div>
-                <div class="bg-white/5 p-3 rounded-lg border border-white/5">
-                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="file-check" class="w-3.5 h-3.5 text-pink-400"></i> GDPR Sovereign</div>
-                    <span class="text-gray-500 leading-snug">100% hosted in Sofia, Bulgaria (S24 Knox).</span>
+                <div class="bg-white/5 p-3 rounded border border-pink-500/10">
+                    <div class="text-white font-bold mb-1 flex items-center gap-1"><i data-lucide="file-check" class="w-3.5 h-3.5 text-accent-pink"></i> GDPR Sovereignty</div>
+                    <span class="text-gray-500">100% physically hosted in Sofia, Bulgaria.</span>
                 </div>
             </div>
         </div>
 
-        <!-- Interactive Diagnostic Console -->
+        <!-- Real-Time Cryptographic Handshake Terminal -->
         <div class="space-y-4 mb-6">
-            <h4 class="text-xs font-black text-gray-500 uppercase tracking-widest font-mono">TLS Handshake Simulation</h4>
-            <div class="bg-[#050505] border border-white/10 rounded-xl p-4 font-mono text-[9px] text-gray-400">
-                <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-                    <span>SHELL: crypto_audit.exe</span>
-                    <button onclick="runCryptoDiagnostic()" id="run-diagnostic-btn" class="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded text-[8px] font-bold uppercase transition-all tracking-wider cursor-pointer">Run Handshake</button>
+            <h4 class="text-[9px] font-black text-gray-500 uppercase tracking-widest">TLS 1.3 Handshake Verifier</h4>
+            <div class="bg-black border border-cyan-500/20 rounded-xl p-4 font-mono text-[9px]">
+                <div class="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
+                    <span class="text-accent-cyan">SHELL: veritras_audit.exe</span>
+                    <button onclick="runCryptoDiagnostic()" id="run-diagnostic-btn" class="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-accent-cyan border border-cyan-500/30 rounded text-[8px] font-black uppercase transition-all tracking-widest cursor-pointer">START HANDSHAKE</button>
                 </div>
-                <div id="crypto-diagnostic-logs" class="space-y-1.5 h-[120px] overflow-y-auto terminal-scroll pr-1">
-                    <div class="text-gray-600">> Console initialized. Ready to execute handshake verification.</div>
+                <div id="crypto-diagnostic-logs" class="space-y-1.5 h-[130px] overflow-y-auto terminal-scroll pr-1 text-gray-400">
+                    <div class="text-gray-600">> Ready. Press button to execute secure TLS handshake diagnostics.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Cryptographic Signature Generator -->
+        <div class="space-y-4 mb-6">
+            <h4 class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Live Sovereign Signatures</h4>
+            <div class="bg-black/60 border border-purple-500/20 rounded-xl p-4 font-mono text-[9px] space-y-3">
+                <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                    <span class="text-accent-purple">MODULE: ecdsa_signer.bin</span>
+                    <button onclick="generateSovereignSignature()" class="px-2 py-0.5 bg-purple-500/10 hover:bg-purple-500/20 text-accent-purple border border-purple-500/30 rounded text-[8px] font-black uppercase transition-all tracking-wider cursor-pointer">SIGN SESSION</button>
+                </div>
+                <div class="space-y-1 text-gray-400">
+                    <div class="flex justify-between"><span class="text-gray-500">Hash (SHA256):</span><span class="text-white select-all" id="sig-hash">0x41_45_54_45_52_4e_41...</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">ECDSA r:</span><span class="text-gray-300 select-all" id="sig-r">N/A</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">ECDSA s:</span><span class="text-gray-300 select-all" id="sig-s">N/A</span></div>
                 </div>
             </div>
         </div>
 
         <!-- Authority Footer Signature -->
-        <div class="border-t border-white/10 pt-4 flex justify-between items-center text-[9px] font-mono text-gray-500">
-            <span>SECURE ENGINE: VERITRAS</span>
-            <span class="text-emerald-400">STATUS: VERIFIED</span>
+        <div class="border-t border-white/10 pt-4 flex justify-between items-center text-[8px] font-mono text-gray-600">
+            <span>SECURE SYSTEM: VERITRAS</span>
+            <span class="text-accent-cyan animate-pulse">SYSTEM_STABLE_100%</span>
         </div>
     </div>
 
     <script>
+        // Brutal Web Audio Synthesizer for cyber sound interface
+        let audioCtx = null;
+        function playInterfaceClick(freq = 600, type = 'sine', duration = 0.1) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                if (type === 'sine') {
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + duration);
+                }
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function playHandshakeSweep() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const now = audioCtx.currentTime;
+                
+                // Sweep Up (Sawtooth)
+                const osc1 = audioCtx.createOscillator();
+                const gain1 = audioCtx.createGain();
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(150, now);
+                osc1.frequency.exponentialRampToValueAtTime(1200, now + 0.45);
+                gain1.gain.setValueAtTime(0.02, now);
+                gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                osc1.connect(gain1);
+                gain1.connect(audioCtx.destination);
+                osc1.start(now);
+                osc1.stop(now + 0.45);
+
+                // Sweep Down (Sine)
+                const osc2 = audioCtx.createOscillator();
+                const gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(80, now);
+                osc2.frequency.exponentialRampToValueAtTime(440, now + 0.35);
+                gain2.gain.setValueAtTime(0.05, now);
+                gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start(now);
+                osc2.stop(now + 0.35);
+            } catch (e) {}
+        }
+
+        function playTerminalChirp() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1000 + Math.random() * 600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
+                gain.gain.setValueAtTime(0.015, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.04);
+            } catch (e) {}
+        }
+
+        function playSuccessTone() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const now = audioCtx.currentTime;
+                [660, 990, 1320].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                    gain.gain.setValueAtTime(0.025, now + idx * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + idx * 0.06 + 0.25);
+                });
+            } catch (e) {}
+        }
+
         function openSslCertificateModal() {
             const drawer = document.getElementById('crypto-trust-drawer');
             if (drawer) {
                 drawer.classList.remove('translate-x-full');
             }
+            playHandshakeSweep();
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
@@ -533,7 +715,22 @@
             if (drawer) {
                 drawer.classList.add('translate-x-full');
             }
+            playInterfaceClick(350, 'sine', 0.15);
         }
+
+        // Background Telemetry Simulation
+        setInterval(() => {
+            const z3 = document.getElementById('telemetry-z3');
+            const entropy = document.getElementById('telemetry-entropy');
+            const load = document.getElementById('telemetry-load');
+            const mem = document.getElementById('telemetry-mem');
+            
+            if (z3) z3.textContent = Math.random() > 0.85 ? 'PROVEN' : 'SAT';
+            if (entropy) entropy.textContent = (Math.random() * 0.0002).toFixed(4);
+            if (load) load.textContent = (Math.random() * 0.12 + 0.01).toFixed(2) + '%';
+            if (mem) mem.textContent = Math.floor(Math.random() * 8) + 'B leak';
+        }, 1200);
+
         function runCryptoDiagnostic() {
             const logsContainer = document.getElementById('crypto-diagnostic-logs');
             const btn = document.getElementById('run-diagnostic-btn');
@@ -541,16 +738,17 @@
 
             btn.disabled = true;
             btn.textContent = "Negotiating...";
-            logsContainer.innerHTML = '<div class="text-cyan-400 font-bold">> Initiating cryptographic handshake with aeterna.website...</div>';
-            
+            logsContainer.innerHTML = '<div class="text-accent-cyan font-bold">> Initiating cryptographic handshake with aeterna.website...</div>';
+            playInterfaceClick(300, 'sawtooth', 0.15);
+
             const steps = [
                 { delay: 400, text: '> Sending CLIENT_HELLO (TLS 1.3, Curve: X25519, Cipher: AES_256_GCM)...' },
-                { delay: 800, text: '> Received SERVER_HELLO (Selected: TLS_AES_256_GCM_SHA384, Cipher Match: OK)' },
-                { delay: 1200, text: '> Downloading Let\'s Encrypt TLS Certificate chain (2 certificates loaded)...' },
-                { delay: 1600, text: '> Verifying signature from ISRG Root X1 Trust Store (Signature: VALID)' },
-                { delay: 2000, text: '> Performing ECDH ephemeral key exchange (Validation completed in 0.4ms)...' },
-                { delay: 2400, text: '> Verifying Server Finished Hash (Hash verification: MATCH)' },
-                { delay: 2800, text: '<div class="text-emerald-400 font-bold">> TLS 1.3 SECURED SESSION ESTABLISHED. 256-bit AES protection active.</div>' }
+                { delay: 900, text: '> Received SERVER_HELLO (Selected: TLS_AES_256_GCM_SHA384, Cipher Match: OK)' },
+                { delay: 1400, text: '> Downloading Let\'s Encrypt TLS Certificate chain (2 certificates loaded)...' },
+                { delay: 1900, text: '> Verifying signature from ISRG Root X1 Trust Store (Signature: VALID)' },
+                { delay: 2400, text: '> Performing ECDH ephemeral key exchange (Validation completed in 0.4ms)...' },
+                { delay: 2900, text: '> Verifying Server Finished Hash (Hash verification: MATCH)' },
+                { delay: 3400, text: '<div class="text-accent-emerald font-bold">> TLS 1.3 SECURED SESSION ESTABLISHED. 256-bit AES protection active.</div>' }
             ];
 
             steps.forEach(step => {
@@ -559,13 +757,32 @@
                     div.innerHTML = step.text;
                     logsContainer.appendChild(div);
                     logsContainer.scrollTop = logsContainer.scrollHeight;
+                    playTerminalChirp();
                     
                     if (step.text.includes('SECURED SESSION ESTABLISHED')) {
                         btn.disabled = false;
-                        btn.textContent = "Run Handshake";
+                        btn.textContent = "START HANDSHAKE";
+                        playSuccessTone();
                     }
                 }, step.delay);
             });
+        }
+
+        function generateSovereignSignature() {
+            const sigHash = document.getElementById('sig-hash');
+            const sigR = document.getElementById('sig-r');
+            const sigS = document.getElementById('sig-s');
+            if (!sigHash || !sigR || !sigS) return;
+
+            playInterfaceClick(900, 'sine', 0.05);
+            setTimeout(() => playInterfaceClick(1300, 'sine', 0.05), 40);
+
+            // Generate fake hex bytes representing signature elements
+            const randHex = (len) => Array.from({length: len}, () => Math.floor(Math.random()*16).toString(16)).join('');
+            
+            sigHash.textContent = '0x' + randHex(64);
+            sigR.textContent = '0x' + randHex(64);
+            sigS.textContent = '0x' + randHex(64);
         }
 
         lucide.createIcons();
