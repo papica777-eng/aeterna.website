@@ -4149,6 +4149,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
     
     
     
+    
     <!-- AETERNA Omni-Assistant Chat Widget -->
     <div id="omni-assistant-container">
         <style>
@@ -4426,10 +4427,6 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
                     <span class="omni-header-text">OMNI-ASSISTANT</span>
                 </div>
                 <div class="omni-header-controls">
-                    <div class="omni-lang-pill">
-                        <button id="omni-lang-bg" class="omni-lang-btn active">BG</button>
-                        <button id="omni-lang-en" class="omni-lang-btn">EN</button>
-                    </div>
                     <button id="omni-close-btn" class="omni-close-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                     </button>
@@ -4450,7 +4447,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             <!-- Input Area -->
             <div class="omni-input-area">
                 <form id="omni-chat-form" class="omni-form">
-                    <input type="text" id="omni-chat-input" placeholder="Задай въпрос за системата..." autocomplete="off">
+                    <input type="text" id="omni-chat-input" placeholder="Ask about the architecture..." autocomplete="off">
                     <button type="submit" class="omni-send-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     </button>
@@ -4500,13 +4497,11 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             const chatMessages = document.getElementById('omni-chat-messages');
             const loadingIndicator = document.getElementById('omni-chat-loading');
             
-            const langBgBtn = document.getElementById('omni-lang-bg');
-            const langEnBtn = document.getElementById('omni-lang-en');
             const iconBot = document.getElementById('omni-icon-bot');
             const iconMsg = document.getElementById('omni-icon-msg');
 
             let isChatOpen = false;
-            let currentLang = 'bg';
+            let currentLang = 'en';
 
             toggleBtn.addEventListener('mouseenter', () => {
                 iconBot.style.display = 'none';
@@ -4522,16 +4517,11 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             const basePrompt = `You are the Live 3D Neuro-Oncology Omni-Assistant. Focus entirely on Glioblastoma tumor modeling, AQP4 clearance, lethality solvers, surgical boundaries, and 99% C-Index precision. You have the capability to execute actions on this page by appending trigger tags to the END of your message. Allowed actions: - Trigger Cure Restoration: use '[TRIGGER: trigger_cure_restoration]' - Run Patient Simulation: use '[TRIGGER: run_patient_simulation]' - Trigger CRB Boost: use '[TRIGGER: trigger_crb_boost]'`;
 
             const welcomeMessages = {
-                'bg': 'СИСТЕМАТА Е ОНЛАЙН. Аз съм AETERNA Omni-Assistant. Обучен съм специфично за този HUD. Как мога да помогна?',
                 'en': 'SYSTEM ONLINE. I am the AETERNA Omni-Assistant. I am trained specifically for this HUD. How can I assist you today?'
             };
 
             function getSystemPrompt() {
-                if (currentLang === 'bg') {
-                    return basePrompt + "\n\nIMPORTANT: You must reply strictly in BULGARIAN language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
-                } else {
-                    return basePrompt + "\n\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
-                }
+                return basePrompt + "\n\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
             }
 
             function renderWelcomeMessage() {
@@ -4553,30 +4543,6 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             }
 
             renderWelcomeMessage();
-
-            langBgBtn.addEventListener('click', () => {
-                currentLang = 'bg';
-                langBgBtn.classList.add('active');
-                langEnBtn.classList.remove('active');
-                chatInput.placeholder = "Задай въпрос за системата...";
-                renderWelcomeMessage();
-                conversationHistory = [];
-                if (typeof window.setLanguage === 'function') {
-                    window.setLanguage('bg', false);
-                }
-            });
-
-            langEnBtn.addEventListener('click', () => {
-                currentLang = 'en';
-                langEnBtn.classList.add('active');
-                langBgBtn.classList.remove('active');
-                chatInput.placeholder = "Ask about the architecture...";
-                renderWelcomeMessage();
-                conversationHistory = [];
-                if (typeof window.setLanguage === 'function') {
-                    window.setLanguage('en', false);
-                }
-            });
 
             function toggleChat() {
                 isChatOpen = !isChatOpen;
