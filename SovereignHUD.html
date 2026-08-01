@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA // Sovereign Brain Cognitive HUD</title>
+    <meta name="description" content="Real-time neurocognitive monitoring dashboard — EEG waveforms, neurotransmitter telemetry, brain region activity, seizure detection with Knox TEE safety.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════════
+           AETERNA SOVEREIGN BRAIN HUD — DESIGN SYSTEM
+           ═══════════════════════════════════════════════════ */
+        :root {
+            --bg-abyss: #030108;
+            --bg-deep: #06020f;
+            --glass-bg: rgba(12, 5, 28, 0.65);
+            --glass-border: rgba(140, 80, 220, 0.12);
+            --glass-border-hover: rgba(140, 80, 220, 0.35);
+            --glass-glow: rgba(140, 80, 220, 0.2);
+
+            --text-primary: #eef2ff;
+            --text-secondary: #8891a8;
+            --text-dim: #4a5068;
+
+            --neon-violet: #a855f7;
+            --neon-cyan: #06d6e0;
+            --neon-emerald: #00ffaa;
+            --neon-rose: #ff2a6d;
+            --neon-amber: #ffb800;
+            --neon-blue: #3b82f6;
+            --neon-pink: #ec4899;
+            --neon-indigo: #6366f1;
+
+            --glow-violet: rgba(168, 85, 247, 0.3);
+            --glow-cyan: rgba(6, 214, 224, 0.3);
+            --glow-emerald: rgba(0, 255, 170, 0.25);
+            --glow-rose: rgba(255, 42, 109, 0.35);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-family: 'Outfit', sans-serif; }
+        body {
+            background: var(--bg-abyss);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            cursor: crosshair;
+            background-image:
+                radial-gradient(ellipse at 50% -10%, rgba(140,80,220,0.15) 0%, transparent 55%),
+                radial-gradient(circle at 15% 85%, rgba(6,214,224,0.04) 0%, transparent 35%),
+                radial-gradient(circle at 85% 75%, rgba(255,42,109,0.03) 0%, transparent 35%);
+            background-attachment: fixed;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #020105; }
+        ::-webkit-scrollbar-thumb { background: #1a0f2e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-violet); }
+
+        /* Scanline */
+        .scanline {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 9999;
+            background: linear-gradient(to bottom, rgba(168,85,247,0.2), transparent);
+            animation: scan 10s linear infinite; pointer-events: none;
+        }
+        @keyframes scan { 0% { transform: translateY(-10px); } 100% { transform: translateY(110vh); } }
+
+        /* Glass card */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(140,80,220,0.04), transparent);
+            transition: 0.8s;
+        }
+        .glass:hover::before { left: 100%; }
+        .glass:hover { border-color: var(--glass-border-hover); box-shadow: 0 0 30px var(--glass-glow); transform: translateY(-1px); }
+
+        /* Header */
+        .hud-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 32px;
+            background: rgba(6,2,18,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(140,80,220,0.1);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .hud-title {
+            font-size: 0.8rem; font-weight: 800; letter-spacing: 2.5px;
+            color: var(--neon-violet);
+            text-shadow: 0 0 20px var(--glow-violet);
+        }
+        .header-controls { display: flex; align-items: center; gap: 16px; }
+        .status-pill {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 1px;
+            padding: 5px 12px; border-radius: 20px;
+            border: 1px solid rgba(0,255,170,0.2); background: rgba(0,255,170,0.05);
+            color: var(--neon-emerald);
+        }
+        .status-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: currentColor;
+            animation: pulse-dot 1.8s infinite ease-out;
+        }
+        @keyframes pulse-dot {
+            0% { box-shadow: 0 0 0 0 currentColor; }
+            70% { box-shadow: 0 0 0 6px transparent; }
+            100% { box-shadow: 0 0 0 0 transparent; }
+        }
+        .lang-btn {
+            background: rgba(140,80,220,0.08); border: 1px solid rgba(140,80,220,0.2);
+            color: var(--text-secondary); padding: 4px 10px; border-radius: 6px;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lang-btn.active { background: rgba(140,80,220,0.2); color: #fff; border-color: var(--neon-violet); }
+        .lang-btn:hover { color: #fff; border-color: rgba(140,80,220,0.4); }
+
+        /* Main layout */
+        .hud-main { padding: 28px 32px; display: flex; flex-direction: column; gap: 24px; }
+
+        /* Tab system */
+        .tab-bar { display: flex; gap: 10px; flex-wrap: wrap; }
+        .tab-btn {
+            background: rgba(140,80,220,0.03); border: 1px solid var(--glass-border);
+            color: var(--text-secondary); padding: 10px 20px; border-radius: 10px;
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tab-btn.active {
+            border-color: var(--neon-violet); color: #fff;
+            background: rgba(140,80,220,0.12); box-shadow: 0 0 20px rgba(140,80,220,0.15);
+        }
+        .tab-btn:hover:not(.active) { color: #fff; border-color: rgba(140,80,220,0.25); }
+
+        /* Metric card mini */
+        .metric-card {
+            border-radius: 14px; padding: 16px; flex: 1; min-width: 140px;
+            background: rgba(12,5,28,0.4); border: 1px solid var(--glass-border);
+            transition: all 0.4s ease;
+        }
+        .metric-card:hover { border-color: var(--glass-border-hover); }
+        .metric-label { font-size: 0.65rem; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .metric-value { font-size: 1.5rem; font-weight: 800; }
+        .metric-norm { font-size: 0.55rem; color: var(--text-dim); margin-top: 3px; }
+
+        /* EEG Canvas */
+        .eeg-canvas-wrap {
+            background: #050210; border: 1px solid rgba(140,80,220,0.06);
+            border-radius: 14px; padding: 2px; position: relative; overflow: hidden;
+        }
+        .eeg-label {
+            position: absolute; left: 8px; font-size: 0.55rem; font-weight: 700;
+            letter-spacing: 1px; color: var(--text-dim); z-index: 2;
+        }
+
+        /* Neurotransmitter bars */
+        .nt-bar-wrap { display: flex; flex-direction: column; gap: 10px; }
+        .nt-row { display: flex; align-items: center; gap: 10px; }
+        .nt-name { font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); width: 100px; text-align: right; }
+        .nt-track { flex: 1; height: 10px; background: rgba(255,255,255,0.03); border-radius: 6px; overflow: hidden; position: relative; }
+        .nt-fill { height: 100%; border-radius: 6px; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
+        .nt-fill::after { content: ''; position: absolute; right: 0; top: 0; width: 20px; height: 100%; background: rgba(255,255,255,0.15); filter: blur(4px); }
+        .nt-val { font-size: 0.65rem; font-weight: 700; width: 55px; text-align: left; }
+
+        /* Brain region grid */
+        .region-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+        .region-card {
+            border-radius: 12px; padding: 14px; background: rgba(12,5,28,0.35);
+            border: 1px solid var(--glass-border); transition: all 0.3s;
+        }
+        .region-card:hover { border-color: var(--glass-border-hover); }
+        .region-name { font-size: 0.7rem; font-weight: 700; margin-bottom: 6px; }
+        .region-activity {
+            font-size: 1.1rem; font-weight: 800;
+        }
+        .region-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.03); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+        .region-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+        /* 3D brain canvas */
+        #brain-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Action buttons */
+        .action-btn {
+            background: linear-gradient(135deg, var(--neon-violet), var(--neon-pink));
+            color: #fff; font-weight: 800; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 1.5px; border: none; padding: 12px 28px; border-radius: 40px;
+            box-shadow: 0 0 25px rgba(168,85,247,0.3); cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .action-btn:hover {
+            transform: scale(1.03) translateY(-1px);
+            box-shadow: 0 0 35px rgba(0,255,170,0.5);
+            background: linear-gradient(135deg, var(--neon-emerald), var(--neon-cyan));
+            color: #020105;
+        }
+        .action-btn:active { transform: scale(0.97); }
+
+        .action-btn.danger {
+            background: linear-gradient(135deg, var(--neon-rose), #ff6b3d);
+            box-shadow: 0 0 25px var(--glow-rose);
+        }
+        .action-btn.danger:hover {
+            background: linear-gradient(135deg, #ff6b3d, var(--neon-amber));
+            box-shadow: 0 0 35px rgba(255,184,0,0.5);
+        }
+
+        .action-btn.secondary {
+            background: rgba(140,80,220,0.1);
+            border: 1px solid rgba(140,80,220,0.3);
+            box-shadow: none; color: var(--neon-violet);
+        }
+        .action-btn.secondary:hover {
+            background: rgba(140,80,220,0.2); color: #fff;
+            box-shadow: 0 0 15px var(--glow-violet);
+        }
+
+        /* Telemetry log */
+        .log-container {
+            background: #040110; border: 1px solid rgba(140,80,220,0.06);
+            border-radius: 12px; padding: 14px; max-height: 200px; overflow-y: auto;
+            font-size: 0.7rem; line-height: 1.7;
+        }
+        .log-time { color: var(--text-dim); margin-right: 8px; }
+        .log-msg { color: var(--neon-cyan); }
+        .log-msg.warn { color: var(--neon-amber); }
+        .log-msg.error { color: var(--neon-rose); }
+        .log-msg.success { color: var(--neon-emerald); }
+
+        /* Safety shield */
+        .shield-panel {
+            padding: 16px 22px; border-radius: 16px; transition: all 0.5s ease;
+        }
+        .shield-panel.safe {
+            border: 2px solid var(--neon-emerald);
+            background: rgba(0,255,170,0.04);
+            box-shadow: 0 0 20px var(--glow-emerald);
+        }
+        .shield-panel.alert {
+            border: 2px solid var(--neon-rose);
+            background: rgba(255,42,109,0.06);
+            box-shadow: 0 0 20px var(--glow-rose);
+            animation: alert-pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes alert-pulse {
+            0%, 100% { box-shadow: 0 0 20px var(--glow-rose); }
+            50% { box-shadow: 0 0 40px var(--glow-rose); }
+        }
+
+        /* Dashboard grid */
+        .dash-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: start; }
+        .col-stack { display: flex; flex-direction: column; gap: 24px; }
+
+        /* Patient profile table */
+        .profile-row {
+            display: flex; justify-content: space-between; padding: 8px 0;
+            border-bottom: 1px solid rgba(140,80,220,0.06); font-size: 0.8rem;
+        }
+        .profile-label { color: var(--text-secondary); }
+        .profile-value { font-weight: 700; }
+
+        /* Footer */
+        .hud-footer {
+            padding: 14px 32px; text-align: center;
+            font-size: 0.6rem; letter-spacing: 2px; color: var(--text-dim);
+            border-top: 1px solid rgba(140,80,220,0.06);
+            background: rgba(6,2,18,0.7);
+        }
+
+        /* Emergency overlay */
+        .emergency-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15,2,5,0.96); z-index: 9998;
+            justify-content: center; align-items: center; flex-direction: column;
+        }
+        .emergency-overlay.active { display: flex; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .dash-grid { grid-template-columns: 1fr; }
+            .hud-header { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+            .hud-main { padding: 16px; }
+            .tab-bar { gap: 6px; }
+            .tab-btn { padding: 8px 14px; font-size: 0.65rem; }
+        }
+
+        /* Pillar cards */
+        .pillar-card {
+            border-radius: 16px; padding: 24px; background: rgba(12,5,28,0.4);
+            border: 1px solid var(--glass-border); transition: all 0.4s ease;
+        }
+        .pillar-card:hover { border-color: var(--glass-border-hover); transform: translateY(-2px); box-shadow: 0 0 25px var(--glass-glow); }
+        .pillar-num { font-size: 0.6rem; font-weight: 800; letter-spacing: 2px; color: var(--neon-violet); margin-bottom: 8px; }
+        .pillar-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+        .pillar-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <!-- Scanline effect -->
+    <div class="scanline"></div>
+
+    <!-- Background brain WebGL -->
+    <canvas id="brain-canvas"></canvas>
+
+    <!-- Emergency seizure overlay -->
+    <div id="emergency-overlay" class="emergency-overlay">
+        <div style="text-align: center; max-width: 600px; padding: 40px;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
+            <h2 id="emergency-title" style="font-size: 1.6rem; font-weight: 900; color: var(--neon-rose); text-shadow: 0 0 30px var(--glow-rose); margin-bottom: 16px;"></h2>
+            <p id="emergency-desc" style="color: #fca5a5; font-size: 0.9rem; line-height: 1.7; margin-bottom: 30px;"></p>
+            <button class="action-btn" onclick="dismissEmergency()" style="font-size: 0.8rem;">
+                ✕ ACKNOWLEDGE &amp; DISMISS
+            </button>
+        </div>
+    </div>
+
+    <!-- App container -->
+    <div id="app">
+        <!-- Header -->
+        <header class="hud-header">
+            <div class="hud-title mono" id="hud-title-text">AETERNA // SOVEREIGN BRAIN COGNITIVE HUD</div>
+            <div class="header-controls">
+                <div class="status-pill" id="neural-link-pill">
+                    <span class="status-dot"></span>
+                    <span class="mono" id="neural-link-label">NEURAL LINK: CONNECTED</span>
+                </div>
+                <div class="status-pill" id="knox-pill" style="border-color: rgba(168,85,247,0.2); color: var(--neon-violet);">
+                    <span class="status-dot" style="background: var(--neon-violet);"></span>
+                    <span class="mono" id="knox-label">KNOX: LIVE</span>
+                </div>
+                <div style="display: flex; gap: 4px;">
+                    <button class="lang-btn active" id="lang-bg" onclick="setLang('bg')">BG</button>
+                    <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="hud-main" id="hud-content">
+            <!-- Will be rendered by JS -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="hud-footer mono" id="hud-footer">
+            AETERNA v4.0 BRAIN SUBSTRATE // ZERO-ENTROPY NEUROCOGNITIVE PROTOCOL // 2026
+        </footer>
+    </div>
+
+    <script>
+    // ═══════════════════════════════════════════════════
+    //  STATE ENGINE
+    // ═══════════════════════════════════════════════════
+    const S = {
+        lang: 'bg',
+        tab: 'dashboard',
+        neuralLink: true,
+        emergencyMode: false,
+        seizureActive: false,
+
+        // EEG bands
+        delta: 12, theta: 18, alpha: 45, beta: 30, gamma: 8,
+
+        // Neurotransmitters (0-100%)
+        dopamine: 72,
+        serotonin: 68,
+        gaba: 81,
+        glutamate: 35,
+        acetylcholine: 58,
+        bdnf: 1.2,
+        norepinephrine: 44,
+
+        // Brain regions (activity 0-100%)
+        prefrontal: 78,
+        motor: 42,
+        temporal: 55,
+        occipital: 38,
+        parietal: 50,
+        hippocampus: 65,
+        amygdala: 28,
+        cerebellum: 60,
+        brainstem: 88,
+        thalamusActivity: 72,
+
+        // Vitals
+        icp: 12.5,         // intracranial pressure mmHg (normal 7-15)
+        cbf: 52,            // cerebral blood flow ml/100g/min (normal 50-60)
+        brainTemp: 37.1,    // brain temperature °C
+        oxygenation: 97,    // SpO2 %
+        hrv: 62,            // heart rate variability ms
+
+        // Safety
+        seizureZScore: 0.8,
+        seizureThreshold: 3.0,
+        hebbianCoherence: 8.4,
+        catuskoti: 'SYNERGY',
+
+        // Cure state
+        cured: false,
+        transitioning: false,
+        entropy: 2.84,
+
+        // Logs
+        logs: [
+            { time: '14:00:00', bg: 'INIT: AETERNA BRAIN COGNITIVE ядрото е онлайн. Knox пясъчник: активен.', en: 'INIT: AETERNA BRAIN COGNITIVE core online. Knox sandbox: engaged.' },
+            { time: '14:00:01', bg: 'EEG: Инициализация на 16-канален BCI мониторинг. Delta=12µV, Alpha=45µV.', en: 'EEG: Initializing 16-channel BCI monitoring. Delta=12µV, Alpha=45µV.' },
+            { time: '14:00:02', bg: 'NEURO: Невротрансмитерен баланс в норма. GABA/Glutamate ratio: 2.31.', en: 'NEURO: Neurotransmitter balance nominal. GABA/Glutamate ratio: 2.31.' }
+        ],
+
+        // EEG waveform history
+        eegHistory: { delta: [], theta: [], alpha: [], beta: [], gamma: [] },
+
+        // Animation
+        tick: 0
+    };
+
+    // Seed EEG history
+    for (let ch in S.eegHistory) { for (let i = 0; i < 300; i++) S.eegHistory[ch].push(0); }
+
+    // ═══════════════════════════════════════════════════
+    //  TRANSLATIONS
+    // ═══════════════════════════════════════════════════
+    const T = {
+        bg: {
+            title: 'AETERNA // SOVEREIGN BRAIN COGNITIVE HUD',
+            neuralLink: 'НЕВРОННА ВРЪЗКА:',
+            connected: 'СВЪРЗАНА',
+            severed: 'ПРЕКЪСНАТА',
+            knox: 'KNOX:',
+            live: 'АКТИВЕН',
+            offline: 'ОФЛАЙН',
+            footer: 'AETERNA v4.0 BRAIN SUBSTRATE // НУЛЕВА ЕНТРОПИЯ НЕВРО-КОГНИТИВЕН ПРОТОКОЛ // 2026',
+
+            tabDashboard: 'Мониторинг',
+            tabEEG: 'EEG Вълни',
+            tabRegions: 'Мозъчни Региони',
+            tabPillars: 'Четирите Стълба',
+            tabNeuromod: 'Невро-Модулация',
+
+            shieldActive: '🧠 AURA BRAIN SHIELD ACTIVE',
+            shieldCompromised: '🧠 AURA BRAIN SHIELD COMPROMISED',
+            shieldEnforced: 'LAYER 4 ENFORCED',
+            shieldLockout: 'SEIZURE LOCKOUT',
+            shieldOkDesc: 'Всички невро-когнитивни параметри са математически верифицирани срещу критичния праг от <strong style="color:#fff">3.0σ</strong>. Seizure risk: минимален.',
+            shieldBadDesc: 'Критично отклонение засечено! Автоматичната невро-стимулация е криптографски спряна чрез Knox TEE.',
+
+            icp: 'ИКН (ICP)',
+            icpNorm: 'Норма: 7-15 mmHg',
+            cbf: 'ЦЕРЕБР. КРЪВОТОК',
+            cbfNorm: 'Норма: 50-60 ml/100g/min',
+            brainTemp: 'МОЗЪЧНА ТЕМП.',
+            brainTempNorm: 'Норма: 36.5-37.5 °C',
+            o2: 'НАСИЩАНЕ O₂',
+            o2Norm: 'Норма: 95-100%',
+            seizureRisk: 'SEIZURE Z-SCORE',
+            seizureNorm: 'Критичен: >3.0σ',
+            entropy: 'ГЛОБАЛНА ЕНТРОПИЯ',
+
+            neurotransmitters: 'Невротрансмитерен Баланс (Реално Време)',
+            dopamine: 'Допамин',
+            serotonin: 'Серотонин',
+            gaba: 'GABA',
+            glutamate: 'Глутамат',
+            acetylcholine: 'Ацетилхолин',
+            norepinephrine: 'Норепинефрин',
+            bdnfLabel: 'BDNF Фактор',
+            bdnfNorm: 'Норма: >1.0 ng/mL',
+
+            eegTitle: 'Реалновремеви EEG Вълни (16-канален BCI)',
+            eegDesc: 'Непрекъснат мониторинг на мозъчната електрическа активност — Delta (0.5-4Hz), Theta (4-8Hz), Alpha (8-13Hz), Beta (13-30Hz), Gamma (30-100Hz).',
+            delta: 'DELTA (0.5-4 Hz)',
+            theta: 'THETA (4-8 Hz)',
+            alpha: 'ALPHA (8-13 Hz)',
+            beta: 'BETA (13-30 Hz)',
+            gamma: 'GAMMA (30-100 Hz)',
+
+            regionsTitle: 'Карта на Мозъчната Активност',
+            regionsDesc: 'Реалновремеви процент на невронална активност по мозъчни региони, извлечен от EEG/fMRI корелация.',
+            prefrontal: 'Префронтален Кортекс',
+            motor: 'Моторен Кортекс',
+            temporal: 'Темпорален Лоб',
+            occipital: 'Окципитален Лоб',
+            parietal: 'Париетален Лоб',
+            hippocampus: 'Хипокампус',
+            amygdala: 'Амигдала',
+            cerebellum: 'Малък Мозък',
+            brainstem: 'Мозъчен Стъвол',
+            thalamus: 'Таламус',
+
+            patientTitle: 'Профил на Пациента',
+            patientLabel: 'ПАЦИЕНТ:',
+            patientValue: 'N-127 (Невро-когнитивен)',
+            ageLabel: 'ВЪЗРАСТ / ДИАГНОЗА:',
+            ageValue: '38 г. / Рефрактерна Епилепсия',
+            stateLabel: 'НЕВРО СТАТУС:',
+            stateActive: 'SEIZURE_RISK_ACTIVE',
+            stateResolved: 'NEURAL_HOMEOSTASIS',
+            therapyLabel: 'АКТИВНА ТЕРАПИЯ:',
+            therapyChaos: 'Closed-Loop Vagal + DBS',
+            therapyCured: 'Sovereign Neural Harmony (0 seizures)',
+            conclusionLabel: 'КЛИНИЧЕН ИЗВОД:',
+            conclusionChaos: 'Пациентът е с активна рефрактерна епилепсия. Необходим е closed-loop BCI контрол за потискане на припадъци.',
+            conclusionCured: 'Пълна невро-когнитивна хомеостаза постигната. Нулеви припадъци, оптимален невротрансмитерен баланс, стабилна EEG морфология.',
+
+            telemetryLog: 'BRAIN_TELEMETRY_LOG',
+            console: 'НЕВРО КОНЗОЛА // ТЕСТ ИНЖЕКТОРИ',
+            consoleDesc: 'Симулиране на критични невро-събития за стрес-тест на Layer 4 безопасността.',
+
+            btnCure: 'ИНДУЦИРАНЕ НА НЕВРО-ХОМЕОСТАЗА',
+            btnRestore: 'ВЪЗСТАНОВЯВАНЕ НА ХАОСА',
+            btnInjectSeizure: 'ИНЖЕКТИРАНЕ НА ПРИПАДЪК',
+            btnInjectGlutamate: 'ГЛУТАМАТЕН ШОК',
+            btnStartBCI: 'СТАРТ CLOSED-LOOP BCI',
+            btnStopBCI: 'СТОП BCI',
+
+            pillar1Num: 'СТЪЛБ 1', pillar1Title: 'EEG Резонансен Контрол',
+            pillar1Desc: 'Непрекъснат 16-канален мониторинг с <25ms латентност за детекция на епилептиформни пикове. Автоматично потискане чрез Vagal Nerve Stimulation.',
+            pillar2Num: 'СТЪЛБ 2', pillar2Title: 'Невротрансмитерен Баланс',
+            pillar2Desc: 'Реалновремево проследяване на GABA/Glutamate ratio. При дисбаланс >2.5σ — автоматична корекция чрез DBS (Deep Brain Stimulation).',
+            pillar3Num: 'СТЪЛБ 3', pillar3Title: 'Хемодинамичен Мониторинг',
+            pillar3Desc: 'Измерване на ICP, CBF и мозъчна оксигенация. Ранна детекция на вазоспазъм и хипоперфузия за предотвратяване на исхемия.',
+            pillar4Num: 'СТЪЛБ 4', pillar4Title: 'Knox TEE Seizure Guard',
+            pillar4Desc: 'Hardware-signed seizure lockout. При Z-Score >3.0σ — всички невро-стимулатори се блокират криптографски на ниво силиций чрез Samsung Knox TEE.',
+
+            neuromodTitle: 'Closed-Loop BCI Невро-Модулация',
+            neuromodDesc: 'Brain-Computer Interface за реалновремево потискане на епилептиформна активност чрез 4-канална Deep Brain Stimulation.',
+            bciStatus: 'BCI СТАТУС:',
+            bciStandby: 'STANDBY',
+            bciActive: 'ACTIVE — SUPPRESSING',
+            hebbianLabel: 'Hebbian EEG Coherence:',
+            catuskotiLabel: 'CATUSKOTI STATE:',
+            chronosTitle: 'CHRONOS PREDICTIVE SEIZURE SHIELD',
+            predictiveLabel: 'Предиктивен статус:',
+            shieldIntact: 'SHIELD INTACT (ACTIVE)',
+            shieldDampened: 'DAMPENED (LOCKOUT)',
+
+            emergencyTitle: 'КРИТИЧНА ТРЕВОГА: SEIZURE LOCKOUT',
+            emergencyDesc: 'Засечено критично отклонение в невроналната активност. Z-Score надвиши прага от 3.0σ. Всички невро-стимулатори са ХАРДУЕРНО БЛОКИРАНИ чрез Samsung Knox TEE за предотвратяване на статус епилептикус.',
+        },
+        en: {
+            title: 'AETERNA // SOVEREIGN BRAIN COGNITIVE HUD',
+            neuralLink: 'NEURAL LINK:',
+            connected: 'CONNECTED',
+            severed: 'SEVERED',
+            knox: 'KNOX:',
+            live: 'LIVE',
+            offline: 'OFFLINE',
+            footer: 'AETERNA v4.0 BRAIN SUBSTRATE // ZERO-ENTROPY NEUROCOGNITIVE PROTOCOL // 2026',
+
+            tabDashboard: 'Monitoring',
+            tabEEG: 'EEG Waves',
+            tabRegions: 'Brain Regions',
+            tabPillars: 'Four Pillars',
+            tabNeuromod: 'Neuro-Modulation',
+
+            shieldActive: '🧠 AURA BRAIN SHIELD ACTIVE',
+            shieldCompromised: '🧠 AURA BRAIN SHIELD COMPROMISED',
+            shieldEnforced: 'LAYER 4 ENFORCED',
+            shieldLockout: 'SEIZURE LOCKOUT',
+            shieldOkDesc: 'All neurocognitive parameters are mathematically verified against the critical threshold of <strong style="color:#fff">3.0σ</strong>. Seizure risk: minimal.',
+            shieldBadDesc: 'Critical deviation detected! Automatic neuro-stimulation is cryptographically suspended via Knox TEE.',
+
+            icp: 'ICP',
+            icpNorm: 'Normal: 7-15 mmHg',
+            cbf: 'CEREBRAL BLOOD FLOW',
+            cbfNorm: 'Normal: 50-60 ml/100g/min',
+            brainTemp: 'BRAIN TEMP.',
+            brainTempNorm: 'Normal: 36.5-37.5 °C',
+            o2: 'O₂ SATURATION',
+            o2Norm: 'Normal: 95-100%',
+            seizureRisk: 'SEIZURE Z-SCORE',
+            seizureNorm: 'Critical: >3.0σ',
+            entropy: 'GLOBAL ENTROPY',
+
+            neurotransmitters: 'Neurotransmitter Balance (Real-Time)',
+            dopamine: 'Dopamine',
+            serotonin: 'Serotonin',
+            gaba: 'GABA',
+            glutamate: 'Glutamate',
+            acetylcholine: 'Acetylcholine',
+            norepinephrine: 'Norepinephrine',
+            bdnfLabel: 'BDNF Factor',
+            bdnfNorm: 'Normal: >1.0 ng/mL',
+
+            eegTitle: 'Real-Time EEG Waveforms (16-Channel BCI)',
+            eegDesc: 'Continuous monitoring of brain electrical activity — Delta (0.5-4Hz), Theta (4-8Hz), Alpha (8-13Hz), Beta (13-30Hz), Gamma (30-100Hz).',
+            delta: 'DELTA (0.5-4 Hz)',
+            theta: 'THETA (4-8 Hz)',
+            alpha: 'ALPHA (8-13 Hz)',
+            beta: 'BETA (13-30 Hz)',
+            gamma: 'GAMMA (30-100 Hz)',
+
+            regionsTitle: 'Brain Activity Map',
+            regionsDesc: 'Real-time neuronal activity percentage per brain region, derived from EEG/fMRI correlation.',
+            prefrontal: 'Prefrontal Cortex',
+            motor: 'Motor Cortex',
+            temporal: 'Temporal Lobe',
+            occipital: 'Occipital Lobe',
+            parietal: 'Parietal Lobe',
+            hippocampus: 'Hippocampus',
+            amygdala: 'Amygdala',
+            cerebellum: 'Cerebellum',
+            brainstem: 'Brainstem',
+            thalamus: 'Thalamus',
+
+            patientTitle: 'Patient Profile',
+            patientLabel: 'PATIENT:',
+            patientValue: 'N-127 (Neurocognitive)',
+            ageLabel: 'AGE / DIAGNOSIS:',
+            ageValue: '38 yrs / Refractory Epilepsy',
+            stateLabel: 'NEURO STATUS:',
+            stateActive: 'SEIZURE_RISK_ACTIVE',
+            stateResolved: 'NEURAL_HOMEOSTASIS',
+            therapyLabel: 'ACTIVE THERAPY:',
+            therapyChaos: 'Closed-Loop Vagal + DBS',
+            therapyCured: 'Sovereign Neural Harmony (0 seizures)',
+            conclusionLabel: 'CLINICAL CONCLUSION:',
+            conclusionChaos: 'Patient has active refractory epilepsy. Closed-loop BCI control is required for seizure suppression.',
+            conclusionCured: 'Full neurocognitive homeostasis achieved. Zero seizures, optimal neurotransmitter balance, stable EEG morphology.',
+
+            telemetryLog: 'BRAIN_TELEMETRY_LOG',
+            console: 'NEURO CONSOLE // TEST INJECTORS',
+            consoleDesc: 'Simulate critical neuro-events to stress-test Layer 4 safety protocols.',
+
+            btnCure: 'INDUCE NEURAL HOMEOSTASIS',
+            btnRestore: 'RESTORE CHAOS',
+            btnInjectSeizure: 'INJECT SEIZURE',
+            btnInjectGlutamate: 'GLUTAMATE SHOCK',
+            btnStartBCI: 'START CLOSED-LOOP BCI',
+            btnStopBCI: 'STOP BCI',
+
+            pillar1Num: 'PILLAR 1', pillar1Title: 'EEG Resonance Control',
+            pillar1Desc: 'Continuous 16-channel monitoring with <25ms latency for epileptiform spike detection. Automatic suppression via Vagal Nerve Stimulation.',
+            pillar2Num: 'PILLAR 2', pillar2Title: 'Neurotransmitter Balance',
+            pillar2Desc: 'Real-time GABA/Glutamate ratio tracking. When imbalance exceeds 2.5σ — automatic correction via DBS (Deep Brain Stimulation).',
+            pillar3Num: 'PILLAR 3', pillar3Title: 'Hemodynamic Monitoring',
+            pillar3Desc: 'ICP, CBF, and brain oxygenation measurement. Early detection of vasospasm and hypoperfusion to prevent ischemia.',
+            pillar4Num: 'PILLAR 4', pillar4Title: 'Knox TEE Seizure Guard',
+            pillar4Desc: 'Hardware-signed seizure lockout. When Z-Score >3.0σ — all neuro-stimulators are cryptographically locked at silicon level via Samsung Knox TEE.',
+
+            neuromodTitle: 'Closed-Loop BCI Neuro-Modulation',
+            neuromodDesc: 'Brain-Computer Interface for real-time suppression of epileptiform activity via 4-channel Deep Brain Stimulation.',
+            bciStatus: 'BCI STATUS:',
+            bciStandby: 'STANDBY',
+            bciActive: 'ACTIVE — SUPPRESSING',
+            hebbianLabel: 'Hebbian EEG Coherence:',
+            catuskotiLabel: 'CATUSKOTI STATE:',
+            chronosTitle: 'CHRONOS PREDICTIVE SEIZURE SHIELD',
+            predictiveLabel: 'Predictive status:',
+            shieldIntact: 'SHIELD INTACT (ACTIVE)',
+            shieldDampened: 'DAMPENED (LOCKOUT)',
+
+            emergencyTitle: 'CRITICAL ALERT: SEIZURE LOCKOUT',
+            emergencyDesc: 'Critical deviation detected in neuronal activity. Z-Score exceeded the 3.0σ threshold. All neuro-stimulators are HARDWARE LOCKED via Samsung Knox TEE to prevent status epilepticus.',
+        }
+    };
+
+    function t(key) { return (T[S.lang] && T[S.lang][key]) || (T.bg[key]) || key; }
+
+    // ═══════════════════════════════════════════════════
+    //  LOG SYSTEM
+    // ═══════════════════════════════════════════════════
+    function addLog(bg, en, type) {
+        const time = new Date().toLocaleTimeString();
+        S.logs.push({ time, bg, en, type: type || '' });
+        if (S.logs.length > 20) S.logs.shift();
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  ACTIONS
+    // ═══════════════════════════════════════════════════
+    function setLang(lang) {
+        S.lang = lang;
+        document.getElementById('lang-bg').classList.toggle('active', lang === 'bg');
+        document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+        render();
+    }
+
+    function switchTab(tab) { S.tab = tab; render(); }
+
+    function triggerCure() {
+        if (S.transitioning || S.cured) return;
+        S.transitioning = true;
+        addLog('BIO_CURE: Инициране на невро-когнитивна хомеостаза...', 'BIO_CURE: Initiating neurocognitive homeostasis...', 'success');
+        let step = 0, steps = 60;
+        const timer = setInterval(() => {
+            step++;
+            const p = step / steps;
+            S.entropy = parseFloat((2.84 * (1 - p) + 0.02 * p).toFixed(3));
+            S.seizureZScore = parseFloat((0.8 * (1 - p) + 0.12 * p).toFixed(2));
+            S.glutamate = Math.round(35 * (1 - p) + 18 * p);
+            S.gaba = Math.round(81 * (1 - p) + 95 * p);
+            S.dopamine = Math.round(72 * (1 - p) + 88 * p);
+            S.serotonin = Math.round(68 * (1 - p) + 92 * p);
+            S.bdnf = parseFloat((1.2 * (1 - p) + 2.8 * p).toFixed(2));
+            S.hebbianCoherence = parseFloat((8.4 * (1 - p) + 9.8 * p).toFixed(1));
+            S.prefrontal = Math.round(78 * (1 - p) + 92 * p);
+            S.hippocampus = Math.round(65 * (1 - p) + 88 * p);
+            if (step >= steps) {
+                clearInterval(timer);
+                S.cured = true; S.transitioning = false; S.catuskoti = 'HARMONY';
+                addLog('SUCCESS: Невро-когнитивна хомеостаза: ПОСТИГНАТА. 0 припадъци.', 'SUCCESS: Neurocognitive homeostasis: ACHIEVED. 0 seizures.', 'success');
+            }
+            render();
+        }, 50);
+    }
+
+    function restoreChaos() {
+        S.cured = false; S.transitioning = false;
+        S.entropy = 2.84; S.seizureZScore = 0.8;
+        S.glutamate = 35; S.gaba = 81; S.dopamine = 72; S.serotonin = 68;
+        S.bdnf = 1.2; S.hebbianCoherence = 8.4; S.catuskoti = 'SYNERGY';
+        S.prefrontal = 78; S.hippocampus = 65;
+        addLog('RESET: Невро-параметрите са нулирани.', 'RESET: Neuro-parameters reset.', 'warn');
+        render();
+    }
+
+    function injectSeizure() {
+        S.seizureZScore = 3.92;
+        S.seizureActive = true;
+        S.glutamate = 88;
+        S.gaba = 22;
+        S.catuskoti = 'SEIZURE_LOCKOUT';
+        S.entropy = 6.41;
+        addLog('CRITICAL: SEIZURE засечен! Z-Score=3.92σ. Knox TEE LOCKOUT!', 'CRITICAL: SEIZURE detected! Z-Score=3.92σ. Knox TEE LOCKOUT!', 'error');
+
+        // Show emergency overlay
+        const ov = document.getElementById('emergency-overlay');
+        document.getElementById('emergency-title').textContent = t('emergencyTitle');
+        document.getElementById('emergency-desc').textContent = t('emergencyDesc');
+        ov.classList.add('active');
+        render();
+    }
+
+    function dismissEmergency() {
+        document.getElementById('emergency-overlay').classList.remove('active');
+        S.seizureZScore = 1.2; S.seizureActive = false;
+        S.glutamate = 40; S.gaba = 75;
+        S.catuskoti = 'RECOVERY'; S.entropy = 3.1;
+        addLog('RECOVERY: Knox lockout премахнат. Невро-модулация: възстановена.', 'RECOVERY: Knox lockout dismissed. Neuro-modulation: restored.', 'success');
+        render();
+    }
+
+    function injectGlutamateShock() {
+        S.glutamate = 92; S.gaba = 18;
+        S.seizureZScore = Math.min(S.seizureZScore + 1.5, 4.2);
+        S.entropy = parseFloat((S.entropy + 1.8).toFixed(2));
+        addLog('SHOCK: Глутаматна екскурзия инжектирана! GABA потиснат.', 'SHOCK: Glutamate excursion injected! GABA suppressed.', 'error');
+        if (S.seizureZScore > S.seizureThreshold) injectSeizure();
+        else render();
+    }
+
+    let bciTimer = null;
+    function toggleBCI() {
+        if (bciTimer) {
+            clearInterval(bciTimer);
+            bciTimer = null;
+            addLog('BCI: Closed-loop спрян.', 'BCI: Closed-loop stopped.');
+            render();
+            return;
+        }
+        addLog('BCI: Стартиране на closed-loop DBS потискане...', 'BCI: Starting closed-loop DBS suppression...', 'success');
+        bciTimer = setInterval(() => {
+            if (S.glutamate > 20) S.glutamate--;
+            if (S.gaba < 90) S.gaba++;
+            if (S.seizureZScore > 0.3) S.seizureZScore = parseFloat((S.seizureZScore - 0.05).toFixed(2));
+            if (S.entropy > 0.1) S.entropy = parseFloat((S.entropy - 0.03).toFixed(2));
+            if (S.bdnf < 2.5) S.bdnf = parseFloat((S.bdnf + 0.01).toFixed(2));
+            if (S.hebbianCoherence < 9.8) S.hebbianCoherence = parseFloat((S.hebbianCoherence + 0.02).toFixed(1));
+            render();
+        }, 200);
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  EEG WAVEFORM ENGINE (Canvas 2D)
+    // ═══════════════════════════════════════════════════
+    const eegCanvases = {};
+    function updateEEG() {
+        const bands = {
+            delta: { freq: 2, amp: S.delta, color: '#6366f1' },
+            theta: { freq: 6, amp: S.theta, color: '#06d6e0' },
+            alpha: { freq: 10, amp: S.alpha, color: '#00ffaa' },
+            beta:  { freq: 22, amp: S.beta,  color: '#ffb800' },
+            gamma: { freq: 50, amp: S.gamma, color: '#ff2a6d' }
+        };
+        S.tick++;
+        for (let band in bands) {
+            const b = bands[band];
+            const noise = (Math.random() - 0.5) * b.amp * 0.4;
+            const seizureBoost = S.seizureActive && (band === 'gamma' || band === 'beta') ? Math.random() * 40 : 0;
+            const val = Math.sin(S.tick * b.freq * 0.02) * b.amp * 0.5 + noise + seizureBoost;
+            S.eegHistory[band].push(val);
+            if (S.eegHistory[band].length > 300) S.eegHistory[band].shift();
+
+            const canvas = document.getElementById('eeg-' + band);
+            if (!canvas) continue;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.offsetWidth * 2;
+            const h = canvas.height = canvas.offsetHeight * 2;
+            ctx.clearRect(0, 0, w, h);
+
+            // Grid
+            ctx.strokeStyle = 'rgba(140,80,220,0.06)';
+            ctx.lineWidth = 1;
+            for (let y = 0; y < h; y += h / 4) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+            // Waveform
+            const data = S.eegHistory[band];
+            ctx.strokeStyle = b.color;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = b.color;
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            for (let i = 0; i < data.length; i++) {
+                const x = (i / data.length) * w;
+                const y = h / 2 - data[i] * (h / 120);
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  BACKGROUND BRAIN SHADER (WebGL)
+    // ═══════════════════════════════════════════════════
+    function initBrainShader() {
+        const canvas = document.getElementById('brain-canvas');
+        const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
+        if (!gl) return;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const vs = `attribute vec2 p; void main(){ gl_Position=vec4(p,0,1); }`;
+        const fs = `
+        precision mediump float;
+        uniform float t;
+        uniform vec2 r;
+
+        float smin(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}
+
+        float brain(vec3 p){
+            // Main brain sphere
+            float d=length(p)-1.0;
+            // Hemispheres split
+            d=max(d,-abs(p.x)-0.02+1.0);
+            // Frontal lobe bulge
+            float fr=length(p-vec3(0,.2,.8))-0.7;
+            d=smin(d,fr,0.3);
+            // Temporal lobe
+            float tl=length(p-vec3(.85,-.3,.1))-0.45;
+            float tr=length(p-vec3(-.85,-.3,.1))-0.45;
+            d=smin(d,tl,0.25);
+            d=smin(d,tr,0.25);
+            // Occipital
+            float oc=length(p-vec3(0,0,-.85))-0.55;
+            d=smin(d,oc,0.3);
+            // Cerebellum
+            float cb=length(p-vec3(0,-.7,-.6))-0.4;
+            d=smin(d,cb,0.15);
+            // Brainstem
+            float bs=length(vec2(length(p.xz),p.y+1.2)- vec2(0,0))-0.18;
+            d=smin(d,bs,0.2);
+            // Sulci (wrinkles)
+            d+=sin(p.x*12.+t)*sin(p.y*10.)*sin(p.z*11.)*.02;
+            d+=sin(p.x*20.+p.z*18.)*.008;
+            return d;
+        }
+
+        void main(){
+            vec2 uv=(gl_FragCoord.xy-.5*r)/r.y;
+            vec3 ro=vec3(0,0,3.5);
+            vec3 rd=normalize(vec3(uv,-1.5));
+
+            // Slow auto-rotate
+            float a=t*0.15;
+            float ca=cos(a),sa=sin(a);
+            rd.xz=mat2(ca,sa,-sa,ca)*rd.xz;
+            ro.xz=mat2(ca,sa,-sa,ca)*ro.xz;
+
+            float d=0.;
+            vec3 p;
+            for(int i=0;i<64;i++){
+                p=ro+rd*d;
+                float h=brain(p);
+                if(h<.001||d>6.)break;
+                d+=h*.7;
+            }
+
+            vec3 col=vec3(0);
+            if(d<6.){
+                // Normal estimation
+                vec2 e=vec2(.001,0);
+                vec3 n=normalize(vec3(
+                    brain(p+e.xyy)-brain(p-e.xyy),
+                    brain(p+e.yxy)-brain(p-e.yxy),
+                    brain(p+e.yyx)-brain(p-e.yyx)
+                ));
+                // Lighting
+                vec3 l=normalize(vec3(1,1,2));
+                float diff=max(dot(n,l),0.);
+                float fres=pow(1.-max(dot(-rd,n),0.),3.);
+
+                // Neural pulse glow
+                float pulse=sin(p.x*6.+p.y*5.+t*2.)*.5+.5;
+                vec3 brainCol=mix(vec3(.25,.08,.45),vec3(.1,.02,.2),pulse);
+                brainCol+=vec3(.4,.15,.7)*fres;
+                brainCol+=vec3(.02,.8,.65)*pulse*0.15*diff;
+
+                col=brainCol*(diff*0.6+0.4);
+                col+=vec3(.65,.3,.95)*fres*0.4;
+            }
+
+            // Vignette
+            vec2 vig=uv*1.2;
+            col*=1.-dot(vig,vig)*0.3;
+
+            gl_FragColor=vec4(col,d<6.?.35:0.);
+        }`;
+
+        function createShader(src, type) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            return s;
+        }
+        const prog = gl.createProgram();
+        gl.attachShader(prog, createShader(vs, gl.VERTEX_SHADER));
+        gl.attachShader(prog, createShader(fs, gl.FRAGMENT_SHADER));
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+        const pLoc = gl.getAttribLocation(prog, 'p');
+        gl.enableVertexAttribArray(pLoc);
+        gl.vertexAttribPointer(pLoc, 2, gl.FLOAT, false, 0, 0);
+
+        const uT = gl.getUniformLocation(prog, 't');
+        const uR = gl.getUniformLocation(prog, 'r');
+
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        let startTime = Date.now();
+        function frame() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.uniform1f(uT, (Date.now() - startTime) * 0.001);
+            gl.uniform2f(uR, canvas.width, canvas.height);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            requestAnimationFrame(frame);
+        }
+        frame();
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  RENDER ENGINE
+    // ═══════════════════════════════════════════════════
+    function render() {
+        const root = document.getElementById('hud-content');
+        if (!root) return;
+
+        // Update header
+        document.getElementById('hud-title-text').textContent = t('title');
+        document.getElementById('neural-link-label').textContent = `${t('neuralLink')} ${S.neuralLink ? t('connected') : t('severed')}`;
+        document.getElementById('knox-label').textContent = `${t('knox')} ${S.neuralLink ? t('live') : t('offline')}`;
+        document.getElementById('hud-footer').textContent = t('footer');
+
+        const neuralPill = document.getElementById('neural-link-pill');
+        if (S.seizureActive) {
+            neuralPill.style.borderColor = 'rgba(255,42,109,0.4)';
+            neuralPill.style.color = 'var(--neon-rose)';
+        } else {
+            neuralPill.style.borderColor = 'rgba(0,255,170,0.2)';
+            neuralPill.style.color = 'var(--neon-emerald)';
+        }
+
+        // Tab bar
+        const tabs = [
+            { id: 'dashboard', label: t('tabDashboard') },
+            { id: 'eeg', label: t('tabEEG') },
+            { id: 'regions', label: t('tabRegions') },
+            { id: 'pillars', label: t('tabPillars') },
+            { id: 'neuromod', label: t('tabNeuromod') }
+        ];
+
+        let tabsHtml = '<div class="tab-bar">';
+        tabs.forEach(tb => {
+            tabsHtml += `<button class="tab-btn ${S.tab === tb.id ? 'active' : ''}" onclick="switchTab('${tb.id}')">${tb.label}</button>`;
+        });
+
+        // Cure / Restore button
+        if (!S.cured && !S.transitioning) {
+            tabsHtml += `<button class="action-btn" onclick="triggerCure()" style="margin-left:auto">⚡ ${t('btnCure')}</button>`;
+        } else {
+            tabsHtml += `<button class="action-btn secondary" onclick="restoreChaos()" style="margin-left:auto" ${S.transitioning ? 'disabled' : ''}>↺ ${t('btnRestore')}</button>`;
+        }
+        tabsHtml += '</div>';
+
+        let content = tabsHtml;
+
+        // ─── Shield Panel ───
+        const isOk = S.seizureZScore < S.seizureThreshold;
+        content += `
+        <div class="shield-panel ${isOk ? 'safe' : 'alert'}">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="mono" style="font-weight:800;color:${isOk ? 'var(--neon-emerald)' : 'var(--neon-rose)'};font-size:0.8rem;letter-spacing:1.5px">
+                    ${isOk ? t('shieldActive') : t('shieldCompromised')}
+                </span>
+                <span class="mono" style="background:${isOk ? 'var(--neon-emerald)' : 'var(--neon-rose)'};color:${isOk ? '#000' : '#fff'};padding:3px 10px;font-size:0.6rem;font-weight:900;border-radius:5px;letter-spacing:1px">
+                    ${isOk ? t('shieldEnforced') : t('shieldLockout')}
+                </span>
+            </div>
+            <div style="margin-top:8px;font-size:0.8rem;color:var(--text-secondary);line-height:1.5">
+                ${isOk ? t('shieldOkDesc') : t('shieldBadDesc')}
+            </div>
+        </div>`;
+
+        // ─── TAB CONTENT ───
+        if (S.tab === 'dashboard') content += renderDashboard();
+        else if (S.tab === 'eeg') content += renderEEG();
+        else if (S.tab === 'regions') content += renderRegions();
+        else if (S.tab === 'pillars') content += renderPillars();
+        else if (S.tab === 'neuromod') content += renderNeuromod();
+
+        root.innerHTML = content;
+
+        // Post-render: draw EEG canvases
+        requestAnimationFrame(() => updateEEG());
+    }
+
+    // ─── DASHBOARD TAB ───
+    function renderDashboard() {
+        const icpColor = S.icp > 15 || S.icp < 7 ? 'var(--neon-rose)' : 'var(--neon-cyan)';
+        const cbfColor = S.cbf < 50 ? 'var(--neon-rose)' : 'var(--neon-emerald)';
+        const seizColor = S.seizureZScore > 3 ? 'var(--neon-rose)' : S.seizureZScore > 2 ? 'var(--neon-amber)' : 'var(--neon-violet)';
+
+        let html = `
+        <!-- Vital Metrics Row -->
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <div class="metric-card"><div class="metric-label mono">${t('icp')}</div><div class="metric-value mono" style="color:${icpColor}">${S.icp.toFixed(1)}<span style="font-size:0.7rem;color:var(--text-dim)"> mmHg</span></div><div class="metric-norm">${t('icpNorm')}</div></div>
+            <div class="metric-card"><div class="metric-label mono">${t('cbf')}</div><div class="metric-value mono" style="color:${cbfColor}">${S.cbf}<span style="font-size:0.7rem;color:var(--text-dim)"> ml</span></div><div class="metric-norm">${t('cbfNorm')}</div></div>
+            <div class="metric-card"><div class="metric-label mono">${t('brainTemp')}</div><div class="metric-value mono" style="color:var(--neon-cyan)">${S.brainTemp.toFixed(1)}<span style="font-size:0.7rem;color:var(--text-dim)"> °C</span></div><div class="metric-norm">${t('brainTempNorm')}</div></div>
+            <div class="metric-card"><div class="metric-label mono">${t('o2')}</div><div class="metric-value mono" style="color:var(--neon-emerald)">${S.oxygenation}<span style="font-size:0.7rem;color:var(--text-dim)">%</span></div><div class="metric-norm">${t('o2Norm')}</div></div>
+            <div class="metric-card"><div class="metric-label mono">${t('seizureRisk')}</div><div class="metric-value mono" style="color:${seizColor}">${S.seizureZScore.toFixed(2)}<span style="font-size:0.7rem;color:var(--text-dim)">σ</span></div><div class="metric-norm">${t('seizureNorm')}</div></div>
+            <div class="metric-card"><div class="metric-label mono">${t('entropy')}</div><div class="metric-value mono" style="color:${S.cured ? 'var(--neon-emerald)' : 'var(--neon-rose)'}; text-shadow:0 0 15px ${S.cured ? 'var(--glow-emerald)' : 'var(--glow-rose)'}">${S.entropy.toFixed(2)}</div><div class="metric-norm">&nbsp;</div></div>
+        </div>
+
+        <div class="dash-grid">
+            <!-- Left: Neurotransmitters + EEG mini -->
+            <div class="col-stack">
+                <div class="glass">
+                    <h3 style="font-size:1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+                        <span style="color:var(--neon-violet)">⚗</span> ${t('neurotransmitters')}
+                    </h3>
+                    <div class="nt-bar-wrap">
+                        ${ntBar('dopamine', S.dopamine, '#a855f7')}
+                        ${ntBar('serotonin', S.serotonin, '#06d6e0')}
+                        ${ntBar('gaba', S.gaba, '#00ffaa')}
+                        ${ntBar('glutamate', S.glutamate, S.glutamate > 60 ? '#ff2a6d' : '#ffb800')}
+                        ${ntBar('acetylcholine', S.acetylcholine, '#3b82f6')}
+                        ${ntBar('norepinephrine', S.norepinephrine, '#ec4899')}
+                    </div>
+                    <div style="display:flex;gap:16px;margin-top:16px;padding-top:12px;border-top:1px solid rgba(140,80,220,0.08)">
+                        <div style="border-left:3px solid var(--neon-cyan);padding-left:10px">
+                            <div style="font-size:0.65rem;color:var(--text-secondary)">${t('bdnfLabel')}</div>
+                            <div class="mono" style="font-size:1.2rem;font-weight:800;color:${S.bdnf > 1.5 ? 'var(--neon-emerald)' : 'var(--neon-amber)'}">${S.bdnf.toFixed(2)} <span style="font-size:0.6rem;color:var(--text-dim)">ng/mL</span></div>
+                            <div style="font-size:0.5rem;color:var(--text-dim)">${t('bdnfNorm')}</div>
+                        </div>
+                        <div style="border-left:3px solid var(--neon-violet);padding-left:10px">
+                            <div style="font-size:0.65rem;color:var(--text-secondary)">GABA/Glut Ratio</div>
+                            <div class="mono" style="font-size:1.2rem;font-weight:800;color:${(S.gaba / Math.max(S.glutamate, 1)) > 1.5 ? 'var(--neon-emerald)' : 'var(--neon-rose)'}">${(S.gaba / Math.max(S.glutamate, 1)).toFixed(2)}</div>
+                            <div style="font-size:0.5rem;color:var(--text-dim)">Normal: >1.5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini EEG preview -->
+                <div class="glass">
+                    <h3 style="font-size:0.85rem;font-weight:700;margin-bottom:10px;color:var(--text-secondary)">EEG PREVIEW (Alpha)</h3>
+                    <div class="eeg-canvas-wrap" style="height:80px">
+                        <canvas id="eeg-alpha" style="width:100%;height:100%"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Patient + Log + Console -->
+            <div class="col-stack">
+                <div class="glass">
+                    <h3 style="font-size:1rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+                        <span style="color:var(--neon-cyan)">🏥</span> ${t('patientTitle')}
+                    </h3>
+                    <div class="mono">
+                        <div class="profile-row"><span class="profile-label">${t('patientLabel')}</span><span class="profile-value">${t('patientValue')}</span></div>
+                        <div class="profile-row"><span class="profile-label">${t('ageLabel')}</span><span class="profile-value">${t('ageValue')}</span></div>
+                        <div class="profile-row"><span class="profile-label">${t('stateLabel')}</span><span class="profile-value" style="color:${S.cured ? 'var(--neon-emerald)' : 'var(--neon-rose)'}; font-weight:900">${S.cured ? t('stateResolved') : t('stateActive')}</span></div>
+                        <div class="profile-row"><span class="profile-label">${t('therapyLabel')}</span><span class="profile-value" style="color:${S.cured ? 'var(--neon-emerald)' : 'var(--neon-amber)'}">${S.cured ? t('therapyCured') : t('therapyChaos')}</span></div>
+                    </div>
+                    <div style="margin-top:12px;padding:14px;background:${S.cured ? 'rgba(0,255,170,0.04)' : 'rgba(255,42,109,0.04)'};border-radius:12px;border:1px solid ${S.cured ? 'rgba(0,255,170,0.12)' : 'rgba(255,42,109,0.12)'}">
+                        <div class="mono" style="font-size:0.7rem;font-weight:700;color:${S.cured ? 'var(--neon-emerald)' : 'var(--neon-rose)'}">${t('conclusionLabel')}</div>
+                        <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:5px;line-height:1.5">${S.cured ? t('conclusionCured') : t('conclusionChaos')}</p>
+                    </div>
+                </div>
+
+                <!-- Telemetry log -->
+                <div class="glass">
+                    <h3 class="mono" style="font-size:0.7rem;font-weight:700;color:var(--neon-cyan);margin-bottom:10px;letter-spacing:1px">${t('telemetryLog')}</h3>
+                    <div class="log-container mono">
+                        ${S.logs.map(l => `<div><span class="log-time">[${l.time}]</span><span class="log-msg ${l.type || ''}">${S.lang === 'bg' ? l.bg : l.en}</span></div>`).join('')}
+                    </div>
+                </div>
+
+                <!-- Test console -->
+                <div class="glass">
+                    <h3 class="mono" style="font-size:0.7rem;font-weight:700;color:var(--neon-amber);margin-bottom:6px;letter-spacing:1px">${t('console')}</h3>
+                    <p style="font-size:0.7rem;color:var(--text-dim);margin-bottom:12px">${t('consoleDesc')}</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="action-btn danger" onclick="injectSeizure()" style="font-size:0.65rem;padding:8px 16px">⚡ ${t('btnInjectSeizure')}</button>
+                        <button class="action-btn danger" onclick="injectGlutamateShock()" style="font-size:0.65rem;padding:8px 16px">☠ ${t('btnInjectGlutamate')}</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+        return html;
+    }
+
+    function ntBar(key, val, color) {
+        return `<div class="nt-row">
+            <span class="nt-name mono">${t(key)}</span>
+            <div class="nt-track"><div class="nt-fill" style="width:${val}%;background:${color}"></div></div>
+            <span class="nt-val mono" style="color:${color}">${val}%</span>
+        </div>`;
+    }
+
+    // ─── EEG TAB ───
+    function renderEEG() {
+        const bands = [
+            { id: 'delta', label: t('delta'), color: '#6366f1' },
+            { id: 'theta', label: t('theta'), color: '#06d6e0' },
+            { id: 'alpha', label: t('alpha'), color: '#00ffaa' },
+            { id: 'beta',  label: t('beta'),  color: '#ffb800' },
+            { id: 'gamma', label: t('gamma'), color: '#ff2a6d' }
+        ];
+        let html = `
+        <div class="glass">
+            <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                <span style="color:var(--neon-cyan)">📊</span> ${t('eegTitle')}
+            </h3>
+            <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.5">${t('eegDesc')}</p>
+            <div style="display:flex;flex-direction:column;gap:14px">`;
+
+        bands.forEach(b => {
+            html += `
+            <div>
+                <div class="mono" style="font-size:0.6rem;font-weight:700;color:${b.color};margin-bottom:4px;letter-spacing:1px">${b.label}</div>
+                <div class="eeg-canvas-wrap" style="height:70px">
+                    <canvas id="eeg-${b.id}" style="width:100%;height:100%"></canvas>
+                </div>
+            </div>`;
+        });
+
+        html += `</div></div>`;
+        return html;
+    }
+
+    // ─── REGIONS TAB ───
+    function renderRegions() {
+        const regions = [
+            { key: 'prefrontal', val: S.prefrontal, color: '#a855f7' },
+            { key: 'motor', val: S.motor, color: '#06d6e0' },
+            { key: 'temporal', val: S.temporal, color: '#3b82f6' },
+            { key: 'occipital', val: S.occipital, color: '#00ffaa' },
+            { key: 'parietal', val: S.parietal, color: '#ec4899' },
+            { key: 'hippocampus', val: S.hippocampus, color: '#ffb800' },
+            { key: 'amygdala', val: S.amygdala, color: '#ff2a6d' },
+            { key: 'cerebellum', val: S.cerebellum, color: '#6366f1' },
+            { key: 'brainstem', val: S.brainstem, color: '#14b8a6' },
+            { key: 'thalamus', val: S.thalamusActivity, color: '#f97316' }
+        ];
+
+        let html = `
+        <div class="glass">
+            <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                <span style="color:var(--neon-violet)">🧠</span> ${t('regionsTitle')}
+            </h3>
+            <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.5">${t('regionsDesc')}</p>
+            <div class="region-grid">`;
+
+        regions.forEach(r => {
+            const col = r.val > 80 ? 'var(--neon-emerald)' : r.val > 50 ? r.color : 'var(--text-dim)';
+            html += `
+            <div class="region-card">
+                <div class="region-name" style="color:${r.color}">${t(r.key)}</div>
+                <div class="region-activity mono" style="color:${col}">${r.val}%</div>
+                <div class="region-bar"><div class="region-bar-fill" style="width:${r.val}%;background:${r.color}"></div></div>
+            </div>`;
+        });
+
+        html += '</div></div>';
+        return html;
+    }
+
+    // ─── PILLARS TAB ───
+    function renderPillars() {
+        const pillars = [
+            { num: t('pillar1Num'), title: t('pillar1Title'), desc: t('pillar1Desc'), icon: '📡', color: 'var(--neon-cyan)' },
+            { num: t('pillar2Num'), title: t('pillar2Title'), desc: t('pillar2Desc'), icon: '⚗', color: 'var(--neon-violet)' },
+            { num: t('pillar3Num'), title: t('pillar3Title'), desc: t('pillar3Desc'), icon: '🩸', color: 'var(--neon-rose)' },
+            { num: t('pillar4Num'), title: t('pillar4Title'), desc: t('pillar4Desc'), icon: '🔒', color: 'var(--neon-emerald)' }
+        ];
+        let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px">';
+        pillars.forEach(p => {
+            html += `
+            <div class="pillar-card">
+                <div class="pillar-num mono">${p.num}</div>
+                <h3 class="pillar-title" style="display:flex;align-items:center;gap:8px"><span>${p.icon}</span> ${p.title}</h3>
+                <p class="pillar-desc">${p.desc}</p>
+            </div>`;
+        });
+        html += '</div>';
+
+        // Soul code
+        html += `
+        <div class="glass" style="margin-top:24px">
+            <h3 class="mono" style="font-size:0.8rem;font-weight:700;color:var(--neon-violet);letter-spacing:1px;margin-bottom:14px">SOUL SAFETY GATE — BRAIN COGNITIVE MODULE</h3>
+            <div style="background:#040110;border:1px solid rgba(140,80,220,0.06);border-radius:12px;padding:18px;font-size:0.75rem;line-height:1.8;color:#8eb4c2" class="mono">
+<span style="color:#6366f1">enforce</span> <span style="color:#a855f7">BRAIN_SAFETY</span> {<br>
+&nbsp;&nbsp;<span style="color:#555">// Layer 4: Seizure Z-Score Guard</span><br>
+&nbsp;&nbsp;<span style="color:#06d6e0">if</span> (seizure_z_score &gt; <span style="color:#ff2a6d">3.0</span>σ) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff2a6d">INVOKE</span>(knox_tee.<span style="color:#ffb800">hardware_lockout</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ff2a6d">HALT</span>(all_neuro_stimulators);<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span style="color:#555">// Layer 3: GABA/Glutamate Balance</span><br>
+&nbsp;&nbsp;<span style="color:#06d6e0">assert</span>(gaba_glutamate_ratio &gt; <span style="color:#00ffaa">1.5</span>);<br>
+&nbsp;&nbsp;<span style="color:#555">// Layer 2: ICP Safe Range</span><br>
+&nbsp;&nbsp;<span style="color:#06d6e0">assert</span>(icp &gt;= <span style="color:#00ffaa">7</span> &amp;&amp; icp &lt;= <span style="color:#00ffaa">15</span>);<br>
+&nbsp;&nbsp;<span style="color:#555">// Layer 1: Entropy Convergence</span><br>
+&nbsp;&nbsp;<span style="color:#06d6e0">assert</span>(entropy &lt; <span style="color:#00ffaa">0.05</span>);<br>
+}
+            </div>
+        </div>`;
+        return html;
+    }
+
+    // ─── NEUROMOD TAB ───
+    function renderNeuromod() {
+        const bciActive = bciTimer !== null;
+        const shieldOk = S.seizureZScore < S.seizureThreshold;
+
+        let html = `
+        <div class="glass">
+            <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+                <span style="color:var(--neon-pink)">🧬</span> ${t('neuromodTitle')}
+            </h3>
+            <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.5">${t('neuromodDesc')}</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                <!-- BCI Status -->
+                <div style="padding:18px;background:rgba(12,5,28,0.4);border:1px solid var(--glass-border);border-radius:14px">
+                    <div class="mono" style="font-size:0.65rem;color:var(--text-secondary);font-weight:700;letter-spacing:1px;margin-bottom:10px">${t('bciStatus')}</div>
+                    <div class="mono" style="font-size:1.1rem;font-weight:900;color:${bciActive ? 'var(--neon-emerald)' : 'var(--text-dim)'}">
+                        ${bciActive ? t('bciActive') : t('bciStandby')}
+                    </div>
+                    <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px" class="mono">
+                        <div style="display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:var(--text-secondary)">${t('hebbianLabel')}</span><span style="font-weight:700;color:var(--neon-cyan)">${S.hebbianCoherence.toFixed(1)}/10</span></div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.75rem"><span style="color:var(--text-secondary)">${t('catuskotiLabel')}</span><span style="font-weight:700;color:var(--neon-violet)">${S.catuskoti}</span></div>
+                    </div>
+                    <button class="action-btn ${bciActive ? 'secondary' : ''}" onclick="toggleBCI()" style="margin-top:16px;font-size:0.65rem;padding:8px 18px;width:100%">
+                        ${bciActive ? '⏹ ' + t('btnStopBCI') : '▶ ' + t('btnStartBCI')}
+                    </button>
+                </div>
+
+                <!-- Chronos Shield -->
+                <div style="padding:18px;background:rgba(12,5,28,0.4);border:1px solid ${shieldOk ? 'rgba(0,255,170,0.15)' : 'rgba(255,42,109,0.2)'};border-radius:14px">
+                    <div class="mono" style="font-size:0.65rem;color:var(--text-secondary);font-weight:700;letter-spacing:1px;margin-bottom:10px">${t('chronosTitle')}</div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                        <span class="mono" style="font-size:0.7rem;color:var(--text-secondary)">${t('predictiveLabel')}</span>
+                        <span class="mono" style="font-size:0.75rem;font-weight:900;color:${shieldOk ? 'var(--neon-emerald)' : 'var(--neon-rose)'}">
+                            ${shieldOk ? t('shieldIntact') : t('shieldDampened')}
+                        </span>
+                    </div>
+                    <div class="mono" style="font-size:0.75rem;display:flex;flex-direction:column;gap:6px">
+                        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-secondary)">Seizure Z-Score:</span><span style="font-weight:700;color:${S.seizureZScore > 3 ? 'var(--neon-rose)' : 'var(--neon-emerald)'}">${S.seizureZScore.toFixed(2)}σ</span></div>
+                        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-secondary)">GABA Level:</span><span style="font-weight:700;color:var(--neon-emerald)">${S.gaba}%</span></div>
+                        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-secondary)">Glutamate Level:</span><span style="font-weight:700;color:${S.glutamate > 60 ? 'var(--neon-rose)' : 'var(--neon-amber)'}">${S.glutamate}%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EEG during neuromod -->
+            <div style="margin-top:20px">
+                <div class="mono" style="font-size:0.6rem;font-weight:700;color:var(--neon-indigo);margin-bottom:6px;letter-spacing:1px">${t('beta')}</div>
+                <div class="eeg-canvas-wrap" style="height:70px"><canvas id="eeg-beta" style="width:100%;height:100%"></canvas></div>
+            </div>
+            <div style="margin-top:12px">
+                <div class="mono" style="font-size:0.6rem;font-weight:700;color:var(--neon-rose);margin-bottom:6px;letter-spacing:1px">${t('gamma')}</div>
+                <div class="eeg-canvas-wrap" style="height:70px"><canvas id="eeg-gamma" style="width:100%;height:100%"></canvas></div>
+            </div>
+        </div>`;
+        return html;
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  INIT
+    // ═══════════════════════════════════════════════════
+    window.addEventListener('DOMContentLoaded', () => {
+        render();
+        initBrainShader();
+
+        // Live EEG update loop
+        setInterval(() => {
+            // Gentle random drift of values
+            S.icp = parseFloat((S.icp + (Math.random() - 0.5) * 0.3).toFixed(1));
+            S.icp = Math.max(6, Math.min(20, S.icp));
+            S.cbf = Math.round(Math.max(40, Math.min(65, S.cbf + (Math.random() - 0.5) * 2)));
+            S.brainTemp = parseFloat((S.brainTemp + (Math.random() - 0.5) * 0.05).toFixed(1));
+            S.brainTemp = Math.max(36.0, Math.min(38.5, S.brainTemp));
+
+            // EEG band amplitudes drift
+            S.delta = Math.max(5, Math.min(50, S.delta + (Math.random() - 0.5) * 2));
+            S.theta = Math.max(5, Math.min(40, S.theta + (Math.random() - 0.5) * 2));
+            S.alpha = Math.max(10, Math.min(60, S.alpha + (Math.random() - 0.5) * 3));
+            S.beta = Math.max(10, Math.min(50, S.beta + (Math.random() - 0.5) * 2));
+            S.gamma = Math.max(3, Math.min(30, S.gamma + (Math.random() - 0.5) * 1.5));
+
+            // Region activity drift
+            const regions = ['prefrontal','motor','temporal','occipital','parietal','hippocampus','amygdala','cerebellum','brainstem','thalamusActivity'];
+            regions.forEach(r => {
+                S[r] = Math.max(15, Math.min(98, S[r] + Math.round((Math.random() - 0.5) * 4)));
+            });
+
+            // NT drift
+            if (!S.seizureActive) {
+                S.dopamine = Math.max(30, Math.min(95, S.dopamine + Math.round((Math.random() - 0.5) * 2)));
+                S.serotonin = Math.max(30, Math.min(95, S.serotonin + Math.round((Math.random() - 0.5) * 2)));
+                S.acetylcholine = Math.max(25, Math.min(90, S.acetylcholine + Math.round((Math.random() - 0.5) * 2)));
+                S.norepinephrine = Math.max(20, Math.min(85, S.norepinephrine + Math.round((Math.random() - 0.5) * 2)));
+            }
+
+            updateEEG();
+            render();
+        }, 800);
+    });
+    </script>
+</body>
+</html>

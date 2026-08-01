@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "rust-lang.rust-analyzer",
+    "ziglang.zig",
+    "ms-vscode.cpptools",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.cpptools-extension-pack",
+    "visualstudioexptteam.vscodeintellicode",
+    "ms-vsliveshare.vsliveshare",
+    "tabnine.tabnine-vscode"
+  ]
+}

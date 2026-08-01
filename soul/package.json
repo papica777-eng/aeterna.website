@@ -1,0 +1,29 @@
+{
+  "name": "soul",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate_payload.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:visual": "playwright test BRUTAL_MODULES/ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.45.0",
+    "@types/node": "^25.6.2",
+    "playwright": "^1.45.0"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.4",
+    "@stellar/stellar-sdk": "^15.1.0",
+    "dotenv": "^17.4.2",
+    "ethers": "5",
+    "express": "^5.2.1",
+    "nodemailer": "^8.0.7",
+    "stripe": "^22.1.1",
+    "ws": "^8.20.1"
+  }
+}

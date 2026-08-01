@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA — Sovereign Autonomous Cognitive Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --glass-bg: rgba(15, 18, 25, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --brand-purple: hsl(260, 85%, 65%);
+            --brand-purple-glow: hsla(260, 85%, 65%, 0.4);
+            --brand-emerald: hsl(150, 80%, 50%);
+            --text-main: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: crosshair;
+        }
+
+        body {
+            background: #050608;
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, hsla(260, 85%, 15%, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, hsla(150, 80%, 10%, 0.1) 0%, transparent 40%);
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            border-color: var(--brand-purple);
+            box-shadow: 0 0 40px var(--brand-purple-glow);
+            transform: translateY(-5px);
+        }
+
+        .purple-gradient {
+            background: linear-gradient(135deg, #fff 30%, var(--brand-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hero Visuals */
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, var(--brand-purple-glow) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--brand-purple);
+            color: var(--brand-purple);
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .btn-action {
+            background: var(--brand-purple);
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 1.25rem 2.5rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-action:hover {
+            background: #fff;
+            box-shadow: 0 0 30px #fff;
+            transform: scale(1.05);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--glass-border);
+            padding: 1.25rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--brand-purple);
+            background: var(--brand-purple-glow);
+        }
+
+        /* Price Tags */
+        .price-tag {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            opacity: 0.5;
+            letter-spacing: 0;
+            margin-left: 0.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-item i {
+            color: var(--brand-emerald);
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(5, 6, 8, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-link {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #64748b;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--brand-purple);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="hero-glow"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl font-black tracking-tighter">AETERNA<span class="text-purple-500">.</span>AIC</span>
+            </div>
+            <div class="hidden md:flex gap-12">
+                <a href="#vision" class="nav-link">VISION</a>
+                <a href="https://qantum.site" target="_blank" class="nav-link text-purple-400">NEURAL HUD</a>
+                <a href="#specs" class="nav-link">STACK</a>
+                <a href="https://veritras.online" target="_blank" class="nav-link text-emerald-400">COMMERCE</a>
+            </div>
+            <a href="#access" class="btn-action !py-3 !px-6 !text-[10px]">INITIATE</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-40 pb-20 px-6 max-w-7xl mx-auto text-center">
+        <div class="status-badge animate-pulse">
+            <i data-lucide="shield"></i>
+            EIC ACCELERATOR 2026 PILOT | PROPOSAL ID: 101327948
+        </div>
+        <h1 class="text-6xl md:text-8xl font-black tracking-tight mb-8">
+            SOVEREIGN <span class="purple-gradient">COGNITIVE</span><br>INTELLIGENCE
+        </h1>
+        <p class="text-xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+            Deploying a <span class="text-white font-bold">Sovereign Autonomous Cognitive Engine</span> for Resilient Cybersecurity and Physical AI Orchestration. 
+            Replacing cloud-dependent black boxes with 100% European deterministic logic.
+        </p>
+        <div class="flex flex-wrap justify-center gap-6">
+            <a href="https://qantum.site" target="_blank" class="btn-action">
+                <i data-lucide="layout-dashboard"></i>
+                ENTER HUD
+            </a>
+            <a href="#access" class="btn-outline">
+                <i data-lucide="zap"></i>
+                ACCESS CORES
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24">
+            <div class="text-center">
+                <div class="text-4xl font-black mb-2">1.85M</div>
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Lines of Code</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-black mb-2">TRL 6</div>
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Validated</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-black mb-2"><100ns</div>
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Core Latency</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-black mb-2">100%</div>
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">GDPR Sovereign</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="access" class="py-32 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-20">
+            <h2 class="text-4xl font-black mb-4">SOVEREIGN ACCESS</h2>
+            <p class="text-slate-400">Tiered entry to the AETERNA infrastructure. 100% deterministic billing.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Tier 1: NODE -->
+            <div class="glass-card p-10 flex flex-col">
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-4">Protocol Alpha</div>
+                <h3 class="text-2xl font-black mb-2">NODE</h3>
+                <div class="price-tag">€29<span>/mo</span></div>
+                <div class="flex-grow space-y-4 mb-10">
+                    <div class="feature-item"><i data-lucide="check"></i> Local Scan Engine</div>
+                    <div class="feature-item"><i data-lucide="check"></i> Vuln Discovery V1</div>
+                    <div class="feature-item"><i data-lucide="check"></i> Federated Intelligence</div>
+                </div>
+                <button onclick="initiateCheckout('node')" class="w-full py-4 border border-white/10 rounded-xl font-bold hover:bg-white hover:text-black transition-all">
+                    ACTIVATE NODE
+                </button>
+            </div>
+
+            <!-- Tier 2: EMPIRE -->
+            <div class="glass-card p-10 flex flex-col border-purple-500/30 scale-105 bg-purple-500/5 shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+                <div class="absolute top-4 right-4 bg-purple-500 text-black text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Recommended</div>
+                <div class="text-[10px] font-bold text-purple-400 uppercase tracking-[0.3em] mb-4">Protocol Beta</div>
+                <h3 class="text-2xl font-black mb-2">EMPIRE</h3>
+                <div class="price-tag">€99<span>/mo</span></div>
+                <div class="flex-grow space-y-4 mb-10">
+                    <div class="feature-item"><i data-lucide="check"></i> Full Self-Healing V2</div>
+                    <div class="feature-item"><i data-lucide="check"></i> Ghost Protocol</div>
+                    <div class="feature-item"><i data-lucide="check"></i> Priority 7.83Hz Sync</div>
+                </div>
+                <button onclick="initiateCheckout('empire')" class="w-full py-5 bg-purple-500 text-black font-black rounded-xl hover:bg-white transition-all shadow-[0_0_30px_rgba(168,85,247,0.4)]">
+                    ACTIVATE EMPIRE
+                </button>
+            </div>
+
+            <!-- Tier 3: CORE -->
+            <div class="glass-card p-10 flex flex-col">
+                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-4">Protocol Omega</div>
+                <h3 class="text-2xl font-black mb-2">CORE</h3>
+                <div class="price-tag">€499<span>/mo</span></div>
+                <div class="flex-grow space-y-4 mb-10">
+                    <div class="feature-item"><i data-lucide="check"></i> On-Premise Deployment</div>
+                    <div class="feature-item"><i data-lucide="check"></i> Custom PQC Hardening</div>
+                    <div class="feature-item"><i data-lucide="check"></i> 24/7 Forensic Audit</div>
+                </div>
+                <button onclick="initiateCheckout('core')" class="w-full py-4 border border-white/10 rounded-xl font-bold hover:bg-white hover:text-black transition-all">
+                    ACTIVATE CORE
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 border-t border-white/5 bg-black/50">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="text-2xl font-black mb-8">AETERNA<span class="text-purple-500">.</span>AIC</div>
+            <div class="flex justify-center gap-12 mb-12">
+                <a href="https://github.com/papica777-eng" class="nav-link">GITHUB</a>
+                <a href="https://linkedin.com/in/dimitar-prodromov" class="nav-link">LINKEDIN</a>
+                <a href="mailto:papica777@gmail.com" class="nav-link">CONNECT</a>
+            </div>
+            <div class="text-[10px] mono text-slate-600 uppercase tracking-[0.5em]">
+                RYZEN_7000_VERIFIED // ZERO_ENTROPY // 2026
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        async function initiateCheckout(plan) {
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "INITIALIZING...";
+            btn.disabled = true;
+
+            try {
+                // Determine API endpoint (default to same domain if not specified)
+                // In production, this would be your GCR endpoint or local tunnel
+                const API_BASE = "https://veritras.online"; 
+                const response = await fetch(`${API_BASE}/api/checkout/${plan}`);
+                const data = await response.json();
+                
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error(data.error || "SESSION_GENERATION_FAILED");
+                }
+            } catch (err) {
+                console.error("Payment Error:", err);
+                alert(`STRIPE_ERROR: ${err.message}`);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

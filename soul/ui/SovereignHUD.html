@@ -1,0 +1,2573 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA // Sovereign VHT HUD</title>
+
+    <!-- React & Babel Standalone (Fallback-Resilient) -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Google Fonts for Medical HUD -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-color: #04010a;
+            --purple-glass: rgba(18, 9, 36, 0.55);
+            --purple-border: rgba(181, 95, 230, 0.15);
+            --purple-glow: rgba(181, 95, 230, 0.25);
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+
+            --neon-purple: #b55fe6;
+            --neon-pink: #ff2a85;
+            --neon-emerald: #00ffaa;
+            --neon-emerald-glow: rgba(0, 255, 170, 0.3);
+            --neon-blue: #00f0ff;
+            --neon-blue-glow: rgba(0, 240, 255, 0.3);
+            --neon-red: #ff3b6f;
+            --neon-red-glow: rgba(255, 59, 111, 0.4);
+            --neon-amber: #ffb800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            cursor: crosshair;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 50% -20%, rgba(181, 95, 230, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(0, 240, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 70%, rgba(255, 42, 133, 0.03) 0%, transparent 40%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            transition: background 1s ease, background-color 1s ease;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Sovereign Purple Glassmorphism */
+        .glass-card {
+            background: var(--purple-glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--purple-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(181, 95, 230, 0.05), transparent);
+            transition: 0.8s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(181, 95, 230, 0.35);
+            box-shadow: 0 0 35px var(--purple-glow);
+            transform: translateY(-2px);
+        }
+
+        .glass-card.glow-emerald:hover {
+            border-color: var(--neon-emerald);
+            box-shadow: 0 0 35px var(--neon-emerald-glow);
+        }
+
+        .glass-card.glow-red:hover {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 35px var(--neon-red-glow);
+        }
+
+        /* Status indicators */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            position: relative;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            opacity: 0;
+            animation: ripple 1.8s infinite ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0.6);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(2.2);
+                opacity: 0;
+            }
+        }
+
+        .bg-emerald {
+            background-color: var(--neon-emerald);
+            color: var(--neon-emerald);
+        }
+
+        .bg-purple {
+            background-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+
+        .bg-blue {
+            background-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .bg-red {
+            background-color: var(--neon-red);
+            color: var(--neon-red);
+        }
+
+        .bg-amber {
+            background-color: var(--neon-amber);
+            color: var(--neon-amber);
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #020105;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1f1430;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-purple);
+        }
+
+        /* Professional tab buttons */
+        .tab-btn {
+            background: rgba(181, 95, 230, 0.02);
+            border: 1px solid var(--purple-border);
+            color: var(--text-secondary);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-btn.active {
+            border-color: var(--neon-purple);
+            color: #fff;
+            background: rgba(181, 95, 230, 0.12);
+            box-shadow: 0 0 25px rgba(181, 95, 230, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: #fff;
+            border-color: rgba(181, 95, 230, 0.3);
+            background: rgba(181, 95, 230, 0.05);
+        }
+
+        /* High-glowing Cure Trigger button */
+        .cure-btn {
+            background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+            color: #fff;
+            font-weight: 900;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            padding: 16px 42px;
+            border-radius: 50px;
+            box-shadow: 0 0 35px rgba(181, 95, 230, 0.35);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cure-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transition: 0.6s;
+        }
+
+        .cure-btn:hover {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 0 45px rgba(0, 255, 170, 0.6);
+            background: linear-gradient(135deg, var(--neon-emerald), var(--neon-blue));
+            color: #020105;
+        }
+
+        .cure-btn:hover::before {
+            left: 100%;
+        }
+
+        .cure-btn:active {
+            transform: scale(0.97) translateY(1px);
+        }
+
+        .glow-text-emerald {
+            text-shadow: 0 0 15px var(--neon-emerald-glow);
+        }
+
+        .glow-text-purple {
+            text-shadow: 0 0 15px var(--purple-glow);
+        }
+
+        .glow-text-blue {
+            text-shadow: 0 0 15px var(--neon-blue-glow);
+        }
+
+        .glow-text-red {
+            text-shadow: 0 0 15px var(--neon-red-glow);
+        }
+
+        /* Code display styling */
+        .code-container {
+            background: #080310;
+            border: 1px solid rgba(181, 95, 230, 0.08);
+            border-radius: 14px;
+            padding: 20px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #b2ccd6;
+            overflow-x: auto;
+        }
+
+        /* Emergency theme overrides */
+        .emergency-theme {
+            background-color: #0b0104 !important;
+            background-image:
+                radial-gradient(circle at 50% -20%, rgba(255, 59, 111, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(255, 184, 0, 0.03) 0%, transparent 40%) !important;
+        }
+
+        .emergency-card {
+            border-color: var(--neon-red) !important;
+            box-shadow: 0 0 35px var(--neon-red-glow) !important;
+            background: rgba(22, 6, 12, 0.85) !important;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.015);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2.2s infinite ease-in-out;
+        }
+
+        /* Perfectly balanced dashboard grid layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .column-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        #app-root {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Table styling refinements */
+        .sovereign-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 12px;
+        }
+
+        .sovereign-table th {
+            padding: 16px;
+            text-align: left;
+            color: var(--text-secondary);
+            border-bottom: 2px solid rgba(181, 95, 230, 0.15);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sovereign-table td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(181, 95, 230, 0.05);
+            vertical-align: middle;
+            transition: background 0.3s ease;
+        }
+
+        .sovereign-table tr:hover td {
+            background: rgba(181, 95, 230, 0.03);
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0.4;
+            }
+        }
+
+        /* 3D Visualizer & Immersive Mode transitions */
+        .hud-transition {
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hud-hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(-20px);
+        }
+
+        /* Floating surgical controls card */
+        .surgical-controls-card {
+            position: fixed;
+            top: 100px;
+            left: 40px;
+            width: 320px;
+            z-index: 50;
+            max-height: calc(100vh - 160px);
+            overflow-y: auto;
+            border-color: rgba(181, 95, 230, 0.3) !important;
+            box-shadow: 0 0 30px rgba(181, 95, 230, 0.15) !important;
+        }
+
+        .surgical-coords-card {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 320px;
+            z-index: 50;
+            border-color: var(--neon-emerald) !important;
+            box-shadow: 0 0 30px var(--neon-emerald-glow) !important;
+        }
+
+        /* Sovereign pointer events mapping */
+        #app-root,
+        main,
+        header,
+        footer {
+            pointer-events: none;
+        }
+
+        .glass-card,
+        button,
+        input,
+        select,
+        .tab-btn,
+        a,
+        header>div,
+        footer>div,
+        .surgical-controls-card,
+        .surgical-coords-card {
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- VHT-BRAIN Volume Raymarching Substrate Canvas -->
+    <canvas id="vht-brain-core"
+        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background-color: #030107;"></canvas>
+
+    <div id="app-root">
+        <!-- Self-Healing Fallback Visual preloaded -->
+        <div id="fallback-container"
+            style="display: flex; flex-direction: column; min-height: 100vh; padding: 40px; justify-content: center; align-items: center;">
+            <div style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 20px;" class="mono">
+                [VHT SUBSTRATE]: INITIALIZING SOVEREIGN PURPLE HUD...
+            </div>
+            <div class="status-dot bg-purple animate-pulse" style="width: 24px; height: 24px;"></div>
+        </div>
+    </div>
+
+    <!-- Авариен Овърлей (Скрит по подразбиране) -->
+    <div id="emergency-overlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 0, 5, 0.95); z-index: 9999; justify-content: center; align-items: center; font-family: monospace;">
+        <!-- Filled reactively in JS -->
+    </div>
+
+    <!-- Complete Vanilla HUD Engine (Used for 100% Offline-Recovery & CDN Bypass) -->
+    <script>
+        // System state logic
+        let state = {
+            activeTab: "dashboard",
+            language: "bg",
+            curedState: false,
+            isTransitioning: false,
+            entropy: 3.56,
+            cPeptide: 0.01,
+            homaIr: 2.40,
+            neuralLinkConnected: true,
+            emergencyMode: false,
+            ph: 7.41,
+            oxygen: 98,
+            zScore: 0.42,
+            empathyAnomaly: false,
+            fesStimulationActive: false,
+            hebbianConfidence: 8.8,
+            bdnfLevel: 1.0,
+            glut4Upregulation: 1.0,
+            fesStatus: "STANDBY",
+            gaitPhase: 0,
+            catuskotiState: "SYNERGY",
+            fesActiveChannels: {
+                plantar: 0,
+                dorsiflex: 0,
+                quad: 0,
+                hamstring: 0
+            },
+            logs: [
+                { time: "12:12:00", bg: "INIT: AETERNA VHT ядрото е онлайн. Knox офлайн пясъчник е активиран.", en: "INIT: AETERNA VHT core online. Knox offline sandbox engaged." },
+                { time: "12:12:01", bg: "INGEST: Заредени 900 близнака от Националния регистър на България за 2015 г.", en: "INGEST: Loaded 900 patient twins from Bulgaria 2015 national registry." },
+                { time: "12:12:02", bg: "TELEMETRY: Активно високоентропийно състояние (Ентропия = 3.56). Некомпенсирани глюкозни криви.", en: "TELEMETRY: High-entropy state active (Entropy = 3.56). Uncompensated glucose curves." }
+            ],
+            hudVisible: true,
+            clipX: 1.0,
+            clipY: 1.0,
+            clipZ: 1.0,
+            windowVal: 0.60,
+            levelVal: 0.30,
+            renderMode: 1, // Default to BDNF for stunning visual impact!
+            autoRotate: true,
+            rotationX: 0.3,
+            rotationY: 0.5,
+            clickCoords: null,
+            bdnfIntensity: 1.0,
+            invModelViewProj: new Float32Array(16),
+            modelMatrixInverse: new Float32Array(16)
+        };
+
+        const rawChaoticData = [
+            { val: 12.4 }, { val: 14.8 }, { val: 16.5 },
+            { val: 15.2 }, { val: 16.1 }, { val: 13.2 },
+            { val: 14.9 }, { val: 15.8 }, { val: 11.2 },
+            { val: 13.9 }, { val: 16.2 }, { val: 12.8 },
+            { val: 14.2 }
+        ];
+
+        const curedData = [
+            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
+            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
+            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
+            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
+            { val: 4.80 }
+        ];
+
+        let currentGlucose = [...rawChaoticData];
+
+        const cohortData = [
+            { group: "groupPediatric", count: 120, baseline: "11.84%", conv: "13.55%", v3: "89.92%", v4: "100.00%", hypoConv: 482.2, hypoV4: 0.0 },
+            { group: "groupYouth", count: 240, baseline: "15.46%", conv: "21.31%", v3: "79.51%", v4: "100.00%", hypoConv: 12.4, hypoV4: 0.0 },
+            { group: "groupMiddle", count: 180, baseline: "13.01%", conv: "23.02%", v3: "80.99%", v4: "100.00%", hypoConv: 15.9, hypoV4: 0.0 },
+            { group: "groupMature", count: 200, baseline: "14.10%", conv: "28.03%", v3: "83.77%", v4: "100.00%", hypoConv: 6.6, hypoV4: 0.0 },
+            { group: "groupElderly", count: 130, baseline: "16.38%", conv: "27.11%", v3: "79.40%", v4: "100.00%", hypoConv: 13.1, hypoV4: 0.0 },
+            { group: "groupCentenarian", count: 30, baseline: "21.70%", conv: "24.47%", v3: "85.21%", v4: "100.00%", hypoConv: 25.0, hypoV4: 0.0 }
+        ];
+
+        const translations = {
+            bg: {
+                hudTitle: "AETERNA // SOVEREIGN VHT HUD",
+                neuralLink: "НЕВРОННА ВРЪЗКА:",
+                connected: "СВЪРЗАНА",
+                severed: "ПРЕКЪСНАТА",
+                knoxHeartbeat: "KNOX HEARTBEAT:",
+                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026",
+                tabScientific: "Научен Панел (Лекари)",
+                tabCohort: "Кохортно Изследване (900 Близнаци)",
+                tabPillars: "Четирите Стълба на Сигурност",
+                tabFes: "BCI-FES Невро-Локомоция",
+                btnInduceCure: "ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ",
+                btnRestoreChaos: "ВЪЗСТАНОВЯВАНЕ НА ХАОСА",
+                btnResetSimulation: "RESET SIMULATION",
+                btnInjectSpasm: "ИНЖЕКТИРАНЕ НА СПАЗЪМ",
+                btnInjectAnomaly: "INJECT METABOLIC ANOMALY",
+                btnStartFes: "СТАРТ НА CLOSED-LOOP FES",
+                btnStopFes: "СПИРАНЕ НА CLOSED-LOOP FES",
+                criticalAlert: "⚠️ КРИТИЧНА ТРЕВОГА",
+                lockoutEnforced: "AURA SOVEREIGN METABOLIC LOCKOUT ENFORCED",
+                lockoutDesc: "Засечено критично отклонение от <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> в субстрата на пациента (Layer 4 Z-score Limit).<br><br>Автоматичните инсулинови/пептидни помпи са <span style=\"color: #ff0055; font-weight: bold;\">ХАРДУЕРНО БЛОКИРАНИ</span> чрез Samsung Knox TEE криптографски подпис на апаратно ниво за предотвратяване на фатален медицински изход.",
+                emergencyModeActive: "EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED",
+                emergencyBannerDesc: "Системата премина в авариен офлайн режим. Всички команди се подписват хардуерно от **Samsung Knox TEE** директно на силиция, гарантирайки поддържането на безопасни дози и предотвратяване на грешки.",
+                auraShieldActive: "🛡️ AURA INTEGRITY SHIELD ACTIVE",
+                auraShieldCompromised: "🛡️ AURA INTEGRITY SHIELD COMPROMISED",
+                shieldEnforced: "LAYER 4 ENFORCED",
+                shieldLockout: "LOCKOUT ACTIVE",
+                statusActiveDesc: "Всички жизнени показатели са математически проверени и потвърдени спрямо критичния праг от <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
+                statusCompromisedDesc: "Засечено критично излизане от нормите за безопасност. Автоматичното дозиране е преустановено криптографски.",
+                bloodPh: "pH НА КРЪВТА",
+                normalPh: "Норма: 7.35 - 7.45",
+                oxygenSat: "КИСЛОРОДНО НАСИЩАНЕ (O₂)",
+                normalO2: "Норма: 95% - 100%",
+                metabolicZscore: "METABOLIC Z-SCORE",
+                criticalZscore: "Критичен праг: >3.0σ",
+                glycemicTrajectory: "Гликемична траектория на Ден 2 (Steady-State)",
+                glycemicDesc: "Метаболитна крива на пациент P-402 при симулация. Зелената зона (4.0 - 10.0 mmol/L) е клиничната норма.",
+                globalEntropy: "GLOBAL ENTROPY",
+                glucoseLabel: "Глюкоза (Glucose)",
+                normalGlucose: "Норма: 4.5 - 6.0 mmol/L",
+                endogenousCpeptide: "Ендогенен C-Пептид",
+                normalCpeptide: "Норма: 0.26 - 1.39 nmol/L",
+                homaIrIndex: "HOMA-IR Индекс",
+                normalHomaIr: "Норма: < 1.0 (Сензитивност)",
+                patientProfile: "Описание на Пациента",
+                patientLabel: "ПАЦИЕНТ:",
+                ageWeightLabel: "ВЪЗРАСТ / ТЕГЛО:",
+                ageWeightVal: "9 години / 32 кг",
+                bypassStateLabel: "БАЙПАС СЪСТОЯНИЕ:",
+                bypassAtrophy: "SEVERE_PANCREATIC_ATROPHY",
+                bypassReversion: "BIOLOGICAL_REVERSION",
+                activeInsulinLabel: "АКТИВЕН ИНСУЛИН:",
+                insulinAuto: "0.00 U (Автоложна регулация)",
+                insulinExternal: "4.50 U (Външна помпа)",
+                clinicalConclusion: "КЛИНИЧЕН ИЗВОД:",
+                conclusionCured: "Появата на ендогенен C-пептид (0.90 nmol/L) в съчетание с пълно периферно възстановяване на инсулиновата чувствителност (HOMA-IR = 1.0) бележи успешна Pax4-индуцирана бета-клетъчна регенерация и автологична терапия.",
+                conclusionChaos: "Пациентът е в хаотична метаболитна декомпенсация с абсолютен инсулинов дефицит. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.",
+                telemetryLog: "LIVE_SUBSTRATE_TELEMETRY_LOG",
+                engConsole: "ENGINEERING CONSOLE // TEST INJECTORS",
+                engConsoleDesc: "Симулиране на критична метаболитна декомпенсация за стрес-тест на Layer 4 безопасността.",
+                cohortTitle: "Сравнителен кохортен екран (900 виртуални близнаци)",
+                cohortDesc: "Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Националния регистър за 2015 г.",
+                ageGroup: "Възрастова Група",
+                count: "Брой",
+                baselineTir: "Базов TIR (2015)",
+                conventionalTir: "Конвенционален TIR",
+                v3Tir: "VHT v3.0 TIR",
+                v4Tir: "v4.0 Биологичен TIR",
+                baselineHypo: "Базови Хипогликемии",
+                v4Hypo: "v4.0 Хипогликемии",
+                groupPediatric: "0-14 (Педиатричен)",
+                groupYouth: "15-44 (Младежка възраст)",
+                groupMiddle: "45-59 (Средна възраст)",
+                groupMature: "60-74 (Зряла възраст)",
+                groupElderly: "75-89 (Старческа възраст)",
+                groupCentenarian: "90+ (Дълголетници)",
+                pillar1Num: "СТЪЛБ 1",
+                pillar1Title: "Фармакотерапевтичен Синхрон",
+                pillar1Desc: "Математическа защита блокира опасни дози при концентрирани форми на прандиален инсулин (U-200, U-300) без съответна механична калибрация.",
+                pillar2Num: "СТЪЛБ 2",
+                pillar2Title: "Диететичен Контрол",
+                pillar2Desc: "Превантивно 15% намаление на въглехидратния коефициент (ICR) сутрин за блокиране на Dawn Phenomenon резистентността.",
+                pillar3Num: "СТЪЛБ 3",
+                pillar3Title: "Физическа Активност",
+                pillar3Desc: "Моделиране на GLUT4 транслокацията при аеробни спортове. Превантивно 30% до 50% свиване на болуса за предотвратяване на хипогликемии.",
+                pillar4Num: "СТЪЛБ 4",
+                pillar4Title: "AURA Integrity Guard",
+                pillar4Desc: "Реалновремево изчисляване на Z-Score за pH и кислородно насищане. Превишаването на 3.0σ прага задейства TEE Knox lockout.",
+                soulCodeTitle: "Физиологичен код на безопасност (SOUL Safety Gate)",
+                fesTitle: "4-Канален Teslasuit Локомоторен Режим",
+                fesDesc: "Динамично картографиране на биоелектрическа стимулация за периферно мускулно активиране и Hebbian pairing.",
+                gaitTimelineTitle: "Времева скала на стъпката (Gait Cycle Phase)",
+                heelStrike: "Удар на пета (0%)",
+                heelOff: "Вдигане на пета (48% spastic check)",
+                swingStart: "Начало на замах (60%)",
+                terminalSwing: "Терминален замах (100%)",
+                neurometabolicEvidence: "Невро-метаболитни доказателства & биомаркери",
+                hebbianPairingTitle: "Биомеханичен трансфер и Hebbian pairing:",
+                hebbianPairingDesc: "Чрез синхронизиране на когнитивното намерение на пациента (BCI) с електрическото задействане на Teslasuit (под 50 ms латентност), системата отключва Hebbian пластичност. Увеличената сила на съкращението задейства AMPK/CaMKII пътищата в скелетните мускули, заставяйки GLUT4 везикулите да се преместят към клетъчната мембрана и да почистят глюкозата самостоятелно.",
+                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & MOTOR RESOLVER",
+                predictiveStatus: "Предиктивен статус:",
+                shieldIntact: "SHIELD INTACT (ACTIVE)",
+                shieldDampened: "DAMPENED (SAFE LOCKOUT)",
+                hebbianConfidenceLabel: "Hebbian BCI Confidence:",
+                chronosPidLabel: "Chronos PID Gains:",
+                catuskotiStateLabel: "CATUSKOTI STATE",
+                gaitStatusStandby: "STANDBY",
+                gaitStatusStance: "STANCE_PHASE",
+                gaitStatusSwing: "SWING_PHASE",
+                vivisectorTitle: "Синтетична Леталност (Vivisector)",
+                vivisectorDesc: "Модулът OMNI-VIVISECTOR извършва неинвазивен динамичен анализ (Runtime Verification) на агенти чрез eBPF куки на ниво ядро и TEE хардуерна изолация. Интроспекцията съчетава XAI (Explainable AI) за невронни структури с формално верифицирани O(1) Taint Traversal правила, гарантиращи EAL4+ съответствие без латентност.",
+                state1Title: "STATE 1: TRUE",
+                state1Desc: "Истински клиничен експлоит (Synthetic Lethality) открит.",
+                state2Title: "STATE 2: FALSE",
+                state2Desc: "Токсичен фалшив сигнал. Метаболитният път е защитен.",
+                state3Title: "STATE 3: PARADOX",
+                state3Desc: "Туморен байпас. Сигналът е пренасочен през алтернативен път.",
+                btnVivisector: "СТАРТ НА VIVISECTOR"
+            },
+            en: {
+                hudTitle: "AETERNA // SOVEREIGN VHT HUD",
+                neuralLink: "NEURAL LINK:",
+                connected: "CONNECTED",
+                severed: "SEVERED",
+                knoxHeartbeat: "KNOX HEARTBEAT:",
+                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026",
+                tabScientific: "Scientific Panel (Physicians)",
+                tabCohort: "Cohort Study (900 Twins)",
+                tabPillars: "Four Pillars of Security",
+                tabFes: "BCI-FES Neuro-Locomotion",
+                btnInduceCure: "INDUCE BIOLOGICAL CURE",
+                btnRestoreChaos: "RESTORE METABOLIC CHAOS",
+                btnResetSimulation: "RESET SIMULATION",
+                btnInjectSpasm: "INJECT MUSCLE SPASM",
+                btnInjectAnomaly: "INJECT METABOLIC ANOMALY",
+                btnStartFes: "START CLOSED-LOOP FES",
+                btnStopFes: "STOP CLOSED-LOOP FES",
+                criticalAlert: "⚠️ CRITICAL ALERT",
+                lockoutEnforced: "AURA SOVEREIGN METABOLIC LOCKOUT ENFORCED",
+                lockoutDesc: "Detected critical deviation of <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> in the patient's substrate (Layer 4 Z-score Limit).<br><br>Automatic insulin/peptide pumps are <span style=\"color: #ff0055; font-weight: bold;\">HARDWARE LOCKED</span> via Samsung Knox TEE cryptographic signature at the silicon level to prevent fatal medical outcomes.",
+                emergencyModeActive: "EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED",
+                emergencyBannerDesc: "The system has transitioned to emergency offline mode. All commands are hardware-signed by **Samsung Knox TEE** directly on the silicon, ensuring safe dosages and preventing metabolic accidents.",
+                auraShieldActive: "🛡️ AURA INTEGRITY SHIELD ACTIVE",
+                auraShieldCompromised: "🛡️ AURA INTEGRITY SHIELD COMPROMISED",
+                shieldEnforced: "LAYER 4 ENFORCED",
+                shieldLockout: "LOCKOUT ACTIVE",
+                statusActiveDesc: "All vital metrics are mathematically verified and confirmed against the critical threshold of <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
+                statusCompromisedDesc: "Critical safety deviation detected. Automatic dosing has been cryptographically suspended.",
+                bloodPh: "BLOOD pH",
+                normalPh: "Normal: 7.35 - 7.45",
+                oxygenSat: "OXYGEN SATURATION (O₂)",
+                normalO2: "Normal: 95% - 100%",
+                metabolicZscore: "METABOLIC Z-SCORE",
+                criticalZscore: "Critical threshold: >3.0σ",
+                glycemicTrajectory: "Glycemic Trajectory Day 2 (Steady-State)",
+                glycemicDesc: "Simulated metabolic curve of patient P-402. The green zone (4.0 - 10.0 mmol/L) represents the clinical norm.",
+                globalEntropy: "GLOBAL ENTROPY",
+                glucoseLabel: "Glucose",
+                normalGlucose: "Normal: 4.5 - 6.0 mmol/L",
+                endogenousCpeptide: "Endogenous C-Peptide",
+                normalCpeptide: "Normal: 0.26 - 1.39 nmol/L",
+                homaIrIndex: "HOMA-IR Index",
+                normalHomaIr: "Normal: < 1.0 (Sensitivity)",
+                patientProfile: "Patient Profile",
+                patientLabel: "PATIENT:",
+                ageWeightLabel: "AGE / WEIGHT:",
+                ageWeightVal: "9 years / 32 kg",
+                bypassStateLabel: "BYPASS STATE:",
+                bypassAtrophy: "SEVERE_PANCREATIC_ATROPHY",
+                bypassReversion: "BIOLOGICAL_REVERSION",
+                activeInsulinLabel: "ACTIVE INSULIN:",
+                insulinAuto: "0.00 U (Autologous regulation)",
+                insulinExternal: "4.50 U (External pump)",
+                clinicalConclusion: "CLINICAL CONCLUSION:",
+                conclusionCured: "The appearance of endogenous C-peptide (0.90 nmol/L) in combination with complete peripheral restoration of insulin sensitivity (HOMA-IR = 1.0) marks successful Pax4-induced beta-cell regeneration and autologous therapy.",
+                conclusionChaos: "The patient is in chaotic metabolic decompensation with absolute insulin deficiency. Induce the biological restart via the main recovery button.",
+                telemetryLog: "LIVE_SUBSTRATE_TELEMETRY_LOG",
+                engConsole: "ENGINEERING CONSOLE // TEST INJECTORS",
+                engConsoleDesc: "Simulate critical metabolic decompensation to stress-test Layer 4 safety protocols.",
+                cohortTitle: "Comparative Cohort Screen (900 Virtual Twins)",
+                cohortDesc: "Scaling the autologous cure v4.0 across the entire demographic sample of the 2015 National Registry.",
+                ageGroup: "Age Group",
+                count: "Count",
+                baselineTir: "Baseline TIR (2015)",
+                conventionalTir: "Conventional TIR",
+                v3Tir: "VHT v3.0 TIR",
+                v4Tir: "v4.0 Biological TIR",
+                baselineHypo: "Baseline Hypoglycemic Events",
+                v4Hypo: "v4.0 Hypoglycemic Events",
+                groupPediatric: "0-14 (Pediatric)",
+                groupYouth: "15-44 (Youth)",
+                groupMiddle: "45-59 (Middle Age)",
+                groupMature: "60-74 (Mature Age)",
+                groupElderly: "75-89 (Elderly)",
+                groupCentenarian: "90+ (Centenarians)",
+                pillar1Num: "PILLAR 1",
+                pillar1Title: "Pharmacotherapeutic Synchrony",
+                pillar1Desc: "Mathematical safety locks block dangerous doses of concentrated prandial insulin (U-200, U-300) without corresponding mechanical calibration.",
+                pillar2Num: "PILLAR 2",
+                pillar2Title: "Dietary Control",
+                pillar2Desc: "Preemptive 15% reduction of the insulin-to-carbohydrate ratio (ICR) in the morning to block Dawn Phenomenon resistance.",
+                pillar3Num: "PILLAR 3",
+                pillar3Title: "Physical Activity",
+                pillar3Desc: "Modeling of GLUT4 translocation during aerobic sports. Preemptive 30% to 50% reduction of the bolus to prevent hypoglycemic events.",
+                pillar4Num: "PILLAR 4",
+                pillar4Title: "AURA Integrity Guard",
+                pillar4Desc: "Real-time calculation of Z-Score for pH and oxygen saturation. Exceeding the 3.0σ threshold triggers the TEE Knox lockout.",
+                soulCodeTitle: "Physiological safety code (SOUL Safety Gate)",
+                fesTitle: "4-Channel Teslasuit Locomotor Mode",
+                fesDesc: "Dynamic mapping of bioelectrical stimulation for peripheral muscle activation and Hebbian pairing.",
+                gaitTimelineTitle: "Gait Cycle Phase Timeline",
+                heelStrike: "Heel strike (0%)",
+                heelOff: "Heel off (48% spastic check)",
+                swingStart: "Swing phase start (60%)",
+                terminalSwing: "Terminal swing (100%)",
+                neurometabolicEvidence: "Neurometabolic evidence & biomarkers",
+                hebbianPairingTitle: "Biomechanical transfer and Hebbian pairing:",
+                hebbianPairingDesc: "By synchronizing the patient's cognitive intent (BCI) with the electrical triggering of the Teslasuit (under 50 ms latency), the system unlocks Hebbian plasticity. The increased contraction force triggers AMPK/CaMKII pathways in skeletal muscles, causing GLUT4 vesicles to translocate to the cell membrane and clear glucose independently.",
+                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & MOTOR RESOLVER",
+                predictiveStatus: "Predictive status:",
+                shieldIntact: "SHIELD INTACT (ACTIVE)",
+                shieldDampened: "DAMPENED (SAFE LOCKOUT)",
+                hebbianConfidenceLabel: "Hebbian BCI Confidence:",
+                chronosPidLabel: "Chronos PID Gains:",
+                catuskotiStateLabel: "CATUSKOTI STATE",
+                gaitStatusStandby: "STANDBY",
+                gaitStatusStance: "STANCE_PHASE",
+                gaitStatusSwing: "SWING_PHASE",
+                vivisectorTitle: "Synthetic Lethality (Vivisector)",
+                vivisectorDesc: "The OMNI-VIVISECTOR module executes non-intrusive dynamic analysis (Runtime Verification) of domain micro-agents using kernel-level eBPF hooks and TEE hardware isolation. The introspection engine combines XAI (Explainable AI) for neural structures with formal O(1) Taint Traversal rules, ensuring EAL4+ compliance with zero latency overhead.",
+                state1Title: "STATE 1: TRUE",
+                state1Desc: "True clinical exploit (Synthetic Lethality) detected.",
+                state2Title: "STATE 2: FALSE",
+                state2Desc: "Toxic false signal. The metabolic pathway is protected.",
+                state3Title: "STATE 3: PARADOX",
+                state3Desc: "Tumor bypass. The signal is rerouted through an alternative pathway.",
+                btnVivisector: "START VIVISECTOR"
+            }
+        };
+
+        function t(key, vars = {}) {
+            const lang = state.language || "bg";
+            let txt = (translations[lang] && translations[lang][key]) || (translations["bg"] && translations["bg"][key]) || key;
+            for (const [k, v] of Object.entries(vars)) {
+                txt = txt.replace(`{${k}}`, v);
+            }
+            return txt;
+        }
+
+        function setLanguage(lang) {
+            state.language = lang;
+            renderVanillaHUD();
+        }
+
+        function addLogEntry(bgMsg, enMsg) {
+            const timeStr = new Date().toLocaleTimeString();
+            state.logs.push({ time: timeStr, bg: bgMsg, en: enMsg || bgMsg });
+            if (state.logs.length > 15) state.logs.shift();
+            renderVanillaHUD();
+        }
+
+        function triggerCureRestoration() {
+            if (state.isTransitioning || state.curedState) return;
+            state.isTransitioning = true;
+            addLogEntry("BIO_CURE_INIT: ИНИЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ...", "BIO_CURE_INIT: INITIATING BIOLOGICAL CURE...");
+            addLogEntry("ТРАНСФОРМАЦИЯ: Мобилизиране на Pax4 бета-регенеративен отговор...", "TRANSFORMATION: Mobilizing Pax4 beta-regenerative response...");
+
+            let duration = 3000;
+            let intervalTime = 50;
+            let steps = duration / intervalTime;
+            let step = 0;
+
+            const timer = setInterval(() => {
+                step++;
+                let pct = step / steps;
+
+                state.entropy = parseFloat((3.56 - (3.56 - 0.05) * pct).toFixed(2));
+                state.cPeptide = parseFloat((0.01 + (0.90 - 0.01) * pct).toFixed(2));
+                state.homaIr = parseFloat((2.40 - (2.40 - 1.00) * pct).toFixed(2));
+
+                currentGlucose = rawChaoticData.map((d, i) => {
+                    const diff = d.val - curedData[i].val;
+                    return {
+                        val: parseFloat((d.val - diff * pct).toFixed(2))
+                    };
+                });
+
+                if (step >= steps) {
+                    clearInterval(timer);
+                    state.entropy = 0.05;
+                    state.cPeptide = 0.90;
+                    state.homaIr = 1.00;
+                    currentGlucose = [...curedData];
+                    state.curedState = true;
+                    state.isTransitioning = false;
+                    addLogEntry("SUCCESS: БИОЛОГИЧНО ИЗЛЕКУВАНЕ: 100% TIR УСПЕШНО ВАЛИДИРАНО.", "SUCCESS: BIOLOGICAL CURE: 100% TIR SUCCESSFULLY VALIDATED.");
+                }
+                renderVanillaHUD();
+            }, intervalTime);
+        }
+
+        function resetCureState() {
+            state.curedState = false;
+            state.isTransitioning = false;
+            state.entropy = 3.56;
+            state.cPeptide = 0.01;
+            state.homaIr = 2.40;
+            currentGlucose = [...rawChaoticData];
+            addLogEntry("SYSTEM_RESET: Нулиране на метаболитните параметри към некомпенсиран хаос.", "SYSTEM_RESET: Resetting metabolic parameters to uncompensated chaos.");
+            renderVanillaHUD();
+        }
+
+        function handleNeuralLinkToggle(e) {
+            state.neuralLinkConnected = e.checked;
+            state.emergencyMode = !state.neuralLinkConnected;
+
+            if (state.emergencyMode) {
+                document.body.classList.add("emergency-theme");
+                addLogEntry("CRITICAL_ALERT: NEURAL LINK: ПРЕКЪСНАТ. Превключване в Emergency_Local_Mode!", "CRITICAL_ALERT: NEURAL LINK: SEVERED. Switching to Emergency_Local_Mode!");
+                addLogEntry("SECURE_KNOX: KNOX TEE: Активирана локална изолация на жизненоважните параметри.", "SECURE_KNOX: KNOX TEE: Local isolation of vital parameters activated.");
+            } else {
+                document.body.classList.remove("emergency-theme");
+                addLogEntry("ONLINE: NEURAL LINK: ВЪЗСТАНОВЕН. Knox Heartbeat е синхронизиран.", "ONLINE: NEURAL LINK: RESTORED. Knox Heartbeat synchronized.");
+            }
+            renderVanillaHUD();
+        }
+
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            renderVanillaHUD();
+        }
+
+        let gaitTimer = null;
+        function toggleGaitSimulation() {
+            if (state.fesStimulationActive) {
+                clearInterval(gaitTimer);
+                state.fesStimulationActive = false;
+                state.fesActiveChannels = { plantar: 0, dorsiflex: 0, quad: 0, hamstring: 0 };
+                state.fesStatus = "STANDBY";
+                addLogEntry("FES_STOP: Спиране на closed-loop FES локомоцията.", "FES_STOP: Disengaging closed-loop FES locomotion.");
+                renderVanillaHUD();
+                return;
+            }
+
+            state.fesStimulationActive = true;
+            state.catuskotiState = "SYNERGY";
+            state.bdnfLevel = 1.0;
+            state.glut4Upregulation = 1.0;
+            addLogEntry("FES_START: Иницииране на 4-канален Teslasuit локомоторен режим...", "FES_START: Initiating 4-channel Teslasuit locomotor mode...");
+
+            gaitTimer = setInterval(() => {
+                state.gaitPhase = (state.gaitPhase + 4) % 104;
+                if (state.gaitPhase >= 100) state.gaitPhase = 0;
+
+                const phase = state.gaitPhase;
+                if (phase < 60) {
+                    state.fesActiveChannels.plantar = 45.0 + Math.sin(phase / 10) * 5;
+                    state.fesActiveChannels.dorsiflex = 0;
+                    state.fesActiveChannels.quad = 0;
+                    state.fesActiveChannels.hamstring = 0;
+                    state.fesStatus = "STANCE_PHASE";
+                } else if (phase >= 60 && phase < 80) {
+                    state.fesActiveChannels.plantar = 0;
+                    state.fesActiveChannels.dorsiflex = 35.0 + Math.cos(phase / 5) * 4;
+                    state.fesActiveChannels.quad = 30.0 + Math.sin(phase / 4) * 3;
+                    state.fesActiveChannels.hamstring = 0;
+                    state.fesStatus = "SWING_PHASE";
+                } else {
+                    state.fesActiveChannels.plantar = 0;
+                    state.fesActiveChannels.dorsiflex = 35.0;
+                    state.fesActiveChannels.quad = 0;
+                    state.fesActiveChannels.hamstring = 25.0 + Math.sin(phase / 4) * 3;
+                    state.fesStatus = "SWING_PHASE";
+                }
+
+                if (state.bdnfLevel < 2.49) state.bdnfLevel += 0.05;
+                else state.bdnfLevel = 2.49;
+
+                if (state.glut4Upregulation < 1.47) state.glut4Upregulation += 0.02;
+                else state.glut4Upregulation = 1.47;
+
+                if (!state.curedState) {
+                    currentGlucose = currentGlucose.map(item => {
+                        let newVal = item.val - 0.05;
+                        if (newVal < 5.8) newVal = 5.8;
+                        return { val: parseFloat(newVal.toFixed(2)) };
+                    });
+                    addLogEntry(
+                        "AMPK_GLUT4: Инсулин-независимо изчистване: GLUT4 уп-регулация = " + state.glut4Upregulation.toFixed(2) + "x",
+                        "AMPK_GLUT4: Insulin-independent clearance: GLUT4 upregulation = " + state.glut4Upregulation.toFixed(2) + "x"
+                    );
+                }
+
+                renderVanillaHUD();
+            }, 150);
+        }
+
+        function triggerFesSpasticityLockout() {
+            if (!state.fesStimulationActive) {
+                toggleGaitSimulation();
+            }
+
+            state.fesStimulationActive = false;
+            clearInterval(gaitTimer);
+
+            state.fesActiveChannels.plantar = 42.0;
+            state.fesActiveChannels.dorsiflex = 35.0;
+            state.fesActiveChannels.quad = 15.0;
+            state.fesActiveChannels.hamstring = 20.0;
+            state.catuskotiState = "SPASTICITY_LOCKOUT";
+
+            addLogEntry(
+                "WARNING: TISSUE_MOTOR_RESOLVER: Засечено нефизиологично повишаване на Dorsiflexor до 35.0 mA при опора (0.48s)!",
+                "WARNING: TISSUE_MOTOR_RESOLVER: Non-physiological increase of Dorsiflexor to 35.0 mA detected during stance (0.48s)!"
+            );
+            addLogEntry(
+                "CHRONOS_LOCKOUT: CHRONOS LOOK-AHEAD: Засечен тренд на антагонистичен ко-спазъм. Изключване на FES каналите!",
+                "CHRONOS_LOCKOUT: CHRONOS LOOK-AHEAD: Antagonistic co-spasm trend detected. Disabling FES channels!"
+            );
+            addLogEntry(
+                "KNOX_SAFETY: Safe-Mode:engage. PID коефициентите са превантивно снижени до kp=0.42, kd=0.21.",
+                "KNOX_SAFETY: Safe-Mode:engage. PID gains preemptively damped to kp=0.42, kd=0.21."
+            );
+
+            renderVanillaHUD();
+        }
+
+        const width = 600;
+        const height = 240;
+        const padding = 35;
+
+        function getSvgCoords(val, idx) {
+            const x = padding + (idx / (currentGlucose.length - 1)) * (width - padding * 2);
+            const y = height - padding - ((val - 3) / 15) * (height - padding * 2);
+            return { x, y };
+        }
+
+        function buildSvgPath() {
+            return currentGlucose.map((d, i) => {
+                const { x, y } = getSvgCoords(d.val, i);
+                return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+            }).join(' ');
+        }
+
+        function buildSvgAreaPath() {
+            const first = getSvgCoords(currentGlucose[0].val, 0);
+            const last = getSvgCoords(currentGlucose[currentGlucose.length - 1].val, currentGlucose.length - 1);
+            let path = buildSvgPath();
+            return `${path} L ${last.x.toFixed(1)} ${height - padding} L ${first.x.toFixed(1)} ${height - padding} Z`;
+        }
+
+        function renderVanillaHUD() {
+            const root = document.getElementById("app-root");
+            if (!root) return;
+
+            let tabHeader = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="display: flex; gap: 12px;">
+                        <button class="tab-btn ${state.activeTab === 'dashboard' ? 'active' : ''}" onclick="switchTab('dashboard')">
+                            <i data-lucide="database" class="w-4 h-4 inline-block mr-2 text-purple-400"></i>${t('tabScientific')}
+                        </button>
+                        <button class="tab-btn ${state.activeTab === 'cohort' ? 'active' : ''}" onclick="switchTab('cohort')">
+                            <i data-lucide="users" class="w-4 h-4 inline-block mr-2 text-emerald-400"></i>${t('tabCohort')}
+                        </button>
+                        <button class="tab-btn ${state.activeTab === 'pillars' ? 'active' : ''}" onclick="switchTab('pillars')">
+                            <i data-lucide="shield" class="w-4 h-4 inline-block mr-2 text-blue-400"></i>${t('tabPillars')}
+                        </button>
+                        <button class="tab-btn ${state.activeTab === 'fes' ? 'active' : ''}" onclick="switchTab('fes')">
+                            <i data-lucide="activity" class="w-4 h-4 inline-block mr-2 text-pink-400"></i>${t('tabFes')}
+                        </button>
+                        <button class="tab-btn ${state.activeTab === 'vivisector' ? 'active' : ''}" onclick="switchTab('vivisector')">
+                            <i data-lucide="dna" class="w-4 h-4 inline-block mr-2 text-indigo-400"></i>${t('vivisectorTitle')}
+                        </button>
+                    </div>
+                    <div>
+                        ${!state.curedState && !state.isTransitioning ? `
+                            <button class="cure-btn" onclick="triggerCureRestoration()">
+                                <i data-lucide="play" class="w-4 h-4 inline-block mr-2 text-white"></i>${t('btnInduceCure')}
+                            </button>
+                        ` : `
+                            <button class="tab-btn" onclick="resetCureState()" style="border-color: var(--neon-amber); color: var(--neon-amber);" ${state.isTransitioning ? 'disabled' : ''}>
+                                <i data-lucide="refresh-cw" class="w-4 h-4 inline-block mr-2 text-amber-400"></i>${t('btnRestoreChaos')}
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+
+            let emergencyBanner = state.emergencyMode ? `
+                <div class="glass-card emergency-card" style="display: flex; gap: 20px; align-items: center; margin-bottom: 28px;">
+                    <div style="color: var(--neon-red);"><i data-lucide="alert-triangle" class="w-10 h-10"></i></div>
+                    <div>
+                        <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--neon-red);" class="glow-text-red">${t('emergencyModeActive')}</h3>
+                        <p style="color: #fda4af; font-size: 0.85rem; margin-top: 4px; line-height: 1.5">
+                            ${t('emergencyBannerDesc')}
+                        </p>
+                    </div>
+                </div>
+            ` : '';
+
+            let tabContent = '';
+
+            if (state.activeTab === "dashboard") {
+                tabContent = `
+                    <!-- AURA Active Safeguard Panel -->
+                    <div id="aura-safeguard-panel" style="border: 2px solid ${state.empathyAnomaly ? '#ff0055' : '#00ff66'}; padding: 18px 24px; margin-bottom: 24px; background: ${state.empathyAnomaly ? 'rgba(255, 0, 85, 0.08)' : 'rgba(0, 255, 102, 0.05)'}; border-radius: 20px; box-shadow: 0 0 25px ${state.empathyAnomaly ? 'rgba(255,0,85,0.2)' : 'rgba(0,255,102,0.15)'}; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);" class="animate-pulse">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 800; color: ${state.empathyAnomaly ? '#ff0055' : '#00ff66'}; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px;" class="mono">
+                                <i data-lucide="shield" class="w-4 h-4 ${state.empathyAnomaly ? 'text-rose-500 animate-bounce' : 'text-emerald-400'}"></i>${state.empathyAnomaly ? t('auraShieldCompromised') : t('auraShieldActive')}
+                            </span>
+                            <span id="shield-status" style="background: ${state.empathyAnomaly ? '#ff0055' : '#00ff66'}; color: ${state.empathyAnomaly ? '#fff' : '#000'}; padding: 4px 12px; font-size: 10px; font-weight: 900; border-radius: 6px; letter-spacing: 1px;" class="mono">
+                                ${state.empathyAnomaly ? t('shieldLockout') : t('shieldEnforced')}
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                            ${state.empathyAnomaly ? t('statusCompromisedDesc') : t('statusActiveDesc')}
+                        </div>
+                    </div>
+
+                    <!-- Живи Физиологични Потоци -->
+                    <div class="metrics-grid" style="display: flex; gap: 20px; margin-bottom: 28px;">
+                        <div class="glass-card glow-emerald" style="flex: 1; border-radius: 16px; padding: 18px; border: 1px solid ${state.empathyAnomaly ? 'rgba(255,0,85,0.2)' : 'rgba(0,255,187,0.15)'}; background: rgba(18, 9, 36, 0.35);">
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700; letter-spacing: 0.5px;">${t('bloodPh')}</div>
+                            <div id="hud-ph-value" class="mono" style="font-size: 26px; font-weight: 800; color: ${state.empathyAnomaly ? '#ff0055' : '#00ffbb'}; margin-top: 5px; transition: color 0.5s ease;">
+                                ${state.ph.toFixed(2)}
+                            </div>
+                            <div style="font-size: 9px; color: #555; margin-top: 2px;">${t('normalPh')}</div>
+                        </div>
+                        <div class="glass-card glow-blue" style="flex: 1; border-radius: 16px; padding: 18px; border: 1px solid ${state.empathyAnomaly ? 'rgba(255,0,85,0.2)' : 'rgba(0,229,255,0.15)'}; background: rgba(18, 9, 36, 0.35);">
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700; letter-spacing: 0.5px;">${t('oxygenSat')}</div>
+                            <div id="hud-o2-value" class="mono" style="font-size: 26px; font-weight: 800; color: ${state.empathyAnomaly ? '#ff0055' : '#00e5ff'}; margin-top: 5px; transition: color 0.5s ease;">
+                                ${state.oxygen}%
+                            </div>
+                            <div style="font-size: 9px; color: #555; margin-top: 2px;">${t('normalO2')}</div>
+                        </div>
+                        <div class="glass-card glow-purple" style="flex: 1; border-radius: 16px; padding: 18px; border: 1px solid ${state.empathyAnomaly ? 'rgba(255,0,85,0.3)' : 'rgba(181,95,230,0.15)'}; background: rgba(18, 9, 36, 0.35);">
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700; letter-spacing: 0.5px;">${t('metabolicZscore')}</div>
+                            <div id="hud-zscore-value" class="mono" style="font-size: 26px; font-weight: 800; color: ${state.empathyAnomaly ? '#ff0055' : '#ff00ff'}; margin-top: 5px; transition: color 0.5s ease;">
+                                ${state.zScore.toFixed(2)}σ
+                            </div>
+                            <div style="font-size: 9px; color: #555; margin-top: 2px;">${t('criticalZscore')}</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        
+                        <!-- Left Column: Medical Analytics & Glycemic Curve (Spans perfectly) -->
+                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px; justify-content: space-between;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                        <i data-lucide="trending-up" class="w-5 h-5 inline-block mr-2 text-purple-400"></i>${t('glycemicTrajectory')}
+                                    </h2>
+                                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                                        ${t('glycemicDesc')}
+                                    </p>
+                                </div>
+                                <div style="text-align: right;" class="mono">
+                                    <div style="font-size: 0.7rem; color: var(--text-secondary);">${t('globalEntropy')}</div>
+                                    <div style="font-size: 1.6rem; font-weight: 900; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};" class="${state.curedState ? 'glow-text-emerald' : 'glow-text-red'}">
+                                        ${state.entropy.toFixed(2)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Advanced SVG Rendering with Gradient Fills under the curve -->
+                            <div style="background: #070311; border-radius: 16px; padding: 20px; border: 1px solid rgba(181,95,230,0.08);">
+                                <svg viewBox="0 0 600 240" style="width: 100%; height: auto;">
+                                    <defs>
+                                        <linearGradient id="gradient-area" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'}" stop-opacity="0.15" />
+                                            <stop offset="100%" stop-color="${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'}" stop-opacity="0.0" />
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Grid lines for medical look -->
+                                    <line x1="35" y1="40" x2="565" y2="40" stroke="rgba(255,255,255,0.02)" />
+                                    <line x1="35" y1="88" x2="565" y2="88" stroke="rgba(0, 240, 255, 0.15)" stroke-dasharray="3 3" />
+                                    <line x1="35" y1="136" x2="565" y2="136" stroke="rgba(255,255,255,0.02)" />
+                                    <line x1="35" y1="184" x2="565" y2="184" stroke="rgba(255, 59, 111, 0.15)" stroke-dasharray="3 3" />
+                                    
+                                    <!-- Shaded area under the curve -->
+                                    <path d="${buildSvgAreaPath()}" fill="url(#gradient-area)" />
+
+                                    <!-- Time X Labels -->
+                                    <text x="35" y="225" fill="#64748b" font-size="10" text-anchor="middle">00:00</text>
+                                    <text x="167" y="225" fill="#64748b" font-size="10" text-anchor="middle">06:00</text>
+                                    <text x="300" y="225" fill="#64748b" font-size="10" text-anchor="middle">12:00</text>
+                                    <text x="432" y="225" fill="#64748b" font-size="10" text-anchor="middle">18:00</text>
+                                    <text x="565" y="225" fill="#64748b" font-size="10" text-anchor="middle">23:00</text>
+
+                                    <!-- Glucose Y Labels -->
+                                    <text x="27" y="187" fill="var(--neon-red)" font-size="9" text-anchor="end">4.0</text>
+                                    <text x="27" y="91" fill="var(--neon-blue)" font-size="9" text-anchor="end">10.0</text>
+
+                                    <!-- Curve path -->
+                                    <path d="${buildSvgPath()}" fill="none" stroke="${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'}" stroke-width="3.5" style="transition: stroke 1s ease;" />
+                                </svg>
+                            </div>
+
+                            <!-- Biomarkers -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                                <div style="border-left: 4px solid var(--neon-blue); padding-left: 12px;">
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${t('glucoseLabel')}</div>
+                                    <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald' : 'glow-text-red'}">
+                                        ${state.curedState ? '4.80 mmol/L' : '16.50 mmol/L'}
+                                    </div>
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${t('normalGlucose')}</span>
+                                </div>
+                                <div style="border-left: 4px solid var(--neon-emerald); padding-left: 12px;">
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${t('endogenousCpeptide')}</div>
+                                    <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald animate-pulse' : 'glow-text-red'}">
+                                        ${state.cPeptide.toFixed(2)} nmol/L
+                                    </div>
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${t('normalCpeptide')}</span>
+                                </div>
+                                <div style="border-left: 4px solid var(--neon-purple); padding-left: 12px;">
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${t('homaIrIndex')}</div>
+                                    <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald' : 'glow-text-purple'}">
+                                        ${state.homaIr.toFixed(2)}
+                                    </div>
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${t('normalHomaIr')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Patient Profile & Dynamic Substrate Telemetry Logs -->
+                        <div class="column-flex">
+                            <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+                                <h3 style="font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="info" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>${t('patientProfile')}
+                                </h3>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 12px;" class="mono">
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
+                                        <span style="color: var(--text-secondary);">${t('patientLabel')}</span>
+                                        <span style="font-weight: 700;">P-402 (${state.language === 'bg' ? 'Педиатричен' : 'Pediatric'})</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
+                                        <span style="color: var(--text-secondary);">${t('ageWeightLabel')}</span>
+                                        <span style="font-weight: 700;">${t('ageWeightVal')}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
+                                        <span style="color: var(--text-secondary);">${t('bypassStateLabel')}</span>
+                                        <span style="font-weight: 900; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
+                                            ${state.curedState ? t('bypassReversion') : t('bypassAtrophy')}
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
+                                        <span style="color: var(--text-secondary);">${t('activeInsulinLabel')}</span>
+                                        <span style="font-weight: 700; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-amber)'};">
+                                            ${state.curedState ? t('insulinAuto') : t('insulinExternal')}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div style="padding: 16px; background: ${state.curedState ? 'rgba(0, 255, 170, 0.04)' : 'rgba(255, 59, 111, 0.04)'}; border-radius: 12px; border: 1px solid ${state.curedState ? 'rgba(0,255,170,0.15)' : 'rgba(255,59,111,0.15)'};">
+                                    <div style="font-size: 0.8rem; font-weight: 700; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};" class="mono">
+                                        <i data-lucide="flask-conical" class="w-4 h-4 inline-block mr-1.5 text-purple-400"></i>${t('clinicalConclusion')}
+                                    </div>
+                                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
+                                        ${state.curedState ? t('conclusionCured') : t('conclusionChaos')}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Live Telemetry Stream Grid -->
+                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}" style="height: 185px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 2px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">
+                                    <i data-lucide="terminal" class="w-4 h-4 inline-block mr-1.5 text-emerald-400"></i>${t('telemetryLog')}
+                                </div>
+                                <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem;" class="mono text-slate-400">
+                                    ${state.logs.map(log => `<div>[${log.time}] ${state.language === 'bg' ? log.bg : log.en}</div>`).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Engineering Console Card -->
+                            <div class="glass-card glow-red ${state.emergencyMode ? 'emergency-card' : ''}" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(255, 0, 85, 0.15);">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                    <i data-lucide="settings" class="w-4 h-4 text-rose-500"></i>${t('engConsole')}
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+                                    ${t('engConsoleDesc')}
+                                </div>
+                                <button onclick="injectMetabolicAnomaly()" class="cure-btn" style="background: linear-gradient(135deg, var(--neon-red), #b91c1c); box-shadow: 0 0 25px rgba(255, 59, 111, 0.3); border-radius: 12px; padding: 12px 20px; justify-content: center; font-size: 0.85rem; width: 100%;">
+                                    <i data-lucide="zap" class="w-4 h-4 text-white"></i>${t('btnInjectAnomaly')}
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            } else if (state.activeTab === "cohort") {
+                tabContent = `
+                    <div class="glass-card glow-emerald ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
+                        <div>
+                            <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                <i data-lucide="users" class="w-5 h-5 inline-block mr-2 text-emerald-400"></i>${t('cohortTitle')}
+                            </h2>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                                ${t('cohortDesc')}
+                            </p>
+                        </div>
+
+                        <table class="sovereign-table mono">
+                            <thead>
+                                <tr>
+                                    <th>${t('ageGroup')}</th>
+                                    <th>${t('count')}</th>
+                                    <th>${t('baselineTir')}</th>
+                                    <th>${t('conventionalTir')}</th>
+                                    <th style="color: var(--neon-purple);">${t('v3Tir')}</th>
+                                    <th style="color: var(--neon-emerald);">${t('v4Tir')}</th>
+                                    <th>${t('baselineHypo')}</th>
+                                    <th style="color: var(--neon-emerald);">${t('v4Hypo')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cohortData.map(row => `
+                                    <tr>
+                                        <td style="font-weight: 700;">${t(row.group)}</td>
+                                        <td>${row.count}</td>
+                                        <td style="color: var(--neon-red);">${row.baseline}</td>
+                                        <td>${row.conv}</td>
+                                        <td style="color: var(--neon-purple);">${row.v3}</td>
+                                        <td style="color: var(--neon-emerald); font-weight: 900;" class="glow-text-emerald">
+                                            ${state.curedState ? row.v4 : '---'}
+                                        </td>
+                                        <td style="color: var(--neon-red);">${row.hypoConv}</td>
+                                        <td style="color: var(--neon-emerald); font-weight: 900;">
+                                            ${state.curedState ? row.hypoV4.toFixed(1) : '---'}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (state.activeTab === "pillars") {
+                tabContent = `
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
+                                <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: 700; margin-bottom: 8px;">${t('pillar1Num')}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${t('pillar1Title')}</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                                    ${t('pillar1Desc')}
+                                </p>
+                            </div>
+                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
+                                <div style="font-size: 0.75rem; color: var(--neon-purple); font-weight: 700; margin-bottom: 8px;">${t('pillar2Num')}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${t('pillar2Title')}</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                                    ${t('pillar2Desc')}
+                                </p>
+                            </div>
+                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
+                                <div style="font-size: 0.75rem; color: var(--neon-amber); font-weight: 700; margin-bottom: 8px;">${t('pillar3Num')}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${t('pillar3Title')}</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                                    ${t('pillar3Desc')}
+                                </p>
+                            </div>
+                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
+                                <div style="font-size: 0.75rem; color: var(--neon-pink); font-weight: 700; margin-bottom: 8px;">${t('pillar4Num')}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${t('pillar4Title')}</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                                    ${t('pillar4Desc')}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
+                            <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 16px;">
+                                <i data-lucide="code" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>${t('soulCodeTitle')}
+                            </h3>
+                            <pre class="code-container mono" style="white-space: pre-wrap; font-size: 0.85rem; color: #b2ccd6;">
+// ═══ METABOLIC_SAFETY_LAWS: Концентрационен и Диететичен Синхрон ═══
+assert(patient.verified_insulin_concentration == U_100 || patient.verified_insulin_concentration == U_200 || patient.verified_insulin_concentration == U_300);
+assert(device.technical_parameters_validated == true);
+
+// Циркадно изчисление на ICR за кортизолов пик (Dawn Phenomenon)
+process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
+    let morning_cortisol_factor = 0.85; // 15% увеличен инсулинов отговор
+    if time_of_day.is_morning() {
+        return base_icr * morning_cortisol_factor;
+    }
+    return base_icr;
+}
+
+// ═══ LAYER_4_AURA_SAFEGUARD: Физиологичен Z-Score контрол ═══
+process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
+    let ph_z = abs(ph - 7.40) / 0.05;
+    let o2_z = abs(o2 - 97.5) / 2.5;
+    let composite_z = sqrt(ph_z * ph_z + o2_z * o2_z);
+
+    if (composite_z > 3.0) {
+        tee_enforce_hardware_lockout(composite_z); // Samsung Knox TEE подпис
+        return false;
+    }
+    return true;
+}
+                            </pre>
+                        </div>
+                    </div>
+                `;
+            } else if (state.activeTab === "vivisector") {
+                tabContent = `
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 28px;">
+                        <div class="glass-card" style="padding: 32px; border-top: 4px solid var(--neon-purple);">
+                            <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 16px; color: #fff; display: flex; align-items: center; gap: 12px;">
+                                <i data-lucide="dna" class="w-8 h-8 text-indigo-400"></i>\${t('vivisectorTitle')}
+                            </h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; font-size: 1rem;">
+                                \${t('vivisectorDesc')}
+                            </p>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 30px;">
+                                <!-- STATE 1: TRUE -->
+                                <div class="glass-card glow-emerald" style="padding: 24px; background: rgba(0,255,170,0.05); border-color: rgba(0,255,170,0.3); border-top: 3px solid var(--neon-emerald);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                        <i data-lucide="check-circle-2" class="w-6 h-6 text-emerald-400"></i>
+                                        <h3 style="color: var(--neon-emerald); font-weight: 900; font-size: 1.3rem; margin: 0;">\${t('state1Title')}</h3>
+                                    </div>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">\${t('state1Desc')}</p>
+                                </div>
+                                
+                                <!-- STATE 2: FALSE -->
+                                <div class="glass-card glow-red" style="padding: 24px; background: rgba(255,0,85,0.05); border-color: rgba(255,0,85,0.3); border-top: 3px solid var(--neon-red);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                        <i data-lucide="x-circle" class="w-6 h-6 text-red-400"></i>
+                                        <h3 style="color: var(--neon-red); font-weight: 900; font-size: 1.3rem; margin: 0;">\${t('state2Title')}</h3>
+                                    </div>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">\${t('state2Desc')}</p>
+                                </div>
+                                
+                                <!-- STATE 3: PARADOX -->
+                                <div class="glass-card glow-purple" style="padding: 24px; background: rgba(181,95,230,0.05); border-color: rgba(181,95,230,0.3); border-top: 3px solid var(--neon-purple);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                        <i data-lucide="refresh-cw" class="w-6 h-6 text-purple-400"></i>
+                                        <h3 style="color: var(--neon-purple); font-weight: 900; font-size: 1.3rem; margin: 0;">\${t('state3Title')}</h3>
+                                    </div>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin: 0;">\${t('state3Desc')}</p>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <button class="cure-btn" style="background: linear-gradient(135deg, #4f46e5, #312e81); box-shadow: 0 0 25px rgba(79, 70, 229, 0.4); margin-top: 10px;" onclick="addLogEntry('VIVISECTOR: Инициализиране на Synthetic Lethality Taint Traversal...', 'VIVISECTOR: Initializing Synthetic Lethality Taint Traversal...')">
+                                    <i data-lucide="play" class="w-5 h-5 text-indigo-200"></i>\${t('btnVivisector')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (state.activeTab === "fes") {
+                // Determine channel percentages
+                const plantarPercent = (state.fesActiveChannels.plantar / 50.0) * 100;
+                const dorsiflexPercent = (state.fesActiveChannels.dorsiflex / 50.0) * 100;
+                const quadPercent = (state.fesActiveChannels.quad / 50.0) * 100;
+                const hamstringPercent = (state.fesActiveChannels.hamstring / 50.0) * 100;
+
+                tabContent = `
+                    <div class="dashboard-grid">
+                        <!-- Left Panel: 4-Channel Teslasuit Locomotion Controller -->
+                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
+                            <div>
+                                <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
+                                    <i data-lucide="activity" class="w-5 h-5 inline-block mr-2 text-pink-400"></i>${t('fesTitle')}
+                                </h2>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                                    ${t('fesDesc')}
+                                </p>
+                            </div>
+
+                            <!-- Channel Progress Bars -->
+                            <div style="display: flex; flex-direction: column; gap: 20px;">
+                                <!-- Plantar Flexors (Gastroc/Soleus) -->
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;" class="mono">
+                                        <span style="color: var(--text-secondary);">1. PLANTAR FLEXORS (Gastroc/Soleus)</span>
+                                        <span style="font-weight: 700; color: var(--neon-emerald);">${state.fesActiveChannels.plantar.toFixed(1)} mA</span>
+                                    </div>
+                                    <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.03); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+                                        <div style="width: ${plantarPercent}%; height: 100%; background: linear-gradient(90deg, var(--neon-emerald), #00bb88); border-radius: 5px; box-shadow: 0 0 10px var(--neon-emerald-glow); transition: width 0.15s ease;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Dorsiflexors (Tibialis Anterior) -->
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;" class="mono">
+                                        <span style="color: var(--text-secondary);">2. DORSIFLEXORS (Tibialis Anterior)</span>
+                                        <span style="font-weight: 700; color: var(--neon-blue);">${state.fesActiveChannels.dorsiflex.toFixed(1)} mA</span>
+                                    </div>
+                                    <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.03); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+                                        <div style="width: ${dorsiflexPercent}%; height: 100%; background: linear-gradient(90deg, var(--neon-blue), #0088ff); border-radius: 5px; box-shadow: 0 0 10px var(--neon-blue-glow); transition: width 0.15s ease;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Quadriceps (Knee Extensors) -->
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;" class="mono">
+                                        <span style="color: var(--text-secondary);">3. QUADRICEPS (Knee Extensors)</span>
+                                        <span style="font-weight: 700; color: var(--neon-purple);">${state.fesActiveChannels.quad.toFixed(1)} mA</span>
+                                    </div>
+                                    <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.03); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+                                        <div style="width: ${quadPercent}%; height: 100%; background: linear-gradient(90deg, var(--neon-purple), #8800ff); border-radius: 5px; box-shadow: 0 0 10px var(--purple-glow); transition: width 0.15s ease;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Hamstrings (Knee Flexors) -->
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;" class="mono">
+                                        <span style="color: var(--text-secondary);">4. HAMSTRINGS (Knee Flexors)</span>
+                                        <span style="font-weight: 700; color: var(--neon-amber);">${state.fesActiveChannels.hamstring.toFixed(1)} mA</span>
+                                    </div>
+                                    <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.03); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+                                        <div style="width: ${hamstringPercent}%; height: 100%; background: linear-gradient(90deg, var(--neon-amber), #ff8800); border-radius: 5px; box-shadow: 0 0 10px rgba(255, 184, 0, 0.3); transition: width 0.15s ease;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Gait Cycle Timeline Slider -->
+                            <div style="margin-top: 10px; background: #070311; border-radius: 14px; padding: 18px; border: 1px solid rgba(181,95,230,0.08);">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 10px;" class="mono">
+                                    <span style="color: var(--text-secondary);">${t('gaitTimelineTitle')}</span>
+                                    <span style="font-weight: bold; color: ${state.fesStimulationActive ? 'var(--neon-emerald)' : 'var(--text-secondary)'};">
+                                        ${state.gaitPhase}% (${t('gaitStatus' + (state.fesStatus === 'STANDBY' ? 'Standby' : state.fesStatus === 'STANCE_PHASE' ? 'Stance' : 'Swing'))})
+                                    </span>
+                                </div>
+                                <div style="position: relative; width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; margin-bottom: 12px;">
+                                    <!-- Stance Phase indicator bar (0-60%) -->
+                                    <div style="position: absolute; left: 0; width: 60%; height: 100%; background: rgba(0, 255, 170, 0.1); border-right: 1px dashed rgba(0, 255, 170, 0.35); border-radius: 3px 0 0 3px;"></div>
+                                    <!-- Swing Phase indicator bar (60-100%) -->
+                                    <div style="position: absolute; left: 60%; width: 40%; height: 100%; background: rgba(0, 240, 255, 0.05); border-radius: 0 3px 3px 0;"></div>
+                                    
+                                    <!-- Active cursor -->
+                                    <div style="position: absolute; left: ${state.gaitPhase}%; top: -5px; width: 16px; height: 16px; background: var(--neon-purple); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 10px var(--neon-purple); transform: translateX(-50%); transition: left 0.15s ease;"></div>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: #555;" class="mono">
+                                    <span>${t('heelStrike')}</span>
+                                    <span>${t('heelOff')}</span>
+                                    <span>${t('swingStart')}</span>
+                                    <span>${t('terminalSwing')}</span>
+                                </div>
+                            </div>
+
+                            <!-- Locomotor Controls -->
+                            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-top: 10px;">
+                                <button onclick="toggleGaitSimulation()" class="cure-btn" style="background: ${state.fesStimulationActive ? 'linear-gradient(135deg, var(--neon-amber), #ff8800)' : 'linear-gradient(135deg, var(--neon-purple), var(--neon-pink))'}; box-shadow: 0 0 25px ${state.fesStimulationActive ? 'rgba(255, 184, 0, 0.3)' : 'rgba(181, 95, 230, 0.3)'}; border-radius: 12px; padding: 14px 20px; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
+                                    <i data-lucide="${state.fesStimulationActive ? 'square' : 'play'}" class="w-4 h-4 text-white inline mr-1"></i>
+                                    ${state.fesStimulationActive ? t('btnStopFes') : t('btnStartFes')}
+                                </button>
+                                <button onclick="triggerFesSpasticityLockout()" class="cure-btn" style="background: linear-gradient(135deg, var(--neon-red), #b91c1c); box-shadow: 0 0 25px rgba(255, 59, 111, 0.3); border-radius: 12px; padding: 14px 20px; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
+                                    <i data-lucide="shield-alert" class="w-4 h-4 text-white inline mr-1"></i>${t('btnInjectSpasm')}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Neuroplastic & Molecular Metrics -->
+                        <div class="column-flex">
+                            <!-- Neuroplasticity & Glucose Clearance Cards -->
+                            <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+                                <h3 style="font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; gap: 8px;">
+                                    <i data-lucide="brain" class="w-5 h-5 inline-block mr-2 text-pink-400"></i>${t('neurometabolicEvidence')}
+                                </h3>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <!-- BDNF Card -->
+                                    <div style="background: rgba(181, 95, 230, 0.04); border: 1px solid rgba(181, 95, 230, 0.15); border-radius: 12px; padding: 16px; text-align: center;">
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);" class="mono">BDNF NEUROPLASTICITY</div>
+                                        <div style="font-size: 2.2rem; font-weight: 900; color: var(--neon-pink); margin: 6px 0;" class="mono glow-text-red">
+                                            ${state.bdnfLevel.toFixed(2)}x
+                                        </div>
+                                        <div style="font-size: 0.7rem; color: var(--neon-pink);" class="mono">2.49x Peak Achieved</div>
+                                    </div>
+
+                                    <!-- GLUT4 Translocation Card -->
+                                    <div style="background: rgba(0, 240, 255, 0.04); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 12px; padding: 16px; text-align: center;">
+                                        <div style="font-size: 0.7rem; color: var(--text-secondary);" class="mono">GLUT4 TRANSLOCATION</div>
+                                        <div style="font-size: 2.2rem; font-weight: 900; color: var(--neon-blue); margin: 6px 0;" class="mono glow-text-blue">
+                                            ${state.glut4Upregulation.toFixed(2)}x
+                                        </div>
+                                        <div style="font-size: 0.7rem; color: var(--neon-blue);" class="mono">1.47x Insulin-Independent</div>
+                                    </div>
+                                </div>
+
+                                <div style="padding: 16px; background: rgba(181, 95, 230, 0.03); border-radius: 12px; border: 1px solid rgba(181, 95, 230, 0.12); font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary);">
+                                    <span style="color: #fff; font-weight: bold; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>${t('hebbianPairingTitle')}
+                                    </span>
+                                    ${t('hebbianPairingDesc')}
+                                </div>
+                            </div>
+
+                            <!-- Chronos Fatigue & Safeguard Gauge -->
+                            <div class="glass-card glow-emerald ${state.emergencyMode ? 'emergency-card' : ''}" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; border-color: rgba(0, 255, 170, 0.15);">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>${t('chronosPredictive')}
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;" class="mono">
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+                                        ${t('predictiveStatus')} <span style="font-weight: bold; color: ${state.catuskotiState === 'SPASTICITY_LOCKOUT' ? 'var(--neon-red)' : 'var(--neon-emerald)'};">
+                                            ${state.catuskotiState === 'SPASTICITY_LOCKOUT' ? t('shieldDampened') : t('shieldIntact')}
+                                        </span><br>
+                                        ${t('hebbianConfidenceLabel')} <span style="color: #fff;">${state.hebbianConfidence.toFixed(1)} / 10.0</span><br>
+                                        ${t('chronosPidLabel')} <span style="color: #fff;">${state.catuskotiState === 'SPASTICITY_LOCKOUT' ? 'kp=0.42, kd=0.21' : 'kp=1.50, kd=0.50'}</span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 0.65rem; color: var(--text-secondary);">${t('catuskotiStateLabel')}</div>
+                                        <div style="font-size: 1.2rem; font-weight: 900; color: ${state.catuskotiState === 'SPASTICITY_LOCKOUT' ? 'var(--neon-red)' : 'var(--neon-emerald)'};">
+                                            ${state.catuskotiState}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            root.innerHTML = `
+                <header class="hud-transition ${state.hudVisible ? '' : 'hud-hidden'}" style="border-bottom: 1px solid var(--purple-border); padding: 18px 40px; background: rgba(5, 2, 12, 0.8); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="status-dot ${state.emergencyMode ? 'bg-red' : 'bg-purple'}"></div>
+                        <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">${t('hudTitle')}</span></span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 24px;">
+                        <!-- Language Toggle -->
+                        <div style="display: flex; align-items: center; gap: 4px; background: rgba(181,95,230,0.03); padding: 4px; border-radius: 100px; border: 1px solid var(--purple-border);">
+                            <button onclick="setLanguage('bg')" style="background: ${state.language === 'bg' ? 'var(--purple-glass)' : 'transparent'}; border: 1px solid ${state.language === 'bg' ? 'var(--neon-purple)' : 'transparent'}; color: ${state.language === 'bg' ? '#fff' : 'var(--text-secondary)'}; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; transition: all 0.3s ease; outline: none; border-style: solid;">🇧🇬 BG</button>
+                            <button onclick="setLanguage('en')" style="background: ${state.language === 'en' ? 'var(--purple-glass)' : 'transparent'}; border: 1px solid ${state.language === 'en' ? 'var(--neon-purple)' : 'transparent'}; color: ${state.language === 'en' ? '#fff' : 'var(--text-secondary)'}; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; transition: all 0.3s ease; outline: none; border-style: solid;">🇬🇧 EN</button>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 8px; background: rgba(181,95,230,0.03); padding: 8px 20px; border-radius: 100px; border: 1px solid var(--purple-border);">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${t('neuralLink')}</span>
+                            <span class="mono" style="font-size: 0.8rem; font-weight: 700; color: ${state.neuralLinkConnected ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
+                                ${state.neuralLinkConnected ? t('connected') : t('severed')}
+                            </span>
+                            <input type="checkbox" ${state.neuralLinkConnected ? 'checked' : ''} onchange="handleNeuralLinkToggle(this)" style="cursor: pointer; margin-left: 8px;" />
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${t('knoxHeartbeat')}</span>
+                            <span class="status-dot ${state.neuralLinkConnected ? 'bg-blue' : 'bg-red'}"></span>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="hud-transition ${state.hudVisible ? '' : 'hud-hidden'}" style="flex: 1; padding: 40px; max-width: 1600px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 28px;">
+                    ${tabHeader}
+                    ${emergencyBanner}
+                    ${tabContent}
+                </main>
+
+                <footer class="hud-transition ${state.hudVisible ? '' : 'hud-hidden'}" style="border-top: 1px solid var(--purple-border); padding: 24px; text-align: center; font-size: 0.75rem; color: var(--text-secondary); background: rgba(3, 1, 8, 0.95);" class="mono">
+                    ${t('footerText')}
+                </footer>
+                
+                ${renderSurgicalControlsCard()}
+                ${renderSurgicalCoordsCard()}
+                ${renderHudToggleButton()}
+            `;
+            if (window.lucide) {
+                setTimeout(() => lucide.createIcons(), 0);
+            }
+
+            // Toggle emergency overlay display reactively
+            const overlay = document.getElementById("emergency-overlay");
+            if (overlay) {
+                overlay.style.display = state.empathyAnomaly ? "flex" : "none";
+            }
+        }
+
+        // =========================================================================
+        // SOVEREIGN 3D VOLUME RAYMARCHING SUBSTRATE (GLSL & Inverse Projection Lock)
+        // =========================================================================
+
+        const volWidth = 128, volHeight = 128, volDepth = 128;
+        const volSize = volWidth * volHeight * volDepth;
+
+        let wasmSharedBuffer;
+        try {
+            wasmSharedBuffer = new SharedArrayBuffer(volSize);
+        } catch (e) {
+            wasmSharedBuffer = new ArrayBuffer(volSize);
+        }
+        const volumeData = new Uint8Array(wasmSharedBuffer);
+
+        let bdnfSharedBuffer;
+        try {
+            bdnfSharedBuffer = new SharedArrayBuffer(volSize);
+        } catch (e) {
+            bdnfSharedBuffer = new ArrayBuffer(volSize);
+        }
+        const bdnfData = new Uint8Array(bdnfSharedBuffer);
+
+        function normalize(v) {
+            const len = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+            return len > 0 ? [v[0] / len, v[1] / len, v[2] / len] : [0, 0, 0];
+        }
+        function subtract(a, b) {
+            return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+        }
+        function add(a, b) {
+            return [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+        }
+        function scale(v, s) {
+            return [v[0] * s, v[1] * s, v[2] * s];
+        }
+        function cross(a, b) {
+            return [
+                a[1] * b[2] - a[2] * b[1],
+                a[2] * b[0] - a[0] * b[2],
+                a[0] * b[1] - a[1] * b[0]
+            ];
+        }
+        function dot(a, b) {
+            return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+        }
+
+        function multiplyMat4(A, B) {
+            const C = new Float32Array(16);
+            for (let col = 0; col < 4; col++) {
+                for (let row = 0; row < 4; row++) {
+                    let sum = 0;
+                    for (let i = 0; i < 4; i++) {
+                        sum += A[i * 4 + row] * B[col * 4 + i];
+                    }
+                    C[col * 4 + row] = sum;
+                }
+            }
+            return C;
+        }
+
+        function rotateX(rad) {
+            const c = Math.cos(rad);
+            const s = Math.sin(rad);
+            return new Float32Array([
+                1, 0, 0, 0,
+                0, c, s, 0,
+                0, -s, c, 0,
+                0, 0, 0, 1
+            ]);
+        }
+
+        function rotateY(rad) {
+            const c = Math.cos(rad);
+            const s = Math.sin(rad);
+            return new Float32Array([
+                c, 0, -s, 0,
+                0, 1, 0, 0,
+                s, 0, c, 0,
+                0, 0, 0, 1
+            ]);
+        }
+
+        function perspective(fov, aspect, near, far) {
+            const f = 1.0 / Math.tan(fov / 2);
+            const nf = 1.0 / (near - far);
+            return new Float32Array([
+                f / aspect, 0, 0, 0,
+                0, f, 0, 0,
+                0, 0, (far + near) * nf, -1,
+                0, 0, (2 * far * near) * nf, 0
+            ]);
+        }
+
+        function invertMat4(m) {
+            const out = new Float32Array(16);
+            const a00 = m[0], a01 = m[1], a02 = m[2], a03 = m[3];
+            const a10 = m[4], a11 = m[5], a12 = m[6], a13 = m[7];
+            const a20 = m[8], a21 = m[9], a22 = m[10], a23 = m[11];
+            const a30 = m[12], a31 = m[13], a32 = m[14], a33 = m[15];
+
+            const b00 = a00 * a11 - a01 * a10;
+            const b01 = a00 * a12 - a02 * a10;
+            const b02 = a00 * a13 - a03 * a10;
+            const b03 = a01 * a12 - a02 * a11;
+            const b04 = a01 * a13 - a03 * a11;
+            const b05 = a02 * a13 - a03 * a12;
+            const b06 = a20 * a31 - a21 * a30;
+            const b07 = a20 * a32 - a22 * a30;
+            const b08 = a20 * a33 - a23 * a30;
+            const b09 = a21 * a32 - a22 * a31;
+            const b10 = a21 * a33 - a23 * a31;
+            const b11 = a22 * a33 - a23 * a32;
+
+            let det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+
+            if (!det) return null;
+            det = 1.0 / det;
+
+            out[0] = (a11 * b11 - a12 * b10 + a13 * b09) * det;
+            out[1] = (-a01 * b11 + a02 * b10 - a03 * b09) * det;
+            out[2] = (a31 * b05 - a32 * b04 + a33 * b03) * det;
+            out[3] = (-a21 * b05 + a22 * b04 - a23 * b03) * det;
+            out[4] = (-a10 * b11 + a12 * b08 - a13 * b07) * det;
+            out[5] = (a00 * b11 - a02 * b08 + a03 * b07) * det;
+            out[6] = (-a30 * b05 + a32 * b02 - a33 * b01) * det;
+            out[7] = (a20 * b05 - a22 * b02 + a23 * b01) * det;
+            out[8] = (a10 * b10 - a11 * b08 + a13 * b06) * det;
+            out[9] = (-a00 * b10 + a01 * b08 - a03 * b06) * det;
+            out[10] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
+            out[11] = (-a20 * b04 + a21 * b02 - a23 * b00) * det;
+            out[12] = (-a10 * b09 + a11 * b07 - a12 * b06) * det;
+            out[13] = (a00 * b09 - a01 * b07 + a02 * b06) * det;
+            out[14] = (-a30 * b03 + a31 * b01 - a32 * b00) * det;
+            out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
+
+            return out;
+        }
+
+        function vec4MulMat4(v, m) {
+            const out = new Float32Array(4);
+            for (let i = 0; i < 4; i++) {
+                out[i] = v[0] * m[0 * 4 + i] + v[1] * m[1 * 4 + i] + v[2] * m[2 * 4 + i] + v[3] * m[3 * 4 + i];
+            }
+            return out;
+        }
+
+        function vec3MulMat4(v, m) {
+            const out = new Float32Array(3);
+            const w = v[0] * m[3] + v[1] * m[7] + v[2] * m[11] + m[15];
+            out[0] = (v[0] * m[0] + v[1] * m[4] + v[2] * m[8] + m[12]) / w;
+            out[1] = (v[0] * m[1] + v[1] * m[5] + v[2] * m[9] + m[13]) / w;
+            out[2] = (v[0] * m[2] + v[1] * m[6] + v[2] * m[10] + m[14]) / w;
+            return out;
+        }
+
+        function vec3MulMat3(v, m) {
+            const out = new Float32Array(3);
+            out[0] = v[0] * m[0] + v[1] * m[4] + v[2] * m[8];
+            out[1] = v[0] * m[1] + v[1] * m[5] + v[2] * m[9];
+            out[2] = v[0] * m[2] + v[1] * m[6] + v[2] * m[10];
+            return out;
+        }
+
+        function intersectBoxJS(ro, rd, t0, t1) {
+            const boxMin = [0, 0, 0];
+            const boxMax = [1, 1, 1];
+            let near = -Infinity;
+            let far = Infinity;
+
+            for (let i = 0; i < 3; i++) {
+                if (Math.abs(rd[i]) < 1e-6) {
+                    if (ro[i] < boxMin[i] || ro[i] > boxMax[i]) return false;
+                } else {
+                    const invD = 1.0 / rd[i];
+                    let tbot = (boxMin[i] - ro[i]) * invD;
+                    let ttop = (boxMax[i] - ro[i]) * invD;
+                    if (tbot > ttop) {
+                        const tmp = tbot; tbot = ttop; ttop = tmp;
+                    }
+                    near = Math.max(near, tbot);
+                    far = Math.min(far, ttop);
+                }
+            }
+            t0[0] = Math.max(near, 0.0);
+            t1[0] = far;
+            return near < far && far > 0.0;
+        }
+
+        function generateBrainVoxels() {
+            for (let z = 0; z < volDepth; z++) {
+                for (let y = 0; y < volHeight; y++) {
+                    for (let x = 0; x < volWidth; x++) {
+                        const idx = x + y * volWidth + z * volWidth * volHeight;
+
+                        const nx = (x / (volWidth - 1)) * 2.0 - 1.0;
+                        const ny = (y / (volHeight - 1)) * 2.0 - 1.0;
+                        const nz = (z / (volDepth - 1)) * 2.0 - 1.0;
+
+                        const distToCenter = Math.sqrt(nx * nx + ny * ny + nz * nz);
+                        let density = 0;
+
+                        if (distToCenter > 0.82 && distToCenter < 0.88) {
+                            density = 220; // Skull
+                        } else if (distToCenter <= 0.80) {
+                            const ellipsoid = Math.sqrt(nx * nx * 1.2 + ny * ny * 1.0 + nz * nz * 0.9);
+                            if (ellipsoid <= 0.8) {
+                                density = 85;
+                                const sulci = Math.sin(nx * 14) * Math.sin(ny * 14) * Math.sin(nz * 14);
+                                if (sulci > 0.15) {
+                                    density -= 25;
+                                } else {
+                                    density += 15;
+                                }
+
+                                if (Math.abs(nx) < 0.035) {
+                                    density = 10;
+                                }
+
+                                const tumorDx = nx - 0.33;
+                                const tumorDy = ny - 0.22;
+                                const tumorDz = nz + 0.18;
+                                const tumorDist = Math.sqrt(tumorDx * tumorDx + tumorDy * tumorDy + tumorDz * tumorDz);
+                                if (tumorDist < 0.16) {
+                                    density = 190 + Math.sin(tumorDist * 45) * 25;
+                                }
+                            }
+                        }
+                        volumeData[idx] = Math.max(0, Math.min(255, density));
+                    }
+                }
+            }
+        }
+
+        function generateBdnfVoxels() {
+            for (let z = 0; z < volDepth; z++) {
+                for (let y = 0; y < volHeight; y++) {
+                    for (let x = 0; x < volWidth; x++) {
+                        const idx = x + y * volWidth + z * volWidth * volHeight;
+
+                        const nx = (x / (volWidth - 1)) * 2.0 - 1.0;
+                        const ny = (y / (volHeight - 1)) * 2.0 - 1.0;
+                        const nz = (z / (volDepth - 1)) * 2.0 - 1.0;
+
+                        const h1Dx = nx + 0.22;
+                        const h1Dy = ny + 0.15;
+                        const h1Dz = nz + 0.2;
+                        const h1Dist = Math.sqrt(h1Dx * h1Dx * 2.5 + h1Dy * h1Dy + h1Dz * h1Dz * 1.2);
+
+                        const h2Dx = nx - 0.22;
+                        const h2Dy = ny + 0.15;
+                        const h2Dz = nz + 0.2;
+                        const h2Dist = Math.sqrt(h2Dx * h2Dx * 2.5 + h2Dy * h2Dy + h2Dz * h2Dz * 1.2);
+
+                        let bdnfVal = 0;
+                        if (h1Dist < 0.26) {
+                            bdnfVal = Math.floor((1.0 - h1Dist / 0.26) * 255);
+                        }
+                        if (h2Dist < 0.26) {
+                            bdnfVal = Math.max(bdnfVal, Math.floor((1.0 - h2Dist / 0.26) * 255));
+                        }
+
+                        const fiberVal = Math.sin(nx * 8 - ny * 4) * Math.sin(nz * 6);
+                        if (fiberVal > 0.82 && Math.sqrt(nx * nx + ny * ny + nz * nz) < 0.7) {
+                            bdnfVal = Math.max(bdnfVal, 95);
+                        }
+
+                        bdnfData[idx] = Math.max(0, Math.min(255, bdnfVal));
+                    }
+                }
+            }
+        }
+
+        function solveClickCoordinates(ndcX, ndcY) {
+            const ndcNear = [ndcX, ndcY, -1, 1];
+            const ndcFar = [ndcX, ndcY, 1, 1];
+
+            const worldNear = vec4MulMat4(ndcNear, state.invModelViewProj);
+            const worldFar = vec4MulMat4(ndcFar, state.invModelViewProj);
+
+            const ro = [worldNear[0] / worldNear[3], worldNear[1] / worldNear[3], worldNear[2] / worldNear[3]];
+            const worldFarPos = [worldFar[0] / worldFar[3], worldFar[1] / worldFar[3], worldFar[2] / worldFar[3]];
+            const rd = normalize(subtract(worldFarPos, ro));
+
+            const localRo = vec3MulMat4(ro, state.modelMatrixInverse);
+            const localRd = normalize(vec3MulMat3(rd, state.modelMatrixInverse));
+
+            const t0 = [0], t1 = [0];
+            if (intersectBoxJS(localRo, localRd, t0, t1)) {
+                const steps = 150;
+                const stepSize = (t1[0] - t0[0]) / steps;
+                for (let i = 0; i < steps; i++) {
+                    const t = t0[0] + i * stepSize;
+                    const p = add(localRo, scale(localRd, t));
+
+                    if (p[0] > state.clipX || p[1] > state.clipY || p[2] > state.clipZ) {
+                        continue;
+                    }
+
+                    const vx = Math.floor(p[0] * (volWidth - 1));
+                    const vy = Math.floor(p[1] * (volHeight - 1));
+                    const vz = Math.floor(p[2] * (volDepth - 1));
+
+                    if (vx >= 0 && vx < volWidth && vy >= 0 && vy < volHeight && vz >= 0 && vz < volDepth) {
+                        const idx = vx + vy * volWidth + vz * volWidth * volHeight;
+                        const d = volumeData[idx];
+
+                        if (d > 45) {
+                            const x_mm = (p[0] - 0.5) * 300;
+                            const y_mm = (p[1] - 0.5) * 300;
+                            const z_mm = (p[2] - 0.5) * 300;
+
+                            state.clickCoords = { x: x_mm, y: y_mm, z: z_mm, density: d };
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        const vsRaymarching = `#version 300 es
+    in vec2 position;
+    out vec2 v_texCoord;
+    void main() {
+        v_texCoord = position * 0.5 + 0.5;
+        gl_Position = vec4(position, 0.0, 1.0);
+    }`;
+
+        const fsRaymarching = `#version 300 es
+    precision highp float;
+    precision highp sampler3D;
+    
+    in vec2 v_texCoord;
+    out vec4 fragColor;
+    
+    uniform sampler3D u_brainVolume;
+    uniform sampler3D u_bdnfVolume;
+    
+    uniform vec3 u_cameraPos;
+    uniform mat4 u_invModelViewProj;
+    uniform mat4 u_modelMatrixInverse;
+    
+    uniform float u_clipX;
+    uniform float u_clipY;
+    uniform float u_clipZ;
+    uniform float u_window;
+    uniform float u_level;
+    uniform int u_renderMode;
+    uniform float u_time;
+    uniform float u_bdnfIntensity;
+    
+    bool intersectBox(vec3 ro, vec3 rd, out float t0, out float t1) {
+        vec3 boxMin = vec3(0.0);
+        vec3 boxMax = vec3(1.0);
+        vec3 invR = 1.0 / (rd + vec3(1e-6));
+        vec3 tbot = invR * (boxMin - ro);
+        vec3 ttop = invR * (boxMax - ro);
+        vec3 tmin = min(tbot, ttop);
+        vec3 tmax = max(tbot, ttop);
+        float near = max(max(tmin.x, tmin.y), tmin.z);
+        float far = min(min(tmax.x, tmax.y), tmax.z);
+        t0 = max(near, 0.0);
+        t1 = far;
+        return near < far && far > 0.0;
+    }
+    
+    void main() {
+        vec4 ndcNear = vec4(v_texCoord * 2.0 - 1.0, -1.0, 1.0);
+        vec4 ndcFar  = vec4(v_texCoord * 2.0 - 1.0,  1.0, 1.0);
+        
+        vec4 worldNear = u_invModelViewProj * ndcNear;
+        vec4 worldFar  = u_invModelViewProj * ndcFar;
+        
+        vec3 ro = worldNear.xyz / worldNear.w;
+        vec3 rd = normalize(worldFar.xyz / worldFar.w - ro);
+        
+        vec3 localRo = (u_modelMatrixInverse * vec4(ro, 1.0)).xyz;
+        vec3 localRd = normalize((u_modelMatrixInverse * vec4(rd, 0.0)).xyz);
+        
+        float t0, t1;
+        if (!intersectBox(localRo, localRd, t0, t1)) {
+            discard;
+        }
+        
+        vec4 accumulatedColor = vec4(0.0);
+        float stepSize = 0.0035;
+        
+        vec3 currentPos = localRo + localRd * t0;
+        vec3 endPos = localRo + localRd * t1;
+        float dist = distance(currentPos, endPos);
+        int numSteps = int(dist / stepSize);
+        numSteps = min(numSteps, 300);
+        
+        for (int i = 0; i < numSteps; i++) {
+            if (currentPos.x > u_clipX || currentPos.y > u_clipY || currentPos.z > u_clipZ) {
+                currentPos += localRd * stepSize;
+                continue;
+            }
+            
+            float density = texture(u_brainVolume, currentPos).r;
+            float normalizedDensity = (density - (u_level - u_window / 2.0)) / u_window;
+            normalizedDensity = clamp(normalizedDensity, 0.0, 1.0);
+            
+            vec4 colorSample = vec4(0.0);
+            
+            if (normalizedDensity > 0.02) {
+                if (u_renderMode == 0) {
+                    if (normalizedDensity > 0.8) {
+                        colorSample = vec4(0.85, 0.80, 0.95, normalizedDensity * 0.22);
+                    } else if (normalizedDensity > 0.52) {
+                        colorSample = vec4(1.0, 0.0, 0.45, normalizedDensity * 0.75);
+                    } else {
+                        colorSample = vec4(0.55, 0.22, 0.85, normalizedDensity * 0.06);
+                    }
+                } else if (u_renderMode == 1 || u_renderMode == 2) {
+                    float bdnf = texture(u_bdnfVolume, currentPos).r;
+                    if (bdnf > 0.08) {
+                        float pulse = 0.5 + 0.5 * sin(u_time * 6.0 + currentPos.y * 22.0);
+                        vec3 bdnfColor = mix(vec3(0.0, 1.0, 0.65), vec3(0.0, 0.7, 1.0), bdnf);
+                        colorSample = vec4(bdnfColor, bdnf * u_bdnfIntensity * (0.75 + 0.25 * pulse));
+                    } else {
+                        if (normalizedDensity > 0.8) {
+                            colorSample = vec4(0.3, 0.2, 0.45, normalizedDensity * 0.08);
+                        } else {
+                            colorSample = vec4(0.4, 0.15, 0.6, normalizedDensity * 0.03);
+                        }
+                    }
+                }
+                
+                accumulatedColor.rgb += (1.0 - accumulatedColor.a) * colorSample.rgb * colorSample.a;
+                accumulatedColor.a += (1.0 - accumulatedColor.a) * colorSample.a;
+                
+                if (accumulatedColor.a >= 0.96) {
+                    accumulatedColor.a = 1.0;
+                    break;
+                }
+            }
+            currentPos += localRd * stepSize;
+        }
+        fragColor = accumulatedColor;
+    }`;
+
+        const lineVsSource = `#version 300 es
+    in vec3 position;
+    in vec3 color;
+    out vec3 v_color;
+    uniform mat4 u_modelViewProj;
+    void main() {
+        v_color = color;
+        gl_Position = u_modelViewProj * vec4(position, 1.0);
+    }`;
+
+        const lineFsSource = `#version 300 es
+    precision highp float;
+    in vec3 v_color;
+    out vec4 fragColor;
+    uniform float u_time;
+    void main() {
+        float pulse = 0.55 + 0.45 * sin(u_time * 7.0);
+        fragColor = vec4(v_color * pulse, 0.8);
+    }`;
+
+        let lineCount = 0;
+        let lineVAO = null;
+        let lineVBO = null;
+
+        function buildTractographyGeometry(gl, program) {
+            const linesData = [];
+
+            for (let i = 0; i < 18; i++) {
+                const yOffset = -0.12 + i * 0.014;
+                const p0 = [0.22, 0.35 + yOffset, 0.5];
+                const p1 = [0.4, 0.65 + yOffset, 0.5];
+                const p2 = [0.6, 0.65 + yOffset, 0.5];
+                const p3 = [0.78, 0.35 + yOffset, 0.5];
+
+                const segments = 24;
+                const color = [0.85, 0.12, 0.95];
+
+                for (let j = 0; j <= segments; j++) {
+                    const t = j / segments;
+                    const pt = getBezierPoint(p0, p1, p2, p3, t);
+                    linesData.push(...pt, ...color);
+                }
+            }
+
+            for (let i = 0; i < 22; i++) {
+                const xOffset = -0.16 + i * 0.015;
+                const zOffset = -0.12 + (i % 6) * 0.04;
+                const p0 = [0.5 + xOffset, 0.72, 0.5 + zOffset];
+                const p1 = [0.5 + xOffset * 0.5, 0.42, 0.5 + zOffset * 0.4];
+                const p2 = [0.5, 0.22, 0.5];
+                const p3 = [0.5, 0.04, 0.5];
+
+                const segments = 24;
+                const color = [0.0, 0.82, 1.0];
+
+                for (let j = 0; j <= segments; j++) {
+                    const t = j / segments;
+                    const pt = getBezierPoint(p0, p1, p2, p3, t);
+                    linesData.push(...pt, ...color);
+                }
+            }
+
+            for (let i = 0; i < 15; i++) {
+                const xOffset = -0.22 + i * 0.03;
+                const p0 = [0.5 + xOffset, 0.32, 0.22];
+                const p1 = [0.5 + xOffset, 0.48, 0.42];
+                const p2 = [0.5 + xOffset, 0.48, 0.62];
+                const p3 = [0.5 + xOffset, 0.32, 0.82];
+
+                const segments = 24;
+                const color = [0.0, 1.0, 0.62];
+
+                for (let j = 0; j <= segments; j++) {
+                    const t = j / segments;
+                    const pt = getBezierPoint(p0, p1, p2, p3, t);
+                    linesData.push(...pt, ...color);
+                }
+            }
+
+            const floatData = new Float32Array(linesData);
+            lineCount = linesData.length / 6;
+
+            lineVAO = gl.createVertexArray();
+            gl.bindVertexArray(lineVAO);
+
+            lineVBO = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, lineVBO);
+            gl.bufferData(gl.ARRAY_BUFFER, floatData, gl.STATIC_DRAW);
+
+            const posLoc = gl.getAttribLocation(program, "position");
+            gl.enableVertexAttribArray(posLoc);
+            gl.vertexAttribPointer(posLoc, 3, gl.FLOAT, false, 24, 0);
+
+            const colLoc = gl.getAttribLocation(program, "color");
+            gl.enableVertexAttribArray(colLoc);
+            gl.vertexAttribPointer(colLoc, 3, gl.FLOAT, false, 24, 12);
+
+            gl.bindVertexArray(null);
+        }
+
+        function getBezierPoint(p0, p1, p2, p3, t) {
+            const mt = 1.0 - t;
+            const mt2 = mt * mt;
+            const mt3 = mt2 * mt;
+            const t2 = t * t;
+            const t3 = t2 * t;
+            return [
+                mt3 * p0[0] + 3 * mt2 * t * p1[0] + 3 * mt * t2 * p2[0] + t3 * p3[0],
+                mt3 * p0[1] + 3 * mt2 * t * p1[1] + 3 * mt * t2 * p2[1] + t3 * p3[1],
+                mt3 * p0[2] + 3 * mt2 * t * p1[2] + 3 * mt * t2 * p2[2] + t3 * p3[2]
+            ];
+        }
+        function createProgram(gl, vsSource, fsSource) {
+            const vs = gl.createShader(gl.VERTEX_SHADER);
+            gl.shaderSource(vs, vsSource);
+            gl.compileShader(vs);
+            if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+                console.error("Vertex shader compile error:", gl.getShaderInfoLog(vs));
+            }
+
+            const fs = gl.createShader(gl.FRAGMENT_SHADER);
+            gl.shaderSource(fs, fsSource);
+            gl.compileShader(fs);
+            if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+                console.error("Fragment shader compile error:", gl.getShaderInfoLog(fs));
+            }
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.linkProgram(program);
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error("Program link error:", gl.getProgramInfoLog(program));
+            }
+            return program;
+        }
+
+        let gl = null;
+        let canvas = null;
+        let volProgram = null;
+        let lineProgram = null;
+        let positionBuffer = null;
+        let vao = null;
+        let brainTexture = null;
+        let bdnfTexture = null;
+
+        function initVolumeSubstrate() {
+            canvas = document.getElementById("vht-brain-core");
+            if (!canvas) return;
+
+            gl = canvas.getContext("webgl2", { alpha: false, antialias: true });
+            if (!gl) {
+                console.error("WebGL2 is not active.");
+                return;
+            }
+
+            generateBrainVoxels();
+            generateBdnfVoxels();
+
+            volProgram = createProgram(gl, vsRaymarching, fsRaymarching);
+            lineProgram = createProgram(gl, lineVsSource, fsRaymarching.replace(fsRaymarching, lineFsSource));
+
+            const quadVerts = new Float32Array([
+                -1, -1,
+                1, -1,
+                -1, 1,
+                -1, 1,
+                1, -1,
+                1, 1
+            ]);
+
+            vao = gl.createVertexArray();
+            gl.bindVertexArray(vao);
+
+            positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, quadVerts, gl.STATIC_DRAW);
+
+            const posAttr = gl.getAttribLocation(volProgram, "position");
+            gl.enableVertexAttribArray(posAttr);
+            gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
+
+            gl.bindVertexArray(null);
+
+            brainTexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_3D, brainTexture);
+            gl.texImage3D(gl.TEXTURE_3D, 0, gl.R8, volWidth, volHeight, volDepth, 0, gl.RED, gl.UNSIGNED_BYTE, volumeData);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+
+            bdnfTexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_3D, bdnfTexture);
+            gl.texImage3D(gl.TEXTURE_3D, 0, gl.R8, volWidth, volHeight, volDepth, 0, gl.RED, gl.UNSIGNED_BYTE, bdnfData);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+
+            buildTractographyGeometry(gl, lineProgram);
+
+            window.addEventListener("mousedown", (e) => {
+                if (e.target.closest('.glass-card, header, footer, button, input, .tab-btn')) return;
+                state.isDragging = true;
+                state.lastMouseX = e.clientX;
+                state.lastMouseY = e.clientY;
+                state.autoRotate = false;
+                renderVanillaHUD();
+            });
+
+            window.addEventListener("mousemove", (e) => {
+                if (!state.isDragging) return;
+                const dx = e.clientX - state.lastMouseX;
+                const dy = e.clientY - state.lastMouseY;
+
+                state.rotationY += dx * 0.006;
+                state.rotationX += dy * 0.006;
+                state.rotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, state.rotationX));
+
+                state.lastMouseX = e.clientX;
+                state.lastMouseY = e.clientY;
+                renderVanillaHUD();
+            });
+
+            window.addEventListener("mouseup", () => {
+                state.isDragging = false;
+            });
+
+            window.addEventListener("click", (e) => {
+                if (e.target.closest('.glass-card, header, footer, button, input, .tab-btn')) return;
+
+                const rect = canvas.getBoundingClientRect();
+                const ndcX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                const ndcY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                if (solveClickCoordinates(ndcX, ndcY)) {
+                    addLogEntry(
+                        `CLINICAL_LOCK: Affine Transformation Lock: Маркиран воксел при [X: ${state.clickCoords.x.toFixed(1)}mm, Y: ${state.clickCoords.y.toFixed(1)}mm, Z: ${state.clickCoords.z.toFixed(1)}mm] с плътност ${state.clickCoords.density} HU.`,
+                        `CLINICAL_LOCK: Affine Transformation Lock: Voxel targeted at [X: ${state.clickCoords.x.toFixed(1)}mm, Y: ${state.clickCoords.y.toFixed(1)}mm, Z: ${state.clickCoords.z.toFixed(1)}mm] with density ${state.clickCoords.density} HU.`
+                    );
+                    renderVanillaHUD();
+                }
+            });
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        function renderLoop(time) {
+            if (!canvas || !gl) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            const displayWidth = Math.floor(canvas.clientWidth * dpr);
+            const displayHeight = Math.floor(canvas.clientHeight * dpr);
+
+            if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+                canvas.width = displayWidth;
+                canvas.height = displayHeight;
+            }
+
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.clearColor(0.012, 0.004, 0.024, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.disable(gl.DEPTH_TEST);
+
+            if (state.autoRotate) {
+                state.rotationY += 0.005;
+            }
+
+            const timeSec = time * 0.001;
+
+            const rx = rotateX(state.rotationX);
+            const ry = rotateY(state.rotationY);
+            const modelMatrix = multiplyMat4(ry, rx);
+            state.modelMatrixInverse = invertMat4(modelMatrix) || identity();
+
+            const view = new Float32Array([
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                -0.5, -0.5, -1.45, 1
+            ]);
+
+            const aspect = canvas.width / canvas.height;
+            const proj = perspective(Math.PI / 4, aspect, 0.1, 10.0);
+
+            const mv = multiplyMat4(view, modelMatrix);
+            const mvp = multiplyMat4(proj, mv);
+            state.invModelViewProj = invertMat4(mvp) || identity();
+
+            state.bdnfIntensity = state.bdnfLevel;
+
+            gl.useProgram(volProgram);
+            gl.bindVertexArray(vao);
+
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_3D, brainTexture);
+            gl.uniform1i(gl.getUniformLocation(volProgram, "u_brainVolume"), 0);
+
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_3D, bdnfTexture);
+            gl.uniform1i(gl.getUniformLocation(volProgram, "u_bdnfVolume"), 1);
+
+            gl.uniform3f(gl.getUniformLocation(volProgram, "u_cameraPos"), 0.5, 0.5, -1.25);
+            gl.uniformMatrix4fv(gl.getUniformLocation(volProgram, "u_invModelViewProj"), false, state.invModelViewProj);
+            gl.uniformMatrix4fv(gl.getUniformLocation(volProgram, "u_modelMatrixInverse"), false, state.modelMatrixInverse);
+
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_clipX"), state.clipX);
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_clipY"), state.clipY);
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_clipZ"), state.clipZ);
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_window"), state.windowVal);
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_level"), state.levelVal);
+            gl.uniform1i(gl.getUniformLocation(volProgram, "u_renderMode"), state.renderMode);
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_time"), timeSec);
+            gl.uniform1f(gl.getUniformLocation(volProgram, "u_bdnfIntensity"), state.bdnfIntensity);
+
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            gl.bindVertexArray(null);
+
+            if (state.renderMode === 2 || state.renderMode === 1) {
+                gl.useProgram(lineProgram);
+                gl.uniformMatrix4fv(gl.getUniformLocation(lineProgram, "u_modelViewProj"), false, mvp);
+                gl.uniform1f(gl.getUniformLocation(lineProgram, "u_time"), timeSec);
+
+                gl.bindVertexArray(lineVAO);
+                const pointsPerTract = 25;
+                const numTracts = lineCount / pointsPerTract;
+                for (let t = 0; t < numTracts; t++) {
+                    gl.drawArrays(gl.LINE_STRIP, t * pointsPerTract, pointsPerTract);
+                }
+                gl.bindVertexArray(null);
+            }
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        function identity() {
+            return new Float32Array([
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            ]);
+        }
+
+        function renderSurgicalControlsCard() {
+            return `
+            <div class="glass-card surgical-controls-card hud-transition" style="pointer-events: auto;">
+                <h3 style="font-size: 1.1rem; font-weight: 900; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;" class="mono text-purple-300">
+                    <i data-lucide="sliders" class="w-4 h-4 text-purple-400"></i>
+                    ${state.language === 'bg' ? '3D ДИГИТАЛЕН СКАЛПЕЛ' : '3D DIGITAL SCALPEL'}
+                </h3>
+                
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 6px;" class="mono">RENDER MODE</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <button onclick="setRenderMode(0)" class="tab-btn ${state.renderMode === 0 ? 'active' : ''}" style="padding: 6px 12px; font-size: 0.75rem; text-align: left; width: 100%;">
+                            ANATOMICAL VOLUME
+                        </button>
+                        <button onclick="setRenderMode(1)" class="tab-btn ${state.renderMode === 1 ? 'active' : ''}" style="padding: 6px 12px; font-size: 0.75rem; text-align: left; width: 100%;">
+                            BDNF NEUROPLASTICITY
+                        </button>
+                        <button onclick="setRenderMode(2)" class="tab-btn ${state.renderMode === 2 ? 'active' : ''}" style="padding: 6px 12px; font-size: 0.75rem; text-align: left; width: 100%;">
+                            DTI TRACTOGRAPHY (3D LINES)
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 8px;">
+                    <span style="font-size: 0.75rem; color: var(--text-secondary);" class="mono">AUTO-SPIN (60 FPS)</span>
+                    <input type="checkbox" ${state.autoRotate ? 'checked' : ''} onchange="toggleAutoRotate(this)" style="cursor: pointer;" />
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
+                        <span>DENSITY WINDOW (CONTRAST)</span>
+                        <span style="color: var(--neon-purple);">${state.windowVal.toFixed(2)}</span>
+                    </div>
+                    <input type="range" min="0.1" max="1.5" step="0.05" value="${state.windowVal}" oninput="updateVolParam('windowVal', this.value)" style="width: 100%; cursor: pointer;" />
+                </div>
+                <div style="margin-bottom: 16px; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
+                        <span>DENSITY LEVEL (BRIGHTNESS)</span>
+                        <span style="color: var(--neon-purple);">${state.levelVal.toFixed(2)}</span>
+                    </div>
+                    <input type="range" min="0.05" max="0.9" step="0.05" value="${state.levelVal}" oninput="updateVolParam('levelVal', this.value)" style="width: 100%; cursor: pointer;" />
+                </div>
+
+                <div style="margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
+                        <span>SAGITTAL CLIP (X-AXIS)</span>
+                        <span style="color: var(--neon-blue);">${state.clipX.toFixed(2)}</span>
+                    </div>
+                    <input type="range" min="0.0" max="1.0" step="0.02" value="${state.clipX}" oninput="updateVolParam('clipX', this.value)" style="width: 100%; cursor: pointer;" />
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
+                        <span>CORONAL CLIP (Y-AXIS)</span>
+                        <span style="color: var(--neon-pink);">${state.clipY.toFixed(2)}</span>
+                    </div>
+                    <input type="range" min="0.0" max="1.0" step="0.02" value="${state.clipY}" oninput="updateVolParam('clipY', this.value)" style="width: 100%; cursor: pointer;" />
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 4px;" class="mono">
+                        <span>AXIAL CLIP (Z-AXIS)</span>
+                        <span style="color: var(--neon-amber);">${state.clipZ.toFixed(2)}</span>
+                    </div>
+                    <input type="range" min="0.0" max="1.0" step="0.02" value="${state.clipZ}" oninput="updateVolParam('clipZ', this.value)" style="width: 100%; cursor: pointer;" />
+                </div>
+            </div>
+        `;
+        }
+
+        function renderSurgicalCoordsCard() {
+            if (!state.clickCoords) return '';
+            return `
+            <div class="glass-card surgical-coords-card scale-in" style="pointer-events: auto;">
+                <h3 style="font-size: 1.0rem; font-weight: 900; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; color: var(--neon-emerald);" class="mono">
+                    <i data-lucide="crosshair" class="w-4 h-4 text-emerald-400"></i>
+                    ${state.language === 'bg' ? 'AFFINE LOCK КООРДИНАТИ' : 'AFFINE LOCK COORDINATES'}
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 6px;" class="mono">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px solid rgba(0, 255, 170, 0.08); padding-bottom: 4px;">
+                        <span style="color: var(--text-secondary);">X (SAGITTAL):</span>
+                        <span style="font-weight: 700; color: #fff;">${state.clickCoords.x.toFixed(1)} mm</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px solid rgba(0, 255, 170, 0.08); padding-bottom: 4px;">
+                        <span style="color: var(--text-secondary);">Y (CORONAL):</span>
+                        <span style="font-weight: 700; color: #fff;">${state.clickCoords.y.toFixed(1)} mm</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px solid rgba(0, 255, 170, 0.08); padding-bottom: 4px;">
+                        <span style="color: var(--text-secondary);">Z (AXIAL):</span>
+                        <span style="font-weight: 700; color: #fff;">${state.clickCoords.z.toFixed(1)} mm</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; border-bottom: 1px solid rgba(0, 255, 170, 0.08); padding-bottom: 4px;">
+                        <span style="color: var(--text-secondary);">VOXEL DENSITY:</span>
+                        <span style="font-weight: 700; color: var(--neon-emerald);">${state.clickCoords.density} HU</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                        <span style="color: var(--text-secondary);">CLINICAL REF:</span>
+                        <span style="font-weight: 700; color: var(--neon-pink);">ISOCENTER</span>
+                    </div>
+                </div>
+                <button onclick="clearClickCoords()" class="tab-btn" style="border-color: rgba(255,59,111,0.3); color: var(--neon-red); padding: 4px 8px; font-size: 0.65rem; margin-top: 10px; width: 100%;">
+                    CLEAR SELECTION
+                </button>
+            </div>
+        `;
+        }
+
+        function renderHudToggleButton() {
+            return `
+            <button onclick="toggleHudVisibility()" class="tab-btn" style="position: fixed; bottom: 40px; right: 40px; z-index: 100; border-color: var(--neon-purple); background: var(--purple-glass); display: flex; align-items: center; gap: 8px; box-shadow: 0 0 20px rgba(181, 95, 230, 0.3); pointer-events: auto;">
+                <i data-lucide="${state.hudVisible ? 'eye-off' : 'eye'}" class="w-4 h-4 text-purple-400"></i>
+                <span>${state.hudVisible ? (state.language === 'bg' ? 'Скрий Телеметрията' : 'Hide Telemetry HUD') : (state.language === 'bg' ? 'Покажи Телеметрията' : 'Show Telemetry HUD')}</span>
+            </button>
+        `;
+        }
+
+        function injectMetabolicAnomaly() {
+            state.ph = 7.12;
+            state.oxygen = 88;
+            state.zScore = 3.9167;
+            state.empathyAnomaly = true;
+            addLogEntry(
+                "[CRITICAL_ALERT] AURA: Засечено критично отклонение от 3.92σ в pH и O₂ субстратите!",
+                "[CRITICAL_ALERT] AURA: Critical safety deviation of 3.92σ detected in pH and O₂ substrates!"
+            );
+            addLogEntry(
+                "[TEE_LOCKOUT] KNOX ENFORCER: Автоматичните помпи са блокирани криптографски.",
+                "[TEE_LOCKOUT] KNOX ENFORCER: Automatic pumps are cryptographically locked."
+            );
+            renderVanillaHUD();
+        }
+
+        function resetHUD() {
+            if (gaitTimer) {
+                clearInterval(gaitTimer);
+                gaitTimer = null;
+            }
+            state.fesStimulationActive = false;
+            state.fesActiveChannels = { plantar: 0, dorsiflex: 0, quad: 0, hamstring: 0 };
+            state.fesStatus = "STANDBY";
+            state.gaitPhase = 0;
+            state.catuskotiState = "SYNERGY";
+            state.bdnfLevel = 1.0;
+            state.glut4Upregulation = 1.0;
+            currentGlucose = [...rawChaoticData];
+
+            state.ph = 7.41;
+            state.oxygen = 98;
+            state.zScore = 0.42;
+            state.empathyAnomaly = false;
+            addLogEntry(
+                "[SYSTEM_RESET] Метаболитните параметри са нормализирани. Защитната решетка е вдигната.",
+                "[SYSTEM_RESET] Metabolic parameters normalized. Safeguard grid is raised."
+            );
+            renderVanillaHUD();
+        }
+
+        // Run Vanilla engine
+        window.addEventListener("DOMContentLoaded", () => {
+            renderVanillaHUD();
+            initVolumeSubstrate();
+            addLogEntry(
+                "[SUCCESS] Self-Healing инициализацията е завършена. Офлайн режимът е напълно активен.",
+                "[SUCCESS] Self-Healing initialization complete. Offline Mode fully active."
+            );
+        });
+    </script>
+</body>
+
+</html>
