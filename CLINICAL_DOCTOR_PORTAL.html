@@ -763,111 +763,28 @@
                 const gene = document.getElementById('geneMutation').value;
                 const recBox = document.getElementById('drugRecommendations');
 
+                const t = i18n[currentLang] || i18n.bg;
+                const drugList = (t.drugs && t.drugs[gene]) ? t.drugs[gene] : (t.drugs ? t.drugs.DEFAULT : []);
+
                 let drugsHTML = '';
-                if (gene === 'KRAS_G12D') {
-                    drugsHTML = `
+                drugList.forEach(item => {
+                    drugsHTML += `
                         <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
                             <div>
-                                <div class="text-sm font-bold text-cyan-400">1. KRAS G12D Direct Selective Inhibitor</div>
-                                <div class="text-xs text-slate-400">Дозировка: 45 mg/m² IV през 48 часа (Специфична инхибиция на активно GTP състояние)</div>
+                                <div class="text-sm font-bold text-cyan-400">${item.name}</div>
+                                <div class="text-xs text-slate-400">${item.desc}</div>
                             </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.4%</span>
-                        </div>
-                        <div class="p-3 bg-slate-900/90 border border-purple-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-purple-400">2. Anti-PD-L1 Checkpoint Immunotherapy</div>
-                                <div class="text-xs text-slate-400">Дозировка: 10 mg/kg | Сенсибилизиране на туморната микросреда</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-purple-400">Lysis Rate: High</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400">${item.tag}</span>
                         </div>
                     `;
-                } else if (gene === 'TP53_LOSS') {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-cyan-400">1. p53 Conformation Reactivator (PRIMA-1MET / APR-246)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 60 mg/kg | Възстановява апоптотичната функция на р53</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.7%</span>
-                        </div>
-                        <div class="p-3 bg-slate-900/90 border border-emerald-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-emerald-400">2. BDNF Micro-dosing Neuro-Perfusion</div>
-                                <div class="text-xs text-slate-400">Дозировка: 15 µg/kg/day | Невропротекция при Глиобластом и CNS лезии</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Neuro-Safety: 100%</span>
-                        </div>
-                    `;
-                } else if (gene === 'HER2_AMPL') {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-pink-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-pink-400">1. Anti-HER2 Monoclonal Conjugate (Trastuzumab Deruxtecan)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 5.4 mg/kg IV | Таргетирано освобождаване на топоизомераза I инхибитор</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.1%</span>
-                        </div>
-                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-cyan-400">2. CDK4/6 Dual Kinase Inhibitor (Palbociclib)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 125 mg дневно | Блокиране на клетъчния цикъл в G1/S фаза</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-cyan-400">Cell Arrest: 96.8%</span>
-                        </div>
-                    `;
-                } else if (gene === 'BRAF_V600E') {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-amber-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-amber-400">1. BRAF V600E + MEK Inhibitor Combo (Dabrafenib + Trametinib)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 150 mg 2x/ден + 2 mg 1x/ден | Двойно MAPK/ERK блокиране</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.3%</span>
-                        </div>
-                    `;
-                } else if (gene === 'EGFR_L858R') {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-cyan-400">1. 3rd-Gen EGFR TKI (Osimertinib)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 80 mg дневно | Специфична инхибиция с пробиване на КРБ (Blood-Brain Barrier)</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.9%</span>
-                        </div>
-                    `;
-                } else if (gene === 'AR_AMPL_PTEN') {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-blue-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-blue-400">1. 2nd-Gen AR Signaling Inhibitor + AKT Block (Enzalutamide + Capivasertib)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 160 mg/day ARi | Таргетиране на PTEN-loss PI3K/AKT път</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.2%</span>
-                        </div>
-                    `;
-                } else if (gene === 'FLT3_ITD') {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-red-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-red-400">1. Targeted FLT3 Kinase Inhibitor (Gilteritinib)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 120 mg дневно | Бърза клирънс реакция при остра миелоидна левкемия</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.5%</span>
-                        </div>
-                    `;
-                } else {
-                    drugsHTML = `
-                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-cyan-400">1. Targeted Tyrosine Kinase Inhibitor</div>
-                                <div class="text-xs text-slate-400">Дозировка: 150 mg дневно орално | Потиска онкогенните сигнали</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 97.9%</span>
-                        </div>
-                    `;
-                }
+                });
 
                 recBox.innerHTML = drugsHTML;
+                
+                // Update survival text
+                const survivalEl = document.getElementById('resSurvival');
+                if (survivalEl) survivalEl.innerText = `38.4 ${t.survivalMonths || 'meseca'}`;
+
                 updateTumorCanvas(12);
             }, 1200);
         }
@@ -885,9 +802,20 @@
             const shrinkRatio = Math.max(0.15, 1 - (0.684 * (week / 24)));
             const currentSize = (sizeInput * shrinkRatio).toFixed(1);
 
-            document.getElementById('timelineWeekLabel').innerText = `Седмица ${week}: -${((1 - shrinkRatio) * 100).toFixed(1)}%`;
-            document.getElementById('initialSizeBadge').innerText = `${sizeInput} cm`;
-            document.getElementById('projectedSizeBadge').innerText = `${currentSize} cm`;
+            const t = i18n[currentLang] || i18n.bg;
+            const weekPrefix = t.weekLabel || 'Седмица';
+            const initPrefix = t.initDiam || 'Първоначален диам.:';
+            const projPrefix = t.projDiam || 'Прогнозиран диам.:';
+
+            document.getElementById('timelineWeekLabel').innerText = `${weekPrefix} ${week}: -${((1 - shrinkRatio) * 100).toFixed(1)}%`;
+            
+            const initBadge = document.getElementById('initialSizeBadge');
+            if (initBadge) initBadge.parentElement.childNodes[0].nodeValue = `${initPrefix} `;
+            if (initBadge) initBadge.innerText = `${sizeInput} cm`;
+
+            const projBadge = document.getElementById('projectedSizeBadge');
+            if (projBadge) projBadge.parentElement.childNodes[0].nodeValue = `${projPrefix} `;
+            if (projBadge) projBadge.innerText = `${currentSize} cm`;
 
             // Clear Background
             ctx.clearRect(0, 0, w, h);
