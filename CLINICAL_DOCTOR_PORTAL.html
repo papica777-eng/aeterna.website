@@ -97,10 +97,22 @@
 
             <div class="flex items-center gap-2 bg-emerald-950/60 border border-emerald-500/30 px-4 py-2 rounded-full">
                 <span class="w-3 h-3 rounded-full bg-emerald-400 pulse-emerald"></span>
-                <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">C-Index Precision: 97.13%</span>
+                <span id="kpiPrecisionLabel" class="text-xs font-bold text-emerald-400 uppercase tracking-wider">C-Index Precision: 97.13%</span>
             </div>
+
+            <!-- 🌍 4-LANGUAGE INTERNATIONALIZATION SELECTOR (BG, EN, FR, ES) -->
+            <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl">
+                <i data-lucide="languages" class="w-4 h-4 text-cyan-400"></i>
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-transparent text-xs font-bold text-slate-200 focus:outline-none cursor-pointer">
+                    <option value="bg" selected class="bg-slate-900 text-slate-200">🇧🇬 Български</option>
+                    <option value="en" class="bg-slate-900 text-slate-200">🇬🇧 English</option>
+                    <option value="fr" class="bg-slate-900 text-slate-200">🇫🇷 Français</option>
+                    <option value="es" class="bg-slate-900 text-slate-200">🇪🇸 Español</option>
+                </select>
+            </div>
+
             <div class="text-right hidden sm:block">
-                <span class="text-xs text-amber-400 font-bold block">Режим на ползване:</span>
+                <span id="modeLabelHeader" class="text-xs text-amber-400 font-bold block">Режим на ползване:</span>
                 <span class="text-xs font-bold text-cyan-400 mono">RUO / Horizon Europe Clinical Protocol</span>
             </div>
         </div>
@@ -388,9 +400,302 @@
         </section>
     </main>
 
-    <!-- JavaScript Logic -->
+    <!-- 🌍 4-LANGUAGE I18N ENGINE (BG, EN, FR, ES) -->
     <script>
+        const i18n = {
+            bg: {
+                title: "AETERNA VHT CLINICAL PORTAL",
+                subtitle: "Система за детерминистични онкологични симулации — Лекарски Интерфейс",
+                mainEco: "Основен Екосистема",
+                vhtDiabetes: "VHT Диабет & Кардио",
+                sovereignHud: "Sovereign HUD",
+                precisionBadge: "C-Index Прецизност: 97.13%",
+                modeLabel: "Режим на ползване:",
+                ruoProtocol: "RUO / Horizon Europe Клиничен Протокол",
+                safetyTitle: "Клинична Защита & RUO Протокол (Research Use Only)",
+                safetyDesc: "AETERNA-VHT функционира като асистент за прецизни тензорни симулации с **97.13% валидирана точност ($C$-index = 0.9713)**. Използва се съвместно с лекарския консилиум съгласно Horizon Europe протокол MDR 2017/745 RUO.",
+                boardVerified: "Онкологичен Консилиум Verified",
+                presetTitle: "1. Бързо Зареждане на Клиничен Шаблон",
+                patientDataTitle: "2. Данни на Пациента",
+                loincId: "LOINC Идентификация",
+                patientIdLabel: "ИД на Пациент / Досие",
+                ageLabel: "Възраст (Години)",
+                mutationLabel: "Драйвърна Мутация (LOINC Genomics / NGS Panel)",
+                ki67Label: "Ki-67 Пролиферационен Индекс (%)",
+                spo2Label: "Тъканна Оксигенация / Кислород (SpO2 %)",
+                tumorSizeLabel: "Размер на Лезията / Тумора (cm)",
+                simButton: "СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ",
+                initReadyTitle: "Системата е в пълна готовност",
+                initReadyDesc: "Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност.",
+                loadingTitle: "Извършване на In-Silico Biophysical Sweep...",
+                loadingDesc: "AVX-512 Tensor Calculations | HL7 FHIR Mapping | Catuskoti Entropy Collapse",
+                kpiSurvival: "Очаквана Преживяемост",
+                kpiSurvivalSub: "+91.3% спрямо стандартна терапия",
+                kpiAccuracy: "Точност на Симулацията",
+                kpiAccuracySub: "C-index = 0.9713 (EU MDR OK)",
+                kpiShrinkage: "Туморен Марджин Свиване",
+                kpiShrinkageSub: "Apoptotic Lysis Rate",
+                recTitle: "Препоръчана Таргетирана Терапия",
+                recSub: "Оптимизирана комбинация от медикаменти за пациента",
+                approvedPlan: "Одобрен План",
+                canvasTitle: "Биофизична Симулация на Туморната Свиваемост (Regression Timeline)",
+                canvasSub: "Визуализация на апоптотичната деструкция на образуванието под терапия",
+                diagZero: "Диагностика (0 седм.)",
+                month1: "Месец 1 (4 седм.)",
+                month3: "Месец 3 (12 седм.)",
+                month6: "Месец 6 (24 седм.)",
+                compTitle: "Сравнение на преживяемостта:",
+                btnPdf: "PDF Доклад",
+                btnFhir: "HL7 FHIR (JSON)",
+                btnTxt: "Текст / EHR (.txt)",
+                btnCsv: "Таблица (.csv)",
+                signedBy: "Подписано от:"
+            },
+            en: {
+                title: "AETERNA VHT CLINICAL PORTAL",
+                subtitle: "Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface",
+                mainEco: "Main Ecosystem",
+                vhtDiabetes: "VHT Diabetes & Cardio",
+                sovereignHud: "Sovereign HUD",
+                precisionBadge: "C-Index Precision: 97.13%",
+                modeLabel: "Execution Mode:",
+                ruoProtocol: "RUO / Horizon Europe Clinical Protocol",
+                safetyTitle: "Clinical Safety & RUO Protocol (Research Use Only)",
+                safetyDesc: "AETERNA-VHT functions as a precision tensor simulation assistant with **97.13% validated accuracy ($C$-index = 0.9713)**. Used jointly with the oncology board pursuant to Horizon Europe MDR 2017/745 RUO protocol.",
+                boardVerified: "Oncology Board Verified",
+                presetTitle: "1. Quick Clinical Preset Loader",
+                patientDataTitle: "2. Patient Dossier & Ingress",
+                loincId: "LOINC Identifier",
+                patientIdLabel: "Patient ID / Record",
+                ageLabel: "Age (Years)",
+                mutationLabel: "Driver Mutation (LOINC Genomics / NGS Panel)",
+                ki67Label: "Ki-67 Proliferation Index (%)",
+                spo2Label: "Tissue Oxygenation / SpO2 (%)",
+                tumorSizeLabel: "Lesion / Tumor Diameter (cm)",
+                simButton: "SIMULATE THERAPY WITH 97.13% TENSOR PRECISION",
+                initReadyTitle: "System Standing By & Fully Operational",
+                initReadyDesc: "Select a preset on the left or input patient diagnostic data. With one click, AETERNA-VHT generates the optimal oncology care plan with 97.13% validated precision.",
+                loadingTitle: "Executing In-Silico Biophysical Sweep...",
+                loadingDesc: "AVX-512 Tensor Calculations | HL7 FHIR Mapping | Catuskoti Entropy Collapse",
+                kpiSurvival: "Predicted Overall Survival",
+                kpiSurvivalSub: "+91.3% vs Standard of Care",
+                kpiAccuracy: "Simulation Precision",
+                kpiAccuracySub: "C-index = 0.9713 (EU MDR Compliant)",
+                kpiShrinkage: "Tumor Margin Shrinkage",
+                kpiShrinkageSub: "Apoptotic Lysis Rate",
+                recTitle: "Recommended Targeted Therapy",
+                recSub: "Optimized multi-agent therapeutic cocktail for patient profile",
+                approvedPlan: "Approved Care Plan",
+                canvasTitle: "Biophysical Tumor Regression Timeline",
+                canvasSub: "Real-time visualization of apoptotic lesion degradation under therapy",
+                diagZero: "Diagnostic (Wk 0)",
+                month1: "Month 1 (Wk 4)",
+                month3: "Month 3 (Wk 12)",
+                month6: "Month 6 (Wk 24)",
+                compTitle: "Overall Survival Comparison:",
+                btnPdf: "PDF Report",
+                btnFhir: "HL7 FHIR (JSON)",
+                btnTxt: "EHR Text (.txt)",
+                btnCsv: "CSV Data (.csv)",
+                signedBy: "Digitally Signed By:"
+            },
+            fr: {
+                title: "PORTAIL CLINIQUE AETERNA VHT",
+                subtitle: "Optimiseur d'Oncologie Jumeau Numérique Virtuel — Interface Médecin",
+                mainEco: "Écosystème Principal",
+                vhtDiabetes: "VHT Diabète & Cardio",
+                sovereignHud: "Sovereign HUD",
+                precisionBadge: "Précision C-Index: 97.13%",
+                modeLabel: "Mode d'Exécution:",
+                ruoProtocol: "RUO / Protocole Clinique Horizon Europe",
+                safetyTitle: "Sécurité Clinique & Protocole RUO (Research Use Only)",
+                safetyDesc: "AETERNA-VHT fonctionne comme un assistant de simulation tensorielle avec **97.13% de précision validée ($C$-index = 0.9713)**. Utilisé avec le comité d'oncologie selon le protocole Horizon Europe MDR 2017/745 RUO.",
+                boardVerified: "Vérifié par le Comité d'Oncologie",
+                presetTitle: "1. Chargement Rapide de Modèle Clinique",
+                patientDataTitle: "2. Données du Patient & Ingress",
+                loincId: "Identification LOINC",
+                patientIdLabel: "ID Patient / Dossier",
+                ageLabel: "Âge (Années)",
+                mutationLabel: "Mutation Driver (LOINC Génomique / Panneau NGS)",
+                ki67Label: "Indice de Prolifération Ki-67 (%)",
+                spo2Label: "Oxygénation Tissulaire / SpO2 (%)",
+                tumorSizeLabel: "Diamètre de la Tumeur (cm)",
+                simButton: "SIMULER LE TRAITEMENT AVEC 97.13% DE PRÉCISION",
+                initReadyTitle: "Système Prêt & Pleinement Opérationnel",
+                initReadyDesc: "Sélectionnez un modèle à gauche ou saisissez les données du patient. En un clic, AETERNA-VHT génère le plan oncologique optimal avec 97.13% de précision.",
+                loadingTitle: "Balayage Biophysique In-Silico en Cours...",
+                loadingDesc: "Calculs Tensoriels AVX-512 | Cartographie HL7 FHIR | Effondrement d'Entropie Catuskoti",
+                kpiSurvival: "Survie Globale Prédite",
+                kpiSurvivalSub: "+91.3% par rapport au traitement standard",
+                kpiAccuracy: "Précision de Simulation",
+                kpiAccuracySub: "C-index = 0.9713 (Conforme EU MDR)",
+                kpiShrinkage: "Réduction de la Marge Tumorale",
+                kpiShrinkageSub: "Taux de Lyse Apoptotique",
+                recTitle: "Thérapie Ciblée Recommandée",
+                recSub: "Cocktail thérapeutique optimisé pour le profil du patient",
+                approvedPlan: "Plan Approuvé",
+                canvasTitle: "Visualisation de Régression Tumorale Biophysique",
+                canvasSub: "Visualisation en temps réel de la dégradation apoptotique sous traitement",
+                diagZero: "Diagnostic (Sem. 0)",
+                month1: "Mois 1 (Sem. 4)",
+                month3: "Mois 3 (Sem. 12)",
+                month6: "Mois 6 (Sem. 24)",
+                compTitle: "Comparaison de Survie Globale:",
+                btnPdf: "Rapport PDF",
+                btnFhir: "HL7 FHIR (JSON)",
+                btnTxt: "Texte EHR (.txt)",
+                btnCsv: "Données CSV (.csv)",
+                signedBy: "Signé Numériquement Par:"
+            },
+            es: {
+                title: "PORTAL CLÍNICO AETERNA VHT",
+                subtitle: "Optimizador de Oncología Gemelo Virtual Humano — Interfaz Médica",
+                mainEco: "Ecosistema Principal",
+                vhtDiabetes: "VHT Diabetes & Cardio",
+                sovereignHud: "Sovereign HUD",
+                precisionBadge: "Precisión C-Index: 97.13%",
+                modeLabel: "Modo de Ejecución:",
+                ruoProtocol: "RUO / Protocolo Clínico Horizon Europe",
+                safetyTitle: "Seguridad Clínica y Protocolo RUO (Research Use Only)",
+                safetyDesc: "AETERNA-VHT funciona como un asistente de simulación tensorial de precisión con **97.13% de precisión validada ($C$-index = 0.9713)**. Utilizado con el comité oncológico según el protocolo Horizon Europe MDR 2017/745 RUO.",
+                boardVerified: "Verificado por el Comité Oncológico",
+                presetTitle: "1. Carga Rápida de Plantilla Clínica",
+                patientDataTitle: "2. Datos del Paciente e Ingesta",
+                loincId: "Identificación LOINC",
+                patientIdLabel: "ID de Paciente / Expediente",
+                ageLabel: "Edad (Años)",
+                mutationLabel: "Mutación Driver (Genómica LOINC / Panel NGS)",
+                ki67Label: "Índice de Proliferación Ki-67 (%)",
+                spo2Label: "Oxigenación Tisular / SpO2 (%)",
+                tumorSizeLabel: "Diámetro de la Lesión / Tumoral (cm)",
+                simButton: "SIMULAR TRATAMIENTO CON 97.13% DE PRECISIÓN",
+                initReadyTitle: "Sistema Listo y Completamente Operativo",
+                initReadyDesc: "Seleccione una plantilla a la izquierda o ingrese los datos diagnósticos del paciente. Con un clic, AETERNA-VHT genera el plan de atención oncológica óptimo con 97.13% de precisión.",
+                loadingTitle: "Ejecutando Barrido Biofísico In-Silico...",
+                loadingDesc: "Cálculos Tensoriales AVX-512 | Mapeo HL7 FHIR | Colapso de Entropía Catuskoti",
+                kpiSurvival: "Supervivencia Global Predicha",
+                kpiSurvivalSub: "+91.3% vs Tratamiento Estándar",
+                kpiAccuracy: "Precisión de Simulación",
+                kpiAccuracySub: "C-index = 0.9713 (Cumple EU MDR)",
+                kpiShrinkage: "Reducción del Margen Tumoral",
+                kpiShrinkageSub: "Tasa de Lisis Apoptótica",
+                recTitle: "Terapia Dirigida Recomendada",
+                recSub: "Cóctel terapéutico optimizado para el perfil del paciente",
+                approvedPlan: "Plan de Atención Aprobado",
+                canvasTitle: "Línea de Tiempo de Regresión Tumoral Biofísica",
+                canvasSub: "Visualización en tiempo real de la degradación apoptótica bajo terapia",
+                diagZero: "Diagnóstico (Sem. 0)",
+                month1: "Mes 1 (Sem. 4)",
+                month3: "Mes 3 (Sem. 12)",
+                month6: "Mes 6 (Sem. 24)",
+                compTitle: "Comparación de Supervivencia Global:",
+                btnPdf: "Informe PDF",
+                btnFhir: "HL7 FHIR (JSON)",
+                btnTxt: "Texto EHR (.txt)",
+                btnCsv: "Datos CSV (.csv)",
+                signedBy: "Firmado Digitalmente Por:"
+            }
+        };
+
+        let currentLang = 'bg';
+
+        function changeLanguage(langKey) {
+            currentLang = langKey;
+            const t = i18n[langKey] || i18n.bg;
+            document.documentElement.lang = langKey;
+
+            // Header Elements
+            const h1Title = document.querySelector('header h1');
+            if (h1Title) h1Title.innerHTML = `AETERNA <span class="gradient-text">${t.title}</span>`;
+            const headerSub = document.querySelector('header p');
+            if (headerSub) headerSub.innerText = t.subtitle;
+            const kpiLabel = document.getElementById('kpiPrecisionLabel');
+            if (kpiLabel) kpiLabel.innerText = t.precisionBadge;
+            const modeHeader = document.getElementById('modeLabelHeader');
+            if (modeHeader) modeHeader.innerText = t.modeLabel;
+
+            // Safety Banner
+            const safetyH4 = document.querySelector('.bg-slate-900\\/90 h4');
+            if (safetyH4) safetyH4.innerText = t.safetyTitle;
+            const safetyP = document.querySelector('.bg-slate-900\\/90 p');
+            if (safetyP) safetyP.innerText = t.safetyDesc;
+            const boardBadge = document.querySelector('.bg-amber-500\\/20');
+            if (boardBadge) boardBadge.innerText = t.boardVerified;
+
+            // Left Section Titles
+            const presetH2 = document.querySelector('.glass-panel h2');
+            if (presetH2) presetH2.innerHTML = `<i data-lucide="zap" class="w-5 h-5"></i> ${t.presetTitle}`;
+            const patientH2 = document.querySelectorAll('.glass-panel h2')[1];
+            if (patientH2) {
+                patientH2.querySelector('span').innerHTML = `<i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> ${t.patientDataTitle}`;
+                patientH2.querySelectorAll('span')[1].innerText = t.loincId;
+            }
+
+            // Labels
+            const labels = document.querySelectorAll('label');
+            if (labels.length >= 4) {
+                labels[0].innerText = t.patientIdLabel;
+                labels[1].innerText = t.ageLabel;
+                labels[2].innerText = t.mutationLabel;
+                labels[3].innerText = t.tumorSizeLabel;
+            }
+
+            const sliders = document.querySelectorAll('.flex.justify-between.text-xs.mb-1 span.font-bold.text-slate-400');
+            if (sliders.length >= 2) {
+                sliders[0].innerText = t.ki67Label;
+                sliders[1].innerText = t.spo2Label;
+            }
+
+            // Sim Button
+            const submitBtn = document.querySelector('#patientForm button[type="submit"]');
+            if (submitBtn) submitBtn.innerHTML = `<i data-lucide="play" class="w-5 h-5 fill-slate-950"></i> ${t.simButton}`;
+
+            // Initial State Banner
+            const initH3 = document.querySelector('#initialState h3');
+            if (initH3) initH3.innerText = t.initReadyTitle;
+            const initP = document.querySelector('#initialState p');
+            if (initP) initP.innerText = t.initReadyDesc;
+
+            // Loading State
+            const loadH3 = document.querySelector('#loadingState h3');
+            if (loadH3) loadH3.innerText = t.loadingTitle;
+
+            // KPI Grid
+            const kpiTitles = document.querySelectorAll('#resultsDashboard .uppercase.font-bold');
+            if (kpiTitles.length >= 3) {
+                kpiTitles[0].innerText = t.kpiSurvival;
+                kpiTitles[1].innerText = t.kpiAccuracy;
+                kpiTitles[2].innerText = t.kpiShrinkage;
+            }
+
+            // Canvas & Controls
+            const canvasH4 = document.querySelector('#resultsDashboard h4');
+            if (canvasH4) canvasH4.innerHTML = `<i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> ${t.canvasTitle}`;
+            const canvasP = document.querySelector('#resultsDashboard p.text-\\[11px\\]');
+            if (canvasP) canvasP.innerText = t.canvasSub;
+
+            const sliderLabels = document.querySelectorAll('#resultsDashboard .space-y-1 span');
+            if (sliderLabels.length >= 4) {
+                sliderLabels[0].innerText = t.diagZero;
+                sliderLabels[1].innerText = t.month1;
+                sliderLabels[2].innerText = t.month3;
+                sliderLabels[3].innerText = t.month6;
+            }
+
+            // Buttons
+            const btnList = document.querySelectorAll('#resultsDashboard button');
+            if (btnList.length >= 4) {
+                btnList[0].innerHTML = `<i data-lucide="file-text" class="w-4 h-4"></i> ${t.btnPdf}`;
+                btnList[1].innerHTML = `<i data-lucide="code" class="w-4 h-4"></i> ${t.btnFhir}`;
+                btnList[2].innerHTML = `<i data-lucide="file-spreadsheet" class="w-4 h-4"></i> ${t.btnTxt}`;
+                btnList[3].innerHTML = `<i data-lucide="download" class="w-4 h-4"></i> ${t.btnCsv}`;
+            }
+
+            lucide.createIcons();
+        }
+
         lucide.createIcons();
+
 
         const presets = {
             pancreatic: {
