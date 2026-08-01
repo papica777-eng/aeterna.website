@@ -113,27 +113,22 @@
 
             <div class="text-right hidden sm:block">
                 <span id="modeLabelHeader" class="text-xs text-amber-400 font-bold block">Режим на ползване:</span>
-                <span class="text-xs font-bold text-cyan-400 mono">RUO / Horizon Europe Clinical Protocol</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Clinical Safety & Regulatory Banner -->
+                <span class="text-xs font-bold text-cyan-400 mono">RUO / Horizon Europe Clinical Protocol    <!-- Clinical Safety & Regulatory Banner -->
     <div class="max-w-7xl mx-auto mb-6 bg-slate-900/90 border border-amber-500/40 rounded-2xl p-4 flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
             <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400">
                 <i data-lucide="shield-alert" class="w-6 h-6"></i>
             </div>
             <div>
-                <h4 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <h4 data-i18n="safetyTitle" class="text-sm font-bold text-slate-100 flex items-center gap-2">
                     Клинична Защита & RUO Протокол (Research Use Only)
                 </h4>
-                <p class="text-xs text-slate-400">
-                    AETERNA-VHT функционира като асистент за прецизни тензорни симулации с **97.13% валидирана точност ($C$-index = 0.9713)**. Използва се съвместно с лекарския консилиум съгласно Horizon Europe протокол MDR 2017/745 RUO.
+                <p data-i18n="safetyDesc" class="text-xs text-slate-400">
+                    AETERNA-VHT функционира като асистент за прецизни тензорни симулации с 97.13% валидирана точност (C-index = 0.9713). Използва се съвместно с лекарския консилиум съгласно Horizon Europe протокол MDR 2017/745 RUO.
                 </p>
             </div>
         </div>
-        <span class="hidden md:inline-flex px-3 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold rounded-lg uppercase tracking-wider whitespace-nowrap">
+        <span data-i18n="boardVerified" class="hidden md:inline-flex px-3 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold rounded-lg uppercase tracking-wider whitespace-nowrap">
             Онкологичен Консилиум Verified
         </span>
     </div>
@@ -146,40 +141,40 @@
             
             <!-- Quick Preset Selector -->
             <div class="glass-panel p-6 space-y-4">
-                <h2 class="text-lg font-bold flex items-center gap-2 text-cyan-400">
+                <h2 data-i18n="presetTitle" class="text-lg font-bold flex items-center gap-2 text-cyan-400">
                     <i data-lucide="zap" class="w-5 h-5"></i> 1. Бързо Зареждане на Клиничен Шаблон
                 </h2>
                 <div class="grid grid-cols-2 gap-2">
                     <button onclick="loadPreset('pancreatic')" class="p-2.5 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Панкреас (PAAD)</div>
+                        <div data-i18n="presetPancreatic" class="text-xs font-bold text-slate-200">Панкреас (PAAD)</div>
                         <div class="text-[10px] text-slate-400">KRAS G12D | Ki-67 78%</div>
                     </button>
                     <button onclick="loadPreset('glioblastoma')" class="p-2.5 bg-slate-800/60 hover:bg-purple-950/50 border border-slate-700 hover:border-purple-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Глиобластом (GBM)</div>
+                        <div data-i18n="presetGBM" class="text-xs font-bold text-slate-200">Глиобластом (GBM)</div>
                         <div class="text-[10px] text-slate-400">TP53 Loss | Ki-67 85%</div>
                     </button>
                     <button onclick="loadPreset('breast_her2')" class="p-2.5 bg-slate-800/60 hover:bg-pink-950/50 border border-slate-700 hover:border-pink-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Млечна Жлеза (HER2+)</div>
+                        <div data-i18n="presetBreast" class="text-xs font-bold text-slate-200">Млечна Жлеза (HER2+)</div>
                         <div class="text-[10px] text-slate-400">HER2 Ampl | Ki-67 72%</div>
                     </button>
                     <button onclick="loadPreset('lung_nsclc')" class="p-2.5 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Бел Дроб (NSCLC)</div>
+                        <div data-i18n="presetLung" class="text-xs font-bold text-slate-200">Бел Дроб (NSCLC)</div>
                         <div class="text-[10px] text-slate-400">EGFR L858R | Ki-67 65%</div>
                     </button>
                     <button onclick="loadPreset('colorectal_msi')" class="p-2.5 bg-slate-800/60 hover:bg-amber-950/50 border border-slate-700 hover:border-amber-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Колорективен (CRC)</div>
+                        <div data-i18n="presetCRC" class="text-xs font-bold text-slate-200">Колорективен (CRC)</div>
                         <div class="text-[10px] text-slate-400">BRAF V600E | Ki-67 70%</div>
                     </button>
                     <button onclick="loadPreset('prostate_crpc')" class="p-2.5 bg-slate-800/60 hover:bg-blue-950/50 border border-slate-700 hover:border-blue-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Простата (mCRPC)</div>
+                        <div data-i18n="presetProstate" class="text-xs font-bold text-slate-200">Простата (mCRPC)</div>
                         <div class="text-[10px] text-slate-400">AR Ampl / PTEN | Ki-67 45%</div>
                     </button>
                     <button onclick="loadPreset('melanoma_braf')" class="p-2.5 bg-slate-800/60 hover:bg-emerald-950/50 border border-slate-700 hover:border-emerald-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Меланом</div>
+                        <div data-i18n="presetMelanoma" class="text-xs font-bold text-slate-200">Меланом</div>
                         <div class="text-[10px] text-slate-400">BRAF V600E | Ki-67 82%</div>
                     </button>
                     <button onclick="loadPreset('hematologic_amli')" class="p-2.5 bg-slate-800/60 hover:bg-red-950/50 border border-slate-700 hover:border-red-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Левкемия (AML)</div>
+                        <div data-i18n="presetAML" class="text-xs font-bold text-slate-200">Левкемия (AML)</div>
                         <div class="text-[10px] text-slate-400">FLT3-ITD | Ki-67 90%</div>
                     </button>
                 </div>
@@ -189,43 +184,43 @@
             <div class="glass-panel p-6 space-y-5">
                 <h2 class="text-lg font-bold flex items-center justify-between text-slate-100">
                     <span class="flex items-center gap-2">
-                        <i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> 2. Данни на Пациента
+                        <i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> <span data-i18n="patientDataTitle">2. Данни на Пациента</span>
                     </span>
-                    <span class="text-xs font-normal text-slate-400">LOINC Идентификация</span>
+                    <span data-i18n="loincId" class="text-xs font-normal text-slate-400">LOINC Идентификация</span>
                 </h2>
 
                 <form id="patientForm" onsubmit="runSimulation(event)" class="space-y-4">
                     <!-- Patient ID & Age -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">ИД на Пациент / Досие</label>
+                            <label data-i18n="patientIdLabel" class="block text-xs font-bold text-slate-400 mb-1">ИД на Пациент / Досие</label>
                             <input type="text" id="patientId" value="PT-2026-8890" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 mono" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">Възраст (Години)</label>
+                            <label data-i18n="ageLabel" class="block text-xs font-bold text-slate-400 mb-1">Възраст (Години)</label>
                             <input type="number" id="patientAge" value="62" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 mono" required>
                         </div>
                     </div>
 
                     <!-- Genomic Driver Mutation -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Драйвърна Мутация (LOINC Genomics / NGS Panel)</label>
+                        <label data-i18n="mutationLabel" class="block text-xs font-bold text-slate-400 mb-1">Драйвърна Мутация (LOINC Genomics / NGS Panel)</label>
                         <select id="geneMutation" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                            <option value="KRAS_G12D">KRAS G12D (LOINC 62358-7) — Панкреас / Колорективен карцином</option>
-                            <option value="TP53_LOSS">TP53 Loss Mutation (LOINC 85337-4) — Глиобластом / Супресорна дефицитност</option>
-                            <option value="HER2_AMPL">HER2 ERBB2 Amplification (LOINC 48676-1) — Рак на гърдата / Стомашен</option>
-                            <option value="EGFR_L858R">EGFR L858R Exon 21 (LOINC 62357-9) — Недребноклетъчен белодробен (NSCLC)</option>
-                            <option value="BRAF_V600E">BRAF V600E (LOINC 43398-7) — Меланом / Колорективен MSI-H</option>
-                            <option value="AR_AMPL_PTEN">AR Amplification + PTEN Loss (LOINC 89104-4) — Кастрационно-резистентен простатен</option>
-                            <option value="FLT3_ITD">FLT3-ITD Mutation (LOINC 48430-3) — Остра миелоидна левкемия (AML)</option>
-                            <option value="BRCA1_DEL">BRCA1/2 HRD Defect (LOINC 55207-5) — Овариален / Фамилен онко-профил</option>
+                            <option value="KRAS_G12D">KRAS G12D (LOINC 62358-7) — Pancreatic / Colorectal Adenocarcinoma</option>
+                            <option value="TP53_LOSS">TP53 Loss Mutation (LOINC 85337-4) — Glioblastoma / Suppressor Deficiency</option>
+                            <option value="HER2_AMPL">HER2 ERBB2 Amplification (LOINC 48676-1) — Breast / Gastric Cancer</option>
+                            <option value="EGFR_L858R">EGFR L858R Exon 21 (LOINC 62357-9) — Non-Small Cell Lung Cancer (NSCLC)</option>
+                            <option value="BRAF_V600E">BRAF V600E (LOINC 43398-7) — Melanoma / Colorectal MSI-H</option>
+                            <option value="AR_AMPL_PTEN">AR Amplification + PTEN Loss (LOINC 89104-4) — Prostate mCRPC</option>
+                            <option value="FLT3_ITD">FLT3-ITD Mutation (LOINC 48430-3) — Acute Myeloid Leukemia (AML)</option>
+                            <option value="BRCA1_DEL">BRCA1/2 HRD Defect (LOINC 55207-5) — Ovarian / Hereditary Onco-Profile</option>
                         </select>
                     </div>
 
                     <!-- Proliferation Index (Ki-67) -->
                     <div>
                         <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-400">Ki-67 Пролиферационен Индекс (%)</span>
+                            <span data-i18n="ki67Label" class="font-bold text-slate-400">Ki-67 Пролиферационен Индекс (%)</span>
                             <span id="ki67Val" class="font-bold text-cyan-400 mono">78%</span>
                         </div>
                         <input type="range" id="ki67" min="10" max="95" value="78" oninput="document.getElementById('ki67Val').innerText = this.value + '%'" class="w-full h-2 bg-slate-800 rounded-lg appearance-none custom-slider">
@@ -234,7 +229,7 @@
                     <!-- Hypoxia / Tissue Oxygenation -->
                     <div>
                         <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-400">Тъканна Оксигенация / Кислород (SpO2 %)</span>
+                            <span data-i18n="spo2Label" class="font-bold text-slate-400">Тъканна Оксигенация / Кислород (SpO2 %)</span>
                             <span id="spo2Val" class="font-bold text-emerald-400 mono">94%</span>
                         </div>
                         <input type="range" id="spo2" min="80" max="100" value="94" oninput="document.getElementById('spo2Val').innerText = this.value + '%'" class="w-full h-2 bg-slate-800 rounded-lg appearance-none custom-slider">
@@ -242,13 +237,13 @@
 
                     <!-- Tumor Diameter -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Размер на Лезията / Тумора (cm)</label>
+                        <label data-i18n="tumorSizeLabel" class="block text-xs font-bold text-slate-400 mb-1">Размер на Лезията / Тумора (cm)</label>
                         <input type="number" step="0.1" id="tumorSize" value="3.4" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 mono" required>
                     </div>
 
                     <!-- SUBMIT BUTTON -->
-                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-xl uppercase tracking-wider text-sm transition-all shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
-                        <i data-lucide="play" class="w-5 h-5 fill-slate-950"></i> СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ
+                    <button type="submit" id="simSubmitBtn" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-xl uppercase tracking-wider text-sm transition-all shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
+                        <i data-lucide="play" class="w-5 h-5 fill-slate-950"></i> <span data-i18n="simButton">СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ</span>
                     </button>
                 </form>
             </div>
@@ -262,8 +257,8 @@
                 <div class="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mx-auto">
                     <i data-lucide="stethoscope" class="w-8 h-8"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Системата е в пълна готовност</h3>
-                <p class="text-sm text-slate-400 max-w-md mx-auto">
+                <h3 data-i18n="initReadyTitle" class="text-xl font-bold text-slate-200">Системата е в пълна готовност</h3>
+                <p data-i18n="initReadyDesc" class="text-sm text-slate-400 max-w-md mx-auto">
                     Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност.
                 </p>
             </div>
@@ -272,8 +267,8 @@
             <div id="loadingState" class="hidden glass-panel p-12 text-center space-y-6">
                 <div class="w-16 h-16 border-4 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin mx-auto"></div>
                 <div>
-                    <h3 class="text-lg font-bold text-cyan-400">Извършване на In-Silico Biophysical Sweep...</h3>
-                    <p class="text-xs text-slate-400 mono mt-1">AVX-512 Tensor Calculations | HL7 FHIR Mapping | Catuskoti Entropy Collapse</p>
+                    <h3 data-i18n="loadingTitle" class="text-lg font-bold text-cyan-400">Извършване на In-Silico Biophysical Sweep...</h3>
+                    <p data-i18n="loadingDesc" class="text-xs text-slate-400 mono mt-1">AVX-512 Tensor Calculations | HL7 FHIR Mapping | Catuskoti Entropy Collapse</p>
                 </div>
             </div>
 
@@ -283,21 +278,21 @@
                 <!-- Primary KPI Metrics Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="glass-panel p-5 border-l-4 border-l-emerald-500">
-                        <div class="text-xs text-slate-400 uppercase font-bold">Очаквана Преживяемост</div>
+                        <div data-i18n="kpiSurvival" class="text-xs text-slate-400 uppercase font-bold">Очаквана Преживяемост</div>
                         <div id="resSurvival" class="text-2xl font-black text-emerald-400 mt-1 mono">38.4 месеца</div>
-                        <div class="text-[10px] text-emerald-500/80 font-bold mt-1">+91.3% спрямо стандартна терапия</div>
+                        <div data-i18n="kpiSurvivalSub" class="text-[10px] text-emerald-500/80 font-bold mt-1">+91.3% спрямо стандартна терапия</div>
                     </div>
 
                     <div class="glass-panel p-5 border-l-4 border-l-cyan-500">
-                        <div class="text-xs text-slate-400 uppercase font-bold">Точност на Симулацията</div>
+                        <div data-i18n="kpiAccuracy" class="text-xs text-slate-400 uppercase font-bold">Точност на Симулацията</div>
                         <div class="text-2xl font-black text-cyan-400 mt-1 mono">97.13%</div>
-                        <div class="text-[10px] text-cyan-500/80 font-bold mt-1">C-index = 0.9713 (EU MDR OK)</div>
+                        <div data-i18n="kpiAccuracySub" class="text-[10px] text-cyan-500/80 font-bold mt-1">C-index = 0.9713 (EU MDR OK)</div>
                     </div>
 
                     <div class="glass-panel p-5 border-l-4 border-l-purple-500">
-                        <div class="text-xs text-slate-400 uppercase font-bold">Туморен Марджин Свиване</div>
+                        <div data-i18n="kpiShrinkage" class="text-xs text-slate-400 uppercase font-bold">Туморен Марджин Свиване</div>
                         <div id="resShrinkage" class="text-2xl font-black text-purple-400 mt-1 mono">-68.4%</div>
-                        <div class="text-[10px] text-purple-500/80 font-bold mt-1">Apoptotic Lysis Rate</div>
+                        <div data-i18n="kpiShrinkageSub" class="text-[10px] text-purple-500/80 font-bold mt-1">Apoptotic Lysis Rate</div>
                     </div>
                 </div>
 
@@ -305,12 +300,12 @@
                 <div class="glass-panel p-6 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                         <div>
-                            <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                            <h3 data-i18n="recTitle" class="text-lg font-bold text-slate-100 flex items-center gap-2">
                                 <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i> Препоръчана Таргетирана Терапия
                             </h3>
-                            <p class="text-xs text-slate-400">Оптимизирана комбинация от медикаменти за пациента</p>
+                            <p data-i18n="recSub" class="text-xs text-slate-400">Оптимизирана комбинация от медикаменти за пациента</p>
                         </div>
-                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold rounded-lg uppercase">
+                        <span data-i18n="approvedPlan" class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold rounded-lg uppercase">
                             Одобрен План
                         </span>
                     </div>
@@ -324,10 +319,10 @@
                     <div class="p-5 bg-slate-900/90 border border-cyan-500/30 rounded-2xl space-y-4">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h4 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+                                <h4 data-i18n="canvasTitle" class="text-sm font-bold text-cyan-400 flex items-center gap-2">
                                     <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> Биофизична Симулация на Туморната Свиваемост (Regression Timeline)
                                 </h4>
-                                <p class="text-[11px] text-slate-400">Визуализация на апоптотичната деструкция на образуванието под терапия</p>
+                                <p data-i18n="canvasSub" class="text-[11px] text-slate-400">Визуализация на апоптотичната деструкция на образуванието под терапия</p>
                             </div>
                             <span id="timelineWeekLabel" class="px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold rounded-lg">
                                 Седмица 12: -68.4%
@@ -350,10 +345,10 @@
                         <!-- Interactive Timeline Slider Controls -->
                         <div class="space-y-1">
                             <div class="flex justify-between text-[11px] font-bold text-slate-400">
-                                <span>Диагностика (0 седм.)</span>
-                                <span>Месец 1 (4 седм.)</span>
-                                <span>Месец 3 (12 седм.)</span>
-                                <span>Месец 6 (24 седм.)</span>
+                                <span data-i18n="diagZero">Диагностика (0 седм.)</span>
+                                <span data-i18n="month1">Месец 1 (4 седм.)</span>
+                                <span data-i18n="month3">Месец 3 (12 седм.)</span>
+                                <span data-i18n="month6">Месец 6 (24 седм.)</span>
                             </div>
                             <input type="range" id="tumorTimeline" min="0" max="24" value="12" oninput="updateTumorCanvas(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none custom-slider">
                         </div>
@@ -362,25 +357,40 @@
                     <!-- Visual Comparison Bar -->
                     <div class="space-y-2 pt-2">
                         <div class="flex justify-between text-xs font-bold">
-                            <span class="text-slate-400">Сравнение на преживяемостта:</span>
+                            <span data-i18n="compTitle" class="text-slate-400">Сравнение на преживяемостта:</span>
                             <span class="text-emerald-400">AETERNA VHT vs Standard of Care (SOC)</span>
                         </div>
                         <div class="h-4 bg-slate-900 rounded-full overflow-hidden flex p-0.5 border border-slate-800">
                             <div class="bg-slate-700 h-full rounded-l-full text-[9px] text-slate-300 font-bold flex items-center justify-center" style="width: 35%;">SOC: 20.0м</div>
-            <div class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-r-full text-[9px] text-slate-950 font-black flex items-center justify-center" style="width: 65%;">AETERNA-VHT: 38.4м</div>
+                            <div class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-r-full text-[9px] text-slate-950 font-black flex items-center justify-center" style="width: 65%;">AETERNA-VHT: 38.4м</div>
                         </div>
                     </div>
 
                     <!-- Export Report Action Dropdown/Buttons -->
                     <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-3">
-                        <span class="text-xs text-slate-400">Подписано от: <strong class="text-slate-200">Димитър Продромов (AETERNA Core)</strong></span>
+                        <span class="text-xs text-slate-400"><span data-i18n="signedBy">Подписано от:</span> <strong class="text-slate-200">Димитър Продромов (AETERNA Core)</strong></span>
                         <div class="flex items-center gap-2 flex-wrap">
                             <!-- Export PDF -->
-                            <button onclick="exportReport('pdf')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold text-xs rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all">
+                            <button onclick="exportReport('pdf')" data-i18n="btnPdf" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold text-xs rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all">
                                 <i data-lucide="file-text" class="w-4 h-4"></i> PDF Доклад
                             </button>
                             <!-- Export HL7 FHIR JSON -->
-                            <button onclick="exportReport('fhir')" class="px-3.5 py-2 bg-slate-800 hover:bg-emerald-950/80 text-emerald-400 font-bold text-xs rounded-xl border border-slate-700 hover:border-emerald-500/50 flex items-center gap-1.5 transition-all">
+                            <button onclick="exportReport('fhir')" data-i18n="btnFhir" class="px-3.5 py-2 bg-slate-800 hover:bg-emerald-950/80 text-emerald-400 font-bold text-xs rounded-xl border border-slate-700 hover:border-emerald-500/50 flex items-center gap-1.5 transition-all">
+                                <i data-lucide="code" class="w-4 h-4"></i> HL7 FHIR (JSON)
+                            </button>
+                            <!-- Export Medical EHR Text -->
+                            <button onclick="exportReport('txt')" data-i18n="btnTxt" class="px-3.5 py-2 bg-slate-800 hover:bg-purple-950/80 text-purple-400 font-bold text-xs rounded-xl border border-slate-700 hover:border-purple-500/50 flex items-center gap-1.5 transition-all">
+                                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Текст / EHR (.txt)
+                            </button>
+                            <!-- Export CSV -->
+                            <button onclick="exportReport('csv')" data-i18n="btnCsv" class="px-3.5 py-2 bg-slate-800 hover:bg-amber-950/80 text-amber-400 font-bold text-xs rounded-xl border border-slate-700 hover:border-amber-500/50 flex items-center gap-1.5 transition-all">
+                                <i data-lucide="download" class="w-4 h-4"></i> Таблица (.csv)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>00 hover:bg-emerald-950/80 text-emerald-400 font-bold text-xs rounded-xl border border-slate-700 hover:border-emerald-500/50 flex items-center gap-1.5 transition-all">
                                 <i data-lucide="code" class="w-4 h-4"></i> HL7 FHIR (JSON)
                             </button>
                             <!-- Export Medical EHR Text -->
@@ -413,9 +423,17 @@
                 modeLabel: "Режим на ползване:",
                 ruoProtocol: "RUO / Horizon Europe Клиничен Протокол",
                 safetyTitle: "Клинична Защита & RUO Протокол (Research Use Only)",
-                safetyDesc: "AETERNA-VHT функционира като асистент за прецизни тензорни симулации с **97.13% валидирана точност ($C$-index = 0.9713)**. Използва се съвместно с лекарския консилиум съгласно Horizon Europe протокол MDR 2017/745 RUO.",
+                safetyDesc: "AETERNA-VHT функционира като асистент за прецизни тензорни симулации с 97.13% валидирана точност (C-index = 0.9713). Използва се съвместно с лекарския консилиум съгласно Horizon Europe протокол MDR 2017/745 RUO.",
                 boardVerified: "Онкологичен Консилиум Verified",
                 presetTitle: "1. Бързо Зареждане на Клиничен Шаблон",
+                presetPancreatic: "Панкреас (PAAD)",
+                presetGBM: "Глиобластом (GBM)",
+                presetBreast: "Млечна Жлеза (HER2+)",
+                presetLung: "Бел Дроб (NSCLC)",
+                presetCRC: "Колорективен (CRC)",
+                presetProstate: "Простата (mCRPC)",
+                presetMelanoma: "Меланом",
+                presetAML: "Левкемия (AML)",
                 patientDataTitle: "2. Данни на Пациента",
                 loincId: "LOINC Идентификация",
                 patientIdLabel: "ИД на Пациент / Досие",
@@ -461,9 +479,17 @@
                 modeLabel: "Execution Mode:",
                 ruoProtocol: "RUO / Horizon Europe Clinical Protocol",
                 safetyTitle: "Clinical Safety & RUO Protocol (Research Use Only)",
-                safetyDesc: "AETERNA-VHT functions as a precision tensor simulation assistant with **97.13% validated accuracy ($C$-index = 0.9713)**. Used jointly with the oncology board pursuant to Horizon Europe MDR 2017/745 RUO protocol.",
+                safetyDesc: "AETERNA-VHT functions as a precision tensor simulation assistant with 97.13% validated accuracy (C-index = 0.9713). Used jointly with the oncology board pursuant to Horizon Europe MDR 2017/745 RUO protocol.",
                 boardVerified: "Oncology Board Verified",
                 presetTitle: "1. Quick Clinical Preset Loader",
+                presetPancreatic: "Pancreas (PAAD)",
+                presetGBM: "Glioblastoma (GBM)",
+                presetBreast: "Breast (HER2+)",
+                presetLung: "Lung (NSCLC)",
+                presetCRC: "Colorectal (CRC)",
+                presetProstate: "Prostate (mCRPC)",
+                presetMelanoma: "Melanoma",
+                presetAML: "Leukemia (AML)",
                 patientDataTitle: "2. Patient Dossier & Ingress",
                 loincId: "LOINC Identifier",
                 patientIdLabel: "Patient ID / Record",
@@ -509,9 +535,17 @@
                 modeLabel: "Mode d'Exécution:",
                 ruoProtocol: "RUO / Protocole Clinique Horizon Europe",
                 safetyTitle: "Sécurité Clinique & Protocole RUO (Research Use Only)",
-                safetyDesc: "AETERNA-VHT fonctionne comme un assistant de simulation tensorielle avec **97.13% de précision validée ($C$-index = 0.9713)**. Utilisé avec le comité d'oncologie selon le protocole Horizon Europe MDR 2017/745 RUO.",
+                safetyDesc: "AETERNA-VHT fonctionne comme un assistant de simulation tensorielle avec 97.13% de précision validée (C-index = 0.9713). Utilisé avec le comité d'oncologie selon le protocole Horizon Europe MDR 2017/745 RUO.",
                 boardVerified: "Vérifié par le Comité d'Oncologie",
                 presetTitle: "1. Chargement Rapide de Modèle Clinique",
+                presetPancreatic: "Pancréas (PAAD)",
+                presetGBM: "Glioblastome (GBM)",
+                presetBreast: "Sein (HER2+)",
+                presetLung: "Poumon (NSCLC)",
+                presetCRC: "Colorectal (CRC)",
+                presetProstate: "Prostate (mCRPC)",
+                presetMelanoma: "Mélanome",
+                presetAML: "Leucémie (AML)",
                 patientDataTitle: "2. Données du Patient & Ingress",
                 loincId: "Identification LOINC",
                 patientIdLabel: "ID Patient / Dossier",
@@ -557,9 +591,17 @@
                 modeLabel: "Modo de Ejecución:",
                 ruoProtocol: "RUO / Protocolo Clínico Horizon Europe",
                 safetyTitle: "Seguridad Clínica y Protocolo RUO (Research Use Only)",
-                safetyDesc: "AETERNA-VHT funciona como un asistente de simulación tensorial de precisión con **97.13% de precisión validada ($C$-index = 0.9713)**. Utilizado con el comité oncológico según el protocolo Horizon Europe MDR 2017/745 RUO.",
+                safetyDesc: "AETERNA-VHT funciona como un asistente de simulación tensorial de precisión con 97.13% de precisión validada (C-index = 0.9713). Utilizado con el comité oncológico según el protocolo Horizon Europe MDR 2017/745 RUO.",
                 boardVerified: "Verificado por el Comité Oncológico",
                 presetTitle: "1. Carga Rápida de Plantilla Clínica",
+                presetPancreatic: "Páncreas (PAAD)",
+                presetGBM: "Glioblastoma (GBM)",
+                presetBreast: "Mama (HER2+)",
+                presetLung: "Pulmón (NSCLC)",
+                presetCRC: "Colorrectal (CRC)",
+                presetProstate: "Próstata (mCRPC)",
+                presetMelanoma: "Melanoma",
+                presetAML: "Leucemia (AML)",
                 patientDataTitle: "2. Datos del Paciente e Ingesta",
                 loincId: "Identificación LOINC",
                 patientIdLabel: "ID de Paciente / Expediente",
@@ -604,92 +646,20 @@
             const t = i18n[langKey] || i18n.bg;
             document.documentElement.lang = langKey;
 
-            // Header Elements
-            const h1Title = document.querySelector('header h1');
-            if (h1Title) h1Title.innerHTML = `AETERNA <span class="gradient-text">${t.title}</span>`;
-            const headerSub = document.querySelector('header p');
-            if (headerSub) headerSub.innerText = t.subtitle;
-            const kpiLabel = document.getElementById('kpiPrecisionLabel');
-            if (kpiLabel) kpiLabel.innerText = t.precisionBadge;
-            const modeHeader = document.getElementById('modeLabelHeader');
-            if (modeHeader) modeHeader.innerText = t.modeLabel;
-
-            // Safety Banner
-            const safetyH4 = document.querySelector('.bg-slate-900\\/90 h4');
-            if (safetyH4) safetyH4.innerText = t.safetyTitle;
-            const safetyP = document.querySelector('.bg-slate-900\\/90 p');
-            if (safetyP) safetyP.innerText = t.safetyDesc;
-            const boardBadge = document.querySelector('.bg-amber-500\\/20');
-            if (boardBadge) boardBadge.innerText = t.boardVerified;
-
-            // Left Section Titles
-            const presetH2 = document.querySelector('.glass-panel h2');
-            if (presetH2) presetH2.innerHTML = `<i data-lucide="zap" class="w-5 h-5"></i> ${t.presetTitle}`;
-            const patientH2 = document.querySelectorAll('.glass-panel h2')[1];
-            if (patientH2) {
-                patientH2.querySelector('span').innerHTML = `<i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> ${t.patientDataTitle}`;
-                patientH2.querySelectorAll('span')[1].innerText = t.loincId;
-            }
-
-            // Labels
-            const labels = document.querySelectorAll('label');
-            if (labels.length >= 4) {
-                labels[0].innerText = t.patientIdLabel;
-                labels[1].innerText = t.ageLabel;
-                labels[2].innerText = t.mutationLabel;
-                labels[3].innerText = t.tumorSizeLabel;
-            }
-
-            const sliders = document.querySelectorAll('.flex.justify-between.text-xs.mb-1 span.font-bold.text-slate-400');
-            if (sliders.length >= 2) {
-                sliders[0].innerText = t.ki67Label;
-                sliders[1].innerText = t.spo2Label;
-            }
-
-            // Sim Button
-            const submitBtn = document.querySelector('#patientForm button[type="submit"]');
-            if (submitBtn) submitBtn.innerHTML = `<i data-lucide="play" class="w-5 h-5 fill-slate-950"></i> ${t.simButton}`;
-
-            // Initial State Banner
-            const initH3 = document.querySelector('#initialState h3');
-            if (initH3) initH3.innerText = t.initReadyTitle;
-            const initP = document.querySelector('#initialState p');
-            if (initP) initP.innerText = t.initReadyDesc;
-
-            // Loading State
-            const loadH3 = document.querySelector('#loadingState h3');
-            if (loadH3) loadH3.innerText = t.loadingTitle;
-
-            // KPI Grid
-            const kpiTitles = document.querySelectorAll('#resultsDashboard .uppercase.font-bold');
-            if (kpiTitles.length >= 3) {
-                kpiTitles[0].innerText = t.kpiSurvival;
-                kpiTitles[1].innerText = t.kpiAccuracy;
-                kpiTitles[2].innerText = t.kpiShrinkage;
-            }
-
-            // Canvas & Controls
-            const canvasH4 = document.querySelector('#resultsDashboard h4');
-            if (canvasH4) canvasH4.innerHTML = `<i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> ${t.canvasTitle}`;
-            const canvasP = document.querySelector('#resultsDashboard p.text-\\[11px\\]');
-            if (canvasP) canvasP.innerText = t.canvasSub;
-
-            const sliderLabels = document.querySelectorAll('#resultsDashboard .space-y-1 span');
-            if (sliderLabels.length >= 4) {
-                sliderLabels[0].innerText = t.diagZero;
-                sliderLabels[1].innerText = t.month1;
-                sliderLabels[2].innerText = t.month3;
-                sliderLabels[3].innerText = t.month6;
-            }
-
-            // Buttons
-            const btnList = document.querySelectorAll('#resultsDashboard button');
-            if (btnList.length >= 4) {
-                btnList[0].innerHTML = `<i data-lucide="file-text" class="w-4 h-4"></i> ${t.btnPdf}`;
-                btnList[1].innerHTML = `<i data-lucide="code" class="w-4 h-4"></i> ${t.btnFhir}`;
-                btnList[2].innerHTML = `<i data-lucide="file-spreadsheet" class="w-4 h-4"></i> ${t.btnTxt}`;
-                btnList[3].innerHTML = `<i data-lucide="download" class="w-4 h-4"></i> ${t.btnCsv}`;
-            }
+            // Query all elements with data-i18n attribute and update content
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    // Check if element has child elements with icons
+                    const icon = el.querySelector('i');
+                    if (icon) {
+                        const iconOuter = icon.outerHTML;
+                        el.innerHTML = `${iconOuter} ${t[key]}`;
+                    } else {
+                        el.innerText = t[key];
+                    }
+                }
+            });
 
             lucide.createIcons();
         }
