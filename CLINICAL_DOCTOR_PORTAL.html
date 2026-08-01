@@ -308,6 +308,45 @@
                         <!-- Dynamic Drug Items inserted via JS -->
                     </div>
 
+                    <!-- 🔬 REAL-TIME TUMOR REGRESSION BIOPHYSICAL CANVAS VISUALIZATION -->
+                    <div class="p-5 bg-slate-900/90 border border-cyan-500/30 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+                                    <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> Биофизична Симулация на Туморната Свиваемост (Regression Timeline)
+                                </h4>
+                                <p class="text-[11px] text-slate-400">Визуализация на апоптотичната деструкция на образуванието под терапия</p>
+                            </div>
+                            <span id="timelineWeekLabel" class="px-2.5 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold rounded-lg">
+                                Седмица 12: -68.4%
+                            </span>
+                        </div>
+
+                        <!-- Canvas Visualizer -->
+                        <div class="relative w-full h-48 bg-slate-950/80 border border-slate-800 rounded-xl overflow-hidden flex items-center justify-center">
+                            <canvas id="tumorCanvas" width="500" height="190" class="w-full h-full object-contain"></canvas>
+
+                            <!-- Overlay Badges -->
+                            <div class="absolute top-2 left-2 bg-slate-900/80 border border-slate-700 px-2 py-1 rounded text-[10px] text-slate-300 font-mono">
+                                Първоначален диам.: <span id="initialSizeBadge" class="text-rose-400 font-bold">3.4 cm</span>
+                            </div>
+                            <div class="absolute top-2 right-2 bg-slate-900/80 border border-slate-700 px-2 py-1 rounded text-[10px] text-slate-300 font-mono">
+                                Прогнозиран диам.: <span id="projectedSizeBadge" class="text-emerald-400 font-bold">1.1 cm</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Timeline Slider Controls -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[11px] font-bold text-slate-400">
+                                <span>Диагностика (0 седм.)</span>
+                                <span>Месец 1 (4 седм.)</span>
+                                <span>Месец 3 (12 седм.)</span>
+                                <span>Месец 6 (24 седм.)</span>
+                            </div>
+                            <input type="range" id="tumorTimeline" min="0" max="24" value="12" oninput="updateTumorCanvas(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none custom-slider">
+                        </div>
+                    </div>
+
                     <!-- Visual Comparison Bar -->
                     <div class="space-y-2 pt-2">
                         <div class="flex justify-between text-xs font-bold">
@@ -551,7 +590,125 @@
                 }
 
                 recBox.innerHTML = drugsHTML;
+                updateTumorCanvas(12);
             }, 1200);
+        }
+
+        function updateTumorCanvas(weekVal) {
+            const canvas = document.getElementById('tumorCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const sizeInput = parseFloat(document.getElementById('tumorSize').value) || 3.4;
+
+            const week = parseFloat(weekVal);
+            // Non-linear apoptotic decay curve
+            const shrinkRatio = Math.max(0.15, 1 - (0.684 * (week / 24)));
+            const currentSize = (sizeInput * shrinkRatio).toFixed(1);
+
+            document.getElementById('timelineWeekLabel').innerText = `Седмица ${week}: -${((1 - shrinkRatio) * 100).toFixed(1)}%`;
+            document.getElementById('initialSizeBadge').innerText = `${sizeInput} cm`;
+            document.getElementById('projectedSizeBadge').innerText = `${currentSize} cm`;
+
+            // Clear Background
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw Background Cellular Grid
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < w; x += 25) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, h);
+                ctx.stroke();
+            }
+            for (let y = 0; y < h; y += 25) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y);
+                ctx.stroke();
+            }
+
+            const centerX = w / 2;
+            const centerY = h / 2;
+
+            // Draw Initial Tumor Boundary Outer Ring (Ghost)
+            const initialRadius = Math.min(75, sizeInput * 18);
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, initialRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(244, 63, 94, 0.3)';
+            ctx.setLineDash([4, 4]);
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw Shrinking Active Tumor Mass
+            const currentRadius = initialRadius * shrinkRatio;
+            
+            // Outer Apoptotic Halo
+            const haloGrad = ctx.createRadialGradient(centerX, centerY, currentRadius * 0.5, centerX, centerY, currentRadius * 1.4);
+            haloGrad.addColorStop(0, 'rgba(6, 182, 212, 0.4)');
+            haloGrad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, currentRadius * 1.4, 0, Math.PI * 2);
+            ctx.fillStyle = haloGrad;
+            ctx.fill();
+
+            // Core Tumor Blob
+            const coreGrad = ctx.createRadialGradient(centerX - currentRadius * 0.2, centerY - currentRadius * 0.2, currentRadius * 0.1, centerX, centerY, currentRadius);
+            coreGrad.addColorStop(0, '#f43f5e');
+            coreGrad.addColorStop(0.6, '#e11d48');
+            coreGrad.addColorStop(1, '#881337');
+
+            ctx.beginPath();
+            // Add subtle organic distortion to tumor border
+            const numPoints = 12;
+            for (let i = 0; i < numPoints; i++) {
+                const angle = (i / numPoints) * Math.PI * 2;
+                const jitter = (Math.sin(angle * 4 + week) * 3);
+                const r = currentRadius + jitter;
+                const px = centerX + Math.cos(angle) * r;
+                const py = centerY + Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fillStyle = coreGrad;
+            ctx.shadowColor = '#06b6d4';
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Draw Target Peptide Rays (Treatment Infiltration)
+            if (week > 0) {
+                ctx.strokeStyle = 'rgba(6, 182, 212, 0.8)';
+                ctx.lineWidth = 1.5;
+                for (let i = 0; i < 8; i++) {
+                    const a = (i / 8) * Math.PI * 2 + (week * 0.1);
+                    const rx1 = centerX + Math.cos(a) * (initialRadius + 20);
+                    const ry1 = centerY + Math.sin(a) * (initialRadius + 20);
+                    const rx2 = centerX + Math.cos(a) * (currentRadius + 5);
+                    const ry2 = centerY + Math.sin(a) * (currentRadius + 5);
+
+                    ctx.beginPath();
+                    ctx.moveTo(rx1, ry1);
+                    ctx.lineTo(rx2, ry2);
+                    ctx.stroke();
+
+                    // Arrowhead / Nano particle
+                    ctx.beginPath();
+                    ctx.arc(rx2, ry2, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fill();
+                }
+            }
+
+            // Draw Label
+            ctx.font = 'bold 11px monospace';
+            ctx.fillStyle = '#38bdf8';
+            ctx.textAlign = 'center';
+            ctx.fillText(`AETERNA VHT Model: ${currentSize} cm`, centerX, centerY + currentRadius + 25);
         }
 
         function exportReport(format) {
