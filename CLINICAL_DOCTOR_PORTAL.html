@@ -117,14 +117,38 @@
                 <h2 class="text-lg font-bold flex items-center gap-2 text-cyan-400">
                     <i data-lucide="zap" class="w-5 h-5"></i> 1. Быстро Зареждане на Клиничен Шаблон
                 </h2>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="loadPreset('pancreatic')" class="p-3 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Панкреатичен Аденокарцином</div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="loadPreset('pancreatic')" class="p-2.5 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Панкреас (PAAD)</div>
                         <div class="text-[10px] text-slate-400">KRAS G12D | Ki-67 78%</div>
                     </button>
-                    <button onclick="loadPreset('glioblastoma')" class="p-3 bg-slate-800/60 hover:bg-purple-950/50 border border-slate-700 hover:border-purple-500/50 rounded-xl text-left transition-all">
+                    <button onclick="loadPreset('glioblastoma')" class="p-2.5 bg-slate-800/60 hover:bg-purple-950/50 border border-slate-700 hover:border-purple-500/50 rounded-xl text-left transition-all">
                         <div class="text-xs font-bold text-slate-200">Глиобластом (GBM)</div>
                         <div class="text-[10px] text-slate-400">TP53 Loss | Ki-67 85%</div>
+                    </button>
+                    <button onclick="loadPreset('breast_her2')" class="p-2.5 bg-slate-800/60 hover:bg-pink-950/50 border border-slate-700 hover:border-pink-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Млечна Жлеза (HER2+)</div>
+                        <div class="text-[10px] text-slate-400">HER2 Ampl | Ki-67 72%</div>
+                    </button>
+                    <button onclick="loadPreset('lung_nsclc')" class="p-2.5 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Бел Дроб (NSCLC)</div>
+                        <div class="text-[10px] text-slate-400">EGFR L858R | Ki-67 65%</div>
+                    </button>
+                    <button onclick="loadPreset('colorectal_msi')" class="p-2.5 bg-slate-800/60 hover:bg-amber-950/50 border border-slate-700 hover:border-amber-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Колорективен (CRC)</div>
+                        <div class="text-[10px] text-slate-400">BRAF V600E | Ki-67 70%</div>
+                    </button>
+                    <button onclick="loadPreset('prostate_crpc')" class="p-2.5 bg-slate-800/60 hover:bg-blue-950/50 border border-slate-700 hover:border-blue-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Простата (mCRPC)</div>
+                        <div class="text-[10px] text-slate-400">AR Ampl / PTEN | Ki-67 45%</div>
+                    </button>
+                    <button onclick="loadPreset('melanoma_braf')" class="p-2.5 bg-slate-800/60 hover:bg-emerald-950/50 border border-slate-700 hover:border-emerald-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Меланом</div>
+                        <div class="text-[10px] text-slate-400">BRAF V600E | Ki-67 82%</div>
+                    </button>
+                    <button onclick="loadPreset('hematologic_amli')" class="p-2.5 bg-slate-800/60 hover:bg-red-950/50 border border-slate-700 hover:border-red-500/50 rounded-xl text-left transition-all">
+                        <div class="text-xs font-bold text-slate-200">Левкемия (AML)</div>
+                        <div class="text-[10px] text-slate-400">FLT3-ITD | Ki-67 90%</div>
                     </button>
                 </div>
             </div>
@@ -153,12 +177,16 @@
 
                     <!-- Genomic Driver Mutation -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Драйвърна Мутация (LOINC Genomics)</label>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">Драйвърна Мутация (LOINC Genomics / NGS Panel)</label>
                         <select id="geneMutation" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                            <option value="KRAS_G12D">KRAS G12D (LOINC 62358-7) — Панкреас/Колон</option>
-                            <option value="TP53_LOSS">TP53 Mutation (LOINC 85337-4) — Високорисков</option>
-                            <option value="EGFR_L858R">EGFR L858R (LOINC 62357-9) — Недребноклетъчен белодробен</option>
-                            <option value="BRCA1_DEL">BRCA1 185delAG (LOINC 55207-5) — Генетичен онко-профил</option>
+                            <option value="KRAS_G12D">KRAS G12D (LOINC 62358-7) — Панкреас / Колорективен карцином</option>
+                            <option value="TP53_LOSS">TP53 Loss Mutation (LOINC 85337-4) — Глиобластом / Супресорна дефицитност</option>
+                            <option value="HER2_AMPL">HER2 ERBB2 Amplification (LOINC 48676-1) — Рак на гърдата / Стомашен</option>
+                            <option value="EGFR_L858R">EGFR L858R Exon 21 (LOINC 62357-9) — Недребноклетъчен белодробен (NSCLC)</option>
+                            <option value="BRAF_V600E">BRAF V600E (LOINC 43398-7) — Меланом / Колорективен MSI-H</option>
+                            <option value="AR_AMPL_PTEN">AR Amplification + PTEN Loss (LOINC 89104-4) — Кастрационно-резистентен простатен</option>
+                            <option value="FLT3_ITD">FLT3-ITD Mutation (LOINC 48430-3) — Остра миелоидна левкемия (AML)</option>
+                            <option value="BRCA1_DEL">BRCA1/2 HRD Defect (LOINC 55207-5) — Овариален / Фамилен онко-профил</option>
                         </select>
                     </div>
 
@@ -268,7 +296,7 @@
                         </div>
                         <div class="h-4 bg-slate-900 rounded-full overflow-hidden flex p-0.5 border border-slate-800">
                             <div class="bg-slate-700 h-full rounded-l-full text-[9px] text-slate-300 font-bold flex items-center justify-center" style="width: 35%;">SOC: 20.0м</div>
-                            <div class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-r-full text-[9px] text-slate-950 font-black flex items-center justify-center" style="width: 65%;">AETERNA-VHT: 38.4м</div>
+            <div class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-r-full text-[9px] text-slate-950 font-black flex items-center justify-center" style="width: 65%;">AETERNA-VHT: 38.4м</div>
                         </div>
                     </div>
 
@@ -292,11 +320,11 @@
 
         const presets = {
             pancreatic: {
-                id: 'PT-PAAD-9912',
-                age: 64,
+                id: 'PT-PAN-2026',
+                age: 62,
                 gene: 'KRAS_G12D',
                 ki67: 78,
-                spo2: 92,
+                spo2: 94,
                 size: 3.8
             },
             glioblastoma: {
@@ -306,6 +334,54 @@
                 ki67: 85,
                 spo2: 89,
                 size: 4.2
+            },
+            breast_her2: {
+                id: 'PT-BRCA-9012',
+                age: 51,
+                gene: 'HER2_AMPL',
+                ki67: 72,
+                spo2: 96,
+                size: 2.8
+            },
+            lung_nsclc: {
+                id: 'PT-NSCLC-3304',
+                age: 67,
+                gene: 'EGFR_L858R',
+                ki67: 65,
+                spo2: 91,
+                size: 3.5
+            },
+            colorectal_msi: {
+                id: 'PT-CRC-7718',
+                age: 64,
+                gene: 'BRAF_V600E',
+                ki67: 70,
+                spo2: 95,
+                size: 3.1
+            },
+            prostate_crpc: {
+                id: 'PT-PRST-5521',
+                age: 71,
+                gene: 'AR_AMPL_PTEN',
+                ki67: 45,
+                spo2: 97,
+                size: 2.4
+            },
+            melanoma_braf: {
+                id: 'PT-MEL-8820',
+                age: 49,
+                gene: 'BRAF_V600E',
+                ki67: 82,
+                spo2: 95,
+                size: 1.9
+            },
+            hematologic_amli: {
+                id: 'PT-HEM-1109',
+                age: 56,
+                gene: 'FLT3_ITD',
+                ki67: 90,
+                spo2: 92,
+                size: 5.0
             }
         };
 
@@ -333,7 +409,6 @@
                 document.getElementById('resultsDashboard').classList.remove('hidden');
 
                 const gene = document.getElementById('geneMutation').value;
-                const size = parseFloat(document.getElementById('tumorSize').value);
                 const recBox = document.getElementById('drugRecommendations');
 
                 let drugsHTML = '';
@@ -341,15 +416,15 @@
                     drugsHTML = `
                         <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
                             <div>
-                                <div class="text-sm font-bold text-cyan-400">1. KRAS G12D Direct Peptide Inhibitor</div>
-                                <div class="text-xs text-slate-400">Дозировка: 45 mg/m² IV през 48 часа (Специфична рецепторна поддръжка)</div>
+                                <div class="text-sm font-bold text-cyan-400">1. KRAS G12D Direct Selective Inhibitor</div>
+                                <div class="text-xs text-slate-400">Дозировка: 45 mg/m² IV през 48 часа (Специфична инхибиция на активно GTP състояние)</div>
                             </div>
                             <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.4%</span>
                         </div>
                         <div class="p-3 bg-slate-900/90 border border-purple-500/30 rounded-xl flex justify-between items-center">
                             <div>
-                                <div class="text-sm font-bold text-purple-400">2. Anti-PD-L1 Checkpoint Activator</div>
-                                <div class="text-xs text-slate-400">Дозировка: 10 mg/kg | Премахва имунната камуфлажност на тумора</div>
+                                <div class="text-sm font-bold text-purple-400">2. Anti-PD-L1 Checkpoint Immunotherapy</div>
+                                <div class="text-xs text-slate-400">Дозировка: 10 mg/kg | Сенсибилизиране на туморната микросреда</div>
                             </div>
                             <span class="text-xs font-mono font-bold text-purple-400">Lysis Rate: High</span>
                         </div>
@@ -358,17 +433,74 @@
                     drugsHTML = `
                         <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
                             <div>
-                                <div class="text-sm font-bold text-cyan-400">1. p53 Pathway Reactivator (APR-246 analogue)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 60 mg/kg | Възстановява апоптотичната функция на клетките</div>
+                                <div class="text-sm font-bold text-cyan-400">1. p53 Conformation Reactivator (PRIMA-1MET / APR-246)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 60 mg/kg | Възстановява апоптотичната функция на р53</div>
                             </div>
                             <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.7%</span>
                         </div>
                         <div class="p-3 bg-slate-900/90 border border-emerald-500/30 rounded-xl flex justify-between items-center">
                             <div>
-                                <div class="text-sm font-bold text-emerald-400">2. BDNF Micro-dosing Perfusion</div>
-                                <div class="text-xs text-slate-400">Дозировка: 15 µg/kg/day | Възстановява синаптичната плътност (98.5%)</div>
+                                <div class="text-sm font-bold text-emerald-400">2. BDNF Micro-dosing Neuro-Perfusion</div>
+                                <div class="text-xs text-slate-400">Дозировка: 15 µg/kg/day | Невропротекция при Глиобластом и CNS лезии</div>
                             </div>
                             <span class="text-xs font-mono font-bold text-emerald-400">Neuro-Safety: 100%</span>
+                        </div>
+                    `;
+                } else if (gene === 'HER2_AMPL') {
+                    drugsHTML = `
+                        <div class="p-3 bg-slate-900/90 border border-pink-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-pink-400">1. Anti-HER2 Monoclonal Conjugate (Trastuzumab Deruxtecan)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 5.4 mg/kg IV | Таргетирано освобождаване на топоизомераза I инхибитор</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.1%</span>
+                        </div>
+                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-cyan-400">2. CDK4/6 Dual Kinase Inhibitor (Palbociclib)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 125 mg дневно | Блокиране на клетъчния цикъл в G1/S фаза</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-cyan-400">Cell Arrest: 96.8%</span>
+                        </div>
+                    `;
+                } else if (gene === 'BRAF_V600E') {
+                    drugsHTML = `
+                        <div class="p-3 bg-slate-900/90 border border-amber-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-amber-400">1. BRAF V600E + MEK Inhibitor Combo (Dabrafenib + Trametinib)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 150 mg 2x/ден + 2 mg 1x/ден | Двойно MAPK/ERK блокиране</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.3%</span>
+                        </div>
+                    `;
+                } else if (gene === 'EGFR_L858R') {
+                    drugsHTML = `
+                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-cyan-400">1. 3rd-Gen EGFR TKI (Osimertinib)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 80 mg дневно | Специфична инхибиция с пробиване на КРБ (Blood-Brain Barrier)</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.9%</span>
+                        </div>
+                    `;
+                } else if (gene === 'AR_AMPL_PTEN') {
+                    drugsHTML = `
+                        <div class="p-3 bg-slate-900/90 border border-blue-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-blue-400">1. 2nd-Gen AR Signaling Inhibitor + AKT Block (Enzalutamide + Capivasertib)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 160 mg/day ARi | Таргетиране на PTEN-loss PI3K/AKT път</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.2%</span>
+                        </div>
+                    `;
+                } else if (gene === 'FLT3_ITD') {
+                    drugsHTML = `
+                        <div class="p-3 bg-slate-900/90 border border-red-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-red-400">1. Targeted FLT3 Kinase Inhibitor (Gilteritinib)</div>
+                                <div class="text-xs text-slate-400">Дозировка: 120 mg дневно | Бърза клирънс реакция при остра миелоидна левкемия</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.5%</span>
                         </div>
                     `;
                 } else {
