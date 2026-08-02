@@ -632,6 +632,153 @@
             }
         };
 
+        const drugDB = {
+            KRAS_G12D: {
+                bg: [
+                    { name: "Sotorasib (AMG-510) + SHP2 Inhibitor (TNO155)", desc: "Ковалентен KRAS G12D/C инхибитор + SHP2 фосфатазна блокада за предотвратяване на рефлекторна RTK реактивация.", tag: "MAPK/ERK Блокада" },
+                    { name: "Folfirinox + Anti-EGFR Peptide", desc: "Стандартен 4-компонентен химиотерапевтичен протокол (Оксалиплатин, Иринотекан, Левковорин, 5-FU) с подсилена апоптотична чувствителност.", tag: "SOC Комбиниран" }
+                ],
+                en: [
+                    { name: "Sotorasib (AMG-510) + SHP2 Inhibitor (TNO155)", desc: "Covalent KRAS G12D/C inhibitor + SHP2 phosphatase blockade preventing feedback RTK reactivation.", tag: "MAPK/ERK Blockade" },
+                    { name: "Folfirinox + Anti-EGFR Peptide", desc: "Standard 4-agent chemotherapy protocol (Oxaliplatin, Irinotecan, Leucovorin, 5-FU) with enhanced apoptotic sensitivity.", tag: "SOC Combination" }
+                ],
+                fr: [
+                    { name: "Sotorasib (AMG-510) + Inhibiteur SHP2 (TNO155)", desc: "Inhibiteur covalent KRAS G12D/C + blocage de la phosphatase SHP2 réprimant la réactivation des RTK.", tag: "Blocage MAPK/ERK" },
+                    { name: "Folfirinox + Peptide Anti-EGFR", desc: "Protocole de chimiothérapie standard à 4 agents avec sensibilité apoptotique renforcée.", tag: "Combinaison SOC" }
+                ],
+                es: [
+                    { name: "Sotorasib (AMG-510) + Inhibidor SHP2 (TNO155)", desc: "Inhibidor covalente KRAS G12D/C + bloqueo de fosfatasa SHP2 para prevenir la reactivación de RTK.", tag: "Bloqueo MAPK/ERK" },
+                    { name: "Folfirinox + Péptido Anti-EGFR", desc: "Protocolo de quimioterapia estándar de 4 agentes con sensibilidad apoptótica mejorada.", tag: "Combinación SOC" }
+                ]
+            },
+            TP53_LOSS: {
+                bg: [
+                    { name: "APR-246 (Eprenetapopt) + Temozolomide", desc: "Възстановяване на конформацията на мутиралия p53 протеин и индуциране на масивна ROS-зависима апоптоза.", tag: "p53 Реактивация" },
+                    { name: "WEE1 Inhibitor (Adavosertib) + Radiotherapy", desc: "Инхибиране на G2/M чекпойнта за избирателно унищожаване на p53-дефицитни туморни клетки.", tag: "G2/M ДНК Стрес" }
+                ],
+                en: [
+                    { name: "APR-246 (Eprenetapopt) + Temozolomide", desc: "Re-activation of mutant p53 protein conformation and induction of massive ROS-dependent apoptosis.", tag: "p53 Reactivation" },
+                    { name: "WEE1 Inhibitor (Adavosertib) + Radiotherapy", desc: "G2/M checkpoint inhibition selectively killing p53-deficient tumor cells via mitotic catastrophe.", tag: "G2/M DNA Stress" }
+                ],
+                fr: [
+                    { name: "APR-246 (Eprenetapopt) + Témozolomide", desc: "Restauration de la conformation de p53 muté et induction d'une apoptose massive dépendante des ROS.", tag: "Réactivation p53" },
+                    { name: "Inhibiteur WEE1 (Adavosertib) + Radiothérapie", desc: "Inhibition du point de contrôle G2/M détruisant sélectivement les cellules tumorales déficientes en p53.", tag: "Stress ADN G2/M" }
+                ],
+                es: [
+                    { name: "APR-246 (Eprenetapopt) + Temozolomida", desc: "Restauración de la conformación de p53 mutado e inducción de apoptosis masiva dependiente de ROS.", tag: "Reactivación p53" },
+                    { name: "Inhibidor WEE1 (Adavosertib) + Radioterapia", desc: "Inhibición del punto de control G2/M destruyendo selectivamente células tumorales deficientes en p53.", tag: "Estrés ADN G2/M" }
+                ]
+            },
+            HER2_AMPL: {
+                bg: [
+                    { name: "Trastuzumab Deruxtecan (Enhertu, T-DXd)", desc: "ADC антитяло-конюгат с топоизомераза I инхибитор за таргетирано унищожаване на HER2-амплифицирани клетки.", tag: "HER2 ADC Тракт" },
+                    { name: "Tucatinib + Capecitabine", desc: "Високоселективен тирозин киназен инхибитор с отлична пропускливост през кръвно-мозъчната бариера.", tag: "TKI Блокада" }
+                ],
+                en: [
+                    { name: "Trastuzumab Deruxtecan (Enhertu, T-DXd)", desc: "ADC antibody-drug conjugate with topoisomerase I payload targeted at HER2-amplified targets.", tag: "HER2 ADC Payload" },
+                    { name: "Tucatinib + Capecitabine", desc: "Highly selective tyrosine kinase inhibitor with active blood-brain barrier penetration.", tag: "TKI Blockade" }
+                ],
+                fr: [
+                    { name: "Trastuzumab Deruxtecan (Enhertu, T-DXd)", desc: "Conjugué anticorps-médicament ADC ciblant les récepteurs HER2 avec inhibiteur de topoisomérase I.", tag: "Charge ADC HER2" },
+                    { name: "Tucatinib + Capécitabine", desc: "Inhibiteur sélectif de tyrosine kinase franchissant la barrière hémato-encéphalique.", tag: "Blocage TKI" }
+                ],
+                es: [
+                    { name: "Trastuzumab Deruxtecan (Enhertu, T-DXd)", desc: "Conjugado anticuerpo-fármaco ADC dirigido a receptores HER2 con inhibidor de topoisomerasa I.", tag: "Carga ADC HER2" },
+                    { name: "Tucatinib + Capecitabina", desc: "Inhibidor selectivo de tirosina quinasa con penetración en la barrera hematoencefálica.", tag: "Bloqueo TKI" }
+                ]
+            },
+            EGFR_L858R: {
+                bg: [
+                    { name: "Osimertinib (Tagrisso) 3rd Gen EGFR-TKI", desc: "Необратим EGFR инхибитор от 3-то поколение, преодоляващ T790M резистентността.", tag: "EGFR TKI 3rd Gen" },
+                    { name: "Amivantamab + Chemotherapy", desc: "Биспецифично антитяло таргетиращо EGFR и MET рецепторите едновременно.", tag: "Dual Bispecific" }
+                ],
+                en: [
+                    { name: "Osimertinib (Tagrisso) 3rd Gen EGFR-TKI", desc: "Irreversible 3rd generation EGFR inhibitor targeting L858R and overcoming T790M resistance.", tag: "EGFR TKI 3rd Gen" },
+                    { name: "Amivantamab + Chemotherapy", desc: "Bispecific antibody targeting EGFR and MET extracellular domains simultaneously.", tag: "Dual Bispecific" }
+                ],
+                fr: [
+                    { name: "Osimertinib (Tagrisso) TKI EGFR 3e Gén", desc: "Inhibiteur irréversible d'EGFR de 3e génération surmontant la résistance T790M.", tag: "TKI EGFR 3e Gén" },
+                    { name: "Amivantamab + Chimiothérapie", desc: "Anticorps bispécifique ciblant simultanément les domaines extracellulaires d'EGFR et MET.", tag: "Bispécifique Double" }
+                ],
+                es: [
+                    { name: "Osimertinib (Tagrisso) TKI EGFR 3a Gen", desc: "Inhibidor irreversible de EGFR de 3a generación superando la resistencia T790M.", tag: "TKI EGFR 3a Gen" },
+                    { name: "Amivantamab + Quimioterapia", desc: "Anticuerpo biespecífico dirigido a dominios extracelulares de EGFR y MET.", tag: "Biespecífico Doble" }
+                ]
+            },
+            BRAF_V600E: {
+                bg: [
+                    { name: "Dabrafenib + Trametinib (Dual BRAF/MEK)", desc: "Комбинирана инхибиция на BRAF V600E и MEK1/2 за пълно потискане на MAPK каскадата.", tag: "BRAF/MEK Синергия" },
+                    { name: "Encorafenib + Cetuximab (BEACON Protocol)", desc: "Специфичен триплет за колоректален рак преодоляващ EGFR FEEDBACK активацията.", tag: "BEACON Протокол" }
+                ],
+                en: [
+                    { name: "Dabrafenib + Trametinib (Dual BRAF/MEK)", desc: "Combined blockade of BRAF V600E and MEK1/2 for complete suppression of the MAPK cascade.", tag: "BRAF/MEK Synergy" },
+                    { name: "Encorafenib + Cetuximab (BEACON Protocol)", desc: "Specific colorectal combination overcoming EGFR feedback reactivation loop.", tag: "BEACON Protocol" }
+                ],
+                fr: [
+                    { name: "Dabrafenib + Trametinib (Double BRAF/MEK)", desc: "Blocage combiné de BRAF V600E et MEK1/2 pour la suppression complète de la cascade MAPK.", tag: "Synergie BRAF/MEK" },
+                    { name: "Encorafenib + Cetuximab (Protocole BEACON)", desc: "Combinaison spécifique pour le cancer colorectal surmontant la réactivation EGFR.", tag: "Protocole BEACON" }
+                ],
+                es: [
+                    { name: "Dabrafenib + Trametinib (Doble BRAF/MEK)", desc: "Bloqueo combinado de BRAF V600E y MEK1/2 para la supresión completa de la cascada MAPK.", tag: "Sinergia BRAF/MEK" },
+                    { name: "Encorafenib + Cetuximab (Protocolo BEACON)", desc: "Combinación específica para cáncer colorrectal superando la reactivación EGFR.", tag: "Protocolo BEACON" }
+                ]
+            },
+            AR_AMPL_PTEN: {
+                bg: [
+                    { name: "Abiraterone Acetate + Ipatasertib (AKT Inhibitor)", desc: "Инхибиране на андрогенната синтеза и PI3K/AKT пътя при PTEN-дефицитен mCRPC.", tag: "AR/PI3K Двойна Блокада" },
+                    { name: "Enzalutamide + Olaparib", desc: "Синтетична леталност чрез PARP инхибиция съвместно с AR рецепторен антагонизъм.", tag: "PARP / AR Леталност" }
+                ],
+                en: [
+                    { name: "Abiraterone Acetate + Ipatasertib (AKT Inhibitor)", desc: "Dual androgen synthesis blockade and AKT pathway inhibition in PTEN-deficient mCRPC.", tag: "AR/PI3K Dual Blockade" },
+                    { name: "Enzalutamide + Olaparib", desc: "Synthetic lethality via PARP inhibition combined with AR receptor antagonism.", tag: "PARP / AR Lethality" }
+                ],
+                fr: [
+                    { name: "Acétate d'Abiratérone + Ipatasertib (Inhibiteur AKT)", desc: "Double blocage de la synthèse des androgènes et de la voie AKT dans le mCRPC déficient en PTEN.", tag: "Double Blocage AR/PI3K" },
+                    { name: "Enzalutamide + Olaparib", desc: "Létalité synthétique par inhibition de PARP combinée à l'antagonisme des récepteurs AR.", tag: "Létalité PARP / AR" }
+                ],
+                es: [
+                    { name: "Acetato de Abiraterona + Ipatasertib (Inhibidor AKT)", desc: "Bloqueo dual de la síntesis de andrógenos e inhibición de la vía AKT en mCRPC deficiente en PTEN.", tag: "Doble Bloqueo AR/PI3K" },
+                    { name: "Enzalutamide + Olaparib", desc: "Letalidad sintética mediante inhibición de PARP combinada con antagonismo de receptores AR.", tag: "Letalidad PARP / AR" }
+                ]
+            },
+            FLT3_ITD: {
+                bg: [
+                    { name: "Gilteritinib (Xospata) + Azacitidine", desc: "Високоспецифичен инхибитор от 2-ро поколение срещу FLT3-ITD и FLT3-TKD мутации.", tag: "FLT3 TKI Блокада" },
+                    { name: "Midostaurin + 7+3 Cytarabine/Daunorubicin", desc: "Индукционна химиотерапия подсилена с пан-киназен инхибитор за бърз циторедуктивен отговор.", tag: "SOC Индукция" }
+                ],
+                en: [
+                    { name: "Gilteritinib (Xospata) + Azacitidine", desc: "Highly potent 2nd generation FLT3 inhibitor active against ITD duplication and TKD mutations.", tag: "FLT3 TKI Blockade" },
+                    { name: "Midostaurin + 7+3 Cytarabine/Daunorubicin", desc: "Standard induction chemotherapy boosted with pan-kinase inhibition for rapid cytoreduction.", tag: "SOC Induction" }
+                ],
+                fr: [
+                    { name: "Gilteritinib (Xospata) + Azacitidine", desc: "Inhibiteur FLT3 de 2e génération très puissant actif contre la duplication ITD et les mutations TKD.", tag: "Blocage TKI FLT3" },
+                    { name: "Midostaurin + 7+3 Cytarabine/Daunorubicine", desc: "Chimiothérapie d'induction renforcée par inhibition pan-kinase pour cytoréduction rapide.", tag: "Induction SOC" }
+                ],
+                es: [
+                    { name: "Gilteritinib (Xospata) + Azacitidina", desc: "Inhibidor FLT3 de 2a generación altamente potente activo contra duplicación ITD y mutaciones TKD.", tag: "Bloqueo TKI FLT3" },
+                    { name: "Midostaurin + 7+3 Citarabina/Daunorrubicina", desc: "Quimioterapia de inducción potenciada con inhibición pan-quinasa para citorreducción rápida.", tag: "Inducción SOC" }
+                ]
+            },
+            BRCA1_DEL: {
+                bg: [
+                    { name: "Olaparib (Lynparza) + Bevacizumab", desc: "PARP инхибиция базирана на синтетична леталност при HRD/BRCA дефицитни вродени състояния.", tag: "PARP HRD Леталност" },
+                    { name: "Niraparib + Carboplatin", desc: "Предотвратяване на възстановяването на единично-верижни скъсвания на ДНК в туморната матрица.", tag: "ДНК Репарация Блокада" }
+                ],
+                en: [
+                    { name: "Olaparib (Lynparza) + Bevacizumab", desc: "PARP inhibition triggering synthetic lethality in HRD/BRCA deficient hereditary profiles.", tag: "PARP HRD Lethality" },
+                    { name: "Niraparib + Carboplatin", desc: "Prevention of single-strand DNA break repair causing double-strand collapse in tumors.", tag: "DNA Repair Blockade" }
+                ],
+                fr: [
+                    { name: "Olaparib (Lynparza) + Bevacizumab", desc: "Inhibition de PARP déclenchant une létalité synthétique dans les profils déficients en HRD/BRCA.", tag: "Létalité PARP HRD" },
+                    { name: "Niraparib + Carboplatine", desc: "Prévention de la réparation des cassures monocaténaires entraînant l'effondrement de l'ADN.", tag: "Blocage Réparation ADN" }
+                ],
+                es: [
+                    { name: "Olaparib (Lynparza) + Bevacizumab", desc: "Inhibición de PARP desencadenando letalidad sintética en perfiles deficientes en HRD/BRCA.", tag: "Letalidad PARP HRD" },
+                    { name: "Niraparib + Carboplatino", desc: "Prevención de la reparación de roturas de ADN monocatenario causando colapso genómico.", tag: "Bloqueo Reparación ADN" }
+                ]
+            }
+        };
+
         let currentLang = 'bg';
 
         function changeLanguage(langKey) {
@@ -659,7 +806,8 @@
             if (resultsDash && !resultsDash.classList.contains('hidden')) {
                 const gene = document.getElementById('geneMutation').value;
                 const recBox = document.getElementById('drugRecommendations');
-                const drugList = (t.drugs && t.drugs[gene]) ? t.drugs[gene] : (t.drugs ? t.drugs.DEFAULT : []);
+                const geneDrugs = drugDB[gene] || drugDB.KRAS_G12D;
+                const drugList = geneDrugs[langKey] || geneDrugs.en || [];
 
                 let drugsHTML = '';
                 drugList.forEach(item => {
@@ -779,24 +927,9 @@
                 const gene = document.getElementById('geneMutation').value;
                 const recBox = document.getElementById('drugRecommendations');
 
+                const geneDrugs = drugDB[gene] || drugDB.KRAS_G12D;
+                const drugList = geneDrugs[currentLang] || geneDrugs.en || [];
                 const t = i18n[currentLang] || i18n.bg;
-                const drugList = (t.drugs && t.drugs[gene]) ? t.drugs[gene] : (t.drugs ? t.drugs.DEFAULT : []);
-
-                let drugsHTML = '';
-                drugList.forEach(item => {
-                    drugsHTML += `
-                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
-                            <div>
-                                <div class="text-sm font-bold text-cyan-400">${item.name}</div>
-                                <div class="text-xs text-slate-400">${item.desc}</div>
-                            </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">${item.tag}</span>
-                        </div>
-                    `;
-                });
-
-                const t = i18n[currentLang] || i18n.bg;
-                const drugList = (t.drugs && t.drugs[gene]) ? t.drugs[gene] : (t.drugs ? t.drugs.DEFAULT : []);
 
                 let drugsHTML = '';
                 drugList.forEach(item => {
