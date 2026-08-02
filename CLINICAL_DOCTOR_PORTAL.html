@@ -204,7 +204,7 @@
                         <div class="text-[10px] text-slate-400">EGFR L858R | Ki-67 65%</div>
                     </button>
                     <button onclick="loadPreset('colorectal_msi')" class="p-2.5 bg-slate-800/60 hover:bg-amber-950/50 border border-slate-700 hover:border-amber-500/50 rounded-xl text-left transition-all">
-                        <div data-i18n="presetCRC" class="text-xs font-bold text-slate-200">Колорективен (CRC)</div>
+                        <div data-i18n="presetCRC" class="text-xs font-bold text-slate-200">Колоректален (CRC)</div>
                         <div class="text-[10px] text-slate-400">BRAF V600E | Ki-67 70%</div>
                     </button>
                     <button onclick="loadPreset('prostate_crpc')" class="p-2.5 bg-slate-800/60 hover:bg-blue-950/50 border border-slate-700 hover:border-blue-500/50 rounded-xl text-left transition-all">
@@ -456,7 +456,9 @@
                 presetGBM: "Глиобластом (GBM)",
                 presetBreast: "Млечна Жлеза (HER2+)",
                 presetLung: "Бел Дроб (NSCLC)",
-                presetCRC: "Колорективен (CRC)",
+                presetCRC: "Колоректален (CRC)",
+                survivalMonths: "месеца",
+                vsSoc: "спрямо стандартна терапия",
                 presetProstate: "Простата (mCRPC)",
                 presetMelanoma: "Меланом",
                 presetAML: "Левкемия (AML)",
@@ -549,7 +551,9 @@
                 btnFhir: "HL7 FHIR (JSON)",
                 btnTxt: "EHR Text (.txt)",
                 btnCsv: "CSV Data (.csv)",
-                signedBy: "Digitally Signed By:"
+                signedBy: "Digitally Signed By:",
+                survivalMonths: "months",
+                vsSoc: "vs. Standard of Care"
             },
             fr: {
                 title: "PORTAIL CLINIQUE AETERNA VHT",
@@ -605,7 +609,9 @@
                 btnFhir: "HL7 FHIR (JSON)",
                 btnTxt: "Texte EHR (.txt)",
                 btnCsv: "Données CSV (.csv)",
-                signedBy: "Signé Numériquement Par:"
+                signedBy: "Signé Numériquement Par:",
+                survivalMonths: "mois",
+                vsSoc: "vs. traitement standard"
             },
             es: {
                 title: "PORTAL CLÍNICO AETERNA VHT",
@@ -661,7 +667,9 @@
                 btnFhir: "HL7 FHIR (JSON)",
                 btnTxt: "Texto EHR (.txt)",
                 btnCsv: "Datos CSV (.csv)",
-                signedBy: "Firmado Digitalmente Por:"
+                signedBy: "Firmado Digitalmente Por:",
+                survivalMonths: "meses",
+                vsSoc: "vs. tratamiento estándar"
             }
         };
 
@@ -1008,11 +1016,11 @@
 
                 // 3. Dynamic Patient-Specific C-Index (Concordance Precision)
                 // C-Index varies realistically between 0.9650 and 0.9850 depending on biomarker completeness
-                const dynamicCIndex = (0.9713 + (spo2 > 95 ? 0.0042 : -0.0021) + (ki67 > 80 ? -0.0015 : 0.0035)).toFixed(4);
+                const dynamicCIndex = parseFloat((0.9713 + (spo2 > 95 ? 0.0042 : -0.0021) + (ki67 > 80 ? -0.0015 : 0.0035)).toFixed(4));
 
                 // DOM Updates for KPIs
                 const survivalEl = document.getElementById('resSurvival');
-                if (survivalEl) survivalEl.innerText = `${vhtSurvivalMonths} ${t.survivalMonths || 'meseca'}`;
+                if (survivalEl) survivalEl.innerText = `${vhtSurvivalMonths} ${t.survivalMonths || 'месеца'}`;
 
                 const survivalSubEl = document.getElementById('resSurvivalSub');
                 if (survivalSubEl) survivalSubEl.innerText = `+${survivalImprovement}% ${t.vsSoc || 'спрямо стандартна терапия'}`;
@@ -1024,14 +1032,15 @@
                 if (cindexEl) cindexEl.innerText = `${(dynamicCIndex * 100).toFixed(2)}%`;
 
                 const cindexSubEl = document.getElementById('resCIndexSub');
-                if (cindexSubEl) cindexSubEl.innerText = `C-index = ${dynamicCIndex} (EU MDR OK)`;
+                if (cindexSubEl) cindexSubEl.innerText = `C-index = ${dynamicCIndex.toFixed(4)} (EU MDR OK)`;
 
-                // Update Visual Comparison Bar
+                // Update Visual Comparison Bar labels with localized month suffix
+                const monthSuffix = t.survivalMonths || 'месеца';
                 const socBarText = document.getElementById('socBarText');
-                if (socBarText) socBarText.innerText = `SOC: ${baseSocMonths}м`;
+                if (socBarText) socBarText.innerText = `SOC: ${baseSocMonths} ${monthSuffix}`;
                 
                 const vhtBarText = document.getElementById('vhtBarText');
-                if (vhtBarText) vhtBarText.innerText = `AETERNA-VHT: ${vhtSurvivalMonths}м`;
+                if (vhtBarText) vhtBarText.innerText = `AETERNA-VHT: ${vhtSurvivalMonths} ${monthSuffix}`;
 
                 // Update Bar Width Percentages dynamically
                 const totalM = baseSocMonths + vhtSurvivalMonths;
