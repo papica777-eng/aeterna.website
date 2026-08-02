@@ -654,6 +654,32 @@
                 }
             });
 
+            // If results dashboard is already visible, re-render dynamic drug list and canvas metrics in new language
+            const resultsDash = document.getElementById('resultsDashboard');
+            if (resultsDash && !resultsDash.classList.contains('hidden')) {
+                const gene = document.getElementById('geneMutation').value;
+                const recBox = document.getElementById('drugRecommendations');
+                const drugList = (t.drugs && t.drugs[gene]) ? t.drugs[gene] : (t.drugs ? t.drugs.DEFAULT : []);
+
+                let drugsHTML = '';
+                drugList.forEach(item => {
+                    drugsHTML += `
+                        <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
+                            <div>
+                                <div class="text-sm font-bold text-cyan-400">${item.name}</div>
+                                <div class="text-xs text-slate-400">${item.desc}</div>
+                            </div>
+                            <span class="text-xs font-mono font-bold text-emerald-400">${item.tag}</span>
+                        </div>
+                    `;
+                });
+                if (recBox) recBox.innerHTML = drugsHTML;
+
+                const slider = document.getElementById('tumorTimeline');
+                const currentWk = slider ? slider.value : 12;
+                updateTumorCanvas(currentWk);
+            }
+
             lucide.createIcons();
         }
 
@@ -1004,6 +1030,13 @@
             let mimeType = 'text/plain';
             let content = '';
 
+            // Query dynamically computed UI metrics for report output
+            const survivalText = document.getElementById('resSurvival') ? document.getElementById('resSurvival').innerText : '38.4 месеца';
+            const survivalSubText = document.getElementById('resSurvivalSub') ? document.getElementById('resSurvivalSub').innerText : '+91.3%';
+            const cindexText = document.getElementById('resCIndex') ? document.getElementById('resCIndex').innerText : '97.13%';
+            const cindexSubText = document.getElementById('resCIndexSub') ? document.getElementById('resCIndexSub').innerText : 'C-index = 0.9713';
+            const shrinkageText = document.getElementById('resShrinkage') ? document.getElementById('resShrinkage').innerText : '-68.4%';
+
             if (format === 'fhir') {
                 filename += '.json';
                 mimeType = 'application/json';
@@ -1042,7 +1075,7 @@
                                 status: "active",
                                 intent: "option",
                                 title: "AETERNA-VHT Precision Oncology Care Plan",
-                                note: [{ text: "Expected Overall Survival: 38.4 months (+91.3% vs Standard of Care). Concordance C-Index: 0.9713" }]
+                                note: [{ text: `Expected Overall Survival: ${survivalText} (${survivalSubText}). Concordance ${cindexSubText}` }]
                             }
                         }
                     ]
@@ -1056,7 +1089,7 @@ AETERNA VIRTUAL HUMAN TWIN (VHT) — CLINICAL ONCOLOGY REPORT
 Дата на генериране: ${new Date().toLocaleString('bg-BG')}
 Издаваща институция: AETERNA Sovereign Labs & Horizon Europe Consortium
 Главен Архитект: Димитър Продромов (AETERNA Core)
-C-Index Прецизност: 97.13% (EU MDR Class III Validated)
+C-Index Прецизност: ${cindexText} (EU MDR Class III Validated)
 
 --------------------------------------------------------------------
 1. ДАННИ НА ПАЦИЕНТА И КЛИНИЧЕН ПРОФИЛ
@@ -1071,9 +1104,9 @@ C-Index Прецизност: 97.13% (EU MDR Class III Validated)
 --------------------------------------------------------------------
 2. ПРОГНОСТИЧНИ СИМУЛАЦИОННИ ПОКАЗАТЕЛИ (IN-SILICO SWEEP)
 --------------------------------------------------------------------
-- Очаквана Преживяемост: 38.4 месеца (+91.3% спрямо Standard of Care)
-- Туморен Марджин Свиване: -68.4% (Apoptotic Lysis Rate)
-- Моделна точност (Concordance Index): C = 0.9713
+- Очаквана Преживяемост: ${survivalText} (${survivalSubText})
+- Туморен Марджин Свиване: ${shrinkageText} (Apoptotic Lysis Rate)
+- Моделна точност (Concordance Index): ${cindexSubText}
 
 --------------------------------------------------------------------
 3. ПРЕПОРЪЧАН ТАРГЕТИРАН ТЕРАПЕВТИЧЕН ПЛАН
@@ -1088,7 +1121,7 @@ END OF REPORT — AETERNA SOVEREIGN LABS
             } else if (format === 'csv') {
                 filename += '.csv';
                 mimeType = 'text/csv';
-                content = `PatientID,Age,GeneMutation,Ki67_Percent,SpO2_Percent,TumorSize_cm,PredictedSurvival_Months,CIndex,ApoptoticShrinkage\n"${pid}",${age},"${gene}",${ki67},${spo2},${size},38.4,0.9713,"-68.4%"`;
+                content = `PatientID,Age,GeneMutation,Ki67_Percent,SpO2_Percent,TumorSize_cm,PredictedSurvival_Months,CIndex,ApoptoticShrinkage\n"${pid}",${age},"${gene}",${ki67},${spo2},${size},"${survivalText}","${cindexText}","${shrinkageText}"`;
             }
 
             const blob = new Blob([content], { type: mimeType });
