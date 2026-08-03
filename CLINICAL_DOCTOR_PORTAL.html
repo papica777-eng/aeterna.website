@@ -495,7 +495,10 @@
                 btnFhir: "HL7 FHIR (JSON)",
                 btnTxt: "Текст / EHR (.txt)",
                 btnCsv: "Таблица (.csv)",
-                signedBy: "Подписано от:"
+                signedBy: "Подписано от:",
+                weekLabel: "Седмица",
+                initDiam: "Първоначален диам.:",
+                projDiam: "Прогнозиран диам.:"
             },
             en: {
                 title: "AETERNA VHT CLINICAL PORTAL",
@@ -553,7 +556,10 @@
                 btnCsv: "CSV Data (.csv)",
                 signedBy: "Digitally Signed By:",
                 survivalMonths: "months",
-                vsSoc: "vs. Standard of Care"
+                vsSoc: "vs. Standard of Care",
+                weekLabel: "Week",
+                initDiam: "Initial diam.:",
+                projDiam: "Projected diam.:"
             },
             fr: {
                 title: "PORTAIL CLINIQUE AETERNA VHT",
@@ -611,7 +617,10 @@
                 btnCsv: "Données CSV (.csv)",
                 signedBy: "Signé Numériquement Par:",
                 survivalMonths: "mois",
-                vsSoc: "vs. traitement standard"
+                vsSoc: "vs. traitement standard",
+                weekLabel: "Semaine",
+                initDiam: "Diam. initial :",
+                projDiam: "Diam. projeté :"
             },
             es: {
                 title: "PORTAL CLÍNICO AETERNA VHT",
@@ -669,7 +678,10 @@
                 btnCsv: "Datos CSV (.csv)",
                 signedBy: "Firmado Digitalmente Por:",
                 survivalMonths: "meses",
-                vsSoc: "vs. tratamiento estándar"
+                vsSoc: "vs. tratamiento estándar",
+                weekLabel: "Semana",
+                initDiam: "Diám. inicial:",
+                projDiam: "Diám. proyectado:"
             }
         };
 
@@ -1000,7 +1012,9 @@
                 else if (gene === 'HER2_AMPL') baseSocMonths = 22.0;
                 else if (gene === 'EGFR_L858R') baseSocMonths = 21.0;
                 else if (gene === 'BRAF_V600E') baseSocMonths = 16.8;
+                else if (gene === 'AR_AMPL_PTEN') baseSocMonths = 16.5;
                 else if (gene === 'FLT3_ITD') baseSocMonths = 12.5;
+                else if (gene === 'BRCA1_DEL') baseSocMonths = 24.0;
 
                 // Kinetic survival bonus formula based on age, ki67 proliferation and SpO2 oxygenation
                 const kineticBonus = (spo2 / 100) * (1.8 + (100 - ki67) / 100) * (size > 3 ? 0.95 : 1.1);
