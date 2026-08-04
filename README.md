@@ -147,6 +147,7 @@ AETERNA is the only applicant at **TRL 6** that simultaneously bridges both EIC 
 - `📂 eic/` — Official grant drafts, full applications, and compliance documentation.
 - `📄 index.html` — The premium, orange/amber glassmorphic research landing portal featuring responsive grid transitions.
 - `📄 hud.html` — Interactive Oncology Twin simulation, metabolic mapping, and Synthetic Lethality HUD.
+- `📄 CLINICAL_DOCTOR_PORTAL.html` — One-Click Doctor Portal for real patient data entry & 97.13% C-index simulation.
 - `📄 IP_FINDER.html` — Zero-leak target routing interface.
 - `📄 LICENSE` — AETERNA Academic & Proprietary License.
 
