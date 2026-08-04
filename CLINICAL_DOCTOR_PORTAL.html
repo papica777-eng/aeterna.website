@@ -90,7 +90,7 @@
                 <a href="vht_diabet.html" class="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-purple-400 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
                     <i data-lucide="heart" class="w-3.5 h-3.5"></i> VHT Diabetes & Cardio
                 </a>
-                <a href="soul/ui/SovereignHUD.html" class="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-emerald-400 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
+                <a href="sovereign-hud.html" class="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-emerald-400 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
                     <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Sovereign HUD
                 </a>
             </div>
@@ -100,9 +100,15 @@
                 <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">C-Index Precision: 97.13%</span>
             </div>
             <div class="text-right hidden sm:block">
-                <span class="text-xs text-slate-400 block">Режим на симулация:</span>
+                <span class="text-xs text-slate-400 block" id="lblSimMode">Режим на симулация:</span>
                 <span class="text-xs font-bold text-cyan-400 mono">EU MDR Class III / HL7 FHIR</span>
             </div>
+
+            <!-- Language Switcher Button -->
+            <button onclick="toggleLanguage()" id="langToggleBtn" class="px-3.5 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 font-bold text-xs rounded-xl border border-cyan-500/40 transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                <i data-lucide="languages" class="w-4 h-4"></i>
+                <span id="langLabel">BG / EN</span>
+            </button>
         </div>
     </header>
 
@@ -582,15 +588,84 @@
             if (window.lucide) setTimeout(() => lucide.createIcons(), 0);
         }
 
-        // ── Backend URL Configuration Helper ─────────────────────────
-        // To connect to Codespaces backend, run in browser console:
-        // localStorage.setItem('aeterna_copilot_url', 'https://YOUR-CODESPACE-8000.app.github.dev')
-        if (!COPILOT_API_URL) {
-            console.log('%c[AETERNA Copilot] Running in LOCAL FALLBACK mode.', 'color: #f59e0b; font-weight: bold');
-            console.log('%cTo connect backend: localStorage.setItem("aeterna_copilot_url", "https://YOUR-CODESPACE-8000.app.github.dev")', 'color: #06b6d4');
-        } else {
-            console.log(`%c[AETERNA Copilot] Backend: ${COPILOT_API_URL}`, 'color: #10b981; font-weight: bold');
+        // ── Language Translation Dictionary (i18n) ───────────────────
+        let currentLang = localStorage.getItem('aeterna_portal_lang') || 'bg';
+
+        const i18nDict = {
+            bg: {
+                simMode: "Режим на симулация:",
+                presetsHeader: "1. Бързо Зареждане на Клиничен Шаблон",
+                presetPancreatic: "Панкреатичен Аденокарцином",
+                presetGlio: "Глиобластом (GBM)",
+                patientDataHeader: "2. Данни на Пациента",
+                patientId: "ИД на Пациент / Досие",
+                age: "Възраст (Години)",
+                driverMutation: "Драйвърна Мутация (LOINC Genomics)",
+                ki67: "Ki-67 Пролиферационен Индекс (%)",
+                spo2: "Тъканна Оксигенация / Кислород (SpO2 %)",
+                tumorSize: "Размер на Лизията / Тумора (cm)",
+                btnSimulate: "СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ",
+                copilotTitle: "AETERNA AI Copilot",
+                copilotSub: "Детерминистичен асистент за лекари и оценители",
+                copilotGreeting: "Здравейте, Д-р Продромов!",
+                copilotDesc: "Аз съм **AETERNA AI Clinical Copilot**, обучен върху архитектурата ни за дигитални онкологични близнаци. Мога да ви разясня **C-Index точността (97.13%)**, формулите за апоптоза, LOINC стандартизацията и изчисленията за преживяемост (+91.3%).",
+                copilotBtn1: "⚡ Как работи C-Index 97.13%?",
+                copilotBtn2: "🧬 Обясни KRAS G12D плана",
+                copilotPlaceholder: "Задайте въпрос относно архитектурата или пациента...",
+                readyTitle: "Системата е в пълна готовност",
+                readyDesc: "Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност."
+            },
+            en: {
+                simMode: "Simulation Mode:",
+                presetsHeader: "1. Quick Clinical Preset Load",
+                presetPancreatic: "Pancreatic Adenocarcinoma",
+                presetGlio: "Glioblastoma (GBM)",
+                patientDataHeader: "2. Patient Data",
+                patientId: "Patient ID / Dossier",
+                age: "Age (Years)",
+                driverMutation: "Driver Mutation (LOINC Genomics)",
+                ki67: "Ki-67 Proliferation Index (%)",
+                spo2: "Tissue Oxygenation (SpO2 %)",
+                tumorSize: "Lesion / Tumor Size (cm)",
+                btnSimulate: "SIMULATE TREATMENT WITH 97.13% TENSOR PRECISION",
+                copilotTitle: "AETERNA AI Copilot",
+                copilotSub: "Deterministic assistant for doctors & evaluators",
+                copilotGreeting: "Welcome, Dr. Prodromov!",
+                copilotDesc: "I am the **AETERNA AI Clinical Copilot**, trained on our Virtual Human Twin oncology architecture. I can detail our **C-Index precision (97.13%)**, apoptosis kinetics, LOINC standardization, and survival extension (+91.3%).",
+                copilotBtn1: "⚡ How C-Index 97.13% works?",
+                copilotBtn2: "🧬 Explain KRAS G12D plan",
+                copilotPlaceholder: "Ask a question about the architecture or patient...",
+                readyTitle: "System Standing By",
+                readyDesc: "Select a preset on the left or input patient parameters. With a single click, AETERNA-VHT will synthesize an optimal oncology treatment plan with validated 97.13% precision."
+            }
+        };
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('aeterna_portal_lang', lang);
+            const dict = i18nDict[lang];
+
+            const setTxt = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = text;
+            };
+
+            setTxt('lblSimMode', dict.simMode);
+            setTxt('copilotPlaceholder', dict.copilotPlaceholder);
+            
+            const input = document.getElementById('copilotInput');
+            if (input) input.placeholder = dict.copilotPlaceholder;
+
+            document.getElementById('langLabel').innerText = lang.toUpperCase() === 'BG' ? '🇧🇬 BG / EN' : '🇬🇧 EN / BG';
         }
+
+        function toggleLanguage() {
+            const nextLang = currentLang === 'bg' ? 'en' : 'bg';
+            applyLanguage(nextLang);
+        }
+
+        // Apply saved language on load
+        applyLanguage(currentLang);
     </script>
 </body>
 </html>
