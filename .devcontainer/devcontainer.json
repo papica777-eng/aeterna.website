@@ -1,0 +1,28 @@
+{
+    "name": "AETERNA VHT Clinical Copilot",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "postCreateCommand": "cd backend && pip install -r requirements.txt && python knowledge_ingest.py",
+    "forwardPorts": [8000],
+    "portsAttributes": {
+        "8000": {
+            "label": "AETERNA Copilot API",
+            "onAutoForward": "openBrowser",
+            "visibility": "public"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python"
+            }
+        }
+    },
+    "hostRequirements": {
+        "cpus": 2,
+        "memory": "8gb"
+    }
+}

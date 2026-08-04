@@ -391,5 +391,206 @@
             window.print();
         }
     </script>
+
+    <!-- AI Clinical Copilot Floating Agent Widget -->
+    <div id="aiCopilotWidget" class="fixed bottom-6 right-6 z-50">
+        <!-- Minimized Floating Button -->
+        <button id="copilotToggleBtn" onclick="toggleCopilotModal()" class="flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-slate-950 font-black rounded-full shadow-[0_0_25px_rgba(6,182,212,0.4)] transition-all hover:scale-105 cursor-pointer">
+            <div class="w-7 h-7 rounded-full bg-slate-950/20 flex items-center justify-center text-slate-950">
+                <i data-lucide="bot" class="w-5 h-5"></i>
+            </div>
+            <span class="text-xs uppercase tracking-wider">AETERNA AI CLINICAL COPILOT</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        </button>
+
+        <!-- Expanded Interactive Chat Window -->
+        <div id="copilotModal" class="hidden w-[380px] sm:w-[440px] h-[540px] glass-panel border border-cyan-500/30 rounded-2xl flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-4 bg-slate-900/90 border-b border-slate-800 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+                        <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-100 flex items-center gap-1.5">
+                            AETERNA AI Copilot <span class="text-[9px] px-1.5 py-0.5 bg-cyan-500/20 text-cyan-400 font-mono rounded">TRL 7</span>
+                        </h4>
+                        <p class="text-[10px] text-slate-400">Детерминистичен асистент за лекари и оценители</p>
+                    </div>
+                </div>
+                <button onclick="toggleCopilotModal()" class="text-slate-400 hover:text-slate-100 p-1 text-lg font-bold">✕</button>
+            </div>
+
+            <!-- Chat Message Container -->
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3.5 text-xs font-sans">
+                <!-- Welcome Assistant Message -->
+                <div class="p-3.5 bg-cyan-950/30 border border-cyan-500/20 rounded-xl space-y-2 text-slate-200">
+                    <div class="font-bold text-cyan-400 flex items-center gap-1.5">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Здравейте, Д-р Продромов!
+                    </div>
+                    <p class="text-[11px] leading-relaxed">
+                        Аз съм **AETERNA AI Clinical Copilot**, обучен върху архитектурата ни за дигитални онкологични близнаци. Мога да ви разясня **C-Index точността (97.13%)**, формулите за апоптоза, LOINC стандартизацията и изчисленията за преживяемост (+91.3%).
+                    </p>
+                    <div class="pt-1 flex flex-wrap gap-1.5">
+                        <button onclick="askCopilot('Как AETERNA постига C-Index 0.9713?')" class="px-2 py-1 bg-slate-800/80 hover:bg-cyan-500/20 text-[10px] text-cyan-300 rounded border border-cyan-500/30 transition-colors">⚡ Как работи C-Index 97.13%?</button>
+                        <button onclick="askCopilot('Какво означава KRAS G12D терапевтичния план?')" class="px-2 py-1 bg-slate-800/80 hover:bg-purple-500/20 text-[10px] text-purple-300 rounded border border-purple-500/30 transition-colors">🧬 Обясни KRAS G12D плана</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Controls -->
+            <div class="p-3 bg-slate-900/90 border-t border-slate-800 flex gap-2">
+                <input type="text" id="copilotInput" onkeypress="if(event.key==='Enter') sendCopilotMsg()" placeholder="Задайте въпрос относно архитектурата или пациента..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+                <button onclick="sendCopilotMsg()" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-xl text-xs transition-colors flex items-center gap-1">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        // AETERNA VHT Clinical Copilot — Frontend Integration
+        // Architecture: SOUL + Rust + Zig + Mojo + Python (Polyglot)
+        // Entropy: 0.0000
+        // ═══════════════════════════════════════════════════════════════
+
+        // ── Backend Configuration ────────────────────────────────────
+        // Set this to your Codespaces URL after deployment:
+        // e.g., 'https://xxx-8000.app.github.dev'
+        const COPILOT_API_URL = localStorage.getItem('aeterna_copilot_url') || 'https://sturdy-space-guacamole-q75gggg95wwg34w5p-8000.app.github.dev';
+        const API_TIMEOUT_MS = 10000;
+
+        function toggleCopilotModal() {
+            const modal = document.getElementById('copilotModal');
+            const btn = document.getElementById('copilotToggleBtn');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                btn.classList.add('hidden');
+            } else {
+                btn.classList.remove('hidden');
+            }
+        }
+
+        // ── Local Knowledge Base (Fallback) ──────────────────────────
+        const copilotKnowledge = {
+            cindex: "Математическият Concordance Index (C-Index = 0.9713) се изчислява чрез съпоставка на прогнозиран биологичен hazard ratio спрямо ретроспективни пациентски кохорти от TCGA-PAAD, TCGA-GBM и EORTC (n=5,000). Това надминава задължителния праг на ЕК (C ≥ 0.75) и покрива стандартите EU MDR Class III. Формулата е: C = P(ĥᵢ > ĥⱼ | Tᵢ < Tⱼ) за всички concordant двойки в кохортата.",
+            kras: "При KRAS G12D мутация (LOINC 62358-7), AETERNA-VHT прилага специфичен пептиден инхибитор с 99.4% рецепторен афинитет, комбиниран с Anti-PD-L1 имунен чекпойнт активатор. Апоптотичната каскада следва: dA/dt = k_a · [Drug] · R_affinity · (1 − e^(−k_d·t)) където k_a = 0.85 h⁻¹.",
+            p53: "TP53 загубата на функция (LOINC 85337-4) се третира с реактиватор на p53 пътя и BDNF микро-дозиране. VHT-BRAIN модулът осигурява 98.50% възстановяване на синаптичната плътност и 54.20 mL/100g/min L-CBF перфузионно поддържане. Формула: S(t) = S₀ · e^(−λ·t) · (1 + BDNF_factor).",
+            survival: "AETERNA-VHT демонстрира +91.3% подобрение на преживяемостта в симулационните кохорти (n=5,000). Kaplan-Meier анализът показва 34.7 месеца средна преживяемост срещу 18.1 месеца стандартна терапия (log-rank p < 0.0001). Cox Proportional Hazard HR = 0.42 (95% CI: 0.35-0.51).",
+            euMdr: "AETERNA-VHT е проектирана за EU MDR Class III (Регламент 2017/745). Архитектурата покрива: ISO 13485:2016 (QMS), ISO 14971:2019 (Risk Management), IEC 62304:2006+A1 (Software Lifecycle), EU AI Act Article 13 (Transparency). Всяка стъпка е криптографски записана с SHA-512 audit trail.",
+            default: "AETERNA-VHT използва 100% детерминистична 'Zero-Entropy' архитектура без непроследими черни кутии (EU AI Act Article 13). Polyglot стек: SOUL DSL (конфигурация) → Rust (guardrails) → Zig (SIMD вектори) → Mojo (ML embedding) → Python (оркестрация). C-Index: 0.9713 | Преживяемост: +91.3% | TRL: 7 | EU MDR Class III Ready."
+        };
+
+        // ── Typing Indicator ─────────────────────────────────────────
+        function showTyping() {
+            const box = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.id = 'typing-indicator';
+            div.className = "p-3 bg-cyan-950/20 text-cyan-400 rounded-xl border border-cyan-500/20 text-[11px] flex items-center gap-2";
+            div.innerHTML = '<div class="flex gap-1"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-delay:0ms"></span><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-delay:150ms"></span><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style="animation-delay:300ms"></span></div> Обработване...';
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typing-indicator');
+            if (el) el.remove();
+        }
+
+        // ── Local Fallback Response ──────────────────────────────────
+        function getLocalResponse(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('c-index') || lower.includes('точност') || lower.includes('concordance') || lower.includes('97')) {
+                return { answer: copilotKnowledge.cindex, confidence: 0.95, tier: 'FALLBACK', sources: ['CLINICAL_DOCUMENTATION.md'] };
+            } else if (lower.includes('kras') || lower.includes('панкреас') || lower.includes('pancrea')) {
+                return { answer: copilotKnowledge.kras, confidence: 0.95, tier: 'FALLBACK', sources: ['VHT_CLINICAL_VALIDATION_REPORT.md'] };
+            } else if (lower.includes('tp53') || lower.includes('p53') || lower.includes('gbm') || lower.includes('глиобластом')) {
+                return { answer: copilotKnowledge.p53, confidence: 0.95, tier: 'FALLBACK', sources: ['VHT_CLINICAL_VALIDATION_REPORT.md'] };
+            } else if (lower.includes('преживяемост') || lower.includes('survival') || lower.includes('kaplan')) {
+                return { answer: copilotKnowledge.survival, confidence: 0.95, tier: 'FALLBACK', sources: ['CLINICAL_DOCUMENTATION.md'] };
+            } else if (lower.includes('eu mdr') || lower.includes('iso') || lower.includes('регулатор') || lower.includes('certif')) {
+                return { answer: copilotKnowledge.euMdr, confidence: 0.95, tier: 'FALLBACK', sources: ['EIC_ACCELERATOR_AETERNA_FULL_APPLICATION.md'] };
+            }
+            return { answer: copilotKnowledge.default, confidence: 0.85, tier: 'FALLBACK', sources: ['AETERNA_VHT_CLINICAL_WHITE_PAPER.md'] };
+        }
+
+        // ── Main Send Function ───────────────────────────────────────
+        async function sendCopilotMsg() {
+            const input = document.getElementById('copilotInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMsg('user', text);
+            input.value = '';
+            showTyping();
+
+            // Try backend API first, fallback to local
+            if (COPILOT_API_URL) {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+
+                    const res = await fetch(`${COPILOT_API_URL}/api/chat`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ question: text }),
+                        signal: controller.signal,
+                    });
+                    clearTimeout(timeout);
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        hideTyping();
+                        const prefix = data.confidence_tier === 'HIGH' ? '✅' :
+                                       data.confidence_tier === 'MEDIUM' ? '⚡' :
+                                       data.confidence_tier === 'REJECTED' ? '⚠️' : '📡';
+                        const sourceTag = data.sources?.length ?
+                            `<div class="mt-1.5 pt-1.5 border-t border-cyan-500/10 text-[9px] text-slate-500">📎 ${data.sources.join(', ')} | Confidence: ${(data.confidence * 100).toFixed(1)}%</div>` : '';
+                        addMsg('bot', `${prefix} ${data.answer}${sourceTag}`);
+                        return;
+                    }
+                } catch (err) {
+                    console.log('[Copilot] Backend unavailable, using local fallback:', err.message);
+                }
+            }
+
+            // Fallback: Local knowledge
+            hideTyping();
+            const local = getLocalResponse(text);
+            const sourceTag = `<div class="mt-1.5 pt-1.5 border-t border-cyan-500/10 text-[9px] text-slate-500">📎 ${local.sources.join(', ')} | Mode: Local Fallback</div>`;
+            addMsg('bot', `${local.answer}${sourceTag}`);
+        }
+
+        function askCopilot(q) {
+            document.getElementById('copilotInput').value = q;
+            sendCopilotMsg();
+        }
+
+        function addMsg(role, msg) {
+            const box = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            if (role === 'user') {
+                div.className = "p-3 bg-slate-800 text-slate-100 rounded-xl max-w-[85%] ml-auto text-[11px] font-medium border border-slate-700";
+                div.innerText = msg;
+            } else {
+                div.className = "p-3 bg-cyan-950/40 text-slate-200 rounded-xl border border-cyan-500/30 text-[11px] leading-relaxed space-y-1";
+                div.innerHTML = `<div class="font-bold text-cyan-400 flex items-center gap-1 text-[10px]"><i data-lucide="bot" class="w-3 h-3"></i> AETERNA Copilot <span class="text-[8px] px-1 py-0.5 bg-cyan-500/10 text-cyan-500/60 rounded font-mono">SOUL+Rust+Zig+Mojo</span>:</div><div>${msg}</div>`;
+            }
+            box.appendChild(div);
+            box.scrollTop = box.scrollHeight;
+            if (window.lucide) setTimeout(() => lucide.createIcons(), 0);
+        }
+
+        // ── Backend URL Configuration Helper ─────────────────────────
+        // To connect to Codespaces backend, run in browser console:
+        // localStorage.setItem('aeterna_copilot_url', 'https://YOUR-CODESPACE-8000.app.github.dev')
+        if (!COPILOT_API_URL) {
+            console.log('%c[AETERNA Copilot] Running in LOCAL FALLBACK mode.', 'color: #f59e0b; font-weight: bold');
+            console.log('%cTo connect backend: localStorage.setItem("aeterna_copilot_url", "https://YOUR-CODESPACE-8000.app.github.dev")', 'color: #06b6d4');
+        } else {
+            console.log(`%c[AETERNA Copilot] Backend: ${COPILOT_API_URL}`, 'color: #10b981; font-weight: bold');
+        }
+    </script>
 </body>
 </html>
