@@ -240,7 +240,7 @@
             <div id="loadingState" class="hidden glass-panel p-12 text-center space-y-6">
                 <div class="w-16 h-16 border-4 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin mx-auto"></div>
                 <div>
-                    <h3 class="text-lg font-bold text-cyan-400">Извършване на In-Silico Biophysical Sweep...</h3>
+                    <h3 class="text-lg font-bold text-cyan-400" data-i18n="loadingSim">Извършване на In-Silico Biophysical Sweep...</h3>
                     <p class="text-xs text-slate-400 mono mt-1">AVX-512 Tensor Calculations | HL7 FHIR Mapping | Catuskoti Entropy Collapse</p>
                 </div>
             </div>
@@ -251,19 +251,19 @@
                 <!-- Primary KPI Metrics Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="glass-panel p-5 border-l-4 border-l-emerald-500">
-                        <div class="text-xs text-slate-400 uppercase font-bold">Очаквана Преживяемост</div>
-                        <div id="resSurvival" class="text-2xl font-black text-emerald-400 mt-1 mono">38.4 месеца</div>
-                        <div class="text-[10px] text-emerald-500/80 font-bold mt-1">+91.3% спрямо стандартна терапия</div>
+                        <div class="text-xs text-slate-400 uppercase font-bold" data-i18n="resSurvivalLabel">Очаквана Преживяемост</div>
+                        <div id="resSurvival" class="text-2xl font-black text-emerald-400 mt-1 mono"><span data-i18n="resSurvivalVal">38.4 месеца</span></div>
+                        <div class="text-[10px] text-emerald-500/80 font-bold mt-1" data-i18n="resSurvivalSub">+91.3% спрямо стандартна терапия</div>
                     </div>
 
                     <div class="glass-panel p-5 border-l-4 border-l-cyan-500">
-                        <div class="text-xs text-slate-400 uppercase font-bold">Точност на Симулацията</div>
+                        <div class="text-xs text-slate-400 uppercase font-bold" data-i18n="resPrecisionLabel">Точност на Симулацията</div>
                         <div class="text-2xl font-black text-cyan-400 mt-1 mono">97.13%</div>
                         <div class="text-[10px] text-cyan-500/80 font-bold mt-1">C-index = 0.9713 (EU MDR OK)</div>
                     </div>
 
                     <div class="glass-panel p-5 border-l-4 border-l-purple-500">
-                        <div class="text-xs text-slate-400 uppercase font-bold">Туморен Марджин Свиване</div>
+                        <div class="text-xs text-slate-400 uppercase font-bold" data-i18n="resShrinkageLabel">Туморен Марджин Свиване</div>
                         <div id="resShrinkage" class="text-2xl font-black text-purple-400 mt-1 mono">-68.4%</div>
                         <div class="text-[10px] text-purple-500/80 font-bold mt-1">Apoptotic Lysis Rate</div>
                     </div>
@@ -274,11 +274,11 @@
                     <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                         <div>
                             <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-                                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i> Препоръчана Таргетирана Терапия
+                                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i> <span data-i18n="resTherapyTitle">Препоръчана Таргетирана Терапия</span>
                             </h3>
-                            <p class="text-xs text-slate-400">Оптимизирана комбинация от медикаменти за пациента</p>
+                            <p class="text-xs text-slate-400" data-i18n="resTherapySub">Оптимизирана комбинация от медикаменти за пациента</p>
                         </div>
-                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold rounded-lg uppercase">
+                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold rounded-lg uppercase" data-i18n="resApproved">
                             Одобрен План
                         </span>
                     </div>
@@ -291,20 +291,20 @@
                     <!-- Visual Comparison Bar -->
                     <div class="space-y-2 pt-2">
                         <div class="flex justify-between text-xs font-bold">
-                            <span class="text-slate-400">Сравнение на преживяемостта:</span>
+                            <span class="text-slate-400" data-i18n="resCompareLabel">Сравнение на преживяемостта:</span>
                             <span class="text-emerald-400">AETERNA VHT vs Standard of Care (SOC)</span>
                         </div>
                         <div class="h-4 bg-slate-900 rounded-full overflow-hidden flex p-0.5 border border-slate-800">
-                            <div class="bg-slate-700 h-full rounded-l-full text-[9px] text-slate-300 font-bold flex items-center justify-center" style="width: 35%;">SOC: 20.0м</div>
-                            <div class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-r-full text-[9px] text-slate-950 font-black flex items-center justify-center" style="width: 65%;">AETERNA-VHT: 38.4м</div>
+                            <div class="bg-slate-700 h-full rounded-l-full text-[9px] text-slate-300 font-bold flex items-center justify-center" style="width: 35%;" data-i18n="resSoc">SOC: 20.0м</div>
+                            <div class="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-r-full text-[9px] text-slate-950 font-black flex items-center justify-center" style="width: 65%;" data-i18n="resAeterna">AETERNA-VHT: 38.4м</div>
                         </div>
                     </div>
 
                     <!-- Export Report Action Button -->
                     <div class="pt-4 border-t border-slate-800 flex justify-between items-center">
-                        <span class="text-xs text-slate-400">Подписано от: <strong class="text-slate-200">Димитър Продромов (AETERNA Core)</strong></span>
+                        <span class="text-xs text-slate-400"><span data-i18n="resSigned">Подписано от:</span> <strong class="text-slate-200">Димитър Продромов (AETERNA Core)</strong></span>
                         <button onclick="printReport()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold text-xs rounded-xl border border-slate-700 flex items-center gap-2 transition-all">
-                            <i data-lucide="file-text" class="w-4 h-4"></i> Изтегли Официален Клиничен Доклад (PDF)
+                            <i data-lucide="file-text" class="w-4 h-4"></i> <span data-i18n="resPdfBtn">Изтегли Официален Клиничен Доклад (PDF)</span>
                         </button>
                     </div>
                 </div>
@@ -320,20 +320,22 @@
 
         const presets = {
             pancreatic: {
-                id: 'PT-PAAD-9912',
-                age: 64,
-                gene: 'KRAS_G12D',
-                ki67: 78,
-                spo2: 92,
-                size: 3.8
+                id: 'PT-PAAD-9912', age: 64, gene: 'KRAS_G12D', ki67: 78, spo2: 92, size: 3.8
             },
             glioblastoma: {
-                id: 'PT-GBM-4401',
-                age: 58,
-                gene: 'TP53_LOSS',
-                ki67: 85,
-                spo2: 89,
-                size: 4.2
+                id: 'PT-GBM-4401', age: 58, gene: 'TP53_LOSS', ki67: 85, spo2: 89, size: 4.2
+            },
+            lung: {
+                id: 'PT-NSCLC-1024', age: 71, gene: 'EGFR_L858R', ki67: 65, spo2: 84, size: 2.9
+            },
+            breast: {
+                id: 'PT-BRCA-8890', age: 45, gene: 'BRCA1_DEL', ki67: 55, spo2: 96, size: 1.8
+            },
+            colorectal: {
+                id: 'PT-CRC-7711', age: 62, gene: 'BRAF_V600E', ki67: 72, spo2: 91, size: 5.1
+            },
+            melanoma: {
+                id: 'PT-MEL-3329', age: 39, gene: 'NRAS_Q61K', ki67: 80, spo2: 98, size: 1.2
             }
         };
 
@@ -364,20 +366,21 @@
                 const size = parseFloat(document.getElementById('tumorSize').value);
                 const recBox = document.getElementById('drugRecommendations');
 
+                let dict = i18nDict[currentLang];
                 let drugsHTML = '';
                 if (gene === 'KRAS_G12D') {
                     drugsHTML = `
                         <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
                             <div>
                                 <div class="text-sm font-bold text-cyan-400">1. KRAS G12D Direct Peptide Inhibitor</div>
-                                <div class="text-xs text-slate-400">Дозировка: 45 mg/m² IV през 48 часа (Специфична рецепторна поддръжка)</div>
+                                <div class="text-xs text-slate-400" data-i18n="rxKras1"></div>
                             </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 99.4%</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400"><span data-i18n="rxAffinity"></span>: 99.4%</span>
                         </div>
                         <div class="p-3 bg-slate-900/90 border border-purple-500/30 rounded-xl flex justify-between items-center">
                             <div>
                                 <div class="text-sm font-bold text-purple-400">2. Anti-PD-L1 Checkpoint Activator</div>
-                                <div class="text-xs text-slate-400">Дозировка: 10 mg/kg | Премахва имунната камуфлажност на тумора</div>
+                                <div class="text-xs text-slate-400" data-i18n="rxKras2"></div>
                             </div>
                             <span class="text-xs font-mono font-bold text-purple-400">Lysis Rate: High</span>
                         </div>
@@ -387,14 +390,14 @@
                         <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
                             <div>
                                 <div class="text-sm font-bold text-cyan-400">1. p53 Pathway Reactivator (APR-246 analogue)</div>
-                                <div class="text-xs text-slate-400">Дозировка: 60 mg/kg | Възстановява апоптотичната функция на клетките</div>
+                                <div class="text-xs text-slate-400" data-i18n="rxTp53_1"></div>
                             </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 98.7%</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400"><span data-i18n="rxAffinity"></span>: 98.7%</span>
                         </div>
                         <div class="p-3 bg-slate-900/90 border border-emerald-500/30 rounded-xl flex justify-between items-center">
                             <div>
                                 <div class="text-sm font-bold text-emerald-400">2. BDNF Micro-dosing Perfusion</div>
-                                <div class="text-xs text-slate-400">Дозировка: 15 µg/kg/day | Възстановява синаптичната плътност (98.5%)</div>
+                                <div class="text-xs text-slate-400" data-i18n="rxTp53_2"></div>
                             </div>
                             <span class="text-xs font-mono font-bold text-emerald-400">Neuro-Safety: 100%</span>
                         </div>
@@ -404,14 +407,15 @@
                         <div class="p-3 bg-slate-900/90 border border-cyan-500/30 rounded-xl flex justify-between items-center">
                             <div>
                                 <div class="text-sm font-bold text-cyan-400">1. Targeted Tyrosine Kinase Inhibitor</div>
-                                <div class="text-xs text-slate-400">Дозировка: 150 mg дневно орално | Потиска онкогенните сигнали</div>
+                                <div class="text-xs text-slate-400" data-i18n="rxGeneral"></div>
                             </div>
-                            <span class="text-xs font-mono font-bold text-emerald-400">Афинитет: 97.9%</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400"><span data-i18n="rxAffinity"></span>: 97.9%</span>
                         </div>
                     `;
                 }
 
                 recBox.innerHTML = drugsHTML;
+                applyLanguage(currentLang);
             }, 1200);
         }
 
@@ -658,7 +662,27 @@
                 copilotBtn2: "🧬 Обясни KRAS G12D плана",
                 copilotPlaceholder: "Задайте въпрос относно архитектурата или пациента...",
                 readyTitle: "Системата е в пълна готовност",
-                readyDesc: "Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност."
+                readyDesc: "Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност.",
+                loadingSim: "Извършване на In-Silico Biophysical Sweep...",
+                resSurvivalLabel: "Очаквана Преживяемост",
+                resSurvivalVal: "38.4 месеца",
+                resSurvivalSub: "+91.3% спрямо стандартна терапия",
+                resPrecisionLabel: "Точност на Симулацията",
+                resShrinkageLabel: "Туморен Марджин Свиване",
+                resTherapyTitle: "Препоръчана Таргетирана Терапия",
+                resTherapySub: "Оптимизирана комбинация от медикаменти за пациента",
+                resApproved: "Одобрен План",
+                resCompareLabel: "Сравнение на преживяемостта:",
+                resSoc: "SOC: 20.0м",
+                resAeterna: "AETERNA-VHT: 38.4м",
+                resSigned: "Подписано от:",
+                resPdfBtn: "Изтегли Официален Клиничен Доклад (PDF)",
+                rxKras1: "Дозировка: 45 mg/m² IV през 48 часа (Специфична рецепторна поддръжка)",
+                rxKras2: "Дозировка: 10 mg/kg | Премахва имунната камуфлажност на тумора",
+                rxTp53_1: "Дозировка: 60 mg/kg | Възстановява апоптотичната функция на клетките",
+                rxTp53_2: "Дозировка: 15 µg/kg/day | Възстановява синаптичната плътност (98.5%)",
+                rxGeneral: "Дозировка: 150 mg дневно орално | Потиска онкогенните сигнали",
+                rxAffinity: "Афинитет"
             },
             en: {
                 headerSub: "Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface",
@@ -696,7 +720,27 @@
                 copilotBtn2: "🧬 Explain KRAS G12D plan",
                 copilotPlaceholder: "Ask a question about the architecture or patient...",
                 readyTitle: "System Standing By",
-                readyDesc: "Select a preset on the left or input patient parameters. With a single click, AETERNA-VHT will synthesize an optimal oncology treatment plan with validated 97.13% precision."
+                readyDesc: "Select a preset on the left or input patient parameters. With a single click, AETERNA-VHT will synthesize an optimal oncology treatment plan with validated 97.13% precision.",
+                loadingSim: "Performing In-Silico Biophysical Sweep...",
+                resSurvivalLabel: "Expected Survival",
+                resSurvivalVal: "38.4 months",
+                resSurvivalSub: "+91.3% compared to standard of care",
+                resPrecisionLabel: "Simulation Precision",
+                resShrinkageLabel: "Tumor Margin Shrinkage",
+                resTherapyTitle: "Recommended Targeted Therapy",
+                resTherapySub: "Optimized medication combination for the patient",
+                resApproved: "Approved Plan",
+                resCompareLabel: "Survival Comparison:",
+                resSoc: "SOC: 20.0m",
+                resAeterna: "AETERNA-VHT: 38.4m",
+                resSigned: "Signed by:",
+                resPdfBtn: "Download Official Clinical Report (PDF)",
+                rxKras1: "Dosage: 45 mg/m² IV every 48 hours (Specific receptor maintenance)",
+                rxKras2: "Dosage: 10 mg/kg | Removes tumor immune camouflage",
+                rxTp53_1: "Dosage: 60 mg/kg | Restores cell apoptotic function",
+                rxTp53_2: "Dosage: 15 µg/kg/day | Restores synaptic density (98.5%)",
+                rxGeneral: "Dosage: 150 mg daily oral | Suppresses oncogenic signals",
+                rxAffinity: "Affinity"
             },
             fr: {
                 headerSub: "Optimiseur d'Oncologie à Jumeau Numérique Souverain — Interface Médecin",
@@ -734,7 +778,27 @@
                 copilotBtn2: "🧬 Expliquer le plan KRAS G12D",
                 copilotPlaceholder: "Posez une question sur l'architecture ou le patient...",
                 readyTitle: "Système en Prêt-à-l'Emploi",
-                readyDesc: "Sélectionnez un modèle à gauche ou saisissez les paramètres du patient. En un clic, AETERNA-VHT synthétisera un plan de traitement oncologique optimal avec une précision validée de 97.13%."
+                readyDesc: "Sélectionnez un modèle à gauche ou saisissez les paramètres du patient. En un clic, AETERNA-VHT synthétisera un plan de traitement oncologique optimal avec une précision validée de 97.13%.",
+                loadingSim: "Balayage Biophysique In-Silico en cours...",
+                resSurvivalLabel: "Survie Attendue",
+                resSurvivalVal: "38.4 mois",
+                resSurvivalSub: "+91.3% par rapport au traitement standard",
+                resPrecisionLabel: "Précision de la Simulation",
+                resShrinkageLabel: "Rétrécissement de la Marge Tumorale",
+                resTherapyTitle: "Thérapie Ciblée Recommandée",
+                resTherapySub: "Combinaison de médicaments optimisée pour le patient",
+                resApproved: "Plan Approuvé",
+                resCompareLabel: "Comparaison de Survie :",
+                resSoc: "SOC: 20.0m",
+                resAeterna: "AETERNA-VHT: 38.4m",
+                resSigned: "Signé par :",
+                resPdfBtn: "Télécharger le Rapport Clinique Officiel (PDF)",
+                rxKras1: "Dosage: 45 mg/m² IV toutes les 48 heures (Maintenance spécifique des récepteurs)",
+                rxKras2: "Dosage: 10 mg/kg | Élimine le camouflage immunitaire de la tumeur",
+                rxTp53_1: "Dosage: 60 mg/kg | Restaure la fonction apoptotique des cellules",
+                rxTp53_2: "Dosage: 15 µg/kg/jour | Restaure la densité synaptique (98.5%)",
+                rxGeneral: "Dosage: 150 mg par jour par voie orale | Supprime les signaux oncogènes",
+                rxAffinity: "Affinité"
             },
             hu: {
                 headerSub: "Szuverén Digitális Iker Onkológiai Optimalizáló — Orvosi Interfész",
@@ -772,7 +836,27 @@
                 copilotBtn2: "🧬 KRAS G12D terv magyarázata",
                 copilotPlaceholder: "Tegyen fel kérdést az architektúráról vagy a betegről...",
                 readyTitle: "A Rendszer Készen Áll",
-                readyDesc: "Válasszon sablont a bal oldalon, vagy adja meg a beteg paramétereit. Egyetlen kattintással az AETERNA-VHT optimális onkológiai kezelési tervet generál 97.13%-os igazolt precizitással."
+                readyDesc: "Válasszon sablont a bal oldalon, vagy adja meg a beteg paramétereit. Egyetlen kattintással az AETERNA-VHT optimális onkológiai kezelési tervet generál 97.13%-os igazolt precizitással.",
+                loadingSim: "In-Silico Biofizikai Vizsgálat Végrehajtása...",
+                resSurvivalLabel: "Várható Túlélés",
+                resSurvivalVal: "38.4 hónap",
+                resSurvivalSub: "+91.3% a standard kezeléshez képest",
+                resPrecisionLabel: "Szimuláció Pontossága",
+                resShrinkageLabel: "Tumor Margó Zsugorodás",
+                resTherapyTitle: "Javasolt Célzott Terápia",
+                resTherapySub: "Optimalizált gyógyszerkombináció a beteg számára",
+                resApproved: "Jóváhagyott Terv",
+                resCompareLabel: "Túlélési Összehasonlítás:",
+                resSoc: "SOC: 20.0h",
+                resAeterna: "AETERNA-VHT: 38.4h",
+                resSigned: "Aláírta:",
+                resPdfBtn: "Hivatalos Klinikai Jelentés Letöltése (PDF)",
+                rxKras1: "Adagolás: 45 mg/m² IV 48 óránként (Specifikus receptor fenntartás)",
+                rxKras2: "Adagolás: 10 mg/kg | Eltávolítja a tumor immun álcáját",
+                rxTp53_1: "Adagolás: 60 mg/kg | Visszaállítja a sejtek apoptotikus funkcióját",
+                rxTp53_2: "Adagolás: 15 µg/kg/nap | Visszaállítja a szinaptikus sűrűséget (98.5%)",
+                rxGeneral: "Adagolás: 150 mg naponta orálisan | Elnyomja az onkogén jeleket",
+                rxAffinity: "Affinitás"
             }
         };
 
