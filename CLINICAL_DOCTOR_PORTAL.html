@@ -120,16 +120,16 @@
             
             <!-- Quick Preset Selector -->
             <div class="glass-panel p-6 space-y-4">
-                <h2 class="text-lg font-bold flex items-center gap-2 text-cyan-400">
-                    <i data-lucide="zap" class="w-5 h-5"></i> 1. Быстро Зареждане на Клиничен Шаблон
+                <h2 class="text-lg font-bold flex items-center gap-2 text-cyan-400" data-i18n="presetsHeader">
+                    <i data-lucide="zap" class="w-5 h-5"></i> 1. Бързо Зареждане на Клиничен Шаблон
                 </h2>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="loadPreset('pancreatic')" class="p-3 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Панкреатичен Аденокарцином</div>
+                        <div class="text-xs font-bold text-slate-200" data-i18n="presetPancreatic">Панкреатичен Аденокарцином</div>
                         <div class="text-[10px] text-slate-400">KRAS G12D | Ki-67 78%</div>
                     </button>
                     <button onclick="loadPreset('glioblastoma')" class="p-3 bg-slate-800/60 hover:bg-purple-950/50 border border-slate-700 hover:border-purple-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200">Глиобластом (GBM)</div>
+                        <div class="text-xs font-bold text-slate-200" data-i18n="presetGlio">Глиобластом (GBM)</div>
                         <div class="text-[10px] text-slate-400">TP53 Loss | Ki-67 85%</div>
                     </button>
                 </div>
@@ -139,7 +139,7 @@
             <div class="glass-panel p-6 space-y-5">
                 <h2 class="text-lg font-bold flex items-center justify-between text-slate-100">
                     <span class="flex items-center gap-2">
-                        <i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> 2. Данни на Пациента
+                        <i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> <span data-i18n="patientDataHeader">2. Данни на Пациента</span>
                     </span>
                     <span class="text-xs font-normal text-slate-400">LOINC Идентификация</span>
                 </h2>
@@ -148,18 +148,18 @@
                     <!-- Patient ID & Age -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">ИД на Пациент / Досие</label>
+                            <label class="block text-xs font-bold text-slate-400 mb-1" data-i18n="patientId">ИД на Пациент / Досие</label>
                             <input type="text" id="patientId" value="PT-2026-8890" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 mono" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 mb-1">Възраст (Години)</label>
+                            <label class="block text-xs font-bold text-slate-400 mb-1" data-i18n="age">Възраст (Години)</label>
                             <input type="number" id="patientAge" value="62" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 mono" required>
                         </div>
                     </div>
 
                     <!-- Genomic Driver Mutation -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Драйвърна Мутация (LOINC Genomics)</label>
+                        <label class="block text-xs font-bold text-slate-400 mb-1" data-i18n="driverMutation">Драйвърна Мутация (LOINC Genomics)</label>
                         <select id="geneMutation" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
                             <option value="KRAS_G12D">KRAS G12D (LOINC 62358-7) — Панкреас/Колон</option>
                             <option value="TP53_LOSS">TP53 Mutation (LOINC 85337-4) — Високорисков</option>
@@ -171,7 +171,7 @@
                     <!-- Proliferation Index (Ki-67) -->
                     <div>
                         <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-400">Ki-67 Пролиферационен Индекс (%)</span>
+                            <span class="font-bold text-slate-400" data-i18n="ki67">Ki-67 Пролиферационен Индекс (%)</span>
                             <span id="ki67Val" class="font-bold text-cyan-400 mono">78%</span>
                         </div>
                         <input type="range" id="ki67" min="10" max="95" value="78" oninput="document.getElementById('ki67Val').innerText = this.value + '%'" class="w-full h-2 bg-slate-800 rounded-lg appearance-none custom-slider">
@@ -180,7 +180,7 @@
                     <!-- Hypoxia / Tissue Oxygenation -->
                     <div>
                         <div class="flex justify-between text-xs mb-1">
-                            <span class="font-bold text-slate-400">Тъканна Оксигенация / Кислород (SpO2 %)</span>
+                            <span class="font-bold text-slate-400" data-i18n="spo2">Тъканна Оксигенация / Кислород (SpO2 %)</span>
                             <span id="spo2Val" class="font-bold text-emerald-400 mono">94%</span>
                         </div>
                         <input type="range" id="spo2" min="80" max="100" value="94" oninput="document.getElementById('spo2Val').innerText = this.value + '%'" class="w-full h-2 bg-slate-800 rounded-lg appearance-none custom-slider">
@@ -188,13 +188,13 @@
 
                     <!-- Tumor Diameter -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 mb-1">Размер на Лезията / Тумора (cm)</label>
+                        <label class="block text-xs font-bold text-slate-400 mb-1" data-i18n="tumorSize">Размер на Лезията / Тумора (cm)</label>
                         <input type="number" step="0.1" id="tumorSize" value="3.4" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500 mono" required>
                     </div>
 
                     <!-- SUBMIT BUTTON -->
                     <button type="submit" class="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black rounded-xl uppercase tracking-wider text-sm transition-all shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2">
-                        <i data-lucide="play" class="w-5 h-5 fill-slate-950"></i> СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ
+                        <i data-lucide="play" class="w-5 h-5 fill-slate-950"></i> <span data-i18n="btnSimulate">СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ</span>
                     </button>
                 </form>
             </div>
@@ -208,8 +208,8 @@
                 <div class="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mx-auto">
                     <i data-lucide="stethoscope" class="w-8 h-8"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Системата е в пълна готовност</h3>
-                <p class="text-sm text-slate-400 max-w-md mx-auto">
+                <h3 class="text-xl font-bold text-slate-200" data-i18n="readyTitle">Системата е в пълна готовност</h3>
+                <p class="text-sm text-slate-400 max-w-md mx-auto" data-i18n="readyDesc">
                     Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност.
                 </p>
             </div>
@@ -588,8 +588,16 @@
             if (window.lucide) setTimeout(() => lucide.createIcons(), 0);
         }
 
-        // ── Language Translation Dictionary (i18n) ───────────────────
+        // ── 4-Language Translation Dictionary (BG / EN / FR / HU) ────
+        const supportedLangs = ['bg', 'en', 'fr', 'hu'];
         let currentLang = localStorage.getItem('aeterna_portal_lang') || 'bg';
+
+        const langFlags = {
+            bg: '🇧🇬 BG',
+            en: '🇬🇧 EN',
+            fr: '🇫🇷 FR',
+            hu: '🇭🇺 HU'
+        };
 
         const i18nDict = {
             bg: {
@@ -603,7 +611,7 @@
                 driverMutation: "Драйвърна Мутация (LOINC Genomics)",
                 ki67: "Ki-67 Пролиферационен Индекс (%)",
                 spo2: "Тъканна Оксигенация / Кислород (SpO2 %)",
-                tumorSize: "Размер на Лизията / Тумора (cm)",
+                tumorSize: "Размер на Лезията / Тумора (cm)",
                 btnSimulate: "СИМУЛИРАЙ ЛЕЧЕНИЕ С 97.13% ТЕНЗОРНА ТОЧНОСТ",
                 copilotTitle: "AETERNA AI Copilot",
                 copilotSub: "Детерминистичен асистент за лекари и оценители",
@@ -637,30 +645,85 @@
                 copilotPlaceholder: "Ask a question about the architecture or patient...",
                 readyTitle: "System Standing By",
                 readyDesc: "Select a preset on the left or input patient parameters. With a single click, AETERNA-VHT will synthesize an optimal oncology treatment plan with validated 97.13% precision."
+            },
+            fr: {
+                simMode: "Mode de Simulation:",
+                presetsHeader: "1. Chargement Rapide du Modèle Clinique",
+                presetPancreatic: "Adénocarcinome Pancréatique",
+                presetGlio: "Glioblastome (GBM)",
+                patientDataHeader: "2. Données du Patient",
+                patientId: "ID Patient / Dossier",
+                age: "Âge (Années)",
+                driverMutation: "Mutation Driver (Génomique LOINC)",
+                ki67: "Indice de Prolifération Ki-67 (%)",
+                spo2: "Oxygénation Tissulaire (SpO2 %)",
+                tumorSize: "Taille de la Lésion / Tumeur (cm)",
+                btnSimulate: "SIMULER LE TRAITEMENT AVEC UNE PRÉCISION TENSORIELLE DE 97.13%",
+                copilotTitle: "AETERNA AI Copilot",
+                copilotSub: "Assistant déterministe pour médecins et évaluateurs",
+                copilotGreeting: "Bonjour, Dr Prodromov !",
+                copilotDesc: "Je suis **AETERNA AI Clinical Copilot**, entraîné sur l'architecture de jumeau numérique en oncologie. Je peux détailler la **précision C-Index (97.13%)**, la cinétique d'apoptose, la standardisation LOINC et l'extension de survie (+91.3%).",
+                copilotBtn1: "⚡ Comment fonctionne le C-Index 97.13% ?",
+                copilotBtn2: "🧬 Expliquer le plan KRAS G12D",
+                copilotPlaceholder: "Posez une question sur l'architecture ou le patient...",
+                readyTitle: "Système en Prêt-à-l'Emploi",
+                readyDesc: "Sélectionnez un modèle à gauche ou saisissez les paramètres du patient. En un clic, AETERNA-VHT synthétisera un plan de traitement oncologique optimal avec une précision validée de 97.13%."
+            },
+            hu: {
+                simMode: "Szimulációs Mód:",
+                presetsHeader: "1. Klinikai Sablon Gyors Betöltése",
+                presetPancreatic: "Hasi Mirigyrák (Pancreas)",
+                presetGlio: "Glioblasztóma (GBM)",
+                patientDataHeader: "2. Beteg Adatai",
+                patientId: "Beteg Azonosító / Kórlap",
+                age: "Életkor (Év)",
+                driverMutation: "Driver Mutáció (LOINC Genomika)",
+                ki67: "Ki-67 Proliferációs Index (%)",
+                spo2: "Szöveti Oxigenizáció (SpO2 %)",
+                tumorSize: "Daganat / Lézió Mérete (cm)",
+                btnSimulate: "KEZELÉS SZIMULÁLÁSA 97.13% TENZOR PRECIZIÓVAL",
+                copilotTitle: "AETERNA AI Copilot",
+                copilotSub: "Determinisztikus asszisztens orvosoknak és értékelőknek",
+                copilotGreeting: "Üdvözöljük, Dr. Prodromov!",
+                copilotDesc: "Az **AETERNA AI Clinical Copilot** vagyok, a digitális iker onkológiai architektúránkra kiképezve. Részletezni tudom a **C-Index pontosságot (97.13%)**, az apoptózis kinetikát, a LOINC szabványosítást és a túlélési hosszabbítást (+91.3%).",
+                copilotBtn1: "⚡ Hogyan működik a 97.13% C-Index?",
+                copilotBtn2: "🧬 KRAS G12D terv magyarázata",
+                copilotPlaceholder: "Tegyen fel kérdést az architektúráról vagy a betegről...",
+                readyTitle: "A Rendszer Készen Áll",
+                readyDesc: "Válasszon sablont a bal oldalon, vagy adja meg a beteg paramétereit. Egyetlen kattintással az AETERNA-VHT optimális onkológiai kezelési tervet generál 97.13%-os igazolt precizitással."
             }
         };
 
         function applyLanguage(lang) {
+            if (!supportedLangs.includes(lang)) lang = 'bg';
             currentLang = lang;
             localStorage.setItem('aeterna_portal_lang', lang);
             const dict = i18nDict[lang];
 
-            const setTxt = (id, text) => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = text;
-            };
+            // Translate elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
+            });
 
-            setTxt('lblSimMode', dict.simMode);
-            setTxt('copilotPlaceholder', dict.copilotPlaceholder);
-            
+            // Input placeholders
             const input = document.getElementById('copilotInput');
-            if (input) input.placeholder = dict.copilotPlaceholder;
+            if (input && dict.copilotPlaceholder) {
+                input.placeholder = dict.copilotPlaceholder;
+            }
 
-            document.getElementById('langLabel').innerText = lang.toUpperCase() === 'BG' ? '🇧🇬 BG / EN' : '🇬🇧 EN / BG';
+            // Language Switcher Label
+            const btnLabel = document.getElementById('langLabel');
+            if (btnLabel) {
+                btnLabel.innerText = langFlags[lang];
+            }
         }
 
         function toggleLanguage() {
-            const nextLang = currentLang === 'bg' ? 'en' : 'bg';
+            const idx = supportedLangs.indexOf(currentLang);
+            const nextLang = supportedLangs[(idx + 1) % supportedLangs.length];
             applyLanguage(nextLang);
         }
 
