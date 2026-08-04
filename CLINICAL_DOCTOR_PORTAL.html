@@ -77,7 +77,7 @@
                 <h1 class="text-2xl font-black tracking-tight flex items-center gap-2">
                     AETERNA <span class="gradient-text">VHT CLINICAL PORTAL</span>
                 </h1>
-                <p class="text-xs text-slate-400 font-medium">Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface</p>
+                <p class="text-xs text-slate-400 font-medium" data-i18n="headerSub">Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface</p>
             </div>
         </div>
 
@@ -85,13 +85,13 @@
             <!-- Navigation Links -->
             <div class="hidden lg:flex items-center gap-2">
                 <a href="index.html" class="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-cyan-400 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
-                    <i data-lucide="globe" class="w-3.5 h-3.5"></i> Main Ecosystem
+                    <i data-lucide="globe" class="w-3.5 h-3.5"></i> <span data-i18n="navEcosystem">Main Ecosystem</span>
                 </a>
                 <a href="vht_diabet.html" class="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-purple-400 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
-                    <i data-lucide="heart" class="w-3.5 h-3.5"></i> VHT Diabetes & Cardio
+                    <i data-lucide="heart" class="w-3.5 h-3.5"></i> <span data-i18n="navDiabetes">VHT Diabetes & Cardio</span>
                 </a>
                 <a href="sovereign-hud.html" class="px-3 py-1.5 bg-slate-800/80 hover:bg-slate-700 text-xs font-bold text-slate-300 hover:text-emerald-400 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5">
-                    <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Sovereign HUD
+                    <i data-lucide="cpu" class="w-3.5 h-3.5"></i> <span data-i18n="navHud">Sovereign HUD</span>
                 </a>
             </div>
 
@@ -100,7 +100,7 @@
                 <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">C-Index Precision: 97.13%</span>
             </div>
             <div class="text-right hidden sm:block">
-                <span class="text-xs text-slate-400 block" id="lblSimMode">Режим на симулация:</span>
+                <span class="text-xs text-slate-400 block" data-i18n="simMode">Режим на симулация:</span>
                 <span class="text-xs font-bold text-cyan-400 mono">EU MDR Class III / HL7 FHIR</span>
             </div>
 
@@ -127,14 +127,30 @@
                 <h2 class="text-lg font-bold flex items-center gap-2 text-cyan-400" data-i18n="presetsHeader">
                     <i data-lucide="zap" class="w-5 h-5"></i> 1. Бързо Зареждане на Клиничен Шаблон
                 </h2>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="loadPreset('pancreatic')" class="p-3 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200" data-i18n="presetPancreatic">Панкреатичен Аденокарцином</div>
-                        <div class="text-[10px] text-slate-400">KRAS G12D | Ki-67 78%</div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    <button type="button" onclick="loadPreset('pancreatic')" class="p-2.5 bg-slate-800/60 hover:bg-cyan-950/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl text-left transition-all">
+                        <div class="text-[11px] font-bold text-slate-200" data-i18n="presetPancreatic">Панкреатичен</div>
+                        <div class="text-[9px] text-slate-400">KRAS G12D | Ki67 78%</div>
                     </button>
-                    <button onclick="loadPreset('glioblastoma')" class="p-3 bg-slate-800/60 hover:bg-purple-950/50 border border-slate-700 hover:border-purple-500/50 rounded-xl text-left transition-all">
-                        <div class="text-xs font-bold text-slate-200" data-i18n="presetGlio">Глиобластом (GBM)</div>
-                        <div class="text-[10px] text-slate-400">TP53 Loss | Ki-67 85%</div>
+                    <button type="button" onclick="loadPreset('glioblastoma')" class="p-2.5 bg-slate-800/60 hover:bg-purple-950/50 border border-slate-700 hover:border-purple-500/50 rounded-xl text-left transition-all">
+                        <div class="text-[11px] font-bold text-slate-200" data-i18n="presetGlio">Глиобластом</div>
+                        <div class="text-[9px] text-slate-400">TP53 Loss | Ki67 85%</div>
+                    </button>
+                    <button type="button" onclick="loadPreset('lung')" class="p-2.5 bg-slate-800/60 hover:bg-emerald-950/50 border border-slate-700 hover:border-emerald-500/50 rounded-xl text-left transition-all">
+                        <div class="text-[11px] font-bold text-slate-200" data-i18n="presetLung">Бели Дробове</div>
+                        <div class="text-[9px] text-slate-400">EGFR L858R | Ki67 65%</div>
+                    </button>
+                    <button type="button" onclick="loadPreset('breast')" class="p-2.5 bg-slate-800/60 hover:bg-rose-950/50 border border-slate-700 hover:border-rose-500/50 rounded-xl text-left transition-all">
+                        <div class="text-[11px] font-bold text-slate-200" data-i18n="presetBreast">Рак на Гърдата</div>
+                        <div class="text-[9px] text-slate-400">BRCA1 Del | Ki67 55%</div>
+                    </button>
+                    <button type="button" onclick="loadPreset('colorectal')" class="p-2.5 bg-slate-800/60 hover:bg-amber-950/50 border border-slate-700 hover:border-amber-500/50 rounded-xl text-left transition-all">
+                        <div class="text-[11px] font-bold text-slate-200" data-i18n="presetColorectal">Колоректален</div>
+                        <div class="text-[9px] text-slate-400">BRAF V600E | Ki67 72%</div>
+                    </button>
+                    <button type="button" onclick="loadPreset('melanoma')" class="p-2.5 bg-slate-800/60 hover:bg-orange-950/50 border border-slate-700 hover:border-orange-500/50 rounded-xl text-left transition-all">
+                        <div class="text-[11px] font-bold text-slate-200" data-i18n="presetMelanoma">Меланом</div>
+                        <div class="text-[9px] text-slate-400">NRAS Q61K | Ki67 80%</div>
                     </button>
                 </div>
             </div>
@@ -145,7 +161,7 @@
                     <span class="flex items-center gap-2">
                         <i data-lucide="user-check" class="w-5 h-5 text-cyan-400"></i> <span data-i18n="patientDataHeader">2. Данни на Пациента</span>
                     </span>
-                    <span class="text-xs font-normal text-slate-400">LOINC Идентификация</span>
+                    <span class="text-xs font-normal text-slate-400" data-i18n="lblLoinc">LOINC Идентификация</span>
                 </h2>
 
                 <form id="patientForm" onsubmit="runSimulation(event)" class="space-y-4">
@@ -165,10 +181,12 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 mb-1" data-i18n="driverMutation">Драйвърна Мутация (LOINC Genomics)</label>
                         <select id="geneMutation" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyan-500">
-                            <option value="KRAS_G12D">KRAS G12D (LOINC 62358-7) — Панкреас/Колон</option>
-                            <option value="TP53_LOSS">TP53 Mutation (LOINC 85337-4) — Високорисков</option>
-                            <option value="EGFR_L858R">EGFR L858R (LOINC 62357-9) — Недребноклетъчен белодробен</option>
-                            <option value="BRCA1_DEL">BRCA1 185delAG (LOINC 55207-5) — Генетичен онко-профил</option>
+                            <option value="KRAS_G12D" data-i18n="optKras">KRAS G12D (LOINC 62358-7) — Панкреас / Колон</option>
+                            <option value="TP53_LOSS" data-i18n="optTp53">TP53 Mutation (LOINC 85337-4) — Глиобластом (GBM)</option>
+                            <option value="EGFR_L858R" data-i18n="optEgfr">EGFR L858R (LOINC 62357-9) — Бели Дробове (NSCLC)</option>
+                            <option value="BRCA1_DEL" data-i18n="optBrca">BRCA1 185delAG (LOINC 55207-5) — Рак на Гърдата / Яйчници</option>
+                            <option value="BRAF_V600E" data-i18n="optBraf">BRAF V600E (LOINC 69548-6) — Колоректален Карцином</option>
+                            <option value="NRAS_Q61K" data-i18n="optNras">NRAS Q61K (LOINC 72347-1) — Меланом</option>
                         </select>
                     </div>
 
@@ -605,14 +623,29 @@
 
         const i18nDict = {
             bg: {
+                headerSub: "Суверенен Оптимизатор за Онкология с Дигитални Близнаци — Лекарски Интерфейс",
+                navEcosystem: "Основен Екосистема",
+                navDiabetes: "VHT Диабет & Кардио",
+                navHud: "Суверенен HUD",
                 simMode: "Режим на симулация:",
                 presetsHeader: "1. Бързо Зареждане на Клиничен Шаблон",
-                presetPancreatic: "Панкреатичен Аденокарцином",
-                presetGlio: "Глиобластом (GBM)",
+                presetPancreatic: "Панкреатичен",
+                presetGlio: "Глиобластом",
+                presetLung: "Бели Дробове",
+                presetBreast: "Рак на Гърдата",
+                presetColorectal: "Колоректален",
+                presetMelanoma: "Меланом",
                 patientDataHeader: "2. Данни на Пациента",
+                lblLoinc: "LOINC Идентификация",
                 patientId: "ИД на Пациент / Досие",
                 age: "Възраст (Години)",
                 driverMutation: "Драйвърна Мутация (LOINC Genomics)",
+                optKras: "KRAS G12D (LOINC 62358-7) — Панкреас / Колон",
+                optTp53: "TP53 Mutation (LOINC 85337-4) — Глиобластом (GBM)",
+                optEgfr: "EGFR L858R (LOINC 62357-9) — Бели Дробове (NSCLC)",
+                optBrca: "BRCA1 185delAG (LOINC 55207-5) — Рак на Гърдата / Яйчници",
+                optBraf: "BRAF V600E (LOINC 69548-6) — Колоректален Карцином",
+                optNras: "NRAS Q61K (LOINC 72347-1) — Меланом",
                 ki67: "Ki-67 Пролиферационен Индекс (%)",
                 spo2: "Тъканна Оксигенация / Кислород (SpO2 %)",
                 tumorSize: "Размер на Лезията / Тумора (cm)",
@@ -620,7 +653,7 @@
                 copilotTitle: "AETERNA AI Copilot",
                 copilotSub: "Детерминистичен асистент за лекари и оценители",
                 copilotGreeting: "Здравейте, Д-р Продромов!",
-                copilotDesc: "Аз съм **AETERNA AI Clinical Copilot**, обучен върху архитектурата ни за дигитални онкологични близнаци. Мога да ви разясня **C-Index точността (97.13%)**, формулите за апоптоза, LOINC стандартизацията и изчисленията за преживяемост (+91.3%).",
+                copilotDesc: "Аз съм AETERNA AI Clinical Copilot, обучен върху архитектурата ни за дигитални онкологични близнаци. Мога да ви разясня C-Index точността (97.13%), формулите за апоптоза, LOINC стандартизацията и изчисленията за преживяемост (+91.3%).",
                 copilotBtn1: "⚡ Как работи C-Index 97.13%?",
                 copilotBtn2: "🧬 Обясни KRAS G12D плана",
                 copilotPlaceholder: "Задайте въпрос относно архитектурата или пациента...",
@@ -628,14 +661,29 @@
                 readyDesc: "Изберете шаблон отляво или въведете данните на пациента. С един клик AETERNA-VHT ще генерира оптималния онкологичен терапевтичен план с валидирана 97.13% прецизност."
             },
             en: {
+                headerSub: "Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface",
+                navEcosystem: "Main Ecosystem",
+                navDiabetes: "VHT Diabetes & Cardio",
+                navHud: "Sovereign HUD",
                 simMode: "Simulation Mode:",
                 presetsHeader: "1. Quick Clinical Preset Load",
-                presetPancreatic: "Pancreatic Adenocarcinoma",
-                presetGlio: "Glioblastoma (GBM)",
+                presetPancreatic: "Pancreatic",
+                presetGlio: "Glioblastoma",
+                presetLung: "Lung Cancer",
+                presetBreast: "Breast Cancer",
+                presetColorectal: "Colorectal",
+                presetMelanoma: "Melanoma",
                 patientDataHeader: "2. Patient Data",
+                lblLoinc: "LOINC Identification",
                 patientId: "Patient ID / Dossier",
                 age: "Age (Years)",
                 driverMutation: "Driver Mutation (LOINC Genomics)",
+                optKras: "KRAS G12D (LOINC 62358-7) — Pancreatic / Colon",
+                optTp53: "TP53 Mutation (LOINC 85337-4) — Glioblastoma (GBM)",
+                optEgfr: "EGFR L858R (LOINC 62357-9) — Non-Small Cell Lung (NSCLC)",
+                optBrca: "BRCA1 185delAG (LOINC 55207-5) — Breast / Ovarian Profile",
+                optBraf: "BRAF V600E (LOINC 69548-6) — Colorectal Carcinoma",
+                optNras: "NRAS Q61K (LOINC 72347-1) — Melanoma",
                 ki67: "Ki-67 Proliferation Index (%)",
                 spo2: "Tissue Oxygenation (SpO2 %)",
                 tumorSize: "Lesion / Tumor Size (cm)",
@@ -643,7 +691,7 @@
                 copilotTitle: "AETERNA AI Copilot",
                 copilotSub: "Deterministic assistant for doctors & evaluators",
                 copilotGreeting: "Welcome, Dr. Prodromov!",
-                copilotDesc: "I am the **AETERNA AI Clinical Copilot**, trained on our Virtual Human Twin oncology architecture. I can detail our **C-Index precision (97.13%)**, apoptosis kinetics, LOINC standardization, and survival extension (+91.3%).",
+                copilotDesc: "I am the AETERNA AI Clinical Copilot, trained on our Virtual Human Twin oncology architecture. I can detail our C-Index precision (97.13%), apoptosis kinetics, LOINC standardization, and survival extension (+91.3%).",
                 copilotBtn1: "⚡ How C-Index 97.13% works?",
                 copilotBtn2: "🧬 Explain KRAS G12D plan",
                 copilotPlaceholder: "Ask a question about the architecture or patient...",
@@ -651,14 +699,29 @@
                 readyDesc: "Select a preset on the left or input patient parameters. With a single click, AETERNA-VHT will synthesize an optimal oncology treatment plan with validated 97.13% precision."
             },
             fr: {
+                headerSub: "Optimiseur d'Oncologie à Jumeau Numérique Souverain — Interface Médecin",
+                navEcosystem: "Écosystème Principal",
+                navDiabetes: "VHT Diabète & Cardio",
+                navHud: "HUD Souverain",
                 simMode: "Mode de Simulation:",
                 presetsHeader: "1. Chargement Rapide du Modèle Clinique",
-                presetPancreatic: "Adénocarcinome Pancréatique",
-                presetGlio: "Glioblastome (GBM)",
+                presetPancreatic: "Pancréatique",
+                presetGlio: "Glioblastome",
+                presetLung: "Poumon (NSCLC)",
+                presetBreast: "Cancer du Sein",
+                presetColorectal: "Colorectal",
+                presetMelanoma: "Mélanome",
                 patientDataHeader: "2. Données du Patient",
+                lblLoinc: "Identification LOINC",
                 patientId: "ID Patient / Dossier",
                 age: "Âge (Années)",
                 driverMutation: "Mutation Driver (Génomique LOINC)",
+                optKras: "KRAS G12D (LOINC 62358-7) — Pancréas / Cordon",
+                optTp53: "TP53 Mutation (LOINC 85337-4) — Glioblastome (GBM)",
+                optEgfr: "EGFR L858R (LOINC 62357-9) — Poumon (NSCLC)",
+                optBrca: "BRCA1 185delAG (LOINC 55207-5) — Cancer du Sein / Ovaire",
+                optBraf: "BRAF V600E (LOINC 69548-6) — Carcinome Colorectal",
+                optNras: "NRAS Q61K (LOINC 72347-1) — Mélanome",
                 ki67: "Indice de Prolifération Ki-67 (%)",
                 spo2: "Oxygénation Tissulaire (SpO2 %)",
                 tumorSize: "Taille de la Lésion / Tumeur (cm)",
@@ -666,7 +729,7 @@
                 copilotTitle: "AETERNA AI Copilot",
                 copilotSub: "Assistant déterministe pour médecins et évaluateurs",
                 copilotGreeting: "Bonjour, Dr Prodromov !",
-                copilotDesc: "Je suis **AETERNA AI Clinical Copilot**, entraîné sur l'architecture de jumeau numérique en oncologie. Je peux détailler la **précision C-Index (97.13%)**, la cinétique d'apoptose, la standardisation LOINC et l'extension de survie (+91.3%).",
+                copilotDesc: "Je suis AETERNA AI Clinical Copilot, entraîné sur l'architecture de jumeau numérique en oncologie. Je peux détailler la précision C-Index (97.13%), la cinétique d'apoptose, la standardisation LOINC et l'extension de survie (+91.3%).",
                 copilotBtn1: "⚡ Comment fonctionne le C-Index 97.13% ?",
                 copilotBtn2: "🧬 Expliquer le plan KRAS G12D",
                 copilotPlaceholder: "Posez une question sur l'architecture ou le patient...",
@@ -674,14 +737,29 @@
                 readyDesc: "Sélectionnez un modèle à gauche ou saisissez les paramètres du patient. En un clic, AETERNA-VHT synthétisera un plan de traitement oncologique optimal avec une précision validée de 97.13%."
             },
             hu: {
+                headerSub: "Szuverén Digitális Iker Onkológiai Optimalizáló — Orvosi Interfész",
+                navEcosystem: "Fő Ökoszisztéma",
+                navDiabetes: "VHT Diabétesz & Kardió",
+                navHud: "Szuverén HUD",
                 simMode: "Szimulációs Mód:",
                 presetsHeader: "1. Klinikai Sablon Gyors Betöltése",
-                presetPancreatic: "Hasi Mirigyrák (Pancreas)",
-                presetGlio: "Glioblasztóma (GBM)",
+                presetPancreatic: "Hasi Mirigyrák",
+                presetGlio: "Glioblasztóma",
+                presetLung: "Tüdőrák (NSCLC)",
+                presetBreast: "Mellrák",
+                presetColorectal: "Vastagbélrák",
+                presetMelanoma: "Melanóma",
                 patientDataHeader: "2. Beteg Adatai",
+                lblLoinc: "LOINC Azonosítás",
                 patientId: "Beteg Azonosító / Kórlap",
                 age: "Életkor (Év)",
                 driverMutation: "Driver Mutáció (LOINC Genomika)",
+                optKras: "KRAS G12D (LOINC 62358-7) — Hasi Mirigyrák / Vastagbél",
+                optTp53: "TP53 Mutáció (LOINC 85337-4) — Glioblasztóma (GBM)",
+                optEgfr: "EGFR L858R (LOINC 62357-9) — Nem Kissejtes Tüdőrák",
+                optBrca: "BRCA1 185delAG (LOINC 55207-5) — Mell- / Petefészekrák",
+                optBraf: "BRAF V600E (LOINC 69548-6) — Vastagbél Carcinoma",
+                optNras: "NRAS Q61K (LOINC 72347-1) — Melanóma",
                 ki67: "Ki-67 Proliferációs Index (%)",
                 spo2: "Szöveti Oxigenizáció (SpO2 %)",
                 tumorSize: "Daganat / Lézió Mérete (cm)",
@@ -689,7 +767,7 @@
                 copilotTitle: "AETERNA AI Copilot",
                 copilotSub: "Determinisztikus asszisztens orvosoknak és értékelőknek",
                 copilotGreeting: "Üdvözöljük, Dr. Prodromov!",
-                copilotDesc: "Az **AETERNA AI Clinical Copilot** vagyok, a digitális iker onkológiai architektúránkra kiképezve. Részletezni tudom a **C-Index pontosságot (97.13%)**, az apoptózis kinetikát, a LOINC szabványosítást és a túlélési hosszabbítást (+91.3%).",
+                copilotDesc: "Az AETERNA AI Clinical Copilot vagyok, a digitális iker onkológiai architektúránkra kiképezve. Részletezni tudom a C-Index pontosságot (97.13%), az apoptózis kinetikát, a LOINC szabványosítást és a túlélési hosszabbítást (+91.3%).",
                 copilotBtn1: "⚡ Hogyan működik a 97.13% C-Index?",
                 copilotBtn2: "🧬 KRAS G12D terv magyarázata",
                 copilotPlaceholder: "Tegyen fel kérdést az architektúráról vagy a betegről...",
