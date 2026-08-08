@@ -4,9 +4,15 @@ import re
 
 def main():
     repo_dir = r"c:\Users\papic\Desktop\AETERNA-WEBSITE-REPO"
-    html_files = glob.glob(os.path.join(repo_dir, "*.html"))
     
-    for file_path in html_files:
+    # Process HTML and JS files
+    target_files = glob.glob(os.path.join(repo_dir, "*.html")) + \
+                   glob.glob(os.path.join(repo_dir, "js", "*.js")) + \
+                   glob.glob(os.path.join(repo_dir, "docs", "*.html"))
+
+    for file_path in target_files:
+        if not os.path.exists(file_path):
+            continue
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
             
@@ -20,17 +26,20 @@ def main():
         new_content = re.sub(r"let\s+currentLang\s*=\s*'bg';", "let currentLang = 'en';", new_content)
         new_content = re.sub(r'let\s+currentLang\s*=\s*"bg";', 'let currentLang = "en";', new_content)
         
-        # 3. Initialization calls
+        # 3. Fallbacks
+        new_content = re.sub(r"\|\|\s*'bg'", "|| 'en'", new_content)
+        new_content = re.sub(r'\|\|\s*"bg"', '|| "en"', new_content)
+        
+        # 4. Initialization calls
         new_content = re.sub(r"setLanguage\('bg'\);", "setLanguage('en');", new_content)
         new_content = re.sub(r'setLanguage\("bg"\);', 'setLanguage("en");', new_content)
         
-        # 4. HTML lang attribute
+        # 5. HTML lang attribute
         new_content = re.sub(r'<html lang="bg">', '<html lang="en">', new_content)
         
-        # 5. Buttons active class (this one is a bit tricky, let's do a more generic replacement)
+        # 6. Active language buttons
         new_content = new_content.replace('id="lang-bg" class="lang-btn active"', 'id="lang-bg" class="lang-btn"')
         new_content = new_content.replace("id='lang-bg' class='lang-btn active'", "id='lang-bg' class='lang-btn'")
-        
         new_content = new_content.replace('id="lang-en" class="lang-btn"', 'id="lang-en" class="lang-btn active"')
         new_content = new_content.replace("id='lang-en' class='lang-btn'", "id='lang-en' class='lang-btn active'")
         

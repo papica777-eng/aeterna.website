@@ -636,7 +636,7 @@
         };
 
         function t(key, vars = {}) {
-            const lang = state.language || "bg";
+            const lang = state.language || "en";
             let txt = (translations[lang] && translations[lang][key]) || (translations["bg"] && translations["bg"][key]) || key;
             for (const [k, v] of Object.entries(vars)) {
                 txt = txt.replace(`{${k}}`, v);

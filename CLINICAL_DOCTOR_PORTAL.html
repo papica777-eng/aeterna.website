@@ -969,7 +969,7 @@
 
         // ── 4-Language Translation Dictionary (BG / EN / FR / HU) ────
         const supportedLangs = ['bg', 'en', 'fr', 'hu'];
-        let currentLang = localStorage.getItem('aeterna_portal_lang') || 'bg';
+        let currentLang = localStorage.getItem('aeterna_portal_lang') || 'en';
 
         const langFlags = {
             bg: '🇧🇬 BG',
@@ -1216,7 +1216,7 @@
         window.activeDosages = null;
 
         function applyLanguage(lang) {
-            if (!supportedLangs.includes(lang)) lang = 'bg';
+            if (!supportedLangs.includes(lang)) lang = 'en';
             currentLang = lang;
             localStorage.setItem('aeterna_portal_lang', lang);
             const dict = i18nDict[lang];

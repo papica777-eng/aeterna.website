@@ -934,7 +934,7 @@
 
         function updateDemoHudText() {
             const activeHud = HUD_DEMO_DATA[demoActiveIndex];
-            const lang = (typeof state !== 'undefined' && state.lang) || 'bg';
+            const lang = (typeof state !== 'undefined' && state.lang) || 'en';
             const activeTrans = activeHud.translations[lang] || activeHud.translations['en'];
             
             const titleEl = document.getElementById('demo-hud-title');
