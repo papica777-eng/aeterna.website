@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -490,7 +490,7 @@
         // System state logic
         let state = {
             activeTab: "dashboard",
-            language: "bg",
+            language: "en",
             curedState: false,
             isTransitioning: false,
             bciCooldown: false,
@@ -3999,6 +3999,18 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             state.isCohortRunning = true;
             state.cohortSimulated = true;
             state.cohortAnimMonth = 0;
+
+            fetch("http://127.0.0.1:8890/api/simulate/cohort", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cohort_size: 5000, target_mutation: "TP53_LOSS" })
+            }).then(r => r.json()).then(data => {
+                state.cohortCIndex = data.c_index * 100.0;
+                addLogEntry(
+                    `БЕКЕНД КОХОРТА: Зареден детерминистичен C-Index = ${data.c_index} за ${data.total_simulated} пациенти.`,
+                    `BACKEND COHORT: Loaded deterministic C-Index = ${data.c_index} for ${data.total_simulated} patients.`
+                );
+            }).catch(e => console.error("Cohort API error:", e));
             
             const logEl = document.getElementById("cohort-terminal-logs");
             if (logEl) logEl.innerHTML = "";

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -369,6 +369,14 @@
                 window._fdaAdverseEvents = fdaData.results ? fdaData.results.slice(0, 10) : [];
             })
             .catch(() => { window._fdaAdverseEvents = []; });
+
+        fetch("http://127.0.0.1:8890/api/simulate/cohort", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cohort_size: cohortCount, target_mutation: "KRAS_G12D" })
+        }).then(r => r.json()).then(backendData => {
+            window._backendCohortResult = backendData;
+        }).catch(e => console.error("Cohort sim API error:", e));
 
         // Simulate progress
         const interval = setInterval(() => {

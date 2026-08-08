@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -334,8 +334,8 @@
                 </div>
                 <!-- Glassmorphic Language Selector Pill -->
                 <div style="display: flex; gap: 4px; border: 1px solid var(--border); padding: 4px 8px; border-radius: 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); pointer-events: auto;">
-                    <button onclick="setLanguage('bg')" id="lang-bg" class="lang-btn active">BG</button>
-                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn">EN</button>
+                    <button onclick="setLanguage('bg')" id="lang-bg" class="lang-btn">BG</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn active">EN</button>
                 </div>
             </div>
         </div>
@@ -353,7 +353,7 @@
     // ===================================================================
     //  LOCALIZATION SYSTEM (BG / EN)
     // ===================================================================
-    let currentLang = 'bg';
+    let currentLang = 'en';
 
     const translations = {
         bg: {
@@ -734,34 +734,42 @@
     animate();
 
     // --- DEPLOY ---
-    function deployStent() {
+    async function deployStent() {
         if (state.status !== 'STENOSIS') return;
         state.status = 'DEPLOYING';
         deployProgress = 0;
         updateHUD();
 
-        const interval = setInterval(() => {
-            deployProgress += 0.012;
-            state.stenosis = Math.max(0, 85 * (1 - deployProgress));
-            state.pressurePre = 182 - deployProgress * 62;
-            state.pressurePost = 58 + deployProgress * 60;
-            state.velocity = 0.18 + deployProgress * 1.02;
-            state.wss = 48.7 - deployProgress * 33.3;
-            state.reynolds = 4200 - deployProgress * 2600;
+        try {
+            const response = await fetch("http://127.0.0.1:8890/api/simulate/cardio", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    age: 55,
+                    systolic: 135.0,
+                    diastolic: 85.0,
+                    hrv: 45.0,
+                    bmi: 28.0
+                })
+            });
+            if (!response.ok) throw new Error("Backend Error");
+            const data = await response.json();
 
-            if (deployProgress >= 1) {
-                deployProgress = 1;
-                state.status = 'CLEAR';
-                state.stenosis = 0;
-                state.pressurePre = 120;
-                state.pressurePost = 118;
-                state.velocity = 1.20;
-                state.wss = 15.4;
-                state.reynolds = 1600;
-                clearInterval(interval);
-            }
-            updateHUD();
-        }, 40);
+            // Set final deterministic metrics
+            state.stenosis = data.plaque_prob;
+            state.pressurePre = 120 + data.hemo_stress * 10;
+            state.pressurePost = 118;
+            state.velocity = data.blood_vectors.length > 0 ? data.blood_vectors[0] : 1.20;
+            state.wss = 15.4;
+            state.reynolds = data.ejection_fraction * 25.0;
+            
+            state.status = 'CLEAR';
+            deployProgress = 1;
+        } catch (err) {
+            console.error("Backend unreachable", err);
+            state.status = 'STENOSIS'; // Revert on failure
+        }
+        updateHUD();
     }
 
     // --- HUD ---

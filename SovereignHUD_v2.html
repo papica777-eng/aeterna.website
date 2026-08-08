@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -463,7 +463,7 @@
         // System state logic
         let state = {
             activeTab: "dashboard",
-            language: "bg",
+            language: "en",
             curedState: false,
             isTransitioning: false,
             entropy: 3.56,
@@ -885,6 +885,19 @@
             state.catuskotiState = "SYNERGY";
             state.bdnfLevel = 1.0;
             state.glut4Upregulation = 1.0;
+            
+            fetch("http://127.0.0.1:8890/api/simulate/neuro", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bdnf_dose: 1.0, synaptic_baseline: 80.0, p53_reactivation: true })
+            }).then(r => r.json()).then(data => {
+                state.bdnfLevel = parseFloat((data.synaptic_density_recovery / 40.0).toFixed(2));
+                addLogEntry(
+                    `БЕКЕНД НЕВРО-СИМУЛАЦИЯ: Синаптично възстановяване: ${data.synaptic_density_recovery}% | L-CBF Перфузия: ${data.l_cbf_perfusion} mL/100g/min`,
+                    `BACKEND NEURO-SIMULATION: Synaptic density recovery: ${data.synaptic_density_recovery}% | L-CBF Perfusion: ${data.l_cbf_perfusion} mL/100g/min`
+                );
+            }).catch(e => console.error("Neuro API Error:", e));
+
             addLogEntry("FES_START: Иницииране на 4-канален Teslasuit локомоторен режим...", "FES_START: Initiating 4-channel Teslasuit locomotor mode...");
 
             gaitTimer = setInterval(() => {

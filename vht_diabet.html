@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -353,7 +353,7 @@
         // System state logic
         let state = {
             activeTab: "dashboard",
-            language: "bg",
+            language: "en",
             curedState: false,
             isTransitioning: false,
             entropy: 3.56,
@@ -656,44 +656,51 @@
             renderVanillaHUD();
         }
 
-        function triggerCureRestoration() {
+        async function triggerCureRestoration() {
             if(state.isTransitioning || state.curedState) return;
             state.isTransitioning = true;
-            addLogEntry("BIO_CURE_INIT: ИНИЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ...", "BIO_CURE_INIT: INITIATING BIOLOGICAL CURE...");
-            addLogEntry("ТРАНСФОРМАЦИЯ: Мобилизиране на Pax4 бета-регенеративен отговор...", "TRANSFORMATION: Mobilizing Pax4 beta-regenerative response...");
+            addLogEntry("BIO_CURE_INIT: ИЗПОЛЗВАНЕ НА ДЕТЕРМИНИСТИЧЕН БЕКЕНД...", "BIO_CURE_INIT: USING DETERMINISTIC BACKEND...");
+            renderVanillaHUD();
 
-            let duration = 3000;
-            let intervalTime = 50;
-            let steps = duration / intervalTime;
-            let step = 0;
-
-            const timer = setInterval(() => {
-                step++;
-                let pct = step / steps;
-
-                state.entropy = parseFloat((3.56 - (3.56 - 0.05) * pct).toFixed(2));
-                state.cPeptide = parseFloat((0.01 + (0.90 - 0.01) * pct).toFixed(2));
-                state.homaIr = parseFloat((2.40 - (2.40 - 1.00) * pct).toFixed(2));
-
-                currentGlucose = rawChaoticData.map((d, i) => {
-                    const diff = d.val - curedData[i].val;
-                    return {
-                        val: parseFloat((d.val - diff * pct).toFixed(2))
-                    };
+            try {
+                const response = await fetch("http://127.0.0.1:8890/api/simulate/diabetes", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        age: 45,
+                        weight: 80.0,
+                        icr: 12.0,
+                        carbs: 60.0,
+                        spasticity: 48.0,
+                        fes_active: state.fesStimulationActive
+                    })
                 });
 
-                if(step >= steps) {
-                    clearInterval(timer);
-                    state.entropy = 0.05;
-                    state.cPeptide = 0.90;
-                    state.homaIr = 1.00;
-                    currentGlucose = [...curedData];
-                    state.curedState = true;
-                    state.isTransitioning = false;
-                    addLogEntry("SUCCESS: БИОЛОГИЧНО ИЗЛЕКУВАНЕ: 100% TIR УСПЕШНО ВАЛИДИРАНО.", "SUCCESS: BIOLOGICAL CURE: 100% TIR SUCCESSFULLY VALIDATED.");
+                if (!response.ok) throw new Error("Backend Error");
+                const data = await response.json();
+
+                // Apply Backend Deterministic Data
+                state.entropy = 0.00;
+                state.cPeptide = data.hba1c; // using cPeptide field to show HbA1c trajectory
+                state.homaIr = data.fes_voltage; // using homaIr field to show FES voltage
+                
+                // Map the 10-point curve to the HUD currentGlucose array
+                if (data.glucose_curve && data.glucose_curve.length >= 10) {
+                    currentGlucose = data.glucose_curve.slice(0, 10).map((v, i) => ({
+                        time: currentGlucose[i].time,
+                        val: v
+                    }));
                 }
+
+                state.curedState = data.cured;
+                addLogEntry(`SUCCESS: БЕКЕНД ВАЛИДАЦИЯ: ${data.tir_percent}% TIR.`, `SUCCESS: BACKEND VALIDATION: ${data.tir_percent}% TIR.`);
+                
+            } catch (err) {
+                addLogEntry("ERROR: БЕКЕНДЪТ НЕ Е ДОСТЪПЕН.", "ERROR: BACKEND UNREACHABLE.");
+            } finally {
+                state.isTransitioning = false;
                 renderVanillaHUD();
-            }, intervalTime);
+            }
         }
 
         function resetCureState() {
