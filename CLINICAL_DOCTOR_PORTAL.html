@@ -343,19 +343,19 @@
                     <!-- Cell State Progress Grid -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center" id="cellStateGrid">
                         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold">Апоптозен Лизис</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="cellApoptosisLabel">Апоптозен Лизис</div>
                             <div class="text-lg font-black text-emerald-400 mono" id="cellApoptoticVal">98.4%</div>
                         </div>
                         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold">Остатъчен Раков Риск</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="cellRiskLabel">Остатъчен Раков Риск</div>
                             <div class="text-lg font-black text-rose-400 mono" id="cellMalignantVal">1.1%</div>
                         </div>
                         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold">LOINC Код</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="cellLoincCodeLabel">LOINC Код</div>
                             <div class="text-lg font-black text-cyan-400 mono" id="cellLoincVal">62358-7</div>
                         </div>
                         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400 uppercase font-bold">Генен Клас</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="cellGeneClassLabel">Генен Клас</div>
                             <div class="text-lg font-black text-yellow-400 mono" id="cellClassVal">ONCOGENE</div>
                         </div>
                     </div>
@@ -1042,7 +1042,11 @@
                 rxTp53_1: "Дозировка: 60 mg/kg | Възстановява апоптотичната функция на клетките",
                 rxTp53_2: "Дозировка: 15 µg/kg/day | Възстановява синаптичната плътност (98.5%)",
                 rxGeneral: "Дозировка: 150 mg дневно орално | Потиска онкогенните сигнали",
-                rxAffinity: "Афинитет"
+                rxAffinity: "Афинитет",
+                cellApoptosisLabel: "Апоптозен Лизис",
+                cellRiskLabel: "Остатъчен Раков Риск",
+                cellLoincCodeLabel: "LOINC Код",
+                cellGeneClassLabel: "Генен Клас"
             },
             en: {
                 headerSub: "Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface",
@@ -1107,7 +1111,11 @@
                 rxTp53_1: "Dosage: 60 mg/kg | Restores cell apoptotic function",
                 rxTp53_2: "Dosage: 15 µg/kg/day | Restores synaptic density (98.5%)",
                 rxGeneral: "Dosage: 150 mg daily oral | Suppresses oncogenic signals",
-                rxAffinity: "Affinity"
+                rxAffinity: "Affinity",
+                cellApoptosisLabel: "Apoptotic Lysis",
+                cellRiskLabel: "Residual Malignant Risk",
+                cellLoincCodeLabel: "LOINC Code",
+                cellGeneClassLabel: "Gene Class"
             },
             fr: {
                 headerSub: "Optimiseur d'Oncologie à Jumeau Numérique Souverain — Interface Médecin",
@@ -1165,7 +1173,11 @@
                 rxTp53_1: "Dosage: 60 mg/kg | Restaure la fonction apoptotique des cellules",
                 rxTp53_2: "Dosage: 15 µg/kg/jour | Restaure la densité synaptique (98.5%)",
                 rxGeneral: "Dosage: 150 mg par jour par voie orale | Supprime les signaux oncogènes",
-                rxAffinity: "Affinité"
+                rxAffinity: "Affinité",
+                cellApoptosisLabel: "Lysis Apoptotique",
+                cellRiskLabel: "Risque Cancéreux Résiduel",
+                cellLoincCodeLabel: "Code LOINC",
+                cellGeneClassLabel: "Classe de Gène"
             },
             hu: {
                 headerSub: "Szuverén Digitális Iker Onkológiai Optimalizáló — Orvosi Interfész",
@@ -1223,7 +1235,11 @@
                 rxTp53_1: "Adagolás: 60 mg/kg | Visszaállítja a sejtek apoptotikus funkcióját",
                 rxTp53_2: "Adagolás: 15 µg/kg/nap | Visszaállítja a szinaptikus sűrűséget (98.5%)",
                 rxGeneral: "Adagolás: 150 mg naponta orálisan | Elnyomja az onkogén jeleket",
-                rxAffinity: "Affinitás"
+                rxAffinity: "Affinitás",
+                cellApoptosisLabel: "Apoptotikus Lízis",
+                cellRiskLabel: "Maradvány Rákos Kockázat",
+                cellLoincCodeLabel: "LOINC Kód",
+                cellGeneClassLabel: "Gén Osztály"
             }
         };
 
