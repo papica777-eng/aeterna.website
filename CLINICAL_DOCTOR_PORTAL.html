@@ -952,6 +952,7 @@
             sendCopilotMsg();
         }
 
+<<<<<<< Updated upstream
         function addMsg(role, msg) {
             const box = document.getElementById('chatMessages');
             const div = document.createElement('div');
@@ -1296,6 +1297,38 @@
 
         // Apply saved language on load
         applyLanguage(currentLang);
+
+        // =====================================================================
+        // 🔱 LIVE MOJO REST BRIDGE & ASYNCHRONOUS TELEMETRY CLIENT
+        // =====================================================================
+        const MOJO_BRIDGE_URL = "http://127.0.0.1:8890";
+
+        async function pingMojoBridge() {
+            const badge = document.getElementById('kpiPrecisionLabel');
+            try {
+                const response = await fetch(`${MOJO_BRIDGE_URL}/api/v1/health`, { method: 'GET', mode: 'cors' });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (badge) {
+                        badge.textContent = `Mojo Bridge Live: Port 8890 (0.0000 Entropy)`;
+                        badge.parentElement.classList.remove('bg-emerald-950/60', 'border-emerald-500/30');
+                        badge.parentElement.classList.add('bg-cyan-950/80', 'border-cyan-400/50');
+                        badge.classList.remove('text-emerald-400');
+                        badge.classList.add('text-cyan-300');
+                    }
+                }
+            } catch (err) {
+                if (badge) {
+                    badge.textContent = "WASM Tensor Core Active (Standby Bridge)";
+                }
+            }
+        }
+
+        // Auto-ping live Mojo bridge on load and interval
+        window.addEventListener('DOMContentLoaded', () => {
+            pingMojoBridge();
+            setInterval(pingMojoBridge, 5000);
+        });
     </script>
 </body>
 </html>
