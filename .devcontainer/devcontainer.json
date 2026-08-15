@@ -2,11 +2,12 @@
     "name": "AETERNA VHT Clinical Copilot",
     "image": "mcr.microsoft.com/devcontainers/python:3.11",
     "postCreateCommand": "cd backend && pip install -r requirements.txt && python knowledge_ingest.py",
+    "postStartCommand": "nohup python -m uvicorn backend.server:app --host 0.0.0.0 --port 8000 > /tmp/copilot_server.log 2>&1 &",
     "forwardPorts": [8000],
     "portsAttributes": {
         "8000": {
             "label": "AETERNA Copilot API",
-            "onAutoForward": "openBrowser",
+            "onAutoForward": "silent",
             "visibility": "public"
         }
     },
