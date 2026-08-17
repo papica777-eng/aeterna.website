@@ -33,10 +33,23 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050505">
     <script>
+        // Force purge any obsolete service worker cache on client browsers
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => {
+                    if (name !== 'aeterna-sovereign-v1.2') {
+                        caches.delete(name);
+                    }
+                });
+            });
+        }
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('[AETERNA PWA] Service Worker registered:', reg.scope))
+                    .then(reg => {
+                        reg.update();
+                        console.log('[AETERNA PWA] Service Worker active:', reg.scope);
+                    })
                     .catch(err => console.log('[AETERNA PWA] SW registration skipped:', err));
             });
         }
