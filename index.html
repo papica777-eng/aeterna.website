@@ -526,7 +526,7 @@
                 </div>
             </div>
 
-            <!-- Right Side: Live IFrame Frame -->
+            <!-- Right Side: Live IFrame Frame with Visual Mode Toggle -->
             <div class="glass-premium rounded-xl overflow-hidden border border-white/10 shadow-2xl flex flex-col h-[650px] relative">
                 <!-- Browser Header Mock -->
                 <div class="bg-black/80 px-4 py-3 border-b border-white/10 flex justify-between items-center shrink-0">
@@ -542,23 +542,186 @@
                             <span id="demo-browser-url" class="text-white select-all overflow-hidden text-ellipsis">vht_longevity.html</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button id="demo-refresh-btn" class="text-gray-500 hover:text-white transition-colors cursor-pointer" title="Reload Frame">
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button id="demo-toggle-view-btn" onclick="toggleDemoViewMode()" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 border border-white/10 text-[9px] font-mono text-accent-cyan uppercase tracking-wider flex items-center gap-1 cursor-pointer" title="Toggle Live Frame / High-Res Visual">
+                            <i data-lucide="image" class="w-3 h-3" id="demo-view-icon"></i>
+                            <span id="demo-view-label">VISUAL</span>
+                        </button>
+                        <button id="demo-refresh-btn" class="text-gray-500 hover:text-white transition-colors cursor-pointer p-1" title="Reload Frame">
                             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                         </button>
-                        <button id="demo-fullscreen-btn" class="text-gray-500 hover:text-white transition-colors cursor-pointer" title="Fullscreen Frame">
+                        <button id="demo-fullscreen-btn" class="text-gray-500 hover:text-white transition-colors cursor-pointer p-1" title="Fullscreen Frame">
                             <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Webpage IFrame -->
+                <!-- Webpage IFrame / Visual Container -->
                 <div class="flex-1 bg-[#020104] relative">
                     <iframe id="demo-iframe" src="./vht_longevity.html" class="w-full h-full border-0 absolute inset-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>
+                    
+                    <!-- High-Res Visual Overlay Image -->
+                    <div id="demo-visual-overlay" class="absolute inset-0 bg-[#020104] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none z-10">
+                        <img id="demo-visual-img" src="assets/vht_brain_hud_preview.png" alt="HUD Visual Preview" class="max-w-full max-h-full object-contain rounded-lg border border-white/10 shadow-2xl">
+                    </div>
+
                     <!-- Loading Mask -->
                     <div id="demo-iframe-loader" class="absolute inset-0 bg-[#050505]/95 flex flex-col items-center justify-center gap-4 transition-all duration-300 opacity-0 pointer-events-none z-20">
                         <div class="w-8 h-8 border-2 border-accent-cyan border-t-transparent rounded-full animate-spin"></div>
                         <span class="font-mono text-[10px] tracking-widest text-accent-cyan animate-pulse">SYNCHRONIZING SUBSTRATE...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VHT & QUANTUM HUD VISUAL SHOWCASE GALLERY -->
+    <section id="hud-gallery" class="py-20 px-6 md:px-12 max-w-7xl mx-auto relative z-10 border-t border-white/5">
+        <div class="text-center mb-16">
+            <span class="text-[10px] font-mono text-accent-pink font-bold tracking-widest px-3 py-1 bg-accent-pink/10 rounded-full border border-accent-pink/20 uppercase">VISUAL HUD TELEMETRY</span>
+            <h2 class="text-3xl md:text-5xl font-black mb-4 tracking-tighter uppercase text-white mt-3">
+                HIGH-RESOLUTION INTERFACE VISUALIZATIONS
+            </h2>
+            <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed">
+                Direct captures of the live Virtual Human Twin raymarching consoles, oncology biomarkers, glucose regulatory loops, and sovereign security layers.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Card 1: VHT-BRAIN 3D Neuro HUD -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-pink/30 hover:border-accent-pink transition-all group flex flex-col justify-between">
+                <div class="relative overflow-hidden aspect-video bg-black/80">
+                    <img src="assets/vht_brain_hud_preview.png" alt="VHT-BRAIN 3D Raymarching HUD" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="window.open('./clinical-oncology.html', '_blank')">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-accent-pink/90 text-black font-black text-[9px] font-mono rounded tracking-widest uppercase">3D RAYMARCHING</div>
+                    <div class="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-accent-pink font-mono text-[9px] rounded border border-accent-pink/40">98.50% SYNAPTIC RECOVERY</div>
+                </div>
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wide mb-2">VHT 3D Neuro & Brain HUD</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed font-mono mb-4">
+                            Real-time volume raymarching of cortical perfusion (54.20 mL/100g/min) and closed-loop BDNF micro-dosing for Glioblastoma cohorts.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-accent-pink font-bold">TRL 7 VALIDATED</span>
+                        <a href="./clinical-oncology.html" class="px-3 py-1.5 bg-accent-pink/10 hover:bg-accent-pink text-accent-pink hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-accent-pink/30 transition-all flex items-center gap-1.5">
+                            <i data-lucide="play" class="w-3 h-3"></i> LAUNCH 3D HUD
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Onco-Calculator & Drug Synergy -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-purple/30 hover:border-accent-purple transition-all group flex flex-col justify-between">
+                <div class="relative overflow-hidden aspect-video bg-black/80">
+                    <img src="assets/VHT_HUD_ONCOCALC_APPLIED.png" alt="Onco-Calculator Drug Synergy" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="window.open('./oncology_hud.html', '_blank')">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-accent-purple/90 text-white font-black text-[9px] font-mono rounded tracking-widest uppercase">ONCO-CALCULATOR</div>
+                    <div class="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-accent-purple font-mono text-[9px] rounded border border-accent-purple/40">97.13% C-INDEX</div>
+                </div>
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wide mb-2">Genomic Onco-Calculator</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed font-mono mb-4">
+                            87 LOINC genomic cancer driver scoring, CAR-T immunotherapy simulation, and +91.3% survival extension calculations.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-accent-purple font-bold">LOINC-87 SUITE</span>
+                        <a href="./oncology_hud.html" class="px-3 py-1.5 bg-accent-purple/10 hover:bg-accent-purple text-accent-purple hover:text-white font-mono font-bold text-[10px] uppercase rounded border border-accent-purple/30 transition-all flex items-center gap-1.5">
+                            <i data-lucide="play" class="w-3 h-3"></i> LAUNCH ONCOLOGY
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Mechanism of Action (MOA) Engine -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-cyan/30 hover:border-accent-cyan transition-all group flex flex-col justify-between">
+                <div class="relative overflow-hidden aspect-video bg-black/80">
+                    <img src="assets/VHT_HUD_MOA_PREVIEW.png" alt="Biomarker MOA Triage" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="window.open('./CLINICAL_DOCTOR_PORTAL.html', '_blank')">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-accent-cyan/90 text-black font-black text-[9px] font-mono rounded tracking-widest uppercase">MOA TRIAGE</div>
+                    <div class="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-accent-cyan font-mono text-[9px] rounded border border-accent-cyan/40">12-STATE CATUSKOTI</div>
+                </div>
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wide mb-2">Mechanism of Action (MOA)</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed font-mono mb-4">
+                            Deterministic multi-cellular transition pathways (STEM to CLEARED) with TME immune microenvironment classification.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-accent-cyan font-bold">ZERO-ENTROPY</span>
+                        <a href="./CLINICAL_DOCTOR_PORTAL.html" class="px-3 py-1.5 bg-accent-cyan/10 hover:bg-accent-cyan text-accent-cyan hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-accent-cyan/30 transition-all flex items-center gap-1.5">
+                            <i data-lucide="play" class="w-3 h-3"></i> DOCTOR PORTAL
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Diabetes & Glucose Homeostasis -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-emerald/30 hover:border-accent-emerald transition-all group flex flex-col justify-between">
+                <div class="relative overflow-hidden aspect-video bg-black/80">
+                    <img src="assets/vht_diabet_hud_preview.png" alt="Diabetes HUD" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="window.open('./vht_diabet.html', '_blank')">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-accent-emerald/90 text-black font-black text-[9px] font-mono rounded tracking-widest uppercase">GLUCOSE REGULATION</div>
+                    <div class="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-accent-emerald font-mono text-[9px] rounded border border-accent-emerald/40">HbA1c STABILIZATION</div>
+                </div>
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wide mb-2">Diabetes & Metabolic HUD</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed font-mono mb-4">
+                            Continuous closed-loop glucose modeling, virtual insulin sensitivity feedback, and real-time hypoglycemia prevention.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-accent-emerald font-bold">METABOLIC TWIN</span>
+                        <a href="./vht_diabet.html" class="px-3 py-1.5 bg-accent-emerald/10 hover:bg-accent-emerald text-accent-emerald hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-accent-emerald/30 transition-all flex items-center gap-1.5">
+                            <i data-lucide="play" class="w-3 h-3"></i> LAUNCH DIABETES
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Clinical Twin Telemetry -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-gold/30 hover:border-accent-gold transition-all group flex flex-col justify-between">
+                <div class="relative overflow-hidden aspect-video bg-black/80">
+                    <img src="assets/refined_purple_twins_signed.png" alt="Clinical Twin Concept" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="window.open('./aeterna_cohort_sim.html', '_blank')">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-accent-gold/90 text-black font-black text-[9px] font-mono rounded tracking-widest uppercase">SOVEREIGN ARCHITECT</div>
+                    <div class="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-accent-gold font-mono text-[9px] rounded border border-accent-gold/40">SIGNATURE VALIDATED</div>
+                </div>
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wide mb-2">Clinical Twin Dual Architecture</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed font-mono mb-4">
+                            Sovereign clinical concept art visualizing the biophysical patient twin and closed-loop neuromodulation substrate.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-accent-gold font-bold">EIC / HORIZON</span>
+                        <a href="./aeterna_cohort_sim.html" class="px-3 py-1.5 bg-accent-gold/10 hover:bg-accent-gold text-accent-gold hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-accent-gold/30 transition-all flex items-center gap-1.5">
+                            <i data-lucide="play" class="w-3 h-3"></i> 100K COHORT
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Quantum & Cyber Sovereignty Poster -->
+            <div class="glass-premium rounded-xl overflow-hidden border border-accent-purple/30 hover:border-accent-purple transition-all group flex flex-col justify-between">
+                <div class="relative overflow-hidden aspect-video bg-black/80">
+                    <img src="assets/aeterna_poster.png" alt="AETERNA Cyber-Physical Swarm" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 cursor-pointer" onclick="window.open('https://github.com/papica777-eng/AETERNA-EKO', '_blank')">
+                    <div class="absolute top-3 left-3 px-2 py-0.5 bg-accent-purple/90 text-white font-black text-[9px] font-mono rounded tracking-widest uppercase">QUANTUM GRID</div>
+                    <div class="absolute bottom-3 right-3 px-2 py-0.5 bg-black/80 text-accent-cyan font-mono text-[9px] rounded border border-accent-cyan/40">194x ACCELERATION</div>
+                </div>
+                <div class="p-6 flex flex-col justify-between flex-1">
+                    <div>
+                        <h3 class="text-lg font-bold text-white uppercase tracking-wide mb-2">Quantum & Cyber Physical Grid</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed font-mono mb-4">
+                            High-performance Modular Mojo ECO-Transmuter kernel and NIST Post-Quantum ML-KEM-1024 cryptography nodes.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-[10px] font-mono text-cyan-400 font-bold">MOJO KERNEL</span>
+                        <a href="https://github.com/papica777-eng/AETERNA-EKO" target="_blank" class="px-3 py-1.5 bg-accent-cyan/10 hover:bg-accent-cyan text-accent-cyan hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-accent-cyan/30 transition-all flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-3 h-3"></i> VIEW MOJO REPO
+                        </a>
                     </div>
                 </div>
             </div>
@@ -571,6 +734,7 @@
             {
                 id: 'longevity',
                 url: './vht_longevity.html',
+                previewImg: 'assets/vht_brain_hud_preview.png',
                 icon: 'infinity',
                 color: 'orange-400',
                 translations: {
@@ -589,6 +753,7 @@
             {
                 id: 'cardio',
                 url: './vht_cardio.html',
+                previewImg: 'assets/VHT_HUD_PREVIEW.png',
                 icon: 'heart',
                 color: 'red-400',
                 translations: {
@@ -607,6 +772,7 @@
             {
                 id: 'diabet',
                 url: './vht_diabet.html',
+                previewImg: 'assets/vht_diabet_hud_preview.png',
                 icon: 'activity',
                 color: 'accent-emerald',
                 translations: {
@@ -625,6 +791,7 @@
             {
                 id: 'neuro',
                 url: './clinical-oncology.html',
+                previewImg: 'assets/vht_brain_hud_preview.png',
                 icon: 'brain',
                 color: 'accent-pink',
                 translations: {
@@ -643,6 +810,7 @@
             {
                 id: 'oncology',
                 url: './CLINICAL_DOCTOR_PORTAL.html',
+                previewImg: 'assets/VHT_HUD_ONCOCALC_APPLIED.png',
                 icon: 'dna',
                 color: 'accent-purple',
                 translations: {
@@ -661,6 +829,7 @@
             {
                 id: 'cohort',
                 url: './aeterna_cohort_sim.html',
+                previewImg: 'assets/refined_purple_twins_signed.png',
                 icon: 'users',
                 color: 'yellow-400',
                 translations: {
@@ -679,6 +848,7 @@
             {
                 id: 'pharma',
                 url: './aeterna_pharma_shadow.html',
+                previewImg: 'assets/VHT_HUD_MOA_PREVIEW.png',
                 icon: 'shield',
                 color: 'gray-400',
                 translations: {
@@ -697,6 +867,7 @@
             {
                 id: 'sovereign',
                 url: './sovereign-hud.html',
+                previewImg: 'assets/aeterna_poster.png',
                 icon: 'shield-alert',
                 color: 'accent-cyan',
                 translations: {
@@ -715,6 +886,7 @@
             {
                 id: 'vertex',
                 url: './k2/index.html',
+                previewImg: 'assets/VHT_HUD_PREVIEW.png',
                 icon: 'coins',
                 color: 'accent-emerald',
                 translations: {
@@ -733,6 +905,7 @@
             {
                 id: 'vivisector_fame',
                 url: '#features',
+                previewImg: 'assets/VHT_HUD_MOA_PREVIEW.png',
                 icon: 'trophy',
                 color: 'accent-pink',
                 translations: {
@@ -751,6 +924,7 @@
             {
                 id: 'aeterna_report',
                 url: './aeterna.html',
+                previewImg: 'assets/aeterna_poster.png',
                 icon: 'shield-check',
                 color: 'accent-cyan',
                 translations: {
@@ -817,6 +991,31 @@
         const demoInterval = 100; // update progress every 100ms
         let demoIntervalId = null;
         let demoIsPlaying = true;
+        let demoIsVisualMode = false;
+
+        function toggleDemoViewMode() {
+            demoIsVisualMode = !demoIsVisualMode;
+            const visualOverlay = document.getElementById('demo-visual-overlay');
+            const viewIcon = document.getElementById('demo-view-icon');
+            const viewLabel = document.getElementById('demo-view-label');
+            
+            if (demoIsVisualMode) {
+                if (visualOverlay) {
+                    visualOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                    visualOverlay.classList.add('opacity-100', 'pointer-events-auto');
+                }
+                if (viewLabel) viewLabel.textContent = 'FRAME';
+                if (viewIcon) viewIcon.setAttribute('data-lucide', 'globe');
+            } else {
+                if (visualOverlay) {
+                    visualOverlay.classList.remove('opacity-100', 'pointer-events-auto');
+                    visualOverlay.classList.add('opacity-0', 'pointer-events-none');
+                }
+                if (viewLabel) viewLabel.textContent = 'VISUAL';
+                if (viewIcon) viewIcon.setAttribute('data-lucide', 'image');
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
 
         function initDemoSection() {
             const listContainer = document.getElementById('demo-hud-list');
@@ -913,6 +1112,11 @@
             
             const iframe = document.getElementById('demo-iframe');
             const loader = document.getElementById('demo-iframe-loader');
+            const visualImg = document.getElementById('demo-visual-img');
+            
+            if (visualImg && activeHud.previewImg) {
+                visualImg.src = activeHud.previewImg;
+            }
             
             if (iframe && iframe.src !== activeHud.url) {
                 loader.classList.remove('opacity-0', 'pointer-events-none');
@@ -927,7 +1131,6 @@
                 urlText.textContent = activeHud.url.replace('./', '');
             }
             
-            const launchBtn = document.getElementById('demo-launch-btn');
             if (launchBtn) {
                 launchBtn.href = activeHud.url;
             }
