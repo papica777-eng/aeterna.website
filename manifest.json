@@ -1,0 +1,18 @@
+{
+  "name": "AETERNA // Sovereign Deep-Tech Research & HUD Platform",
+  "short_name": "AETERNA",
+  "description": "Sovereign European Deep-Tech Research, €62.5M EU Grants, and Multi-Scale Virtual Human Twin Simulators",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#00f0ff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./assets/aeterna_logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

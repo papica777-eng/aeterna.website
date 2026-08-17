@@ -30,6 +30,17 @@
     <meta property="twitter:image" content="https://aeterna.website/assets/aeterna_logo.svg">
 
     <link rel="icon" type="image/svg+xml" href="assets/aeterna_logo.svg">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('[AETERNA PWA] Service Worker registered:', reg.scope))
+                    .catch(err => console.log('[AETERNA PWA] SW registration skipped:', err));
+            });
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
