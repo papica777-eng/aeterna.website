@@ -1395,7 +1395,7 @@ process YAMANAKA_OSK_REPROGRAM(
                         <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">VHT SUITE v5.0</span></span>
                     </div>
 
-                    <div style="display: flex; align-items: center; gap: 24px;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
                         <div style="display: flex; align-items: center; gap: 8px; background: rgba(181,95,230,0.03); padding: 8px 20px; border-radius: 100px; border: 1px solid var(--purple-border);">
                             <span style="font-size: 0.75rem; color: var(--text-secondary);">NEURAL LINK:</span>
                             <span class="mono" style="font-size: 0.8rem; font-weight: 700; color: ${state.neuralLinkConnected ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
@@ -1408,6 +1408,14 @@ process YAMANAKA_OSK_REPROGRAM(
                             <span style="font-size: 0.75rem; color: var(--text-secondary);">KNOX HEARTBEAT:</span>
                             <span class="status-dot ${state.neuralLinkConnected ? 'bg-blue' : 'bg-red'}"></span>
                         </div>
+
+                        <!-- Language Switcher -->
+                        <div style="display: flex; gap: 4px; background: rgba(0,0,0,0.4); padding: 4px; border-radius: 8px; border: 1px solid var(--purple-border);">
+                            <button onclick="setLang('en')" id="vht-lang-en" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 800; border-radius: 6px; border: none; cursor: pointer; background: var(--neon-purple); color: #fff;">EN</button>
+                            <button onclick="setLang('bg')" id="vht-lang-bg" style="padding: 4px 10px; font-size: 0.75rem; font-weight: 800; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: var(--text-secondary);">BG</button>
+                        </div>
+
+                        <a href="index.html" style="padding: 6px 14px; border: 1px solid var(--purple-border); border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: var(--neon-purple); text-decoration: none; text-transform: uppercase;">← Exit</a>
                     </div>
                 </header>
 
@@ -1424,6 +1432,20 @@ process YAMANAKA_OSK_REPROGRAM(
             `;
             if (window.lucide) {
                 setTimeout(() => lucide.createIcons(), 0);
+            }
+        }
+
+        let currentLang = 'en';
+        function setLang(lang) {
+            currentLang = lang;
+            const btnEn = document.getElementById('vht-lang-en');
+            const btnBg = document.getElementById('vht-lang-bg');
+            if (lang === 'en') {
+                if (btnEn) { btnEn.style.background = 'var(--neon-purple)'; btnEn.style.color = '#fff'; }
+                if (btnBg) { btnBg.style.background = 'transparent'; btnBg.style.color = 'var(--text-secondary)'; }
+            } else {
+                if (btnBg) { btnBg.style.background = 'var(--neon-purple)'; btnBg.style.color = '#fff'; }
+                if (btnEn) { btnEn.style.background = 'transparent'; btnEn.style.color = 'var(--text-secondary)'; }
             }
         }
 
