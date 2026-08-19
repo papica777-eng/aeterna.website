@@ -54,7 +54,7 @@ graph TD
 
 ## 2. Technical and Biophysical Work Packages
 
-### WP1: High-Speed FHIR & Genomic Ingress (Lead: AETERNA Sovereign Labs)
+### WP1: High-Speed FHIR & Genomic Ingress (Lead: AETERNA Technologies)
 * **Objective:** Establish low-latency real-time clinical integration pathways.
 * **Deliverables:** LOINC mapping schemas for `TP53` [85337-4], `KRAS` [62358-7], `EGFR` [62357-9], and `PD-L1 TPS` [85147-7] molecular diagnostics.
 
@@ -69,7 +69,7 @@ graph TD
   2. Multi-center prospective clinical pilot trial (200 patients) validating VHT-guided precision regimens.
   3. Demonstration of **2.10% mtDNA mutation load mitigation** under neurometabolic stress to arrest tumor-driven metabolic shifts.
 
-### WP4: Medical Regulatory & Compliance (Lead: AETERNA Sovereign Labs)
+### WP4: Medical Regulatory & Compliance (Lead: AETERNA Technologies)
 * **Objective:** Class III SaMD compliance under EU MDR 2017/745 and High-Risk AI System certification under EU AI Act Annex III.
 
 ### WP5: Exploitation, Dissemination & IP Management (Lead: LC Innoconsult International)
@@ -83,7 +83,7 @@ The total proposed budget of **€9,850,000** is meticulously allocated across z
 
 | Beneficiary Name | Role | Country | Direct Costs (€) | Overheads (€) | Total Requested (€) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **AETERNA Sovereign Labs** | Coordinator / Core VM | BG | €1,289,000 | €322,250 | **€1,611,250** |
+| **AETERNA Technologies** | Coordinator / Core VM | BG | €1,289,000 | €322,250 | **€1,611,250** |
 | **Medical University Sofia** | Clinical Trial Lead | BG | €1,800,000 | €450,000 | **€2,250,000** |
 | **Barcelona Supercomputing Ctr** | Supercompute Core | ES | €1,800,000 | €450,000 | **€2,250,000** |
 | **Institut Curie** | Oncology Validation | FR | €1,800,000 | €450,000 | **€2,250,000** |
@@ -95,7 +95,7 @@ The total proposed budget of **€9,850,000** is meticulously allocated across z
 
 ## 4. Consortium Partners & Physical Anchors
 
-1. **AETERNA Sovereign Labs** (Sofia, Bulgaria) — Coordinator. Core VM development, high-speed SIMD mathematical logic execution, and WebSocket telemetry integration.
+1. **AETERNA Technologies** (Sofia, Bulgaria) — Coordinator. Core VM development, high-speed SIMD mathematical logic execution, and WebSocket telemetry integration.
 2. **Medical University Sofia** (Sofia, Bulgaria) — Clinical Validation Lead. Multi-center prospective clinical pilot and retrospective trial oversight.
 3. **Barcelona Supercomputing Center (BSC CNS)** (Barcelona, Spain) — High-Performance Compute Infrastructure (MareNostrum 5) for multi-scale biophysical simulations.
 4. **Institut Curie** (Paris, France) — European Oncology Validation and cell-level patient tissue kinetics.

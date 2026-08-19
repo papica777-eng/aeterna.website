@@ -27,12 +27,13 @@ AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe
 
 | Institution | Country | PIC Code | Specialization & Infrastructure Role |
 | :--- | :---: | :---: | :--- |
-| **AETERNA** | 🇧🇬 BG | **`865986222`** | **Lead Coordinator & System Architect** (Architect: Dimitar Stavrev Prodromov) |
+| **AETERNA Technologies** | 🇧🇬 BG | **`865986222`** | **Lead Coordinator & System Architect** (Architect: Dimitar Stavrev Prodromov) |
 | **Ludwig-Maximilians-Universität München (LMU)** | 🇩🇪 DE | **`999978433`** | Quantum Optics, Geophysics & Continuous-Variable QKD Photonic Routing |
 | **Barcelona Supercomputing Center (BSC)** | 🇪🇸 ES | **`999655520`** | MareNostrum 5 Tier-0 Supercomputing, High-Performance Bio-Simulations |
 | **Institut Curie (Paris)** | 🇫🇷 FR | **`999896759`** | Comprehensive Cancer Center, Clinical Trial & Molecular Oncology Validation |
 | **GRNET S.A.** | 🇬🇷 EL | **`999937887`** | National Research & Technology Infrastructure, Balkan Optical Core Backbone |
 | **Medical University of Sofia** | 🇧🇬 BG | **`999857571`** | Leading Medical University in Bulgaria, Clinical Protocol & Cohort Governance |
+| **LC Innoconsult International** | 🇭🇺 HU | **`997894676`** | WP5 Lead: IP Strategy, FTO Patent Landscaping, HTA & EU Market Exploitation |
 
 ---
 

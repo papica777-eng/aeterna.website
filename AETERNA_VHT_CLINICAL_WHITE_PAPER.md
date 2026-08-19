@@ -75,7 +75,7 @@ AETERNA-VHT не е просто софтуер, а **когнитивен ин�
 
 ---
 
-**Изготвил:** Димитър Продромов (Основател и главен архитект) / AETERNA Sovereign Labs  
+**Изготвил:** Димитър Продромов (Основател и главен архитект) / AETERNA Technologies  
 **Дата:** Август 2026  
 **Статус:** EIC Grant Defense Verified & SaMD Class III Ready
 
