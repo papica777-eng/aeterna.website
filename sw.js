@@ -24,7 +24,7 @@ const ASSETS_TO_CACHE = [
   './qantum-mailer.html',
   './IP_FINDER.html',
   './manifest.json',
-  './assets/aeterna_logo.svg',
+  './assets/aeterna_logo.png',
   './assets/VHT_HUD_MOA_PREVIEW.png',
   './assets/VHT_HUD_ONCOCALC_APPLIED.png',
   './assets/vht_brain_hud_preview.png',
