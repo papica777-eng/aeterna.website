@@ -1,7 +1,6 @@
-# 🔱 AETERNA // THE MYTHOS UNIFIED ARCHITECTURE
-**Master System Paradigm: Unifying Meaning (MYTHOS) & Mathematical Law (LOGOS)**  
+# 🔱 MYTHOS // THE MASTER ONTOLOGY & SOVEREIGN CORPUS
 **Supreme Architect:** Dimitar Stavrev Prodromov (ID 101327948) | AETERNA Technologies  
-**Authority:** `0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21`  
+**Authority Manifest:** `0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21`  
 **Consolidated Portfolio:** €52,047,219.00 (~101.8M BGN) | **EU SIGN** Digitally Sealed  
 
 ---

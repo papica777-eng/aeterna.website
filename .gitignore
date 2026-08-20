@@ -1,4 +1,21 @@
+# Dependencies & Builds
 node_modules/
 dist/
+build/
 .DS_Store
 *.log
+
+# Sensitive Credentials & Keys
+.env
+.env.*
+*credential*
+*CREDENTIALS*
+*.secret
+*.pem
+*.key
+*.shadow.*
+
+# Rust & Engine Target Artifacts
+core-engine/target/
+backend/.env
+backend/secrets/

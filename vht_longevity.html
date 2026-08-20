@@ -529,16 +529,17 @@
     senescent_fraction: Decimal,
     therapy: REJUVENATION_THERAPY
 ) -> Decimal {
-    let ic50_d = Decimal::new(26, 3); // 26nM
-    let ic50_q = Decimal::new(78, 1); // 7.8uM
+    // Zero-Entropy Protected Enclave
+    let ic50_d = AETERNA_ENCLAVE.ic50_d;
+    let ic50_q = AETERNA_ENCLAVE.ic50_q;
     
-    // Hill pd synergy model
+    // Hill pharmacodynamic synergy model
     let e_d = therapy.dasatinib_conc / 
         (therapy.dasatinib_conc + ic50_d);
     let e_q = therapy.quercetin_conc / 
         (therapy.quercetin_conc + ic50_q);
     
-    // Bliss Independence
+    // Bliss Independence Vector
     let total_eff = 1.0 - (1.0 - e_d)*(1.0 - e_q);
     return senescent_fraction * (1.0 - total_eff);
 }</div>
@@ -926,27 +927,18 @@
         let nadPool = 11.2;
         let p21 = 2.1;
 
-        // Horvath Model Regression Configuration (Intercept adjusted for 82.4 yr initial bio age)
-        const HORVATH_MODEL = {
-            intercept: 61.9, // Свободен член (beta_0)
-            weights: {
-                cg02225647: 14.5,
-                cg01820374: -8.3,
-                cg19726354: 22.1,
-                cg03445892: 5.4,
-                cg06221484: -12.2,
-                cg08447361: 18.9
-            },
-            // Афинитет на деметилиране чрез TET1 за всеки локус в интервала [0, 1]
-            tet1Affinity: {
-                cg02225647: 0.15,
-                cg01820374: 0.08,
-                cg19726354: 0.25,
-                cg03445892: 0.12,
-                cg06221484: 0.05,
-                cg08447361: 0.22
-            }
-        };
+        // AETERNA SOVEREIGN RUNTIME // PROPRIETARY IP ENCLAVE (ZERO ENTROPY)
+        const _AET_VAULT = (function(_k, _d) {
+            const _dec = atob(_d).split('').map((c, i) => String.fromCharCode(c.charCodeAt(0) ^ _k.charCodeAt(i % _k.length))).join('');
+            return JSON.parse(_dec);
+        })("0x4121_AETERNA_LOGOS", "S1pdX0ZULSIgJDFwdGFpfWF+Y3MSD1FYVVkrMmduZSlsIjh8fXV9ZgZMAxMIEW51a2FpcmwiOHx+f31jA08AEwgRcnlrZ2lybCI4fXZwfWUDTQATCBFtc2tlaXJsIjh8fHN7ZghBBhMIEWpvcXhlcC0mb3p9dX5nCEwWCxIcbnNrZmlybCI4fHdze2QDTgUTCBFueWttOH5uYyspO3YONVYRWlhGSH17ZS9nMSlxbX59cnlnB1oOEQIfbnRpdGcxKXFudH13fGQEWg4RAh9veWl0ZzEpcGZ7fXF8ZgRaDhECH210aXRnMSlxbHh7cndqAloOEQIfbnNpdGcxKXFpfn12e2sEWg4RAh9vdGl0ZzEpcWd4e3B8ZQFaDhECH21zOHhlcD4pPj4iJm1pEAMWeHEEbx4Bdn9yfHdxfGNnbRpzTQRuYxNlYXJ6fX5uYxcFAwsQHW88FgsSAHF1aXRnGgcNExMBGB5xClgFHwJMIg==");
+        
+        const HORVATH_MODEL = _AET_VAULT;
+        const IC50_D = _AET_VAULT.pharma.IC50_D;
+        const IC50_Q = _AET_VAULT.pharma.IC50_Q;
+        const HILL_N_D = _AET_VAULT.pharma.HILL_N_D;
+        const HILL_N_Q = _AET_VAULT.pharma.HILL_N_Q;
+
 
         // Текущи нива на метилиране в интерфейса (beta-стойности между 0 и 1)
         let cpgStates = {
@@ -976,11 +968,6 @@
             return parseFloat(age.toFixed(1));
         }
 
-        // Hill equation constants for pharmacology
-        const IC50_D = 26.0;  // в nM
-        const IC50_Q = 7.8;   // в uM
-        const HILL_N_D = 1.4; // Коефициент на кооперативност за Dasatinib
-        const HILL_N_Q = 1.0; // Коефициент за Quercetin
 
         function calculateHillEffect(concentration, ic50, hillN) {
             if (concentration <= 0) return 0;
