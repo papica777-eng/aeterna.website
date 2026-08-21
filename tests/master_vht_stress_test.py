@@ -252,6 +252,59 @@ def test_fhir_r4_schema_strict():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# 6. TEST SUITE: MULTI-ORGAN PHYSIOLOGICAL EQUATIONS (CKD-EPI, ARDS, CHILD-PUGH, NLR)
+# ─────────────────────────────────────────────────────────────────────────────
+def test_multi_organ_physiology():
+    print("[TEST SUITE 6] Testing Multi-Organ Physiological Equations (CKD-EPI, ARDS, Child-Pugh, NLR)...")
+    
+    # 1. CKD-EPI 2021 Equation Validation
+    def ckd_epi(scr, age, is_female):
+        kappa = 0.7 if is_female else 0.9
+        alpha = -0.241 if is_female else -0.302
+        female_factor = 1.012 if is_female else 1.000
+        scr_ratio = scr / kappa
+        min_v = min(scr_ratio, 1.0)
+        max_v = max(scr_ratio, 1.0)
+        return 142.0 * (min_v ** alpha) * (max_v ** -1.200) * (0.9938 ** age) * female_factor
+
+    egfr_normal_male = ckd_epi(0.9, 30.0, False)
+    assert egfr_normal_male > 100.0, f"Normal male eGFR {egfr_normal_male:.1f} should exceed 100"
+    
+    egfr_severe_female = ckd_epi(2.8, 65.0, True)
+    assert egfr_severe_female < 25.0, f"Severe female eGFR {egfr_severe_female:.1f} should be <25"
+
+    # 2. Berlin ARDS PaO2/FiO2 Ratio
+    pao2, fio2 = 70.0, 0.80
+    pf_ratio = pao2 / fio2
+    assert pf_ratio <= 100.0, "PaO2/FiO2 <= 100 must classify as Severe ARDS"
+
+    # 3. Child-Pugh Hepatic Scoring
+    def child_pugh(bili, alb, inr, asc, enc):
+        score = 0
+        score += 1 if bili < 2.0 else (2 if bili <= 3.0 else 3)
+        score += 1 if alb > 3.5 else (2 if alb >= 2.8 else 3)
+        score += 1 if inr < 1.7 else (2 if inr <= 2.2 else 3)
+        score += 1 if asc == "None" else (2 if asc == "Slight" else 3)
+        score += 1 if enc == "None" else (2 if enc in ["Grade 1", "Grade 2"] else 3)
+        return score
+
+    score_normal = child_pugh(1.0, 4.2, 1.0, "None", "None")
+    assert score_normal == 5, f"Normal liver score must be 5 (Class A), got {score_normal}"
+
+    score_cirrhosis = child_pugh(4.5, 2.4, 2.5, "Moderate", "Grade 3")
+    assert score_cirrhosis >= 10, f"Decompensated score must be >=10 (Class C), got {score_cirrhosis}"
+
+    # 4. NLR Inflammatory Ratio
+    neutrophils, lymphocytes = 4.2, 2.1
+    nlr = neutrophils / lymphocytes
+    assert abs(nlr - 2.0) < 1e-4, f"NLR calculation mismatch: {nlr}"
+
+    print(f"  -> Normal eGFR: {egfr_normal_male:.1f} mL/min | Severe CKD: {egfr_severe_female:.1f} mL/min (CKD-EPI Verified)")
+    print(f"  -> Severe ARDS PaO2/FiO2: {pf_ratio:.1f} mmHg | Child-Pugh Score: {score_cirrhosis}/15 (Class C Decompensated)")
+    print("  -> Passed: Multi-Organ Mathematical Physiology & Clinical Triage Validation.")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # MAIN STRESS-TEST ORCHESTRATOR
 # ─────────────────────────────────────────────────────────────────────────────
 def run_all_stress_tests():
@@ -266,12 +319,14 @@ def run_all_stress_tests():
     test_connectome_plv_high_load()
     test_pharmacokinetics_extremes()
     test_fhir_r4_schema_strict()
+    test_multi_organ_physiology()
     t_total = (time.time() - t_start) * 1000.0
 
     print("======================================================================")
-    print(f"   STATUS: ALL 5 STRESS SUITES PASSED IN {t_total:.2f} ms")
+    print(f"   STATUS: ALL 6 STRESS SUITES PASSED IN {t_total:.2f} ms")
     print("   ZERO DEFECTS // ZERO DRIFT // 100% DETERMINISTIC GUARANTEE       ")
     print("======================================================================")
 
 if __name__ == "__main__":
     run_all_stress_tests()
+

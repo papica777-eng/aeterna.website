@@ -15,7 +15,19 @@ build/
 *.key
 *.shadow.*
 
-# Rust & Engine Target Artifacts
+# Proprietary Biophysical Modules & Soul Manifolds (NEVER PUSH TO GIT)
+*.soul
+soul/
+soul/**
+mojo/
+*.mojo
+zig/
+*.zig
+gleam/
+*.gleam
+rust_core/
 core-engine/target/
+backend/
 backend/.env
 backend/secrets/
+tests/test_extended_physiology.py
