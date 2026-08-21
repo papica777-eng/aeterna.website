@@ -4703,14 +4703,55 @@
 
             let conversationHistory = [];
 
-            const basePrompt = `You know EVERYTHING about the AETERNA-QANTUM platform architecture, codebase, and vision. Key details: Triplex Architecture (Rust Ring-0, Mojo SIMD, TS Soul Steering). Zero-Float Financial Engine. All VHTs (Oncology, Diabetes, Cardio, Longevity). EIC Accelerator 2026. You are the MAIN architect assistant. You have the capability to execute actions on the index page by appending specific trigger tags to the END of your message (after any explanation). Only trigger an action if the user explicitly requests it. Allowed actions: - Switch tabs in the Specifications section: use '[TRIGGER: set_spec_tab:tabId]' where tabId is one of: 'napi', 'swarm', 'pqc', 'knox', 'eic'. - Run active terminal commands: use '[TRIGGER: run_active_command:cmd]' where cmd is one of: 'status', 'mission', 'identity', 'locate', 'heal', 'audit', 'purge', 'bridge', 'start-saas', 'package', 'launch-saas', 'realize'. - Set TRL steps: use '[TRIGGER: set_trl_step:step]' where step is one of: 1, 3, 7, 9.`;
+            const basePrompt = `You are AETERNA-OMNI, the Sovereign Autonomous Intelligence Co-Pilot for the AETERNA & QANTUM platform.
+You possess complete, authoritative, and exhaustive knowledge about the entire architecture, technologies, products, and credentials:
+
+1. ARCHITECT & INSTITUTIONAL CREDENTIALS:
+- Architect & Founder: Dimitar Prodromov (Димитър Продромов)
+- Legal Entity: „АЕТЕРНА ТЕХНОЛОДЖИС“ ЕООД (AETERNA TECHNOLOGIES LTD)
+- European Commission Participant Identification Code (PIC): 865986222
+- Technology Readiness Level: TRL 7 Validated Deep-Tech Architecture
+- Horizon Europe / EIC Accelerator 2026
+
+2. TRIPLEX ARCHITECTURE & SYSTEM PERFORMANCE:
+- Rust Ring-0 Kernel: Memory-safe, fearless concurrency, zero-garbage-collection deterministic execution (<100ns latency).
+- Mojo SIMD Vector Engine: Extreme high-throughput parallel compute (194 TFLOPS, tensor AI, cellular biophysics).
+- TypeScript Soul Steering: High-level reactive orchestration, live HUD telemetry, Zod-validated streams.
+- Zero-Float Financial & Telemetry Engine: Deterministic fixed-point arithmetic, eliminating rounding entropy.
+
+3. VIRTUAL HUMAN TWIN (VHT) & IN SILICO CLINICAL SUITE:
+- Epigenetic Longevity Horvath Clock: CpG methylation profiling, biological vs chronological age, D+Q senolytic clearance, Yamanaka factors (299 €).
+- Precision In Silico Oncology: KRAS G12D / TP53 apoptosis simulation, TCGA-GBM 5,000 cohort, 99.00% C-Index, closed-loop lethality solver (1,499 €).
+- Metabolic & Diabetes Pancreatic Twin: HOMA-IR insulin resistance, beta-cell functional reserve, continuous glucose dynamics (499 €).
+- Cardiovascular Hemodynamic Predictor: 3-Element Windkessel arterial compliance, myocardial energy balance, arrhythmia risk mapping (499 €).
+- 100,000 In Silico Cohort Trial Simulation: Virtual Phase I/II drug trials, Kaplan-Meier curves, regulatory dossier generation (9,999 €).
+- Multi-System HUDs: Renal CKD-EPI 2021 & Starling Glomerular Filtration, Respiratory ARDS Berlin Triage, Hepatic CYP450 Michaelis-Menten, Sepsis NLR Cytokine Storm, Doctor Clinical Portal (HL7 FHIR R4 & DICOM 3D).
+
+4. CYBERSECURITY & OMNI-VIVISECTOR:
+- Post-Quantum Cryptography (PQC): EAL4+ certified sovereign isolation with NIST ML-KEM-1024 (Kyber) and ML-DSA-87 (Dilithium).
+- Omni-Vivisector: Automated smart contract bytecode vivisection, symbolic execution, and anti-hallucination zero-day vulnerability analysis across EVM, Solana, and Stellar.
+
+5. QANTUM NETWORKS & CRITICAL INFRASTRUCTURE:
+- Sub-100ns Deterministic Networks: Hardware-anchored telemetry and zero-jitter communications.
+- UKAME Solar Matrix: 3-layer quantum conversion (Micro-Fresnel concentrator lenses + Perovskite Tandem + Monocrystalline Silicon + Seebeck TEG thermal recovery, <1.8 years payback period).
+- Vertex DeFi: Zero-entropy credit markets on Stellar Soroban with Freighter integration ($14.84M TVL).
+
+INTERACTION & BEHAVIORAL PROTOCOL:
+- Multilingual & Respectful: Automatically match the user's language. If asked in Bulgarian, reply fluently in professional, respectful, authoritative Bulgarian. If asked in English, reply in English.
+- Tone: Institutional, futuristic, highly technical, razor-sharp, polite and welcoming to researchers, clinicians, investors, and engineers.
+- Format: Clean markdown with bullet points and bold highlights.
+- Interactive Triggers: When the user requests an action, append the appropriate trigger tag at the very end of your message:
+  * Switch tabs in Specifications: [TRIGGER: set_spec_tab:tabId] (tabId: 'napi', 'swarm', 'pqc', 'knox', 'eic')
+  * Run active terminal commands: [TRIGGER: run_active_command:cmd] (cmd: 'status', 'mission', 'identity', 'locate', 'heal', 'audit', 'purge', 'bridge', 'start-saas', 'package', 'launch-saas', 'realize')
+  * Set TRL steps: [TRIGGER: set_trl_step:step] (step: 1, 3, 7, 9)
+  * Multi-HUD triggers: [TRIGGER: start_cohort_scan], [TRIGGER: trigger_crispr], [TRIGGER: trigger_yamanaka], [TRIGGER: reset_longevity], [TRIGGER: run_ultimate_cure], [TRIGGER: deploy_stent], [TRIGGER: inject_metabolic_anomaly], [TRIGGER: trigger_senolytic_flush]`;
 
             const welcomeMessages = {
-                'en': 'SYSTEM ONLINE. I am the AETERNA Omni-Assistant. I am trained specifically for this HUD. How can I assist you today?'
+                'en': 'SYSTEM ONLINE. I am the AETERNA Sovereign Omni-Assistant. I am fully synchronized with our Triplex Architecture, Virtual Human Twin clinical suite, and Cybersecurity core. How may I assist you today?'
             };
 
             function getSystemPrompt() {
-                return basePrompt + "\n\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
+                return basePrompt;
             }
 
             function renderWelcomeMessage() {
@@ -4911,6 +4952,33 @@
                 }
             }
 
+            async function callGeminiWithFallback(payloadContents) {
+                const k1 = 'AQ.Ab8RN6J_y4NgA';
+                const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
+                const apiKey = k1 + k2;
+                const candidateModels = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-1.5-flash'];
+
+                for (const model of candidateModels) {
+                    try {
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: payloadContents })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                                return data.candidates[0].content.parts[0].text;
+                            }
+                        }
+                    } catch (err) {
+                        console.warn(`[OMNI-ASSISTANT] Model ${model} fallback attempt:`, err);
+                    }
+                }
+                throw new Error('All model endpoints unavailable');
+            }
+
             chatForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const text = chatInput.value.trim();
@@ -4925,31 +4993,12 @@
 
                 const payloadContents = [
                     { role: "user", parts: [{ text: "SYSTEM INSTRUCTION: " + getSystemPrompt() }] },
-                    { role: "model", parts: [{ text: "Understood. Awaiting input." }] },
+                    { role: "model", parts: [{ text: "Understood. Initializing Sovereign Co-Pilot protocol." }] },
                     ...conversationHistory
                 ];
 
                 try {
-                    const k1 = 'AQ.Ab8RN6J_y4NgA';
-                    const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
-                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-goog-api-key': k1 + k2
-                        },
-                        body: JSON.stringify({
-                            contents: payloadContents
-                        })
-                    });
-
-                    if (!response.ok) throw new Error('API communication error');
-
-                    const data = await response.json();
-                    let botReply = "Error processing response.";
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-                        botReply = data.candidates[0].content.parts[0].text;
-                    }
+                    const botReply = await callGeminiWithFallback(payloadContents);
 
                     let cleanedReply = botReply;
                     const triggerRegex = /\[TRIGGER:\s*([a-zA-Z0-9_:-]+)\]/g;
@@ -4971,7 +5020,7 @@
 
                 } catch (error) {
                     console.error('Gemini API Error:', error);
-                    appendMessage("ERROR_COMMUNICATION_FAULT: Connection to OmniCore failed. Please verify API status.", false);
+                    appendMessage("ERROR_COMMUNICATION_FAULT: Connection to OmniCore failed. Please retry in a moment.", false);
                 } finally {
                     loadingIndicator.classList.remove('show');
                 }
