@@ -585,19 +585,19 @@
                             
                             <div style="display: flex; gap: 10px; align-items: flex-end; height: 100px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
                                 <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-blue); border-radius: 4px 4px 0 0; transition: height 0.5s;" style="height: ${state.yamanakaActive ? '85%' : '10%'};"></div>
+                                    <div style="width: 40px; background: var(--neon-blue); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '85%' : '10%'};"></div>
                                     <span class="mono" style="font-size: 0.7rem;">OCT4</span>
                                 </div>
                                 <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-emerald); border-radius: 4px 4px 0 0; transition: height 0.5s;" style="height: ${state.yamanakaActive ? '95%' : '15%'};"></div>
+                                    <div style="width: 40px; background: var(--neon-emerald); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '95%' : '15%'};"></div>
                                     <span class="mono" style="font-size: 0.7rem;">SOX2</span>
                                 </div>
                                 <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-purple); border-radius: 4px 4px 0 0; transition: height 0.5s;" style="height: ${state.yamanakaActive ? '70%' : '5%'};"></div>
+                                    <div style="width: 40px; background: var(--neon-purple); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '70%' : '5%'};"></div>
                                     <span class="mono" style="font-size: 0.7rem;">KLF4</span>
                                 </div>
                                 <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-pink); border-radius: 4px 4px 0 0; transition: height 0.5s;" style="height: ${state.yamanakaActive ? '60%' : '10%'};"></div>
+                                    <div style="width: 40px; background: var(--neon-pink); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '60%' : '10%'};"></div>
                                     <span class="mono" style="font-size: 0.7rem;">c-MYC</span>
                                 </div>
                             </div>
@@ -617,13 +617,12 @@
             }
         }
 
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            renderHUD();
-        } else {
-            window.onload = function() {
-                renderHUD();
-            };
-        }
+        // Immediate & Multi-Trigger Rendering
+        renderHUD();
+        document.addEventListener('DOMContentLoaded', renderHUD);
+        window.addEventListener('load', renderHUD);
+        setTimeout(renderHUD, 50);
+        setTimeout(renderHUD, 300);
 
     </script>
 
