@@ -1,6 +1,6 @@
 # 🛡️ AETERNA Sovereign Cognitive Engine & European Research Portfolio
 ### Sovereign Autonomous Cyber-Physical Orchestrator & Multi-Scale Scientific Simulator
-**Consortium Coordinator PIC:** `865986222` | **Total EU Portfolio Budget:** **€62,547,219.00** | **TRL:** 7 Validated | **Standards:** NIS-2 / UNCAN.eu & Advanced VHT / ISO 13485 & IEC 62304 / ETSI / Common Criteria EAL4+
+**Consortium Coordinator PIC:** `865986222` | **Total EU Portfolio Budget:** **€67,047,219.00** | **TRL:** 7 Validated | **Standards:** NIS-2 / UNCAN.eu & Advanced VHT / ISO 13485 & IEC 62304 / ETSI / Common Criteria EAL4+
 
 <div align="center">
   <img src="assets/aeterna_poster.png" alt="AETERNA Sovereign European AI" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);">
@@ -8,18 +8,17 @@
 
 ---
 
-## 🏛️ European Union Grant & Defense Portfolio (€62.5M+)
-AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe's leading universities, Tier-0 supercomputing nodes, and comprehensive cancer institutes.
+## 🏛️ European Union Grant & Defense Portfolio (€67.04M+)
+AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe's leading universities, Tier-0 supercomputing nodes, and comprehensive cancer institutes. Detailed dossier: [docs/EU_SOVEREIGN_FLAGSHIP_PORTFOLIO.md](docs/EU_SOVEREIGN_FLAGSHIP_PORTFOLIO.md).
 
 | Grant / Fund | Topic / Call | Proposal ID | Budget | Lead / Role | Key Consortium Partners |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **EuroHPC JU 2026** | `NQKD-12-01` (Next-Gen QKD) | `SEP-211377138` | **€8,000,000.00** | **Coordinator (AETERNA)** | LMU München (DE), BSC MareNostrum 5 (ES), GRNET (EL) |
-| **European Defence Fund (EDF)** | `EDF-2026-RA-CYBER` | `101357872` | **€22,197,219.00** | **Coordinator (AETERNA)** | LMU München (DE), EETT (EL) |
-| **CEF Digital (Works)** | `SMART CABLES 2026` | `101354145` | **€20,000,000.00** | **Coordinator (AETERNA)** | Coastal Maritime Quantum Terminal (Pomorie, Black Sea) |
-| **Horizon Europe (RIA)** | `CANCER MISSION 2026` | `101347293` | **€9,850,000.00** | **Coordinator (AETERNA)** | Charité (DE), NKI (NL), Gustave Roussy (FR), Nordic EHR (SE), LC InnoConsult (HU), ECPC (BE) |
-| **EIC Accelerator 2026** | `EIC-2026-OMNICORE` | `101327948` | **€7,500,000.00** | **Host (AETERNA)** | Deep-Tech Scale-Up & Sovereign Hardware Integration |
-| **ERC Starting Grant** | `ERC-2026-STG` | `101357176` | **€2,500,000.00** | **Host (AETERNA)** | Formal Verification, UKAME Symbolic Vivisector |
-| **TOTAL ALLOCATED** | **Horizon / EDF / CEF / EuroHPC** | **Consortium 865986222** | **€62,547,219.00** | **Sovereign Lead** | **Europe Tier-1 High-Performance Network** |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| **EuroHPC JU 2026** | `NQKD-12-01` (Next-Gen QKD) | `101358168` | **€8,000,000.00** | **Coordinator (AETERNA)** | LMU München (DE), BSC MareNostrum 5 (ES), GRNET (EL) |
+| **European Defence Fund (EDF)** | `EDF-2026-RA-CYBER-QSTN` | `101357872` | **€22,197,219.00** | **Coordinator (AETERNA)** | LMU München (DE), EETT (EL) |
+| **CEF Digital (Works)** | `SMART CABLES 2026` | `101354145` | **€20,000,000.00** | **Coordinator (AETERNA)** | Coastal Maritime Quantum Terminal (Pomorie, BG), GRNET (EL), LMU (DE) |
+| **Cancer Mission (Horizon RIA)** | `HORIZON-MISS-2026-02-CANCER-01` | `101347293` | **€9,850,000.00** | **Coordinator (AETERNA)** | Charité (DE), NKI (NL), Gustave Roussy (FR), Nordic EHR (SE), LC InnoConsult (HU), ECPC (BE) |
+| **Horizon-ERC (ERC Plus)** | `ERC-2026-PLUS` (Formal Vivisection) | `101357176` | **€7,000,000.00** | **Host (AETERNA)** | Principal Investigator: Dimitar Stavrev Prodromov |
+| **TOTAL ALLOCATED** | **Horizon / EDF / CEF / EuroHPC / ERC** | **Consortium 865986222** | **€67,047,219.00** | **Sovereign Lead** | **Europe Tier-1 High-Performance Network** |
 
 ---
 
