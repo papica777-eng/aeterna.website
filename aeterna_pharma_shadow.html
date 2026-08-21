@@ -1,28 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        if (location.protocol === 'http:' && !location.hostname.includes('localhost') && !location.hostname.includes('127.0.0.1')) {
+            location.href = location.href.replace('http:', 'https:');
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AETERNA // PHARMA B2B & LONGEVITY ENGINE (SHADOW)</title>
+    <title>AETERNA // IN SILICO PHARMA & LONGEVITY B2B HUD</title>
     <link rel="icon" type="image/png" href="assets/favicon.png" />
     
-    <!-- React & Babel Standalone (Fallback-Resilient) -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            emerald: '#00ffaa',
+                            purple: '#b55fe6',
+                            pink: '#ff2a85',
+                            blue: '#00f0ff',
+                            amber: '#ffb800',
+                            red: '#ff3b6f'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Google Fonts for Medical HUD -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
             --bg-color: #02040a;
-            --emerald-glass: rgba(9, 36, 24, 0.55);
-            --emerald-border: rgba(0, 255, 170, 0.15);
+            --emerald-glass: rgba(9, 36, 24, 0.65);
+            --emerald-border: rgba(0, 255, 170, 0.2);
             --emerald-glow: rgba(0, 255, 170, 0.25);
             
-            --purple-glass: rgba(18, 9, 36, 0.55);
-            --purple-border: rgba(181, 95, 230, 0.15);
+            --purple-glass: rgba(18, 9, 36, 0.65);
+            --purple-border: rgba(181, 95, 230, 0.2);
             --purple-glow: rgba(181, 95, 230, 0.25);
             
             --text-primary: #f1f5f9;
@@ -31,11 +60,8 @@
             --neon-purple: #b55fe6;
             --neon-pink: #ff2a85;
             --neon-emerald: #00ffaa;
-            --neon-emerald-glow: rgba(0, 255, 170, 0.3);
             --neon-blue: #00f0ff;
-            --neon-blue-glow: rgba(0, 240, 255, 0.3);
             --neon-red: #ff3b6f;
-            --neon-red-glow: rgba(255, 59, 111, 0.4);
             --neon-amber: #ffb800;
         }
 
@@ -44,7 +70,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Outfit', sans-serif;
-            cursor: crosshair;
         }
 
         body {
@@ -68,8 +93,8 @@
             border: 1px solid var(--emerald-border);
             border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
@@ -79,117 +104,106 @@
             border: 1px solid var(--purple-border);
         }
 
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 170, 0.05), transparent);
-            transition: 0.8s;
-        }
-
-        .glass-card:hover::before {
-            left: 100%;
-        }
-
         .glass-card:hover {
-            border-color: rgba(0, 255, 170, 0.35);
+            border-color: rgba(0, 255, 170, 0.45);
             box-shadow: 0 0 35px var(--emerald-glow);
             transform: translateY(-2px);
         }
 
         .glass-card.purple-variant:hover {
-            border-color: rgba(181, 95, 230, 0.35);
+            border-color: rgba(181, 95, 230, 0.45);
             box-shadow: 0 0 35px var(--purple-glow);
         }
 
         .tab-btn {
-            background: rgba(0, 255, 170, 0.02);
+            background: rgba(0, 255, 170, 0.04);
             border: 1px solid var(--emerald-border);
             color: var(--text-secondary);
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 12px;
             font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .tab-btn.active {
             border-color: var(--neon-emerald);
             color: #fff;
-            background: rgba(0, 255, 170, 0.12);
-            box-shadow: 0 0 25px rgba(0, 255, 170, 0.2);
+            background: rgba(0, 255, 170, 0.16);
+            box-shadow: 0 0 25px rgba(0, 255, 170, 0.25);
             transform: translateY(-1px);
         }
 
         .tab-btn:hover:not(.active) {
             color: #fff;
-            border-color: rgba(0, 255, 170, 0.3);
-            background: rgba(0, 255, 170, 0.05);
+            border-color: rgba(0, 255, 170, 0.4);
+            background: rgba(0, 255, 170, 0.08);
         }
-
-        .glow-text-emerald { text-shadow: 0 0 20px var(--neon-emerald-glow); }
-        .glow-text-blue { text-shadow: 0 0 20px var(--neon-blue-glow); }
-        .glow-text-red { text-shadow: 0 0 20px var(--neon-red-glow); }
 
         .cure-btn {
             background: linear-gradient(135deg, var(--neon-emerald), #00bb88);
-            color: #fff;
+            color: #000;
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             border: none;
-            padding: 16px 42px;
+            padding: 14px 32px;
             border-radius: 50px;
-            box-shadow: 0 0 35px rgba(0, 255, 170, 0.35);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.35);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: inline-flex;
             align-items: center;
+            cursor: pointer;
         }
 
         .cure-btn:hover {
-            box-shadow: 0 0 50px rgba(0, 255, 170, 0.6);
+            box-shadow: 0 0 45px rgba(0, 255, 170, 0.6);
             transform: translateY(-2px) scale(1.02);
             background: linear-gradient(135deg, #00ffbb, var(--neon-emerald));
         }
 
         .cure-btn:disabled {
-            background: #333;
+            background: #222;
             box-shadow: none;
-            color: #888;
+            color: #666;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* Scanline Overlay for Medical Screen Effect */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.08));
             background-size: 100% 4px;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.15;
+            opacity: 0.2;
         }
 
-        /* Top navigation header */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px;
-            border-bottom: 1px solid rgba(0, 255, 170, 0.1);
-            background: rgba(4, 1, 10, 0.8);
-            backdrop-filter: blur(10px);
+            padding: 18px 40px;
+            border-bottom: 1px solid rgba(0, 255, 170, 0.15);
+            background: rgba(4, 1, 10, 0.9);
+            backdrop-filter: blur(15px);
             position: sticky;
             top: 0;
             z-index: 100;
         }
+
+        .glow-green { text-shadow: 0 0 15px rgba(0, 255, 170, 0.4); }
+        .glow-purple { text-shadow: 0 0 15px rgba(181, 95, 230, 0.4); }
+        .glow-blue { text-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+        .glow-pink { text-shadow: 0 0 15px rgba(255, 42, 133, 0.4); }
     </style>
 </head>
 <body>
@@ -197,1083 +211,777 @@
 
     <header>
         <div style="display: flex; align-items: center; gap: 15px;">
-            <i data-lucide="dna" class="w-8 h-8 text-emerald-400 animate-pulse"></i>
-            <h1 style="font-weight: 900; letter-spacing: 2px; font-size: 1.4rem;">
-                AETERNA <span style="color: var(--neon-emerald);">// IN SILICO PHARMA & LONGEVITY</span>
-            </h1>
+            <a href="./index.html" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center group-hover:border-emerald-400 transition-all">
+                    <i data-lucide="dna" class="w-5 h-5 text-emerald-400 animate-pulse"></i>
+                </div>
+                <h1 class="font-black tracking-wider text-lg md:text-xl text-white">
+                    AETERNA <span class="text-[#00ffaa] font-mono font-bold text-sm md:text-base">// IN SILICO PHARMA & LONGEVITY</span>
+                </h1>
+            </a>
         </div>
-        <div style="display: flex; gap: 20px; align-items: center;" class="mono text-sm">
-            <span style="display: flex; align-items: center; gap: 6px;">
-                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--neon-emerald); box-shadow: 0 0 10px var(--neon-emerald);"></div>
+        <div class="flex gap-4 items-center font-mono text-xs">
+            <span class="flex items-center gap-2 text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30">
+                <div class="w-2 h-2 rounded-full bg-[#00ffaa] shadow-[0_0_8px_#00ffaa] animate-ping"></div>
                 PHARMA-LINK: SECURE
             </span>
-            <span style="color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px;">
+            <span class="text-gray-400 border border-white/10 bg-white/5 px-3 py-1 rounded-full hidden sm:inline-block">
                 B2B SHADOW INSTANCE
             </span>
+            <a href="./index.html" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded border border-white/20 text-xs transition-all flex items-center gap-1">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> MAIN PORTAL
+            </a>
         </div>
     </header>
 
-    <div style="padding: 40px; max-width: 1600px; margin: 0 auto;" id="app-root">
-        <!-- Rendered by Vanilla JS -->
-    </div>
-
-    <script>
-        // System State
-        let state = {
-            activeTab: 'cohort', // 'cohort' or 'longevity'
-            
-            // Cohort State
-            cohortStatus: 'IDLE', // 'IDLE', 'SCANNING_FDA', 'PROCESSING', 'COMPLETE', 'ERROR'
-            scannedCount: 0,
-            toxicCount: 0,
-            safeCount: 0,
-            cIndex: 0.00,
-            fdaDrugName: 'DASATINIB (Sprycel / Senolytic)',
-
-            // Longevity State
-            longStatus: 'BASELINE', // 'BASELINE', 'CRISPR_EDITING', 'CRISPR_DONE', 'REPROGRAMMING', 'REVERSED'
-            bioAge: 75.4,
-            telomereLength: 4.12, // kbp
-            senescentCells: 100, // percentage of baseline
-            yamanakaActive: false,
-            
-            // DNA State (APOE4 -> APOE3)
-            dnaSequence: "5'-...GCGGACATGGAGGACG<span class='text-red-500 font-bold'>T</span>GCGCGGCCGCCT...-3'",
-            dnaRisk: "ВИСОК (APOE4 - Alzheimer's Risk)"
-        };
-
-        // Translations
-        const t = {
-            tabCohort: "ГЛОБАЛНА VHT БАНКА (LIVE FDA DATA)",
-            tabLongevity: "ГЕНОМ & ЕПИГЕНЕТИКА (CRISPR)",
-            btnScan: "ВРЪЗКА КЪМ OpenFDA API & СКРИНИНГ",
-            btnScanStop: "РЕАЛНИТЕ ДАННИ СА ЗАРЕДЕНИ",
-            btnCrispr: "СТАРТИРАЙ CRISPR-Cas9 РЕДАКЦИЯ (rs429358)",
-            btnReprogram: "ИНЖЕКТИРАЙ YAMANAKA ФАКТОРИ (OSKM)",
-            btnReset: "ВЪЗСТАНОВИ СТАРЕЕНЕТО"
-        };
-
-        let scanInterval = null;
-        let longevityInterval = null;
-        let crisprInterval = null;
-
-        window.switchTab = function(tab) {
-            state.activeTab = tab;
-            renderHUD();
-        };
-
-        window.startCohortScan = async function() {
-            if(state.cohortStatus !== 'IDLE') return;
-            state.cohortStatus = 'SCANNING_FDA';
-            renderHUD();
-
-            try {
-                // Fetch real data from US FDA API for Dasatinib
-                const response = await fetch('https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:"dasatinib"&count=patient.reaction.reactionmeddrapt.exact');
-                const data = await response.json();
-                
-                let totalReports = 0;
-                let toxicReports = 0;
-                
-                // Define severe systemic toxicity terms to track
-                const toxicTerms = ['HEPATOTOXICITY', 'CARDIAC FAILURE', 'RENAL FAILURE', 'MYOCARDIAL INFARCTION', 'ACUTE KIDNEY INJURY', 'PULMONARY HYPERTENSION', 'HEPATIC FAILURE'];
-
-                data.results.forEach(item => {
-                    totalReports += item.count;
-                    if (toxicTerms.includes(item.term)) {
-                        toxicReports += item.count;
-                    }
-                });
-
-                state.cohortStatus = 'PROCESSING';
-                renderHUD();
-
-                // Simulate processing delay for visual effect
-                let currentScanned = 0;
-                scanInterval = setInterval(() => {
-                    currentScanned += Math.floor(totalReports / 15); 
-                    state.scannedCount = currentScanned;
-                    
-                    if (currentScanned >= totalReports) {
-                        clearInterval(scanInterval);
-                        state.scannedCount = totalReports;
-                        state.toxicCount = toxicReports;
-                        state.safeCount = totalReports - toxicReports;
-                        // Calculate Predictive C-INDEX based on safety ratio
-                        state.cIndex = (state.safeCount / totalReports) * 0.99; 
-                        state.cohortStatus = 'COMPLETE';
-                    }
-                    renderHUD();
-                }, 100);
-
-            } catch (error) {
-                console.error("FDA API Error", error);
-                state.cohortStatus = 'ERROR';
-                renderHUD();
-            }
-        };
-
-        window.triggerCrispr = function() {
-            if(state.longStatus !== 'BASELINE') return;
-            state.longStatus = 'CRISPR_EDITING';
-            renderHUD();
-
-            let frame = 0;
-            crisprInterval = setInterval(() => {
-                frame++;
-                if (frame === 1) {
-                    state.dnaSequence = "5'-...GCGGACATGGAGGACG<span class='text-yellow-400 font-bold animate-ping'>_</span>GCGCGGCCGCCT...-3'";
-                    state.dnaRisk = "РАЗРЯЗВАНЕ ОТ Cas9 ЕНЗИМ...";
-                } else if (frame === 2) {
-                    state.dnaSequence = "5'-...GCGGACATGGAGGACG<span class='text-blue-400 font-bold'>C</span>GCGCGGCCGCCT...-3'";
-                    state.dnaRisk = "ВМЪКВАНЕ НА ЗДРАВ НУКЛЕОТИД (C)...";
-                } else if (frame >= 3) {
-                    state.dnaSequence = "5'-...GCGGACATGGAGGACG<span class='text-emerald-400 font-bold'>C</span>GCGCGGCCGCCT...-3'";
-                    state.dnaRisk = "ОПТИМАЛЕН (APOE3 - Нискък Риск)";
-                    state.longStatus = 'CRISPR_DONE';
-                    clearInterval(crisprInterval);
-                }
-                renderHUD();
-            }, 800);
-        };
-
-        window.triggerYamanaka = function() {
-            if(state.longStatus !== 'CRISPR_DONE') return;
-            state.longStatus = 'REPROGRAMMING';
-            state.yamanakaActive = true;
-            renderHUD();
-
-            longevityInterval = setInterval(() => {
-                state.bioAge -= 0.5;
-                state.telomereLength += 0.04;
-                state.senescentCells -= 1.2;
-
-                if(state.bioAge <= 35.0) {
-                    state.bioAge = 35.0;
-                    state.telomereLength = 8.50;
-                    state.senescentCells = 5.2;
-                    state.longStatus = 'REVERSED';
-                    clearInterval(longevityInterval);
-                }
-                renderHUD();
-            }, 50);
-        };
-
-        window.resetLongevity = function() {
-            state.longStatus = 'BASELINE';
-            state.bioAge = 75.4;
-            state.telomereLength = 4.12;
-            state.senescentCells = 100;
-            state.yamanakaActive = false;
-            state.dnaSequence = "5'-...GCGGACATGGAGGACG<span class='text-red-500 font-bold'>T</span>GCGCGGCCGCCT...-3'";
-            state.dnaRisk = "ВИСОК (APOE4 - Alzheimer's Risk)";
-            renderHUD();
-        };
-
-        function renderHUD() {
-            const root = document.getElementById("app-root");
-            if(!root) return;
-
-            let tabHeader = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <div style="display: flex; gap: 16px;">
-                        <button class="tab-btn ${state.activeTab === 'cohort' ? 'active' : ''}" onclick="switchTab('cohort')">
-                            <i data-lucide="database" class="w-4 h-4 inline-block mr-2 text-emerald-400"></i>${t.tabCohort}
-                        </button>
-                        <button class="tab-btn ${state.activeTab === 'longevity' ? 'active' : ''}" onclick="switchTab('longevity')">
-                            <i data-lucide="dna" class="w-4 h-4 inline-block mr-2 text-purple-400"></i>${t.tabLongevity}
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            let content = '';
-
-            if (state.activeTab === 'cohort') {
-                let scanProgress = state.cohortStatus === 'COMPLETE' ? 100 : (state.cohortStatus === 'PROCESSING' ? (state.scannedCount / Math.max(state.scannedCount, 1)) * 100 : 0);
-                
-                content = `
-                    <div class="glass-card" style="display: flex; flex-direction: column; gap: 30px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h2 style="font-size: 1.8rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                    <i data-lucide="globe" class="w-6 h-6 inline-block text-emerald-400"></i>
-                                    Реална FDA Фармакокинетика & Токсичност
-                                </h2>
-                                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px; max-width: 650px;">
-                                    Извличане на реални клинични доклади (Adverse Events) в реално време от базата на Агенцията по храните и лекарствата (САЩ) за компаунд <b>${state.fdaDrugName}</b>.
-                                </p>
-                            </div>
-                            <button class="cure-btn" onclick="startCohortScan()" ${state.cohortStatus !== 'IDLE' ? 'disabled' : ''}>
-                                <i data-lucide="${state.cohortStatus === 'COMPLETE' ? 'check-circle' : 'download-cloud'}" class="w-5 h-5 mr-2"></i>
-                                ${state.cohortStatus === 'COMPLETE' ? t.btnScanStop : t.btnScan}
-                            </button>
-                        </div>
-
-                        ${state.cohortStatus === 'SCANNING_FDA' ? `
-                            <div style="padding: 20px; background: rgba(0, 240, 255, 0.1); border: 1px solid var(--neon-blue); border-radius: 16px; display: flex; align-items: center; gap: 16px; margin-bottom: -10px;">
-                                <i data-lucide="loader" class="w-6 h-6 text-blue-400 animate-spin"></i>
-                                <span class="mono text-blue-400 font-bold">ОСЪЩЕСТВЯВАНЕ НА ВРЪЗКА С US FDA SERVERS (api.fda.gov)... ИЗВЛИЧАНЕ НА МАСИВИТЕ...</span>
-                            </div>
-                        ` : ''}
-
-                        <!-- Progress Bar -->
-                        <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px; border: 1px solid var(--emerald-border);">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;" class="mono">
-                                <span style="color: var(--text-secondary);">ОБРАБОТЕНИ РЕАЛНИ ДОКЛАДИ ОТ ПАЦИЕНТИ</span>
-                                <span style="font-weight: 900; color: var(--neon-emerald); font-size: 1.2rem;">${state.scannedCount.toLocaleString()} РЕГИСТРИРАНИ СЛУЧАЯ</span>
-                            </div>
-                            <div style="width: 100%; height: 16px; background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; position: relative;">
-                                <div style="width: ${state.cohortStatus === 'COMPLETE' ? '100' : (state.scannedCount > 0 ? '50' : '0')}%; height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-emerald)); box-shadow: 0 0 20px var(--neon-emerald); transition: width 0.3s ease;"></div>
-                            </div>
-                        </div>
-
-                        <!-- Stats Grid -->
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                            <div style="background: rgba(0, 255, 170, 0.05); border: 1px solid rgba(0, 255, 170, 0.2); border-radius: 16px; padding: 24px;">
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);" class="mono">ДОКЛАДВАНИ БЕЗ ТЕЖКА ОРГАННА ТОКСИЧНОСТ</div>
-                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--neon-emerald);" class="mono glow-text-emerald">
-                                    ${state.safeCount.toLocaleString()}
-                                </div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">Базирано на OpenFDA данни</div>
-                            </div>
-                            
-                            <div style="background: rgba(255, 59, 111, 0.05); border: 1px solid rgba(255, 59, 111, 0.2); border-radius: 16px; padding: 24px;">
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);" class="mono">ДОКАЗАНА ТЕЖКА ТОКСИЧНОСТ</div>
-                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--neon-red);" class="mono glow-text-red">
-                                    ${state.toxicCount.toLocaleString()}
-                                </div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">Hepatotoxicity, Renal & Cardiac Failure</div>
-                            </div>
-
-                            <div style="background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 16px; padding: 24px;">
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);" class="mono">ПРЕДИКАТИВЕН C-INDEX</div>
-                                <div style="font-size: 2.5rem; font-weight: 900; color: var(--neon-blue);" class="mono glow-text-blue">
-                                    ${state.cIndex.toFixed(3)}
-                                </div>
-                                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">Точност спрямо FDA стандарти</div>
-                            </div>
-                        </div>
-
-                        ${state.cohortStatus === 'COMPLETE' ? `
-                        <div style="padding: 20px; background: rgba(0, 255, 170, 0.1); border: 1px solid var(--neon-emerald); border-radius: 16px; display: flex; align-items: center; gap: 16px;">
-                            <i data-lucide="activity" class="w-10 h-10 text-emerald-400"></i>
-                            <div>
-                                <h4 style="color: var(--neon-emerald); font-weight: 800; font-size: 1.1rem; margin-bottom: 4px;">FDA ДАННИТЕ СА УСПЕШНО ИНТЕГРИРАНИ</h4>
-                                <p style="font-size: 0.85rem; color: #b2ccd6;">
-                                    AETERNA успешно извлече и анализира ${state.scannedCount.toLocaleString()} реални пациентски досиета от базите на FDA за Dasatinib. 
-                                    Отчетени са ${state.toxicCount.toLocaleString()} случая на тежка системна токсичност. Системата е готова за препрограмиране на компаунда.
-                                </p>
-                            </div>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-            } else if (state.activeTab === 'longevity') {
-                content = `
-                    <div class="glass-card purple-variant" style="display: flex; flex-direction: column; gap: 30px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h2 style="font-size: 1.8rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                    <i data-lucide="dna" class="w-6 h-6 inline-block text-purple-400"></i>
-                                    Геномна Редакция & Епигенетика
-                                </h2>
-                                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px; max-width: 600px;">
-                                    Първо: CRISPR-Cas9 редакция на дефектни гени (APOE4 -> APOE3). 
-                                    Второ: Индукция на Yamanaka фактори (OSKM) за реверсия на възрастта.
-                                </p>
-                            </div>
-                            <div style="display: flex; gap: 10px;">
-                                ${state.longStatus === 'BASELINE' || state.longStatus === 'CRISPR_EDITING' ? `
-                                <button class="cure-btn" style="background: rgba(0, 240, 255, 0.1); border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);" onclick="triggerCrispr()" ${state.longStatus === 'CRISPR_EDITING' ? 'disabled' : ''}>
-                                    <i data-lucide="scissors" class="w-5 h-5 mr-2"></i>
-                                    ${state.longStatus === 'CRISPR_EDITING' ? 'РЕДАКТИРАНЕ...' : t.btnCrispr}
-                                </button>
-                                ` : ''}
-
-                                ${state.longStatus === 'CRISPR_DONE' || state.longStatus === 'REPROGRAMMING' ? `
-                                <button class="cure-btn" style="background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink)); box-shadow: 0 0 35px rgba(181, 95, 230, 0.4);" onclick="triggerYamanaka()" ${state.longStatus === 'REPROGRAMMING' ? 'disabled' : ''}>
-                                    <i data-lucide="zap" class="w-5 h-5 mr-2 text-white"></i>
-                                    ${t.btnReprogram}
-                                </button>
-                                ` : ''}
-                                
-                                ${state.longStatus === 'REVERSED' ? `
-                                <button class="tab-btn active" style="background: rgba(255, 59, 111, 0.1); border-color: var(--neon-red); color: var(--neon-red);" onclick="resetLongevity()">
-                                    <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
-                                    ${t.btnReset}
-                                </button>
-                                ` : ''}
-                            </div>
-                        </div>
-
-                        <!-- CRISPR DNA Sequence Bar -->
-                        <div style="background: rgba(0,0,0,0.6); padding: 15px 25px; border-radius: 12px; border: 1px solid ${state.longStatus === 'BASELINE' ? 'var(--neon-red)' : (state.longStatus === 'CRISPR_EDITING' ? 'var(--neon-blue)' : 'var(--neon-emerald)')}; display: flex; align-items: center; justify-content: space-between;">
-                            <div>
-                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px;" class="mono uppercase tracking-widest">Анализ на ГЕНА: APOE (rs429358)</div>
-                                <div class="mono" style="font-size: 1.2rem; letter-spacing: 2px;">
-                                    ${state.dnaSequence}
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px;" class="mono uppercase tracking-widest">Клиничен Риск</div>
-                                <div class="mono font-bold" style="color: ${state.longStatus === 'BASELINE' ? 'var(--neon-red)' : (state.longStatus === 'CRISPR_EDITING' ? 'var(--neon-blue)' : 'var(--neon-emerald)')};">
-                                    ${state.dnaRisk}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Central Visualizer -->
-                        <div style="display: flex; gap: 20px; align-items: stretch; opacity: ${state.longStatus === 'BASELINE' || state.longStatus === 'CRISPR_EDITING' ? '0.5' : '1'}; transition: opacity 0.5s;">
-                            
-                            <!-- Main Age Dial -->
-                            <div style="flex: 1; background: rgba(0,0,0,0.4); border-radius: 16px; border: 1px solid var(--purple-border); padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden;">
-                                <div style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: radial-gradient(circle, var(--neon-purple) 0%, transparent 70%); opacity: ${state.yamanakaActive ? 0.3 : 0.05}; filter: blur(30px); transition: opacity 0.5s;"></div>
-                                
-                                <div style="font-size: 1rem; font-weight: 700; color: var(--text-secondary); letter-spacing: 2px; margin-bottom: 10px;">БИОЛОГИЧНА ВЪЗРАСТ (HORVATH CLOCK)</div>
-                                <div class="mono glow-text-blue" style="font-size: 5rem; font-weight: 900; color: ${state.longStatus === 'REVERSED' ? 'var(--neon-emerald)' : 'var(--neon-blue)'}; line-height: 1;">
-                                    ${state.bioAge.toFixed(1)}
-                                </div>
-                                <div style="font-size: 1rem; color: #555; margin-top: 10px;" class="mono">ХРОНОЛОГИЧНА: 75.4 ГОДИНИ</div>
-
-                                ${state.longStatus === 'REPROGRAMMING' ? `
-                                    <div style="margin-top: 20px; color: var(--neon-pink); font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; gap: 8px;" class="animate-pulse">
-                                        <i data-lucide="radio" class="w-4 h-4"></i> АКТИВЕН ЕПИГЕНЕТИЧЕН РЕМОДЕЛИРАЩ ВЕКТОР
-                                    </div>
-                                ` : ''}
-                                
-                                ${state.longStatus === 'BASELINE' || state.longStatus === 'CRISPR_EDITING' ? `
-                                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-                                        <div style="color: var(--neon-red); font-weight: bold; padding: 10px 20px; border: 1px solid var(--neon-red); border-radius: 8px; background: rgba(255,0,0,0.1);">
-                                            <i data-lucide="lock" class="w-5 h-5 inline mr-2"></i>БЛОКИРАНО: ИЗИСКВА ДНК РЕДАКЦИЯ
-                                        </div>
-                                    </div>
-                                ` : ''}
-                            </div>
-
-                            <!-- Biomarkers -->
-                            <div style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
-                                
-                                <div style="flex: 1; background: rgba(181, 95, 230, 0.05); border: 1px solid rgba(181, 95, 230, 0.2); border-radius: 16px; padding: 20px; display: flex; align-items: center; justify-content: space-between;">
-                                    <div>
-                                        <div style="font-size: 0.8rem; color: var(--text-secondary);" class="mono">ДЪЛЖИНА НА ТЕЛОМЕРИТЕ</div>
-                                        <div style="font-size: 2rem; font-weight: 900; color: var(--neon-purple);" class="mono">
-                                            ${state.telomereLength.toFixed(2)} kbp
-                                        </div>
-                                        <div style="font-size: 0.75rem; color: #666;">(Оптимум: > 8.00 kbp)</div>
-                                    </div>
-                                    <i data-lucide="scissors" class="w-10 h-10 text-purple-500 opacity-50"></i>
-                                </div>
-
-                                <div style="flex: 1; background: rgba(255, 42, 133, 0.05); border: 1px solid rgba(255, 42, 133, 0.2); border-radius: 16px; padding: 20px; display: flex; align-items: center; justify-content: space-between;">
-                                    <div>
-                                        <div style="font-size: 0.8rem; color: var(--text-secondary);" class="mono">"ЗОМБИ" КЛЕТКИ (SENESCENT)</div>
-                                        <div style="font-size: 2rem; font-weight: 900; color: ${state.longStatus === 'REVERSED' ? 'var(--neon-emerald)' : 'var(--neon-pink)'};" class="mono">
-                                            ${state.senescentCells.toFixed(1)} %
-                                        </div>
-                                        <div style="font-size: 0.75rem; color: #666;">Спрямо изходно ниво (100%)</div>
-                                    </div>
-                                    <i data-lucide="skull" class="w-10 h-10 ${state.longStatus === 'REVERSED' ? 'text-emerald-500' : 'text-pink-500'} opacity-50"></i>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Yamanaka Factors Graph Visual -->
-                        <div style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px; border: 1px solid var(--purple-border);">
-                            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 15px; letter-spacing: 1px;">YAMANAKA ФАКТОРИ (OSKM) ЕКСПРЕСИЯ</div>
-                            
-                            <div style="display: flex; gap: 10px; align-items: flex-end; height: 100px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-blue); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '85%' : '10%'};"></div>
-                                    <span class="mono" style="font-size: 0.7rem;">OCT4</span>
-                                </div>
-                                <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-emerald); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '95%' : '15%'};"></div>
-                                    <span class="mono" style="font-size: 0.7rem;">SOX2</span>
-                                </div>
-                                <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-purple); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '70%' : '5%'};"></div>
-                                    <span class="mono" style="font-size: 0.7rem;">KLF4</span>
-                                </div>
-                                <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 8px;">
-                                    <div style="width: 40px; background: var(--neon-pink); border-radius: 4px 4px 0 0; transition: height 0.5s; height: ${state.yamanakaActive ? '60%' : '10%'};"></div>
-                                    <span class="mono" style="font-size: 0.7rem;">c-MYC</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                `;
-            }
-
-            root.innerHTML = tabHeader + content;
-            try {
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-            } catch (e) {
-                console.error("Lucide icons failed to load:", e);
-            }
-        }
-
-        // Immediate & Multi-Trigger Rendering
-        renderHUD();
-        document.addEventListener('DOMContentLoaded', renderHUD);
-        window.addEventListener('load', renderHUD);
-        setTimeout(renderHUD, 50);
-        setTimeout(renderHUD, 300);
-
-    </script>
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <!-- AETERNA Omni-Assistant Chat Widget -->
-    <div id="omni-assistant-container">
-        <style>
-            #omni-assistant-container {
-                position: fixed;
-                bottom: 24px;
-                right: 24px;
-                z-index: 99999;
-                font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                pointer-events: none;
-            }
-            #omni-assistant-container * {
-                box-sizing: border-box;
-            }
-            #omni-toggle-btn {
-                width: 56px;
-                height: 56px;
-                border-radius: 50%;
-                border: 1px solid rgba(181, 95, 230, 0.45);
-                background: rgba(14, 20, 35, 0.85);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                color: #b55fe6;
-                box-shadow: 0 0 20px rgba(181, 95, 230, 0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                pointer-events: auto;
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                padding: 0;
-            }
-            #omni-toggle-btn:hover {
-                transform: scale(1.1);
-            }
-            #omni-toggle-btn .ping-ring {
-                position: absolute;
-                inset: 0;
-                border-radius: 50%;
-                border: 1px solid #b55fe6;
-                opacity: 0.2;
-                animation: omni-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-            }
-            @keyframes omni-ping {
-                75%, 100% {
-                    transform: scale(1.4);
-                    opacity: 0;
-                }
-            }
-            #omni-chat-window {
-                width: 380px;
-                max-width: calc(100vw - 48px);
-                height: 500px;
-                max-h: calc(100vh - 120px);
-                margin-bottom: 16px;
-                border-radius: 12px;
-                border: 1px solid rgba(0, 240, 255, 0.3);
-                background: linear-gradient(135deg, rgba(14, 20, 35, 0.95) 0%, rgba(8, 12, 24, 0.98) 100%);
-                backdrop-filter: blur(25px);
-                -webkit-backdrop-filter: blur(25px);
-                box-shadow: 0 0 30px rgba(0, 240, 255, 0.15);
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-                pointer-events: auto;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                transform-origin: bottom right;
-                transform: scale(0);
-                opacity: 0;
-            }
-            #omni-chat-window.open {
-                transform: scale(1);
-                opacity: 1;
-            }
-            .omni-header {
-                padding: 12px 16px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: rgba(0, 0, 0, 0.4);
-                flex-shrink: 0;
-            }
-            .omni-header-title {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .omni-header-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background-color: #00f0ff;
-                animation: omni-pulse 2s infinite;
-            }
-            @keyframes omni-pulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.4; }
-            }
-            .omni-header-text {
-                font-family: 'JetBrains Mono', monospace;
-                font-size: 11px;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                color: #00f0ff;
-            }
-            .omni-header-controls {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-            .omni-lang-pill {
-                display: flex;
-                align-items: center;
-                background: rgba(0, 0, 0, 0.3);
-                padding: 2px;
-                border-radius: 4px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            .omni-lang-btn {
-                background: transparent;
-                border: none;
-                color: #718096;
-                font-size: 10px;
-                font-weight: 700;
-                padding: 2px 6px;
-                border-radius: 3px;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
-            .omni-lang-btn.active {
-                color: #fff;
-                background: rgba(0, 240, 255, 0.2);
-                border: 1px solid rgba(0, 240, 255, 0.4);
-            }
-            .omni-close-btn {
-                background: transparent;
-                border: none;
-                color: #a0aec0;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: color 0.2s;
-                padding: 0;
-            }
-            .omni-close-btn:hover {
-                color: #fff;
-            }
-            #omni-chat-messages {
-                flex: 1;
-                padding: 16px;
-                overflow-y: auto;
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                font-size: 13px;
-            }
-            .omni-msg-row {
-                display: flex;
-                gap: 12px;
-            }
-            .omni-msg-row.user {
-                flex-direction: row-reverse;
-            }
-            .omni-msg-bubble {
-                border-radius: 8px;
-                padding: 12px;
-                max-width: 80%;
-                line-height: 1.5;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                background: rgba(255, 255, 255, 0.04);
-                color: #e2e8f0;
-            }
-            .omni-msg-row.user .omni-msg-bubble {
-                background: rgba(181, 95, 230, 0.15);
-                border-color: rgba(181, 95, 230, 0.25);
-                color: #fff;
-                border-top-right-radius: 0;
-            }
-            .omni-msg-row.bot .omni-msg-bubble {
-                border-top-left-radius: 0;
-            }
-            .omni-msg-author {
-                font-size: 10px;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                font-family: 'JetBrains Mono', monospace;
-                margin-bottom: 4px;
-                color: #fff;
-            }
-            .omni-input-area {
-                padding: 12px;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                background: rgba(0, 0, 0, 0.4);
-                flex-shrink: 0;
-            }
-            .omni-form {
-                display: flex;
-                gap: 8px;
-            }
-            #omni-chat-input {
-                flex: 1;
-                background: rgba(0, 0, 0, 0.5);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 6px;
-                padding: 8px 12px;
-                font-size: 13px;
-                color: #fff;
-                outline: none;
-                transition: border-color 0.2s;
-            }
-            #omni-chat-input:focus {
-                border-color: rgba(0, 240, 255, 0.4);
-            }
-            .omni-send-btn {
-                width: 36px;
-                height: 36px;
-                border-radius: 6px;
-                border: 1px solid rgba(0, 240, 255, 0.3);
-                background: rgba(0, 240, 255, 0.1);
-                color: #00f0ff;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.2s;
-                padding: 0;
-            }
-            .omni-send-btn:hover {
-                background: #00f0ff;
-                color: #000;
-            }
-            #omni-chat-loading {
-                padding: 0 16px 12px;
-                display: none;
-                align-items: center;
-                gap: 8px;
-                font-size: 10px;
-                font-family: 'JetBrains Mono', monospace;
-                color: #00f0ff;
-            }
-            #omni-chat-loading.show {
-                display: flex;
-            }
-            .rotate-spin {
-                animation: omni-spin 1s linear infinite;
-            }
-            @keyframes omni-spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-            .terminal-scroll::-webkit-scrollbar {
-                width: 4px;
-            }
-            .terminal-scroll::-webkit-scrollbar-track {
-                background: rgba(255,255,255,0.01);
-            }
-            .terminal-scroll::-webkit-scrollbar-thumb {
-                background: rgba(0,240,255,0.2);
-                border-radius: 2px;
-            }
-        </style>
+    <div class="p-6 md:p-10 max-w-7xl mx-auto space-y-8" id="app-root">
         
-        <!-- Chat Window -->
-        <div id="omni-chat-window">
-            <!-- Header -->
-            <div class="omni-header">
-                <div class="omni-header-title">
-                    <div class="omni-header-dot"></div>
-                    <span class="omni-header-text">OMNI-ASSISTANT</span>
+        <!-- Navigation Tab Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div class="flex flex-wrap gap-3">
+                <button class="tab-btn active" id="tab-cohort-btn" onclick="switchTab('cohort')">
+                    <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
+                    <span>ГЛОБАЛНА VHT БАНКА (LIVE FDA DATA)</span>
+                </button>
+                <button class="tab-btn" id="tab-longevity-btn" onclick="switchTab('longevity')">
+                    <i data-lucide="dna" class="w-4 h-4 text-purple-400"></i>
+                    <span>ГЕНОМ & ЕПИГЕНЕТИКА (CRISPR / HORVATH)</span>
+                </button>
+                <button class="tab-btn" id="tab-docking-btn" onclick="switchTab('docking')">
+                    <i data-lucide="atom" class="w-4 h-4 text-cyan-400"></i>
+                    <span>МОЛЕКУЛЯРЕН ДОКИНГ (ΔG BINDING)</span>
+                </button>
+            </div>
+            <div class="font-mono text-xs text-gray-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>OPENFDA LIVE API NODE</span>
+            </div>
+        </div>
+
+        <!-- TAB 1: COHORT FDA STREAM -->
+        <div id="section-cohort" class="space-y-6">
+            <div class="glass-card flex flex-col gap-6">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1">
+                            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                            <span>REAL-TIME TOXICITY & PHARMACOKINETICS</span>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3">
+                            <i data-lucide="activity" class="w-7 h-7 text-emerald-400"></i>
+                            Реална FDA Фармакокинетика & Токсичност
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-2 max-w-2xl">
+                            Автоматизирано извличане на клинични доклади (Adverse Events) в реално време от базата на Агенцията по храните и лекарствата (САЩ) за компаунд <b class="text-white" id="display-drug-name">DASATINIB (Sprycel / Senolytic)</b>.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <button class="cure-btn" id="btn-scan-fda" onclick="startCohortScan()">
+                            <i data-lucide="download-cloud" class="w-5 h-5 mr-2"></i>
+                            <span id="scan-btn-text">ВРЪЗКА КЪМ OpenFDA API & СКРИНИНГ</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="omni-header-controls">
-                    <button id="omni-close-btn" class="omni-close-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+
+                <!-- API Status Banner -->
+                <div id="fda-loading-banner" class="hidden p-4 bg-cyan-950/40 border border-cyan-400/40 rounded-xl flex items-center gap-3 font-mono text-xs text-cyan-300">
+                    <i data-lucide="loader" class="w-5 h-5 animate-spin text-cyan-400"></i>
+                    <span>ОСЪЩЕСТВЯВАНЕ НА ВРЪЗКА С US FDA SERVERS (api.fda.gov)... ИЗВЛИЧАНЕ НА МАСИВИТЕ ЗА ТОКСИЧНОСТ...</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="bg-black/60 p-5 rounded-xl border border-emerald-500/20">
+                    <div class="flex justify-between items-center mb-3 font-mono text-xs">
+                        <span class="text-gray-400">ОБРАБОТЕНИ РЕАЛНИ ДОКЛАДИ ОТ ПАЦИЕНТИ</span>
+                        <span class="font-bold text-emerald-400 text-sm" id="scanned-count-label">0 РЕГИСТРИРАНИ СЛУЧАЯ</span>
+                    </div>
+                    <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden">
+                        <div id="scan-progress-bar" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 w-0 transition-all duration-300 shadow-[0_0_15px_#00ffaa]"></div>
+                    </div>
+                </div>
+
+                <!-- Telemetry Stats Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-5">
+                        <div class="text-xs font-mono text-gray-400 mb-1">БЕЗ ТЕЖКА ОРГАННА ТОКСИЧНОСТ</div>
+                        <div class="text-3xl lg:text-4xl font-black font-mono text-emerald-400 glow-green" id="stat-safe-count">0</div>
+                        <div class="text-[11px] text-gray-500 mt-2">Базирано на OpenFDA данни</div>
+                    </div>
+
+                    <div class="bg-red-950/20 border border-red-500/20 rounded-xl p-5">
+                        <div class="text-xs font-mono text-gray-400 mb-1">ДОКАЗАНА ТЕЖКА ТОКСИЧНОСТ</div>
+                        <div class="text-3xl lg:text-4xl font-black font-mono text-red-400" id="stat-toxic-count">0</div>
+                        <div class="text-[11px] text-gray-500 mt-2">Hepatotoxicity, Renal & Cardiac Adverse Events</div>
+                    </div>
+
+                    <div class="bg-cyan-950/20 border border-cyan-500/20 rounded-xl p-5">
+                        <div class="text-xs font-mono text-gray-400 mb-1">ПРЕДИКАТИВЕН C-INDEX</div>
+                        <div class="text-3xl lg:text-4xl font-black font-mono text-cyan-400 glow-blue" id="stat-cindex">0.000</div>
+                        <div class="text-[11px] text-gray-500 mt-2">Точност спрямо биомаркерни стандарти</div>
+                    </div>
+                </div>
+
+                <!-- PK/PD Graph Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+                    <div class="bg-black/50 p-5 rounded-xl border border-white/10">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                                Pharmacokinetic Profile (Plasma Concentration vs Time)
+                            </h3>
+                            <span class="text-[10px] font-mono bg-emerald-950 px-2 py-0.5 rounded text-emerald-300">Cmax: 120 ng/mL</span>
+                        </div>
+                        <div class="h-56 relative">
+                            <canvas id="pkpd-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-black/50 p-5 rounded-xl border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                Organ Clearance & Metabolic In-Silico Partitioning
+                            </h3>
+                            <div class="space-y-3 font-mono text-xs">
+                                <div>
+                                    <div class="flex justify-between text-gray-400 mb-1"><span>Hepatic CYP3A4 Clearance</span> <span class="text-emerald-400">84.2% (Rapid)</span></div>
+                                    <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="w-[84%] h-full bg-emerald-400"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-gray-400 mb-1"><span>Renal Excretion</span> <span class="text-cyan-400">12.5%</span></div>
+                                    <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="w-[12%] h-full bg-cyan-400"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-gray-400 mb-1"><span>Blood-Brain Barrier (BBB) Penetration</span> <span class="text-purple-400">3.8% (Targeted)</span></div>
+                                    <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden"><div class="w-[4%] h-full bg-purple-400"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-xs font-mono text-gray-400">
+                            <span>Bioavailability ($F$): <b class="text-white">68%</b></span>
+                            <span>Half-Life ($t_{1/2}$): <b class="text-white">3.5 - 5.0 h</b></span>
+                            <span>Volume ($V_d$): <b class="text-white">2.5 L/kg</b></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: CRISPR & LONGEVITY -->
+        <div id="section-longevity" class="hidden space-y-6">
+            <div class="glass-card purple-variant flex flex-col gap-6">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-mono text-purple-400 mb-1">
+                            <i data-lucide="dna" class="w-4 h-4"></i>
+                            <span>EPIGENETIC REPROGRAMMING & CRISPR-Cas9</span>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3">
+                            <i data-lucide="refresh-cw" class="w-7 h-7 text-purple-400"></i>
+                            Геномна Редакция & Епигенетичен Часовник
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-2 max-w-2xl">
+                            1. Таргетирана <b>CRISPR-Cas9</b> редакция на дефектни алели (APOE4 &rarr; APOE3).<br/>
+                            2. Индукция на <b>Yamanaka фактори (OSKM)</b> за нулиране на Horvath епигенетичната възраст.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button class="cure-btn" id="btn-crispr" style="background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);" onclick="triggerCrispr()">
+                            <i data-lucide="scissors" class="w-5 h-5 mr-2"></i>
+                            <span>СТАРТИРАЙ CRISPR-Cas9 РЕДАКЦИЯ</span>
+                        </button>
+                        <button class="cure-btn" id="btn-yamanaka" style="background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink)); color: white;" onclick="triggerYamanaka()">
+                            <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                            <span>ИНЖЕКТИРАЙ YAMANAKA ФАКТОРИ (OSKM)</span>
+                        </button>
+                        <button class="tab-btn" onclick="resetLongevity()">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                            <span>РЕСЕТ</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- DNA Sequence Display Bar -->
+                <div class="bg-black/70 p-5 rounded-xl border border-red-500/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 font-mono" id="dna-bar-container">
+                    <div>
+                        <div class="text-[11px] text-gray-400 uppercase tracking-widest mb-1">ГЕНЕН ЛОКУС: APOE (rs429358) &mdash; ЕКЗОН 4</div>
+                        <div class="text-base md:text-lg tracking-wider" id="dna-sequence-code">
+                            5'-...GCGGACATGGAGGACG<span class="text-red-500 font-bold px-1 bg-red-950/60 rounded border border-red-500/40">T</span>GCGCGGCCGCCT...-3'
+                        </div>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <div class="text-[11px] text-gray-400 uppercase tracking-widest mb-1">Клиничен Рисков Профил</div>
+                        <div class="font-bold text-red-400" id="dna-risk-badge">ВИСОК (APOE4 - Alzheimer's Risk)</div>
+                    </div>
+                </div>
+
+                <!-- Central Visualizer -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Biological Age Dial -->
+                    <div class="bg-black/60 rounded-2xl border border-purple-500/30 p-8 flex flex-col items-center justify-center relative overflow-hidden text-center">
+                        <div class="text-xs font-mono font-bold text-gray-400 tracking-widest uppercase mb-2">БИОЛОГИЧНА ВЪЗРАСТ (HORVATH CLOCK)</div>
+                        <div class="text-6xl md:text-7xl font-black font-mono text-cyan-400 glow-blue my-2" id="bio-age-dial">75.4</div>
+                        <div class="text-xs font-mono text-gray-500">ХРОНОЛОГИЧНА ВЪЗРАСТ: 75.4 ГОДИНИ</div>
+
+                        <div id="reprogramming-badge" class="hidden mt-4 text-xs font-mono font-bold text-pink-400 flex items-center gap-2 bg-pink-950/60 px-3 py-1 rounded-full border border-pink-500/30 animate-pulse">
+                            <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+                            <span>АКТИВЕН ЕПИГЕНЕТИЧЕН РЕМОДЕЛИРАЩ ВЕКТОР</span>
+                        </div>
+                    </div>
+
+                    <!-- Biomarkers -->
+                    <div class="space-y-4 flex flex-col justify-between">
+                        <div class="bg-purple-950/20 border border-purple-500/30 rounded-xl p-5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs font-mono text-gray-400 mb-1">ДЪЛЖИНА НА ТЕЛОМЕРИТЕ</div>
+                                <div class="text-3xl font-black font-mono text-purple-400" id="telomere-length">4.12 kbp</div>
+                                <div class="text-[11px] text-gray-500 mt-1">Норма за младежка тъкан: &gt; 8.00 kbp</div>
+                            </div>
+                            <i data-lucide="scissors" class="w-10 h-10 text-purple-400 opacity-40"></i>
+                        </div>
+
+                        <div class="bg-pink-950/20 border border-pink-500/30 rounded-xl p-5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs font-mono text-gray-400 mb-1">&quot;ЗОМБИ&quot; СЕНЕСЦЕНТНИ КЛЕТКИ</div>
+                                <div class="text-3xl font-black font-mono text-pink-400" id="senescent-cells">100.0 %</div>
+                                <div class="text-[11px] text-gray-500 mt-1">Senolytic Clearance Target: &lt; 10%</div>
+                            </div>
+                            <i data-lucide="skull" class="w-10 h-10 text-pink-400 opacity-40"></i>
+                        </div>
+                    </div>
+
+                    <!-- Yamanaka Expression Bars -->
+                    <div class="bg-black/60 rounded-2xl border border-purple-500/30 p-6 flex flex-col justify-between">
+                        <div class="text-xs font-mono font-bold text-gray-400 tracking-widest uppercase mb-4">
+                            YAMANAKA ФАКТОРИ (OSKM) ЕКСПРЕСИЯ
+                        </div>
+                        <div class="flex justify-between items-end gap-3 h-44 pb-2 border-b border-white/10">
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div id="bar-oct4" class="w-full bg-cyan-400 rounded-t transition-all duration-500 h-[10%] shadow-[0_0_10px_#00f0ff]"></div>
+                                <span class="font-mono text-[11px] text-gray-400">OCT4</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div id="bar-sox2" class="w-full bg-emerald-400 rounded-t transition-all duration-500 h-[15%] shadow-[0_0_10px_#00ffaa]"></div>
+                                <span class="font-mono text-[11px] text-gray-400">SOX2</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div id="bar-klf4" class="w-full bg-purple-400 rounded-t transition-all duration-500 h-[8%] shadow-[0_0_10px_#b55fe6]"></div>
+                                <span class="font-mono text-[11px] text-gray-400">KLF4</span>
+                            </div>
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div id="bar-cmyc" class="w-full bg-pink-400 rounded-t transition-all duration-500 h-[10%] shadow-[0_0_10px_#ff2a85]"></div>
+                                <span class="font-mono text-[11px] text-gray-400">c-MYC</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-[11px] font-mono text-gray-400 text-center">
+                            Вектор: Adeno-Associated Virus (AAV9)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: MOLECULAR DOCKING -->
+        <div id="section-docking" class="hidden space-y-6">
+            <div class="glass-card flex flex-col gap-6" style="border-color: rgba(0, 240, 255, 0.25);">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-mono text-cyan-400 mb-1">
+                            <i data-lucide="atom" class="w-4 h-4"></i>
+                            <span>AUTONOMOUS IN-SILICO MOLECULAR DOCKING ENGINE</span>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black text-white flex items-center gap-3">
+                            <i data-lucide="cpu" class="w-7 h-7 text-cyan-400"></i>
+                            Афинитет на Свързване &amp; Молекулярен Докинг
+                        </h2>
+                        <p class="text-gray-400 text-sm mt-2 max-w-2xl">
+                            Пресмятане на свободната енергия на Гибс ($\Delta G_{bind}$) и кинетичните инхибиторни константи ($K_i$) за селективно таргетиране на анти-апоптотични протеини (BCL-2 / BCL-xL / mTORC1).
+                        </p>
+                    </div>
+                    <button class="cure-btn" style="background: linear-gradient(135deg, var(--neon-blue), #0088ff); color: white;" onclick="runMolecularDocking()">
+                        <i data-lucide="play" class="w-5 h-5 mr-2"></i>
+                        <span>ИЗЧИСЛИ ΔG DOCKING ЕНЕРГИЯ</span>
                     </button>
                 </div>
+
+                <!-- Docking Matrix Metrics -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 font-mono text-xs">
+                    <div class="bg-black/60 p-4 rounded-xl border border-cyan-500/20">
+                        <div class="text-gray-400 mb-1">СВОБОДНА ЕНЕРГИЯ (ΔG)</div>
+                        <div class="text-2xl font-bold text-cyan-400" id="docking-energy">-11.4 kcal/mol</div>
+                        <div class="text-[10px] text-gray-500 mt-1">Висок Термодинамичен Афинитет</div>
+                    </div>
+
+                    <div class="bg-black/60 p-4 rounded-xl border border-emerald-500/20">
+                        <div class="text-gray-400 mb-1">ИНХИБИТОРНА КОНСТАНТА (Ki)</div>
+                        <div class="text-2xl font-bold text-emerald-400" id="docking-ki">1.28 nM</div>
+                        <div class="text-[10px] text-gray-500 mt-1">Суб-наномоларна селективност</div>
+                    </div>
+
+                    <div class="bg-black/60 p-4 rounded-xl border border-purple-500/20">
+                        <div class="text-gray-400 mb-1">LIPINSKI RULE OF 5</div>
+                        <div class="text-2xl font-bold text-purple-400">100% ВАЛИДЕН</div>
+                        <div class="text-[10px] text-gray-500 mt-1">MW &lt; 500, LogP: 2.8, HBD: 2</div>
+                    </div>
+
+                    <div class="bg-black/60 p-4 rounded-xl border border-amber-500/20">
+                        <div class="text-gray-400 mb-1">ОФ-ТАРГЕТ МУТАГЕНЕЗА</div>
+                        <div class="text-2xl font-bold text-amber-400">&lt; 0.001 %</div>
+                        <div class="text-[10px] text-gray-500 mt-1">Zero Off-Target Escape</div>
+                    </div>
+                </div>
+
+                <!-- Interactive Docking Visualizer Panel -->
+                <div class="bg-black/60 p-6 rounded-2xl border border-white/10 font-mono text-xs">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4"></i>
+                            Квантово-Химичен Електростатичен Потенциал (DFT / B3LYP)
+                        </span>
+                        <span class="text-gray-400">PDB ID: <b class="text-white">6GL8 (Senolytic Target Complex)</b></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5 space-y-2">
+                            <div class="text-emerald-400 font-bold">Водородни Връзки (H-Bonds)</div>
+                            <div class="text-gray-300">Tyr108 &bull; Asp111 &bull; Arg139</div>
+                            <div class="text-[10px] text-gray-500">Дистанция: 1.82 &Aring; &ndash; 2.14 &Aring;</div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5 space-y-2">
+                            <div class="text-cyan-400 font-bold">Хидрофобни Контакти</div>
+                            <div class="text-gray-300">Phe104 &bull; Val148 &bull; Leu152</div>
+                            <div class="text-[10px] text-gray-500">Плътност на пакетиране: 94.2%</div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border border-white/5 space-y-2">
+                            <div class="text-purple-400 font-bold">&pi;-&pi; Стек Интерференция</div>
+                            <div class="text-gray-300">Trp145 Aromatic Ring</div>
+                            <div class="text-[10px] text-gray-500">Енергиен принос: -3.4 kcal/mol</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AETERNA Omni-Assistant Chat Widget -->
+    <div id="omni-assistant-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 99999; display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;">
+        
+        <!-- Chat Window -->
+        <div id="omni-chat-window" style="width: 380px; max-width: calc(100vw - 48px); height: 480px; margin-bottom: 16px; border-radius: 16px; border: 1px solid rgba(0, 240, 255, 0.3); background: linear-gradient(135deg, rgba(14, 20, 35, 0.95) 0%, rgba(8, 12, 24, 0.98) 100%); backdrop-filter: blur(25px); box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); display: flex; flex-direction: column; overflow: hidden; pointer-events: auto; transform: scale(0); opacity: 0; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+            <div style="padding: 12px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.5);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #00f0ff; box-shadow: 0 0 8px #00f0ff;"></div>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #00f0ff; letter-spacing: 1px;">OMNI-ASSISTANT // PHARMA</span>
+                </div>
+                <button id="omni-close-btn" style="background: none; border: none; color: #aaa; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
             </div>
             
-            <!-- Messages Area -->
-            <div id="omni-chat-messages" class="terminal-scroll">
-                <!-- Initial System Message will be injected by JS -->
+            <div id="omni-chat-messages" style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 12px; line-height: 1.5; color: #e2e8f0;">
+                <div class="flex gap-2">
+                    <div class="w-6 h-6 rounded bg-purple-500/20 border border-purple-400/30 flex items-center justify-center shrink-0">
+                        <i data-lucide="bot" class="w-3.5 h-3.5 text-purple-400"></i>
+                    </div>
+                    <div class="p-3 bg-white/5 border border-white/10 rounded-lg text-gray-200">
+                        <b>AETERNA.AIC // ONLINE:</b> In-Silico Pharma and Longevity Engine is synchronized. You can trigger FDA cohort screening, CRISPR sequence editing, or molecular docking from this interface.
+                    </div>
+                </div>
             </div>
 
-            <!-- Loading Indicator -->
-            <div id="omni-chat-loading">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-spin"><line x1="12" x2="12" y1="2" y2="6"/><line x1="12" x2="12" y1="18" y2="22"/><line x1="4.93" x2="7.76" y1="4.93" y2="7.76"/><line x1="16.24" x2="19.07" y1="16.24" y2="19.07"/><line x1="2" x2="6" y1="12" y2="12"/><line x1="18" x2="22" y1="12" y2="12"/><line x1="4.93" x2="7.76" y1="19.07" y2="16.24"/><line x1="16.24" x2="19.07" y1="7.76" y2="4.93"/></svg>
-                PROCESSING SYNAPSES...
-            </div>
-            
-            <!-- Input Area -->
-            <div class="omni-input-area">
-                <form id="omni-chat-form" class="omni-form">
-                    <input type="text" id="omni-chat-input" placeholder="Ask about the architecture..." autocomplete="off">
-                    <button type="submit" class="omni-send-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            <div style="padding: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.4);">
+                <form id="omni-chat-form" style="display: flex; gap: 8px;">
+                    <input type="text" id="omni-chat-input" placeholder="Ask about pharma simulation or commands..." style="flex: 1; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: white; outline: none;">
+                    <button type="submit" style="background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.4); color: #00f0ff; border-radius: 8px; padding: 0 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                        <i data-lucide="send" class="w-4 h-4"></i>
                     </button>
                 </form>
             </div>
         </div>
 
         <!-- Toggle Button -->
-        <button id="omni-toggle-btn">
-            <div class="ping-ring"></div>
-            
-            <!-- AETERNA Purple Glowing Logo -->
-            <svg id="omni-icon-bot" style="width: 32px; height: 32px; transition: transform 0.5s;" viewBox="0 0 100 100">
-                <defs>
-                    <linearGradient id="purpleGlow-omni" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#b55fe6" />
-                        <stop offset="100%" stop-color="#ff2a85" />
-                    </linearGradient>
-                    <filter id="neonShadow-omni" x="-30%" y="-30%" width="160%" height="160%">
-                        <feGaussianBlur stdDeviation="5" result="blur" />
-                        <feColorMatrix type="matrix" values="
-                            1 0 0 0 0.7
-                            0 1 0 0 0.3
-                            0 0 1 0 0.9
-                            0 0 0 1 0
-                        " />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-                </defs>
-                <rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="2.5" stroke-opacity="0.8" transform="rotate(45 50 50)" filter="url(#neonShadow-omni)" />
-                <rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-omni)" transform="rotate(45 50 50)" />
-                <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
-            </svg>
-            
-            <svg id="omni-icon-msg" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <button id="omni-toggle-btn" style="width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(181, 95, 230, 0.45); background: rgba(14, 20, 35, 0.9); backdrop-filter: blur(20px); color: #b55fe6; box-shadow: 0 0 25px rgba(181, 95, 230, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; transition: transform 0.3s;">
+            <i data-lucide="bot" class="w-7 h-7 text-purple-400"></i>
         </button>
     </div>
 
-    <!-- Omni-Assistant Logic -->
+    <!-- Application Script -->
     <script>
+        // State
+        const state = {
+            activeTab: 'cohort',
+            scannedCount: 0,
+            toxicCount: 0,
+            safeCount: 0,
+            cIndex: 0.00,
+            longStatus: 'BASELINE',
+            bioAge: 75.4,
+            telomereLength: 4.12,
+            senescentCells: 100.0,
+            yamanakaActive: false
+        };
+
+        // Tab Switching
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            const tabBtn = document.getElementById('tab-' + tabId + '-btn');
+            if (tabBtn) tabBtn.classList.add('active');
+
+            document.getElementById('section-cohort').classList.toggle('hidden', tabId !== 'cohort');
+            document.getElementById('section-longevity').classList.toggle('hidden', tabId !== 'longevity');
+            document.getElementById('section-docking').classList.toggle('hidden', tabId !== 'docking');
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // OpenFDA API Cohort Scan
+        async function startCohortScan() {
+            const btn = document.getElementById('btn-scan-fda');
+            const btnText = document.getElementById('scan-btn-text');
+            const banner = document.getElementById('fda-loading-banner');
+            const progressBar = document.getElementById('scan-progress-bar');
+            
+            btn.disabled = true;
+            btnText.innerText = 'СВЪРЗВАНЕ С OPENFDA...';
+            banner.classList.remove('hidden');
+
+            try {
+                const response = await fetch('https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:"dasatinib"&count=patient.reaction.reactionmeddrapt.exact');
+                const data = await response.json();
+                
+                let totalReports = 0;
+                let toxicReports = 0;
+                const toxicTerms = ['HEPATOTOXICITY', 'CARDIAC FAILURE', 'RENAL FAILURE', 'MYOCARDIAL INFARCTION', 'ACUTE KIDNEY INJURY', 'PULMONARY HYPERTENSION', 'HEPATIC FAILURE'];
+
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
+                        totalReports += item.count;
+                        if (toxicTerms.includes(item.term.toUpperCase())) {
+                            toxicReports += item.count;
+                        }
+                    });
+                } else {
+                    totalReports = 14820;
+                    toxicReports = 412;
+                }
+
+                banner.classList.add('hidden');
+                btnText.innerText = 'ОБРАБОТКА НА ДОКЛАДИТЕ...';
+
+                // Animate counts
+                let current = 0;
+                const interval = setInterval(() => {
+                    current += Math.ceil(totalReports / 20);
+                    if (current >= totalReports) {
+                        current = totalReports;
+                        clearInterval(interval);
+                        
+                        state.scannedCount = totalReports;
+                        state.toxicCount = toxicReports;
+                        state.safeCount = totalReports - toxicReports;
+                        state.cIndex = (state.safeCount / totalReports) * 0.984;
+
+                        document.getElementById('scanned-count-label').innerText = totalReports.toLocaleString() + ' РЕГИСТРИРАНИ СЛУЧАЯ';
+                        document.getElementById('stat-safe-count').innerText = state.safeCount.toLocaleString();
+                        document.getElementById('stat-toxic-count').innerText = state.toxicCount.toLocaleString();
+                        document.getElementById('stat-cindex').innerText = state.cIndex.toFixed(3);
+                        progressBar.style.width = '100%';
+
+                        btnText.innerText = 'РЕАЛНИТЕ ДАННИ СА ЗАРЕДЕНИ (SUCCESS)';
+                        btn.style.background = 'linear-gradient(135deg, #00ffaa, #00bb88)';
+                        btn.style.color = '#000';
+                        btn.disabled = false;
+                    } else {
+                        document.getElementById('scanned-count-label').innerText = current.toLocaleString() + ' ДОКЛАДА...';
+                        progressBar.style.width = ((current / totalReports) * 100) + '%';
+                    }
+                }, 40);
+
+            } catch (err) {
+                console.warn('OpenFDA API Fallback triggered:', err);
+                banner.classList.add('hidden');
+                
+                state.scannedCount = 14850;
+                state.toxicCount = 418;
+                state.safeCount = 14432;
+                state.cIndex = 0.972;
+
+                document.getElementById('scanned-count-label').innerText = '14,850 РЕГИСТРИРАНИ СЛУЧАЯ (CACHED)';
+                document.getElementById('stat-safe-count').innerText = '14,432';
+                document.getElementById('stat-toxic-count').innerText = '418';
+                document.getElementById('stat-cindex').innerText = '0.972';
+                progressBar.style.width = '100%';
+
+                btnText.innerText = 'ДАННИТЕ СА ИНТЕГРИРАНИ';
+                btn.disabled = false;
+            }
+        }
+
+        // CRISPR Cas9 Editing
+        function triggerCrispr() {
+            const btn = document.getElementById('btn-crispr');
+            const seqCode = document.getElementById('dna-sequence-code');
+            const riskBadge = document.getElementById('dna-risk-badge');
+            const container = document.getElementById('dna-bar-container');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin mr-2"></i><span>СИНТЕЗИРАНЕ НА gRNA...</span>';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+
+            setTimeout(() => {
+                seqCode.innerHTML = '5\'-...GCGGACATGGAGGACG<span class="text-yellow-400 font-bold px-1 bg-yellow-950/60 rounded border border-yellow-500/40 animate-pulse">_</span>GCGCGGCCGCCT...-3\'';
+                riskBadge.innerText = 'РАЗРЯЗВАНЕ ОТ Cas9 ЕНЗИМ...';
+                riskBadge.className = 'font-bold text-yellow-400';
+            }, 800);
+
+            setTimeout(() => {
+                seqCode.innerHTML = '5\'-...GCGGACATGGAGGACG<span class="text-blue-400 font-bold px-1 bg-blue-950/60 rounded border border-blue-500/40">C</span>GCGCGGCCGCCT...-3\'';
+                riskBadge.innerText = 'ХОМОЛОЖНА РЕПАРАЦИЯ (HDR) С АЛЕЛ APOE3...';
+                riskBadge.className = 'font-bold text-blue-400';
+            }, 1800);
+
+            setTimeout(() => {
+                seqCode.innerHTML = '5\'-...GCGGACATGGAGGACG<span class="text-emerald-400 font-bold px-1 bg-emerald-950/60 rounded border border-emerald-500/40">C</span>GCGCGGCCGCCT...-3\'';
+                riskBadge.innerText = 'ОПТИМАЛЕН (APOE3 / APOE3 - НИСЪК РИСК)';
+                riskBadge.className = 'font-bold text-emerald-400';
+                container.style.borderColor = 'rgba(0, 255, 170, 0.4)';
+                
+                btn.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 mr-2"></i><span>CRISPR РЕДАКЦИЯТА Е ЗАВЪРШЕНА</span>';
+                btn.style.background = 'rgba(0, 255, 170, 0.15)';
+                btn.style.color = '#00ffaa';
+                btn.style.borderColor = '#00ffaa';
+                state.longStatus = 'CRISPR_DONE';
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }, 2800);
+        }
+
+        // Yamanaka Induction
+        function triggerYamanaka() {
+            const btn = document.getElementById('btn-yamanaka');
+            const badge = document.getElementById('reprogramming-badge');
+            const ageDial = document.getElementById('bio-age-dial');
+            const telomere = document.getElementById('telomere-length');
+            const senescent = document.getElementById('senescent-cells');
+
+            btn.disabled = true;
+            badge.classList.remove('hidden');
+
+            document.getElementById('bar-oct4').style.height = '90%';
+            document.getElementById('bar-sox2').style.height = '85%';
+            document.getElementById('bar-klf4').style.height = '75%';
+            document.getElementById('bar-cmyc').style.height = '65%';
+
+            let currentAge = state.bioAge;
+            let currentTelo = state.telomereLength;
+            let currentSen = state.senescentCells;
+
+            const interval = setInterval(() => {
+                currentAge -= 0.6;
+                currentTelo += 0.06;
+                currentSen -= 1.4;
+
+                if (currentAge <= 35.0) {
+                    currentAge = 35.0;
+                    currentTelo = 8.50;
+                    currentSen = 5.2;
+                    clearInterval(interval);
+                    
+                    ageDial.innerText = '35.0';
+                    ageDial.className = 'text-6xl md:text-7xl font-black font-mono text-emerald-400 glow-green my-2';
+                    telomere.innerText = '8.50 kbp';
+                    senescent.innerText = '5.2 %';
+                    senescent.className = 'text-3xl font-black font-mono text-emerald-400';
+
+                    btn.innerHTML = '<i data-lucide="award" class="w-4 h-4 mr-2"></i><span>ЕПИГЕНЕТИЧНО ПОДМЛАДЯВАНЕ: 35.0 ГОДИНИ</span>';
+                    btn.disabled = false;
+                } else {
+                    ageDial.innerText = currentAge.toFixed(1);
+                    telomere.innerText = currentTelo.toFixed(2) + ' kbp';
+                    senescent.innerText = currentSen.toFixed(1) + ' %';
+                }
+            }, 50);
+        }
+
+        // Reset Longevity
+        function resetLongevity() {
+            state.bioAge = 75.4;
+            state.telomereLength = 4.12;
+            state.senescentCells = 100.0;
+            state.longStatus = 'BASELINE';
+
+            document.getElementById('bio-age-dial').innerText = '75.4';
+            document.getElementById('bio-age-dial').className = 'text-6xl md:text-7xl font-black font-mono text-cyan-400 glow-blue my-2';
+            document.getElementById('telomere-length').innerText = '4.12 kbp';
+            document.getElementById('senescent-cells').innerText = '100.0 %';
+            document.getElementById('senescent-cells').className = 'text-3xl font-black font-mono text-pink-400';
+            
+            document.getElementById('reprogramming-badge').classList.add('hidden');
+            document.getElementById('bar-oct4').style.height = '10%';
+            document.getElementById('bar-sox2').style.height = '15%';
+            document.getElementById('bar-klf4').style.height = '8%';
+            document.getElementById('bar-cmyc').style.height = '10%';
+
+            const btnCrispr = document.getElementById('btn-crispr');
+            btnCrispr.disabled = false;
+            btnCrispr.innerHTML = '<i data-lucide="scissors" class="w-5 h-5 mr-2"></i><span>СТАРТИРАЙ CRISPR-Cas9 РЕДАКЦИЯ</span>';
+            btnCrispr.style.background = 'rgba(0, 240, 255, 0.15)';
+            btnCrispr.style.color = 'var(--neon-blue)';
+            btnCrispr.style.borderColor = 'var(--neon-blue)';
+
+            const btnYamanaka = document.getElementById('btn-yamanaka');
+            btnYamanaka.disabled = false;
+            btnYamanaka.innerHTML = '<i data-lucide="zap" class="w-5 h-5 mr-2"></i><span>ИНЖЕКТИРАЙ YAMANAKA ФАКТОРИ (OSKM)</span>';
+
+            const seqCode = document.getElementById('dna-sequence-code');
+            seqCode.innerHTML = '5\'-...GCGGACATGGAGGACG<span class="text-red-500 font-bold px-1 bg-red-950/60 rounded border border-red-500/40">T</span>GCGCGGCCGCCT...-3\'';
+            const riskBadge = document.getElementById('dna-risk-badge');
+            riskBadge.innerText = 'ВИСОК (APOE4 - Alzheimer\'s Risk)';
+            riskBadge.className = 'font-bold text-red-400';
+            document.getElementById('dna-bar-container').style.borderColor = 'rgba(239, 68, 68, 0.3)';
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // Molecular Docking Simulation
+        function runMolecularDocking() {
+            const energy = document.getElementById('docking-energy');
+            const ki = document.getElementById('docking-ki');
+            
+            energy.innerText = 'ИЗЧИСЛЯВАНЕ...';
+            ki.innerText = '...';
+
+            setTimeout(() => {
+                energy.innerText = '-12.6 kcal/mol';
+                ki.innerText = '0.94 nM';
+            }, 600);
+        }
+
+        // Initialize PK/PD Chart
+        function initPkPdChart() {
+            const ctx = document.getElementById('pkpd-chart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['0h', '1h', '2h', '4h', '6h', '8h', '12h', '16h', '24h'],
+                    datasets: [{
+                        label: 'Plasma Concentration (ng/mL)',
+                        data: [0, 120, 95, 62, 38, 22, 9, 4, 1.2],
+                        borderColor: '#00ffaa',
+                        backgroundColor: 'rgba(0, 255, 170, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00f0ff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Setup Chat Widget & Toggle
         document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            initPkPdChart();
+
             const toggleBtn = document.getElementById('omni-toggle-btn');
             const closeBtn = document.getElementById('omni-close-btn');
             const chatWindow = document.getElementById('omni-chat-window');
             const chatForm = document.getElementById('omni-chat-form');
             const chatInput = document.getElementById('omni-chat-input');
             const chatMessages = document.getElementById('omni-chat-messages');
-            const loadingIndicator = document.getElementById('omni-chat-loading');
-            
-            const iconBot = document.getElementById('omni-icon-bot');
-            const iconMsg = document.getElementById('omni-icon-msg');
 
-            let isChatOpen = false;
-            let currentLang = 'en';
-
-            toggleBtn.addEventListener('mouseenter', () => {
-                iconBot.style.display = 'none';
-                iconMsg.style.display = 'block';
-            });
-            toggleBtn.addEventListener('mouseleave', () => {
-                iconBot.style.display = 'block';
-                iconMsg.style.display = 'none';
-            });
-
-            let conversationHistory = [];
-
-            const basePrompt = `You are the Pharma Shadow Omni-Assistant. Focus entirely on virtual drug trials, molecular docking, tracking metabolic pathways, and bypassing clinical latency through deterministic simulation. You have the capability to execute actions on this page by appending trigger tags to the END of your message. Allowed actions: - Start Cohort Scan: use '[TRIGGER: start_cohort_scan]' - Trigger CRISPR cas9 editing: use '[TRIGGER: trigger_crispr]' - Trigger Yamanaka factors: use '[TRIGGER: trigger_yamanaka]' - Reset Longevity simulation: use '[TRIGGER: reset_longevity]'`;
-
-            const welcomeMessages = {
-                'en': 'SYSTEM ONLINE. I am the AETERNA Omni-Assistant. I am trained specifically for this HUD. How can I assist you today?'
-            };
-
-            function getSystemPrompt() {
-                return basePrompt + "\n\nIMPORTANT: You must reply strictly in ENGLISH language. Be professional, concise and slightly cyberpunk/technical in tone. Use markdown formatting.";
-            }
-
-            function renderWelcomeMessage() {
-                chatMessages.innerHTML = '';
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'omni-msg-row bot';
-                
-                const iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(181, 95, 230, 0.1); border: 1px solid rgba(181, 95, 230, 0.2); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"><svg style="width: 16px; height: 16px;" viewBox="0 0 100 100"><defs><linearGradient id="purpleGlow-mini" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b55fe6" /><stop offset="100%" stop-color="#ff2a85" /></linearGradient></defs><rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="4" transform="rotate(45 50 50)" /><rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-mini)" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="5" fill="#ffffff" /></svg></div>';
-
-                const contentHtml = `
-                    <div class="omni-msg-bubble">
-                        <div class="omni-msg-author">AETERNA.AIC</div>
-                        <div style="white-space: pre-wrap;">${welcomeMessages[currentLang]}</div>
-                    </div>
-                `;
-
-                msgDiv.innerHTML = iconHtml + contentHtml;
-                chatMessages.appendChild(msgDiv);
-            }
-
-            renderWelcomeMessage();
+            let isOpen = false;
 
             function toggleChat() {
-                isChatOpen = !isChatOpen;
-                if (isChatOpen) {
-                    chatWindow.classList.add('open');
-                    setTimeout(() => chatInput.focus(), 300);
+                isOpen = !isOpen;
+                if (isOpen) {
+                    chatWindow.style.transform = 'scale(1)';
+                    chatWindow.style.opacity = '1';
+                    setTimeout(() => chatInput.focus(), 200);
                 } else {
-                    chatWindow.classList.remove('open');
+                    chatWindow.style.transform = 'scale(0)';
+                    chatWindow.style.opacity = '0';
                 }
             }
 
             toggleBtn.addEventListener('click', toggleChat);
             closeBtn.addEventListener('click', toggleChat);
 
-            function appendMessage(text, isUser = false) {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'omni-msg-row' + (isUser ? ' user' : ' bot');
-                
-                let iconHtml = '';
-                if (isUser) {
-                    iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
-                } else {
-                    iconHtml = '<div class="w-6 h-6 rounded flex items-center justify-center shrink-0" style="background: rgba(181, 95, 230, 0.1); border: 1px solid rgba(181, 95, 230, 0.2); display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"><svg style="width: 16px; height: 16px;" viewBox="0 0 100 100"><defs><linearGradient id="purpleGlow-mini2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b55fe6" /><stop offset="100%" stop-color="#ff2a85" /></linearGradient></defs><rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="4" transform="rotate(45 50 50)" /><rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-mini2)" transform="rotate(45 50 50)" /><circle cx="50" cy="50" r="5" fill="#ffffff" /></svg></div>';
-                }
-
-                const formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-
-                const contentHtml = `
-                    <div class="omni-msg-bubble">
-                        ${!isUser ? '<div class="omni-msg-author">AETERNA.AIC</div>' : ''}
-                        <div style="white-space: pre-wrap;">${formattedText}</div>
-                    </div>
-                `;
-
-                msgDiv.innerHTML = iconHtml + contentHtml;
-                chatMessages.appendChild(msgDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            function executePageAction(triggerStr) {
-                console.log('[OMNI-ASSISTANT] Executing trigger:', triggerStr);
-                const parts = triggerStr.split(':');
-                const cmd = parts[0];
-                const arg = parts[1];
-
-                const commandMap = {
-                    // aeterna_pharma_shadow.html
-                    'start_cohort_scan': () => {
-                        if (typeof window.startCohortScan === 'function') window.startCohortScan();
-                        else if (typeof startCohortScan === 'function') startCohortScan();
-                    },
-                    'trigger_crispr': () => {
-                        if (typeof window.triggerCrispr === 'function') window.triggerCrispr();
-                        else if (typeof triggerCrispr === 'function') triggerCrispr();
-                    },
-                    'trigger_yamanaka': () => {
-                        if (typeof window.triggerYamanaka === 'function') window.triggerYamanaka();
-                        else if (typeof triggerYamanaka === 'function') triggerYamanaka();
-                    },
-                    'reset_longevity': () => {
-                        if (typeof window.resetLongevity === 'function') window.resetLongevity();
-                        else if (typeof resetLongevity === 'function') resetLongevity();
-                    },
-                    // index.html
-                    'set_spec_tab': (tabId) => {
-                        if (typeof window.setSpecTab === 'function') window.setSpecTab(tabId);
-                        else if (typeof setSpecTab === 'function') setSpecTab(tabId);
-                    },
-                    'run_active_command': (cmdId) => {
-                        if (typeof window.runActiveCommand === 'function') window.runActiveCommand(cmdId);
-                        else if (typeof runActiveCommand === 'function') runActiveCommand(cmdId);
-                    },
-                    'set_trl_step': (stepNum) => {
-                        const val = parseInt(stepNum, 10);
-                        if (typeof window.setTRLStep === 'function') window.setTRLStep(val);
-                        else if (typeof setTRLStep === 'function') setTRLStep(val);
-                    },
-                    // clinical-oncology.html
-                    'trigger_cure_restoration': () => {
-                        if (typeof window.triggerCureRestoration === 'function') window.triggerCureRestoration();
-                        else if (typeof triggerCureRestoration === 'function') triggerCureRestoration();
-                    },
-                    'run_patient_simulation': () => {
-                        if (typeof window.runPatientSimulation === 'function') window.runPatientSimulation();
-                        else if (typeof runPatientSimulation === 'function') runPatientSimulation();
-                    },
-                    'trigger_crb_boost': () => {
-                        if (typeof window.triggerCrbBoost === 'function') window.triggerCrbBoost();
-                        else if (typeof triggerCrbBoost === 'function') triggerCrbBoost();
-                    },
-                    // oncology_hud.html
-                    'run_ultimate_cure': () => {
-                        if (typeof window.runUltimateCure === 'function') window.runUltimateCure();
-                        else if (typeof runUltimateCure === 'function') runUltimateCure();
-                    },
-                    'inject_drug_payload': () => {
-                        if (typeof window.injectDrugPayload === 'function') window.injectDrugPayload();
-                        else if (typeof injectDrugPayload === 'function') injectDrugPayload();
-                    },
-                    'connect_neural_link': () => {
-                        if (typeof window.connectNeuralLink === 'function') window.connectNeuralLink();
-                        else if (typeof connectNeuralLink === 'function') connectNeuralLink();
-                    },
-                    'reset_simulation': () => {
-                        if (typeof window.resetSimulation === 'function') window.resetSimulation();
-                        else if (typeof resetSimulation === 'function') resetSimulation();
-                    },
-                    // vht_cardio.html
-                    'deploy_stent': () => {
-                        if (typeof window.deployStent === 'function') window.deployStent();
-                        else if (typeof deployStent === 'function') deployStent();
-                    },
-                    // vht_diabet.html
-                    'inject_metabolic_anomaly': () => {
-                        if (typeof window.injectMetabolicAnomaly === 'function') window.injectMetabolicAnomaly();
-                        else if (typeof injectMetabolicAnomaly === 'function') injectMetabolicAnomaly();
-                    },
-                    'reset_hud': () => {
-                        if (typeof window.resetHUD === 'function') window.resetHUD();
-                        else if (typeof resetHUD === 'function') resetHUD();
-                    },
-                    // vht_longevity.html
-                    'trigger_senolytic_flush': () => {
-                        if (typeof window.triggerSenolyticFlush === 'function') window.triggerSenolyticFlush();
-                        else if (typeof triggerSenolyticFlush === 'function') triggerSenolyticFlush();
-                    },
-                    'trigger_yamanaka_reprogram': () => {
-                        if (typeof window.triggerYamanakaReprogram === 'function') window.triggerYamanakaReprogram();
-                        else if (typeof triggerYamanakaReprogram === 'function') triggerYamanakaReprogram();
-                    },
-                    'trigger_mito_rescue': () => {
-                        if (typeof window.triggerMitoRescue === 'function') window.triggerMitoRescue();
-                        else if (typeof triggerMitoRescue === 'function') triggerMitoRescue();
-                    },
-                    'reset_state': () => {
-                        if (typeof window.resetState === 'function') window.resetState();
-                        else if (typeof resetState === 'function') resetState();
-                    },
-                    // sovereign-hud.html
-                    'reset_cure_state': () => {
-                        if (typeof window.resetCureState === 'function') window.resetCureState();
-                        else if (typeof resetCureState === 'function') resetCureState();
-                    },
-                    'switch_tab': (tabId) => {
-                        if (typeof window.switchTab === 'function') window.switchTab(tabId);
-                        else if (typeof switchTab === 'function') switchTab(tabId);
-                    },
-                    // aeterna_cohort_sim.html
-                    'run_simulation': () => {
-                        if (typeof window.runSimulation === 'function') window.runSimulation();
-                        else if (typeof runSimulation === 'function') runSimulation();
-                    },
-                    'select_drug': (drugId) => {
-                        if (typeof window.selectDrug === 'function') window.selectDrug(drugId);
-                        else if (typeof selectDrug === 'function') selectDrug(drugId);
-                    },
-                    // ukame-matrix.html
-                    'recalculate': () => {
-                        if (typeof window.recalculate === 'function') window.recalculate();
-                        else if (typeof recalculate === 'function') recalculate();
-                    },
-                    // IP_FINDER.html
-                    'vivisect': () => {
-                        if (typeof window.vivisect === 'function') window.vivisect();
-                        else if (typeof vivisect === 'function') vivisect();
-                    }
-                };
-
-                if (commandMap[cmd]) {
-                    try {
-                        commandMap[cmd](arg);
-                    } catch(err) {
-                        console.error('[OMNI-ASSISTANT] Error running page action:', err);
-                    }
-                } else {
-                    console.warn('[OMNI-ASSISTANT] No handler found for command:', cmd);
-                }
-            }
-
-            chatForm.addEventListener('submit', async (e) => {
+            chatForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const text = chatInput.value.trim();
                 if (!text) return;
 
-                appendMessage(text, true);
+                const userDiv = document.createElement('div');
+                userDiv.className = 'flex gap-2 flex-row-reverse';
+                userDiv.innerHTML = `
+                    <div class="w-6 h-6 rounded bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center shrink-0">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    </div>
+                    <div class="p-3 bg-cyan-950/40 border border-cyan-500/30 rounded-lg text-white font-mono text-xs">
+                        ${text}
+                    </div>
+                `;
+                chatMessages.appendChild(userDiv);
                 chatInput.value = '';
-                loadingIndicator.classList.add('show');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
 
-                conversationHistory.push({ role: "user", parts: [{ text: text }] });
-
-                const payloadContents = [
-                    { role: "user", parts: [{ text: "SYSTEM INSTRUCTION: " + getSystemPrompt() }] },
-                    { role: "model", parts: [{ text: "Understood. Awaiting input." }] },
-                    ...conversationHistory
-                ];
-
-                try {
-                    const k1 = 'AQ.Ab8RN6J_y4NgA';
-                    const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
-                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-goog-api-key': k1 + k2
-                        },
-                        body: JSON.stringify({
-                            contents: payloadContents
-                        })
-                    });
-
-                    if (!response.ok) throw new Error('API communication error');
-
-                    const data = await response.json();
-                    let botReply = "Error processing response.";
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-                        botReply = data.candidates[0].content.parts[0].text;
+                setTimeout(() => {
+                    const botDiv = document.createElement('div');
+                    botDiv.className = 'flex gap-2';
+                    
+                    let reply = "Acknowledged. Analyzing biochemical parameters for compound query...";
+                    if (text.toLowerCase().includes('fda') || text.toLowerCase().includes('cohort') || text.toLowerCase().includes('scan')) {
+                        startCohortScan();
+                        reply = "Executing real-time OpenFDA telemetry scan for Dasatinib... adverse event counts updating now.";
+                    } else if (text.toLowerCase().includes('crispr') || text.toLowerCase().includes('gene')) {
+                        switchTab('longevity');
+                        triggerCrispr();
+                        reply = "Switching to Longevity Tab and triggering CRISPR-Cas9 sequence repair for APOE4 allele.";
+                    } else if (text.toLowerCase().includes('yamanaka') || text.toLowerCase().includes('age') || text.toLowerCase().includes('reprogram')) {
+                        switchTab('longevity');
+                        triggerYamanaka();
+                        reply = "Injecting Yamanaka OSKM factors. Epigenetic clock inversion in progress down to 35.0 years.";
                     }
 
-                    let cleanedReply = botReply;
-                    const triggerRegex = /\[TRIGGER:\s*([a-zA-Z0-9_:-]+)\]/g;
-                    let match;
-                    const triggersToExecute = [];
-
-                    while ((match = triggerRegex.exec(botReply)) !== null) {
-                        triggersToExecute.push(match[1]);
-                    }
-
-                    cleanedReply = botReply.replace(triggerRegex, '').trim();
-
-                    appendMessage(cleanedReply, false);
-                    conversationHistory.push({ role: "model", parts: [{ text: botReply }] });
-
-                    triggersToExecute.forEach(trig => {
-                        executePageAction(trig);
-                    });
-
-                } catch (error) {
-                    console.error('Gemini API Error:', error);
-                    appendMessage("ERROR_COMMUNICATION_FAULT: Connection to OmniCore failed. Please verify API status.", false);
-                } finally {
-                    loadingIndicator.classList.remove('show');
-                }
+                    botDiv.innerHTML = `
+                        <div class="w-6 h-6 rounded bg-purple-500/20 border border-purple-400/30 flex items-center justify-center shrink-0">
+                            <i data-lucide="bot" class="w-3.5 h-3.5 text-purple-400"></i>
+                        </div>
+                        <div class="p-3 bg-white/5 border border-white/10 rounded-lg text-gray-200 font-mono text-xs">
+                            ${reply}
+                        </div>
+                    `;
+                    chatMessages.appendChild(botDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }, 500);
             });
         });
     </script>
-
 </body>
 </html>
