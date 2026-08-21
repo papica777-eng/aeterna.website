@@ -221,40 +221,63 @@
                         <span data-i18n="hero.tagline">// THE ARCHITECTURE OF LIFE, COMPUTE & SOVEREIGN SECURITY</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-6xl lg:text-[62px] font-black tracking-tight leading-[1.08] text-white uppercase">
-                        <span class="inline-flex items-center gap-3 sm:gap-4 text-transparent bg-clip-text bg-gradient-to-r from-[#ff2a85] via-[#e879f9] to-[#a855f7] drop-shadow-[0_0_35px_rgba(232,121,249,0.55)]">
-                            <svg class="w-8 h-8 sm:w-11 sm:h-11 inline-block shrink-0 drop-shadow-[0_0_15px_rgba(232,121,249,0.9)]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <h1 class="text-3xl sm:text-5xl lg:text-[58px] tracking-tight leading-[1.12] text-white uppercase">
+                        <span class="inline-flex items-center gap-3 sm:gap-4.5 text-transparent bg-clip-text bg-gradient-to-r from-[#ff2a85] via-[#e879f9] to-[#a855f7] drop-shadow-[0_0_35px_rgba(232,121,249,0.55)]">
+                            <svg class="w-9 h-9 sm:w-13 sm:h-13 inline-block shrink-0 drop-shadow-[0_0_18px_rgba(232,121,249,0.85)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
-                                    <linearGradient id="dnaGlow1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <linearGradient id="dnaStrandA" x1="0%" y1="0%" x2="100%" y2="100%">
                                         <stop offset="0%" stop-color="#ff2a85" />
                                         <stop offset="50%" stop-color="#e879f9" />
                                         <stop offset="100%" stop-color="#a855f7" />
                                     </linearGradient>
+                                    <linearGradient id="dnaStrandB" x1="100%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#a855f7" />
+                                        <stop offset="50%" stop-color="#c084fc" />
+                                        <stop offset="100%" stop-color="#00ffd2" />
+                                    </linearGradient>
+                                    <linearGradient id="dnaRungGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#ff2a85" stop-opacity="0.85" />
+                                        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.95" />
+                                        <stop offset="100%" stop-color="#00ffd2" stop-opacity="0.85" />
+                                    </linearGradient>
                                 </defs>
-                                <!-- Base pairs / Rungs -->
-                                <line x1="8" y1="5" x2="24" y2="5" stroke="#e879f9" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/>
-                                <line x1="12" y1="10" x2="20" y2="10" stroke="#e879f9" stroke-width="1.8" stroke-linecap="round" opacity="0.8"/>
-                                <line x1="14" y1="16" x2="18" y2="16" stroke="#ff2a85" stroke-width="2.2" stroke-linecap="round"/>
-                                <line x1="12" y1="22" x2="20" y2="22" stroke="#e879f9" stroke-width="1.8" stroke-linecap="round" opacity="0.8"/>
-                                <line x1="8" y1="27" x2="24" y2="27" stroke="#e879f9" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/>
                                 
-                                <!-- Double Helix Strands -->
-                                <path d="M 8 4 C 8 11, 24 11, 24 16 C 24 21, 8 21, 8 28" stroke="url(#dnaGlow1)" stroke-width="2.5" stroke-linecap="round"/>
-                                <path d="M 24 4 C 24 11, 8 11, 8 16 C 8 21, 24 21, 24 28" stroke="url(#dnaGlow1)" stroke-width="2.5" stroke-linecap="round"/>
+                                <!-- Base Pair Connecting Rungs with Depth -->
+                                <line x1="12" y1="6" x2="36" y2="6" stroke="url(#dnaRungGrad)" stroke-width="1.8" stroke-linecap="round" />
+                                <line x1="15" y1="12" x2="33" y2="12" stroke="url(#dnaRungGrad)" stroke-width="1.8" stroke-linecap="round" opacity="0.9" />
+                                <line x1="20" y1="18" x2="28" y2="18" stroke="url(#dnaRungGrad)" stroke-width="1.8" stroke-linecap="round" opacity="0.9" />
+                                <line x1="23" y1="24" x2="25" y2="24" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" />
+                                <line x1="20" y1="30" x2="28" y2="30" stroke="url(#dnaRungGrad)" stroke-width="1.8" stroke-linecap="round" opacity="0.9" />
+                                <line x1="15" y1="36" x2="33" y2="36" stroke="url(#dnaRungGrad)" stroke-width="1.8" stroke-linecap="round" opacity="0.9" />
+                                <line x1="12" y1="42" x2="36" y2="42" stroke="url(#dnaRungGrad)" stroke-width="1.8" stroke-linecap="round" />
                                 
-                                <!-- Nucleotide Nodes -->
-                                <circle cx="8" cy="4" r="2.2" fill="#ff2a85" />
-                                <circle cx="24" cy="4" r="2.2" fill="#a855f7" />
-                                <circle cx="16" cy="16" r="2.4" fill="#ffffff" />
-                                <circle cx="8" cy="28" r="2.2" fill="#ff2a85" />
-                                <circle cx="24" cy="28" r="2.2" fill="#a855f7" />
+                                <!-- Back Strand (Layered Depth) -->
+                                <path d="M 36 6 C 36 15, 12 15, 12 24 C 12 33, 36 33, 36 42" stroke="url(#dnaStrandB)" stroke-width="2.4" stroke-linecap="round" opacity="0.75" />
+                                
+                                <!-- Front Strand (Crisp & Vibrant) -->
+                                <path d="M 12 6 C 12 15, 36 15, 36 24 C 36 33, 12 33, 12 42" stroke="url(#dnaStrandA)" stroke-width="3" stroke-linecap="round" />
+                                
+                                <!-- Nucleotide Base Spheres / Atoms -->
+                                <circle cx="12" cy="6" r="3" fill="#ff2a85" />
+                                <circle cx="36" cy="6" r="3" fill="#00ffd2" />
+                                <circle cx="15" cy="12" r="2.2" fill="#ff2a85" />
+                                <circle cx="33" cy="12" r="2.2" fill="#c084fc" />
+                                <circle cx="20" cy="18" r="2" fill="#e879f9" />
+                                <circle cx="28" cy="18" r="2" fill="#a855f7" />
+                                <circle cx="24" cy="24" r="2.6" fill="#ffffff" />
+                                <circle cx="28" cy="30" r="2" fill="#ff2a85" />
+                                <circle cx="20" cy="30" r="2" fill="#00ffd2" />
+                                <circle cx="33" cy="36" r="2.2" fill="#ff2a85" />
+                                <circle cx="15" cy="36" r="2.2" fill="#a855f7" />
+                                <circle cx="36" cy="42" r="3" fill="#ff2a85" />
+                                <circle cx="12" cy="42" r="3" fill="#00ffd2" />
                             </svg>
-                            <span>VIRTUAL HUMAN TWIN</span>
+                            <span class="font-semibold tracking-wider">VIRTUAL HUMAN TWIN</span>
                         </span>
-                        <span class="text-white block font-extrabold text-3xl sm:text-5xl lg:text-[54px] tracking-tight mt-1">
+                        <span class="text-white block font-extrabold text-3xl sm:text-5xl lg:text-[54px] tracking-tight mt-1.5">
                             CYBERSECURITY
                         </span>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(0,240,255,0.4)] block text-3xl sm:text-5xl lg:text-[54px]">
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(0,240,255,0.4)] block font-extrabold text-3xl sm:text-5xl lg:text-[54px]">
                             & QANTUM NETWORKS
                         </span>
                     </h1>
