@@ -2066,14 +2066,14 @@
                     </div>
                 </div>
 
-                <!-- MDR Class III Ready -->
+                <!-- UNCAN.eu & Advanced VHT Compliance -->
                 <div class="glass p-8 hover:border-accent-cyan/30 transition-all rounded-lg group flex flex-col justify-between">
                     <div>
                         <div class="w-12 h-12 bg-accent-pink/5 border border-accent-pink/20 rounded flex items-center justify-center text-accent-pink mb-6 group-hover:bg-accent-pink/15 transition-all shadow-md">
                             <i data-lucide="activity" class="w-5 h-5"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="compliance.card5_title">MDR 2017/745 Class III Ready</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed" data-i18n="compliance.card5_desc">Architecture with zero software entropy (Entropy 0.0000), eliminating algorithmic black boxes through verifiable, biophysical equations.</p>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="compliance.card5_title">UNCAN.eu & Advanced VHT (EDITH)</h3>
+                        <p class="text-gray-400 text-xs leading-relaxed" data-i18n="compliance.card5_desc">Full compliance with European Cancer Mission standards (OMOP-CDM v5.4, HL7 FHIR R5, GA4GH Phenopackets v2) and Non-Interventional SaMD (ISO 13485 & IEC 62304).</p>
                     </div>
                 </div>
             </div>
@@ -2322,8 +2322,8 @@
                 "compliance.card3_desc": "Директно внедряване в Samsung Knox TEE криптопроцесор, осигуряващо пълен хардуерен одит на жизнения цикъл на устройството.",
                 "compliance.card4_title": "HL7 FHIR & JSON-LD",
                 "compliance.card4_desc": "Автоматична трансформация на медицинската телеметрия в стандартизирани FHIR ресурси (Observation / DiagnosticReport), готови за семантично индексиране в EHDS (European Health Data Space) и UNCAN.eu.",
-                "compliance.card5_title": "MDR 2017/745 Class III Ready",
-                "compliance.card5_desc": "Архитектура с нулева софтуерна ентропия (Entropy 0.0000), елиминираща черните кутии в алгоритмите чрез проверими, общоприети биофизични уравнения.",
+                "compliance.card5_title": "UNCAN.eu & Advanced VHT (EDITH)",
+                "compliance.card5_desc": "Пълно съответствие с европейските стандарти за ракови мисии (OMOP-CDM v5.4 Oncology, HL7 FHIR R5, GA4GH Phenopackets v2) и ненамесителен SaMD софтуер (ISO 13485 & IEC 62304 с нулево ниво на софтуерна ентропия).",
                 
                 "pricing.title": "СУВЕРЕНЕН ПРОТОКОЛ ЗА ДОСТЪП",
                 "pricing.subtitle": "Гъвкави нива за интеграция на инфраструктурата. 100% предвидими разходи.",
@@ -2958,7 +2958,7 @@
                         `[${time}] [COX] Изчисляване на Cox Proportional Hazards за преживяемостта на кохортата...`,
                         `[${time}] [AUDIT] Брой клинични случаи: 5000 // Липса на данни: 0.00%`,
                         `[${time}] [C-INDEX] С-Индекс на Harrell (изчислен): ${cIndex} (изискван праг >= 0.7500)`,
-                        `[${time}] [УСПЕХ] Одитът приключи. Постигнато пълно съответствие по MDR Class III с нулева ентропия!`
+                        `[${time}] [УСПЕХ] Одитът приключи. Постигнато пълно съответствие по UNCAN.eu и Advanced VHT с нулева ентропия!`
                     ];
                 } else {
                     logLines = [
@@ -2969,7 +2969,7 @@
                         `[${time}] [COX] Fitting Cox Proportional Hazards regression for cohort survival metrics...`,
                         `[${time}] [AUDIT] Clinical sample size: 5,000 cases // Missing telemetry parameters: 0.00%`,
                         `[${time}] [C-INDEX] Harrell's Concordance C-Index calculated: ${cIndex} (regulatory threshold >= 0.7500)`,
-                        `[${time}] [SUCCESS] Audit complete. MDR Class III clinical compliance verified with zero software entropy.`
+                        `[${time}] [SUCCESS] Audit complete. UNCAN.eu and Advanced VHT (EDITH) compliance verified with zero software entropy.`
                     ];
                 }
             } else if (cmd === 'eic_ignition') {

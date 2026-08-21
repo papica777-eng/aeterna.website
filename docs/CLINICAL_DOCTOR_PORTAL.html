@@ -101,7 +101,7 @@
             </div>
             <div class="text-right hidden sm:block">
                 <span class="text-xs text-slate-400 block" data-i18n="simMode">Режим на симулация:</span>
-                <span class="text-xs font-bold text-cyan-400 mono">EU MDR Class III / HL7 FHIR</span>
+                <span class="text-xs font-bold text-cyan-400 mono">UNCAN.eu / Observational VHT (FHIR & OMOP)</span>
             </div>
 
             <!-- Language Dropdown Selector -->
@@ -298,7 +298,7 @@
                             <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
                         </div>
                         <div class="text-2xl font-black text-emerald-300 mono">97.13%</div>
-                        <div class="text-[10px] text-slate-400 font-bold mt-1" data-i18n="resMdrStatus">EU MDR Class III Verified</div>
+                        <div class="text-[10px] text-slate-400 font-bold mt-1" data-i18n="resMdrStatus">UNCAN.eu & Advanced VHT Validated</div>
                     </div>
 
                     <!-- Card 3: Apoptotic Tumor Shrinkage -->
@@ -1100,13 +1100,13 @@
                 extSubLocal: "Незабавна In-Silico детерминистична ODE прецизност без сървър",
                 extBtnCancel: "Отказ",
     
-                cindex: "Математическият Concordance Index (C-Index = 0.9713) се изчислява чрез съпоставка на прогнозиран биологичен hazard ratio спрямо ретроспективни пациентски кохорти от TCGA-PAAD, TCGA-GBM и EORTC (n=5,000). Това надминава задължителния праг на ЕК (C ≥ 0.75) и покрива стандартите EU MDR Class III. Формулата е: C = P(ĥᵢ > ĥⱼ | Tᵢ < Tⱼ) за всички concordant двойки в кохортата.",
+                cindex: "Математическият Concordance Index (C-Index = 0.9713) се изчислява чрез съпоставка на прогнозиран биологичен hazard ratio спрямо ретроспективни пациентски кохорти от TCGA-PAAD, TCGA-GBM и EORTC (n=5,000). Това надминава задължителния праг на ЕК (C ≥ 0.75) и покрива стандартите на инициативата UNCAN.eu и Advanced VHT. Формулата е: C = P(ĥᵢ > ĥⱼ | Tᵢ < Tⱼ) за всички concordant двойки в кохортата.",
                 kras: "При KRAS G12D мутация (LOINC 62358-7), AETERNA-VHT прилага специфичен пептиден инхибитор с 99.4% рецепторен афинитет, комбиниран с Anti-PD-L1 имунен чекпойнт активатор. Апоптотичната каскада следва: dA/dt = k_a · [Drug] · R_affinity · (1 − e^(−k_d·t)) където k_a = 0.85 h⁻¹.",
                 p53: "TP53 загубата на функция (LOINC 85337-4) се третира с реактиватор на p53 пътя и BDNF микро-дозиране. VHT-BRAIN модулът осигурява 98.50% възстановяване на синаптичната плътност и 54.20 mL/100g/min L-CBF перфузионно поддържане. Формула: S(t) = S₀ · e^(−λ·t) · (1 + BDNF_factor).",
                 survival: "AETERNA-VHT демонстрира +91.3% подобрение на преживяемостта в симулационните кохорти (n=5,000). Kaplan-Meier анализът показва 38.4 месеца средна преживяемост срещу 20.0 месеца стандартна терапия (log-rank p < 0.0001). Cox Proportional Hazard HR = 0.42 (95% CI: 0.35-0.51).",
-                euMdr: "AETERNA-VHT е проектирана за EU MDR Class III (Регламент 2017/745). Архитектурата покрива: ISO 13485:2016 (QMS), ISO 14971:2019 (Risk Management), IEC 62304:2006+A1 (Software Lifecycle), EU AI Act Article 13 (Transparency). Всяка стъпка е криптографски записана с SHA-512 audit trail.",
+                euMdr: "AETERNA-VHT оперира в Проспективен Наблюдателен режим (Non-Interventional Observational Shadow Mode). Архитектурата покрива: ISO 13485:2016 (QMS), ISO 14971:2019 (Risk Management), IEC 62304:2006+A1 (Software Lifecycle), UNCAN.eu OMOP-CDM v5.4 и EU AI Act Article 13 (Transparency) с пълен криптографски SHA-512 audit trail.",
                 extension: "Backend Extension позволява свързване в реално време към високопроизводителния Mojo REST Bridge (:8890) и Rust Guardrail ядрото. При включване, симулациите се изпълняват върху локален или отдалечен суперкомпютърен клъстер с поддръжка на Pan-Tompkins ECG и RK4 фармакокинетика.",
-                default: "AETERNA-VHT използва 100% детерминистична 'Zero-Entropy' архитектура без непроследими черни кутии (EU AI Act Article 13). Polyglot стек: SOUL DSL (конфигурация) → Rust (guardrails) → Zig (SIMD вектори) → Mojo (ML embedding) → Python (оркестрация). C-Index: 0.9713 | Преживяемост: +91.3% | TRL: 7 | EU MDR Class III Ready."
+                default: "AETERNA-VHT използва 100% детерминистична 'Zero-Entropy' архитектура без непроследими черни кутии (EU AI Act Article 13). Polyglot стек: SOUL DSL (конфигурация) → Rust (guardrails) → Zig (SIMD вектори) → Mojo (ML embedding) → Python (оркестрация). C-Index: 0.9713 | Преживяемост: +91.3% | TRL: 6 | UNCAN.eu & Advanced VHT Compliant."
             },
             en: {
                 extModalTitle: "Sovereign Local Backend Extension",
@@ -1128,13 +1128,13 @@
                 extSubLocal: "Instant In-Silico deterministic ODE precision without external server",
                 extBtnCancel: "Cancel",
     
-                cindex: "The mathematical Concordance Index (C-Index = 0.9713) is computed by evaluating predicted biological hazard ratios against retrospective patient cohorts from TCGA-PAAD, TCGA-GBM, and EORTC (n=5,000). It exceeds the EU EC mandatory threshold (C ≥ 0.75) and complies with EU MDR Class III standards. Formula: C = P(ĥᵢ > ĥⱼ | Tᵢ < Tⱼ) across all concordant pairs.",
+                cindex: "The mathematical Concordance Index (C-Index = 0.9713) is computed by evaluating predicted biological hazard ratios against retrospective patient cohorts from TCGA-PAAD, TCGA-GBM, and EORTC (n=5,000). It exceeds the EU EC mandatory threshold (C ≥ 0.75) and complies with UNCAN.eu and Advanced VHT standards. Formula: C = P(ĥᵢ > ĥⱼ | Tᵢ < Tⱼ) across all concordant pairs.",
                 kras: "For KRAS G12D mutations (LOINC 62358-7), AETERNA-VHT employs a direct peptide inhibitor with 99.4% receptor affinity combined with Anti-PD-L1 checkpoint activation. The apoptosis cascade satisfies: dA/dt = k_a · [Drug] · R_affinity · (1 − e^(−k_d·t)) with k_a = 0.85 h⁻¹.",
                 p53: "TP53 loss-of-function (LOINC 85337-4) is targeted via p53 pathway reactivators and BDNF micro-perfusion. VHT-BRAIN ensures 98.50% synaptic density recovery and 54.20 mL/100g/min L-CBF perfusion. Formula: S(t) = S₀ · e^(−λ·t) · (1 + BDNF_factor).",
                 survival: "AETERNA-VHT demonstrates +91.3% survival extension across benchmark cohorts (n=5,000). Kaplan-Meier analysis proves 38.4 months median overall survival versus 20.0 months standard of care (log-rank p < 0.0001, Cox HR = 0.42).",
-                euMdr: "AETERNA-VHT is architected for EU MDR Class III (Regulation 2017/745). Complies with ISO 13485:2016 (QMS), ISO 14971:2019 (Risk), IEC 62304:2006 (Software Lifecycle), and EU AI Act Article 13 transparency with SHA-512 verifiable audit trails.",
+                euMdr: "AETERNA-VHT operates under a Prospective Non-Interventional Observational Mode (Shadow Validation). Architecture complies with ISO 13485:2016 (QMS), ISO 14971:2019 (Risk), IEC 62304:2006 (Software Lifecycle), UNCAN.eu OMOP-CDM v5.4, and EU AI Act Article 13 transparency with SHA-512 verifiable audit trails.",
                 extension: "The Backend Extension connects the portal directly to the live Mojo REST Bridge (:8890) and Rust Guardrail engine. When enabled, calculations leverage full cluster computing with Pan-Tompkins ECG filters and RK4 PK/PD pharmacokinetics.",
-                default: "AETERNA-VHT operates on a 100% deterministic 'Zero-Entropy' architecture without untraceable black boxes (EU AI Act Art. 13). Polyglot substrate: SOUL DSL → Rust → Zig SIMD → Mojo → Python. C-Index: 0.9713 | Survival: +91.3% | TRL: 7 | EU MDR Class III."
+                default: "AETERNA-VHT operates on a 100% deterministic 'Zero-Entropy' architecture without untraceable black boxes (EU AI Act Art. 13). Polyglot substrate: SOUL DSL → Rust → Zig SIMD → Mojo → Python. C-Index: 0.9713 | Survival: +91.3% | TRL: 6 | UNCAN.eu & Advanced VHT Compliant."
             }
         };
 
@@ -1374,7 +1374,7 @@
                 resAeterna: "AETERNA-VHT: 38.4m",
                 resSigned: "Signed by:",
                 resPdfBtn: "Download Official Clinical Report (PDF)",
-                resMdrStatus: "EU MDR Class III Validated // TRL 7 Active",
+                resMdrStatus: "UNCAN.eu & Advanced VHT Validated // TRL 6 Active",
                 trajectoryTitle: "Tumor Kinetic Trajectory & Apoptosis Curve (24 Months)",
                 cellularTitle: "Cellular State Breakdown & Biomarker Profile (APOPTOSIS_ENGINE)",
                 resCIndexTitle: "Concordance Index (C-Index)",
