@@ -104,6 +104,21 @@
 
         <!-- Sidebar Navigation -->
         <div class="p-4 flex-grow space-y-2 custom-scroll overflow-y-auto">
+            <!-- UNCAN.eu Mode Badge -->
+            <div class="mb-3 p-2 rounded-lg bg-cyan-950/40 border border-cyan-500/20 text-[9px] text-cyan-300 font-mono flex items-center justify-between">
+                <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i> UNCAN.eu Observational Mode</span>
+                <span class="text-[8px] bg-emerald-500/20 text-emerald-300 px-1 rounded font-bold">TRL 6</span>
+            </div>
+
+            <!-- Direct Link to Doctor Clinical Portal -->
+            <a href="./CLINICAL_DOCTOR_PORTAL.html" class="flex items-center justify-between p-3.5 bg-gradient-to-r from-cyan-950/60 to-slate-900 border border-cyan-500/30 rounded-xl text-cyan-300 hover:text-white hover:border-cyan-400 cursor-pointer transition-all shadow-[0_0_15px_rgba(6,182,212,0.15)] mb-3">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="stethoscope" class="text-cyan-400 w-5 h-5"></i>
+                    <span class="text-xs font-black tracking-wide uppercase">Doctor Clinical Portal</span>
+                </div>
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-cyan-400"></i>
+            </a>
+
             <div data-i18n="nav-control" class="text-[10px] text-cyan-400/50 font-bold uppercase tracking-widest mb-4 px-2">Clinical Control</div>
             
             <div id="nav-simulator" onclick="setActivePanel('simulator')" class="flex items-center justify-between p-4 bg-cyan-500/10 border-l-4 border-cyan-400 rounded-xl text-white cursor-pointer transition-all hover:bg-cyan-500/15">
