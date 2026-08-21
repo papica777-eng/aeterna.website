@@ -22,17 +22,22 @@ AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe
 
 ---
 
-## 🤝 Institutional Consortium Partner & PIC Registry
+## 🤝 Comprehensive European Institutional Consortium & PIC Registry
 
-| Institution | Country | PIC Code | Specialization & Infrastructure Role | Harmonized Budget |
-| :--- | :---: | :---: | :--- | :---: |
-| **AETERNA Technologies** | 🇧🇬 BG | **`865986222`** | **Lead Coordinator & System Architect** (Architect: Dimitar Stavrev Prodromov) | **€2,900,000.00** |
-| **Institute of Molecular Oncology (IMO / Charité)** | 🇩🇪 DE | **`999978433`** | Biophysics, Genomics, Molecular Modeling & Tumor Microenvironment Validation | **€1,650,000.00** |
-| **Clinical Centers Consortium (NKI / Gustave Roussy)** | 🇳🇱 NL / 🇫🇷 FR | **`999896759`** | Comprehensive Cancer Centers, Multi-Site Cohort Clinical Data Governance | **€2,950,000.00** |
-| **Nordic EHR Alliance** | 🇸🇪 SE | **`999857571`** | Electronic Health Records Standard Mapping (OMOP-CDM v5.4 / HL7 FHIR R5) | **€1,050,000.00** |
-| **LC InnoConsult International** | 🇭🇺 HU | **`997894676`** | WP5 Lead: Dissemination, Exploitation, IP Strategy & Stakeholder Engagement | **€600,000.00** |
-| **European Cancer Patient Coalition (ECPC)** | 🇧🇪 BE | **`999587421`** | Patient Advocacy, Co-Design, ePROMs Integration & Ethical Oversight | **€700,000.00** |
-| **TOTAL HORIZON CANCER MISSION** | 🇪🇺 EU | **Consortium 865986222** | **HORIZON-RIA Call: HORIZON-MISS-2026-02-CANCER-01** | **€9,850,000.00** |
+| Institution | Country | PIC Code | Action Framework | Specialization & Infrastructure Role | Harmonized Budget |
+| :--- | :---: | :---: | :--- | :--- | :---: |
+| **AETERNA Technologies** | 🇧🇬 BG | **`865986222`** | **All Actions** | **Lead Coordinator & System Architect** (Architect: Dimitar Stavrev Prodromov) | **€31,150,000.00** |
+| **Ludwig-Maximilians-Universität München (LMU)** | 🇩🇪 DE | **`999978433`** | **EuroHPC / EDF / CEF** | Quantum Optics, Continuous-Variable QKD, Sub-Shot-Noise Photon Squeezing | **€12,500,000.00** |
+| **Barcelona Supercomputing Center (BSC-CNS)** | 🇪🇸 ES | **`999655520`** | **EuroHPC JU / VHT** | Tier-0 EuroHPC Supercomputing (MareNostrum 5), SDN Orchestration, Hybrid PQC | **€4,200,000.00** |
+| **National Infrastructures for Research (GRNET)** | 🇬🇷 EL | **`999937887`** | **EuroHPC / CEF Digital** | National Optical Backbone, Cross-Border Fiber Routing, EuroQCI Integration | **€4,500,000.00** |
+| **National Telecom & Post Commission (EETT)** | 🇬🇷 EL | **`999653192`** | **EDF Defence Fund** | Subsea Telecom Security, Spectrum Governance, Naval Tactical Infrastructure | **€3,500,000.00** |
+| **Institute of Molecular Oncology (IMO / Charité)** | 🇩🇪 DE | **`999978433`** | **Cancer Mission** | Biophysics, Genomics, Molecular Modeling & Tumor Microenvironment Validation | **€1,650,000.00** |
+| **Comprehensive Cancer Centers (NKI / Gustave Roussy)** | 🇳🇱 NL / 🇫🇷 FR | **`999896759`** | **Cancer Mission** | Multi-Center Clinical Cohort Governance & Observational Trial Validation | **€2,950,000.00** |
+| **Nordic EHR Alliance** | 🇸🇪 SE | **`999857571`** | **Cancer Mission** | Electronic Health Records Standard Mapping (OMOP-CDM v5.4 / HL7 FHIR R5) | **€1,050,000.00** |
+| **European Cancer Patient Coalition (ECPC)** | 🇧🇪 BE | **`999587421`** | **Cancer Mission** | Patient Advocacy, Co-Design, ePROMs Integration & Ethical Oversight | **€700,000.00** |
+| **LC InnoConsult International** | 🇭🇺 HU | **`997894676`** | **Cancer Mission** | WP5 Lead: Dissemination, Exploitation, IP Strategy & Stakeholder Engagement | **€600,000.00** |
+| **ERC Sovereign Host (AETERNA Labs)** | 🇧🇬 BG | **`865986222`** | **Horizon-ERC** | Principal Investigator Track: Formal Verification & Zero-Entropy Vivisector | **€7,000,000.00** |
+| 🏆 **TOTAL ALLOCATED PORTFOLIO** | 🇪🇺 EU | **Consortium 865986222** | **Horizon / EDF / CEF / EuroHPC / ERC** | **European Union Sovereign Deep-Tech & Quantum Network** | **€67,047,219.00** |
 
 ---
 
