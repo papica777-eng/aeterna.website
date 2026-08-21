@@ -204,22 +204,39 @@
         
         <div class="max-w-7xl mx-auto relative z-30 grid lg:grid-cols-[1.3fr_0.7fr] gap-12 lg:gap-20 items-center">
             <!-- Left Column: Title + CTAs -->
-            <div>
-                <div class="inline-flex items-center gap-3 px-4 py-2 rounded border border-accent-cyan/20 bg-accent-cyan/5 text-[10px] font-bold tracking-widest text-accent-cyan mb-8 uppercase font-mono">
-                    <i data-lucide="award" size="14"></i>
-                    <span data-i18n="hero.badge">EUROPEAN COMMISSION PIC: 865986222 | €62.5M+ EU PORTFOLIO</span>
+            <div class="relative z-10">
+                <!-- Glowing Futuristic Telemetry Badge -->
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass border border-cyan-400/40 bg-cyan-950/40 text-cyan-300 text-xs font-mono font-bold tracking-widest uppercase mb-6 backdrop-blur-xl shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+                    </span>
+                    <span data-i18n="hero.badge">EU PIC: 865986222 &bull; TRL-7 MULTISCALE VHT & AI CORE</span>
                 </div>
-                
-                <h1 class="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.95] uppercase">
-                    <span data-i18n="hero.title_1">MULTISCALE</span> <br> 
-                    <span class="gradient-text" data-i18n="hero.title_2">VIRTUAL HUMAN TWIN</span> <br> 
-                    <span data-i18n="hero.title_3">& SOVEREIGN INTELLIGENCE</span>
-                </h1>
-                
-                <p class="text-gray-400 max-w-3xl text-lg md:text-xl font-light leading-relaxed mb-12" data-i18n="hero.subtitle">
-                    Institutional-grade computational physiology, in silico clinical oncology trials, and zero-latency deterministic AI. From epigenetic longevity clock reprogramming to sovereign critical infrastructure.
+
+                <!-- Innovative Futuristic Headline -->
+                <div class="space-y-3 mb-6">
+                    <div class="text-[11px] sm:text-xs font-mono font-bold tracking-[0.3em] text-cyan-400 uppercase flex items-center gap-2">
+                        <span class="inline-block w-6 h-px bg-cyan-400"></span>
+                        <span data-i18n="hero.tagline">// THE ARCHITECTURE OF LIFE & COMPUTE</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl lg:text-[68px] font-black tracking-tight leading-[1.08] text-white uppercase">
+                        <span class="text-slate-300 font-light block" data-i18n="hero.title_1">MULTISCALE</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-indigo-400 drop-shadow-[0_0_35px_rgba(0,240,255,0.4)] block" data-i18n="hero.title_2">VIRTUAL HUMAN TWIN</span>
+                    </h1>
+
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white/5 border border-cyan-400/20 font-mono text-xs sm:text-sm text-cyan-300 font-bold tracking-wider">
+                        <i data-lucide="cpu" class="w-4 h-4 text-cyan-400"></i>
+                        <span data-i18n="hero.title_3">SOVEREIGN COGNITIVE & IN SILICO SUITE</span>
+                    </div>
+                </div>
+
+                <!-- Sleek Bordered Subtitle -->
+                <p class="text-gray-300 max-w-2xl text-sm sm:text-base font-normal leading-relaxed mb-10 border-l-2 border-cyan-400/60 pl-4 bg-cyan-950/10 py-1 rounded-r-lg" data-i18n="hero.subtitle">
+                    Zero-entropy computational physiology, real-time in silico clinical trials, and deterministic bare-metal AI — eliminating biological risk through multi-scale cellular simulations and sovereign European infrastructure.
                 </p>
-                
+
                 <div class="flex flex-wrap gap-6 items-center">
                     <a href="#specs" class="px-10 py-5 bg-accent-cyan text-black font-black text-xs tracking-widest uppercase hover:bg-white transition-all rounded shadow-lg shadow-accent-cyan/15 glow-cyan" data-i18n="hero.cta">Enter Sandbox Lab</a>
                     
@@ -2208,11 +2225,12 @@
                 "nav.ukame": "UKAME СОЛАР",
                 "nav.vivisector": "OMNI-VIVISECTOR",
                 "nav.longevity": "ДЪЛГОЛЕТИЕ HUD",
-                "hero.badge": "ЕВРОПЕЙСКА КОМИСИЯ PIC: 865986222 | TRL 7 ВАЛИДИРАНА БИОФИЗИКА & AI",
+                "hero.badge": "EU PIC: 865986222 • TRL-7 МНОГОМАЩАБЕН VHT & AI CORE",
+                "hero.tagline": "// АРХИТЕКТУРА НА ЖИВОТА И ИЗЧИСЛЕНИЯТА",
                 "hero.title_1": "МНОГОМАЩАБЕН",
                 "hero.title_2": "ВИРТУАЛЕН ЧОВЕШКИ БЛИЗНАК",
-                "hero.title_3": "& СУВЕРЕНЕН ИНТЕЛЕКТ",
-                "hero.subtitle": "Институционална изчислителна физиология, in silico онкологични изпитвания и детерминиран AI с нулево закъснение. От епигенетично моделиране на дълголетието до координация на критична инфраструктура.",
+                "hero.title_3": "СУВЕРЕНЕН КОГНИТИВЕН & IN SILICO ЕНДЖИН",
+                "hero.subtitle": "Изчислителна биофизика с нулева ентропия, in silico клинични изпитвания в реално време и детерминиран bare-metal AI — елиминиращ биологичния риск чрез многомащабни симулации и европейска суверенна инфраструктура.", in silico онкологични изпитвания и детерминиран AI с нулево закъснение. От епигенетично моделиране на дълголетието до координация на критична инфраструктура.",
                 "hero.cta": "Влез в Лабораторията",
                 "hero.cta_action_text": "Аетерна в действие",
                 "hero.cta_vht_diabet": "Онкологичен HUD",
@@ -2344,11 +2362,12 @@
                 "nav.ukame": "UKAME SOLAR",
                 "nav.vivisector": "OMNI-VIVISECTOR",
                 "nav.longevity": "LONGEVITY HUD",
-                "hero.badge": "EUROPEAN COMMISSION PIC: 865986222 | TRL 7 VALIDATED BIOPHYSICS & AI",
+                "hero.badge": "EU PIC: 865986222 • TRL-7 MULTISCALE VHT & AI CORE",
+                "hero.tagline": "// THE ARCHITECTURE OF LIFE & COMPUTE",
                 "hero.title_1": "MULTISCALE",
                 "hero.title_2": "VIRTUAL HUMAN TWIN",
-                "hero.title_3": "& SOVEREIGN INTELLIGENCE",
-                "hero.subtitle": "Institutional-grade computational physiology, in silico clinical oncology trials, and zero-latency deterministic AI. From epigenetic longevity clock reprogramming to sovereign critical infrastructure.",
+                "hero.title_3": "SOVEREIGN COGNITIVE & IN SILICO SUITE",
+                "hero.subtitle": "Zero-entropy computational physiology, real-time in silico clinical trials, and deterministic bare-metal AI — eliminating biological risk through multi-scale cellular simulations and sovereign European infrastructure.", in silico clinical oncology trials, and zero-latency deterministic AI. From epigenetic longevity clock reprogramming to sovereign critical infrastructure.",
                 "hero.cta": "Enter Sandbox Lab",
                 "hero.cta_action_text": "Aeterna in Action",
                 "hero.cta_vht_diabet": "Oncology HUD",
