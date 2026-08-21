@@ -1152,6 +1152,7 @@
             demoTimer = 0;
             
             const activeHud = HUD_DEMO_DATA[index];
+            if (!activeHud) return;
             
             const activeItem = document.querySelector(`[data-hud-idx="${index}"]`);
             if (activeItem) {
@@ -1167,25 +1168,26 @@
             const iframe = document.getElementById('demo-iframe');
             const loader = document.getElementById('demo-iframe-loader');
             const visualImg = document.getElementById('demo-visual-img');
+            const launchBtn = document.getElementById('demo-launch-btn');
             
             if (visualImg && activeHud.previewImg) {
                 visualImg.src = activeHud.previewImg;
             }
             
-            if (iframe && iframe.src !== activeHud.url) {
-                loader.classList.remove('opacity-0', 'pointer-events-none');
+            if (iframe && activeHud.url) {
+                if (loader) loader.classList.remove('opacity-0', 'pointer-events-none');
                 iframe.src = activeHud.url;
                 iframe.onload = () => {
-                    loader.classList.add('opacity-0', 'pointer-events-none');
+                    if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
                 };
             }
             
             const urlText = document.getElementById('demo-browser-url');
-            if (urlText) {
+            if (urlText && activeHud.url) {
                 urlText.textContent = activeHud.url.replace('./', '');
             }
             
-            if (launchBtn) {
+            if (launchBtn && activeHud.url) {
                 launchBtn.href = activeHud.url;
             }
             
