@@ -826,7 +826,11 @@
                 "val.relative": "относително",
                 "val.foci": "огнища/клетка",
                 "val.hours": "часа",
-                "val.hours_single": "час"
+                "val.hours_single": "час",
+                "demo.terminal_title": "ДЕМО СИМУЛАТОР НА РЕАЛЕН ИЗХОД (LIVE TELEMETRY)",
+                "demo.btn_pro": "СИМУЛАЦИЯ €299 PRO",
+                "demo.btn_ent": "СИМУЛАЦИЯ €2,499 ENTERPRISE",
+                "demo.placeholder": "// Изберете симулация от бутоните горе, за да видите криптографската верификация, изчисленията и генерирания файл..."
             },
             en: {
                 "topbar.subtitle": "CELLULAR LONGEVITY & EPIGENETIC RESTORATION HUD",
@@ -896,7 +900,11 @@
                 "val.relative": "relative",
                 "val.foci": "foci/cell",
                 "val.hours": "hours",
-                "val.hours_single": "hour"
+                "val.hours_single": "hour",
+                "demo.terminal_title": "LIVE OUTPUT TELEMETRY SIMULATOR",
+                "demo.btn_pro": "SIMULATE €299 PRO",
+                "demo.btn_ent": "SIMULATE €2,499 ENTERPRISE",
+                "demo.placeholder": "// Click a simulation button above to preview real-time cryptographic verification, pipeline compute, and sample output..."
             }
         };
 
@@ -947,6 +955,76 @@
                 msg.style.color = '#00ffaa';
                 msg.style.fontWeight = 'bold';
             }
+        }
+
+        // Live Demo Sandbox Terminal Logic for VHT
+        let demoIntervalVht = null;
+        function runDemoPipelineVht(tier) {
+            const terminal = document.getElementById('demo-terminal-box-vht');
+            if (!terminal) return;
+            
+            if (demoIntervalVht) clearInterval(demoIntervalVht);
+            terminal.innerHTML = '';
+
+            const isBg = currentLang === 'bg';
+            let logs = [];
+
+            if (tier === 'pro') {
+                logs = isBg ? [
+                    { t: "11:02:14.102", tag: "💳 STRIPE WEBHOOK", text: "Успешно верифицирано плащане (€299/мес) - Търговец: acct_1TGhWsCqZ2g7mOQM", color: "#00ffaa" },
+                    { t: "11:02:14.340", tag: "🔑 КРИПТО ТОКЕН", text: "Генериран защитен B2B ключ: PRO-AET-984218-EXP2026 (Status: VALID)", color: "#00f0ff" },
+                    { t: "11:02:14.710", tag: "🧬 ПАЦИЕНТСКИ TWIN", text: "Зареден профил Twin P-78B (78.0 г.) -> CpG Метилиране: 6 локуса активни", color: "#fff" },
+                    { t: "11:02:15.120", tag: "🧪 SENOLYTIC HILL PD", text: "Dasatinib (25nM) + Quercetin (50uM) -> Клирънс на зомби клетки: 94.8%", color: "#f59e0b" },
+                    { t: "11:02:15.580", tag: "⏳ HORVATH CLOCK", text: "Биологичната възраст е редуцирана: 82.4г. -> 35.0г. (Delta: -47.4 години)", color: "#00ffaa" },
+                    { t: "11:02:16.020", tag: "📑 PDF ЕКСПОРТ", text: "Компилиран официален клиничен доклад: AETERNA_DOSSIER_P78B.pdf (5.4 MB)", color: "#b55fe6" },
+                    { t: "11:02:16.200", tag: "✅ РЕЗУЛТАТ", text: "Клиничният файл е готов за сваляне. Пълен достъп до Horvath Engine: ОТКЛЮЧЕН.", color: "#00ffaa" }
+                ] : [
+                    { t: "11:02:14.102", tag: "💳 STRIPE WEBHOOK", text: "Payment event confirmed (€299/mo) - Merchant: acct_1TGhWsCqZ2g7mOQM", color: "#00ffaa" },
+                    { t: "11:02:14.340", tag: "🔑 ENCLAVE TOKEN", text: "Generated secure B2B session key: PRO-AET-984218-EXP2026 (Status: VALID)", color: "#00f0ff" },
+                    { t: "11:02:14.710", tag: "🧬 PATIENT TWIN", text: "Ingested Twin P-78B (78.0 yrs) -> CpG Methylation: 6 active loci loaded", color: "#fff" },
+                    { t: "11:02:15.120", tag: "🧪 SENOLYTIC HILL PD", text: "Dasatinib (25nM) + Quercetin (50uM) -> Zombie cell clearance: 94.8%", color: "#f59e0b" },
+                    { t: "11:02:15.580", tag: "⏳ HORVATH CLOCK", text: "Biological Age reduced: 82.4y -> 35.0y (Delta: -47.4 yrs lifespan gain)", color: "#00ffaa" },
+                    { t: "11:02:16.020", tag: "📑 PDF ENGINE", text: "Compiled complete clinical dossier: AETERNA_DOSSIER_P78B.pdf (5.4 MB)", color: "#b55fe6" },
+                    { t: "11:02:16.200", tag: "✅ OUTPUT READY", text: "Clinical Dossier ready for export. Full Pro Horvath Engine: UNLOCKED.", color: "#00ffaa" }
+                ];
+            } else {
+                logs = isBg ? [
+                    { t: "11:02:14.100", tag: "💳 STRIPE ENTERPRISE", text: "Верифициран Enterprise абонамент (€2,499/мес) - B2B Dedicated SLA", color: "#b55fe6" },
+                    { t: "11:02:14.300", tag: "🔐 ZERO-KNOWLEDGE NODE", text: "Заделен изолиран HPC анклав на MareNostrum 5 (48 vCPU / 192GB RAM)", color: "#00f0ff" },
+                    { t: "11:02:14.650", tag: "🚀 BATCH INGESTION", text: "Заредена кохорта от 10,000 In-Silico близнаци през POST /v1/batch/screen", color: "#fff" },
+                    { t: "11:02:15.200", tag: "⚡ HIGH-THROUGHPUT", text: "10,000 Фармакокинетични симулации изчислени за 1.42s (C-Index: 0.964)", color: "#00ffaa" },
+                    { t: "11:02:15.700", tag: "🔬 CRISPR VECTOR", text: "Off-target мутагенеза < 0.0001% за таргетиран APOE4 екзон 4 локус", color: "#ff2a85" },
+                    { t: "11:02:16.150", tag: "📊 REST JSON PAYLOAD", text: "{ status: 200, twins_processed: 10000, safe_ratio: 0.912, latency_ms: 8.4 }", color: "#00f0ff" },
+                    { t: "11:02:16.300", tag: "✅ ENTERPRISE LIVE", text: "Enterprise API Endpoint е активен. 100,000 заявки/час лимит: ВКЛЮЧЕН.", color: "#00ffaa" }
+                ] : [
+                    { t: "11:02:14.100", tag: "💳 STRIPE ENTERPRISE", text: "Verified Enterprise subscription (€2,499/mo) - Dedicated B2B SLA", color: "#b55fe6" },
+                    { t: "11:02:14.300", tag: "🔐 ZERO-KNOWLEDGE NODE", text: "Allocated dedicated HPC enclave on MareNostrum 5 (48 vCPU / 192GB RAM)", color: "#00f0ff" },
+                    { t: "11:02:14.650", tag: "🚀 BATCH INGESTION", text: "Ingested cohort of 10,000 In-Silico Twins via POST /v1/batch/screen", color: "#fff" },
+                    { t: "11:02:15.200", tag: "⚡ HIGH-THROUGHPUT", text: "10,000 Pharmacokinetic simulations computed in 1.42s (C-Index: 0.964)", color: "#00ffaa" },
+                    { t: "11:02:15.700", tag: "🔬 CRISPR VECTOR", text: "Off-target mutagenesis < 0.0001% for targeted APOE4 exon 4 locus", color: "#ff2a85" },
+                    { t: "11:02:16.150", tag: "📊 REST JSON PAYLOAD", text: "{ status: 200, twins_processed: 10000, safe_ratio: 0.912, latency_ms: 8.4 }", color: "#00f0ff" },
+                    { t: "11:02:16.300", tag: "✅ ENTERPRISE LIVE", text: "Enterprise API Endpoint active. 100,000 req/hr rate limit: ENABLED.", color: "#00ffaa" }
+                ];
+            }
+
+            let idx = 0;
+            demoIntervalVht = setInterval(() => {
+                if (idx >= logs.length) {
+                    clearInterval(demoIntervalVht);
+                    return;
+                }
+                const l = logs[idx];
+                const line = document.createElement('div');
+                line.style.padding = "2px 0";
+                line.style.display = "flex";
+                line.style.flexWrap = "wrap";
+                line.style.alignItems = "baseline";
+                line.style.gap = "6px";
+                line.innerHTML = `<span style="color: #64748b; font-family: monospace; font-size: 10px;">[${l.t}]</span> <span style="font-weight: bold; font-size: 10px; padding: 1px 4px; border-radius: 3px; background: rgba(255,255,255,0.06); color: ${l.color}">${l.tag}:</span> <span style="color: ${l.color === '#00ffaa' ? '#e2e8f0' : l.color}">${l.text}</span>`;
+                terminal.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+                idx++;
+            }, 300);
         }
 
         // System variables
@@ -2815,6 +2893,29 @@
 
             </div>
 
+            <!-- Live Demo Sandbox Terminal Section -->
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 16px;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                        <span data-i18n="demo.terminal_title">LIVE OUTPUT TELEMETRY SIMULATOR</span>
+                    </span>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="runDemoPipelineVht('pro')" style="padding: 4px 12px; border-radius: 6px; background: rgba(0, 240, 255, 0.15); border: 1px solid rgba(0, 240, 255, 0.4); color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);">
+                            ▶ <span data-i18n="demo.btn_pro">SIMULATE €299 PRO</span>
+                        </button>
+                        <button onclick="runDemoPipelineVht('enterprise')" style="padding: 4px 12px; border-radius: 6px; background: rgba(181, 95, 230, 0.15); border: 1px solid rgba(181, 95, 230, 0.4); color: #b55fe6; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(181, 95, 230, 0.2);">
+                            ▶ <span data-i18n="demo.btn_ent">SIMULATE €2,499 ENTERPRISE</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- The Terminal Box -->
+                <div id="demo-terminal-box-vht" style="background: rgba(0, 0, 0, 0.85); border-radius: 12px; border: 1px solid rgba(0, 240, 255, 0.25); padding: 12px 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #cbd5e1; line-height: 1.6; max-height: 150px; overflow-y: auto;">
+                    <div style="color: #64748b;" data-i18n="demo.placeholder">// Click a simulation button above to preview real-time cryptographic verification, pipeline compute, and sample output...</div>
+                </div>
+            </div>
+
             <!-- Token / API Key Activation Bar -->
             <div style="background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 16px; display: flex; gap: 10px; align-items: center;">
                 <input type="text" id="license-key-input-vht" placeholder="Enter Sovereign License Key / Sponsor Token..." style="flex: 1; background: transparent; border: none; font-size: 12px; color: #fff; font-family: 'JetBrains Mono', monospace; outline: none;">
@@ -3278,6 +3379,8 @@
                         else if (typeof triggerYamanaka === 'function') triggerYamanaka();
                     },
                     'run_active_command': (cmdId) => {
+                        if (typeof window.runActiveCommand === 'function') window.runActiveCommand(cmdId);
+                    },
                     'trigger_crb_boost': () => {
                         if (typeof window.triggerCrbBoost === 'function') window.triggerCrbBoost();
                         else if (typeof triggerCrbBoost === 'function') triggerCrbBoost();
