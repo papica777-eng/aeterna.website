@@ -1,6 +1,6 @@
 # 🛡️ AETERNA Sovereign Cognitive Engine & European Research Portfolio
 ### Sovereign Autonomous Cyber-Physical Orchestrator & Multi-Scale Scientific Simulator
-**Consortium Coordinator PIC:** `865986222` | **Total EU Portfolio Budget:** **€67,047,219.00** | **TRL:** 7 Validated | **Standards:** NIS-2 / UNCAN.eu & Advanced VHT / ISO 13485 & IEC 62304 / ETSI / Common Criteria EAL4+
+**Consortium Coordinator PIC:** `865986222` | **Total EU Portfolio Budget:** **€84,547,219.00** | **TRL:** 7 Validated | **Standards:** NIS-2 / UNCAN.eu & Advanced VHT / ISO 13485 & IEC 62304 / ETSI / Common Criteria EAL4+
 
 <div align="center">
   <img src="assets/aeterna_poster.png" alt="AETERNA Sovereign European AI" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);">
@@ -8,7 +8,7 @@
 
 ---
 
-## 🏛️ European Union Grant & Defense Portfolio (€67.04M+)
+## 🏛️ European Union Grant & Defense Portfolio (€84.55M+)
 AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe's leading universities, Tier-0 supercomputing nodes, and comprehensive cancer institutes. Detailed dossier: [docs/EU_SOVEREIGN_FLAGSHIP_PORTFOLIO.md](docs/EU_SOVEREIGN_FLAGSHIP_PORTFOLIO.md).
 
 | Grant / Fund | Topic / Call | Proposal ID | Budget | Lead / Role | Key Consortium Partners |
@@ -18,7 +18,8 @@ AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe
 | **CEF Digital (Works)** | `SMART CABLES 2026` | `101354145` | **€20,000,000.00** | **Coordinator (AETERNA)** | Coastal Maritime Quantum Terminal (Pomorie, BG), GRNET (EL), LMU (DE) |
 | **Cancer Mission (Horizon RIA)** | `HORIZON-MISS-2026-02-CANCER-01` | `101347293` | **€9,850,000.00** | **Coordinator (AETERNA)** | Charité (DE), NKI (NL), Gustave Roussy (FR), Nordic EHR (SE), LC InnoConsult (HU), ECPC (BE) |
 | **Horizon-ERC (ERC Plus)** | `ERC-2026-PLUS` (Formal Vivisection) | `101357176` | **€7,000,000.00** | **Host (AETERNA)** | Principal Investigator: Dimitar Stavrev Prodromov |
-| **TOTAL ALLOCATED** | **Horizon / EDF / CEF / EuroHPC / ERC** | **Consortium 865986222** | **€67,047,219.00** | **Sovereign Lead** | **Europe Tier-1 High-Performance Network** |
+| **EIC Accelerator (STEP / Chips Act)** | `HORIZON-EIC-2026-ACCELERATOR-01` | `101359291` | **€17,500,000.00** | **Single Applicant (AETERNA)** | Lead: Dimitar Stavrev Prodromov (Metamorphic Silicon ASIC) |
+| **TOTAL ALLOCATED** | **Horizon / EDF / CEF / EuroHPC / ERC / EIC** | **Consortium 865986222** | **€84,547,219.00** | **Sovereign Lead** | **Europe Tier-1 High-Performance Network** |
 
 ---
 
