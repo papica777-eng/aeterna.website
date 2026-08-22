@@ -228,10 +228,14 @@
                 <button id="lang-btn-bg" onclick="setLanguage('bg')" class="px-2.5 py-1 rounded font-bold transition-all text-gray-400 hover:text-white">BG</button>
             </div>
 
-            <span class="flex items-center gap-2 text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30">
+            <span class="flex items-center gap-2 text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-500/30 hidden md:inline-flex">
                 <div class="w-2 h-2 rounded-full bg-[#00ffaa] shadow-[0_0_8px_#00ffaa] animate-ping"></div>
                 <span data-i18n="header_status">PHARMA-LINK: SECURE</span>
             </span>
+            <button onclick="openSponsorModal()" class="px-3 py-1 bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-pink-300 rounded border border-pink-500/40 text-xs transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(255,42,133,0.25)]">
+                <i data-lucide="heart" class="w-3.5 h-3.5 text-pink-400"></i>
+                <span data-i18n="btn_sponsor_header">SPONSOR / UNLOCK PRO</span>
+            </button>
             <span class="text-gray-400 border border-white/10 bg-white/5 px-3 py-1 rounded-full hidden sm:inline-block" data-i18n="header_badge">
                 B2B SHADOW INSTANCE
             </span>
@@ -571,6 +575,82 @@
             </div>
         </div>
 
+    <!-- B2B Subscription & GitHub Sponsors Modal -->
+    <div id="sponsor-modal" class="fixed inset-0 z-[100000] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="bg-gradient-to-b from-[#0e1628] to-[#060913] border border-cyan-500/40 rounded-2xl max-w-2xl w-full p-6 md:p-8 shadow-[0_0_50px_rgba(0,240,255,0.3)] relative overflow-hidden font-sans">
+            <!-- Close button -->
+            <button onclick="closeSponsorModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-lg bg-white/5 border border-white/10">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center">
+                    <i data-lucide="heart" class="w-5 h-5 text-pink-400"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-black text-white tracking-wide" data-i18n="sponsor_modal_title">AETERNA // B2B ACCESS & GITHUB SPONSORS</h3>
+                    <p class="text-xs font-mono text-cyan-400" data-i18n="sponsor_modal_sub">Stripe Express Verified Merchant: acct_1TGhWsCqZ2g7mOQM</p>
+                </div>
+            </div>
+
+            <p class="text-sm text-gray-300 mb-6 leading-relaxed" data-i18n="sponsor_modal_desc">
+                Unlock unrestricted High-Throughput In-Silico Simulations, custom patient cohort uploads, private Horvath regression models, and full clinical PDF dossiers via GitHub Sponsors & Stripe Express.
+            </p>
+
+            <!-- Pricing Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                
+                <!-- Tier 1 -->
+                <div class="bg-white/5 border border-cyan-500/30 rounded-xl p-5 hover:border-cyan-400 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider" data-i18n="tier_clinic_title">CLINIC / PRO</span>
+                            <span class="text-[10px] font-mono bg-cyan-950 px-2 py-0.5 rounded text-cyan-300">POPULAR</span>
+                        </div>
+                        <div class="text-2xl font-black text-white mb-2">€299 <span class="text-xs font-normal text-gray-400">/ mo</span></div>
+                        <ul class="text-xs text-gray-300 space-y-2 mb-4">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i> <span data-i18n="tier_clinic_f1">Unlimited Senolytic Hill PD runs</span></li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i> <span data-i18n="tier_clinic_f2">Horvath Clock patient export</span></li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyan-400 shrink-0"></i> <span data-i18n="tier_clinic_f3">Automated Clinical PDF Dossiers</span></li>
+                        </ul>
+                    </div>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-black font-bold text-xs font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,255,170,0.3)] transition-all">
+                        <i data-lucide="credit-card" class="w-4 h-4"></i>
+                        <span data-i18n="btn_sponsor_clinic">SUBSCRIBE VIA GITHUB / STRIPE</span>
+                    </a>
+                </div>
+
+                <!-- Tier 2 -->
+                <div class="bg-white/5 border border-purple-500/30 rounded-xl p-5 hover:border-purple-400 transition-all flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-mono font-bold text-purple-400 uppercase tracking-wider" data-i18n="tier_enterprise_title">BIOTECH ENTERPRISE</span>
+                            <span class="text-[10px] font-mono bg-purple-950 px-2 py-0.5 rounded text-purple-300">CUSTOM API</span>
+                        </div>
+                        <div class="text-2xl font-black text-white mb-2">€2,499 <span class="text-xs font-normal text-gray-400">/ mo</span></div>
+                        <ul class="text-xs text-gray-300 space-y-2 mb-4">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400 shrink-0"></i> <span data-i18n="tier_enterprise_f1">High-Throughput Batch API Node</span></li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400 shrink-0"></i> <span data-i18n="tier_enterprise_f2">Zero-Knowledge Secure Enclave</span></li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-purple-400 shrink-0"></i> <span data-i18n="tier_enterprise_f3">Dedicated CRISPR Locus Design</span></li>
+                        </ul>
+                    </div>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-bold text-xs font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(181,95,230,0.3)] transition-all">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                        <span data-i18n="btn_sponsor_enterprise">UNLOCK ENTERPRISE TIER</span>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Token / API Key Activation Bar -->
+            <div class="bg-black/50 border border-white/10 rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-center">
+                <input type="text" id="license-key-input" placeholder="Enter Sovereign License Key / Sponsor Token..." class="flex-1 bg-black/60 border border-white/15 rounded-lg px-3 py-2 text-xs text-white font-mono outline-none focus:border-cyan-400 w-full">
+                <button onclick="activateLicenseKey()" class="px-5 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono font-bold text-xs border border-white/20 shrink-0 w-full sm:w-auto" data-i18n="btn_activate_key">
+                    ACTIVATE
+                </button>
+            </div>
+            <div id="license-status-msg" class="text-[11px] font-mono mt-2 text-center text-gray-400"></div>
+        </div>
     </div>
 
     <!-- AETERNA Omni-Assistant Chat Widget -->
@@ -696,7 +776,22 @@
                 pipi_title: "π-π Stacking Interference",
                 pipi_contrib: "Energy Contribution: -3.4 kcal/mol",
                 omni_welcome: "<b>AETERNA.AIC // ONLINE:</b> In-Silico Pharma and Longevity Engine is synchronized. You can trigger FDA cohort screening, CRISPR sequence editing, or molecular docking from this interface.",
-                chat_placeholder: "Ask about pharma simulation or commands..."
+                chat_placeholder: "Ask about pharma simulation or commands...",
+                btn_sponsor_header: "SPONSOR / UNLOCK PRO",
+                sponsor_modal_title: "AETERNA // B2B ACCESS & GITHUB SPONSORS",
+                sponsor_modal_sub: "Stripe Express Verified Merchant: acct_1TGhWsCqZ2g7mOQM",
+                sponsor_modal_desc: "Unlock unrestricted High-Throughput In-Silico Simulations, custom patient cohort uploads, private Horvath regression models, and full clinical PDF dossiers via GitHub Sponsors & Stripe Express.",
+                tier_clinic_title: "CLINIC / PRO",
+                tier_clinic_f1: "Unlimited Senolytic Hill PD runs",
+                tier_clinic_f2: "Horvath Clock patient export",
+                tier_clinic_f3: "Automated Clinical PDF Dossiers",
+                btn_sponsor_clinic: "SUBSCRIBE VIA GITHUB / STRIPE",
+                tier_enterprise_title: "BIOTECH ENTERPRISE",
+                tier_enterprise_f1: "High-Throughput Batch API Node",
+                tier_enterprise_f2: "Zero-Knowledge Secure Enclave",
+                tier_enterprise_f3: "Dedicated CRISPR Locus Design",
+                btn_sponsor_enterprise: "UNLOCK ENTERPRISE TIER",
+                btn_activate_key: "ACTIVATE"
             },
             bg: {
                 header_status: "PHARMA-LINK: ЗАЩИТЕН",
@@ -775,7 +870,22 @@
                 pipi_title: "π-π Стек Интерференция",
                 pipi_contrib: "Енергиен принос: -3.4 kcal/mol",
                 omni_welcome: "<b>AETERNA.AIC // НА ЛИНИЯ:</b> In-Silico Фарма и Longevity модулът е синхронизиран. Можете да стартирате FDA скрининг, CRISPR редакция или молекулярен докинг.",
-                chat_placeholder: "Попитайте за фарма симулацията или команди..."
+                chat_placeholder: "Попитайте за фарма симулацията или команди...",
+                btn_sponsor_header: "СПОНСОРИРАЙ / PRO ДОСТЪП",
+                sponsor_modal_title: "AETERNA // B2B ЛИЦЕНЗ & GITHUB SPONSORS",
+                sponsor_modal_sub: "Stripe Express Верифициран Търговец: acct_1TGhWsCqZ2g7mOQM",
+                sponsor_modal_desc: "Отключете неограничени High-Throughput In-Silico симулации, зареждане на персонализирани пациентски кохорти, защитени Horvath модели и генериране на пълни клинични PDF доклади през GitHub Sponsors & Stripe Express.",
+                tier_clinic_title: "КЛИНИКА / PRO",
+                tier_clinic_f1: "Неограничени Hill PD сенолитични симулации",
+                tier_clinic_f2: "Експорт на Horvath часовник за пациенти",
+                tier_clinic_f3: "Автоматични медицински PDF доклади",
+                btn_sponsor_clinic: "АБОНИРАНЕ ПРЕЗ GITHUB / STRIPE",
+                tier_enterprise_title: "BIOTECH ENTERPRISE",
+                tier_enterprise_f1: "High-Throughput Batch API възел",
+                tier_enterprise_f2: "Zero-Knowledge защитен анклав",
+                tier_enterprise_f3: "Персонализиран CRISPR дизайн",
+                btn_sponsor_enterprise: "ОТКЛЮЧИ ENTERPRISE ПЛАН",
+                btn_activate_key: "АКТИВИРАЙ"
             }
         };
 
@@ -850,6 +960,42 @@
             document.getElementById('section-docking').classList.toggle('hidden', tabId !== 'docking');
 
             if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // B2B Sponsorship & License Modal Functions
+        function openSponsorModal() {
+            const modal = document.getElementById('sponsor-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeSponsorModal() {
+            const modal = document.getElementById('sponsor-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function activateLicenseKey() {
+            const input = document.getElementById('license-key-input');
+            const msg = document.getElementById('license-status-msg');
+            const key = input ? input.value.trim() : '';
+
+            if (!key) {
+                if (msg) {
+                    msg.innerText = state.lang === 'bg' ? 'Моля въведете валиден лицензен ключ или Sponsor Token.' : 'Please enter a valid license key or sponsor token.';
+                    msg.className = 'text-[11px] font-mono mt-2 text-center text-red-400';
+                }
+                return;
+            }
+
+            if (msg) {
+                msg.innerText = state.lang === 'bg' ? '✓ ЛИЦЕНЗЪТ Е АКТИВИРАН УСПЕШНО. НЕОГРАНИЧЕНИ B2B СИМУЛАЦИИ: ОТКЛЮЧЕНИ.' : '✓ LICENSE ACTIVATED SUCCESSFULLY. UNLIMITED B2B SIMULATIONS: UNLOCKED.';
+                msg.className = 'text-[11px] font-mono mt-2 text-center text-emerald-400 font-bold';
+            }
         }
 
         // OpenFDA API Cohort Scan
