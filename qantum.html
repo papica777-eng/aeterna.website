@@ -56,158 +56,234 @@
     <div class="particles" id="particles"></div>
     
     <!-- Navigation Header -->
-    <nav class="fixed w-full z-50 glass py-5 px-6 md:px-12 flex justify-between items-center border-b border-white/5">
-        <div class="flex items-center gap-4 shrink-0">
-            <img src="assets/aeterna_logo.png" alt="AETERNA Logo" class="w-10 h-10 rounded-full object-cover shadow-lg shadow-purple-500/40 border border-purple-400/40 transition-transform hover:scale-110 duration-300">
-            <span class="text-2xl font-black tracking-tighter font-mono">AETERNA<span class="text-accent-purple">.</span>AIC</span>
+    <nav class="fixed w-full z-50 glass py-3.5 px-4 sm:px-6 lg:px-8 xl:px-12 flex justify-between items-center border-b border-white/5 transition-all duration-300">
+        <!-- Left: Logo + Security Lock -->
+        <div class="flex items-center gap-3 shrink-0">
+            <img src="assets/aeterna_logo.png" alt="AETERNA Logo" class="w-9 h-9 rounded-full object-cover shadow-lg shadow-purple-500/40 border border-purple-400/40 transition-transform hover:scale-110 duration-300">
+            <span class="text-xl font-black tracking-tighter font-mono flex items-center gap-1">
+                AETERNA<span class="text-accent-purple">.</span>AIC
+                <span onclick="openSslCertificateModal()" class="cursor-pointer text-gray-500 hover:text-emerald-400 transition-colors flex items-center justify-center p-1" title="Cryptographic Security Details">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                </span>
+            </span>
         </div>
         
-        <div class="flex items-center gap-4 xl:gap-8 min-w-0">
-            <div class="hidden lg:flex gap-3 xl:gap-5 2xl:gap-8 text-[10px] xl:text-xs font-bold tracking-[0.05em] xl:tracking-[0.15em] uppercase items-center">
-                <a href="./index.html#vision" class="hover:text-accent-cyan transition-all">VISION</a>
-                <a href="./index.html#scientific-achievements" class="hover:text-accent-cyan transition-all">SCIENTIFIC BREAKTHROUGHS</a>
-                <a href="./index.html#specs" class="hover:text-accent-cyan transition-all">SPECIFICATIONS LAB</a>
-                <a href="./index.html#timeline" class="hover:text-accent-cyan transition-all">CHRONOLOGY</a>
-                <a href="./index.html#grants" class="hover:text-accent-cyan transition-all">EU GRANTS</a>
-                <a href="./index.html#access" class="hover:text-accent-cyan transition-all">PRICING</a>
+        <!-- Right / Center: Navigation Links & Actions -->
+        <div class="flex items-center gap-2.5 lg:gap-3 xl:gap-5 min-w-0">
+            <div class="hidden lg:flex gap-2.5 xl:gap-4 2xl:gap-6 text-[10px] xl:text-[11px] font-extrabold tracking-[0.06em] xl:tracking-[0.1em] uppercase items-center text-gray-300">
+                <a href="./index.html#vision" class="hover:text-accent-cyan transition-all py-1">VISION</a>
+                <a href="./index.html#scientific-achievements" class="hover:text-accent-cyan transition-all py-1">BREAKTHROUGHS</a>
+                <a href="./index.html#specs" class="hover:text-accent-cyan transition-all py-1">SPECS LAB</a>
+                <a href="./index.html#timeline" class="hover:text-accent-cyan transition-all py-1">CHRONOLOGY</a>
+                <a href="./index.html#grants" class="hover:text-accent-cyan transition-all py-1">EU GRANTS</a>
+                <a href="./index.html#hud-gallery" class="hover:text-accent-cyan transition-all py-1">HUDs</a>
                 
                 <!-- VHT Dropdown -->
                 <div class="relative group">
-                    <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1.5 uppercase cursor-pointer">
-                        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                        VIRTUAL HUMAN TWIN (VHT)
-                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180"></i>
+                    <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
+                        <i data-lucide="layers" class="w-3.5 h-3.5 text-accent-purple"></i>
+                        <span>VHT BIO-CYBER</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
                     </button>
                     <!-- Dropdown Menu -->
-                    <div class="absolute left-0 top-full hidden group-hover:block pt-4 z-50">
-                        <div class="flex flex-col gap-3 p-5 glass-premium border border-white/10 rounded-xl min-w-[240px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-                            <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
-                            <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
-                            <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
-                            <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
-                            <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
+                    <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
+                        <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[250px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
+                            <a href="./CLINICAL_DOCTOR_PORTAL.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1"><div class="w-5 h-5 rounded bg-cyan-400/10 flex items-center justify-center shrink-0"><i data-lucide="stethoscope" class="w-3 h-3"></i></div> DOCTOR CLINICAL PORTAL</a>
+                            <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse py-1"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center shrink-0"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
+                            <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
+                            <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
+                            <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center shrink-0"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
+                            <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center shrink-0"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
                             <div class="w-full h-px bg-white/10 my-1"></div>
-                            <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
-                            <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
+                            <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
+                            <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
                         </div>
                     </div>
                 </div>
 
-                <a href="./ukame-matrix.html" class="text-accent-gold hover:text-white transition-all font-black flex items-center gap-1.5">UKAME SOLAR</a>
-                <a href="ukame-matrix.html" class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5">OMNI-VIVISECTOR</a>
-                <a href="./k2/index.html" class="text-accent-emerald hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5 text-accent-emerald"></i> VERTEX DeFi</a>
-                <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline/blob/main/docs/ZERO_ENTROPY_MEV_MODEL.md" target="_blank" class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-cyan"></i> WHITEPAPER</a>
-                <a href="./qantum.html" class="text-accent-indigo hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-accent-indigo"></i> QANTUM PRIME</a>
-                <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="book" class="w-3.5 h-3.5 text-accent-purple"></i> DOCS</a>
+                <!-- DEEP-TECH & SECURITY Dropdown -->
+                <div class="relative group">
+                    <button class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                        <span>DEEP-TECH SUITE</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
+                        <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[260px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
+                            <a href="./ukame-matrix.html" class="text-[11px] text-accent-gold hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-gold/10 flex items-center justify-center shrink-0"><i data-lucide="sun" class="w-3 h-3 text-accent-gold"></i></div> UKAME SOLAR TAINT MATRIX</a>
+                            <a href="https://github.com/papica777-eng/AETERNA-QSTN" target="_blank" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3 text-accent-purple"></i></div> AETERNA-QSTN (DEFENCE GRID)</a>
+                            <a href="./k2/index.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3 text-accent-emerald"></i></div> VERTEX DEFI ENGINE</a>
+                            <a href="./qantum.html" class="text-[11px] text-accent-indigo hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-indigo/10 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-accent-indigo"></i></div> QANTUM PRIME RUNTIME</a>
+                            <a href="https://github.com/papica777-eng/AETERNA-EKO" target="_blank" class="text-[11px] text-accent-cyan hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-cyan/10 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-3 h-3 text-accent-cyan"></i></div> ECO-TRANSMUTER (MOJO)</a>
+                            <div class="w-full h-px bg-white/10 my-1"></div>
+                            <a href="./aeterna.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-3 h-3"></i></div> FORENSIC AUDIT REPORT</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DOCS Direct Link -->
+                <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5 px-2 py-1 rounded bg-accent-purple/10 border border-accent-purple/20 hover:border-accent-purple/50">
+                    <i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-purple"></i>
+                    <span>DOCS</span>
+                </a>
             </div>
+
+            <!-- GitHub Sponsors & Stripe Button -->
+            <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="shrink-0 px-3 py-1.5 bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-pink-300 rounded-full border border-pink-500/40 text-[11px] font-bold font-mono transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,42,133,0.3)] hover:scale-105">
+                <i data-lucide="heart" class="w-3.5 h-3.5 text-pink-400 fill-pink-400/30"></i>
+                <span class="font-extrabold tracking-wider">SPONSOR</span>
+            </a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero compact-hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="pulse"></span>
+    <section class="hero compact-hero pt-36 pb-12">
+        <div class="hero-content max-w-4xl mx-auto text-center px-4">
+            <div class="hero-badge inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-950/30 text-cyan-300 text-xs font-mono font-bold tracking-widest uppercase mb-6 backdrop-blur-xl shadow-[0_0_20px_rgba(0,240,255,0.2)]">
+                <span class="pulse w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                 <span>Autonomous Testing Substrate • Online</span>
             </div>
             
-            <h1>The AI That <span class="gradient">Tests Itself</span></h1>
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white mb-4">The AI That <span class="gradient text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">Tests Itself</span></h1>
             
-            <p class="hero-subtitle">
+            <p class="hero-subtitle text-gray-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
                 QAntum Prime is an autonomous testing agent that eliminates flaky tests, slashes QA costs, and prevents broken builds. It automatically discovers, writes, runs, and self-heals your test suites in real-time.
             </p>
             
-            <div class="hero-buttons">
-                <a href="docs.html#quickstart" class="btn btn-primary">🚀 Get Started</a>
-                <a href="#features" class="btn btn-secondary">📖 Learn More</a>
+            <div class="hero-buttons flex items-center justify-center gap-4 mb-6">
+                <a href="docs.html#quickstart" class="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-black font-extrabold text-sm tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(0,240,255,0.3)]">🚀 Get Started</a>
+                <a href="#features" class="px-6 py-3 rounded-xl glass border border-white/10 hover:border-cyan-400/40 text-white font-bold text-sm tracking-wider uppercase transition-all">📖 Learn More</a>
             </div>
             
             <!-- Install Command -->
-            <div class="install-box">
+            <div class="install-box inline-flex items-center gap-3 px-4 py-2.5 rounded-xl glass border border-white/10 bg-black/50 font-mono text-xs text-cyan-300">
                 <code>npx qantum init my-project</code>
-                <button class="copy-btn" onclick="copyInstall()">📋</button>
+                <button class="copy-btn hover:text-white cursor-pointer transition-colors" onclick="copyInstall()">📋</button>
             </div>
         </div>
     </section>
 
     <!-- Live Terminal + Features Side by Side -->
-    <section class="dual-section" id="demo">
-        <div class="container">
-            <div class="dual-grid">
-                <!-- Left: Terminal -->
-                <div class="dual-left">
-                    <div class="terminal">
-                        <div class="terminal-header">
-                            <div class="terminal-buttons">
-                                <span class="btn-red"></span>
-                                <span class="btn-yellow"></span>
-                                <span class="btn-green"></span>
-                            </div>
-                            <div class="terminal-title">QAntum Prime • Neural Hub</div>
-                            <div class="terminal-status">
-                                <span class="status-dot online"></span>
-                                <span>LIVE</span>
-                            </div>
+    <section class="dual-section py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="demo">
+        <div class="dual-grid grid lg:grid-cols-12 gap-8 items-start">
+            <!-- Left: Terminal (7 cols) -->
+            <div class="dual-left lg:col-span-7 space-y-3">
+                <div class="terminal rounded-2xl border border-white/10 bg-[#080c14] shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,240,255,0.12)] overflow-hidden">
+                    <div class="terminal-header flex items-center justify-between px-4 py-3 bg-black/60 border-b border-white/10">
+                        <div class="terminal-buttons flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
                         </div>
-                        <div class="terminal-body" id="terminalOutput"></div>
-                    </div>
-                </div>
-                
-                <!-- Right: Interactive Feature Cards -->
-                <div class="dual-right" id="features">
-                    <h2 class="compact-title">Core <span class="gradient">Powers</span></h2>
-                    <div class="feature-buttons">
-                        <button class="feature-btn active" data-feature="ghost" onclick="showFeatureDemo('ghost')">
-                            <span class="fb-icon">👻</span>
-                            <span class="fb-name">Ghost Protocol</span>
-                            <span class="fb-status">• ACTIVE</span>
-                        </button>
-                        <button class="feature-btn" data-feature="heal" onclick="showFeatureDemo('heal')">
-                            <span class="fb-icon">🔮</span>
-                            <span class="fb-name">Self-Healing</span>
-                            <span class="fb-status">• READY</span>
-                        </button>
-                        <button class="feature-btn" data-feature="swarm" onclick="showFeatureDemo('swarm')">
-                            <span class="fb-icon">🐝</span>
-                            <span class="fb-name">Global Swarm</span>
-                            <span class="fb-status">• 1,247 NODES</span>
-                        </button>
-                        <button class="feature-btn" data-feature="oracle" onclick="showFeatureDemo('oracle')">
-                            <span class="fb-icon">🔍</span>
-                            <span class="fb-name">The Oracle</span>
-                            <span class="fb-status">• SCANNING</span>
-                        </button>
-                        <button class="feature-btn" data-feature="chronos" onclick="showFeatureDemo('chronos')">
-                            <span class="fb-icon">⏱️</span>
-                            <span class="fb-name">Chronos Engine</span>
-                            <span class="fb-status">• PREDICTING</span>
-                        </button>
-                        <button class="feature-btn" data-feature="fortress" onclick="showFeatureDemo('fortress')">
-                            <span class="fb-icon">🛡️</span>
-                            <span class="fb-name">Fortress</span>
-                            <span class="fb-status">• SECURE</span>
-                        </button>
+                        <div class="terminal-title text-xs font-mono font-bold text-gray-300 flex items-center gap-2">
+                            <i data-lucide="terminal" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            QAntum Prime • Neural Hub
+                        </div>
+                        <div class="terminal-status flex items-center gap-2 text-[10px] font-mono font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span class="text-emerald-400">LIVE</span>
+                        </div>
                     </div>
                     
-                    <!-- Feature Demo Panel -->
-                    <div class="feature-demo-panel" id="featureDemoPanel">
-                        <div class="fdp-header">
-                            <span class="fdp-title" id="fdpTitle">Ghost Protocol v2</span>
-                            <span class="fdp-badge live">LIVE DEMO</span>
+                    <!-- Terminal Body with live telemetry stream -->
+                    <div class="terminal-body font-mono text-xs leading-relaxed p-4 h-[420px] overflow-y-auto terminal-scroll text-gray-300" id="terminalOutput">
+                        <!-- Streamed live via JS -->
+                    </div>
+                </div>
+
+                <!-- Interactive Quick-Action Terminal Controls -->
+                <div class="terminal-actions flex flex-wrap items-center gap-2 pt-1">
+                    <button onclick="runTerminalCommand('ghost')" class="px-3 py-1.5 rounded-lg border border-cyan-400/30 bg-cyan-950/40 text-cyan-300 text-[11px] font-mono font-bold hover:bg-cyan-500/20 hover:border-cyan-400 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>👻</span> Ghost Bypass
+                    </button>
+                    <button onclick="runTerminalCommand('heal')" class="px-3 py-1.5 rounded-lg border border-purple-400/30 bg-purple-950/40 text-purple-300 text-[11px] font-mono font-bold hover:bg-purple-500/20 hover:border-purple-400 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>🔮</span> Self-Heal DOM
+                    </button>
+                    <button onclick="runTerminalCommand('swarm')" class="px-3 py-1.5 rounded-lg border border-emerald-400/30 bg-emerald-950/40 text-emerald-300 text-[11px] font-mono font-bold hover:bg-emerald-500/20 hover:border-emerald-400 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>🐝</span> Swarm 1,247
+                    </button>
+                    <button onclick="runTerminalCommand('oracle')" class="px-3 py-1.5 rounded-lg border border-indigo-400/30 bg-indigo-950/40 text-indigo-300 text-[11px] font-mono font-bold hover:bg-indigo-500/20 hover:border-indigo-400 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>🔍</span> Oracle Scan
+                    </button>
+                    <button onclick="runTerminalCommand('fortress')" class="px-3 py-1.5 rounded-lg border border-pink-400/30 bg-pink-950/40 text-pink-300 text-[11px] font-mono font-bold hover:bg-pink-500/20 hover:border-pink-400 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>🛡️</span> Fortress Audit
+                    </button>
+                    <button onclick="clearTerminalLogs()" class="px-2.5 py-1.5 rounded-lg border border-white/10 bg-white/5 text-gray-400 text-[11px] font-mono hover:text-white hover:border-white/20 transition-all flex items-center gap-1">
+                        <span>🧹</span> Clear
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Right: Interactive Feature Cards (5 cols) -->
+            <div class="dual-right lg:col-span-5 space-y-4" id="features">
+                <h2 class="text-2xl font-black uppercase tracking-tight text-white flex items-center gap-2">
+                    Core <span class="gradient text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Powers</span>
+                </h2>
+                
+                <div class="feature-buttons grid grid-cols-2 gap-2.5">
+                    <button class="feature-btn active text-left p-3 rounded-xl glass border border-cyan-400/40 bg-cyan-950/30 text-white transition-all cursor-pointer hover:scale-[1.02]" data-feature="ghost" onclick="showFeatureDemo('ghost')">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">👻</span>
+                            <span class="font-bold text-xs">Ghost Protocol</span>
                         </div>
-                        <div class="fdp-content" id="fdpContent">
-                            <div class="fdp-stat"><span>Detection Bypass</span><span class="fdp-value">100%</span></div>
-                            <div class="fdp-stat"><span>Protected Sites</span><span class="fdp-value">2,847</span></div>
-                            <div class="fdp-stat"><span>Bot Challenges</span><span class="fdp-value">0 Failed</span></div>
+                        <span class="text-[10px] font-mono text-cyan-400 font-bold">• ACTIVE</span>
+                    </button>
+                    <button class="feature-btn text-left p-3 rounded-xl glass border border-white/10 text-gray-300 transition-all cursor-pointer hover:border-purple-400/40 hover:scale-[1.02]" data-feature="heal" onclick="showFeatureDemo('heal')">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">🔮</span>
+                            <span class="font-bold text-xs">Self-Healing</span>
                         </div>
-                        <div class="fdp-visual" id="fdpVisual">
-                            <div class="ghost-visual">
-                                <div class="gv-node cloudflare">Cloudflare</div>
-                                <div class="gv-arrow">→</div>
-                                <div class="gv-node qantum active">QAntum</div>
-                                <div class="gv-arrow">→</div>
-                                <div class="gv-node target">Target</div>
-                            </div>
+                        <span class="text-[10px] font-mono text-purple-400 font-bold">• READY</span>
+                    </button>
+                    <button class="feature-btn text-left p-3 rounded-xl glass border border-white/10 text-gray-300 transition-all cursor-pointer hover:border-emerald-400/40 hover:scale-[1.02]" data-feature="swarm" onclick="showFeatureDemo('swarm')">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">🐝</span>
+                            <span class="font-bold text-xs">Global Swarm</span>
+                        </div>
+                        <span class="text-[10px] font-mono text-emerald-400 font-bold">• 1,247 NODES</span>
+                    </button>
+                    <button class="feature-btn text-left p-3 rounded-xl glass border border-white/10 text-gray-300 transition-all cursor-pointer hover:border-indigo-400/40 hover:scale-[1.02]" data-feature="oracle" onclick="showFeatureDemo('oracle')">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">🔍</span>
+                            <span class="font-bold text-xs">The Oracle</span>
+                        </div>
+                        <span class="text-[10px] font-mono text-indigo-400 font-bold">• SCANNING</span>
+                    </button>
+                    <button class="feature-btn text-left p-3 rounded-xl glass border border-white/10 text-gray-300 transition-all cursor-pointer hover:border-yellow-400/40 hover:scale-[1.02]" data-feature="chronos" onclick="showFeatureDemo('chronos')">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">⏱️</span>
+                            <span class="font-bold text-xs">Chronos Engine</span>
+                        </div>
+                        <span class="text-[10px] font-mono text-yellow-400 font-bold">• PREDICTING</span>
+                    </button>
+                    <button class="feature-btn text-left p-3 rounded-xl glass border border-white/10 text-gray-300 transition-all cursor-pointer hover:border-pink-400/40 hover:scale-[1.02]" data-feature="fortress" onclick="showFeatureDemo('fortress')">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">🛡️</span>
+                            <span class="font-bold text-xs">Fortress</span>
+                        </div>
+                        <span class="text-[10px] font-mono text-pink-400 font-bold">• SECURE</span>
+                    </button>
+                </div>
+                
+                <!-- Feature Demo Panel -->
+                <div class="feature-demo-panel glass-premium p-5 rounded-2xl border border-white/10 space-y-4" id="featureDemoPanel">
+                    <div class="fdp-header flex items-center justify-between border-b border-white/5 pb-3">
+                        <span class="fdp-title font-mono font-bold text-sm text-cyan-300" id="fdpTitle">Ghost Protocol v2</span>
+                        <span class="fdp-badge live px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-400/10 text-cyan-300 border border-cyan-400/30">LIVE DEMO</span>
+                    </div>
+                    <div class="fdp-content grid grid-cols-3 gap-2 text-center" id="fdpContent">
+                        <div class="fdp-stat p-2.5 rounded-xl bg-black/40 border border-white/5"><div class="text-[10px] text-gray-400 font-mono mb-1">Detection Bypass</div><div class="fdp-value text-base font-black text-cyan-400">100%</div></div>
+                        <div class="fdp-stat p-2.5 rounded-xl bg-black/40 border border-white/5"><div class="text-[10px] text-gray-400 font-mono mb-1">Protected Sites</div><div class="fdp-value text-base font-black text-white">2,847</div></div>
+                        <div class="fdp-stat p-2.5 rounded-xl bg-black/40 border border-white/5"><div class="text-[10px] text-gray-400 font-mono mb-1">Bot Challenges</div><div class="fdp-value text-base font-black text-emerald-400">0 Failed</div></div>
+                    </div>
+                    <div class="fdp-visual p-4 rounded-xl bg-black/50 border border-white/5 font-mono text-xs" id="fdpVisual">
+                        <div class="ghost-visual flex items-center justify-between">
+                            <div class="gv-node px-3 py-1.5 rounded bg-red-950/50 border border-red-500/40 text-red-300 text-[11px] font-bold">Cloudflare</div>
+                            <div class="gv-arrow text-gray-500 font-bold">→</div>
+                            <div class="gv-node active px-3 py-1.5 rounded bg-cyan-950/60 border border-cyan-400 text-cyan-300 text-[11px] font-bold shadow-[0_0_15px_rgba(0,240,255,0.3)]">QAntum Prime</div>
+                            <div class="gv-arrow text-gray-500 font-bold">→</div>
+                            <div class="gv-node target px-3 py-1.5 rounded bg-emerald-950/50 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold">Target ✓</div>
                         </div>
                     </div>
                 </div>

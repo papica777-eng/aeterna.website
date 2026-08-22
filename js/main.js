@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// INTERACTIVE FEATURE BUTTONS
+// INTERACTIVE FEATURE BUTTONS & TERMINAL ENGINE
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const FEATURE_DATA = {
@@ -665,9 +665,152 @@ const FEATURE_DATA = {
     }
 };
 
+let terminalLogTimer = null;
+let terminalHeartbeatTimer = null;
+
+function getTimestamp() {
+    const now = new Date();
+    return now.toTimeString().split(' ')[0];
+}
+
+function appendTerminalLog(htmlLine) {
+    const terminal = document.getElementById('terminalOutput');
+    if (!terminal) return;
+    
+    const row = document.createElement('div');
+    row.className = 'terminal-line py-0.5 animate-fadeIn font-mono text-xs';
+    row.innerHTML = `<span class="text-gray-500 select-none mr-1.5">[${getTimestamp()}]</span> ${htmlLine}`;
+    terminal.appendChild(row);
+    
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+const FEATURE_SCRIPTS = {
+    ghost: [
+        '<span class="text-cyan-400 font-bold">👻 [GHOST_PROTOCOL]</span> Initializing stealth testing session for target <span class="text-indigo-300">https://app.enterprise.io</span>',
+        '<span class="text-purple-400 font-bold">⚡ [JA4_SPOOF]</span> Negotiating TLS ClientHello: cipher suites [0x1301, 0x1302, 0x1303] (Chrome 128 / Win64)',
+        '<span class="text-yellow-400 font-bold">🛡️ [CHALLENGE]</span> Cloudflare Turnstile token validation challenge detected',
+        '<span class="text-cyan-300 font-bold">🔮 [BEZIER]</span> Generating natural human-curved mouse trajectory (micro-jitter: 0.02ms)',
+        '<span class="text-emerald-400 font-bold">✅ [BYPASSED]</span> Bot check cleared in 18ms. HTTP 200 OK authenticated session established.'
+    ],
+    heal: [
+        '<span class="text-purple-400 font-bold">🔮 [SELF_HEAL]</span> Executing E2E Playwright step: <code class="text-pink-300">click("#submit-checkout-btn")</code>',
+        '<span class="text-red-400 font-bold">⚠️ [DOM_MUTATION]</span> Target selector <code class="text-red-300">#submit-checkout-btn</code> not found (DOM 404 fault)',
+        '<span class="text-cyan-400 font-bold">🧠 [CATUSKOTI_AST]</span> Initiating multi-layer proximity AST search across 184 DOM subtrees...',
+        '<span class="text-yellow-300 font-bold">🎯 [LOCATOR_MATCH]</span> Discovered candidate: <code class="text-emerald-300">button[data-qa="complete-order"]</code> (Confidence: 99.8%)',
+        '<span class="text-emerald-400 font-bold">🩹 [HEALED]</span> Selector repaired in-memory without test disruption. Step passed in 4ms!'
+    ],
+    swarm: [
+        '<span class="text-emerald-400 font-bold">🐝 [SWARM_EXEC]</span> Distributing test runners across 5 global edge regions (1,247 active workers)',
+        '<span class="text-gray-300 font-bold">🌍 [REGIONS]</span> Frankfurt (256), Virginia (312), Tokyo (198), Oregon (287), São Paulo (241)',
+        '<span class="text-cyan-400 font-bold">⚡ [DISPATCH]</span> Parallelizing 6,685 full integration test suites via zero-copy WebSockets',
+        '<span class="text-indigo-300 font-bold">📊 [THROUGHPUT]</span> 450 concurrent suites/sec | Zero mutex locks | Zero flaky timeouts',
+        '<span class="text-emerald-400 font-bold">🚀 [BENCHMARK]</span> 6,685 tests completed in 14.2s. 40.2x speedup compared to standard Selenium.'
+    ],
+    oracle: [
+        '<span class="text-indigo-400 font-bold">🔍 [ORACLE_AI]</span> Autonomous crawler scanning application sitemap and GraphQL schema...',
+        '<span class="text-cyan-300 font-bold">📄 [DISCOVERY]</span> Mapped 847 routes, 12,483 state transitions, 412 API endpoints',
+        '<span class="text-purple-300 font-bold">✍️ [AUTO_GEN]</span> Synthesizing 500+ unit, integration and visual regression test suites in TypeScript',
+        '<span class="text-yellow-300 font-bold">📈 [COVERAGE]</span> Total test coverage increased from 42% to 94.7% with zero human manual test writing',
+        '<span class="text-emerald-400 font-bold">✅ [ORACLE_SYNC]</span> Automated test suites compiled and committed to CI/CD pipeline.'
+    ],
+    chronos: [
+        '<span class="text-yellow-400 font-bold">⏱️ [CHRONOS_ENGINE]</span> Analyzing temporal race conditions and async promise resolutions...',
+        '<span class="text-yellow-300 font-bold">⚠️ [PREDICTION]</span> 89% probability of flakiness detected in payment webhook callback step',
+        '<span class="text-cyan-400 font-bold">🔄 [MUTEX_BARRIER]</span> Dynamically inserting deterministic memory barrier before webhook resolution',
+        '<span class="text-emerald-400 font-bold">✅ [PREVENTED]</span> Flaky test failure neutralized. Deterministic execution guaranteed.'
+    ],
+    fortress: [
+        '<span class="text-pink-400 font-bold">🛡️ [FORTRESS_AUDIT]</span> Launching AST security taint analysis and vulnerability fuzzing...',
+        '<span class="text-cyan-300 font-bold">🔒 [FUZZING]</span> Testing 2,391 payloads for SQLi, XSS, CSRF, Reentrancy, and timing side-channels',
+        '<span class="text-purple-400 font-bold">📜 [POST_QUANTUM]</span> Generating ML-DSA-87 / Ed25519 cryptographic test execution attestation',
+        '<span class="text-emerald-400 font-bold">✅ [FORTRESS_VERIFIED]</span> All 2,391 security edge cases passed. System zero-day hardened.'
+    ]
+};
+
+function runTerminalCommand(feature) {
+    if (terminalLogTimer) clearTimeout(terminalLogTimer);
+    showFeatureDemo(feature);
+    
+    const lines = FEATURE_SCRIPTS[feature] || FEATURE_SCRIPTS.ghost;
+    let idx = 0;
+    
+    function streamNextLine() {
+        if (idx < lines.length) {
+            appendTerminalLog(lines[idx]);
+            idx++;
+            terminalLogTimer = setTimeout(streamNextLine, 350);
+        }
+    }
+    
+    streamNextLine();
+}
+
+function clearTerminalLogs() {
+    const terminal = document.getElementById('terminalOutput');
+    if (terminal) {
+        terminal.innerHTML = '';
+        appendTerminalLog('<span class="text-cyan-400 font-bold">[READY]</span> Terminal reset. Select a feature or run a command to simulate.');
+    }
+}
+
+function startAmbientTerminalHeartbeat() {
+    if (terminalHeartbeatTimer) clearInterval(terminalHeartbeatTimer);
+    
+    const ambientLogs = [
+        '<span class="text-emerald-400 font-bold">[HEARTBEAT]</span> Node <code class="text-cyan-300">0x4121</code> synced | 0 flaky tests | Swarm latency: 12ms',
+        '<span class="text-purple-400 font-bold">[TELEMETRY]</span> 1,247 edge nodes active across 5 regions | Memory drift: 0.00KB',
+        '<span class="text-cyan-300 font-bold">[GHOST_PROBE]</span> Cloudflare JA4 handshake valid | Zero bot detections reported',
+        '<span class="text-yellow-400 font-bold">[ORACLE_SYNC]</span> Automated regression sweep: 6,685 / 6,685 passed (100% pass rate)'
+    ];
+    
+    let ambientIdx = 0;
+    terminalHeartbeatTimer = setInterval(() => {
+        const terminal = document.getElementById('terminalOutput');
+        if (!terminal) return;
+        if (terminal.children.length > 30) {
+            terminal.removeChild(terminal.firstChild);
+        }
+        appendTerminalLog(ambientLogs[ambientIdx % ambientLogs.length]);
+        ambientIdx++;
+    }, 4500);
+}
+
+function initTerminalStream() {
+    const terminal = document.getElementById('terminalOutput');
+    if (!terminal) return;
+    
+    terminal.innerHTML = '';
+    
+    const bootLogs = [
+        '<span class="text-cyan-400 font-bold">[INIT]</span> QAntum Prime Runtime v30.6.4-OMEGA initializing...',
+        '<span class="text-purple-400 font-bold">[CORE]</span> Bare-metal AST & Catuṣkoṭi logic controllers: <span class="text-emerald-400 font-bold">ONLINE</span>',
+        '<span class="text-emerald-400 font-bold">[SWARM]</span> Connected to 1,247 distributed edge nodes across 5 regions',
+        '<span class="text-cyan-300 font-bold">[GHOST]</span> Stealth bypass active (TLS JA4 / Chromium headless masking ready)',
+        '<span class="text-yellow-300 font-bold">[ORACLE]</span> 847 routes indexed | 0 flaky tests detected in workspace',
+        '<span class="text-emerald-400 font-bold">[READY]</span> Autonomous testing engine primed and awaiting trigger.'
+    ];
+    
+    let idx = 0;
+    function printBootLine() {
+        if (idx < bootLogs.length) {
+            appendTerminalLog(bootLogs[idx]);
+            idx++;
+            setTimeout(printBootLine, 250);
+        } else {
+            setTimeout(() => {
+                runTerminalCommand('ghost');
+                startAmbientTerminalHeartbeat();
+            }, 600);
+        }
+    }
+    
+    printBootLine();
+}
+
 function initFeatureButtons() {
-    // Show first feature by default
     showFeatureDemo('ghost');
+    initTerminalStream();
 }
 
 function showFeatureDemo(feature) {
@@ -676,9 +819,9 @@ function showFeatureDemo(feature) {
     
     // Update active button
     document.querySelectorAll('.feature-btn').forEach(btn => {
-        btn.classList.remove('active');
+        btn.classList.remove('active', 'border-cyan-400/40', 'bg-cyan-950/30', 'text-white');
         if (btn.dataset.feature === feature) {
-            btn.classList.add('active');
+            btn.classList.add('active', 'border-cyan-400/40', 'bg-cyan-950/30', 'text-white');
         }
     });
     
@@ -691,7 +834,7 @@ function showFeatureDemo(feature) {
     
     if (contentEl) {
         contentEl.innerHTML = data.stats.map(s => 
-            `<div class="fdp-stat"><span>${s.label}</span><span class="fdp-value">${s.value}</span></div>`
+            `<div class="fdp-stat p-2.5 rounded-xl bg-black/40 border border-white/5"><div class="text-[10px] text-gray-400 font-mono mb-1">${s.label}</div><div class="fdp-value text-base font-black text-cyan-400">${s.value}</div></div>`
         ).join('');
     }
     
@@ -703,62 +846,62 @@ function showFeatureDemo(feature) {
 function getVisualHTML(type) {
     switch(type) {
         case 'ghost':
-            return `<div class="ghost-visual">
-                <div class="gv-node cloudflare">Cloudflare</div>
-                <div class="gv-arrow">→</div>
-                <div class="gv-node qantum active">QAntum</div>
-                <div class="gv-arrow">→</div>
-                <div class="gv-node target">Target ✓</div>
+            return `<div class="ghost-visual flex items-center justify-between">
+                <div class="gv-node px-3 py-1.5 rounded bg-red-950/50 border border-red-500/40 text-red-300 text-[11px] font-bold">Cloudflare</div>
+                <div class="gv-arrow text-gray-500 font-bold">→</div>
+                <div class="gv-node active px-3 py-1.5 rounded bg-cyan-950/60 border border-cyan-400 text-cyan-300 text-[11px] font-bold shadow-[0_0_15px_rgba(0,240,255,0.3)]">QAntum Prime</div>
+                <div class="gv-arrow text-gray-500 font-bold">→</div>
+                <div class="gv-node target px-3 py-1.5 rounded bg-emerald-950/50 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold">Target ✓</div>
             </div>`;
         case 'heal':
-            return `<div class="heal-visual">
-                <div class="heal-label"><span>Broken Selector</span><span>Fixed</span></div>
-                <div class="heal-bar"><div class="heal-progress"></div></div>
-                <div class="heal-label"><span>#old-btn-submit</span><span>[data-qa="submit"]</span></div>
+            return `<div class="heal-visual space-y-2">
+                <div class="flex justify-between text-[11px] font-mono"><span class="text-red-400">#submit-btn (404)</span><span class="text-emerald-400">Fixed ✓</span></div>
+                <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden"><div class="bg-gradient-to-r from-purple-500 to-cyan-400 h-full w-full animate-pulse"></div></div>
+                <div class="text-[11px] font-mono text-cyan-300">[data-qa="complete-order"] (99.8% Match)</div>
             </div>`;
         case 'swarm':
-            return `<div class="swarm-visual">${Array(32).fill('<div class="swarm-node"></div>').join('')}</div>`;
+            return `<div class="swarm-visual grid grid-cols-8 gap-1.5">${Array(32).fill(0).map((_, i) => `<div class="h-4 rounded bg-cyan-400/20 border border-cyan-400/40 animate-pulse" style="animation-delay:${(i%8)*100}ms"></div>`).join('')}</div>`;
         case 'oracle':
-            return `<div class="oracle-visual">
-                <div class="scan-line"></div>
-                <div class="oracle-stats">
+            return `<div class="oracle-visual font-mono text-xs space-y-1">
+                <div class="text-cyan-400 font-bold flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> AI Crawler Mapping:</div>
+                <div class="flex justify-between text-gray-300 text-[11px] pt-1">
                     <span>📄 Pages: 847</span>
-                    <span>🔗 Links: 12,483</span>
-                    <span>✅ Tests: 500+</span>
+                    <span>🔗 State Links: 12,483</span>
+                    <span>✅ Specs: 500+</span>
                 </div>
             </div>`;
         case 'chronos':
-            return `<div class="chronos-visual">
-                <div class="time-zones">
-                    <span class="tz active">🌍 EU</span>
-                    <span class="tz">🌎 US</span>
-                    <span class="tz">🌏 ASIA</span>
+            return `<div class="chronos-visual font-mono text-xs space-y-2">
+                <div class="flex gap-2">
+                    <span class="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 border border-cyan-400/40 text-[10px] font-bold">🌍 EU (256)</span>
+                    <span class="px-2 py-0.5 rounded bg-purple-400/20 text-purple-300 border border-purple-400/40 text-[10px] font-bold">🌎 US (312)</span>
+                    <span class="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 border border-emerald-400/40 text-[10px] font-bold">🌏 ASIA (198)</span>
                 </div>
-                <div class="prediction-bar">⚠️ Failure predicted in 2h → Test rescheduled</div>
+                <div class="text-[11px] text-yellow-300 bg-yellow-950/40 p-2 rounded border border-yellow-500/30">⚠️ Flakiness prevented → Mutex channel locked in-flight</div>
             </div>`;
         case 'fortress':
-            return `<div class="fortress-visual">
-                <div class="security-grid">
-                    <span class="sec-item safe">SQLi ✓</span>
-                    <span class="sec-item safe">XSS ✓</span>
-                    <span class="sec-item safe">CSRF ✓</span>
-                    <span class="sec-item safe">Auth ✓</span>
-                </div>
+            return `<div class="fortress-visual grid grid-cols-4 gap-1.5 font-mono text-center text-[10px]">
+                <span class="p-1.5 rounded bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">SQLi ✓</span>
+                <span class="p-1.5 rounded bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">XSS ✓</span>
+                <span class="p-1.5 rounded bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">CSRF ✓</span>
+                <span class="p-1.5 rounded bg-emerald-950/40 border border-emerald-500/30 text-emerald-300">Auth ✓</span>
             </div>`;
         default:
             return '';
     }
 }
 
-// Make function globally available
+// Make functions globally available
 window.showFeatureDemo = showFeatureDemo;
+window.runTerminalCommand = runTerminalCommand;
+window.clearTerminalLogs = clearTerminalLogs;
+window.initTerminalStream = initTerminalStream;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // REAL-TIME DASHBOARD UPDATE
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function updateDashboardStats(data) {
-    // Update proof stats if visible
     const proofStats = {
         'lines': data.lines,
         'tests': data.testsRunning,
@@ -766,7 +909,6 @@ function updateDashboardStats(data) {
         'passRate': data.passRate?.toFixed(1) + '%'
     };
     
-    // Update any elements with data-live attribute
     document.querySelectorAll('[data-live]').forEach(el => {
         const key = el.dataset.live;
         if (proofStats[key]) {
@@ -781,3 +923,4 @@ function updateDashboardStats(data) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { CONFIG, animateCounter, copyToClipboard, telemetry };
 }
+
