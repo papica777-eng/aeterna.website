@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA-FUSION // Tokamak Plasma Equilibrium & MHD Disruption Core</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background: #05050a; color: #f3f4f6; font-family: system-ui, sans-serif; }
+        .fusion-glow { background: radial-gradient(circle at center, rgba(249, 115, 22, 0.15) 0%, rgba(5, 5, 10, 1) 70%); }
+        .glass-panel { background: rgba(18, 18, 28, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(249, 115, 22, 0.25); }
+    </style>
+</head>
+<body class="p-6 fusion-glow min-h-screen">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <header class="flex justify-between items-center border-b border-orange-500/20 pb-4">
+            <div>
+                <span class="text-xs font-mono text-orange-400 tracking-widest uppercase">HORIZON EUROPE // EIC ACCELERATOR FUSION CHALLENGE 2026</span>
+                <h1 class="text-3xl font-black uppercase text-white flex items-center gap-3">
+                    <i data-lucide="flame" class="w-8 h-8 text-orange-500"></i> AETERNA-FUSION: Plasma AI Controller
+                </h1>
+            </div>
+            <div class="text-right font-mono text-xs text-orange-300">
+                <div>PIC: <strong>865986222</strong></div>
+                <div class="text-emerald-400">EQUILIBRIUM: q95 = 3.20 (LOCKED)</div>
+            </div>
+        </header>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-panel p-6 rounded-2xl flex flex-col justify-between h-96">
+                <div class="flex justify-between items-center text-xs font-mono text-gray-400">
+                    <span>ITER/DEMO TOKAMAK PLASMA CHAMBER</span>
+                    <span class="text-orange-400">CORE TEMP: 15.2 keV (176M K)</span>
+                </div>
+                
+                <!-- Tokamak Torus Simulation Ring -->
+                <div class="flex-1 flex items-center justify-center">
+                    <div class="w-56 h-36 rounded-full border-4 border-orange-500/60 shadow-[0_0_35px_#f97316] flex items-center justify-center">
+                        <div class="w-32 h-20 rounded-full border-2 border-purple-500/50 flex items-center justify-center text-[10px] font-mono text-orange-300">
+                            MAGNETIC AXIS
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-black/60 rounded-xl border border-orange-500/20 flex justify-between items-center font-mono text-xs">
+                    <span class="text-gray-400">Actuator Response: <strong class="text-emerald-400">274.61 ns</strong></span>
+                    <span class="text-gray-400">MHD Disruption Advance Warning: <strong class="text-orange-400">50 ms</strong></span>
+                    <span class="text-gray-400">Safety Factor: <strong class="text-white">q95 &gt; 3.0</strong></span>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold uppercase text-white mb-2">Technical Core</h3>
+                    <ul class="text-xs font-mono space-y-2 text-gray-300">
+                        <li>&bull; Sub-Microsecond MHD Partial Differential Solver</li>
+                        <li>&bull; 16-Channel Superconducting Poloidal Coils Driver</li>
+                        <li>&bull; Catuskoti 4-State Plasma Instability Collapse</li>
+                        <li>&bull; Budget: &euro;17,500,000 (&euro;2.5M Grant + &euro;15M Equity)</li>
+                    </ul>
+                </div>
+                <div class="p-3 bg-orange-950/40 border border-orange-500/30 rounded-xl text-center font-mono text-xs text-orange-300">
+                    Coordinator: <strong>Dimitar Stavrev Prodromov</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

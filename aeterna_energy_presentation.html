@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA-ENERGY // Solid-State Sodium-Ion Battery Molecular Twin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background: #030a06; color: #f3f4f6; font-family: system-ui, sans-serif; }
+        .energy-glow { background: radial-gradient(circle at center, rgba(16, 185, 129, 0.15) 0%, rgba(3, 10, 6, 1) 70%); }
+        .glass-panel { background: rgba(6, 30, 18, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(16, 185, 129, 0.25); }
+    </style>
+</head>
+<body class="p-6 energy-glow min-h-screen">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <header class="flex justify-between items-center border-b border-emerald-500/20 pb-4">
+            <div>
+                <span class="text-xs font-mono text-emerald-400 tracking-widest uppercase">HORIZON EUROPE // EIC ACCELERATOR ENERGY STORAGE CHALLENGE 2026</span>
+                <h1 class="text-3xl font-black uppercase text-white flex items-center gap-3">
+                    <i data-lucide="zap" class="w-8 h-8 text-emerald-400"></i> AETERNA-ENERGY: Solid-State Battery Twin
+                </h1>
+            </div>
+            <div class="text-right font-mono text-xs text-emerald-300">
+                <div>PIC: <strong>865986222</strong></div>
+                <div class="text-emerald-400">HEALTH: 88.0% SOH (10,000 CYCLES)</div>
+            </div>
+        </header>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass-panel p-6 rounded-2xl flex flex-col justify-between h-96">
+                <div class="flex justify-between items-center text-xs font-mono text-gray-400">
+                    <span>SOLID ELECTROLYTE INTERPHASE (SEI) CELL CHAMBER</span>
+                    <span class="text-emerald-400">CHEMISTRY: SODIUM-ION (Na+) SOLID-STATE</span>
+                </div>
+                
+                <!-- 3D Battery Cell Representation -->
+                <div class="flex-1 flex items-center justify-center">
+                    <div class="w-64 h-32 rounded-2xl border-2 border-emerald-400/60 shadow-[0_0_30px_#10b981] flex items-center justify-around p-4">
+                        <div class="text-center font-mono text-xs">
+                            <span class="text-gray-400 block">ANODE</span>
+                            <span class="text-emerald-300 font-bold">Na Metal</span>
+                        </div>
+                        <div class="h-full w-4 bg-emerald-500/30 rounded border border-emerald-400 flex items-center justify-center text-[9px] font-mono text-emerald-200">
+                            SEI
+                        </div>
+                        <div class="text-center font-mono text-xs">
+                            <span class="text-gray-400 block">CATHODE</span>
+                            <span class="text-emerald-300 font-bold">Polyanionic</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-black/60 rounded-xl border border-emerald-500/20 flex justify-between items-center font-mono text-xs">
+                    <span class="text-gray-400">Lithium / Cobalt: <strong class="text-emerald-400">0.00% (100% FREE)</strong></span>
+                    <span class="text-gray-400">Dendrite Penetration: <strong class="text-emerald-400">0.00%</strong></span>
+                    <span class="text-gray-400">BMS Latency: <strong class="text-white">0.12 &mu;s</strong></span>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl space-y-4 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold uppercase text-white mb-2">Technical Core</h3>
+                    <ul class="text-xs font-mono space-y-2 text-gray-300">
+                        <li>&bull; 512-bit Fixed-Point Butler-Volmer Accelerator</li>
+                        <li>&bull; Sodium-Ion Solid-State Electrolyte Twin</li>
+                        <li>&bull; 10,000 Cycle Life with Zero-Dendrite Growth</li>
+                        <li>&bull; Budget: &euro;17,500,000 (&euro;2.5M Grant + &euro;15M Equity)</li>
+                    </ul>
+                </div>
+                <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl text-center font-mono text-xs text-emerald-300">
+                    Coordinator: <strong>Dimitar Stavrev Prodromov</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
