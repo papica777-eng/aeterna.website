@@ -4256,15 +4256,23 @@
             </div>
             <h3 class="text-2xl font-black text-white mb-2">Order Confirmed!</h3>
             <p id="vht-modal-desc" class="text-xs text-gray-300 mb-6 leading-relaxed">
-                Your request has been registered in the Sovereign Ledger. An invoice and execution instructions have been prepared.
+                Your request has been registered in the Sovereign Ledger.
             </p>
-            <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-left font-mono text-xs mb-6 flex flex-col gap-2">
+            <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-left font-mono text-xs mb-4 flex flex-col gap-2">
                 <div class="flex justify-between text-gray-400"><span>Target:</span> <span id="modal-target-module" class="text-white font-bold"></span></div>
                 <div class="flex justify-between text-gray-400"><span>Price:</span> <span id="modal-target-price" class="text-cyan-400 font-bold"></span></div>
-                <div class="flex justify-between text-gray-400"><span>Status:</span> <span class="text-emerald-400 font-bold">Awaiting Ingress</span></div>
+                <div class="flex justify-between text-gray-400"><span>Status:</span> <span class="text-emerald-400 font-bold">Awaiting Payment Settlement</span></div>
             </div>
+
+            <!-- Dynamic Action / Payment Button Container -->
+            <div id="vht-modal-actions" class="w-full mb-3">
+                <a id="vht-direct-pay-link" href="https://github.com/sponsors/papica777-eng" target="_blank" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2">
+                    <i data-lucide="credit-card" class="w-4 h-4"></i> Complete Instant Checkout (Stripe Express)
+                </a>
+            </div>
+
             <button onclick="closeVhtOrderModal()" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all">
-                Close & Return
+                Close Window
             </button>
         </div>
     </div>
@@ -4308,12 +4316,38 @@
             document.getElementById('modal-target-module').innerText = currentVhtProduct.title;
             document.getElementById('modal-target-price').innerText = currentVhtProduct.price.toLocaleString() + ' €';
             
-            let methodText = "Credit Card / Stripe";
-            if (method === 'sepa_bank') methodText = "SEPA Bank Proforma Invoice sent to " + email;
-            else if (method === 'crypto_usdt') methodText = "USDC / USDT crypto wallet instructions sent to " + email;
-            else if (method === 'stellar_xlm') methodText = "Stellar Freighter link prepared for " + email;
+            const actionsContainer = document.getElementById('vht-modal-actions');
+            
+            if (method === 'card_stripe') {
+                document.getElementById('vht-modal-desc').innerText = `Thank you, ${name}! Your order for "${currentVhtProduct.title}" (${currentVhtProduct.price.toLocaleString()} €) is ready for instant checkout.`;
+                actionsContainer.innerHTML = `
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2">
+                        <i data-lucide="credit-card" class="w-4 h-4"></i> Complete Instant Stripe Checkout (${currentVhtProduct.price.toLocaleString()} €)
+                    </a>
+                `;
+            } else if (method === 'sepa_bank') {
+                document.getElementById('vht-modal-desc').innerText = `Proforma Invoice generated for ${name} (${email}). Please transfer ${currentVhtProduct.price.toLocaleString()} EUR to the designated institutional bank account.`;
+                actionsContainer.innerHTML = `
+                    <div class="p-3 bg-black/60 rounded-xl border border-cyan-500/30 text-left font-mono text-[11px] text-gray-300 space-y-1 mb-2">
+                        <div class="text-cyan-400 font-bold">🏛️ SEPA Bank Settlement Details:</div>
+                        <div><span class="text-gray-500">Beneficiary:</span> Dimitar Stavrev Prodromov</div>
+                        <div><span class="text-gray-500">IBAN:</span> <span class="text-white font-bold select-all">BG22INTF40012011857631</span></div>
+                        <div><span class="text-gray-500">BIC / SWIFT:</span> <span class="text-white font-bold select-all">INTFBGSF</span> (iCard AD)</div>
+                        <div><span class="text-gray-500">Reference:</span> VHT-${currentVhtProduct.id.toUpperCase()}-${Date.now().toString().slice(-6)}</div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('vht-modal-desc').innerText = `Thank you, ${name}! Settlement instructions for ${currentVhtProduct.title} have been dispatched to ${email}.`;
+                actionsContainer.innerHTML = `
+                    <a href="mailto:papica777@gmail.com?subject=VHT%20Settlement%20Request%20-%20${encodeURIComponent(currentVhtProduct.title)}" class="w-full py-3 px-4 rounded-xl bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="mail" class="w-4 h-4"></i> Confirm Settlement via Institutional Desk
+                    </a>
+                `;
+            }
 
-            document.getElementById('vht-modal-desc').innerText = `Thank you, ${name}! Your order for "${currentVhtProduct.title}" has been registered. Payment protocol: ${methodText}.`;
+            if (window.lucide) {
+                lucide.createIcons();
+            }
             
             document.getElementById('vht-order-modal').classList.remove('hidden');
         }
