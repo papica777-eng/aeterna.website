@@ -7,6 +7,7 @@
         }
     </script>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation | QAntum Prime</title>
     <meta name="description" content="Complete documentation for QAntum Prime. Learn how to use Ghost Protocol, Self-Healing, Swarm Execution and more.">
@@ -287,72 +288,84 @@
     <div class="bg-grid"></div>
     
     <!-- Navigation Header -->
-    <nav class="fixed w-full z-50 glass py-5 px-6 md:px-12 flex justify-between items-center border-b border-white/5">
-        <div class="flex items-center gap-4 shrink-0">
-            <img src="assets/aeterna_logo.png" alt="AETERNA Logo" class="w-10 h-10 rounded-full object-cover shadow-lg shadow-purple-500/40 border border-purple-400/40 transition-transform hover:scale-110 duration-300">
-            <span class="text-2xl font-black tracking-tighter font-mono flex items-center gap-1.5">
+    <nav class="fixed w-full z-50 glass py-3.5 px-4 sm:px-6 lg:px-8 xl:px-12 flex justify-between items-center border-b border-white/5 transition-all duration-300">
+        <!-- Left: Logo + Security Lock -->
+        <div class="flex items-center gap-3 shrink-0">
+            <img src="assets/aeterna_logo.png" alt="AETERNA Logo" class="w-9 h-9 rounded-full object-cover shadow-lg shadow-purple-500/40 border border-purple-400/40 transition-transform hover:scale-110 duration-300">
+            <span class="text-xl font-black tracking-tighter font-mono flex items-center gap-1">
                 AETERNA<span class="text-accent-purple">.</span>AIC
                 <span onclick="openSslCertificateModal()" class="cursor-pointer text-gray-500 hover:text-emerald-400 transition-colors flex items-center justify-center p-1" title="Cryptographic Security Details">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
                 </span>
             </span>
         </div>
         
-        <div class="flex items-center gap-4 xl:gap-8 min-w-0">
-            <div class="hidden lg:flex gap-3 xl:gap-5 2xl:gap-8 text-[10px] xl:text-xs font-bold tracking-[0.05em] xl:tracking-[0.15em] uppercase items-center">
-                <a href="./index.html#vision" class="hover:text-accent-cyan transition-all">VISION</a>
-                <a href="./index.html#scientific-achievements" class="hover:text-accent-cyan transition-all">SCIENTIFIC BREAKTHROUGHS</a>
-                <a href="./index.html#specs" class="hover:text-accent-cyan transition-all">SPECIFICATIONS LAB</a>
-                <a href="./index.html#timeline" class="hover:text-accent-cyan transition-all">CHRONOLOGY</a>
-                <a href="./index.html#grants" class="hover:text-accent-cyan transition-all">EU GRANTS</a>
-                <a href="./index.html#access" class="hover:text-accent-cyan transition-all">PRICING</a>
+        <!-- Right / Center: Navigation Links & Actions -->
+        <div class="flex items-center gap-2.5 lg:gap-3 xl:gap-5 min-w-0">
+            <div class="hidden lg:flex gap-2.5 xl:gap-4 2xl:gap-6 text-[10px] xl:text-[11px] font-extrabold tracking-[0.06em] xl:tracking-[0.1em] uppercase items-center text-gray-300">
+                <a href="./index.html#vision" class="hover:text-accent-cyan transition-all py-1">VISION</a>
+                <a href="./index.html#scientific-achievements" class="hover:text-accent-cyan transition-all py-1">BREAKTHROUGHS</a>
+                <a href="./index.html#specs" class="hover:text-accent-cyan transition-all py-1">SPECS LAB</a>
+                <a href="./index.html#timeline" class="hover:text-accent-cyan transition-all py-1">CHRONOLOGY</a>
+                <a href="./index.html#grants" class="hover:text-accent-cyan transition-all py-1">EU GRANTS</a>
+                <a href="./index.html#hud-gallery" class="hover:text-accent-cyan transition-all py-1">HUDs</a>
                 
                 <!-- VHT Dropdown -->
                 <div class="relative group">
-                    <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1.5 uppercase cursor-pointer">
-                        <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                        VIRTUAL HUMAN TWIN (VHT)
-                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180"></i>
+                    <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
+                        <i data-lucide="layers" class="w-3.5 h-3.5 text-accent-purple"></i>
+                        <span>VHT BIO-CYBER</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
                     </button>
                     <!-- Dropdown Menu -->
-                    <div class="absolute left-0 top-full hidden group-hover:block pt-4 z-50">
-                        <div class="flex flex-col gap-3 p-5 glass-premium border border-white/10 rounded-xl min-w-[240px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-                            <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
-                            <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
-                            <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
-                            <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
-                            <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
+                    <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
+                        <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[250px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
+                            <a href="./CLINICAL_DOCTOR_PORTAL.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1"><div class="w-5 h-5 rounded bg-cyan-400/10 flex items-center justify-center shrink-0"><i data-lucide="stethoscope" class="w-3 h-3"></i></div> DOCTOR CLINICAL PORTAL</a>
+                            <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse py-1"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center shrink-0"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
+                            <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
+                            <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
+                            <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center shrink-0"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
+                            <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center shrink-0"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
                             <div class="w-full h-px bg-white/10 my-1"></div>
-                            <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
-                            <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
+                            <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
+                            <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
                         </div>
                     </div>
                 </div>
 
-                <a href="./ukame-matrix.html" class="text-accent-gold hover:text-white transition-all font-black flex items-center gap-1.5">UKAME SOLAR</a>
-                
-                <!-- OMNI-VIVISECTOR Dropdown -->
+                <!-- DEEP-TECH & SECURITY Dropdown -->
                 <div class="relative group">
-                    <button class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5 uppercase cursor-pointer">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-                        OMNI-VIVISECTOR
-                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180"></i>
+                    <button class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                        <span>DEEP-TECH SUITE</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
                     </button>
                     <!-- Dropdown Menu -->
-                    <div class="absolute left-0 top-full hidden group-hover:block pt-4 z-50">
-                        <div class="flex flex-col gap-3 p-5 glass-premium border border-white/10 rounded-xl min-w-[240px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
-                            <a href="ukame-matrix.html" class="text-[11px] text-accent-cyan hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-cyan/10 flex items-center justify-center"><i data-lucide="scan" class="w-3 h-3"></i></div> VIVISECTOR DASHBOARD</a>
-                            <a href="./index.html#features" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center"><i data-lucide="trophy" class="w-3 h-3"></i></div> HALL OF FAME (3D)</a>
-                            <a href="./aeterna.html" class="text-[11px] text-accent-cyan hover:text-white transition-all font-black flex items-center gap-2.5"><div class="w-5 h-5 rounded bg-accent-cyan/10 flex items-center justify-center"><i data-lucide="file-text" class="w-3 h-3"></i></div> FORENSIC REPORT</a>
+                    <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
+                        <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[260px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
+                            <a href="./ukame-matrix.html" class="text-[11px] text-accent-gold hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-gold/10 flex items-center justify-center shrink-0"><i data-lucide="sun" class="w-3 h-3 text-accent-gold"></i></div> UKAME SOLAR TAINT MATRIX</a>
+                            <a href="https://github.com/papica777-eng/AETERNA-QSTN" target="_blank" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3 text-accent-purple"></i></div> AETERNA-QSTN (DEFENCE GRID)</a>
+                            <a href="./k2/index.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3 text-accent-emerald"></i></div> VERTEX DEFI ENGINE</a>
+                            <a href="./qantum.html" class="text-[11px] text-accent-indigo hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-indigo/10 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-accent-indigo"></i></div> QANTUM PRIME RUNTIME</a>
+                            <a href="https://github.com/papica777-eng/AETERNA-EKO" target="_blank" class="text-[11px] text-accent-cyan hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-cyan/10 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-3 h-3 text-accent-cyan"></i></div> ECO-TRANSMUTER (MOJO)</a>
+                            <div class="w-full h-px bg-white/10 my-1"></div>
+                            <a href="./aeterna.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-3 h-3"></i></div> FORENSIC AUDIT REPORT</a>
                         </div>
                     </div>
                 </div>
 
-                <a href="./k2/index.html" class="text-accent-emerald hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5 text-accent-emerald"></i> VERTEX DeFi</a>
-                <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline/blob/main/docs/ZERO_ENTROPY_MEV_MODEL.md" target="_blank" class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-cyan"></i> WHITEPAPER</a>
-                <a href="./qantum.html" class="text-accent-indigo hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="cpu" class="w-3.5 h-3.5 text-accent-indigo"></i> QANTUM PRIME</a>
-                <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5"><i data-lucide="book" class="w-3.5 h-3.5 text-accent-purple"></i> DOCS</a>
+                <!-- DOCS Direct Link -->
+                <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5 px-2.5 py-1 rounded bg-accent-purple/20 border border-accent-purple/40 text-white shadow-[0_0_12px_rgba(181,95,230,0.3)]">
+                    <i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-purple"></i>
+                    <span>DOCS</span>
+                </a>
             </div>
+
+            <!-- GitHub Sponsors & Stripe Button -->
+            <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="shrink-0 px-3 py-1.5 bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-pink-300 rounded-full border border-pink-500/40 text-[11px] font-bold font-mono transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,42,133,0.3)] hover:scale-105">
+                <i data-lucide="heart" class="w-3.5 h-3.5 text-pink-400 fill-pink-400/30"></i>
+                <span class="font-extrabold tracking-wider">SPONSOR</span>
+            </a>
         </div>
     </nav>
 
