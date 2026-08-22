@@ -232,7 +232,7 @@
         <div class="absolute -top-40 -right-40 w-[600px] h-[600px] bg-accent-cyan/5 rounded-full blur-[150px] pointer-events-none"></div>
         <div class="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-accent-purple/5 rounded-full blur-[150px] pointer-events-none"></div>
         
-        <div class="max-w-7xl mx-auto relative z-30 grid lg:grid-cols-[1.3fr_0.7fr] gap-12 lg:gap-20 items-center">
+        <div class="max-w-7xl 2xl:max-w-[1600px] mx-auto relative z-30 grid lg:grid-cols-[1fr_1fr] 2xl:grid-cols-[1.05fr_1.15fr] gap-8 lg:gap-12 items-center">
             <!-- Left Column: Title + CTAs -->
             <div class="relative z-10">
                 <!-- Glowing Futuristic Telemetry Badge -->
@@ -384,115 +384,182 @@
                 </div>
             </div>
 
-            <!-- Right Column: Scientific Domain Achievement Badges -->
-            <div class="hidden lg:grid grid-cols-2 gap-3 max-w-sm w-full ml-auto" id="hero-domain-grid">
-                <!-- Oncology -->
-                <div class="glass-premium p-4 rounded-lg border border-accent-purple/20 hover:border-accent-purple/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(181,95,230,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.1s;">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-7 h-7 rounded bg-accent-purple/10 flex items-center justify-center border border-accent-purple/20 group-hover:bg-accent-purple/20 transition-all">
-                            <i data-lucide="microscope" class="w-4 h-4 text-accent-purple"></i>
-                        </div>
-                        <span class="text-[8px] font-bold tracking-[0.2em] text-accent-purple uppercase font-mono">Oncology</span>
-                    </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">99.00% <span class="text-[10px] font-normal text-gray-500">C-Index</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">5,000 TCGA-GBM cohort. Closed-loop lethality solver.</div>
-                </div>
-
-                <!-- Neuroscience -->
-                <div class="glass-premium p-4 rounded-lg border border-accent-pink/20 hover:border-accent-pink/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(255,42,133,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.2s;">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-7 h-7 rounded bg-accent-pink/10 flex items-center justify-center border border-accent-pink/20 group-hover:bg-accent-pink/20 transition-all">
-                            <i data-lucide="brain" class="w-4 h-4 text-accent-pink"></i>
-                        </div>
-                        <span class="text-[8px] font-bold tracking-[0.2em] text-accent-pink uppercase font-mono">Neuro</span>
-                    </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">Aβ → 0 <span class="text-[10px] font-normal text-gray-500">Clearance</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">AQP4 & sleep delta-wave closed-loop BCI controller.</div>
-                </div>
-
-                <!-- Mathematics -->
-                <div class="glass-premium p-4 rounded-lg border border-accent-cyan/20 hover:border-accent-cyan/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(0,240,255,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.3s;">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-7 h-7 rounded bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/20 group-hover:bg-accent-cyan/20 transition-all">
-                            <i data-lucide="sigma" class="w-4 h-4 text-accent-cyan"></i>
-                        </div>
-                        <span class="text-[8px] font-bold tracking-[0.2em] text-accent-cyan uppercase font-mono">Math</span>
-                    </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">λ<sub>n</sub> > 0 <span class="text-[10px] font-normal text-gray-500">Li Collapse</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">Symbolic Riemann hypothesis coefficients validation.</div>
-                </div>
-
-                <!-- Cybersecurity -->
-                <div class="glass-premium p-4 rounded-lg border border-accent-emerald/20 hover:border-accent-emerald/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(0,255,170,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.4s;">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-7 h-7 rounded bg-accent-emerald/10 flex items-center justify-center border border-accent-emerald/20 group-hover:bg-accent-emerald/20 transition-all">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-accent-emerald"></i>
-                        </div>
-                        <span class="text-[8px] font-bold tracking-[0.2em] text-accent-emerald uppercase font-mono">Security</span>
-                    </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">EAL4+ <span class="text-[10px] font-normal text-gray-500">PQC Shield</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">ML-KEM-1024 / ML-DSA-87 sovereign isolation.</div>
-                </div>
-
-                <!-- Genomics -->
-                <div class="glass-premium p-4 rounded-lg border border-accent-gold/20 hover:border-accent-gold/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(212,175,55,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.5s;">
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-7 h-7 rounded bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20 group-hover:bg-accent-gold/20 transition-all">
-                            <i data-lucide="dna" class="w-4 h-4 text-accent-gold"></i>
-                        </div>
-                        <span class="text-[8px] font-bold tracking-[0.2em] text-accent-gold uppercase font-mono">Genomics</span>
-                    </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">mtDNA <span class="text-[10px] font-normal text-gray-500">Breaker</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">Metabolic taint analysis with automated apoptosis induction.</div>
-                </div>
-
-                <!-- Finance / Atomics -->
-                <a href="./k2/index.html" class="glass-premium p-4 rounded-lg border border-accent-emerald/20 hover:border-accent-emerald/50 transition-all duration-500 group cursor-pointer hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(52,211,153,0.12)] block" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.6s;">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-2">
-                            <div class="w-7 h-7 rounded bg-accent-emerald/10 flex items-center justify-center border border-accent-emerald/20 group-hover:bg-accent-emerald/20 transition-all">
-                                <i data-lucide="coins" class="w-4 h-4 text-accent-emerald"></i>
+            <!-- Right Column: Scientific Domain Grid + Metamorphic Silicon ASIC Flagship Tower -->
+            <div class="hidden lg:flex flex-col xl:flex-row gap-3.5 items-stretch w-full ml-auto justify-end">
+                <!-- Scientific Domain Achievement Badges -->
+                <div class="grid grid-cols-2 gap-2.5 max-w-sm w-full shrink-0" id="hero-domain-grid">
+                    <!-- Oncology -->
+                    <div class="glass-premium p-3.5 rounded-lg border border-accent-purple/20 hover:border-accent-purple/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(181,95,230,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.1s;">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded bg-accent-purple/10 flex items-center justify-center border border-accent-purple/20 group-hover:bg-accent-purple/20 transition-all">
+                                <i data-lucide="microscope" class="w-3.5 h-3.5 text-accent-purple"></i>
                             </div>
-                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-emerald uppercase font-mono">Finance</span>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-purple uppercase font-mono">Oncology</span>
                         </div>
-                        <span class="text-[7px] font-bold font-mono px-1.5 py-0.5 rounded bg-accent-emerald/10 border border-accent-emerald/20 text-accent-emerald animate-pulse">LAUNCH HUD</span>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">99.00% <span class="text-[9px] font-normal text-gray-500">C-Index</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">5,000 TCGA-GBM cohort solver.</div>
                     </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">$14.84M <span class="text-[10px] font-normal text-gray-500">TVL</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">Zero-entropy credit markets on Stellar Soroban with Freighter integration.</div>
+
+                    <!-- Neuroscience -->
+                    <div class="glass-premium p-3.5 rounded-lg border border-accent-pink/20 hover:border-accent-pink/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(255,42,133,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.2s;">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded bg-accent-pink/10 flex items-center justify-center border border-accent-pink/20 group-hover:bg-accent-pink/20 transition-all">
+                                <i data-lucide="brain" class="w-3.5 h-3.5 text-accent-pink"></i>
+                            </div>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-pink uppercase font-mono">Neuro</span>
+                        </div>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">Aβ → 0 <span class="text-[9px] font-normal text-gray-500">Clearance</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">AQP4 delta-wave BCI controller.</div>
+                    </div>
+
+                    <!-- Mathematics -->
+                    <div class="glass-premium p-3.5 rounded-lg border border-accent-cyan/20 hover:border-accent-cyan/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(0,240,255,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.3s;">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded bg-accent-cyan/10 flex items-center justify-center border border-accent-cyan/20 group-hover:bg-accent-cyan/20 transition-all">
+                                <i data-lucide="sigma" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                            </div>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-cyan uppercase font-mono">Math</span>
+                        </div>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">λ<sub>n</sub> > 0 <span class="text-[9px] font-normal text-gray-500">Li Collapse</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">Symbolic Riemann validation.</div>
+                    </div>
+
+                    <!-- Cybersecurity -->
+                    <div class="glass-premium p-3.5 rounded-lg border border-accent-emerald/20 hover:border-accent-emerald/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(0,255,170,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.4s;">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded bg-accent-emerald/10 flex items-center justify-center border border-accent-emerald/20 group-hover:bg-accent-emerald/20 transition-all">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-accent-emerald"></i>
+                            </div>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-emerald uppercase font-mono">Security</span>
+                        </div>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">EAL4+ <span class="text-[9px] font-normal text-gray-500">PQC Shield</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">ML-KEM-1024 isolation.</div>
+                    </div>
+
+                    <!-- Genomics -->
+                    <div class="glass-premium p-3.5 rounded-lg border border-accent-gold/20 hover:border-accent-gold/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(212,175,55,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.5s;">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="w-6 h-6 rounded bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20 group-hover:bg-accent-gold/20 transition-all">
+                                <i data-lucide="dna" class="w-3.5 h-3.5 text-accent-gold"></i>
+                            </div>
+                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-gold uppercase font-mono">Genomics</span>
+                        </div>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">mtDNA <span class="text-[9px] font-normal text-gray-500">Breaker</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">Metabolic taint analysis.</div>
+                    </div>
+
+                    <!-- Finance / Atomics -->
+                    <a href="./k2/index.html" class="glass-premium p-3.5 rounded-lg border border-accent-emerald/20 hover:border-accent-emerald/50 transition-all duration-500 group cursor-pointer hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(52,211,153,0.12)] block" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.6s;">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded bg-accent-emerald/10 flex items-center justify-center border border-accent-emerald/20 group-hover:bg-accent-emerald/20 transition-all">
+                                    <i data-lucide="coins" class="w-3.5 h-3.5 text-accent-emerald"></i>
+                                </div>
+                                <span class="text-[8px] font-bold tracking-[0.2em] text-accent-emerald uppercase font-mono">Finance</span>
+                            </div>
+                            <span class="text-[7px] font-bold font-mono px-1 py-0.5 rounded bg-accent-emerald/10 border border-accent-emerald/20 text-accent-emerald animate-pulse">HUD</span>
+                        </div>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">$14.84M <span class="text-[9px] font-normal text-gray-500">TVL</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">Soroban credit markets.</div>
+                    </a>
+
+                    <!-- Longevity -->
+                    <div class="col-span-2 glass-premium p-3.5 rounded-lg border border-orange-500/20 hover:border-orange-500/50 transition-all duration-500 group cursor-default hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(249,115,22,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.65s;">
+                        <div class="flex justify-between items-center mb-1">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded bg-orange-500/10 flex items-center justify-center border border-orange-500/20 group-hover:bg-orange-500/20 transition-all">
+                                    <i data-lucide="activity" class="w-3.5 h-3.5 text-orange-500 animate-pulse"></i>
+                                </div>
+                                <span class="text-[8px] font-bold tracking-[0.2em] text-orange-500 uppercase font-mono">Longevity</span>
+                            </div>
+                        </div>
+                        <div class="text-white font-black text-sm leading-none mb-0.5">-4.4 yr <span class="text-[9px] font-normal text-gray-500">AgeAccel</span></div>
+                        <div class="text-[8.5px] text-gray-500 leading-snug">Senolytic D+Q clearance & epigenetic reprogramming.</div>
+                    </div>
+
+                    <!-- 194 TFLOPS Tensor AI Breakthrough Card -->
+                    <div class="col-span-2 glass-premium p-3.5 rounded-lg border border-accent-gold/40 hover:border-accent-gold transition-all duration-500 group cursor-default hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.7s;">
+                        <div class="flex justify-between items-center mb-1">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20 group-hover:bg-accent-gold/20 transition-all">
+                                    <i data-lucide="zap" class="w-3.5 h-3.5 text-accent-gold animate-pulse"></i>
+                                </div>
+                                <span class="text-[8px] font-bold tracking-[0.2em] text-accent-gold uppercase font-mono" data-i18n="hero.tflops_domain">Sovereign AI Acceleration</span>
+                            </div>
+                            <span class="text-[7px] font-bold font-mono px-1.5 py-0.5 rounded bg-accent-gold/10 border border-accent-gold/20 text-accent-gold animate-pulse">WORLD BEATER</span>
+                        </div>
+                        <div class="text-white font-black text-base leading-none mb-0.5">
+                            194 TFLOPS <span class="text-[10px] font-normal text-gray-400">Tensor AI</span>
+                        </div>
+                        <p class="text-[9px] text-gray-400 leading-snug" data-i18n="hero.tflops_desc">
+                            Локално Mojo & CUDA ускорение, превъзхождащо Apple M-Series Neural Engine с над 400%.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- TALL METAMORPHIC SILICON FLAGSHIP TOWER (Official Breakthrough Card) -->
+                <a href="./aeterna_chip_presentation.html" target="_blank" class="glass-premium p-5 rounded-2xl border-2 border-cyan-400/50 hover:border-cyan-300 transition-all duration-500 group cursor-pointer hover:scale-[1.02] shadow-[0_0_40px_rgba(0,240,255,0.25)] flex flex-col justify-between w-full xl:w-[280px] shrink-0 relative overflow-hidden bg-gradient-to-b from-cyan-950/60 via-purple-950/30 to-black/90" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.25s;">
+                    <!-- Ambient Glow Effect -->
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-cyan-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
+
+                    <div>
+                        <!-- Top Badges -->
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="text-[8px] font-mono text-cyan-300 font-black tracking-widest px-2 py-0.5 bg-cyan-400/20 rounded border border-cyan-400/40 uppercase inline-block shadow-[0_0_10px_rgba(0,240,255,0.3)]">EU CHIPS ACT // STEP</span>
+                                <div class="text-[9px] font-mono text-gold-400 font-bold mt-1 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span>ID: 101359291</span>
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+                                <i data-lucide="cpu" class="w-4 h-4 text-cyan-400 animate-pulse"></i>
+                            </div>
+                        </div>
+
+                        <!-- Title & Subtitle -->
+                        <h3 class="text-lg font-black text-white uppercase tracking-tight leading-tight mb-1">
+                            AETERNA-CHIP
+                            <span class="text-cyan-400 text-xs block font-mono font-bold mt-0.5">METAMORPHIC SILICON ASIC</span>
+                        </h3>
+                        <p class="text-[10px] text-gray-300 font-mono leading-relaxed mb-3">
+                            The world's 1st self-reconfiguring quantum-logic hardware accelerator.
+                        </p>
+
+                        <!-- Key Architecture Bullets -->
+                        <div class="space-y-2 text-[10px] font-mono border-t border-white/10 pt-3 mb-3 text-gray-300">
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="zap" class="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5"></i>
+                                <div><strong class="text-white">Catuṣkoṭi 4-State ALU:</strong> 1-cycle O(1) determinism, zero deadlock.</div>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-purple-400 shrink-0 mt-0.5"></i>
+                                <div><strong class="text-white">0ns Dynamic Reconfig:</strong> 16-slot polymorphic mutation table.</div>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5"></i>
+                                <div><strong class="text-white">Ring-0 MPU Tripwire:</strong> Hardware instruction zero-day immunity.</div>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <i data-lucide="layers" class="w-3.5 h-3.5 text-gold-400 shrink-0 mt-0.5"></i>
+                                <div><strong class="text-white">512-bit SIMD:</strong> 8x 64-bit atomic lanes for ODE biophysics.</div>
+                            </div>
+                        </div>
+
+                        <!-- Tape-out & Economics Block -->
+                        <div class="bg-black/70 p-3 rounded-xl border border-cyan-400/30 font-mono text-[9.5px] space-y-1.5 mb-4 shadow-inner">
+                            <div class="flex justify-between text-gray-400"><span>Tape-Out Node:</span> <span class="text-cyan-300 font-bold">TSMC 28nm / SkyWater</span></div>
+                            <div class="flex justify-between text-gray-400"><span>EU EIC Funding:</span> <span class="text-emerald-400 font-bold">€2.5M Grant + €15M Eq</span></div>
+                            <div class="flex justify-between text-gray-400"><span>Unit Economics:</span> <span class="text-gold-400 font-bold">€16.70 Cost / 91.2% Margin</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Glowing Call To Action Button -->
+                    <div class="w-full py-2.5 bg-gradient-to-r from-cyan-500/30 to-purple-500/30 group-hover:from-cyan-400 group-hover:to-cyan-300 text-cyan-300 group-hover:text-black font-mono font-black text-[11px] uppercase rounded-xl border border-cyan-400/50 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.3)]">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        <span>EXPLORE SILICON DIE 3D</span>
+                    </div>
                 </a>
-
-                <!-- Longevity -->
-                <div class="col-span-2 glass-premium p-4 rounded-lg border border-orange-500/20 hover:border-orange-500/50 transition-all duration-500 group cursor-default hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(249,115,22,0.12)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.65s;">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-2">
-                            <div class="w-7 h-7 rounded bg-orange-500/10 flex items-center justify-center border border-orange-500/20 group-hover:bg-orange-500/20 transition-all">
-                                <i data-lucide="activity" class="w-4 h-4 text-orange-500 animate-pulse"></i>
-                            </div>
-                            <span class="text-[8px] font-bold tracking-[0.2em] text-orange-500 uppercase font-mono">Longevity</span>
-                        </div>
-                    </div>
-                    <div class="text-white font-black text-md leading-none mb-0.5">-4.4 yr <span class="text-[10px] font-normal text-gray-500">AgeAccel</span></div>
-                    <div class="text-[9px] text-gray-500 leading-snug">Senolytic D+Q clearance & epigenetic reprogramming protocols.</div>
-                </div>
-
-                <!-- 194 TFLOPS Tensor AI Breakthrough Card (Spans 2 columns for supreme visual impact) -->
-                <div class="col-span-2 glass-premium p-4 rounded-lg border border-accent-gold/40 hover:border-accent-gold transition-all duration-500 group cursor-default hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(212,175,55,0.2)]" style="animation: fadeInUp 0.6s ease both; animation-delay: 0.7s;">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-2">
-                            <div class="w-7 h-7 rounded bg-accent-gold/10 flex items-center justify-center border border-accent-gold/20 group-hover:bg-accent-gold/20 transition-all">
-                                <i data-lucide="cpu" class="w-4 h-4 text-accent-gold animate-pulse"></i>
-                            </div>
-                            <span class="text-[8px] font-bold tracking-[0.2em] text-accent-gold uppercase font-mono" data-i18n="hero.tflops_domain">Sovereign AI Acceleration</span>
-                        </div>
-                        <span class="text-[8px] font-bold font-mono px-2 py-0.5 rounded bg-accent-gold/10 border border-accent-gold/20 text-accent-gold animate-pulse">WORLD BEATER</span>
-                    </div>
-                    <div class="text-white font-black text-lg leading-none mb-1">
-                        194 TFLOPS <span class="text-xs font-normal text-gray-400">Tensor AI</span>
-                    </div>
-                    <p class="text-[10px] text-gray-400 leading-snug" data-i18n="hero.tflops_desc">
-                        Локално невронно Mojo & CUDA ускорение, превъзхождащо Apple Neural Engine (40-50 TFLOPS) с над 400% без термодинамично забавяне.
-                    </p>
-                </div>
             </div>
         </div>
     </section>
