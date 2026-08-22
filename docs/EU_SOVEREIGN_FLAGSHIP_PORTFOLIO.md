@@ -2,7 +2,7 @@
 ### Master Registry of European Union Grants, Defense Frameworks & Scientific Actions
 **Consortium Lead Coordinator:** AETERNA Technologies (Pomorie, Bulgaria — PIC: `865986222`)  
 **Lead System Architect & Principal Investigator:** Dimitar Stavrev Prodromov  
-**Total EU Portfolio Requested Funding:** **€67,047,219.00**  
+**Total EU Portfolio Requested Funding:** **€84,547,219.00**  
 **Standards & Directives:** NIS-2 (EU 2022/2555) | UNCAN.eu & EDITH VHT | EuroHPC JU | EDF Defence Autonomy | ISO 13485 & IEC 62304
 
 ---
@@ -16,7 +16,8 @@
 | **3** | **AETERNA-QKD** | *Sovereign Next-Generation Quantum Key Distribution and High-Throughput Photon Routing for EuroHPC Supercomputing Backbones and Critical Infrastructure* | **EuroHPC JU (Horizon RIA)**<br/>`HORIZON-JU-EUROHPC-2026-NQKD-12-01` | **`101358168`** | **€8,000,000.00** | **€2,600,000.00** | 🇧🇬 **AETERNA (Lead)**<br/>🇩🇪 LMU München<br/>🇪🇸 BSC-CNS (MareNostrum 5)<br/>🇬🇷 GRNET |
 | **4** | **AETERNA-VHT** | *Biogenesis & Next-Generation In-Silico Virtual Human Twin for Longitudinal Oncology & UNCAN.eu Platform Integration* | **Cancer Mission (Horizon RIA)**<br/>`HORIZON-MISS-2026-02-CANCER-01` | **`101347293`** | **€9,850,000.00** | **€2,900,000.00** | 🇧🇬 **AETERNA (Lead)**<br/>🇩🇪 Charité / IMO<br/>🇳🇱 NKI / 🇫🇷 Gustave Roussy<br/>🇸🇪 Nordic EHR<br/>🇭🇺 LC InnoConsult<br/>🇧🇪 ECPC |
 | **5** | **OMNI-VIVISECTOR** | *AETERNA-VIVISECTOR: Non-Classical Catuskoti Logic and Autonomous Zero-Entropy Formal Vivisection for Heterogeneous Distributed Systems* | **European Research Council (ERC)**<br/>`ERC-2026-PLUS (HORIZON-ERC)` | **`101357176`** | **€7,000,000.00** | **€7,000,000.00** | 🇧🇬 **AETERNA (Host Institution)**<br/>*PI: Dimitar Prodromov* |
-| 🏆 | **TOTAL PORTFOLIO** | **Sovereign Deep-Tech, Quantum, Oncology & Defence Actions** | **EC Funding & Tenders** | **PIC: 865986222** | **€67,047,219.00** | **€31,150,000.00** | **6 EU Member States Tier-1 Network** |
+| **6** | **AETERNA-CHIP** | *Synthesizable Self-Reconfiguring Metamorphic Silicon ASIC Accelerator for Deterministic Computing & European Semiconductor Sovereignty* | **EIC Accelerator (STEP / Chips Act)**<br/>`HORIZON-EIC-2026-ACCELERATOR-01` | **`101359291`** | **€17,500,000.00** | **€17,500,000.00** | 🇧🇬 **AETERNA (Single Applicant)**<br/>*Lead: Dimitar Prodromov* |
+| 🏆 | **TOTAL PORTFOLIO** | **Sovereign Deep-Tech, Semiconductors, Quantum, Oncology & Defence Actions** | **EC Funding & Tenders** | **PIC: 865986222** | **€84,547,219.00** | **€48,650,000.00** | **European Union Sovereign Deep-Tech Network** |
 
 ---
 
@@ -47,6 +48,11 @@
 * **Objective:** Foundational formal verification engine combining Weisfeiler-Lehman (WL) AST graph embedding with 4-state non-classical Catuskoti logic to achieve $O(1)$ structural zero-day discovery in distributed computing architectures.
 * **Empirical Validation:** Proven on high-throughput Tier-1 production codebases (Firedancer VM sandbox escape, Base Azul SpanBatch panic DoS).
 * **Principal Investigator:** Dimitar Stavrev Prodromov | **Host Institution:** AETERNA Technologies.
+
+### 6. AETERNA-CHIP — European Semiconductor Sovereignty & Metamorphic Silicon (€17.5M)
+* **Objective:** Synthesizable self-reconfiguring Metamorphic Silicon ASIC IP Core featuring 4-state Catuṣkoṭi quantum-logic ALU, 16-slot dynamic polymorphic mutation matrix, 512-bit vector SIMD pipeline, and Ring-0 MPU Dead-Zone Tripwire.
+* **Silicon Roadmap & Tape-Out:** TSMC 28nm FinFET / SkyWater 130nm MPW shuttle via EUROPRACTICE / Chips JU; packaging into 4-core enterprise PCIe accelerator boards (91.2% gross margin).
+* **Principal Investigator & Lead Architect:** Dimitar Stavrev Prodromov | **Applicant:** AETERNA Technologies (PIC: `865986222`, Official Final ID: `101359291`).
 
 ## 🤝 Comprehensive European Institutional Consortium & PIC Registry
 
