@@ -3339,8 +3339,17 @@
         state.selectedProduct = null;
 
         window.openPortal = function(productId = null) {
-            // Redirect directly to the QAntum-Nexus QA-SAAS Dashboard
-            window.location.href = 'http://localhost:5555/billing';
+            const modal = document.getElementById('billing-portal-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (productId) {
+                selectCheckoutProduct(productId);
+            }
+            if (state.client) {
+                showDashboardView();
+            } else {
+                showAuthView();
+            }
         }
 
         window.closePortal = function() {
@@ -3430,7 +3439,7 @@
             const body = isRegisterMode ? { email, name, password } : { email, password };
             
             try {
-                const response = await fetch(`http://localhost:3000${endpoint}`, {
+                const response = await fetch(`https://api.aeterna.website/v1${endpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
@@ -3445,7 +3454,7 @@
                     showDashboardView();
                 }
             } catch (err) {
-                document.getElementById('auth-error-msg').textContent = "Failed to connect to local backend (http://localhost:3000)";
+                document.getElementById('auth-error-msg').textContent = "Failed to connect to Sovereign Gateway (https://api.aeterna.website/v1)";
             }
         }
 
@@ -3605,7 +3614,7 @@
             logPlaygroundTerminal(`[SIMULATOR] Mocking Transak payment completion...`);
             
             try {
-                const response = await fetch(`http://localhost:3000/api/client/purchase`, {
+                const response = await fetch(`https://api.aeterna.website/v1/client/purchase`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -3625,7 +3634,7 @@
                     logPlaygroundTerminal(`[ERROR] Quota credit failed: ${data.error}`);
                 }
             } catch (err) {
-                logPlaygroundTerminal(`[ERROR] Connection error to http://localhost:3000/api/client/purchase`);
+                logPlaygroundTerminal(`[ERROR] Connection error to https://api.aeterna.website/v1/client/purchase`);
             }
         }
 
@@ -3656,13 +3665,13 @@
             promptInput.value = '';
             
             const time = new Date().toLocaleTimeString();
-            logPlaygroundTerminal(`\n[${time}] ▸ POST http://localhost:3000/v1/chat/completions`);
+            logPlaygroundTerminal(`\n[${time}] ▸ POST https://api.aeterna.website/v1/chat/completions`);
             logPlaygroundTerminal(`[HEADERS] Authorization: Bearer ${state.client.apiKey.substring(0, 15)}...`);
             logPlaygroundTerminal(`[BODY] { model: "aeterna-cognitive-v1", prompt: "${prompt}" }`);
             
             try {
                 const startTime = Date.now();
-                const response = await fetch(`http://localhost:3000/v1/chat/completions`, {
+                const response = await fetch(`https://api.aeterna.website/v1/chat/completions`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -3707,7 +3716,7 @@
             try {
                 if (!state.client || !state.clientPassword) return;
                 
-                const response = await fetch(`http://localhost:3000/api/client/login`, {
+                const response = await fetch(`https://api.aeterna.website/v1/client/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -3749,7 +3758,7 @@
             statusMsg.textContent = "Processing donation...";
             
             try {
-                const response = await fetch(`http://localhost:3000/api/donate`, {
+                const response = await fetch(`https://api.aeterna.website/v1/donate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -3945,72 +3954,43 @@
                             </div>
                         </div>
 
-                            <!-- ✨ Support the Project — Donate Section -->
-                            <div class="glass p-5 rounded-xl border border-white/5 space-y-4 mt-0">
+                            <!-- 🏛️ Institutional Horizon Europe Consortium & Research Partnership -->
+                            <div class="glass p-5 rounded-xl border border-cyan-500/20 space-y-4 mt-0">
                                 <div>
                                     <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                                        <span>💖</span> Support the Project
+                                        <i data-lucide="building-2" class="w-4 h-4 text-cyan-400"></i>
+                                        <span>Horizon Europe Consortium & Research Track</span>
                                     </h4>
-                                    <p class="text-gray-500 text-[10px] font-mono mt-1">DONATIONS BOOST YOUR QUOTA — 1 USD = +200 REQUESTS</p>
+                                    <p class="text-gray-400 text-[10px] font-mono mt-1">OFFICIAL INSTITUTIONAL CO-DEVELOPMENT & GRANT PARTNERSHIP</p>
                                 </div>
 
-                                <!-- Quick Donate Buttons -->
-                                <div class="grid grid-cols-3 gap-2">
-                                    <a href="https://www.paypal.com/donate/?business=papica777%40gmail.com&currency_code=USD"
-                                       target="_blank"
-                                       class="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-[#003087]/40 hover:bg-[#003087]/70 border border-[#009cde]/30 hover:border-[#009cde] transition-all group">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M7.144 19.532l1.049-5.971-.66-.003H4.982l2.162-13.29h7.267c2.492 0 4.212.518 5.101 1.541.424.488.694 1.006.826 1.585.137.607.14 1.329.006 2.208l-.01.064v.56l.526.298a3.508 3.508 0 011.042.888c.441.534.724 1.214.84 2.019.12.826.08 1.812-.117 2.93-.227 1.293-.596 2.419-1.096 3.345a6.732 6.732 0 01-1.726 2.168c-.672.556-1.47.978-2.371 1.254-.873.268-1.871.405-2.962.405h-.703c-.502 0-.99.181-1.374.507a2.21 2.21 0 00-.74 1.28l-.055.297-.876 5.555-.04.203c-.01.056-.027.084-.05.103a.132.132 0 01-.083.03H7.144z" fill="#009cde"/>
-                                            <path d="M20.25 7.77c-.017.1-.036.202-.057.305C19.4 11.85 17.178 13.5 13.771 13.5h-1.987a.799.799 0 00-.79.676l-.843 5.348-.239 1.517a.42.42 0 00.415.485h2.912c.35 0 .648-.254.703-.601l.029-.151.557-3.532.036-.194a.714.714 0 01.704-.601h.444c2.87 0 5.117-1.165 5.776-4.536.275-1.41.133-2.588-.594-3.417a2.833 2.833 0 00-.644-.524z" fill="#012169"/>
-                                        </svg>
-                                        <span class="text-[8px] font-bold font-mono text-[#009cde] group-hover:text-white tracking-widest uppercase">PayPal</span>
-                                    </a>
-                                    <a href="https://github.com/sponsors/papica777-eng"
-                                       target="_blank"
-                                       class="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-[#6e5494]/20 hover:bg-[#6e5494]/50 border border-[#6e5494]/30 hover:border-[#6e5494] transition-all group">
-                                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="#f8a8c8" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                        <span class="text-[8px] font-bold font-mono text-[#f8a8c8] group-hover:text-white tracking-widest uppercase">Sponsors</span>
-                                    </a>
-                                    <a href="https://buymeacoffee.com/aeterna"
-                                       target="_blank"
-                                       class="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-[#ffdd00]/10 hover:bg-[#ffdd00]/25 border border-[#ffdd00]/30 hover:border-[#ffdd00] transition-all group">
-                                        <span class="text-xl leading-none">☕</span>
-                                        <span class="text-[8px] font-bold font-mono text-[#ffdd00] group-hover:text-white tracking-widest uppercase">Coffee</span>
-                                    </a>
+                                <!-- Institutional Badges & Identifiers -->
+                                <div class="bg-black/50 p-3 rounded-lg border border-white/10 text-xs font-mono space-y-1.5 text-gray-300">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">EU PIC Identifier:</span>
+                                        <span class="text-cyan-300 font-bold">865986222</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">EC Horizon Coordinator ID:</span>
+                                        <span class="text-emerald-300 font-bold">101327948</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Clinical Data Compliance:</span>
+                                        <span class="text-purple-300 font-bold">GDPR Art. 9 / HIPAA Safe Harbor</span>
+                                    </div>
                                 </div>
 
-                                <!-- Custom Donate Form -->
-                                <div class="bg-black/40 rounded-lg border border-white/5 p-3 space-y-2">
-                                    <p class="text-[8px] font-mono text-gray-500 uppercase tracking-wider">Custom Donation (auto-credits quota)</p>
-                                    <div class="flex gap-2">
-                                        <div class="relative flex-grow">
-                                            <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs font-mono">$</span>
-                                            <input id="donate-amount-input" type="number" min="1" value="10" placeholder="10"
-                                                class="w-full pl-6 pr-2 py-2 bg-white/5 border border-white/10 rounded text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
-                                        </div>
-                                        <select id="donate-currency-select" class="bg-white/5 border border-white/10 rounded px-2 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
-                                            <option value="USD">USD</option>
-                                            <option value="EUR">EUR</option>
-                                            <option value="GBP">GBP</option>
-                                        </select>
-                                        <select id="donate-provider-select" class="bg-white/5 border border-white/10 rounded px-2 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
-                                            <option value="paypal">PayPal</option>
-                                            <option value="github">GitHub</option>
-                                            <option value="stripe">Stripe</option>
-                                            <option value="crypto">Crypto</option>
-                                        </select>
-                                    </div>
-                                    <div class="flex gap-2 items-center">
-                                        <input id="donate-message-input" type="text" placeholder="Optional message..."
-                                            class="flex-grow bg-white/5 border border-white/10 rounded px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-accent-cyan">
-                                        <button onclick="submitDonation()"
-                                            class="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-400 hover:to-purple-400 text-white font-extrabold text-[9px] tracking-widest font-mono uppercase rounded transition-all shrink-0 shadow-lg shadow-purple-900/40">
-                                            💖 Donate
-                                        </button>
-                                    </div>
-                                    <p id="donate-status-msg" class="text-[9px] font-mono text-accent-emerald hidden"></p>
+                                <!-- Institutional Action Buttons -->
+                                <div class="grid grid-cols-2 gap-2 pt-1">
+                                    <a href="mailto:papica777@gmail.com?subject=Horizon%20Europe%20Consortium%20Inquiry%20-%20AETERNA"
+                                       class="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-cyan-950/60 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold font-mono uppercase tracking-wider transition-all">
+                                        <i data-lucide="mail" class="w-3.5 h-3.5"></i> Request Consortium NDA
+                                    </a>
+                                    <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline/blob/main/docs/ZERO_ENTROPY_MEV_MODEL.md"
+                                       target="_blank"
+                                       class="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-purple-950/60 hover:bg-purple-900 border border-purple-500/40 text-purple-300 text-[10px] font-bold font-mono uppercase tracking-wider transition-all">
+                                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i> View Grant Portfolio
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -4050,8 +4030,8 @@
                             <!-- Tab Content: API Documentation -->
                             <div id="right-tab-docs" class="hidden p-4 bg-black/40 font-mono text-[10px] leading-relaxed text-gray-400 overflow-y-auto flex-grow terminal-scroll space-y-4">
                                 <div>
-                                    <span class="text-accent-cyan font-bold block mb-1">🔗 BASE URL</span>
-                                    <code class="bg-white/5 px-2 py-1 rounded border border-white/10 block text-white select-all">http://localhost:3000</code>
+                                    <span class="text-accent-cyan font-bold block mb-1">🔗 BASE PRODUCTION URL</span>
+                                    <code class="bg-white/5 px-2 py-1 rounded border border-white/10 block text-white select-all">https://api.aeterna.website/v1</code>
                                 </div>
                                 
                                 <div class="w-full border-t border-white/5 my-2"></div>
@@ -4070,7 +4050,7 @@
                                     <p class="text-gray-500 mb-2">POST /v1/chat/completions (Deducts 1 Request)</p>
                                     
                                     <span class="text-gray-500 block mb-1">cURL Example:</span>
-                                    <pre class="bg-white/5 p-2 rounded border border-white/10 text-white overflow-x-auto select-all">curl -X POST http://localhost:3000/v1/chat/completions \
+                                    <pre class="bg-white/5 p-2 rounded border border-white/10 text-white overflow-x-auto select-all">curl -X POST https://api.aeterna.website/v1/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -4083,10 +4063,10 @@
                                 
                                 <div>
                                     <span class="text-accent-emerald font-bold block mb-1">⚡ 2. SUBMIT COMPUTE JOB</span>
-                                    <p class="text-gray-500 mb-2">POST /compute/submit (Deducts 1 Request)</p>
+                                    <p class="text-gray-500 mb-2">POST /v1/compute/submit (Deducts 1 Request)</p>
                                     
                                     <span class="text-gray-500 block mb-1">cURL Example:</span>
-                                    <pre class="bg-white/5 p-2 rounded border border-white/10 text-white overflow-x-auto select-all">curl -X POST http://localhost:3000/compute/submit \
+                                    <pre class="bg-white/5 p-2 rounded border border-white/10 text-white overflow-x-auto select-all">curl -X POST https://api.aeterna.website/v1/compute/submit \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
