@@ -303,6 +303,16 @@
 <body>
     <div id="scene-container"></div>
 
+    <!-- Home & Pro Navigation -->
+    <div style="position:fixed; top:16px; right:16px; z-index:99999; display:flex; align-items:center; gap:8px;">
+        <a href="./index.html#clinical-order" style="display:flex; align-items:center; gap:6px; padding:6px 14px; background:linear-gradient(135deg, rgba(235, 75, 75, 0.25), rgba(74, 144, 217, 0.25)); border:1px solid rgba(235, 75, 75, 0.5); border-radius:10px; color:#ff8888; text-decoration:none; font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; font-family:'JetBrains Mono',monospace; backdrop-filter:blur(10px); transition:all 0.3s;" onmouseover="this.style.boxShadow='0 0 15px rgba(235,75,75,0.4)'" onmouseout="this.style.boxShadow='none'">
+            <i data-lucide="shopping-cart" style="width:12px;height:12px;"></i> ORDER CVD TWIN (499 €)
+        </a>
+        <a href="./index.html" style="display:flex; align-items:center; gap:6px; padding:6px 14px; background:rgba(10,15,26,0.85); backdrop-filter:blur(12px); border:1px solid rgba(70,130,220,0.3); border-radius:10px; color:#4a90d9; text-decoration:none; font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; font-family:'JetBrains Mono',monospace; transition:all 0.3s;" onmouseover="this.style.borderColor='rgba(70,130,220,0.8)';this.style.boxShadow='0 0 15px rgba(70,130,220,0.3)'" onmouseout="this.style.borderColor='rgba(70,130,220,0.3)';this.style.boxShadow='none'">
+            <i data-lucide="home" style="width:12px;height:12px;"></i> HOME
+        </a>
+    </div>
+
     <div class="equation-bar mono">
         <span class="eq-label">Navier-Stokes Momentum Equation (Incompressible Flow)</span>
         ρ(∂v/∂t + v·∇v) = −∇p + μ∇²v + f &nbsp;&nbsp;│&nbsp;&nbsp; Re = ρvD/μ
@@ -318,7 +328,7 @@
                 </div>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-right: 280px;">
                 <div class="patient-strip">
                     <span><strong>ID:</strong> VHT-CVD-992</span>
                     <span class="divider"></span>
