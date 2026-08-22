@@ -3150,7 +3150,6 @@
                 const arg = parts[1];
 
                 const commandMap = {
-                    // aeterna_pharma_shadow.html
                     'start_cohort_scan': () => {
                         if (typeof window.startCohortScan === 'function') window.startCohortScan();
                         else if (typeof startCohortScan === 'function') startCohortScan();
@@ -3163,33 +3162,7 @@
                         if (typeof window.triggerYamanaka === 'function') window.triggerYamanaka();
                         else if (typeof triggerYamanaka === 'function') triggerYamanaka();
                     },
-                    'reset_longevity': () => {
-                        if (typeof window.resetLongevity === 'function') window.resetLongevity();
-                        else if (typeof resetLongevity === 'function') resetLongevity();
-                    },
-                    // index.html
-                    'set_spec_tab': (tabId) => {
-                        if (typeof window.setSpecTab === 'function') window.setSpecTab(tabId);
-                        else if (typeof setSpecTab === 'function') setSpecTab(tabId);
-                    },
                     'run_active_command': (cmdId) => {
-                        if (typeof window.runActiveCommand === 'function') window.runActiveCommand(cmdId);
-                        else if (typeof runActiveCommand === 'function') runActiveCommand(cmdId);
-                    },
-                    'set_trl_step': (stepNum) => {
-                        const val = parseInt(stepNum, 10);
-                        if (typeof window.setTRLStep === 'function') window.setTRLStep(val);
-                        else if (typeof setTRLStep === 'function') setTRLStep(val);
-                    },
-                    // clinical-oncology.html
-                    'trigger_cure_restoration': () => {
-                        if (typeof window.triggerCureRestoration === 'function') window.triggerCureRestoration();
-                        else if (typeof triggerCureRestoration === 'function') triggerCureRestoration();
-                    },
-                    'run_patient_simulation': () => {
-                        if (typeof window.runPatientSimulation === 'function') window.runPatientSimulation();
-                        else if (typeof runPatientSimulation === 'function') runPatientSimulation();
-                    },
                     'trigger_crb_boost': () => {
                         if (typeof window.triggerCrbBoost === 'function') window.triggerCrbBoost();
                         else if (typeof triggerCrbBoost === 'function') triggerCrbBoost();
@@ -3241,34 +3214,6 @@
                     'reset_state': () => {
                         if (typeof window.resetState === 'function') window.resetState();
                         else if (typeof resetState === 'function') resetState();
-                    },
-                    // sovereign-hud.html
-                    'reset_cure_state': () => {
-                        if (typeof window.resetCureState === 'function') window.resetCureState();
-                        else if (typeof resetCureState === 'function') resetCureState();
-                    },
-                    'switch_tab': (tabId) => {
-                        if (typeof window.switchTab === 'function') window.switchTab(tabId);
-                        else if (typeof switchTab === 'function') switchTab(tabId);
-                    },
-                    // aeterna_cohort_sim.html
-                    'run_simulation': () => {
-                        if (typeof window.runSimulation === 'function') window.runSimulation();
-                        else if (typeof runSimulation === 'function') runSimulation();
-                    },
-                    'select_drug': (drugId) => {
-                        if (typeof window.selectDrug === 'function') window.selectDrug(drugId);
-                        else if (typeof selectDrug === 'function') selectDrug(drugId);
-                    },
-                    // ukame-matrix.html
-                    'recalculate': () => {
-                        if (typeof window.recalculate === 'function') window.recalculate();
-                        else if (typeof recalculate === 'function') recalculate();
-                    },
-                    // IP_FINDER.html
-                    'vivisect': () => {
-                        if (typeof window.vivisect === 'function') window.vivisect();
-                        else if (typeof vivisect === 'function') vivisect();
                     }
                 };
 
