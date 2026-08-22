@@ -568,41 +568,35 @@ function initConsoleEasterEgg() {
 // INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════════════════
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Core functionality
-    initParticles();
-    initNavigation();
-    initTypewriter();
-    initHeroStats();
-    initCounters();
-    initCopyButtons();
-    
-    // Animations
-    initRevealOnScroll();
-    initFeatureCards();
-    initArchLayers();
-    
-    // Performance
-    initLazyLoading();
-    
-    // Extras
-    initKeyboardShortcuts();
-    initThemeToggle();
-    initConsoleEasterEgg();
-    
-    // Initialize Interactive Feature Buttons
-    initFeatureButtons();
-    
-    // Connect to QAntum Neural Hub (Real-time or Simulation)
-    telemetry.connect();
-    
-    // Listen for real-time data updates
-    telemetry.onData((data) => {
-        updateDashboardStats(data);
-    });
-    
+function initApp() {
+    try { initParticles(); } catch(e){}
+    try { initNavigation(); } catch(e){}
+    try { initTypewriter(); } catch(e){}
+    try { initHeroStats(); } catch(e){}
+    try { initCounters(); } catch(e){}
+    try { initCopyButtons(); } catch(e){}
+    try { initRevealOnScroll(); } catch(e){}
+    try { initFeatureCards(); } catch(e){}
+    try { initArchLayers(); } catch(e){}
+    try { initLazyLoading(); } catch(e){}
+    try { initKeyboardShortcuts(); } catch(e){}
+    try { initThemeToggle(); } catch(e){}
+    try { initConsoleEasterEgg(); } catch(e){}
+    try { initFeatureButtons(); } catch(e){}
+    try { telemetry.connect(); } catch(e){}
+    try {
+        telemetry.onData((data) => {
+            updateDashboardStats(data);
+        });
+    } catch(e){}
     console.log(`%c⚡ QAntum Prime ${CONFIG.version} initialized`, 'color: #10b981; font-weight: bold;');
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // INTERACTIVE FEATURE BUTTONS & TERMINAL ENGINE
