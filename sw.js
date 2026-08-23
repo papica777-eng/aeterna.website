@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aeterna-sovereign-v1.3';
+const CACHE_NAME = 'aeterna-infinity-v2.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
