@@ -7,7 +7,7 @@
 * **AETERNA Technologies EOOD (Bulgaria)** — Coordinator & SaMD Core (WP1, WP4, WP5 Lead)
 * **Medical University Sofia (Bulgaria)** — Clinical Trial Lead (WP3 Lead, Prof. Dr. Ventsislava Pencheva, Dr. Magdalena Kasnakova)
 * **Barcelona Supercomputing Center (BSC-CNS, Spain)** — HPC MareNostrum 5 Core (WP2 Co-Lead, Dr. Alfonso Valencia)
-* **ATHENA Research Center / NKUA (Athens, Greece)** — Translational Oncology Center of Excellence (WP2/WP3 Co-Lead, Dr. Jean Laurent)
+* **Institut Curie (Paris, France)** — Translational Oncology Center of Excellence (WP2/WP3 Co-Lead, Dr. Jean Laurent)
 
 ---
 
@@ -86,7 +86,7 @@ graph TD
   * **mOS:** $20.07 \to 38.40$ месеца (**$+91.3\%$ Gain**, $\text{HR} = 0.52$).
   * **Grade 3/4 странични токсичности:** $-68.9\%$ редукция.
 * **200-пациентен проспективен клиничен пилот (Shadow Mode):**
-  * Провежда се в МУ София, ATHENA Research Center (Athens, EL) и BSC (60 GBM, 70 PAAD, 70 NSCLC) с 5-точков лонгитюдинален протокол T0–T4.
+  * Провежда се в МУ София, Institut Curie (Paris, FR) и BSC (60 GBM, 70 PAAD, 70 NSCLC) с 5-точков лонгитюдинален протокол T0–T4.
 
 ---
 

@@ -58,7 +58,7 @@ graph TD
 * **Objective:** Establish low-latency real-time clinical integration pathways.
 * **Deliverables:** LOINC mapping schemas for `TP53` [85337-4], `KRAS` [62358-7], `EGFR` [62357-9], and `PD-L1 TPS` [85147-7] molecular diagnostics.
 
-### WP2: Multi-Scale Tumor & Neurological Glioblastoma Simulation (Lead: Barcelona Supercomputing Center & ATHENA Research Center (Athens, EL))
+### WP2: Multi-Scale Tumor & Neurological Glioblastoma Simulation (Lead: Barcelona Supercomputing Center & Institut Curie (Paris, FR))
 * **Objective:** High-performance thermodynamic, physical, and neural twin simulation of mutated tumor boundaries, integrating closed-loop neuro-oncological feedback (BCI-FES & dynamic BDNF Hebbian facilitation).
 * **Deliverables:** The `APOPTOSIS_ENGINE` and `VHT-BRAIN` cores running on vectorized AVX-512 and CUDA architectures, simulating ligand-receptor affinity matrices at $<25\text{ms}$ latency, **98.50% Hebbian Synaptic Density Regeneration** via BDNF, and **54.20 mL/100g/min L-CBF perfusion recovery** in tumor margins.
 
@@ -86,7 +86,7 @@ The total proposed budget of **€9,850,000** is meticulously allocated across z
 | **AETERNA Technologies** | Coordinator / Core VM | BG | €1,289,000 | €322,250 | **€1,611,250** |
 | **Medical University Sofia** | Clinical Trial Lead | BG | €1,800,000 | €450,000 | **€2,250,000** |
 | **Barcelona Supercomputing Ctr** | Supercompute Core | ES | €1,800,000 | €450,000 | **€2,250,000** |
-| **ATHENA Research Center (Athens, EL)** | Oncology Validation | FR | €1,800,000 | €450,000 | **€2,250,000** |
+| **Institut Curie (Paris, FR)** | Oncology Validation | FR | €1,800,000 | €450,000 | **€2,250,000** |
 | **LC Innoconsult International** | WP5 Lead (D&E / IP) | HU | €256,000 | €64,000 | **€320,000** |
 | **Clinical Infrastructure Fund** | Patient Registries | EU | €935,000 | €233,750 | **€1,168,750** |
 | **TOTAL CONSORTIUM** | Full Project | EU | €7,880,000 | €1,970,000 | **€9,850,000** |
@@ -98,7 +98,7 @@ The total proposed budget of **€9,850,000** is meticulously allocated across z
 1. **AETERNA Technologies** (Sofia, Bulgaria) — Coordinator. Core VM development, high-speed SIMD mathematical logic execution, and WebSocket telemetry integration.
 2. **Medical University Sofia** (Sofia, Bulgaria) — Clinical Validation Lead. Multi-center prospective clinical pilot and retrospective trial oversight.
 3. **Barcelona Supercomputing Center (BSC CNS)** (Barcelona, Spain) — High-Performance Compute Infrastructure (MareNostrum 5) for multi-scale biophysical simulations.
-4. **ATHENA Research Center (Athens, EL)** (Paris, France) — European Oncology Validation and cell-level patient tissue kinetics.
+4. **Institut Curie (Paris, FR)** (Paris, France) — European Oncology Validation and cell-level patient tissue kinetics.
 5. **LC Innoconsult International** (Szeged, Hungary) — Dissemination, Exploitation & IP Freedom-to-Operate (FTO) Management.
 
 ---

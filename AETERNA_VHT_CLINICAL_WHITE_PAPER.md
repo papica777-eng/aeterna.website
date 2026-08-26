@@ -9,7 +9,7 @@
 * **AETERNA Technologies EOOD (Bulgaria)** — Project Coordinator & SaMD Core Lead
 * **Medical University Sofia (Bulgaria)** — Academic & Clinical Trials Lead (Prof. Dr. Ventsislava Pencheva, Dr. Magdalena Kasnakova)
 * **Barcelona Supercomputing Center (BSC-CNS, Spain)** — High-Performance Supercomputing (MareNostrum 5, Dr. Alfonso Valencia)
-* **ATHENA Research Center / NKUA (Athens, Greece)** — Translational Oncology & Organoid Screening (Dr. Jean Laurent)
+* **Institut Curie (Paris, France)** — Translational Oncology & Organoid Screening (Dr. Jean Laurent)
 
 ---
 
@@ -43,7 +43,7 @@ The engine features a 5-tier escalation library matching driver mutations to Eur
 * **Grade 3/4 Cytotoxicity Events:** $-68.9\%$ reduction through precise pharmacokinetic dose clamping.
 
 ### Prospective Multi-Center Clinical Pilot ($N = 200$ Patients in Blinded Shadow Mode)
-* **Sites:** Medical University Sofia (Bulgaria), ATHENA Research Center / NKUA (Athens, Greece), BSC (Spain).
+* **Sites:** Medical University Sofia (Bulgaria), Institut Curie (Paris, France), BSC (Spain).
 * **Target Cohorts:** Glioblastoma ($N=60$), Pancreatic Adenocarcinoma ($N=70$), Non-Small Cell Lung Cancer ($N=70$).
 * **Longitudinal Sampling:** T0 (Baseline), T1 (Month 3), T2 (Month 6), T3 (Month 12), T4 (Months 18–48).
 

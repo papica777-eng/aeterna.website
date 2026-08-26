@@ -16,7 +16,7 @@ AETERNA operates as the **Lead Coordinator** (PIC: 865986222) alongside Europe's
 | **EuroHPC JU 2026** | NQKD-12-01 (Next-Gen QKD) | 101358168 | **€8,000,000.00** | **Coordinator (AETERNA)** | LMU München (DE), BSC MareNostrum 5 (ES), GRNET (EL) |
 | **European Defence Fund (EDF)** | EDF-2026-RA-CYBER-QSTN | 101357872 | **€22,197,219.00** | **Coordinator (AETERNA)** | LMU München (DE), EETT (EL) |
 | **CEF Digital (Works)** | SMART CABLES 2026 | 101354145 | **€20,000,000.00** | **Coordinator (AETERNA)** | Coastal Maritime Quantum Terminal (Pomorie, BG), GRNET (EL), LMU (DE) |
-| **Cancer Mission (Horizon RIA)** | HORIZON-MISS-2026-02-CANCER-01 | 101347293 (Draft: SEP-211328418) | **€9,850,000.00** | **Coordinator (AETERNA)** | Medical University Sofia (BG), BSC MareNostrum 5 (ES), ATHENA Research Center (Athens, EL) |
+| **Cancer Mission (Horizon RIA)** | HORIZON-MISS-2026-02-CANCER-01 | 101347293 (Draft: SEP-211328418) | **€9,850,000.00** | **Coordinator (AETERNA)** | Medical University Sofia (BG), BSC MareNostrum 5 (ES), Institut Curie (Paris, FR) |
 | **Horizon-ERC (ERC Plus)** | ERC-2026-PLUS (Formal Vivisection) | 101357176 | **€2,500,000.00** | **Host (AETERNA)** | Principal Investigator: Dimitar Stavrev Prodromov |
 | **EIC Accelerator (STEP / Chips Act)** | HORIZON-EIC-2026-ACCELERATOR-01 | SEP-211377840 | **€7,500,000.00** | **Single Applicant (AETERNA)** | Lead: Dimitar Stavrev Prodromov (AETERNA OMNICORE) |
 | **European Defence Fund (EDF)** | EDF-2026-RA-CYBER-UAS | EDF-AERO-2026 | **€17,500,000.00** | **Coordinator (AETERNA)** | Lead: Dimitar Stavrev Prodromov (AETERNA-AERO Swarm Shield) |

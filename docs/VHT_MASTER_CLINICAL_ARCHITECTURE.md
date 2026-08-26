@@ -9,7 +9,7 @@
 1. **AETERNA Technologies EOOD (BG)** — Lead Coordinator, SaMD Architecture, WP1, WP4, WP5 Lead (€1,931,250.00 | 156 PM)
 2. **Medical University Sofia (BG)** — Clinical Trial Lead, Department of Propedeutics of Internal Diseases, WP3 Lead (€2,250,000.00 | 88 PM)
 3. **Barcelona Supercomputing Center (BSC-CNS) (ES)** — HPC Core, MareNostrum 5 Pre-Exascale Partition, WP2 Co-Lead (€2,250,000.00 | 78 PM)
-4. **ATHENA Research Center (Athens, EL)** — Translational Oncology Center of Excellence, WP2/WP3 Co-Lead (€3,418,750.00 | 110 PM)
+4. **Institut Curie (Paris, FR)** — Translational Oncology Center of Excellence, WP2/WP3 Co-Lead (€3,418,750.00 | 110 PM)
 
 ---
 
@@ -81,7 +81,7 @@
    * **Grade 3/4 странични токсичности:** Спад от $41.20\%$ на **$12.80\%$** (**$-68.9\%$ редукция**).
 
 2. **Проспективно клинично пилотно изпитване ($N = 200$ пациенти в Shadow Mode):**
-   * **Кохорта 1 (GBM):** $N = 60$ пациенти (МУ София, ATHENA Research Center (Athens, EL))
+   * **Кохорта 1 (GBM):** $N = 60$ пациенти (МУ София, Institut Curie (Paris, FR))
    * **Кохорта 2 (PAAD):** $N = 70$ пациенти (Панкреас)
    * **Кохорта 3 (NSCLC):** $N = 70$ пациенти (Бял дроб)
    * **Лонгитюдинален протокол:** T0 (Базов), T1 (Месец 3), T2 (Месец 6), T3 (Месец 12), T4 (Проследяване Месеци 18–48).
@@ -102,7 +102,7 @@
 | Пакет | Наименование | Водещ бенефициер | Усилие (PM) | Срок |
 | :--- | :--- | :--- | :---: | :---: |
 | **WP1** | High-Speed FHIR & Genomic Ingress Normalization | AETERNA Technologies (BG) | 72 PM | M01 – M48 |
-| **WP2** | Multi-Scale Biophysical Tumor & Neuro Simulation Core | BSC-CNS (ES) / ATHENA RC (Athens, EL) | 144 PM | M06 – M48 |
+| **WP2** | Multi-Scale Biophysical Tumor & Neuro Simulation Core | BSC-CNS (ES) / Institut Curie (FR) | 144 PM | M06 – M48 |
 | **WP3** | Retrospective & Prospective Clinical Cohort Validation | Medical University Sofia (BG) | 120 PM | M06 – M48 |
 | **WP4** | Medical Regulatory Affairs, MDR & EU AI Act Certification | AETERNA Technologies (BG) | 48 PM | M12 – M48 |
 | **WP5** | Exploitation, IP Protection, Dissemination & Communication | AETERNA Technologies (BG) | 48 PM | M01 – M48 |
