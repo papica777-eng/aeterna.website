@@ -2045,9 +2045,17 @@
                 </div>
 
                 <!-- EIC Accelerator (AETERNA-CHIP) -->
-                <div onclick="window.open('./aeterna_chip_presentation.html', '_blank')" class="glass-premium p-8 rounded-xl border border-accent-gold/40 hover:border-accent-cyan transition-all group flex flex-col justify-between cursor-pointer hover:scale-[1.02] shadow-[0_0_30px_rgba(0,240,255,0.1)]">
+                <div onclick="window.open('./aeterna_chip_presentation.html', '_blank')" class="glass-premium p-6 rounded-xl border border-accent-gold/40 hover:border-accent-cyan transition-all group flex flex-col justify-between cursor-pointer hover:scale-[1.02] shadow-[0_0_30px_rgba(0,240,255,0.1)]">
                     <div>
-                        <div class="flex justify-between items-start mb-6">
+                        <!-- ASIC Silicon Chip Render Preview -->
+                        <div class="relative w-full h-36 rounded-lg overflow-hidden border border-accent-cyan/40 mb-4 group-hover:border-accent-cyan transition-colors shadow-[0_0_20px_rgba(0,240,255,0.15)]">
+                            <img src="assets/aeterna_chip_physical.jpg" alt="AETERNA Metamorphic Silicon ASIC" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-2 left-2 text-[9px] font-mono text-cyan-300 font-bold bg-black/80 px-2 py-0.5 rounded border border-cyan-500/30">
+                                ⚡ METAMORPHIC ASIC DIE // 101359291
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start mb-4">
                             <div>
                                 <span class="text-[10px] font-mono text-accent-gold font-bold tracking-widest px-2 py-1 bg-accent-gold/10 rounded border border-accent-gold/20">EIC ACCELERATOR 2026 // STEP</span>
                                 <h3 class="text-xl font-bold text-white mt-3 uppercase tracking-wide">AETERNA-CHIP <span class="text-accent-cyan text-sm block font-mono font-normal">METAMORPHIC SILICON ASIC</span></h3>
@@ -2091,6 +2099,106 @@
                         <p class="text-[11px] text-gray-400 leading-relaxed font-mono mb-4">Non-Classical Catuskoti Logic & Autonomous Zero-Entropy Formal Verification. Principal Investigator: Dimitar Stavrev Prodromov.</p>
                         <a href="./ukame-matrix.html" target="_blank" onclick="event.stopPropagation()" class="w-full py-2 bg-accent-cyan/10 hover:bg-accent-cyan text-accent-cyan hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-accent-cyan/30 transition-all flex items-center justify-center gap-2">
                             <i data-lucide="binary" class="w-3.5 h-3.5"></i> OPEN UKAME MATRIX
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action 7: European Defence Fund (EDF AERO) -->
+                <div onclick="window.open('./aeterna_aero_presentation.html', '_blank')" class="glass-premium p-8 rounded-xl border border-red-500/30 hover:border-red-500 transition-all group flex flex-col justify-between cursor-pointer hover:scale-[1.02]">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono text-red-400 font-bold tracking-widest px-2 py-1 bg-red-500/10 rounded border border-red-500/20">EDF DEFENCE // UAS</span>
+                                <h3 class="text-xl font-bold text-white mt-3 uppercase tracking-wide">AETERNA-AERO</h3>
+                            </div>
+                            <i data-lucide="crosshair" class="text-red-400 w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <div class="font-mono text-xs text-gray-400 space-y-2 mb-6">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Call:</span> <span class="text-white text-[10px]">EDF-2026-RA-CYBER-UAS</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Proposal ID:</span> <span class="text-white">EDF-AERO-2026</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600" data-i18n="grants.budget">Budget:</span> <span class="text-accent-emerald font-bold">€17,500,000.00</span></div>
+                        </div>
+                    </div>
+                    <div class="border-t border-red-500/20 pt-4 mt-auto">
+                        <h4 class="text-[10px] font-bold text-red-400 mb-2 uppercase tracking-widest flex items-center gap-2"><i data-lucide="shield-alert" class="w-3 h-3"></i> <span>Autonomous Drone Swarms & Anti-Jamming</span></h4>
+                        <p class="text-[11px] text-gray-400 leading-relaxed font-mono mb-4">GPS-Denied Autonomous Drone Swarms & Optical P2P Mesh Interlink with sub-50μs reaction speed. Coordinator: AETERNA.</p>
+                        <a href="./aeterna_aero_presentation.html" target="_blank" onclick="event.stopPropagation()" class="w-full py-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white font-mono font-bold text-[10px] uppercase rounded border border-red-500/30 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="crosshair" class="w-3.5 h-3.5"></i> OPEN SWARM RADAR
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action 8: EIC Accelerator (AETERNA-FUSION) -->
+                <div onclick="window.open('./aeterna_fusion_presentation.html', '_blank')" class="glass-premium p-8 rounded-xl border border-amber-500/30 hover:border-amber-500 transition-all group flex flex-col justify-between cursor-pointer hover:scale-[1.02]">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono text-amber-400 font-bold tracking-widest px-2 py-1 bg-amber-500/10 rounded border border-amber-500/20">EIC ACCELERATOR // FUSION</span>
+                                <h3 class="text-xl font-bold text-white mt-3 uppercase tracking-wide">AETERNA-FUSION</h3>
+                            </div>
+                            <i data-lucide="flame" class="text-amber-400 w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <div class="font-mono text-xs text-gray-400 space-y-2 mb-6">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Challenge:</span> <span class="text-white text-[10px]">CHALLENGES-FUSION</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Proposal ID:</span> <span class="text-white">101359319</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600" data-i18n="grants.budget">Budget:</span> <span class="text-accent-emerald font-bold">€17,500,000.00</span></div>
+                        </div>
+                    </div>
+                    <div class="border-t border-amber-500/20 pt-4 mt-auto">
+                        <h4 class="text-[10px] font-bold text-amber-400 mb-2 uppercase tracking-widest flex items-center gap-2"><i data-lucide="zap" class="w-3 h-3"></i> <span>Tokamak Plasma AI Controller</span></h4>
+                        <p class="text-[11px] text-gray-400 leading-relaxed font-mono mb-4">Sub-Microsecond Tokamak Plasma Equilibrium & Magnetohydrodynamics (MHD) Disruption Control Core. Single Applicant: AETERNA.</p>
+                        <a href="./aeterna_fusion_presentation.html" target="_blank" onclick="event.stopPropagation()" class="w-full py-2 bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-amber-500/30 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="flame" class="w-3.5 h-3.5"></i> OPEN FUSION PLASMA HUB
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action 9: EIC Accelerator (AETERNA-ENERGY) -->
+                <div onclick="window.open('./aeterna_energy_presentation.html', '_blank')" class="glass-premium p-8 rounded-xl border border-emerald-500/30 hover:border-emerald-500 transition-all group flex flex-col justify-between cursor-pointer hover:scale-[1.02]">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono text-emerald-400 font-bold tracking-widest px-2 py-1 bg-emerald-500/10 rounded border border-emerald-500/20">EIC ACCELERATOR // ENERGY</span>
+                                <h3 class="text-xl font-bold text-white mt-3 uppercase tracking-wide">AETERNA-ENERGY</h3>
+                            </div>
+                            <i data-lucide="battery-charging" class="text-emerald-400 w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <div class="font-mono text-xs text-gray-400 space-y-2 mb-6">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Challenge:</span> <span class="text-white text-[10px]">CHALLENGES-ENERGY</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Proposal ID:</span> <span class="text-white">101359332</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600" data-i18n="grants.budget">Budget:</span> <span class="text-accent-emerald font-bold">€17,500,000.00</span></div>
+                        </div>
+                    </div>
+                    <div class="border-t border-emerald-500/20 pt-4 mt-auto">
+                        <h4 class="text-[10px] font-bold text-emerald-400 mb-2 uppercase tracking-widest flex items-center gap-2"><i data-lucide="battery-charging" class="w-3 h-3"></i> <span>Solid-State Sodium-Ion Digital Twin</span></h4>
+                        <p class="text-[11px] text-gray-400 leading-relaxed font-mono mb-4">100% Lithium & Cobalt Free Sodium-Ion (Na+) solid-state battery molecular digital twin with 10,000 cycle zero-dendrite lifetime.</p>
+                        <a href="./aeterna_energy_presentation.html" target="_blank" onclick="event.stopPropagation()" class="w-full py-2 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-black font-mono font-bold text-[10px] uppercase rounded border border-emerald-500/30 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="battery-charging" class="w-3.5 h-3.5"></i> OPEN ENERGY TWIN
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action 10: EIC Accelerator (AETERNA-SPACE) -->
+                <div onclick="window.open('./aeterna_space_presentation.html', '_blank')" class="glass-premium p-8 rounded-xl border border-blue-500/30 hover:border-blue-500 transition-all group flex flex-col justify-between cursor-pointer hover:scale-[1.02]">
+                    <div>
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono text-blue-400 font-bold tracking-widest px-2 py-1 bg-blue-500/10 rounded border border-blue-500/20">EIC ACCELERATOR // SPACE</span>
+                                <h3 class="text-xl font-bold text-white mt-3 uppercase tracking-wide">AETERNA-SPACE</h3>
+                            </div>
+                            <i data-lucide="satellite" class="text-blue-400 w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <div class="font-mono text-xs text-gray-400 space-y-2 mb-6">
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Challenge:</span> <span class="text-white text-[10px]">CHALLENGES-SPACE</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600">Proposal ID:</span> <span class="text-white">101359333</span></div>
+                            <div class="flex justify-between border-b border-white/5 pb-1"><span class="text-gray-600" data-i18n="grants.budget">Budget:</span> <span class="text-accent-emerald font-bold">€17,500,000.00</span></div>
+                        </div>
+                    </div>
+                    <div class="border-t border-blue-500/20 pt-4 mt-auto">
+                        <h4 class="text-[10px] font-bold text-blue-400 mb-2 uppercase tracking-widest flex items-center gap-2"><i data-lucide="satellite" class="w-3 h-3"></i> <span>IRIS2 Laser Mesh & Post-Quantum Orbit</span></h4>
+                        <p class="text-[11px] text-gray-400 leading-relaxed font-mono mb-4">Space-Grade radiation-hardened 100 Gbps inter-satellite laser router with native NIST ML-KEM-1024 post-quantum lattice cryptography.</p>
+                        <a href="./aeterna_space_presentation.html" target="_blank" onclick="event.stopPropagation()" class="w-full py-2 bg-blue-500/10 hover:bg-blue-500 text-blue-400 hover:text-white font-mono font-bold text-[10px] uppercase rounded border border-blue-500/30 transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="satellite" class="w-3.5 h-3.5"></i> OPEN SPACE MESH HUB
                         </a>
                     </div>
                 </div>
