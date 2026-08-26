@@ -24,6 +24,28 @@
         .terminal-scroll::-webkit-scrollbar-thumb { background: var(--cyan); }
         .metric-card { border-left: 2px solid rgba(6, 182, 212, 0.3); }
     </style>
+<script>
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = '#00f0ff';
+                btnEn.style.color = '#000';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = '#94a3b8';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = '#94a3b8';
+                btnBg.style.background = '#00f0ff';
+                btnBg.style.color = '#000';
+            }
+        }
+    }
+    </script>
 </head>
 <body class="h-screen flex flex-col selection:bg-cyan-500 selection:text-black">
     <div class="scanline"></div>
@@ -45,6 +67,11 @@
             <div class="flex flex-col"><span class="text-cyan-500 font-bold">Latency</span> <span>&lt;1.2ms</span></div>
             <div class="flex flex-col"><span class="text-white font-bold">Substrate</span> <span>Ryzen 7000</span></div>
             <div class="flex flex-col"><span class="text-green-500 font-bold">Uptime</span> <span>99.999%</span></div>
+        </div>
+    
+        <div style="display:flex; align-items:center; background:rgba(0,0,0,0.6); border:1px solid rgba(0,240,255,0.3); border-radius:8px; padding:2px;">
+            <button id="lang-btn-en" onclick="setLanguage('en')" style="padding:4px 10px; border-radius:6px; font-weight:700; font-size:0.75rem; border:none; cursor:pointer; background:#00f0ff; color:#000;">EN</button>
+            <button id="lang-btn-bg" onclick="setLanguage('bg')" style="padding:4px 10px; border-radius:6px; font-weight:700; font-size:0.75rem; border:none; cursor:pointer; background:transparent; color:#94a3b8;">BG</button>
         </div>
     </header>
 

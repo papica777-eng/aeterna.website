@@ -22,7 +22,14 @@
                     <i data-lucide="shield-alert" class="w-8 h-8 text-sky-400"></i> AETERNA-AERO: Swarm Autonomy
                 </h1>
             </div>
-            <div class="text-right font-mono text-xs text-sky-300">
+            
+            <div class="flex items-center gap-4 text-right font-mono text-xs">
+                <!-- Language Switcher -->
+                <div class="flex items-center bg-black/60 border border-white/20 rounded-lg p-0.5 text-xs font-mono">
+                    <button onclick="setLang('en')" id="btn-en" class="px-2 py-0.5 rounded bg-sky-500 text-black font-bold">EN</button>
+                    <button onclick="setLang('bg')" id="btn-bg" class="px-2 py-0.5 rounded text-gray-400 hover:text-white font-bold">BG</button>
+                </div>
+             text-sky-300">
                 <div>PIC: <strong>865986222</strong></div>
                 <div class="text-emerald-400">STATUS: EW SHIELD LATCHED</div>
             </div>
@@ -75,6 +82,21 @@
             </div>
         </div>
     </div>
-    <script>lucide.createIcons();</script>
+    <script>
+        lucide.createIcons();
+        function setLang(lang) {
+            const btnEn = document.getElementById('btn-en');
+            const btnBg = document.getElementById('btn-bg');
+            if (btnEn && btnBg) {
+                if (lang === 'en') {
+                    btnEn.className = 'px-2 py-0.5 rounded bg-sky-500 text-black font-bold';
+                    btnBg.className = 'px-2 py-0.5 rounded text-gray-400 hover:text-white font-bold';
+                } else {
+                    btnEn.className = 'px-2 py-0.5 rounded text-gray-400 hover:text-white font-bold';
+                    btnBg.className = 'px-2 py-0.5 rounded bg-sky-500 text-black font-bold';
+                }
+            }
+        }
+    </script>
 </body>
 </html>

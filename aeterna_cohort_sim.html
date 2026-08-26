@@ -350,6 +350,29 @@
         genes: GENES.map(g => ({ ...g, mutCount: Math.round(COHORT_SIZE * g.mutRate) })),
     };
 
+    
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = 'var(--accent)';
+                btnEn.style.color = '#fff';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = 'var(--text-sec)';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = 'var(--text-sec)';
+                btnBg.style.background = 'var(--accent)';
+                btnBg.style.color = '#fff';
+            }
+        }
+        render();
+    }
+    
     let selectedDrug = null;
     let simStatus = 'IDLE'; // IDLE | RUNNING | DONE
     let simProgress = 0;

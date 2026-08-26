@@ -49,6 +49,28 @@
     <link rel="stylesheet" href="css/animations.css">
     
 
+<script>
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = '#00f0ff';
+                btnEn.style.color = '#000';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = '#94a3b8';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = '#94a3b8';
+                btnBg.style.background = '#00f0ff';
+                btnBg.style.color = '#000';
+            }
+        }
+    }
+    </script>
 </head>
 <body>
     <!-- Animated Background -->

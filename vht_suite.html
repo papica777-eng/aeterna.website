@@ -363,6 +363,7 @@
     <script>
         // System state logic
         let state = {
+            lang: "en",
             activeTwin: "metabolic", // "metabolic" | "neurological" | "cardiovascular" | "longevity"
             activeTab: "dashboard",   // "dashboard" | "cohort" | "pillars"
             curedStates: {
@@ -618,6 +619,11 @@
                 document.body.classList.remove("emergency-theme");
                 addLogEntry("[ONLINE] NEURAL LINK: RESTORED. Knox Heartbeat синхронизиран.");
             }
+            renderVanillaHUD();
+        }
+
+        function setLanguage(lang) {
+            state.lang = lang;
             renderVanillaHUD();
         }
 

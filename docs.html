@@ -283,6 +283,28 @@
             100% { top: 0%; }
         }
     </style>
+<script>
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = '#b55fe6';
+                btnEn.style.color = '#fff';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = '#94a3b8';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = '#94a3b8';
+                btnBg.style.background = '#b55fe6';
+                btnBg.style.color = '#fff';
+            }
+        }
+    }
+    </script>
 </head>
 <body>
     <div class="bg-grid"></div>

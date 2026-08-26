@@ -339,6 +339,7 @@
     <script>
         // System state logic
         let state = {
+            lang: "en",
             activeTab: "dashboard",
             curedState: false,
             isTransitioning: false,
@@ -455,6 +456,11 @@
             renderVanillaHUD();
         }
 
+        function setLanguage(lang) {
+            state.lang = lang;
+            renderVanillaHUD();
+        }
+
         function switchTab(tabId) {
             state.activeTab = tabId;
             renderVanillaHUD();
@@ -490,27 +496,72 @@
             const root = document.getElementById("app-root");
             if (!root) return;
 
+            const isBg = state.lang === 'bg';
+
+            const i18nText = {
+                title: isBg ? 'AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">СУВЕРЕНЕН VHT HUD</span>' : 'AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">SOVEREIGN VHT HUD</span>',
+                neuralLink: isBg ? 'НЕВРО-ВРЪЗКА:' : 'NEURAL LINK:',
+                connected: isBg ? 'СВЪРЗАНА' : 'CONNECTED',
+                severed: isBg ? 'ПРЕКЪСНАТА' : 'SEVERED',
+                knoxHeartbeat: isBg ? 'KNOX СЪРДЕЧЕН РИТЪМ:' : 'KNOX HEARTBEAT:',
+                tabDashboard: isBg ? 'Научен Панел (Лекари)' : 'Scientific Panel (Clinicians)',
+                tabCohort: isBg ? 'Кохортно Изследване (900 Близнаци)' : 'Cohort Study (900 Twins)',
+                tabPillars: isBg ? 'Трите Стълба на Сигурност' : 'Three Pillars of Security',
+                btnCure: isBg ? 'ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ' : 'INDUCE BIOLOGICAL CURE',
+                btnReset: isBg ? 'ВЪЗСТАНОВЯВАНЕ НА ХАОСА' : 'RESTORE CHAOTIC STATE',
+                emergencyTitle: isBg ? 'АВАРИЕН ЛОКАЛЕН РЕЖИМ АКТИВЕН // НЕВРО-ВРЪЗКАТА Е ПРЕКЪСНАТА' : 'EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED',
+                emergencyDesc: isBg ? 'Системата премина в авариен офлайн режим. Всички команди се подписват хардуерно от Samsung Knox TEE директно на силиция, гарантирайки поддържането на безопасни дози и предотвратяване на грешки.' : 'System entered emergency offline mode. All commands hardware-signed by Samsung Knox TEE directly on silicon, guaranteeing safe dosing and eliminating risk.',
+                glycemicTitle: isBg ? 'Гликемична траектория на Ден 2 (Steady-State)' : 'Glycemic Trajectory Day 2 (Steady-State)',
+                glycemicDesc: isBg ? 'Метаболитна крива на пациент P-402 при симулация. Зелената зона (4.0 - 10.0 mmol/L) е клиничната норма.' : 'Metabolic curve for patient P-402 during simulation. Green zone (4.0 - 10.0 mmol/L) represents clinical target in range.',
+                glucoseNorm: isBg ? 'Норма: 4.5 - 6.0 mmol/L' : 'Target: 4.5 - 6.0 mmol/L',
+                cPeptideNorm: isBg ? 'Норма: 0.26 - 1.39 nmol/L' : 'Target: 0.26 - 1.39 nmol/L',
+                homaIrNorm: isBg ? 'Норма: < 1.0 (Сензитивност)' : 'Target: < 1.0 (Sensitivity)',
+                patientProfileTitle: isBg ? 'Описание на Пациента' : 'Patient Clinical Profile',
+                patientLabel: isBg ? 'ПАЦИЕНТ:' : 'PATIENT:',
+                patientVal: isBg ? 'P-402 (Педиатричен)' : 'P-402 (Pediatric)',
+                ageWeightLabel: isBg ? 'ВЪЗРАСТ / ТЕГЛО:' : 'AGE / WEIGHT:',
+                ageWeightVal: isBg ? '9 години / 32 кг' : '9 yrs / 32 kg',
+                bypassLabel: isBg ? 'БАЙПАС СЪСТОЯНИЕ:' : 'BYPASS STATUS:',
+                insulinLabel: isBg ? 'АКТИВЕН ИНСУЛИН:' : 'ACTIVE INSULIN:',
+                insulinValCured: isBg ? '0.00 U (Автоложна регулация)' : '0.00 U (Autologous regulation)',
+                insulinValUncured: isBg ? '4.50 U (Външна помпа)' : '4.50 U (External pump)',
+                clinicalConclusionTitle: isBg ? 'КЛИНИЧЕН ИЗВОД:' : 'CLINICAL CONCLUSION:',
+                conclusionCured: isBg ? 'Появата на ендогенен C-пептид (0.90 nmol/L) в съчетание с пълно периферно възстановяване на инсулиновата чувствителност (HOMA-IR = 1.0) бележи успешна Pax4-индуцирана бета-клетъчна регенерация и автологична терапия.' : 'Endogenous C-peptide secretion (0.90 nmol/L) combined with complete restoration of insulin sensitivity (HOMA-IR = 1.0) confirms successful Pax4-induced beta-cell regeneration and autologous biological recovery.',
+                conclusionUncured: isBg ? 'Пациентът е в хаотична метаболитна декомпенсация с абсолютен инсулинов дефицит. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.' : 'Patient in chaotic metabolic decompensation with absolute insulin deficiency. Induce biological recovery via the central action trigger.',
+                cohortTitle: isBg ? 'Сравнителен кохортен екран (900 виртуални близнаци)' : 'Comparative Cohort Telemetry (900 Virtual Human Twins)',
+                cohortDesc: isBg ? 'Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Националния регистър за 2015 г.' : 'Validation of autologous recovery across full demographic cohort from national validation registry (2015-2026).',
+                thAge: isBg ? 'Възрастова Група' : 'Age Bracket',
+                thCount: isBg ? 'Брой' : 'Cohort Size',
+                thBaseTIR: isBg ? 'Базов TIR (2015)' : 'Baseline TIR (2015)',
+                thConvTIR: isBg ? 'Конвенционален TIR' : 'Standard Care TIR',
+                thV3TIR: 'VHT v3.0 TIR',
+                thV4TIR: isBg ? 'v4.0 Биологичен TIR' : 'v4.0 Biological TIR',
+                thBaseHypo: isBg ? 'Базови Хипогликемии' : 'Baseline Hypos / yr',
+                thV4Hypo: isBg ? 'v4.0 Хипогликемии' : 'v4.0 Hypos / yr',
+                footerText: isBg ? 'AETERNA v4.0 Субстрат // ПРОТОКОЛ ЗА БИОЛОГИЧНО ИЗЛЕКУВАНЕ С НУЛЕВА ЕНТРОПИЯ // 2026' : 'AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026'
+            };
+
             let tabHeader = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: nowrap; gap: 14px;">
                     <div style="display: flex; gap: 10px; flex-shrink: 0;">
                         <button class="tab-btn ${state.activeTab === 'dashboard' ? 'active' : ''}" onclick="switchTab('dashboard')">
-                            <i data-lucide="database" class="w-4 h-4 inline-block mr-2 text-purple-400"></i>Научен Панел (Лекари)
+                            <i data-lucide="database" class="w-4 h-4 inline-block mr-2 text-purple-400"></i>${i18nText.tabDashboard}
                         </button>
                         <button class="tab-btn ${state.activeTab === 'cohort' ? 'active' : ''}" onclick="switchTab('cohort')">
-                            <i data-lucide="users" class="w-4 h-4 inline-block mr-2 text-emerald-400"></i>Кохортно Изследване (900 Близнаци)
+                            <i data-lucide="users" class="w-4 h-4 inline-block mr-2 text-emerald-400"></i>${i18nText.tabCohort}
                         </button>
                         <button class="tab-btn ${state.activeTab === 'pillars' ? 'active' : ''}" onclick="switchTab('pillars')">
-                            <i data-lucide="shield" class="w-4 h-4 inline-block mr-2 text-blue-400"></i>Трите Стълба на Сигурност
+                            <i data-lucide="shield" class="w-4 h-4 inline-block mr-2 text-blue-400"></i>${i18nText.tabPillars}
                         </button>
                     </div>
                     <div style="flex-shrink: 0;">
                         ${!state.curedState && !state.isTransitioning ? `
                             <button class="cure-btn" onclick="triggerCureRestoration()">
-                                <i data-lucide="play" class="w-4 h-4 inline-block mr-2 text-white"></i>ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ
+                                <i data-lucide="play" class="w-4 h-4 inline-block mr-2 text-white"></i>${i18nText.btnCure}
                             </button>
                         ` : `
                             <button class="tab-btn" onclick="resetCureState()" style="border-color: var(--neon-amber); color: var(--neon-amber);" ${state.isTransitioning ? 'disabled' : ''}>
-                                <i data-lucide="refresh-cw" class="w-4 h-4 inline-block mr-2 text-amber-400"></i>ВЪЗСТАНОВЯВАНЕ НА ХАОСА
+                                <i data-lucide="refresh-cw" class="w-4 h-4 inline-block mr-2 text-amber-400"></i>${i18nText.btnReset}
                             </button>
                         `}
                     </div>
@@ -521,9 +572,9 @@
                 <div class="glass-card emergency-card" style="display: flex; gap: 20px; align-items: center; margin-bottom: 28px;">
                     <div style="color: var(--neon-red);"><i data-lucide="alert-triangle" class="w-10 h-10"></i></div>
                     <div>
-                        <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--neon-red);" class="glow-text-red">EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED</h3>
+                        <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--neon-red);" class="glow-text-red">${i18nText.emergencyTitle}</h3>
                         <p style="color: #fda4af; font-size: 0.85rem; margin-top: 4px; line-height: 1.5">
-                            Системата премина в авариен офлайн режим. Всички команди се подписват хардуерно от **Samsung Knox TEE** директно на силиция, гарантирайки поддържането на безопасни дози и предотвратяване на грешки.
+                            ${i18nText.emergencyDesc}
                         </p>
                     </div>
                 </div>
@@ -535,15 +586,15 @@
                 tabContent = `
                     <div class="dashboard-grid">
                         
-                        <!-- Left Column: Medical Analytics & Glycemic Curve (Spans perfectly) -->
+                        <!-- Left Column: Medical Analytics & Glycemic Curve -->
                         <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px; justify-content: space-between;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div>
                                     <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                        <i data-lucide="trending-up" class="w-5 h-5 inline-block mr-2 text-purple-400"></i>Гликемична траектория на Ден 2 (Steady-State)
+                                        <i data-lucide="trending-up" class="w-5 h-5 inline-block mr-2 text-purple-400"></i>${i18nText.glycemicTitle}
                                     </h2>
                                     <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
-                                        Метаболитна крива на пациент P-402 при симулация. Зелената зона (4.0 - 10.0 mmol/L) е клиничната норма.
+                                        ${i18nText.glycemicDesc}
                                     </p>
                                 </div>
                                 <div style="text-align: right;" class="mono">
@@ -592,25 +643,25 @@
                             <!-- Biomarkers -->
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
                                 <div style="border-left: 4px solid var(--neon-blue); padding-left: 12px;">
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Глюкоза (Glucose)</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${isBg ? 'Глюкоза (Glucose)' : 'Blood Glucose'}</div>
                                     <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald' : 'glow-text-red'}">
                                         ${state.curedState ? '4.80 mmol/L' : '16.50 mmol/L'}
                                     </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">Норма: 4.5 - 6.0 mmol/L</span>
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${i18nText.glucoseNorm}</span>
                                 </div>
                                 <div style="border-left: 4px solid var(--neon-emerald); padding-left: 12px;">
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">Ендогенен C-Пептид</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${isBg ? 'Ендогенен C-Пептид' : 'Endogenous C-Peptide'}</div>
                                     <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald animate-pulse' : 'glow-text-red'}">
                                         ${state.cPeptide.toFixed(2)} nmol/L
                                     </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">Норма: 0.26 - 1.39 nmol/L</span>
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${i18nText.cPeptideNorm}</span>
                                 </div>
                                 <div style="border-left: 4px solid var(--neon-purple); padding-left: 12px;">
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">HOMA-IR Индекс</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${isBg ? 'HOMA-IR Индекс' : 'HOMA-IR Index'}</div>
                                     <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald' : 'glow-text-purple'}">
                                         ${state.homaIr.toFixed(2)}
                                     </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">Норма: &lt; 1.0 (Сензитивност)</span>
+                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${i18nText.homaIrNorm}</span>
                                 </div>
                             </div>
                         </div>
@@ -619,41 +670,38 @@
                         <div class="column-flex">
                             <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
                                 <h3 style="font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="info" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>Описание на Пациента
+                                    <i data-lucide="info" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>${i18nText.patientProfileTitle}
                                 </h3>
                                 
                                 <div style="display: flex; flex-direction: column; gap: 12px;" class="mono">
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">ПАЦИЕНТ:</span>
-                                        <span style="font-weight: 700;">P-402 (Педиатричен)</span>
+                                        <span style="color: var(--text-secondary);">${i18nText.patientLabel}</span>
+                                        <span style="font-weight: 700;">${i18nText.patientVal}</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">ВЪЗРАСТ / ТЕГЛО:</span>
-                                        <span style="font-weight: 700;">9 години / 32 кг</span>
+                                        <span style="color: var(--text-secondary);">${i18nText.ageWeightLabel}</span>
+                                        <span style="font-weight: 700;">${i18nText.ageWeightVal}</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">БАЙПАС СЪСТОЯНИЕ:</span>
+                                        <span style="color: var(--text-secondary);">${i18nText.bypassLabel}</span>
                                         <span style="font-weight: 900; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
                                             ${state.curedState ? 'BIOLOGICAL_REVERSION' : 'SEVERE_PANCREATIC_ATROPHY'}
                                         </span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">АКТИВЕН ИНСУЛИН:</span>
+                                        <span style="color: var(--text-secondary);">${i18nText.insulinLabel}</span>
                                         <span style="font-weight: 700; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-amber)'};">
-                                            ${state.curedState ? '0.00 U (Автоложна регулация)' : '4.50 U (Външна помпа)'}
+                                            ${state.curedState ? i18nText.insulinValCured : i18nText.insulinValUncured}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div style="padding: 16px; background: ${state.curedState ? 'rgba(0, 255, 170, 0.04)' : 'rgba(255, 59, 111, 0.04)'}; border-radius: 12px; border: 1px solid ${state.curedState ? 'rgba(0,255,170,0.15)' : 'rgba(255,59,111,0.15)'};">
                                     <div style="font-size: 0.8rem; font-weight: 700; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};" class="mono">
-                                        <i data-lucide="flask-conical" class="w-4 h-4 inline-block mr-1.5 text-purple-400"></i>КЛИНИЧЕН ИЗВОД:
+                                        <i data-lucide="flask-conical" class="w-4 h-4 inline-block mr-1.5 text-purple-400"></i>${i18nText.clinicalConclusionTitle}
                                     </div>
                                     <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
-                                        ${state.curedState 
-                                            ? 'Появата на ендогенен C-пептид (0.90 nmol/L) в съчетание с пълно периферно възстановяване на инсулиновата чувствителност (HOMA-IR = 1.0) бележи успешна Pax4-индуцирана бета-клетъчна регенерация и автологична терапия.'
-                                            : 'Пациентът е в хаотична метаболитна декомпенсация с абсолютен инсулинов дефицит. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.'
-                                        }
+                                        ${state.curedState ? i18nText.conclusionCured : i18nText.conclusionUncured}
                                     </p>
                                 </div>
                             </div>
@@ -676,30 +724,30 @@
                     <div class="glass-card glow-emerald ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
                         <div>
                             <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                <i data-lucide="users" class="w-5 h-5 inline-block mr-2 text-emerald-400"></i>Сравнителен кохортен екран (900 виртуални близнаци)
+                                <i data-lucide="users" class="w-5 h-5 inline-block mr-2 text-emerald-400"></i>${i18nText.cohortTitle}
                             </h2>
                             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
-                                Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Националния регистър за 2015 г.
+                                ${i18nText.cohortDesc}
                             </p>
                         </div>
 
                         <table class="sovereign-table mono">
                             <thead>
                                 <tr>
-                                    <th>Възрастова Група</th>
-                                    <th>Брой</th>
-                                    <th>Базов TIR (2015)</th>
-                                    <th>Конвенционален TIR</th>
-                                    <th style="color: var(--neon-purple);">VHT v3.0 TIR</th>
-                                    <th style="color: var(--neon-emerald);">v4.0 Биологичен TIR</th>
-                                    <th>Базови Хипогликемии</th>
-                                    <th style="color: var(--neon-emerald);">v4.0 Хипогликемии</th>
+                                    <th>${i18nText.thAge}</th>
+                                    <th>${i18nText.thCount}</th>
+                                    <th>${i18nText.thBaseTIR}</th>
+                                    <th>${i18nText.thConvTIR}</th>
+                                    <th style="color: var(--neon-purple);">${i18nText.thV3TIR}</th>
+                                    <th style="color: var(--neon-emerald);">${i18nText.thV4TIR}</th>
+                                    <th>${i18nText.thBaseHypo}</th>
+                                    <th style="color: var(--neon-emerald);">${i18nText.thV4Hypo}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 ${cohortData.map(row => `
                                     <tr>
-                                        <td style="font-weight: 700;">${row.group}</td>
+                                        <td style="font-weight: 700;">${isBg ? row.group : row.group.replace('Педиатричен', 'Pediatric').replace('Младежка възраст', 'Youth').replace('Средна възраст', 'Middle Age').replace('Зряла възраст', 'Mature').replace('Старческа възраст', 'Elderly').replace('Дълголетници', 'Centenarians')}</td>
                                         <td>${row.count}</td>
                                         <td style="color: var(--neon-red);">${row.baseline}</td>
                                         <td>${row.conv}</td>
@@ -722,40 +770,40 @@
                     <div style="display: flex; flex-direction: column; gap: 24px;">
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
                             <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                                <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: 700; margin-bottom: 8px;">СТЪЛБ 1</div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">Фармакотерапевтичен Синхрон</h3>
+                                <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: 700; margin-bottom: 8px;">${isBg ? 'СТЪЛБ 1' : 'PILLAR 1'}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${isBg ? 'Фармакотерапевтичен Синхрон' : 'Pharmacotherapeutic Synchrony'}</h3>
                                 <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
-                                    Математическа защита блокира опасни дози при концентрирани форми на прандиален инсулин (U-200, U-300) без съответна механична калибрация.
+                                    ${isBg ? 'Математическа защита блокира опасни дози при концентрирани форми на прандиален инсулин (U-200, U-300) без съответна механична калибрация.' : 'Mathematical constraints prevent dangerous overdoses for concentrated prandial insulins (U-200, U-300) without hardware calibration.'}
                                 </p>
                             </div>
                             <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                                <div style="font-size: 0.75rem; color: var(--neon-purple); font-weight: 700; margin-bottom: 8px;">СТЪЛБ 2</div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">Диететичен Контрол</h3>
+                                <div style="font-size: 0.75rem; color: var(--neon-purple); font-weight: 700; margin-bottom: 8px;">${isBg ? 'СТЪЛБ 2' : 'PILLAR 2'}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${isBg ? 'Диететичен Контрол' : 'Dietetic Control'}</h3>
                                 <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
-                                    Динамично пресмятане на въглехидратния коефициент (ICR) сутрин чрез Emax Хил фармакодинамичен модел за блокиране на Dawn Phenomenon резистентността без статични евристики.
+                                    ${isBg ? 'Динамично пресмятане на въглехидратния коефициент (ICR) сутрин чрез Emax Хил фармакодинамичен модел за блокиране на Dawn Phenomenon резистентността.' : 'Dynamic circadian calculation of insulin-to-carb ratio (ICR) via Emax Hill pharmacodynamic modeling to eliminate Dawn Phenomenon spikes.'}
                                 </p>
                             </div>
                             <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                                <div style="font-size: 0.75rem; color: var(--neon-amber); font-weight: 700; margin-bottom: 8px;">СТЪЛБ 3</div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">Физическа Активност</h3>
+                                <div style="font-size: 0.75rem; color: var(--neon-amber); font-weight: 700; margin-bottom: 8px;">${isBg ? 'СТЪЛБ 3' : 'PILLAR 3'}</div>
+                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${isBg ? 'Физическа Активност' : 'Physical Activity Modeling'}</h3>
                                 <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
-                                    Моделиране на GLUT4 транслокацията при аеробни спортове. Скоростта на цитозолно изчистване и болусната редукция се извеждат динамично от Закона на Стокс за вискозно хемотактично триене (v_max = F_propulsion / (6 * pi * eta * r)).
+                                    ${isBg ? 'Моделиране на GLUT4 транслокацията при аеробни спортове с извеждане от Закона на Стокс за вискозно триене.' : 'Modeling GLUT4 translocation during aerobic exertion with viscous chemotactic drag equations (Stokes Law).'}
                                 </p>
                             </div>
                         </div>
 
                         <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
                             <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 16px;">
-                                <i data-lucide="code" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>Физиологичен код на безопасност (SOUL Safety Gate)
+                                <i data-lucide="code" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>${isBg ? 'Физиологичен код на безопасност (SOUL Safety Gate)' : 'Physiological Safety Gate Code (SOUL Engine)'}
                             </h3>
                             <pre class="code-container mono" style="white-space: pre-wrap; font-size: 0.85rem; color: #b2ccd6;">
-// ═══ METABOLIC_SAFETY_LAWS: Концентрационен и Диететичен Синхрон ═══
+// ═══ METABOLIC_SAFETY_LAWS: Concentration & Dietetic Synchrony ═══
 assert(patient.verified_insulin_concentration == U_100 || patient.verified_insulin_concentration == U_200 || patient.verified_insulin_concentration == U_300);
 assert(device.technical_parameters_validated == true);
 
-// Циркадно изчисление на ICR за кортизолов пик (Dawn Phenomenon)
+// Circadian ICR calculation for morning cortisol spike (Dawn Phenomenon)
 process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
-    let morning_cortisol_factor = 0.85; // 15% увеличен инсулинов отговор
+    let morning_cortisol_factor = 0.85; // 15% increased insulin response
     if time_of_day.is_morning() {
         return base_icr * morning_cortisol_factor;
     }
@@ -771,20 +819,26 @@ process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
                 <header style="border-bottom: 1px solid var(--purple-border); padding: 18px 40px; background: rgba(5, 2, 12, 0.8); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div class="status-dot ${state.emergencyMode ? 'bg-red' : 'bg-purple'}"></div>
-                        <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">SOVEREIGN VHT HUD</span></span>
+                        <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">${i18nText.title}</span>
                     </div>
 
-                    <div style="display: flex; align-items: center; gap: 24px;">
-                        <div style="display: flex; align-items: center; gap: 8px; background: rgba(181,95,230,0.03); padding: 8px 20px; border-radius: 100px; border: 1px solid var(--purple-border);">
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">NEURAL LINK:</span>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <!-- Language Switcher (EN / BG) -->
+                        <div style="display: flex; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid var(--purple-border); border-radius: 8px; padding: 2px;">
+                            <button id="lang-btn-en" onclick="setLanguage('en')" style="padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; border: none; cursor: pointer; ${state.lang === 'en' ? 'background: var(--neon-purple); color: #fff; box-shadow: 0 0 10px var(--purple-glow);' : 'background: transparent; color: var(--text-secondary);'}">EN</button>
+                            <button id="lang-btn-bg" onclick="setLanguage('bg')" style="padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; border: none; cursor: pointer; ${state.lang === 'bg' ? 'background: var(--neon-purple); color: #fff; box-shadow: 0 0 10px var(--purple-glow);' : 'background: transparent; color: var(--text-secondary);'}">BG</button>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 8px; background: rgba(181,95,230,0.03); padding: 8px 16px; border-radius: 100px; border: 1px solid var(--purple-border);">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${i18nText.neuralLink}</span>
                             <span class="mono" style="font-size: 0.8rem; font-weight: 700; color: ${state.neuralLinkConnected ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
-                                ${state.neuralLinkConnected ? 'CONNECTED' : 'SEVERED'}
+                                ${state.neuralLinkConnected ? i18nText.connected : i18nText.severed}
                             </span>
                             <input type="checkbox" ${state.neuralLinkConnected ? 'checked' : ''} onchange="handleNeuralLinkToggle(this)" style="cursor: pointer; margin-left: 8px;" />
                         </div>
 
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">KNOX HEARTBEAT:</span>
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${i18nText.knoxHeartbeat}</span>
                             <span class="status-dot ${state.neuralLinkConnected ? 'bg-blue' : 'bg-red'}"></span>
                         </div>
                     </div>
@@ -797,7 +851,7 @@ process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
                 </main>
 
                 <footer style="border-top: 1px solid var(--purple-border); padding: 24px; text-align: center; font-size: 0.75rem; color: var(--text-secondary); background: rgba(3, 1, 8, 0.95);" class="mono">
-                    AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026
+                    ${i18nText.footerText}
                 </footer>
             `;
             if (window.lucide) {

@@ -642,6 +642,57 @@
             color: var(--text-dim);
         }
     </style>
+<script>
+    let currentLang = 'en';
+
+    const portfolioI18n = {
+        en: {
+            title: 'K2 WEALTH & PORTFOLIO ENGINE',
+            subtitle: 'Zero-Float Fixed Point Asset Ledger & High-Frequency Kinetic Vault',
+            status: 'PORTFOLIO STATUS: REBALANCED (0.0000 ENTROPY)',
+            tvlLabel: 'Total Value Locked (TVL)',
+            apyLabel: 'Effective Yield (APY)',
+            riskLabel: 'Algorithmic Risk Score',
+            assetsTitle: 'Vault Asset Allocation',
+            rebalanceTitle: 'Automated Rebalancing Engine'
+        },
+        bg: {
+            title: 'K2 ПОРТФОЛИО И АКТИВЕН БАЛАНС',
+            subtitle: 'Фиксирана запетая (Zero-Float) счетоводна книга и високочестотен кинетичен трезор',
+            status: 'СТАТУС НА ПОРТФОЛИОТО: БАЛАНСИРАНО (0.0000 ЕНТРОПИЯ)',
+            tvlLabel: 'Обща заключена стойност (TVL)',
+            apyLabel: 'Ефективна доходност (APY)',
+            riskLabel: 'Алгоритмичен индекс на риска',
+            assetsTitle: 'Разпределение на активите в трезора',
+            rebalanceTitle: 'Двигател за автоматично ребалансиране'
+        }
+    };
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = '#8b5cf6';
+                btnEn.style.color = '#fff';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = '#94a3b8';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = '#94a3b8';
+                btnBg.style.background = '#8b5cf6';
+                btnBg.style.color = '#fff';
+            }
+        }
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (portfolioI18n[lang] && portfolioI18n[lang][key]) {
+                el.innerHTML = portfolioI18n[lang][key];
+            }
+        });
+    }
+    </script>
 </head>
 <body>
 

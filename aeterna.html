@@ -112,6 +112,28 @@
             100% { top: 0%; }
         }
     </style>
+<script>
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = '#b55fe6';
+                btnEn.style.color = '#fff';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = '#94a3b8';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = '#94a3b8';
+                btnBg.style.background = '#b55fe6';
+                btnBg.style.color = '#fff';
+            }
+        }
+    }
+    </script>
 </head>
 <body class="max-w-6xl mx-auto p-6 md:p-12">
 
@@ -144,6 +166,11 @@
                     <i data-lucide="trophy" class="w-4 h-4"></i> Hall of Fame
                 </a>
             </div>
+        </div>
+    
+        <div style="display:flex; align-items:center; background:rgba(0,0,0,0.6); border:1px solid rgba(181,95,230,0.3); border-radius:8px; padding:2px;">
+            <button id="lang-btn-en" onclick="setLanguage('en')" style="padding:4px 10px; border-radius:6px; font-weight:700; font-size:0.75rem; border:none; cursor:pointer; background:#b55fe6; color:#fff;">EN</button>
+            <button id="lang-btn-bg" onclick="setLanguage('bg')" style="padding:4px 10px; border-radius:6px; font-weight:700; font-size:0.75rem; border:none; cursor:pointer; background:transparent; color:#94a3b8;">BG</button>
         </div>
     </header>
 

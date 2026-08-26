@@ -390,6 +390,61 @@
             color: #fff;
         }
     </style>
+<script>
+    let currentLang = 'en';
+
+    const k2I18n = {
+        en: {
+            title: 'K2 KINETIC ROUTER',
+            subtitle: 'Stellar & Cross-Chain Deterministic High-Throughput Liquidity Engine',
+            status: 'ROUTER STATUS: ONLINE (0.0000 ENTROPY)',
+            tpsLabel: 'Network Throughput',
+            latencyLabel: 'Execution Latency',
+            routedLabel: 'Total Routed Volume',
+            efficiencyLabel: 'Routing Efficiency',
+            mempoolTitle: 'Mempool Transactions',
+            dexTitle: 'Decentralized Order Routing',
+            nodesTitle: 'Kinetic Nodes Cluster'
+        },
+        bg: {
+            title: 'K2 КИНЕТИЧЕН РУТЕР',
+            subtitle: 'Stellar & Крос-чейн детерминиран ликвиден двигател с висока пропускателна способност',
+            status: 'СТАТУС НА РУТЕРА: АКТИВЕН (0.0000 ЕНТРОПИЯ)',
+            tpsLabel: 'Пропускателна способност',
+            latencyLabel: 'Време за изпълнение',
+            routedLabel: 'Общ прехвърлен обем',
+            efficiencyLabel: 'Ефективност на маршрутизиране',
+            mempoolTitle: 'Транзакции в мемпула',
+            dexTitle: 'Децентрализирано маршрутизиране на поръчки',
+            nodesTitle: 'Клъстер от кинетични възли'
+        }
+    };
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const btnEn = document.getElementById('lang-btn-en');
+        const btnBg = document.getElementById('lang-btn-bg');
+        if (btnEn && btnBg) {
+            if (lang === 'en') {
+                btnEn.style.background = 'var(--accent-purple)';
+                btnEn.style.color = '#fff';
+                btnBg.style.background = 'transparent';
+                btnBg.style.color = 'var(--text-secondary)';
+            } else {
+                btnEn.style.background = 'transparent';
+                btnEn.style.color = 'var(--text-secondary)';
+                btnBg.style.background = 'var(--accent-purple)';
+                btnBg.style.color = '#fff';
+            }
+        }
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (k2I18n[lang] && k2I18n[lang][key]) {
+                el.innerHTML = k2I18n[lang][key];
+            }
+        });
+    }
+    </script>
 </head>
 <body>
     <div class="app-container">
