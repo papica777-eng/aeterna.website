@@ -162,12 +162,13 @@
             background: rgba(181, 95, 230, 0.02);
             border: 1px solid var(--purple-border);
             color: var(--text-secondary);
-            padding: 14px 28px;
+            padding: 12px 22px;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
+            white-space: nowrap;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -190,17 +191,18 @@
             background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
             color: #fff;
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             border: none;
-            padding: 16px 42px;
+            padding: 14px 30px;
             border-radius: 50px;
             box-shadow: 0 0 35px rgba(181, 95, 230, 0.35);
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            white-space: nowrap;
             position: relative;
             overflow: hidden;
         }
@@ -489,8 +491,8 @@
             if (!root) return;
 
             let tabHeader = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <div style="display: flex; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: nowrap; gap: 14px;">
+                    <div style="display: flex; gap: 10px; flex-shrink: 0;">
                         <button class="tab-btn ${state.activeTab === 'dashboard' ? 'active' : ''}" onclick="switchTab('dashboard')">
                             <i data-lucide="database" class="w-4 h-4 inline-block mr-2 text-purple-400"></i>Научен Панел (Лекари)
                         </button>
@@ -501,7 +503,7 @@
                             <i data-lucide="shield" class="w-4 h-4 inline-block mr-2 text-blue-400"></i>Трите Стълба на Сигурност
                         </button>
                     </div>
-                    <div>
+                    <div style="flex-shrink: 0;">
                         ${!state.curedState && !state.isTransitioning ? `
                             <button class="cure-btn" onclick="triggerCureRestoration()">
                                 <i data-lucide="play" class="w-4 h-4 inline-block mr-2 text-white"></i>ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ
@@ -788,7 +790,7 @@ process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
                     </div>
                 </header>
 
-                <main style="flex: 1; padding: 40px; maxWidth: 1600px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 28px;">
+                <main style="flex: 1; padding: 24px 32px; maxWidth: 1600px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 24px;">
                     ${tabHeader}
                     ${emergencyBanner}
                     ${tabContent}
