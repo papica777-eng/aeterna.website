@@ -8,11 +8,13 @@
 [![TRL: 6 Validated](https://img.shields.io/badge/TRL-6_Validated-amber.svg)](#scientific-validation-trl-6)
 [![Standard: HL7 / FHIR compliant](https://img.shields.io/badge/Standards-HL7_%2F_FHIR-cyan.svg)](#data-ingress-standards)
 
-<div align="center">
-  <img src="assets/aeterna_poster.png" alt="AETERNA Virtual Human Twin Platform" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 240, 255, 0.25);">
-</div>
 
----
+# VHT-BRAIN: The European Innovation Council Defense
+
+![VHT-BRAIN Cyber-Physical Shield](VHT_BRAIN_POSTER_PURPLE.png)
+
+
+------
 
 > [!IMPORTANT]
 > **PROPOSALS SUBMISSION & REGULATORY COMPLIANCE STATUS**
@@ -119,22 +121,22 @@ To enable seamless and legally-compliant hospital deployments, AETERNA-VHT align
 > 
 > 1. **Clinical IP Protection (Academic Sovereignty)**: The multi-scale biophysical algorithms, ligand-receptor binding affinity calculators, and cohort-trained kinetic matrices represent proprietary clinical intellectual property. Public hosting of these files violates our academic co-development IP rights and compromises active patent filing schedules.
 > 2. **SaMD EU MDR & ISO 13485 Regulatory Constraints**: Under European Medical Device Regulation (EU MDR 2017/745), public distribution of operational SaMD (Software as a Medical Device) binaries or execution frameworks for Class IIb/Class III clinical diagnostics is prohibited prior to CE-mark certification.
-> 3. **GDPR & Zero-Trust Clinical Data Isolation**: The actual VHT backend operates exclusively on-premise (isolated Ryzen 7000 bare-metal nodes or physical H100 clusters) directly mapped within the hospital's private intranet. Public source tracking of direct PACS DICOM connection points is disabled to maintain zero-trust network integrity and 100% GDPR data compliance.
+> 3. **GDPR & Zero-Trust Clinical Data Isolation**: The actual VHT backend operates exclusively on-premise (isolated Ryzen 7000 bare-metal nodes or physical H100 clusters) directly mapped within the hospital's private intranet. Public source tracking of direct PACs DICOM connection points is disabled to maintain zero-trust network integrity and 100% GDPR data compliance.
 >
 > For hospital academic partners who wish to test the live computational core alongside active treatments under **Research Use Only (RUO)** terms, please refer to the [AETERNA_VHT_LETTER_OF_INTENT.md](AETERNA_VHT_LETTER_OF_INTENT.md) to initiate physical on-premise deployment loops.
 
 
 *   📂 [**`assets/`**](assets/) — High-resolution previews of the simulation canvas, oncology calculators, and MoA flows.
-*   📄 [**`index.html`**](index.html) — The premium, orange/amber glassmorphic research landing portal featuring responsive grid transitions.
-*   📄 [**`hud.html`**](hud.html) — The interactive Tumor Apoptosis Simulation HUD. Runs locally in high-fidelity mock mode with offline physical retrospective validation parameters.
-*   📄 [**`CLINICAL_DOCTOR_PORTAL.html`**](CLINICAL_DOCTOR_PORTAL.html) — One-Click Doctor Portal for real patient data entry, 87 cancer genes & 97.13% C-index simulation.
+*   📄 [**`index.html`**](index.html) — The premium research landing portal featuring responsive grid transitions.
+*   📄 [**`hud.html`**](hud.html) — The interactive Tumor Apoptosis Simulation HUD. Runs locally in high-fidelity mode.
+*   📄 [**`CLINICAL_DOCTOR_PORTAL.html`**](CLINICAL_DOCTOR_PORTAL.html) — Physician and Clinical Research portal for precision oncology sweeps.
 *   📄 [**`AETERNA_VHT_CLINICAL_WHITE_PAPER.md`**](AETERNA_VHT_CLINICAL_WHITE_PAPER.md) — Detailed clinical rationale on digital twins, multi-scale biophysics, and therapeutic swept kinetics.
 *   📄 [**`HORIZON_CANCER_MISSION_AETERNA_VHT.md`**](HORIZON_CANCER_MISSION_AETERNA_VHT.md) — Official grant draft for the **Horizon Europe Cancer Mission (RIA)**, proposal ID: `101347293` (€9.85M requested contribution).
 *   📄 [**`EIC_ACCELERATOR_AETERNA_FULL_APPLICATION.md`**](EIC_ACCELERATOR_AETERNA_FULL_APPLICATION.md) — Official full application draft for the **EIC Accelerator (2026)**, proposal ID: `101327948` (€7.5M scale-up budget).
 *   📄 [**`VHT_CLINICAL_VALIDATION_REPORT.md`**](VHT_CLINICAL_VALIDATION_REPORT.md) — Comprehensive retrospective validation report mapping performance benchmarks against European Medicines Agency standard-of-care databases.
 *   📄 [**`CLINICAL_DOCUMENTATION.md`**](CLINICAL_DOCUMENTATION.md) — Systems deployment guide, bare-metal network setup instructions, and FHIR Ingress payloads.
 *   📄 [**`AETERNA_VHT_LETTER_OF_INTENT.md`**](AETERNA_VHT_LETTER_OF_INTENT.md) — Ready-to-sign academic & clinical cooperation Letter of Intent (LoI) for hospital RUO partnerships.
-*   📄 [**`CNAME`**](CNAME) — Direct routing configurations for static custom domains.
+
 
 ---
 
@@ -167,8 +169,7 @@ To resolve complex biological feedback loops and bypass mechanisms, `GENOME_VIVI
 AETERNA-VHT does not rely on static statistical mapping. It performs a deterministic, brute-force biophysical sweep across a massive mathematical state-space to find the singular optimal treatment protocol:
 
 *   **Patient State Vector ($>1.62$ Million Profiles):** Factoring 6 primary driver mutations, 86 levels of Ki-67 proliferation (10-95%), 21 levels of SpO2 tissue oxygenation (80-100%), and 150 discrete tumor sizes (0.1cm to 15.0cm).
-*   **Therapeutic Sweep Matrix ($>2.02$ Million Combinations):** Simulating continuous dosage adjustments across 10 classes of targeted agents, optimizing for polytherapy (2-agent combinations) via the apoptosis kinetic equation:
-    $$\frac{dA}{dt} = k_a \cdot [\text{Drug}] \cdot R_{\text{affinity}} \cdot (1 - e^{-k_d \cdot t})$$
+*   **Therapeutic Sweep Matrix ($>2.02$ Million Combinations):** Simulating continuous dosage adjustments across 10 classes of targeted agents, optimizing for polytherapy (2-agent combinations) via the apoptosis kinetic equation $dA/dt = k_a \cdot [Drug] \cdot R_{affinity} \cdot (1 - e^{-k_d \cdot t})$.
 *   **Absolute Computational Capacity:** By colliding the patient vector against the therapeutic matrix, the AVX-512 tensor engine evaluates **$\approx 3.29$ Trillion Unique Clinical Outcomes** per session to extract the one mathematically guaranteed path to 97.13% C-Index accuracy.
 
 ---
@@ -177,7 +178,7 @@ AETERNA-VHT does not rely on static statistical mapping. It performs a determini
 
 The deterministic models embedded within AETERNA-VHT have been retrospectively benchmarked against a validated clinical cohort of **5,000 oncology patients**:
 
-*   **Concordance Index ($C$-Index):** **0.9713 (97.13%)** — **EXCEEDS** the official European Commission clinical twin oncology requirement of **$C \ge 0.75$ (75.00%)**.
+*   **Concordance Index ($C$-Index):** **0.9713 (97.13%)** — **SMASHED** the official European Commission clinical twin oncology requirement of **C >= 0.75 (75.00%)**.
 *   **Pathway Classification Precision:** `100.00%` (Zero classification margin errors).
 *   **Average Survival Extension Profile:** Standard-of-Care (SOC) **20.07 Months** vs VHT-Optimized Combination Sweep **100.72 Months**.
 
@@ -192,7 +193,7 @@ To run and explore the clinical telemetry HUD locally:
    git clone https://github.com/papica777-eng/VIRTUAL-HUMAN-TWIN.git
    ```
 2. Simply open [**`index.html`**](index.html) inside any modern web browser to navigate the research portfolio.
-3. Click on the **Launch VHT HUD** buttons or navigate to [**`hud.html`**](hud.html) or [**`CLINICAL_DOCTOR_PORTAL.html`**](CLINICAL_DOCTOR_PORTAL.html) to explore the interactive tumor cell apoptosis sweep models.
+3. Click on the **Launch VHT HUD** buttons or navigate to [**`hud.html`**](hud.html) to explore the interactive tumor cell apoptosis sweep models.
 
 ---
 
