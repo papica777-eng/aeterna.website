@@ -4443,6 +4443,7 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
             <!-- Header -->
             <div class="omni-header">
                 <div class="omni-header-title">
+                    <img src="assets/aeterna_logo.png?v=circle_v4" alt="AETERNA Logo" style="width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(181, 95, 230, 0.5); box-shadow: 0 0 8px rgba(181, 95, 230, 0.4); margin-right: 6px;">
                     <div class="omni-header-dot"></div>
                     <span class="omni-header-text">OMNI-ASSISTANT</span>
                 </div>
@@ -4479,28 +4480,8 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
         <button id="omni-toggle-btn">
             <div class="ping-ring"></div>
             
-            <!-- AETERNA Purple Glowing Logo -->
-            <svg id="omni-icon-bot" style="width: 32px; height: 32px; transition: transform 0.5s;" viewBox="0 0 100 100">
-                <defs>
-                    <linearGradient id="purpleGlow-omni" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#b55fe6" />
-                        <stop offset="100%" stop-color="#ff2a85" />
-                    </linearGradient>
-                    <filter id="neonShadow-omni" x="-30%" y="-30%" width="160%" height="160%">
-                        <feGaussianBlur stdDeviation="5" result="blur" />
-                        <feColorMatrix type="matrix" values="
-                            1 0 0 0 0.7
-                            0 1 0 0 0.3
-                            0 0 1 0 0.9
-                            0 0 0 1 0
-                        " />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-                </defs>
-                <rect x="26" y="26" width="48" height="48" rx="10" fill="none" stroke="#b55fe6" stroke-width="2.5" stroke-opacity="0.8" transform="rotate(45 50 50)" filter="url(#neonShadow-omni)" />
-                <rect x="32" y="32" width="36" height="36" rx="8" fill="url(#purpleGlow-omni)" transform="rotate(45 50 50)" />
-                <circle cx="50" cy="50" r="4.5" fill="#ffffff" />
-            </svg>
+            <!-- AETERNA Official Circular Infinity Logo -->
+            <img id="omni-icon-bot" src="assets/aeterna_logo.png?v=circle_v4" alt="AETERNA Logo" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 16px rgba(181, 95, 230, 0.8); border: 1.5px solid rgba(181, 95, 230, 0.7); transition: transform 0.4s ease;">
             
             <svg id="omni-icon-msg" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </button>
