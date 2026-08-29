@@ -1,9 +1,16 @@
 # 🛡️ AETERNA Sovereign Cognitive Engine & European Research Portfolio
 ### Sovereign Autonomous Cyber-Physical Orchestrator & Multi-Scale Scientific Simulator
-**Consortium Coordinator PIC:** `865986222` | **Total EU Portfolio Budget:** **€154,547,219.00 (10 Actions)** | **TRL:** 7 Validated | **Standards:** NIS-2 (EU 2022/2555) / UNCAN.eu & EDITH VHT / ISO 13485 & IEC 62304 / ETSI / Common Criteria EAL4+
+**Architect & Lead PI:** Dimitar Stavrev Prodromov ([ORCID: `0009-0004-8070-1348`](https://orcid.org/0009-0004-8070-1348))  
+**Consortium Coordinator PIC:** `865986222` | **Total EU Portfolio Budget:** **€154,547,219.00 (10 Actions)** | **TRL:** 7 Validated | **Standards:** NIS-2 (EU 2022/2555) / UNCAN.eu & EDITH VHT / ISO 13485 & IEC 62304 / ETSI / Common Criteria EAL4+  
 
 <div align="center">
-  <img src="assets/aeterna_poster.png" alt="AETERNA Sovereign European Deep-Tech AI" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 240, 255, 0.25);">
+  <img src="assets/aeterna_poster.png" alt="AETERNA Sovereign European Deep-Tech AI" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 240, 255, 0.25);"><br/><br/>
+  <a href="https://orcid.org/0009-0004-8070-1348" target="_blank">
+    <img src="assets/orcid_qr_code.png" alt="ORCID QR Code — Dimitar Prodromov" width="140px" style="border: 2px solid #00F0FF; border-radius: 8px; padding: 4px; background: white;" />
+  </a><br/>
+  <a href="https://orcid.org/0009-0004-8070-1348" target="_blank" style="color: #00F0FF; font-family: monospace; font-size: 14px;">
+    <b>ORCID iD: 0009-0004-8070-1348 (Dimitar Stavrev Prodromov)</b>
+  </a>
 </div>
 
 ---
