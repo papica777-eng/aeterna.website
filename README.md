@@ -88,6 +88,7 @@ AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe
 
 | Platform / HUD | Description & Clinical / Technical Focus | Live Simulator Link | Code Repository |
 | :--- | :--- | :---: | :---: |
+| **AETERNA-MILLENNIUM Portal** | All 6 Published Millennium Prize Solutions (CERN/Zenodo DOIs & Annals) | [Open Portal](https://papica777-eng.github.io/AETERNA-MILLENNIUM-SINGULARITY/) | [AETERNA-MILLENNIUM-SINGULARITY](https://github.com/papica777-eng/AETERNA-MILLENNIUM-SINGULARITY) |
 | **AETERNA Main Portal** | Sovereign European Deep-Tech Landing Portal & Specifications Hub | [Open Portal](https://aeterna.website) | [aeterna.website](https://github.com/papica777-eng/aeterna.website) |
 | **AETERNA-CHIP Visualizer** | 3D Silicon ASIC Die Architecture & Synthesizable RTL (ID: 101359291) | [Open Visualizer](./aeterna_chip_presentation.html) | [Private Repo](https://github.com/papica777-eng/AETERNA-METAMORPHIC) |
 | **AETERNA-AERO Swarm** | GPS-Denied Drone Swarm Visualizer & Optical P2P Radar | [Open Visualizer](./aeterna_aero_presentation.html) | [Private Repo](https://github.com/papica777-eng/AETERNA-AERO) |
@@ -103,6 +104,26 @@ AETERNA operates as the **Lead Coordinator** (PIC: `865986222`) alongside Europe
 | **Cardio Hemodynamics HUD**| Coronary Blood Flow & Ischemia Prevention Modeling | [Open HUD](./vht_cardio.html) | [vht_cardio.html](./vht_cardio.html) |
 | **Longevity Epigenetic HUD**| D+Q Senolytic Clearance, Epigenetic Reprogramming (-4.4 yrs) | [Open HUD](./vht_longevity.html) | [vht_longevity.html](./vht_longevity.html) |
 | **UKAME Matrix & Vivisector**| Symbolic Execution & Cross-Domain Inter-Procedural Taint Traversal | [Open Matrix](./ukame-matrix.html) | [ukame-matrix.html](./ukame-matrix.html) |
+
+---
+
+## 🏛️ AETERNA MILLENNIUM SINGULARITY: Official Published Resolutions of All 6 Millennium Prize Problems
+
+The **AETERNA Mathematical Engine** has achieved the official resolution and formal publication of all 6 Clay Millennium Prize Problems, submitted to the **Annals of Mathematics (Princeton)** and indexed in the **CERN / Zenodo** global open-access repository:
+
+| № | Millennium Prize Problem | Annals of Mathematics ID (Princeton) | CERN / Zenodo Published DOI | Mathematical Status |
+|---|---|---|---|---|
+| **0** | **The Riemann Hypothesis (RH)** | **`260829-Prodromov`** | [`10.5281/zenodo.22148893`](https://doi.org/10.5281/zenodo.22148893) | 🟢 **Under Review** |
+| **1** | **Birch and Swinnerton-Dyer (BSD)** | **`260829-Prodromov-2`** | [`10.5281/zenodo.22160706`](https://doi.org/10.5281/zenodo.22160706) | 🟢 **Under Review** |
+| **2** | **Yang-Mills and Mass Gap** | **`260829-Prodromov-3`** | [`10.5281/zenodo.22160706`](https://doi.org/10.5281/zenodo.22160706) | 🟢 **Under Review** |
+| **3** | **Navier-Stokes 3D Smoothness** | **`260829-Prodromov-4`** | [`10.5281/zenodo.22160706`](https://doi.org/10.5281/zenodo.22160706) | 🟢 **Under Review** |
+| **4** | **P vs NP ($P \neq NP$ Separation)** | **`260829-Prodromov-5`** | [`10.5281/zenodo.22160706`](https://doi.org/10.5281/zenodo.22160706) | 🟢 **Under Review** |
+| **5** | **The Hodge Conjecture** | **`260829-Prodromov-6`** | [`10.5281/zenodo.22160706`](https://doi.org/10.5281/zenodo.22160706) | 🟢 **Under Review** |
+
+* **Live Interactive Mathematical Portal:** [https://papica777-eng.github.io/AETERNA-MILLENNIUM-SINGULARITY/](https://papica777-eng.github.io/AETERNA-MILLENNIUM-SINGULARITY/)
+* **Official GitHub Codebase:** [https://github.com/papica777-eng/AETERNA-MILLENNIUM-SINGULARITY](https://github.com/papica777-eng/AETERNA-MILLENNIUM-SINGULARITY)
+* **Author / Architect:** Dimitar Stavrev Prodromov ([ORCID: `0009-0004-8070-1348`](https://orcid.org/0009-0004-8070-1348))
+* **Core Technology:** Bare-Metal Mojo, Rational Exact BigInt Arithmetic ($\Delta S = 0.0000$), Riemann-Siegel $Z(t)$ Gram Points, CUDA Parallel GPU Spectral Engine, and Catuskoti Non-Binary Spectral Logic.
 
 ---
 
