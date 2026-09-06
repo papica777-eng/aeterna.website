@@ -817,8 +817,11 @@
     <!-- Application Script & i18n Logic -->
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'ONCOLOGY';
+        const AETERNA_REQUIRED_PRICE_EUR = 1499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -866,20 +869,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -902,21 +892,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -927,207 +966,7 @@
                 if (cb) cb(key);
             }, 500);
         }
-
-        // i18n Translation Dictionary (Default: EN)
-        const i18n = {
-            en: {
-                header_status: "PHARMA-LINK: SECURE",
-                header_badge: "B2B SHADOW INSTANCE",
-                header_portal: "MAIN PORTAL",
-                tab_cohort: "GLOBAL VHT REPOSITORY (LIVE FDA DATA)",
-                tab_longevity: "GENOMICS & EPIGENETICS (CRISPR / HORVATH)",
-                tab_docking: "MOLECULAR DOCKING (ΔG BINDING)",
-                api_node_label: "OPENFDA LIVE API NODE",
-                cohort_tag: "REAL-TIME TOXICITY & PHARMACOKINETICS",
-                cohort_title: "Real-Time FDA Pharmacokinetics & Toxicity",
-                cohort_desc: "Automated real-time ingestion of adverse event clinical reports from the US Food and Drug Administration (FDA) database for compound DASATINIB (Sprycel / Senolytic).",
-                btn_scan_init: "CONNECT TO OPENFDA API & SCREEN",
-                btn_scan_loading: "CONNECTING TO OPENFDA...",
-                btn_scan_processing: "INGESTING DOSSIERS...",
-                btn_scan_success: "LIVE DATA INGESTED (SUCCESS)",
-                fda_loading_msg: "ESTABLISHING SECURE HANDSHAKE WITH US FDA SERVERS (api.fda.gov)... STREAMING ADVERSE EVENT ARRAYS...",
-                processed_reports_label: "PROCESSED REAL PATIENT CLINICAL DOSSIERS",
-                cases_suffix: "REGISTERED CASES",
-                stat_safe_label: "WITHOUT SEVERE ORGAN TOXICITY",
-                stat_safe_sub: "Validated via OpenFDA clinical telemetry",
-                stat_toxic_label: "CONFIRMED SEVERE TOXICITY",
-                stat_toxic_sub: "Hepatotoxicity, Renal & Cardiac Adverse Events",
-                stat_cindex_label: "PREDICTIVE C-INDEX",
-                stat_cindex_sub: "Concordance index vs FDA benchmark standards",
-                pkpd_title: "Pharmacokinetic Profile (Plasma Concentration vs Time)",
-                clearance_title: "Organ Clearance & Metabolic In-Silico Partitioning",
-                clearance_hepatic: "Hepatic CYP3A4 Clearance",
-                clearance_renal: "Renal Excretion",
-                clearance_bbb: "Blood-Brain Barrier (BBB) Penetration",
-                param_bioavail: "Bioavailability",
-                param_halflife: "Half-Life",
-                param_vol: "Volume",
-                longevity_tag: "EPIGENETIC REPROGRAMMING & CRISPR-Cas9",
-                longevity_title: "CRISPR Genomic Splicing & Epigenetic Clock",
-                longevity_desc: "1. Targeted CRISPR-Cas9 editing of pathogenic alleles (APOE4 → APOE3).<br/>2. Induction of Yamanaka factors (OSKM) to reverse Horvath DNA methylation age.",
-                btn_crispr_init: "START CRISPR-Cas9 EDITING (rs429358)",
-                btn_crispr_step1: "SYNTHESIZING gRNA TARGET VECTOR...",
-                btn_crispr_step2: "Cas9 ENDONUCLEASE CLEAVAGE...",
-                btn_crispr_step3: "HOMOLOGY DIRECTED REPAIR (HDR) WITH APOE3...",
-                btn_crispr_done: "CRISPR SPLICING COMPLETE",
-                btn_yamanaka_init: "INJECT YAMANAKA FACTORS (OSKM)",
-                btn_yamanaka_done: "EPIGENETIC REJUVENATION: 35.0 YRS",
-                btn_reset: "RESET",
-                gene_locus_label: "GENE LOCUS: APOE (rs429358) — EXON 4",
-                risk_profile_label: "Clinical Risk Profile",
-                risk_profile_val: "HIGH (APOE4 - Alzheimer's Risk)",
-                risk_profile_cleaved: "Cas9 ENZYMATIC CLEAVAGE IN PROGRESS...",
-                risk_profile_repaired: "OPTIMAL (APOE3 / APOE3 - LOW RISK)",
-                bio_age_label: "BIOLOGICAL AGE (HORVATH CLOCK)",
-                chrono_age_label: "CHRONOLOGICAL AGE: 75.4 YEARS",
-                reprog_active_badge: "ACTIVE EPIGENETIC REMODELING VECTOR",
-                telomere_label: "TELOMERE LENGTH",
-                telomere_sub: "Youth tissue standard: > 8.00 kbp",
-                senescent_label: "\"ZOMBIE\" SENESCENT CELLS",
-                senescent_sub: "Senolytic Clearance Target: < 10%",
-                yamanaka_header: "YAMANAKA FACTORS (OSKM) EXPRESSION",
-                vector_label: "Vector Delivery: Adeno-Associated Virus (AAV9)",
-                docking_tag: "AUTONOMOUS IN-SILICO MOLECULAR DOCKING ENGINE",
-                docking_title: "Binding Affinity & Molecular Docking",
-                docking_desc: "Computation of Gibbs free energy (ΔG_bind) and kinetic inhibition constants (K_i) for selective targeting of anti-apoptotic proteins (BCL-2 / BCL-xL / mTORC1).",
-                btn_docking: "CALCULATE ΔG DOCKING ENERGY",
-                docking_energy_label: "GIBBS FREE ENERGY (ΔG)",
-                docking_energy_sub: "High Thermodynamic Affinity",
-                docking_ki_label: "INHIBITION CONSTANT (Ki)",
-                docking_ki_sub: "Sub-nanomolar Selectivity",
-                docking_lipinski_label: "LIPINSKI RULE OF 5",
-                docking_lipinski_val: "100% COMPLIANT",
-                docking_offtarget_label: "OFF-TARGET MUTAGENESIS",
-                docking_offtarget_sub: "Zero Off-Target Escape",
-                dft_potential_label: "Quantum-Chemical Electrostatic Potential (DFT / B3LYP)",
-                hbonds_title: "Hydrogen Bonds (H-Bonds)",
-                hbonds_dist: "Distance: 1.82 Å – 2.14 Å",
-                hydrophobic_title: "Hydrophobic Contacts",
-                hydrophobic_pack: "Packing Density: 94.2%",
-                pipi_title: "π-π Stacking Interference",
-                pipi_contrib: "Energy Contribution: -3.4 kcal/mol",
-                omni_welcome: "<b>AETERNA.AIC // ONLINE:</b> In-Silico Pharma and Longevity Engine is synchronized. You can trigger FDA cohort screening, CRISPR sequence editing, or molecular docking from this interface.",
-                chat_placeholder: "Ask about pharma simulation or commands...",
-                btn_sponsor_header: "SPONSOR / UNLOCK PRO",
-                sponsor_modal_title: "AETERNA // B2B ACCESS & GITHUB SPONSORS",
-                sponsor_modal_sub: "Stripe Express Verified Merchant: acct_1TGhWsCqZ2g7mOQM",
-                sponsor_modal_desc: "Unlock unrestricted High-Throughput In-Silico Simulations, custom patient cohort uploads, private Horvath regression models, and full clinical PDF dossiers via GitHub Sponsors & Stripe Express.",
-                tier_clinic_title: "CLINIC / PRO",
-                tier_clinic_f1: "Unlimited Senolytic Hill PD runs",
-                tier_clinic_f2: "Horvath Clock patient export",
-                tier_clinic_f3: "Automated Clinical PDF Dossiers",
-                btn_sponsor_clinic: "SUBSCRIBE VIA GITHUB / STRIPE",
-                tier_enterprise_title: "BIOTECH ENTERPRISE",
-                tier_enterprise_f1: "High-Throughput Batch API Node",
-                tier_enterprise_f2: "Zero-Knowledge Secure Enclave",
-                tier_enterprise_f3: "Dedicated CRISPR Locus Design",
-                btn_sponsor_enterprise: "UNLOCK ENTERPRISE TIER",
-                btn_activate_key: "ACTIVATE",
-                demo_terminal_title: "LIVE OUTPUT TELEMETRY SIMULATOR",
-                btn_demo_pro: "SIMULATE €299 PRO",
-                btn_demo_ent: "SIMULATE €2,499 ENTERPRISE",
-                demo_terminal_placeholder: "// Click a simulation button above to preview real-time cryptographic verification, pipeline compute, and sample output...",
-                header_badge: "B2B IN-SILICO ENCLAVE (FDA/EMA TRL-7)"
-            },
-            bg: {
-                header_status: "PHARMA-LINK: ЗАЩИТЕН",
-                header_badge: "B2B IN-SILICO АНКЛАВ (FDA/EMA TRL-7)",
-                header_portal: "ГЛАВЕН ПОРТАЛ",
-                tab_cohort: "ГЛОБАЛНА VHT БАНКА (LIVE FDA DATA)",
-                tab_longevity: "ГЕНОМ & ЕПИГЕНЕТИКА (CRISPR / HORVATH)",
-                tab_docking: "МОЛЕКУЛЯРЕН ДОКИНГ (ΔG BINDING)",
-                api_node_label: "OPENFDA LIVE API ВЪЗЕЛ",
-                cohort_tag: "РЕАЛНА ТОКСИЧНОСТ & ФАРМАКОКИНЕТИКА В РЕАЛНО ВРЕМЕ",
-                cohort_title: "Реална FDA Фармакокинетика & Токсичност",
-                cohort_desc: "Автоматизирано извличане на клинични доклади (Adverse Events) в реално време от базата на Агенцията по храните и лекарствата (САЩ) за компаунд DASATINIB (Sprycel / Senolytic).",
-                btn_scan_init: "ВРЪЗКА КЪМ OpenFDA API & СКРИНИНГ",
-                btn_scan_loading: "СВЪРЗВАНЕ С OPENFDA...",
-                btn_scan_processing: "ОБРАБОТКА НА ДОКЛАДИТЕ...",
-                btn_scan_success: "РЕАЛНИТЕ ДАННИ СА ЗАРЕДЕНИ (SUCCESS)",
-                fda_loading_msg: "ОСЪЩЕСТВЯВАНЕ НА ВРЪЗКА С US FDA SERVERS (api.fda.gov)... ИЗВЛИЧАНЕ НА МАСИВИТЕ ЗА ТОКСИЧНОСТ...",
-                processed_reports_label: "ОБРАБОТЕНИ РЕАЛНИ ДОКЛАДИ ОТ ПАЦИЕНТИ",
-                cases_suffix: "РЕГИСТРИРАНИ СЛУЧАЯ",
-                stat_safe_label: "БЕЗ ТЕЖКА ОРГАННА ТОКСИЧНОСТ",
-                stat_safe_sub: "Валидирано чрез OpenFDA клинична телеметрия",
-                stat_toxic_label: "ДОКАЗАНА ТЕЖКА ТОКСИЧНОСТ",
-                stat_toxic_sub: "Hepatotoxicity, Renal & Cardiac Adverse Events",
-                stat_cindex_label: "ПРЕДИКАТИВЕН C-INDEX",
-                stat_cindex_sub: "Точност спрямо биомаркерни стандарти на FDA",
-                pkpd_title: "Фармакокинетичен профил (Плазмена концентрация спрямо време)",
-                clearance_title: "Органно пречистване & Метаболитно разпределение",
-                clearance_hepatic: "Чернодробен CYP3A4 клирънс",
-                clearance_renal: "Бъбречна екскреция",
-                clearance_bbb: "Кръвно-мозъчна бариера (BBB)",
-                param_bioavail: "Бионаличност",
-                param_halflife: "Полуживот",
-                param_vol: "Обем",
-                longevity_tag: "ЕПИГЕНЕТИЧНО ПРЕПРОГРАМИРАНЕ & CRISPR-Cas9",
-                longevity_title: "Геномна Редакция & Епигенетичен Часовник",
-                longevity_desc: "1. Таргетирана CRISPR-Cas9 редакция на дефектни алели (APOE4 → APOE3).<br/>2. Индукция на Yamanaka фактори (OSKM) за нулиране на Horvath епигенетичната възраст.",
-                btn_crispr_init: "СТАРТИРАЙ CRISPR-Cas9 РЕДАКЦИЯ (rs429358)",
-                btn_crispr_step1: "СИНТЕЗИРАНЕ НА gRNA ВЕКТОР...",
-                btn_crispr_step2: "РАЗРЯЗВАНЕ ОТ Cas9 ЕНЗИМ...",
-                btn_crispr_step3: "ХОМОЛОЖНА РЕПАРАЦИЯ (HDR) С АЛЕЛ APOE3...",
-                btn_crispr_done: "CRISPR РЕДАКЦИЯТА Е ЗАВЪРШЕНА",
-                btn_yamanaka_init: "ИНЖЕКТИРАЙ YAMANAKA ФАКТОРИ (OSKM)",
-                btn_yamanaka_done: "ЕПИГЕНЕТИЧНО ПОДМЛАДЯВАНЕ: 35.0 ГОДИНИ",
-                btn_reset: "РЕСЕТ",
-                gene_locus_label: "ГЕНЕН ЛОКУС: APOE (rs429358) — ЕКЗОН 4",
-                risk_profile_label: "Клиничен Рисков Профил",
-                risk_profile_val: "ВИСОК (APOE4 - Alzheimer's Risk)",
-                risk_profile_cleaved: "РАЗРЯЗВАНЕ ОТ Cas9 ЕНЗИМ В ХОД...",
-                risk_profile_repaired: "ОПТИМАЛЕН (APOE3 / APOE3 - НИСЪК РИСК)",
-                bio_age_label: "БИОЛОГИЧНА ВЪЗРАСТ (HORVATH CLOCK)",
-                chrono_age_label: "ХРОНОЛОГИЧНА ВЪЗРАСТ: 75.4 ГОДИНИ",
-                reprog_active_badge: "АКТИВЕН ЕПИГЕНЕТИЧЕН РЕМОДЕЛИРАЩ ВЕКТОР",
-                telomere_label: "ДЪЛЖИНА НА ТЕЛОМЕРИТЕ",
-                telomere_sub: "Норма за младежка тъкан: > 8.00 kbp",
-                senescent_label: "\"ЗОМБИ\" СЕНЕСЦЕНТНИ КЛЕТКИ",
-                senescent_sub: "Senolytic Clearance Target: < 10%",
-                yamanaka_header: "YAMANAKA ФАКТОРИ (OSKM) ЕКСПРЕСИЯ",
-                vector_label: "Вектор за доставка: Adeno-Associated Virus (AAV9)",
-                docking_tag: "АВТОНОМЕН IN-SILICO МОЛЕКУЛЯРЕН ДОКИНГ ДВИГАТЕЛ",
-                docking_title: "Афинитет на Свързване & Молекулярен Докинг",
-                docking_desc: "Пресмятане на свободната енергия на Гибс (ΔG_bind) и кинетичните инхибиторни константи (K_i) за селективно таргетиране на анти-апоптотични протеини (BCL-2 / BCL-xL / mTORC1).",
-                btn_docking: "ИЗЧИСЛИ ΔG DOCKING ЕНЕРГИЯ",
-                docking_energy_label: "СВОБОДНА ЕНЕРГИЯ НА ГИБС (ΔG)",
-                docking_energy_sub: "Висок Термодинамичен Афинитет",
-                docking_ki_label: "ИНХИБИТОРНА КОНСТАНТА (Ki)",
-                docking_ki_sub: "Суб-наномоларна селективност",
-                docking_lipinski_label: "LIPINSKI ПРАВИЛО НА 5-ТЕ",
-                docking_lipinski_val: "100% ВАЛИДЕН",
-                docking_offtarget_label: "ОФ-ТАРГЕТ МУТАГЕНЕЗА",
-                docking_offtarget_sub: "Zero Off-Target Escape",
-                dft_potential_label: "Квантово-Химичен Електростатичен Потенциал (DFT / B3LYP)",
-                hbonds_title: "Водородни Връзки (H-Bonds)",
-                hbonds_dist: "Дистанция: 1.82 Å – 2.14 Å",
-                hydrophobic_title: "Хидрофобни Контакти",
-                hydrophobic_pack: "Плътност на пакетиране: 94.2%",
-                pipi_title: "π-π Стек Интерференция",
-                pipi_contrib: "Енергиен принос: -3.4 kcal/mol",
-                omni_welcome: "<b>AETERNA.AIC // НА ЛИНИЯ:</b> In-Silico Фарма и Longevity модулът е синхронизиран. Можете да стартирате FDA скрининг, CRISPR редакция или молекулярен докинг.",
-                chat_placeholder: "Попитайте за фарма симулацията или команди...",
-                btn_sponsor_header: "СПОНСОРИРАЙ / PRO ДОСТЪП",
-                sponsor_modal_title: "AETERNA // B2B ЛИЦЕНЗ & GITHUB SPONSORS",
-                sponsor_modal_sub: "Stripe Express Верифициран Търговец: acct_1TGhWsCqZ2g7mOQM",
-                sponsor_modal_desc: "Отключете неограничени High-Throughput In-Silico симулации, зареждане на персонализирани пациентски кохорти, защитени Horvath модели и генериране на пълни клинични PDF доклади през GitHub Sponsors & Stripe Express.",
-                tier_clinic_title: "КЛИНИКА / PRO",
-                tier_clinic_f1: "Неограничени Hill PD сенолитични симулации",
-                tier_clinic_f2: "Експорт на Horvath часовник за пациенти",
-                tier_clinic_f3: "Автоматични медицински PDF доклади",
-                btn_sponsor_clinic: "АБОНИРАНЕ ПРЕЗ GITHUB / STRIPE",
-                tier_enterprise_title: "BIOTECH ENTERPRISE",
-                tier_enterprise_f1: "High-Throughput Batch API възел",
-                tier_enterprise_f2: "Zero-Knowledge защитен анклав",
-                tier_enterprise_f3: "Персонализиран CRISPR дизайн",
-                btn_sponsor_enterprise: "ОТКЛЮЧИ ENTERPRISE ПЛАН",
-                btn_activate_key: "АКТИВИРАЙ",
-                demo_terminal_title: "ДЕМО СИМУЛАТОР НА РЕАЛЕН ИЗХОД (LIVE TELEMETRY)",
-                btn_demo_pro: "СИМУЛАЦИЯ €299 PRO",
-                btn_demo_ent: "СИМУЛАЦИЯ €2,499 ENTERPRISE",
-                demo_terminal_placeholder: "// Изберете симулация от бутоните горе, за да видите криптографската верификация, изчисленията и генерирания файл..."
-            }
-        };
+;
 
         // State (Default Language is always 'en')
         const state = {
@@ -1824,49 +1663,48 @@ LANGUAGE INSTRUCTION:
         });
     </script>
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #a855f799; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #a855f766; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #a855f726; border: 1px solid #a855f766; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a855f7; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #a855f74d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Precision In Silico Oncology & Molecular Docking</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #a855f7; font-size: 14px; padding: 2px 8px; background: #a855f71a; border-radius: 6px; border: 1px solid #a855f74d;">1 499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>1 499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: ONCOLOGY (1 499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 1 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 1 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-ONCOLOGY-1499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #a855f7; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #a855f7, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #a855f759;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

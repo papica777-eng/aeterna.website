@@ -665,8 +665,11 @@
         }
 
         // ═══════════════════════════════════════════════════════════════
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'DIABETES';
+        const AETERNA_REQUIRED_PRICE_EUR = 499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -714,27 +717,14 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
 
             if (!key) {
                 if (statusMsg) {
-                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
+                    statusMsg.innerText = '❌ Please enter a license key from GitHub Sponsors!';
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
@@ -743,28 +733,77 @@
 
             if (isLicenseKeyConsumed(key)) {
                 if (statusMsg) {
-                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
+                    statusMsg.innerText = '❌ THIS KEY HAS ALREADY BEEN CONSUMED! (1 key = 1 run). Get a new one via GitHub Sponsors.';
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
+            }
+
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
             }
 
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -776,58 +815,6 @@
             }, 500);
         }
 
-        async function triggerCureRestoration() {
-            if(state.isTransitioning || state.curedState) return;
-            requestAeternaLicenseKey((consumedKey) => {
-                runActualCureRestoration(consumedKey);
-            });
-        }
-
-        async function runActualCureRestoration(licenseKey) {
-            state.isTransitioning = true;
-            addLogEntry(`BIO_CURE_INIT [KEY: ${licenseKey}]: ИЗПОЛЗВАНЕ НА ДЕТЕРМИНИСТИЧЕН БЕКЕНД...`, `BIO_CURE_INIT [KEY: ${licenseKey}]: USING DETERMINISTIC BACKEND...`);
-            renderVanillaHUD();
-
-            try {
-                const response = await fetch("http://127.0.0.1:8890/api/simulate/diabetes", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        age: 45,
-                        weight: 80.0,
-                        icr: 12.0,
-                        carbs: 60.0,
-                        spasticity: 48.0,
-                        fes_active: state.fesStimulationActive
-                    })
-                });
-
-                if (!response.ok) throw new Error("Backend Error");
-                const data = await response.json();
-
-                // Apply Backend Deterministic Data
-                state.entropy = 0.00;
-                state.cPeptide = data.hba1c; // using cPeptide field to show HbA1c trajectory
-                state.homaIr = data.fes_voltage; // using homaIr field to show FES voltage
-                
-                // Map the 10-point curve to the HUD currentGlucose array
-                if (data.glucose_curve && data.glucose_curve.length >= 10) {
-                    currentGlucose = data.glucose_curve.slice(0, 10).map((v, i) => ({
-                        time: currentGlucose[i].time,
-                        val: v
-                    }));
-                }
-
-                state.curedState = data.cured;
-                addLogEntry(`SUCCESS: БЕКЕНД ВАЛИДАЦИЯ: ${data.tir_percent}% TIR.`, `SUCCESS: BACKEND VALIDATION: ${data.tir_percent}% TIR.`);
-                
-            } catch (err) {
-                addLogEntry("ERROR: БЕКЕНДЪТ НЕ Е ДОСТЪПЕН.", "ERROR: BACKEND UNREACHABLE.");
-            } finally {
-                state.isTransitioning = false;
-                renderVanillaHUD();
-            }
-        }
 
         function resetCureState() {
             state.curedState = false;
@@ -1948,49 +1935,48 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
         </button>
     </div>
 
-        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+            <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #10b98199; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #10b98166; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #10b98126; border: 1px solid #10b98166; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #10b981; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #10b9814d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Metabolic & Diabetes Pancreatic Twin</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #10b981; font-size: 14px; padding: 2px 8px; background: #10b9811a; border-radius: 6px; border: 1px solid #10b9814d;">499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: DIABETES (499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-DIABETES-499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #10b981; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #10b981, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #10b98159;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

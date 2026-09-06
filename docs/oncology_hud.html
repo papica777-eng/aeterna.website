@@ -990,8 +990,11 @@
     <!-- Simulation Engine JavaScript -->
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'ONCOLOGY';
+        const AETERNA_REQUIRED_PRICE_EUR = 1499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -1039,20 +1042,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -1075,21 +1065,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -1100,187 +1139,7 @@
                 if (cb) cb(key);
             }, 500);
         }
-
-        lucide.createIcons();
-
-        let currentLanguage = 'bg';
-
-        const i18n = {
-            bg: {
-                "lang-indicator": "BG",
-                "quick-title": "🩺 AETERNA.VHT // Клиничен Навигатор на Лекаря",
-                "quick-sub": "Интуитивно ръководство за оценка на онкологични случаи и автоматизиране на терапевтични протоколи",
-                "quick-badge": "Готов за клинична диагностика",
-                
-                "case-pancreatic": "Панкреатичен аденокарцином",
-                "case-nsclc": "Недребноклетъчен рак на б. дроб",
-                "case-breast": "Инвазивен дуктален карцином",
-
-                "alert-header": "Изисква се Спешна Навигация",
-                "alert-desc": "Невронната връзка е прекъсната. Knox буферът (TEE) успешно изолира локалните пациентски данни.",
-                "alert-step1": "1. Използвайте локално симулираните онко-модели.",
-                "alert-step2": "2. Проверете локалната Ryzen IPC мрежа.",
-                "alert-retry": "Опитай повторно свързване",
-
-                "card-tumor-mass": "Туморен Индекс",
-                "card-apoptosis": "Скорост на Апоптоз",
-                "card-mutation": "ДНК Корекция",
-                "card-immune": "Имунен Инфилтрат",
-                
-                "step1-title": "Избор на Пациент",
-                "step1-desc": "Кликнете на някой от пациентските профили в секция <strong>\"Clinical Case Profiles\"</strong> (вляво). Това автоматично ще зареди реалните биомаркери и геномна структура на пациента.",
-                "step2-title": "Дозиране (OncoCalc)",
-                "step2-desc": "Отидете на десния панел, таб <strong>\"OncoCalc (Дозиране)\"</strong>. Въведете туморния обем и биомаркерите. Системата автоматично ще изчисли точната терапевтична доза.",
-                "step3-title": "Сценарен Тест",
-                "step3-desc": "Изберете клиничен сценарий от долния <strong>\"Сценарен Симулационен Терминал\"</strong> (Chemo, AP-90 или Codon Repair), за да видите как се променя симулацията в реално време.",
-                "step4-title": "Таргетиран Апоптоз",
-                "step4-desc": "Натиснете светещия бутон <strong>\"Инициирай Таргетиран Апоптоз\"</strong> вдясно. Наблюдавайте на живо в центъра как Т-клетките атакуват и унищожават тумора.",
-                
-                "sim-title": "Многомащабен Симулатор на Туморна Микросреда",
-                "legend-healthy": "Здрава Тъкан",
-                "legend-cancer": "Карцином",
-                "legend-tcell": "Т-Лимфоцити",
-                "label-dose": "Концентрация на лекарство",
-                "label-immune": "Имунна реакция",
-                "label-vegf": "Нива на ангиогенеза",
-                
-                "analysis-title": "Терапевтичен Анализ",
-                "tab-biomarkers-lbl": "Биомаркери",
-                "tab-moa-lbl": "Механизъм",
-                "tab-oncocalc-lbl": "Дозиране (OncoCalc)",
-                
-                "regimen-lbl": "Терапевтичен Режим",
-                "no-drug-lbl": "Няма въведено лекарство. Използвайте Drug Docking.",
-                "awaiting-lbl": "VHT ядрото очаква инжектиране на инхибитор в реално време.",
-                "patient-biomarkers-lbl": "Биомаркери на Пациента",
-                "p53-lbl": "p53 Протеин (Tumor Suppressor)",
-                "kras-lbl": "KRAS Сигнална Пътека",
-                "ki67-lbl": "Пролиферационен индекс Ki-67",
-                "vegf-lbl": "Ангиогенезен фактор VEGFA",
-                
-                "moa-stages-lbl": "Етапи на клетъчна лиза и разрушаване",
-                "moa-s1-title": "1. Геномна поправка (TP53)",
-                "moa-s1-desc": "Възстановяване на дивия тип p53 за реактивиране на апоптозната машина.",
-                "moa-s2-title": "2. Имунно демаскиране (PD-L1 Blocker)",
-                "moa-s2-desc": "Деактивиране на имунния escape \"щит\" на раковата клетка.",
-                "moa-s3-title": "3. Таргетирано свързване (AP-90)",
-                "moa-s3-desc": "Докиране на пептида в KRAS G12D джоба и спиране на растежния сигнал.",
-                "moa-s4-title": "4. Каспазна каскада (Blebbing)",
-                "moa-s4-desc": "Активиране на BAX/BAK и свиване на раковата клетка (клетъчна смърт).",
-                "moa-s5-title": "5. Т-клетъчна лиза (Cytolysis)",
-                "moa-s5-desc": "Цитотоксичните Т-лимфоцити разграждат и поглъщат клетъчните остатъци.",
-                
-                "oncocalc-title": "Мултимащабен Онкологичен Калкулатор",
-                "calc-vol-lbl": "Туморен Обем (Tumor Volume, cm³)",
-                "calc-pdl1-lbl": "PD-L1 Експресия (%)",
-                "calc-ki67-lbl": "Ki-67 Index (%)",
-                "calc-kras-lbl": "KRAS Мутация",
-                "calc-tp53-lbl": "TP53 Status",
-                "calc-btn": "Изчисли Оптимална Терапия",
-                "calc-res-lbl": "Резултат от изчислението",
-                "calc-ligand": "Препоръчителен Лиганд:",
-                "calc-dose": "Прецизна Доза:",
-                "calc-method": "Методика / Режим:",
-                "calc-roi": "Успеваемост (ROI):",
-                "calc-note": "* Изчислено въз основа на многомащабната тъканна симулация. Лигандите се свързват с точност ΔG в реално време.",
-                "apply-btn": "Приложи в симулацията",
-                
-                "action-apoptosis": "Инициирай Таргетиран Апоптоз",
-                "action-restart": "Рестартирай Симулационния Модел",
-
-                "nav-control": "Клиничен Контрол",
-                "nav-cases": "Пациентски Профили"
-            },
-            en: {
-                "lang-indicator": "EN",
-                "quick-title": "🩺 AETERNA.VHT // Doctor's Clinical Navigator",
-                "quick-sub": "Intuitive guide for oncological case assessment and automated therapeutic protocols",
-                "quick-badge": "Ready for Clinical Diagnostics",
-                
-                "case-pancreatic": "Pancreatic Adenocarcinoma",
-                "case-nsclc": "NSCLC (Lung Cancer)",
-                "case-breast": "Invasive Ductal Carcinoma",
-
-                "alert-header": "Emergency Navigation Required",
-                "alert-desc": "Neural Link severed. Knox Cryptographic buffer (TEE) successfully isolated patient data local to terminal.",
-                "alert-step1": "1. Run local simulated oncology models.",
-                "alert-step2": "2. Verify local Ryzen IPC web array.",
-                "alert-retry": "Attempt Reconnection",
-
-                "card-tumor-mass": "Tumor Index",
-                "card-apoptosis": "Apoptosis Velocity",
-                "card-mutation": "Mutation Correction",
-                "card-immune": "Immune Infiltration",
-
-                "step1-title": "Patient Selection",
-                "step1-desc": "Click on any patient profile in the <strong>\"Clinical Case Profiles\"</strong> section (left). This automatically loads their biomarkers and genomic structure.",
-                "step2-title": "Dosing (OncoCalc)",
-                "step2-desc": "Go to the right panel, <strong>\"OncoCalc (Dosing)\"</strong> tab. Input the tumor volume and biomarkers. The system will automatically calculate the exact therapeutic dose.",
-                "step3-title": "Scenario Test",
-                "step3-desc": "Select a clinical scenario from the lower <strong>\"Scenario Simulation Terminal\"</strong> (Chemo, AP-90 or Codon Repair) to view how the simulation shifts in real-time.",
-                "step4-title": "Targeted Apoptosis",
-                "step4-desc": "Click the glowing <strong>\"Initiate Targeted Apoptosis\"</strong> button on the right. Observe live in the center how T-cells attack and destroy the tumor.",
-                
-                "sim-title": "Multiscale Tumor Microenvironment Simulator",
-                "legend-healthy": "Healthy Tissue",
-                "legend-cancer": "Carcinoma",
-                "legend-tcell": "T-Lymphocytes",
-                "label-dose": "Drug Concentration",
-                "label-immune": "Immune Response",
-                "label-vegf": "Angiogenesis Levels",
-                
-                "analysis-title": "Therapeutic Analysis",
-                "tab-biomarkers-lbl": "Biomarkers",
-                "tab-moa-lbl": "Mechanism (MoA)",
-                "tab-oncocalc-lbl": "OncoCalc (Dosing)",
-                
-                "regimen-lbl": "Therapeutic Regimen",
-                "no-drug-lbl": "No drug administered. Use Drug Docking.",
-                "awaiting-lbl": "VHT core is awaiting live inhibitor injection.",
-                "patient-biomarkers-lbl": "Patient Biomarkers",
-                "p53-lbl": "p53 Protein (Tumor Suppressor)",
-                "kras-lbl": "KRAS Signaling Pathway",
-                "ki67-lbl": "Proliferation Index Ki-67",
-                "vegf-lbl": "Angiogenesis Factor VEGFA",
-                
-                // MoA tab
-                "moa-stages-lbl": "Cellular Lysis & Destruction Phases",
-                "moa-s1-title": "1. Genomic Repair (TP53)",
-                "moa-s1-desc": "Restoring wild-type p53 to reactivate the apoptosis machinery.",
-                "moa-s2-title": "2. Immune Unmasking (PD-L1 Blocker)",
-                "moa-s2-desc": "Deactivating the tumor's immune escape shield.",
-                "moa-s3-title": "3. Targeted Binding (AP-90)",
-                "moa-s3-desc": "Docking peptide in the KRAS G12D pocket to halt the growth signal.",
-                "moa-s4-title": "4. Caspase Cascade (Blebbing)",
-                "moa-s4-desc": "Activating BAX/BAK resulting in cancer cell shrinkage (apoptosis).",
-                "moa-s5-title": "5. T-Cell Lysis (Cytolysis)",
-                "moa-s5-desc": "Cytotoxic T-lymphocytes lyse and ingest cellular debris.",
-                
-                // OncoCalc tab
-                "oncocalc-title": "Multiscale Oncology Calculator",
-                "calc-vol-lbl": "Tumor Volume (Tumor Volume, cm³)",
-                "calc-pdl1-lbl": "PD-L1 Expression (%)",
-                "calc-ki67-lbl": "Ki-67 Index (%)",
-                "calc-kras-lbl": "KRAS Mutation",
-                "calc-tp53-lbl": "TP53 Status",
-                "calc-btn": "Calculate Optimal Therapy",
-                "calc-res-lbl": "Calculation Results",
-                "calc-ligand": "Recommended Ligand:",
-                "calc-dose": "Precise Dosage:",
-                "calc-method": "Methodology / Regimen:",
-                "calc-roi": "Success Rate (ROI):",
-                "calc-note": "* Calculated based on multiscale tissue simulation. Ligands bind with real-time binding affinity ΔG.",
-                "apply-btn": "Apply to Simulation",
-                
-                // Big Actions
-                "action-apoptosis": "Initiate Targeted Apoptosis",
-                "action-restart": "Reset Simulation Model",
-
-                // Sidebar items that had BG parts
-                "nav-control": "Clinical Control",
-                "nav-cases": "Clinical Case Profiles"
-            }
-        };
+;
 
         function setLanguage(lang) {
             // Complexity: O(n)
@@ -3738,49 +3597,48 @@ AP-90 е високоспецифичен пептиден лиганд с **99.
     </script>
 
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #a855f799; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #a855f766; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #a855f726; border: 1px solid #a855f766; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a855f7; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #a855f74d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Precision In Silico Oncology & Drug Targeting</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #a855f7; font-size: 14px; padding: 2px 8px; background: #a855f71a; border-radius: 6px; border: 1px solid #a855f74d;">1 499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>1 499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: ONCOLOGY (1 499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 1 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 1 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-ONCOLOGY-1499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #a855f7; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #a855f7, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #a855f759;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

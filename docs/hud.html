@@ -463,8 +463,11 @@
     <!-- Complete Vanilla HUD Engine (Used for 100% Offline-Recovery & CDN Bypass) -->
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'SOVEREIGN_CORE';
+        const AETERNA_REQUIRED_PRICE_EUR = 1499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -512,20 +515,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -548,21 +538,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -573,323 +612,7 @@
                 if (cb) cb(key);
             }, 500);
         }
-
-        // System state logic
-        let state = {
-            activeTab: "dashboard",
-            language: "en",
-            curedState: false,
-            isTransitioning: false,
-            entropy: 3.56,
-            cPeptide: 0.01,
-            homaIr: 2.40,
-            neuralLinkConnected: true,
-            emergencyMode: false,
-            ph: 7.41,
-            oxygen: 98,
-            zScore: 0.42,
-            empathyAnomaly: false,
-            fesStimulationActive: false,
-            hebbianConfidence: 8.8,
-            bdnfLevel: 1.0,
-            glut4Upregulation: 1.0,
-            fesStatus: "STANDBY",
-            gaitPhase: 0,
-            catuskotiState: "SYNERGY",
-            fesActiveChannels: {
-                plantar: 0,
-                dorsiflex: 0,
-                quad: 0,
-                hamstring: 0
-            },
-            logs: [
-                { time: "12:12:00", bg: "INIT: AETERNA VHT ядрото е онлайн. Knox офлайн пясъчник е активиран.", en: "INIT: AETERNA VHT core online. Knox offline sandbox engaged." },
-                { time: "12:12:01", bg: "INGEST: Заредени 900 близнака от Националния регистър на България за 2015 г.", en: "INGEST: Loaded 900 patient twins from Bulgaria 2015 national registry." },
-                { time: "12:12:02", bg: "TELEMETRY: Активно високоентропийно състояние (Ентропия = 3.56). Некомпенсирани глюкозни криви.", en: "TELEMETRY: High-entropy state active (Entropy = 3.56). Uncompensated glucose curves." }
-            ],
-            hudVisible: true,
-            clipX: 1.0,
-            clipY: 1.0,
-            clipZ: 1.0,
-            windowVal: 0.60,
-            levelVal: 0.30,
-            renderMode: 1, // Default to BDNF for stunning visual impact!
-            autoRotate: true,
-            rotationX: 0.3,
-            rotationY: 0.5,
-            clickCoords: null,
-            bdnfIntensity: 1.0,
-            invModelViewProj: new Float32Array(16),
-            modelMatrixInverse: new Float32Array(16)
-        };
-
-        const rawChaoticData = [
-            { val: 12.4 }, { val: 14.8 }, { val: 16.5 },
-            { val: 15.2 }, { val: 16.1 }, { val: 13.2 },
-            { val: 14.9 }, { val: 15.8 }, { val: 11.2 },
-            { val: 13.9 }, { val: 16.2 }, { val: 12.8 },
-            { val: 14.2 }
-        ];
-
-        const curedData = [
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }
-        ];
-
-        let currentGlucose = [...rawChaoticData];
-
-        const cohortData = [
-            { group: "groupPediatric", count: 120, baseline: "11.84%", conv: "13.55%", v3: "89.92%", v4: "100.00%", hypoConv: 482.2, hypoV4: 0.0 },
-            { group: "groupYouth", count: 240, baseline: "15.46%", conv: "21.31%", v3: "79.51%", v4: "100.00%", hypoConv: 12.4, hypoV4: 0.0 },
-            { group: "groupMiddle", count: 180, baseline: "13.01%", conv: "23.02%", v3: "80.99%", v4: "100.00%", hypoConv: 15.9, hypoV4: 0.0 },
-            { group: "groupMature", count: 200, baseline: "14.10%", conv: "28.03%", v3: "83.77%", v4: "100.00%", hypoConv: 6.6, hypoV4: 0.0 },
-            { group: "groupElderly", count: 130, baseline: "16.38%", conv: "27.11%", v3: "79.40%", v4: "100.00%", hypoConv: 13.1, hypoV4: 0.0 },
-            { group: "groupCentenarian", count: 30, baseline: "21.70%", conv: "24.47%", v3: "85.21%", v4: "100.00%", hypoConv: 25.0, hypoV4: 0.0 }
-        ];
-
-        const translations = {
-            bg: {
-                hudTitle: "AETERNA // SOVEREIGN VHT HUD",
-                neuralLink: "НЕВРОННА ВРЪЗКА:",
-                connected: "СВЪРЗАНА",
-                severed: "ПРЕКЪСНАТА",
-                knoxHeartbeat: "KNOX HEARTBEAT:",
-                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026",
-                tabScientific: "Научен Панел (Лекари)",
-                tabCohort: "Кохортно Изследване (900 Близнаци)",
-                tabPillars: "Четирите Стълба на Сигурност",
-                tabFes: "BCI-FES Невро-Локомоция",
-                btnInduceCure: "ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ",
-                btnRestoreChaos: "ВЪЗСТАНОВЯВАНЕ НА ХАОСА",
-                btnResetSimulation: "RESET SIMULATION",
-                btnInjectSpasm: "ИНЖЕКТИРАНЕ НА СПАЗЪМ",
-                btnInjectAnomaly: "INJECT METABOLIC ANOMALY",
-                btnStartFes: "СТАРТ НА CLOSED-LOOP FES",
-                btnStopFes: "СПИРАНЕ НА CLOSED-LOOP FES",
-                criticalAlert: "⚠️ КРИТИЧНА ТРЕВОГА",
-                lockoutEnforced: "AURA SOVEREIGN METABOLIC LOCKOUT ENFORCED",
-                lockoutDesc: "Засечено критично отклонение от <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> в субстрата на пациента (Layer 4 Z-score Limit).<br><br>Автоматичните инсулинови/пептидни помпи са <span style=\"color: #ff0055; font-weight: bold;\">ХАРДУЕРНО БЛОКИРАНИ</span> чрез Samsung Knox TEE криптографски подпис на апаратно ниво за предотвратяване на фатален медицински изход.",
-                emergencyModeActive: "EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED",
-                emergencyBannerDesc: "Системата премина в авариен офлайн режим. Всички команди се подписват хардуерно от **Samsung Knox TEE** директно на силиция, гарантирайки поддържането на безопасни дози и предотвратяване на грешки.",
-                auraShieldActive: "🛡️ AURA INTEGRITY SHIELD ACTIVE",
-                auraShieldCompromised: "🛡️ AURA INTEGRITY SHIELD COMPROMISED",
-                shieldEnforced: "LAYER 4 ENFORCED",
-                shieldLockout: "LOCKOUT ACTIVE",
-                statusActiveDesc: "Всички жизнени показатели са математически проверени и потвърдени спрямо критичния праг от <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
-                statusCompromisedDesc: "Засечено критично излизане от нормите за безопасност. Автоматичното дозиране е преустановено криптографски.",
-                bloodPh: "pH НА КРЪВТА",
-                normalPh: "Норма: 7.35 - 7.45",
-                oxygenSat: "КИСЛОРОДНО НАСИЩАНЕ (O₂)",
-                normalO2: "Норма: 95% - 100%",
-                metabolicZscore: "METABOLIC Z-SCORE",
-                criticalZscore: "Критичен праг: >3.0σ",
-                glycemicTrajectory: "Гликемична траектория на Ден 2 (Steady-State)",
-                glycemicDesc: "Метаболитна крива на пациент P-402 при симулация. Зелената зона (4.0 - 10.0 mmol/L) е клиничната норма.",
-                globalEntropy: "GLOBAL ENTROPY",
-                glucoseLabel: "Глюкоза (Glucose)",
-                normalGlucose: "Норма: 4.5 - 6.0 mmol/L",
-                endogenousCpeptide: "Ендогенен C-Пептид",
-                normalCpeptide: "Норма: 0.26 - 1.39 nmol/L",
-                homaIrIndex: "HOMA-IR Индекс",
-                normalHomaIr: "Норма: < 1.0 (Сензитивност)",
-                patientProfile: "Описание на Пациента",
-                patientLabel: "ПАЦИЕНТ:",
-                ageWeightLabel: "ВЪЗРАСТ / ТЕГЛО:",
-                ageWeightVal: "9 години / 32 кг",
-                bypassStateLabel: "БАЙПАС СЪСТОЯНИЕ:",
-                bypassAtrophy: "SEVERE_PANCREATIC_ATROPHY",
-                bypassReversion: "BIOLOGICAL_REVERSION",
-                activeInsulinLabel: "АКТИВЕН ИНСУЛИН:",
-                insulinAuto: "0.00 U (Автоложна регулация)",
-                insulinExternal: "4.50 U (Външна помпа)",
-                clinicalConclusion: "КЛИНИЧЕН ИЗВОД:",
-                conclusionCured: "Появата на ендогенен C-пептид (0.90 nmol/L) в съчетание с пълно периферно възстановяване на инсулиновата чувствителност (HOMA-IR = 1.0) бележи успешна Pax4-индуцирана бета-клетъчна регенерация и автологична терапия.",
-                conclusionChaos: "Пациентът е в хаотична метаболитна декомпенсация с абсолютен инсулинов дефицит. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.",
-                telemetryLog: "LIVE_SUBSTRATE_TELEMETRY_LOG",
-                engConsole: "ENGINEERING CONSOLE // TEST INJECTORS",
-                engConsoleDesc: "Симулиране на критична метаболитна декомпенсация за стрес-тест на Layer 4 безопасността.",
-                cohortTitle: "Сравнителен кохортен екран (900 виртуални близнаци)",
-                cohortDesc: "Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Националния регистър за 2015 г.",
-                ageGroup: "Възрастова Група",
-                count: "Брой",
-                baselineTir: "Базов TIR (2015)",
-                conventionalTir: "Конвенционален TIR",
-                v3Tir: "VHT v3.0 TIR",
-                v4Tir: "v4.0 Биологичен TIR",
-                baselineHypo: "Базови Хипогликемии",
-                v4Hypo: "v4.0 Хипогликемии",
-                groupPediatric: "0-14 (Педиатричен)",
-                groupYouth: "15-44 (Младежка възраст)",
-                groupMiddle: "45-59 (Средна възраст)",
-                groupMature: "60-74 (Зряла възраст)",
-                groupElderly: "75-89 (Старческа възраст)",
-                groupCentenarian: "90+ (Дълголетници)",
-                pillar1Num: "СТЪЛБ 1",
-                pillar1Title: "Фармакотерапевтичен Синхрон",
-                pillar1Desc: "Математическа защита блокира опасни дози при концентрирани форми на прандиален инсулин (U-200, U-300) без съответна механична калибрация.",
-                pillar2Num: "СТЪЛБ 2",
-                pillar2Title: "Диететичен Контрол",
-                pillar2Desc: "Превантивно 15% намаление на въглехидратния коефициент (ICR) сутрин за блокиране на Dawn Phenomenon резистентността.",
-                pillar3Num: "СТЪЛБ 3",
-                pillar3Title: "Физическа Активност",
-                pillar3Desc: "Моделиране на GLUT4 транслокацията при аеробни спортове. Превантивно 30% до 50% свиване на болуса за предотвратяване на хипогликемии.",
-                pillar4Num: "СТЪЛБ 4",
-                pillar4Title: "AURA Integrity Guard",
-                pillar4Desc: "Реалновремево изчисляване на Z-Score за pH и кислородно насищане. Превишаването на 3.0σ прага задейства TEE Knox lockout.",
-                soulCodeTitle: "Физиологичен код на безопасност (SOUL Safety Gate)",
-                fesTitle: "4-Канален Teslasuit Локомоторен Режим",
-                fesDesc: "Динамично картографиране на биоелектрическа стимулация за периферно мускулно активиране и Hebbian pairing.",
-                gaitTimelineTitle: "Времева скала на стъпката (Gait Cycle Phase)",
-                heelStrike: "Удар на пета (0%)",
-                heelOff: "Вдигане на пета (48% spastic check)",
-                swingStart: "Начало на замах (60%)",
-                terminalSwing: "Терминален замах (100%)",
-                neurometabolicEvidence: "Невро-метаболитни доказателства & биомаркери",
-                hebbianPairingTitle: "Биомеханичен трансфер и Hebbian pairing:",
-                hebbianPairingDesc: "Чрез синхронизиране на когнитивното намерение на пациента (BCI) с електрическото задействане на Teslasuit (под 50 ms латентност), системата отключва Hebbian пластичност. Увеличената сила на съкращението задейства AMPK/CaMKII пътищата в скелетните мускули, заставяйки GLUT4 везикулите да се преместят към клетъчната мембрана и да почистят глюкозата самостоятелно.",
-                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & MOTOR RESOLVER",
-                predictiveStatus: "Предиктивен статус:",
-                shieldIntact: "SHIELD INTACT (ACTIVE)",
-                shieldDampened: "DAMPENED (SAFE LOCKOUT)",
-                hebbianConfidenceLabel: "Hebbian BCI Confidence:",
-                chronosPidLabel: "Chronos PID Gains:",
-                catuskotiStateLabel: "CATUSKOTI STATE",
-                gaitStatusStandby: "STANDBY",
-                gaitStatusStance: "STANCE_PHASE",
-                gaitStatusSwing: "SWING_PHASE",
-                vivisectorTitle: "Синтетична Леталност (Vivisector)",
-                vivisectorDesc: "Алгоритъмът GENOME_VIVISECTOR извършва O(1) Inter-Procedural Taint Traversal през метаболитните графове, идентифицирайки критични уязвимости в туморния метаболизъм (Synthetic Lethality) и изолирайки фалшивите сигнали.",
-                state1Title: "STATE 1: TRUE",
-                state1Desc: "Истински клиничен експлоит (Synthetic Lethality) открит.",
-                state2Title: "STATE 2: FALSE",
-                state2Desc: "Токсичен фалшив сигнал. Метаболитният път е защитен.",
-                state3Title: "STATE 3: PARADOX",
-                state3Desc: "Туморен байпас. Сигналът е пренасочен през алтернативен път.",
-                btnVivisector: "СТАРТ НА VIVISECTOR"
-            },
-            en: {
-                hudTitle: "AETERNA // SOVEREIGN VHT HUD",
-                neuralLink: "NEURAL LINK:",
-                connected: "CONNECTED",
-                severed: "SEVERED",
-                knoxHeartbeat: "KNOX HEARTBEAT:",
-                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026",
-                tabScientific: "Scientific Panel (Physicians)",
-                tabCohort: "Cohort Study (900 Twins)",
-                tabPillars: "Four Pillars of Security",
-                tabFes: "BCI-FES Neuro-Locomotion",
-                btnInduceCure: "INDUCE BIOLOGICAL CURE",
-                btnRestoreChaos: "RESTORE METABOLIC CHAOS",
-                btnResetSimulation: "RESET SIMULATION",
-                btnInjectSpasm: "INJECT MUSCLE SPASM",
-                btnInjectAnomaly: "INJECT METABOLIC ANOMALY",
-                btnStartFes: "START CLOSED-LOOP FES",
-                btnStopFes: "STOP CLOSED-LOOP FES",
-                criticalAlert: "⚠️ CRITICAL ALERT",
-                lockoutEnforced: "AURA SOVEREIGN METABOLIC LOCKOUT ENFORCED",
-                lockoutDesc: "Detected critical deviation of <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> in the patient's substrate (Layer 4 Z-score Limit).<br><br>Automatic insulin/peptide pumps are <span style=\"color: #ff0055; font-weight: bold;\">HARDWARE LOCKED</span> via Samsung Knox TEE cryptographic signature at the silicon level to prevent fatal medical outcomes.",
-                emergencyModeActive: "EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED",
-                emergencyBannerDesc: "The system has transitioned to emergency offline mode. All commands are hardware-signed by **Samsung Knox TEE** directly on the silicon, ensuring safe dosages and preventing metabolic accidents.",
-                auraShieldActive: "🛡️ AURA INTEGRITY SHIELD ACTIVE",
-                auraShieldCompromised: "🛡️ AURA INTEGRITY SHIELD COMPROMISED",
-                shieldEnforced: "LAYER 4 ENFORCED",
-                shieldLockout: "LOCKOUT ACTIVE",
-                statusActiveDesc: "All vital metrics are mathematically verified and confirmed against the critical threshold of <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
-                statusCompromisedDesc: "Critical safety deviation detected. Automatic dosing has been cryptographically suspended.",
-                bloodPh: "BLOOD pH",
-                normalPh: "Normal: 7.35 - 7.45",
-                oxygenSat: "OXYGEN SATURATION (O₂)",
-                normalO2: "Normal: 95% - 100%",
-                metabolicZscore: "METABOLIC Z-SCORE",
-                criticalZscore: "Critical threshold: >3.0σ",
-                glycemicTrajectory: "Glycemic Trajectory Day 2 (Steady-State)",
-                glycemicDesc: "Simulated metabolic curve of patient P-402. The green zone (4.0 - 10.0 mmol/L) represents the clinical norm.",
-                globalEntropy: "GLOBAL ENTROPY",
-                glucoseLabel: "Glucose",
-                normalGlucose: "Normal: 4.5 - 6.0 mmol/L",
-                endogenousCpeptide: "Endogenous C-Peptide",
-                normalCpeptide: "Normal: 0.26 - 1.39 nmol/L",
-                homaIrIndex: "HOMA-IR Index",
-                normalHomaIr: "Normal: < 1.0 (Sensitivity)",
-                patientProfile: "Patient Profile",
-                patientLabel: "PATIENT:",
-                ageWeightLabel: "AGE / WEIGHT:",
-                ageWeightVal: "9 years / 32 kg",
-                bypassStateLabel: "BYPASS STATE:",
-                bypassAtrophy: "SEVERE_PANCREATIC_ATROPHY",
-                bypassReversion: "BIOLOGICAL_REVERSION",
-                activeInsulinLabel: "ACTIVE INSULIN:",
-                insulinAuto: "0.00 U (Autologous regulation)",
-                insulinExternal: "4.50 U (External pump)",
-                clinicalConclusion: "CLINICAL CONCLUSION:",
-                conclusionCured: "The appearance of endogenous C-peptide (0.90 nmol/L) in combination with complete peripheral restoration of insulin sensitivity (HOMA-IR = 1.0) marks successful Pax4-induced beta-cell regeneration and autologous therapy.",
-                conclusionChaos: "The patient is in chaotic metabolic decompensation with absolute insulin deficiency. Induce the biological restart via the main recovery button.",
-                telemetryLog: "LIVE_SUBSTRATE_TELEMETRY_LOG",
-                engConsole: "ENGINEERING CONSOLE // TEST INJECTORS",
-                engConsoleDesc: "Simulate critical metabolic decompensation to stress-test Layer 4 safety protocols.",
-                cohortTitle: "Comparative Cohort Screen (900 Virtual Twins)",
-                cohortDesc: "Scaling the autologous cure v4.0 across the entire demographic sample of the 2015 National Registry.",
-                ageGroup: "Age Group",
-                count: "Count",
-                baselineTir: "Baseline TIR (2015)",
-                conventionalTir: "Conventional TIR",
-                v3Tir: "VHT v3.0 TIR",
-                v4Tir: "v4.0 Biological TIR",
-                baselineHypo: "Baseline Hypoglycemic Events",
-                v4Hypo: "v4.0 Hypoglycemic Events",
-                groupPediatric: "0-14 (Pediatric)",
-                groupYouth: "15-44 (Youth)",
-                groupMiddle: "45-59 (Middle Age)",
-                groupMature: "60-74 (Mature Age)",
-                groupElderly: "75-89 (Elderly)",
-                groupCentenarian: "90+ (Centenarians)",
-                pillar1Num: "PILLAR 1",
-                pillar1Title: "Pharmacotherapeutic Synchrony",
-                pillar1Desc: "Mathematical safety locks block dangerous doses of concentrated prandial insulin (U-200, U-300) without corresponding mechanical calibration.",
-                pillar2Num: "PILLAR 2",
-                pillar2Title: "Dietary Control",
-                pillar2Desc: "Preemptive 15% reduction of the insulin-to-carbohydrate ratio (ICR) in the morning to block Dawn Phenomenon resistance.",
-                pillar3Num: "PILLAR 3",
-                pillar3Title: "Physical Activity",
-                pillar3Desc: "Modeling of GLUT4 translocation during aerobic sports. Preemptive 30% to 50% reduction of the bolus to prevent hypoglycemic events.",
-                pillar4Num: "PILLAR 4",
-                pillar4Title: "AURA Integrity Guard",
-                pillar4Desc: "Real-time calculation of Z-Score for pH and oxygen saturation. Exceeding the 3.0σ threshold triggers the TEE Knox lockout.",
-                soulCodeTitle: "Physiological safety code (SOUL Safety Gate)",
-                fesTitle: "4-Channel Teslasuit Locomotor Mode",
-                fesDesc: "Dynamic mapping of bioelectrical stimulation for peripheral muscle activation and Hebbian pairing.",
-                gaitTimelineTitle: "Gait Cycle Phase Timeline",
-                heelStrike: "Heel strike (0%)",
-                heelOff: "Heel off (48% spastic check)",
-                swingStart: "Swing phase start (60%)",
-                terminalSwing: "Terminal swing (100%)",
-                neurometabolicEvidence: "Neurometabolic evidence & biomarkers",
-                hebbianPairingTitle: "Biomechanical transfer and Hebbian pairing:",
-                hebbianPairingDesc: "By synchronizing the patient's cognitive intent (BCI) with the electrical triggering of the Teslasuit (under 50 ms latency), the system unlocks Hebbian plasticity. The increased contraction force triggers AMPK/CaMKII pathways in skeletal muscles, causing GLUT4 vesicles to translocate to the cell membrane and clear glucose independently.",
-                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & MOTOR RESOLVER",
-                predictiveStatus: "Predictive status:",
-                shieldIntact: "SHIELD INTACT (ACTIVE)",
-                shieldDampened: "DAMPENED (SAFE LOCKOUT)",
-                hebbianConfidenceLabel: "Hebbian BCI Confidence:",
-                chronosPidLabel: "Chronos PID Gains:",
-                catuskotiStateLabel: "CATUSKOTI STATE",
-                gaitStatusStandby: "STANDBY",
-                gaitStatusStance: "STANCE_PHASE",
-                gaitStatusSwing: "SWING_PHASE",
-                vivisectorTitle: "Synthetic Lethality (Vivisector)",
-                vivisectorDesc: "The GENOME_VIVISECTOR algorithm performs an O(1) Inter-Procedural Taint Traversal through metabolic graphs, identifying critical vulnerabilities in tumor metabolism (Synthetic Lethality) and isolating false signals.",
-                state1Title: "STATE 1: TRUE",
-                state1Desc: "True clinical exploit (Synthetic Lethality) detected.",
-                state2Title: "STATE 2: FALSE",
-                state2Desc: "Toxic false signal. The metabolic pathway is protected.",
-                state3Title: "STATE 3: PARADOX",
-                state3Desc: "Tumor bypass. The signal is rerouted through an alternative pathway.",
-                btnVivisector: "START VIVISECTOR"
-            }
-        };
+;
 
         function t(key, vars = {}) {
             const lang = state.language || "en";
@@ -2695,49 +2418,48 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
         });
     </script>
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #06b6d499; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #06b6d466; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #06b6d426; border: 1px solid #06b6d466; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #06b6d4; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #06b6d44d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Sovereign Bio-Computational Matrix</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #06b6d4; font-size: 14px; padding: 2px 8px; background: #06b6d41a; border-radius: 6px; border: 1px solid #06b6d44d;">1 499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>1 499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: SOVEREIGN_CORE (1 499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 1 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 1 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-SOVEREIGN_CORE-1499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #06b6d4; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #06b6d459;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

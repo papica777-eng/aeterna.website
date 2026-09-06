@@ -295,8 +295,11 @@
 
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'COHORT';
+        const AETERNA_REQUIRED_PRICE_EUR = 9999;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -344,20 +347,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -380,21 +370,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -406,82 +445,6 @@
             }, 500);
         }
 
-    // ===================================================================
-    //  AETERNA — IN SILICO CLINICAL TRIALS ENGINE
-    //  100,000 Virtual Patient Cohort Simulator
-    // ===================================================================
-
-    const COHORT_SIZE = 100000;
-
-    // --- COHORT GENERATION ---
-    const ETHNICITIES = [
-        { name: 'Caucasian', pct: 0.38, color: '#4a8fe7' },
-        { name: 'Asian', pct: 0.25, color: '#e8963e' },
-        { name: 'African', pct: 0.18, color: '#8b6cdf' },
-        { name: 'Hispanic', pct: 0.12, color: '#3daa6d' },
-        { name: 'Middle Eastern', pct: 0.05, color: '#e05252' },
-        { name: 'Other', pct: 0.02, color: '#6a7a8e' },
-    ];
-
-    // MUTATION PREVALENCE — Source: TCGA Pan-Cancer Atlas (Cell, 2018) & COSMIC v99
-    const GENES = [
-        { name: 'TP53', desc: 'Тумор-супресор (Li-Fraumeni)', mutRate: 0.36, color: '#e05252', source: 'TCGA Pan-Cancer: 36% across 33 cancer types' },
-        { name: 'BRCA1/2', desc: 'ДНК репарация (наследствен рак)', mutRate: 0.035, color: '#e8963e', source: 'TCGA: ~3-5% germline across solid tumors' },
-        { name: 'EGFR', desc: 'Тирозин-киназен рецептор', mutRate: 0.14, color: '#4a8fe7', source: 'COSMIC: 10-15% NSCLC (до 50% в Азия)' },
-        { name: 'KRAS', desc: 'RAS/MAPK сигнален път', mutRate: 0.25, color: '#8b6cdf', source: 'TCGA: 25% pan-cancer (до 90% в панкреас)' },
-        { name: 'ALK', desc: 'Анапластична лимфома-киназа', mutRate: 0.04, color: '#3daa6d', source: 'COSMIC: 3-5% NSCLC транслокации' },
-        { name: 'HER2/neu', desc: 'Рецепторна свръхекспресия', mutRate: 0.17, color: '#d97ab5', source: 'TCGA: 15-20% breast cancer amplification' },
-        { name: 'BRAF', desc: 'RAF/MEK/ERK каскада', mutRate: 0.07, color: '#5ec4c8', source: 'COSMIC: 7% pan-cancer (50% в меланом)' },
-        { name: 'PD-L1', desc: 'Имунен чекпойнт лиганд (>1% TPS)', mutRate: 0.32, color: '#c4a840', source: 'KEYNOTE trials: 30-50% NSCLC PD-L1 TPS≥1%' },
-    ];
-
-    // DRUG DATA — Source: Published Phase III Clinical Trials (ClinicalTrials.gov)
-    const DRUGS = [
-        { id: 'dasatinib', name: 'Dasatinib (Sprycel)', cls: 'TKI (Тирозин-киназен инхибитор)', target: 'BCR-ABL, SRC', fdaName: 'dasatinib',
-          trial: 'DASISION', nct: 'NCT00481247', citation: 'Kantarjian et al. NEJM 2010;362:2260-70',
-          realORR: 0.77, realTox: 0.35, realN: 519, realPFS: '24.7 мес.' },
-        { id: 'pembrolizumab', name: 'Pembrolizumab (Keytruda)', cls: 'Anti-PD-1 (Имунотерапия)', target: 'PD-1 рецептор', fdaName: 'pembrolizumab',
-          trial: 'KEYNOTE-024', nct: 'NCT02142738', citation: 'Reck et al. NEJM 2016;375:1823-33',
-          realORR: 0.448, realTox: 0.267, realN: 305, realPFS: '10.3 мес.' },
-        { id: 'osimertinib', name: 'Osimertinib (Tagrisso)', cls: 'EGFR TKI (3-та генерация)', target: 'EGFR T790M/del19/L858R', fdaName: 'osimertinib',
-          trial: 'FLAURA', nct: 'NCT02296125', citation: 'Soria et al. NEJM 2018;378:113-25',
-          realORR: 0.80, realTox: 0.34, realN: 556, realPFS: '18.9 мес.' },
-        { id: 'olaparib', name: 'Olaparib (Lynparza)', cls: 'PARP инхибитор', target: 'BRCA1/2 дефицит (HRD)', fdaName: 'olaparib',
-          trial: 'OlympiAD', nct: 'NCT02000622', citation: 'Robson et al. NEJM 2017;377:523-33',
-          realORR: 0.599, realTox: 0.368, realN: 302, realPFS: '7.0 мес.' },
-    ];
-
-    // Generate cohort summary
-    const cohort = {
-        total: COHORT_SIZE,
-        male: Math.round(COHORT_SIZE * 0.52),
-        female: Math.round(COHORT_SIZE * 0.48),
-        ageMedian: 58,
-        ageRange: '22–84',
-        ethnicities: ETHNICITIES.map(e => ({ ...e, count: Math.round(COHORT_SIZE * e.pct) })),
-        genes: GENES.map(g => ({ ...g, mutCount: Math.round(COHORT_SIZE * g.mutRate) })),
-    };
-
-    
-    let currentLang = 'en';
-
-    function setLanguage(lang) {
-        currentLang = lang;
-        const btnEn = document.getElementById('lang-btn-en');
-        const btnBg = document.getElementById('lang-btn-bg');
-        if (btnEn && btnBg) {
-            if (lang === 'en') {
-                btnEn.style.background = 'var(--accent)';
-                btnEn.style.color = '#fff';
-                btnBg.style.background = 'transparent';
-                btnBg.style.color = 'var(--text-sec)';
-            } else {
-                btnEn.style.background = 'transparent';
-                btnEn.style.color = 'var(--text-sec)';
-                btnBg.style.background = 'var(--accent)';
-                btnBg.style.color = '#fff';
-            }
-        }
         render();
     }
     
@@ -1504,49 +1467,48 @@
     </script>
 
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #eab30899; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #eab30866; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #eab30826; border: 1px solid #eab30866; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #eab308; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #eab3084d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">100,000 In Silico Cohort Trial Simulation</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #eab308; font-size: 14px; padding: 2px 8px; background: #eab3081a; border-radius: 6px; border: 1px solid #eab3084d;">9 999 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>9 999 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: COHORT (9 999 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 9 999 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 9 999 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-COHORT-9999EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #eab308; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #eab308, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #eab30859;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

@@ -839,7 +839,69 @@ async def classify_genomics(request: GenomicsClassifyRequest):
         consensus_pathogenicity="ACTIONABLE_ONCOGENIC_DRIVER"
     )
 
+
+# ── Sovereign License Engine & GitHub Sponsors Webhook ─────────────────────────
+from license_engine import (
+    MODULE_TIERS,
+    generate_license_key,
+    verify_and_consume_key,
+    process_github_sponsorship,
+    SOVEREIGN_SECRET
+)
+
+class LicenseVerifyRequest(BaseModel):
+    key: str
+    module: str
+
+class LicenseIssueRequest(BaseModel):
+    module: str
+    sponsor_login: str = "SPONSOR"
+    authority_token: str
+
+@app.post("/api/v1/licenses/verify")
+async def api_verify_license(request: LicenseVerifyRequest, req: Request):
+    """
+    Verifies cryptographic signature, matches module tier price, and performs one-shot burn.
+    """
+    client_ip = req.client.host if req.client else "unknown"
+    is_valid, msg, details = verify_and_consume_key(request.key, request.module, client_ip)
+    if not is_valid:
+        raise HTTPException(status_code=402, detail=msg)
+    return {
+        "valid": True,
+        "message": msg,
+        "details": details
+    }
+
+@app.post("/api/v1/licenses/issue")
+async def api_issue_license(request: LicenseIssueRequest):
+    """
+    Authority endpoint to issue a cryptographically signed license key.
+    """
+    if request.authority_token != SOVEREIGN_SECRET:
+        raise HTTPException(status_code=403, detail="Unauthorized: Sovereign Authority Token Required")
+    return generate_license_key(request.module, request.sponsor_login)
+
+@app.post("/api/v1/sponsors/webhook")
+async def api_sponsors_webhook(req: Request):
+    """
+    GitHub Sponsors Webhook Receiver (Event: sponsorship.created / tier_changed).
+    Validates tier price and issues one-shot license key for sponsor.
+    """
+    payload = await req.json()
+    result = process_github_sponsorship(payload)
+    if result:
+        print(f"[SPONSORS_WEBHOOK] Issued Key: {result['key']} for sponsor {result['sponsor']} (Tier: {result['module']} {result['price_eur']} EUR)")
+        return {"status": "KEY_ISSUED", "result": result}
+    return {"status": "IGNORED"}
+
+@app.get("/api/v1/licenses/tiers")
+async def api_license_tiers():
+    """Returns official institutional price tiers."""
+    return MODULE_TIERS
+
 # ── Run ──────────────────────────────────────────────────────────────────────
+
 if __name__ == "__main__":
     import uvicorn
     print("═" * 60)

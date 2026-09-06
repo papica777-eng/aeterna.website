@@ -490,8 +490,11 @@
     <!-- Complete Vanilla HUD Engine (Used for 100% Offline-Recovery & CDN Bypass) -->
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'ONCOLOGY';
+        const AETERNA_REQUIRED_PRICE_EUR = 1499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -539,20 +542,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -575,21 +565,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -600,502 +639,7 @@
                 if (cb) cb(key);
             }, 500);
         }
-
-        // System state logic
-        let state = {
-            activeTab: "dashboard",
-            language: "en",
-            curedState: false,
-            isTransitioning: false,
-            bciCooldown: false,
-            entropy: 3.56,
-            cPeptide: 0.01,
-            homaIr: 2.40,
-            neuralLinkConnected: true,
-            emergencyMode: false,
-            ph: 7.41,
-            oxygen: 98,
-            zScore: 0.42,
-            empathyAnomaly: false,
-            fesStimulationActive: false,
-            hebbianConfidence: 8.8,
-            bdnfLevel: 1.0,
-            glut4Upregulation: 1.0,
-            fesStatus: "EEG_STANDBY",
-            gaitPhase: 0,
-            catuskotiState: "SYNERGY",
-            fesActiveChannels: {
-                plantar: 0,
-                dorsiflex: 0,
-                quad: 0,
-                hamstring: 0
-            },
-            logs: [
-                { time: "12:12:00", bg: "INIT: AETERNA VHT ядрото за ОНКОЛОГИЯ е онлайн. Knox офлайн пясъчник е активиран.", en: "INIT: AETERNA VHT ONCOLOGY core online. Knox offline sandbox engaged." },
-                { time: "12:12:01", bg: "INGEST: Заредени 900 близнака с глиобластом от Европейските онко-регистри (2015-2026).", en: "INGEST: Loaded 900 glioblastoma patient twins from European Cancer Registries (2015-2026)." },
-                { time: "12:12:02", bg: "TELEMETRY: Активно високоентропийно неопластично състояние (Обем = 24.50 cm³). Некомпенсиран глутаматен шок.", en: "TELEMETRY: High-entropy neoplastic growth active (Volume = 24.50 cm³). Uncompensated glutamate curves." }
-            ],
-            hudVisible: true,
-            clipX: 1.0,
-            clipY: 1.0,
-            clipZ: 1.0,
-            windowVal: 0.60,
-            levelVal: 0.30,
-            renderMode: 1, // Default to BDNF for stunning visual impact!
-            autoRotate: true,
-            rotationX: 0.3,
-            rotationY: 0.5,
-            clickCoords: null,
-            bdnfIntensity: 1.0,
-            invModelViewProj: new Float32Array(16),
-            modelMatrixInverse: new Float32Array(16),
-            grantsKeyword: "cancer",
-            grantsList: [],
-            picSearchInput: "",
-            picOrgProfile: null,
-            grantsLoading: false,
-            picLoading: false,
-            aqp4Polarization: 0.42,
-            deltaWaveAmplitude: 66.0,
-            amyloidSynthesisRate: 1.50,
-            cohortSimulated: false,
-            cohortCIndex: 97.13,
-            epigeneticBreakerTripped: false,
-            mtdnaMutationLoad: 1.20,
-            crbAlphaCoherence: 0.75,
-            crbDmnNoise: 1.20,
-            crbTaskPower: 4.50,
-            crbHz: 4.0,
-            crbBoosting: false,
-            guideStep: 0,
-            guideActive: false
-        };
-
-        const rawChaoticData = [
-            { val: 24.5 }, { val: 26.8 }, { val: 28.5 },
-            { val: 27.2 }, { val: 28.1 }, { val: 25.2 },
-            { val: 26.9 }, { val: 27.8 }, { val: 23.2 },
-            { val: 25.9 }, { val: 28.2 }, { val: 24.8 },
-            { val: 26.2 }
-        ];
-
-        const curedData = [
-            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
-            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
-            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
-            { val: 0.00 }, { val: 0.00 }, { val: 0.00 },
-            { val: 0.00 }
-        ];
-
-        let currentGlucose = [...rawChaoticData];
-
-        const cohortData = [
-            { group: "groupPediatric", count: 120, baseline: "11.84%", conv: "13.55%", v3: "89.92%", v4: "100.00%", hypoConv: 482.2, hypoV4: 0.0 },
-            { group: "groupYouth", count: 240, baseline: "15.46%", conv: "21.31%", v3: "79.51%", v4: "100.00%", hypoConv: 12.4, hypoV4: 0.0 },
-            { group: "groupMiddle", count: 180, baseline: "13.01%", conv: "23.02%", v3: "80.99%", v4: "100.00%", hypoConv: 15.9, hypoV4: 0.0 },
-            { group: "groupMature", count: 200, baseline: "14.10%", conv: "28.03%", v3: "83.77%", v4: "100.00%", hypoConv: 6.6, hypoV4: 0.0 },
-            { group: "groupElderly", count: 130, baseline: "16.38%", conv: "27.11%", v3: "79.40%", v4: "100.00%", hypoConv: 13.1, hypoV4: 0.0 },
-            { group: "groupCentenarian", count: 30, baseline: "21.70%", conv: "24.47%", v3: "85.21%", v4: "100.00%", hypoConv: 25.0, hypoV4: 0.0 }
-        ];
-
-        const translations = {
-            bg: {
-                hudTitle: "AETERNA // SOVEREIGN 3D NEURO HUD",
-                neuralLink: "НЕВРОННА ВРЪЗКА:",
-                connected: "СВЪРЗАНА",
-                severed: "ПРЕКЪСНАТА",
-                knoxHeartbeat: "KNOX HEARTBEAT:",
-                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY ONCOLOGICAL CURE PROTOCOL // 2026",
-                tabScientific: "Научен Панел (Онколози)",
-                tabCohort: "Кохортна Симулация (5,000 Пациенти)",
-                tabPillars: "Четирите Стълба на Сигурност",
-                tabFes: "BCI-EEG Невро-Модулация",
-                btnInduceCure: "ИНДУЦИРАНЕ НА ТУМОРНА РЕВЕРСИЯ",
-                btnRestoreChaos: "ВЪЗСТАНОВЯВАНЕ НА НЕОПЛАЗМАТА",
-                btnResetSimulation: "RESET SIMULATION",
-                btnInjectSpasm: "ИНЖЕКТИРАНЕ НА ЕПИ-ПРИСТЪП",
-                btnInjectAnomaly: "ИНЖЕКТИРАНЕ НА ГЛУТАМАТЕН ШОК",
-                btnStartFes: "СТАРТ НА CLOSED-LOOP EEG",
-                btnStopFes: "СПИРАНЕ НА CLOSED-LOOP EEG",
-                criticalAlert: "⚠️ КРИТИЧНА ТРЕВОГА",
-                lockoutEnforced: "AURA SOVEREIGN SEIZURE LOCKOUT ENFORCED",
-                lockoutDesc: "Засечено критично отклонение от <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> в перитуморалните нива на глутамат (Layer 4 Z-score Limit).<br><br>Автоматичните невро-модулатори са <span style=\"color: #ff0055; font-weight: bold;\">ХАРДУЕРНО БЛОКИРАНИ</span> чрез Samsung Knox TEE подпис за предотвратяване на ексайтотоксичност и фатален статус епилептикус.",
-                emergencyModeActive: "EMERGENCY LOCAL ONCOLOGY MODE ACTIVE // NEURAL LINK SEVERED",
-                emergencyBannerDesc: "Системата премина в авариен локален режим. Всички команди за невро-стимулация се подписват хардуерно от **Samsung Knox TEE** директно на силиция за предотвратяване на туморна хипервъзбудимост.",
-                auraShieldActive: "🛡️ AURA ONCOLOGY SHIELD ACTIVE",
-                auraShieldCompromised: "🛡️ AURA ONCOLOGY SHIELD COMPROMISED",
-                shieldEnforced: "LAYER 4 ENFORCED",
-                shieldLockout: "LOCKOUT ACTIVE",
-                statusActiveDesc: "Всички невро-онкологични жизнени показатели са математически проверени и потвърдени спрямо критичния праг от <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
-                statusCompromisedDesc: "Засечено критично излизане от нормите за невронна безопасност. Автоматичното стимулационно дозиране е преустановено криптографски.",
-                bloodPh: "pH НА КРЪВТА",
-                normalPh: "Норма: 7.35 - 7.45",
-                oxygenSat: "КИСЛОРОДНО НАСИЩАНЕ (O₂)",
-                normalO2: "Норма: 95% - 100%",
-                metabolicZscore: "Z-SCORE РИСК ОТ ГЪРЧОВЕ",
-                criticalZscore: "Критичен праг: >3.0σ",
-                glycemicTrajectory: "Крива на туморния регрес на Ден 2 (Steady-State)",
-                glycemicDesc: "Симулиран обем на глиобластома (GBM) при приложен метаболитен блок. Нормата е пълна реверсия (0.00 cm³).",
-                globalEntropy: "GLOBAL ENTROPY",
-                glucoseLabel: "Обем на тумора (GBM)",
-                normalGlucose: "Норма: 0.00 cm³",
-                endogenousCpeptide: "Интегритет на КМБ (BBB)",
-                normalCpeptide: "Норма: >90% (Защитена)",
-                homaIrIndex: "Глутаматна Токсичност",
-                normalHomaIr: "Норма: < 1.00 mM",
-                patientProfile: "Описание на Пациента",
-                patientLabel: "ПАЦИЕНТ:",
-                ageWeightLabel: "ВЪЗРАСТ / ДИАГНОЗА:",
-                ageWeightVal: "42 години / Мултиформен Глиобластом (GBM)",
-                bypassStateLabel: "ТЕРАПЕВТИЧЕН БАЙПАС:",
-                bypassAtrophy: "TUMOR_NEOPLASM_ACTIVE",
-                bypassReversion: "ONCOLOGICAL_REVERSION",
-                activeInsulinLabel: "АКТИВЕН ИНХИБИТОР:",
-                insulinAuto: "Pax4-Sovereign Block (0.00 cm³)",
-                insulinExternal: "Temozolomide + Metabolic Block",
-                clinicalConclusion: "КЛИНИЧЕН ИЗВОД:",
-                conclusionCured: "Успешното блокиране на туморния метаболизъм (0.00 cm³) в съчетание с пълно периферно възстановяване на невронната стабилност бележи успешна Sovereign-индуцирана онкологична реверсия и автологична терапия.",
-                conclusionChaos: "Пациентът е в състояние на прогресираща неоплазма с активна глутаматна токсичност и висок риск от гърчове. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.",
-                telemetryLog: "LIVE_ONCOLOGY_TELEMETRY_LOG",
-                engConsole: "CLINICAL CONSOLE // TUMOR TEST INJECTORS",
-                engConsoleDesc: "Симулиране на критична глутаматна екскурзия и тумор-индуциран епилептичен спазъм за стрес-тест на Layer 4 безопасността.",
-                cohortTitle: "Сравнителен кохортен екран (900 виртуални онкологични близнаци)",
-                cohortDesc: "Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Глиобластомните кохорти за 2015-2026 г.",
-                ageGroup: "Възрастова Група",
-                count: "Брой",
-                baselineTir: "Базова Преживяемост",
-                conventionalTir: "Конвенционална Преживяемост",
-                v3Tir: "VHT v3.0 Преживяемост",
-                v4Tir: "v4.0 Биологична Преживяемост",
-                baselineHypo: "Базови Епи-пристъпи",
-                v4Hypo: "v4.0 Епи-пристъпи",
-                groupPediatric: "0-14 (Педиатричен GBM)",
-                groupYouth: "15-44 (Младежка възраст)",
-                groupMiddle: "45-59 (Средна възраст)",
-                groupMature: "60-74 (Зряла възраст)",
-                groupElderly: "75-89 (Старческа възраст)",
-                groupCentenarian: "90+ (Дълголетници)",
-                pillar1Num: "СТЪЛБ 1",
-                pillar1Title: "Метаболитен Контрол",
-                pillar1Desc: "Блокиране на глутаминовите и гликолитичните пътища на глиобластомните клетки чрез изключване на Warburg ефекта без системна токсичност.",
-                pillar2Num: "СТЪЛБ 2",
-                pillar2Title: "Пропускливост на КМБ",
-                pillar2Desc: "Математическо моделиране на transport-ните протеини за оптимизиране на преминаването на лекарства през Кръвно-Мозъчната Бариера.",
-                pillar3Num: "СТЪЛБ 3",
-                pillar3Title: "Невропластичен Резонанс",
-                pillar3Desc: "Активиране на AMPK и CaMKII сигнализацията за предпазване на здравата съседна мозъчна тъкан от ексайтотоксична дегенерация.",
-                pillar4Num: "СТЪЛБ 4",
-                pillar4Title: "AURA Integrity Guard",
-                pillar4Desc: "Реалновремево изчисляване на Z-Score за перитуморален глутамат и seizure risk. Превишаването на 3.0σ прага задейства TEE Knox lockout.",
-                soulCodeTitle: "Физиологичен онкологичен код на безопасност (SOUL Safety Gate)",
-                fesTitle: "4-Канален closed-loop EEG Невро-Модулатор",
-                fesDesc: "Реалновремево BCI засичане на епелиптиформени пикове в кората с цел моментално closed-loop предотвратяване на пристъпи.",
-                gaitTimelineTitle: "Времева скала на ЕЕГ ритъма (EEG Wave Cycles)",
-                heelStrike: "Делта Ритъм (0.5 - 4 Hz)",
-                heelOff: "Тета Ритъм (4 - 8 Hz)",
-                swingStart: "Алфа Ритъм (8 - 12 Hz)",
-                terminalSwing: "Бета Ритъм (12 - 30 Hz)",
-                neurometabolicEvidence: "Невро-онкологични биомаркери & доказателства",
-                hebbianPairingTitle: "Невропластичен трансфер и Hebbian pairing:",
-                hebbianPairingDesc: "Чрез синхронизиране на когнитивните вълни с closed-loop BCI стимулация, системата стимулира невронните мрежи да се преконфигурират около туморната зона, ограничавайки огнищата на свръхвъзбудимост и блокирайки пристъпите.",
-                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & SEIZURE RESOLVER",
-                predictiveStatus: "Предиктивен статус:",
-                shieldIntact: "SHIELD INTACT (ACTIVE)",
-                shieldDampened: "DAMPENED (SAFE LOCKOUT)",
-                hebbianConfidenceLabel: "Hebbian EEG Coherence:",
-                chronosPidLabel: "Chronos PID Gains:",
-                catuskotiStateLabel: "CATUSKOTI STATE",
-                gaitStatusStandby: "EEG_STANDBY",
-                gaitStatusStance: "SYNCHRONIZED",
-                gaitStatusSwing: "SPIKE_SUPPRESSION",
-                vivisectorTitle: "Синтетична Леталност (Vivisector)",
-                vivisectorDesc: "Алгоритъмът GENOME_VIVISECTOR извършва O(1) Inter-Procedural Taint Traversal през метаболитните графове, идентифицирайки критични уязвимости в туморния метаболизъм (Synthetic Lethality) и изолирайки фалшивите сигнали.",
-                state1Title: "STATE 1: TRUE",
-                state1Desc: "Истински клиничен експлоит (Synthetic Lethality) открит.",
-                state2Title: "STATE 2: FALSE",
-                state2Desc: "Токсичен фалшив сигнал. Метаболитният път е защитен.",
-                state3Title: "STATE 3: PARADOX",
-                state3Desc: "Tumor bypass. Сигналът е пренасочен през алтернативен път.",
-                btnVivisector: "СТАРТ НА VIVISECTOR",
-                scalpelTitle: "3D ДИГИТАЛЕН СКАЛПЕЛ",
-                renderModeLabel: "РЕЖИМ НА РЕНДЕРИРАНЕ",
-                anatomicalVolume: "АНАТОМИЧЕН ОБЕМ",
-                bdnfNeuroplasticity: "BDNF НЕВРОПЛАСТИЧНОСТ",
-                dtiTractography: "DTI ТРАКТОГРАФИЯ (3D ЛИНИИ)",
-                autoSpin: "АВТО-РОТАЦИЯ (60 FPS)",
-                densityWindow: "ПЛЪТНОСТЕН ПРОЗОРЕЦ (КОНТРАСТ)",
-                densityLevel: "НИВО НА ПЛЪТНОСТ (ЯРКОСТ)",
-                sagittalClip: "САГИТАЛЕН СРЕЗ (X-ОС)",
-                coronalClip: "КОРОНАЛЕН СРЕЗ (Y-ОС)",
-                axialClip: "АКСИАЛЕН СРЕЗ (Z-ОС)",
-                clearSelection: "ИЗЧИСТИ ИЗБОРА",
-                voxelDensity: "ПЛЪТНОСТ НА ВОКСЕЛА:",
-                clinicalRef: "КЛИНИЧНА РЕФЕРЕНЦИЯ:",
-                isocenter: "ИЗОЦЕНТЪР",
-                affineLockCoords: "AFFINE LOCK КООРДИНАТИ",
-                hideTelemetry: "Скрий Телеметрията",
-                showTelemetry: "Покажи Телеметрията",
-                tabGrants: "EU Финансиране & Партньори",
-                searchPicLabel: "Търсене на организация по PIC номер:",
-                grantsListTitle: "Активни Грантове (Хоризонт Европа)",
-                picSearchBtn: "ИЗВЛЕЧИ ПРОФИЛ",
-                noGrantsFound: "Няма намерени отворени грантове.",
-                picDetailsTitle: "Профил на легалния субект",
-                picDetailsOrgName: "Организация:",
-                picDetailsCountry: "Държава:",
-                picDetailsStatus: "Статус:",
-                picDetailsVat: "ДДС номер:",
-                picDetailsWebsite: "Уебсайт:",
-                picDetailsProjects: "Активни проекти:",
-                grantsKeywordLabel: "Филтриране по ключова дума:",
-                btnSearchGrants: "ТЪРСЕНЕ НА ГРАНТОВЕ",
-                grantTitle: "Заглавие:",
-                grantDeadline: "Краен срок:",
-                grantBudget: "Бюджет на поканата:",
-                grantLink: "Към ЕС портал",
-                tabNeuro: "Невро-Навигатор",
-                neuroTitle: "Глимфатичен Дренажен Баланс",
-                neuroDesc: "Моделиране на масовия баланс на Амилоид-β и Тау в интерстициалното пространство по време на NREM сън.",
-                aqp4Label: "AQP4 Поляризация (Аквапорин-4)",
-                deltaWaveLabel: "EEG Делта-Вълни (Амплитуда)",
-                synthesisRateLabel: "Базова скорост на синтез (K_synthesis)",
-                clearanceFlowLabel: "Глимфатичен Дебит (Phi)",
-                massBalanceLabel: "Масов Баланс (d[Aβ]/dt)",
-                statusLabel: "СТАТУС НА СУБСТРАТА:",
-                homeostasisGuaranteed: "🟢 HOMEOSTASIS_GUARANTEED",
-                toxicEntropy: "🔴 TOXIC_ENTROPY_ACCUMULATION",
-                verdictLabel: "КЛИНИЧЕН ВЕРДИКТ:",
-                verdictHomeostasis: "Спирането на когнитивния упадък е детерминистично доказано. Активен CSF дренаж.",
-                verdictToxic: "Патологично натрупване на протеопатия в церебралния субстрат. Риск от когнитивен упадък.",
-                aqp4PolarizationDesc: "Поляризацията на AQP4 водни канали по крайните крачета на астроцитите е хидравличната помпа на мозъка. Падането под 0.60 води до разпръскване на каналите и срив на флуидния поток.",
-                deltaWaveDesc: "EEG делта-вълни с голяма амплитуда (>75 µV) по време на NREM сън координират масивните CSF пулсации за разширяване на интерстициалното пространство с 60%.",
-                synthesisRateDesc: "Скорост на базовия патологичен синтез на амилоид-β протеини.",
-                scenariosTitle: "Клинични Сценарии (Mojo Тест)",
-                scenario1Btn: "Сценарий 1: Дълбок NREM сън",
-                scenario2Btn: "Сценарий 2: AQP4 Деполяризация",
-                scenario3Btn: "Сценарий 3: Повърхностен NREM сън",
-                crbTitle: "Когнитивен Резонансен Ускорител (CRB)",
-                crbDesc: "Анализ и управление на когнитивната мощност в будно състояние чрез контролирана фазова кохерентност.",
-                crbAlphaLabel: "Alpha Cross-Coherence (0.1 - 1.0)",
-                crbAlphaDesc: "Степен на фазова синхронизация между ЕЕГ сензорите в Алфа спектъра (7-10 Hz).",
-                crbDmnLabel: "DMN Intrusive Noise (dB)",
-                crbDmnDesc: "Фонов шум на Default Mode Network (разсейване и его шум).",
-                crbTaskLabel: "Waking Task Power (µV²)",
-                crbTaskDesc: "Мощност на Task-Positive Network при активно решаване на задачи.",
-                crbControllable: "Контролируема Мощност:",
-                crbEntropy: "Ландауерова Ентропия:",
-                crbBoostBtn: "АКТИВИРАНЕ НА ФОКУСЕН ТЛАСЪК (BOOST)",
-                crbActiveResonance: "Резонансна Честота на BCI:",
-                guideWelcome: "Здравейте, Доктор! Аз съм вашият когнитивен навигатор в AETERNA. Желаете ли въвеждащ тур?",
-                guideStep1: "Добре дошли в AETERNA Clinical HUD! Този главен панел показва реалновремевите показатели за pH, O₂ и Z-Score риск от пристъпи. Можете да индуцирате туморна реверсия и излекуване чрез бутона ИНДУЦИРАНЕ НА ТУМОРНА РЕВЕРСИЯ.",
-                guideStep2: "В Невро-Навигатора симулирате глимфатичното очистване при Алцхаймер. Настройте astrocyte AQP4 поляризацията ≥ 0.60 и EEG NREM делта-вълните ≥ 75.0 µV за гарантиране на очистващия баланс.",
-                guideStep3: "Това е Когнитивният Ускорител (CRB). Той изчислява будната ефективност по модела на Ландауер. Натиснете BOOST за фазова кохерентност в 8 Hz спектъра и ограничаване на DMN шума.",
-                guideStep4: "В Кохортния Симулатор можете да валидирате биологичния детерминизъм на VHT върху 5,000 онкологични пациенти от TCGA-GBM. Наблюдавайте как Kaplan-Meier кривата на преживяемост достига 100% C-Index.",
-                guideStep5: "Епигенетичният прекъсвач следи за критичен mtDNA мутационен товар. При стойности ≥ 2.10% системата автоматично форсира клетъчна смърт (апоптоза) за 100% прецизност на лечението.",
-                guideStep6: "В таба BCI-EEG Невро-Модулация управлявате 4-каналния Teslasuit костюм. Синхронизирането на намерението със стимулация отключва Hebbian невропластичност за инсулин-независимо изчистване на глюкозата.",
-                guideStep7: "Чрез Хоризонт Европа портала можете да извършвате търсене на активни ЕС проекти и извличане на легални профили (PIC) директно от официалните регистри на ЕК. Желаем Ви успешен одит с AETERNA!",
-                guideNext: "НАПРЕД",
-                guideClose: "ЗАТВОРИ"
-            },
-            en: {
-                hudTitle: "AETERNA // SOVEREIGN 3D NEURO HUD",
-                neuralLink: "NEURAL LINK:",
-                connected: "CONNECTED",
-                severed: "SEVERED",
-                knoxHeartbeat: "KNOX HEARTBEAT:",
-                footerText: "AETERNA v4.0 Substrate // ZERO-ENTROPY ONCOLOGICAL CURE PROTOCOL // 2026",
-                tabScientific: "Scientific Panel (Oncologists)",
-                tabCohort: "Cohort Simulation (5,000 Patients)",
-                tabPillars: "Four Pillars of Security",
-                tabFes: "BCI-EEG Neuro-Modulation",
-                btnInduceCure: "INDUCE TUMOR REVERSION",
-                btnRestoreChaos: "RESTORE NEOPLASMATIC CHAOS",
-                btnResetSimulation: "RESET SIMULATION",
-                btnInjectSpasm: "INJECT EPILEPTIC SEIZURE",
-                btnInjectAnomaly: "INJECT GLUTAMATE ANOMALY",
-                btnStartFes: "START CLOSED-LOOP EEG",
-                btnStopFes: "STOP CLOSED-LOOP EEG",
-                criticalAlert: "⚠️ CRITICAL ALERT",
-                lockoutEnforced: "AURA SOVEREIGN SEIZURE LOCKOUT ENFORCED",
-                lockoutDesc: "Detected critical deviation of <span style=\"color: #fff; font-weight: bold;\" id=\"anomaly-zscore\">{zScore}σ</span> in peritumoral glutamate levels (Layer 4 Z-score Limit).<br><br>Automatic neuro-modulators are <span style=\"color: #ff0055; font-weight: bold;\">HARDWARE LOCKED</span> via Samsung Knox TEE signature to prevent excitotoxicity and fatal status epilepticus.",
-                emergencyModeActive: "EMERGENCY LOCAL ONCOLOGY MODE ACTIVE // NEURAL LINK SEVERED",
-                emergencyBannerDesc: "The system transitioned to emergency local mode. All neuro-stimulation commands are hardware-signed by **Samsung Knox TEE** directly on the silicon to prevent tumor-induced hyperexcitability.",
-                auraShieldActive: "🛡️ AURA ONCOLOGY SHIELD ACTIVE",
-                auraShieldCompromised: "🛡️ AURA ONCOLOGY SHIELD COMPROMISED",
-                shieldEnforced: "LAYER 4 ENFORCED",
-                shieldLockout: "LOCKOUT ACTIVE",
-                statusActiveDesc: "All neuro-oncological vital metrics are mathematically verified and confirmed against the critical threshold of <span style=\"color: #fff; font-weight: 800;\">3.0σ</span>.",
-                statusCompromisedDesc: "Critical safety deviation detected. Automatic stimulation dosing has been cryptographically suspended.",
-                bloodPh: "BLOOD pH",
-                normalPh: "Normal: 7.35 - 7.45",
-                oxygenSat: "OXYGEN SATURATION (O₂)",
-                normalO2: "Normal: 95% - 100%",
-                metabolicZscore: "Z-SCORE SEIZURE RISK",
-                criticalZscore: "Critical threshold: >3.0σ",
-                glycemicTrajectory: "Tumor Regression Curve Day 2 (Steady-State)",
-                glycemicDesc: "Simulated glioblastoma (GBM) volume under metabolic block therapy. The norm is complete reversion (0.00 cm³).",
-                globalEntropy: "GLOBAL ENTROPY",
-                glucoseLabel: "Tumor Volume (GBM)",
-                normalGlucose: "Normal: 0.00 cm³",
-                endogenousCpeptide: "BBB Integrity",
-                normalCpeptide: "Normal: >90% (Protected)",
-                homaIrIndex: "Glutamate Toxicity",
-                normalHomaIr: "Normal: < 1.00 mM",
-                patientProfile: "Patient Profile",
-                patientLabel: "PATIENT:",
-                ageWeightLabel: "AGE / DIAGNOSIS:",
-                ageWeightVal: "42 years / Glioblastoma Multiforme (GBM)",
-                bypassStateLabel: "THERAPEUTIC BYPASS:",
-                bypassAtrophy: "TUMOR_NEOPLASM_ACTIVE",
-                bypassReversion: "ONCOLOGICAL_REVERSION",
-                activeInsulinLabel: "ACTIVE INHIBITOR:",
-                insulinAuto: "Pax4-Sovereign Block (0.00 cm³)",
-                insulinExternal: "Temozolomide + Metabolic Block",
-                clinicalConclusion: "CLINICAL CONCLUSION:",
-                conclusionCured: "Successful blocking of tumor metabolism (0.00 cm³) in combination with complete peripheral restoration of neural stability marks successful Sovereign-induced oncological reversion and autologous therapy.",
-                conclusionChaos: "The patient is in a state of progressive neoplasm with active glutamate toxicity and high risk of seizures. Induce the biological restart via the main recovery button.",
-                telemetryLog: "LIVE_ONCOLOGY_TELEMETRY_LOG",
-                engConsole: "CLINICAL CONSOLE // TUMOR TEST INJECTORS",
-                engConsoleDesc: "Simulate critical glutamate excursion and tumor-induced epileptic spasm to stress-test Layer 4 safety protocols.",
-                cohortTitle: "Comparative Cohort Screen (900 Virtual Oncological Twins)",
-                cohortDesc: "Scaling the autologous cure v4.0 across the entire demographic sample of Glioblastoma cohorts for 2015-2026.",
-                ageGroup: "Age Group",
-                count: "Count",
-                baselineTir: "Baseline Survival",
-                conventionalTir: "Conventional Survival",
-                v3Tir: "VHT v3.0 Survival",
-                v4Tir: "v4.0 Biological Survival",
-                baselineHypo: "Baseline Seizures",
-                v4Hypo: "v4.0 Seizures",
-                groupPediatric: "0-14 (Pediatric GBM)",
-                groupYouth: "Youth",
-                groupMiddle: "Middle Age",
-                groupMature: "Mature Age",
-                groupElderly: "Elderly",
-                groupCentenarian: "Centenarians",
-                pillar1Num: "PILLAR 1",
-                pillar1Title: "Metabolic Control",
-                pillar1Desc: "Blocking glutamine and glycolytic pathways of glioblastoma cells by turning off the Warburg effect without systemic toxicity.",
-                pillar2Num: "PILLAR 2",
-                pillar2Title: "BBB Permeability",
-                pillar2Desc: "Mathematical modeling of transport proteins to optimize drug delivery across the Blood-Brain Barrier.",
-                pillar3Num: "PILLAR 3",
-                pillar3Title: "Neuroplastic Resonance",
-                pillar3Desc: "Activating AMPK and CaMKII signaling to protect healthy adjacent brain tissue from excitotoxic degeneration.",
-                pillar4Num: "PILLAR 4",
-                pillar4Title: "AURA Integrity Guard",
-                pillar4Desc: "Real-time calculation of Z-Score for pH and oxygen saturation. Exceeding the 3.0σ threshold triggers the TEE Knox lockout.",
-                soulCodeTitle: "Physiological safety code (SOUL Safety Gate)",
-                fesTitle: "4-Channel Teslasuit Locomotor Mode",
-                fesDesc: "Dynamic mapping of bioelectrical stimulation for peripheral muscle activation and Hebbian pairing.",
-                gaitTimelineTitle: "Gait Cycle Phase Timeline",
-                heelStrike: "Heel strike (0%)",
-                heelOff: "Heel off (48% spastic check)",
-                swingStart: "Swing phase start (60%)",
-                terminalSwing: "Terminal swing (100%)",
-                neurometabolicEvidence: "Neurometabolic evidence & biomarkers",
-                hebbianPairingTitle: "Biomechanical transfer and Hebbian pairing:",
-                hebbianPairingDesc: "By synchronizing the patient's cognitive intent (BCI) with the electrical triggering of the Teslasuit (under 50 ms latency), the system unlocks Hebbian plasticity. The increased contraction force triggers AMPK/CaMKII pathways in skeletal muscles, causing GLUT4 vesicles to translocate to the cell membrane and clear glucose independently.",
-                chronosPredictive: "CHRONOS PREDICTIVE SHIELD & MOTOR RESOLVER",
-                predictiveStatus: "Predictive status:",
-                shieldIntact: "SHIELD INTACT (ACTIVE)",
-                shieldDampened: "DAMPENED (SAFE LOCKOUT)",
-                hebbianConfidenceLabel: "Hebbian BCI Confidence:",
-                chronosPidLabel: "Chronos PID Gains:",
-                catuskotiStateLabel: "CATUSKOTI STATE",
-                gaitStatusStandby: "STANDBY",
-                gaitStatusStance: "STANCE_PHASE",
-                gaitStatusSwing: "SWING_PHASE",
-                vivisectorTitle: "Synthetic Lethality (Vivisector)",
-                vivisectorDesc: "The GENOME_VIVISECTOR algorithm performs an O(1) Inter-Procedural Taint Traversal through metabolic graphs, identifying critical vulnerabilities in tumor metabolism (Synthetic Lethality) and isolating false signals.",
-                state1Title: "STATE 1: TRUE",
-                state1Desc: "True clinical exploit (Synthetic Lethality) detected.",
-                state2Title: "STATE 2: FALSE",
-                state2Desc: "Toxic false signal. The metabolic pathway is protected.",
-                state3Title: "STATE 3: PARADOX",
-                state3Desc: "Tumor bypass. The signal is rerouted through an alternative pathway.",
-                btnVivisector: "START VIVISECTOR",
-                scalpelTitle: "3D DIGITAL SCALPEL",
-                renderModeLabel: "RENDER MODE",
-                anatomicalVolume: "ANATOMICAL VOLUME",
-                bdnfNeuroplasticity: "BDNF NEUROPLASTICITY",
-                dtiTractography: "DTI TRACTOGRAPHY (3D LINES)",
-                autoSpin: "AUTO-SPIN (60 FPS)",
-                densityWindow: "DENSITY WINDOW (CONTRAST)",
-                densityLevel: "DENSITY LEVEL (BRIGHTNESS)",
-                sagittalClip: "SAGITTAL CLIP (X-AXIS)",
-                coronalClip: "CORONAL CLIP (Y-AXIS)",
-                axialClip: "AXIAL CLIP (Z-AXIS)",
-                clearSelection: "CLEAR SELECTION",
-                voxelDensity: "VOXEL DENSITY:",
-                clinicalRef: "CLINICAL REF:",
-                isocenter: "ISOCENTER",
-                affineLockCoords: "AFFINE LOCK COORDINATES",
-                hideTelemetry: "Hide Telemetry HUD",
-                showTelemetry: "Show Telemetry HUD",
-                tabGrants: "EU Funding & Partners",
-                searchPicLabel: "Search Organisation by PIC Number:",
-                grantsListTitle: "Active Horizon Europe Grants",
-                picSearchBtn: "FETCH PROFILE",
-                noGrantsFound: "No open grants found.",
-                picDetailsTitle: "Legal Entity Profile",
-                picDetailsOrgName: "Organisation:",
-                picDetailsCountry: "Country:",
-                picDetailsStatus: "Status:",
-                picDetailsVat: "VAT Number:",
-                picDetailsWebsite: "Website:",
-                picDetailsProjects: "Active Projects:",
-                grantsKeywordLabel: "Filter by Keyword:",
-                btnSearchGrants: "SEARCH GRANTS",
-                grantTitle: "Title:",
-                grantDeadline: "Deadline:",
-                grantBudget: "Call Budget:",
-                grantLink: "Go to Opportunity",
-                tabNeuro: "Neuro-Navigator",
-                neuroTitle: "Glymphatic Drainage Balance",
-                neuroDesc: "Modeling the mass balance of Amyloid-β and Tau proteins in the interstitial space during NREM sleep.",
-                aqp4Label: "AQP4 Polarization (Aquaporin-4)",
-                deltaWaveLabel: "EEG Delta Wave (Amplitude)",
-                synthesisRateLabel: "Base Synthesis Rate (K_synthesis)",
-                clearanceFlowLabel: "Glymphatic Flow Rate (Phi)",
-                massBalanceLabel: "Mass Balance (d[Aβ]/dt)",
-                statusLabel: "SUBSTRATE STATUS:",
-                homeostasisGuaranteed: "🟢 HOMEOSTASIS_GUARANTEED",
-                toxicEntropy: "🔴 TOXIC_ENTROPY_ACCUMULATION",
-                verdictLabel: "CLINICAL VERDICT:",
-                verdictHomeostasis: "Cognitive decline halt is deterministically proven. Active CSF drainage.",
-                verdictToxic: "Pathological accumulation of proteopathy in the cerebral substrate. Risk of cognitive decline.",
-                aqp4PolarizationDesc: "AQP4 channel polarization at astrocyte endfeet acts as the brain's hydraulic pump. Falling below 0.60 causes channels to scatter, collapsing directional CSF flow.",
-                deltaWaveDesc: "High-amplitude EEG delta waves (>75 µV) during NREM sleep coordinate massive CSF pulsations to expand the interstitial space by 60%.",
-                synthesisRateDesc: "The rate of base pathological synthesis of amyloid-β proteins.",
-                scenariosTitle: "Clinical Scenarios (Mojo Test)",
-                scenario1Btn: "Scenario 1: Deep NREM Sleep",
-                scenario2Btn: "Scenario 2: AQP4 Depolarization",
-                scenario3Btn: "Scenario 3: Light NREM Sleep",
-                crbTitle: "Cognitive Resonance Booster (CRB)",
-                crbDesc: "Real-time waking cognitive capacity & focus efficiency solver based on controlled EEG phase coherence.",
-                crbAlphaLabel: "Alpha Cross-Coherence (0.1 - 1.0)",
-                crbAlphaDesc: "EEG sensor phase synchronization level in the alpha spectrum (7-10 Hz).",
-                crbDmnLabel: "DMN Intrusive Noise (dB)",
-                crbDmnDesc: "Default Mode Network background activity level (ego noise/distraction).",
-                crbTaskLabel: "Waking Task Power (µV²)",
-                crbTaskDesc: "Task-Positive Network signal power during active task execution.",
-                crbControllable: "Controllable Power Capacity:",
-                crbEntropy: "Landauer Entropy Factor:",
-                crbBoostBtn: "ENGAGE COGNITIVE FOCUS BOOST",
-                crbActiveResonance: "BCI Resonant Modulation:",
-                guideWelcome: "Hello, Doctor! I am your AETERNA cognitive navigator. Would you like a system onboarding tour?",
-                guideStep1: "Welcome to AETERNA Clinical HUD! This primary dashboard displays real-time vital telemetry streams (pH, O₂, seizure risk). You can trigger Pax4-driven tumor reversion and autologous healing using the central purple INDUCE TUMOR REVERSION button.",
-                guideStep2: "In the Neuro-Navigator, you simulate interstitial glymphatic clearance in Alzheimer's. Maintain astrocytic AQP4 polarization ≥ 0.60 and deep EEG NREM delta waves ≥ 75 µV to ensure clearing homeostasis.",
-                guideStep3: "The Waking Focus Accelerator (CRB) handles cognitive power under controlled alpha phase coherence (8 Hz). Press BOOST to fully suppress Default Mode Network noise under strict Landauer thermodynamic limits.",
-                guideStep4: "This is the 5,000 Patient Cohort Simulator. Here, you validate clinical determinism by simulating Glioblastoma (TCGA-GBM) profiles. Run the simulator to see the Kaplan-Meier curve reach a perfect 100.00% Concordance Index.",
-                guideStep5: "The Epigenetic Circuit Breaker monitors mtDNA mutations. If mutation load exceeds 2.10%, the system overrides stochastic tumor escape and forces immediate cell death (apoptosis) for absolute cure determinism.",
-                guideStep6: "Under BCI-EEG Neuro-Modulation, you orchestrate peripheral muscle activation using the 4-channel Teslasuit. Synchronizing cognitive intent with stimulation triggers GLUT4 translocation to clear glucose independently.",
-                guideStep7: "Finally, the Grants Radar scans Horizon Europe funding and retrieves EC Organisation profiles (PIC) from official registries in real-time. Thank you for exploring the sovereign future with AETERNA!",
-                guideNext: "NEXT",
-                guideClose: "CLOSE"
-            }
-        };
+;
 
         function t(key, vars = {}) {
             const lang = state.language || "en";
@@ -4934,49 +4478,48 @@ process VERIFY_AURA_INTEGRITY(ph: Decimal, o2: Decimal) -> Boolean {
     </script>
 
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #a855f799; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #a855f766; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #a855f726; border: 1px solid #a855f766; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a855f7; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #a855f74d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Precision In Silico Oncology & Drug Targeting</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #a855f7; font-size: 14px; padding: 2px 8px; background: #a855f71a; border-radius: 6px; border: 1px solid #a855f74d;">1 499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>1 499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: ONCOLOGY (1 499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 1 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 1 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-ONCOLOGY-1499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #a855f7; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #a855f7, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #a855f759;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

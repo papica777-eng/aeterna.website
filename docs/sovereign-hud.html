@@ -338,8 +338,11 @@
     <!-- Complete Vanilla HUD Engine (Used for 100% Offline-Recovery & CDN Bypass) -->
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'SOVEREIGN_CORE';
+        const AETERNA_REQUIRED_PRICE_EUR = 1499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -387,20 +390,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -423,21 +413,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -449,533 +488,6 @@
             }, 500);
         }
 
-        // System state logic
-        let state = {
-            lang: "en",
-            activeTab: "dashboard",
-            curedState: false,
-            isTransitioning: false,
-            entropy: 3.56,
-            cPeptide: 0.01,
-            homaIr: 2.40,
-            neuralLinkConnected: true,
-            emergencyMode: false,
-            logs: [
-                "[12:12:00] INIT: AETERNA VHT core online. Knox offline sandbox engaged.",
-                "[12:12:01] INGEST: Loaded 900 patient twins from Bulgaria 2015 national registry.",
-                "[12:12:02] TELEMETRY: High-entropy state active (Entropy = 3.56). Uncompensated glucose curves."
-            ]
-        };
-
-        const rawChaoticData = [
-            { val: 12.4 }, { val: 14.8 }, { val: 16.5 },
-            { val: 15.2 }, { val: 16.1 }, { val: 13.2 },
-            { val: 14.9 }, { val: 15.8 }, { val: 11.2 },
-            { val: 13.9 }, { val: 16.2 }, { val: 12.8 },
-            { val: 14.2 }
-        ];
-
-        const curedData = [
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }, { val: 4.80 }, { val: 4.80 },
-            { val: 4.80 }
-        ];
-
-        let currentGlucose = [...rawChaoticData];
-
-        const cohortData = [
-            { group: "0-14 (Педиатричен)", count: 120, baseline: "11.84%", conv: "13.55%", v3: "89.92%", v4: "100.00%", hypoConv: 482.2, hypoV4: 0.0 },
-            { group: "15-44 (Младежка възраст)", count: 240, baseline: "15.46%", conv: "21.31%", v3: "79.51%", v4: "100.00%", hypoConv: 12.4, hypoV4: 0.0 },
-            { group: "45-59 (Средна възраст)", count: 180, baseline: "13.01%", conv: "23.02%", v3: "80.99%", v4: "100.00%", hypoConv: 15.9, hypoV4: 0.0 },
-            { group: "60-74 (Зряла възраст)", count: 200, baseline: "14.10%", conv: "28.03%", v3: "83.77%", v4: "100.00%", hypoConv: 6.6, hypoV4: 0.0 },
-            { group: "75-89 (Старческа възраст)", count: 130, baseline: "16.38%", conv: "27.11%", v3: "79.40%", v4: "100.00%", hypoConv: 13.1, hypoV4: 0.0 },
-            { group: "90+ (Дълголетници)", count: 30, baseline: "21.70%", conv: "24.47%", v3: "85.21%", v4: "100.00%", hypoConv: 25.0, hypoV4: 0.0 }
-        ];
-
-        function addLogEntry(msg) {
-            const timeStr = new Date().toLocaleTimeString();
-            state.logs.push(`[${timeStr}] ${msg}`);
-            if(state.logs.length > 15) state.logs.shift();
-            renderVanillaHUD();
-        }
-
-        function triggerCureRestoration() {
-            requestAeternaLicenseKey((consumedKey) => {
-                _internal_triggerCureRestoration(consumedKey);
-            });
-        }
-
-        function _internal_triggerCureRestoration(_licenseKey) {
-            if(state.isTransitioning || state.curedState) return;
-            state.isTransitioning = true;
-            addLogEntry("[BIO_CURE_INIT] ИНИЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ...");
-            addLogEntry("[ТРАНСФОРМАЦИЯ]: Мобилизиране на Pax4 бета-регенеративен отговор...");
-
-            let duration = 3000;
-            let intervalTime = 50;
-            let steps = duration / intervalTime;
-            let step = 0;
-
-            const timer = setInterval(() => {
-                step++;
-                let pct = step / steps;
-
-                state.entropy = parseFloat((3.56 - (3.56 - 0.05) * pct).toFixed(2));
-                state.cPeptide = parseFloat((0.01 + (0.90 - 0.01) * pct).toFixed(2));
-                state.homaIr = parseFloat((2.40 - (2.40 - 1.00) * pct).toFixed(2));
-
-                currentGlucose = rawChaoticData.map((d, i) => {
-                    const diff = d.val - curedData[i].val;
-                    return {
-                        val: parseFloat((d.val - diff * pct).toFixed(2))
-                    };
-                });
-
-                if(step >= steps) {
-                    clearInterval(timer);
-                    state.entropy = 0.05;
-                    state.cPeptide = 0.90;
-                    state.homaIr = 1.00;
-                    currentGlucose = [...curedData];
-                    state.curedState = true;
-                    state.isTransitioning = false;
-                    addLogEntry("[SUCCESS] БИОЛОГИЧНО ИЗЛЕКУВАНЕ: 100% TIR УСПЕШНО ВАЛИДИРАНО.");
-                }
-                renderVanillaHUD();
-            }, intervalTime);
-        }
-
-        function resetCureState() {
-            state.curedState = false;
-            state.isTransitioning = false;
-            state.entropy = 3.56;
-            state.cPeptide = 0.01;
-            state.homaIr = 2.40;
-            currentGlucose = [...rawChaoticData];
-            addLogEntry("[SYSTEM_RESET] Нулиране на метаболитните параметри към некомпенсиран хаос.");
-            renderVanillaHUD();
-        }
-
-        function handleNeuralLinkToggle(e) {
-            // ДИРЕКТИВА: При прекъсване на Neural Link, SovereignHUD.tsx автоматически преминава в Emergency_Local_Mode, докато Knox не потвърди нов Heartbeat.
-            state.neuralLinkConnected = e.checked;
-            state.emergencyMode = !state.neuralLinkConnected;
-            
-            if(state.emergencyMode) {
-                document.body.classList.add("emergency-theme");
-                addLogEntry("[CRITICAL_ALERT] NEURAL LINK: SEVERED. Превключване в Emergency_Local_Mode!");
-                addLogEntry("[SECURE_KNOX] KNOX TEE: Активирана локална изолация на жизненоважните параметри.");
-            } else {
-                document.body.classList.remove("emergency-theme");
-                addLogEntry("[ONLINE] NEURAL LINK: RESTORED. Knox Heartbeat синхронизиран.");
-            }
-            renderVanillaHUD();
-        }
-
-        function setLanguage(lang) {
-            state.lang = lang;
-            renderVanillaHUD();
-        }
-
-        function switchTab(tabId) {
-            state.activeTab = tabId;
-            renderVanillaHUD();
-        }
-
-        // SVG Render helpers
-        const width = 600;
-        const height = 240;
-        const padding = 35;
-
-        function getSvgCoords(val, idx) {
-            const x = padding + (idx / (currentGlucose.length - 1)) * (width - padding * 2);
-            const y = height - padding - ((val - 3) / 15) * (height - padding * 2);
-            return { x, y };
-        }
-
-        function buildSvgPath() {
-            return currentGlucose.map((d, i) => {
-                const { x, y } = getSvgCoords(d.val, i);
-                return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-            }).join(' ');
-        }
-
-        function buildSvgAreaPath() {
-            const first = getSvgCoords(currentGlucose[0].val, 0);
-            const last = getSvgCoords(currentGlucose[currentGlucose.length - 1].val, currentGlucose.length - 1);
-            let path = buildSvgPath();
-            return `${path} L ${last.x.toFixed(1)} ${height - padding} L ${first.x.toFixed(1)} ${height - padding} Z`;
-        }
-
-        // Render function mapping pure HTML
-        function renderVanillaHUD() {
-            const root = document.getElementById("app-root");
-            if (!root) return;
-
-            const isBg = state.lang === 'bg';
-
-            const i18nText = {
-                title: isBg ? 'AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">СУВЕРЕНЕН VHT HUD</span>' : 'AETERNA // <span style="color: var(--neon-purple);" class="glow-text-purple">SOVEREIGN VHT HUD</span>',
-                neuralLink: isBg ? 'НЕВРО-ВРЪЗКА:' : 'NEURAL LINK:',
-                connected: isBg ? 'СВЪРЗАНА' : 'CONNECTED',
-                severed: isBg ? 'ПРЕКЪСНАТА' : 'SEVERED',
-                knoxHeartbeat: isBg ? 'KNOX СЪРДЕЧЕН РИТЪМ:' : 'KNOX HEARTBEAT:',
-                tabDashboard: isBg ? 'Научен Панел (Лекари)' : 'Scientific Panel (Clinicians)',
-                tabCohort: isBg ? 'Кохортно Изследване (900 Близнаци)' : 'Cohort Study (900 Twins)',
-                tabPillars: isBg ? 'Трите Стълба на Сигурност' : 'Three Pillars of Security',
-                btnCure: isBg ? 'ИНДУЦИРАНЕ НА БИОЛОГИЧНО ИЗЛЕКУВАНЕ' : 'INDUCE BIOLOGICAL CURE',
-                btnReset: isBg ? 'ВЪЗСТАНОВЯВАНЕ НА ХАОСА' : 'RESTORE CHAOTIC STATE',
-                emergencyTitle: isBg ? 'АВАРИЕН ЛОКАЛЕН РЕЖИМ АКТИВЕН // НЕВРО-ВРЪЗКАТА Е ПРЕКЪСНАТА' : 'EMERGENCY LOCAL MODE ACTIVE // NEURAL LINK SEVERED',
-                emergencyDesc: isBg ? 'Системата премина в авариен офлайн режим. Всички команди се подписват хардуерно от Samsung Knox TEE директно на силиция, гарантирайки поддържането на безопасни дози и предотвратяване на грешки.' : 'System entered emergency offline mode. All commands hardware-signed by Samsung Knox TEE directly on silicon, guaranteeing safe dosing and eliminating risk.',
-                glycemicTitle: isBg ? 'Гликемична траектория на Ден 2 (Steady-State)' : 'Glycemic Trajectory Day 2 (Steady-State)',
-                glycemicDesc: isBg ? 'Метаболитна крива на пациент P-402 при симулация. Зелената зона (4.0 - 10.0 mmol/L) е клиничната норма.' : 'Metabolic curve for patient P-402 during simulation. Green zone (4.0 - 10.0 mmol/L) represents clinical target in range.',
-                glucoseNorm: isBg ? 'Норма: 4.5 - 6.0 mmol/L' : 'Target: 4.5 - 6.0 mmol/L',
-                cPeptideNorm: isBg ? 'Норма: 0.26 - 1.39 nmol/L' : 'Target: 0.26 - 1.39 nmol/L',
-                homaIrNorm: isBg ? 'Норма: < 1.0 (Сензитивност)' : 'Target: < 1.0 (Sensitivity)',
-                patientProfileTitle: isBg ? 'Описание на Пациента' : 'Patient Clinical Profile',
-                patientLabel: isBg ? 'ПАЦИЕНТ:' : 'PATIENT:',
-                patientVal: isBg ? 'P-402 (Педиатричен)' : 'P-402 (Pediatric)',
-                ageWeightLabel: isBg ? 'ВЪЗРАСТ / ТЕГЛО:' : 'AGE / WEIGHT:',
-                ageWeightVal: isBg ? '9 години / 32 кг' : '9 yrs / 32 kg',
-                bypassLabel: isBg ? 'БАЙПАС СЪСТОЯНИЕ:' : 'BYPASS STATUS:',
-                insulinLabel: isBg ? 'АКТИВЕН ИНСУЛИН:' : 'ACTIVE INSULIN:',
-                insulinValCured: isBg ? '0.00 U (Автоложна регулация)' : '0.00 U (Autologous regulation)',
-                insulinValUncured: isBg ? '4.50 U (Външна помпа)' : '4.50 U (External pump)',
-                clinicalConclusionTitle: isBg ? 'КЛИНИЧЕН ИЗВОД:' : 'CLINICAL CONCLUSION:',
-                conclusionCured: isBg ? 'Появата на ендогенен C-пептид (0.90 nmol/L) в съчетание с пълно периферно възстановяване на инсулиновата чувствителност (HOMA-IR = 1.0) бележи успешна Pax4-индуцирана бета-клетъчна регенерация и автологична терапия.' : 'Endogenous C-peptide secretion (0.90 nmol/L) combined with complete restoration of insulin sensitivity (HOMA-IR = 1.0) confirms successful Pax4-induced beta-cell regeneration and autologous biological recovery.',
-                conclusionUncured: isBg ? 'Пациентът е в хаотична метаболитна декомпенсация с абсолютен инсулинов дефицит. Индуцирайте биологичния рестарт чрез централния бутон за възстановяване.' : 'Patient in chaotic metabolic decompensation with absolute insulin deficiency. Induce biological recovery via the central action trigger.',
-                cohortTitle: isBg ? 'Сравнителен кохортен екран (900 виртуални близнаци)' : 'Comparative Cohort Telemetry (900 Virtual Human Twins)',
-                cohortDesc: isBg ? 'Скалиране на автоложното излекуване v4.0 върху цялата демографска извадка на Националния регистър за 2015 г.' : 'Validation of autologous recovery across full demographic cohort from national validation registry (2015-2026).',
-                thAge: isBg ? 'Възрастова Група' : 'Age Bracket',
-                thCount: isBg ? 'Брой' : 'Cohort Size',
-                thBaseTIR: isBg ? 'Базов TIR (2015)' : 'Baseline TIR (2015)',
-                thConvTIR: isBg ? 'Конвенционален TIR' : 'Standard Care TIR',
-                thV3TIR: 'VHT v3.0 TIR',
-                thV4TIR: isBg ? 'v4.0 Биологичен TIR' : 'v4.0 Biological TIR',
-                thBaseHypo: isBg ? 'Базови Хипогликемии' : 'Baseline Hypos / yr',
-                thV4Hypo: isBg ? 'v4.0 Хипогликемии' : 'v4.0 Hypos / yr',
-                footerText: isBg ? 'AETERNA v4.0 Субстрат // ПРОТОКОЛ ЗА БИОЛОГИЧНО ИЗЛЕКУВАНЕ С НУЛЕВА ЕНТРОПИЯ // 2026' : 'AETERNA v4.0 Substrate // ZERO-ENTROPY BIOLOGICAL CURE PROTOCOL // 2026'
-            };
-
-            let tabHeader = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: nowrap; gap: 14px;">
-                    <div style="display: flex; gap: 10px; flex-shrink: 0;">
-                        <button class="tab-btn ${state.activeTab === 'dashboard' ? 'active' : ''}" onclick="switchTab('dashboard')">
-                            <i data-lucide="database" class="w-4 h-4 inline-block mr-2 text-purple-400"></i>${i18nText.tabDashboard}
-                        </button>
-                        <button class="tab-btn ${state.activeTab === 'cohort' ? 'active' : ''}" onclick="switchTab('cohort')">
-                            <i data-lucide="users" class="w-4 h-4 inline-block mr-2 text-emerald-400"></i>${i18nText.tabCohort}
-                        </button>
-                        <button class="tab-btn ${state.activeTab === 'pillars' ? 'active' : ''}" onclick="switchTab('pillars')">
-                            <i data-lucide="shield" class="w-4 h-4 inline-block mr-2 text-blue-400"></i>${i18nText.tabPillars}
-                        </button>
-                    </div>
-                    <div style="flex-shrink: 0;">
-                        ${!state.curedState && !state.isTransitioning ? `
-                            <button class="cure-btn" onclick="triggerCureRestoration()">
-                                <i data-lucide="play" class="w-4 h-4 inline-block mr-2 text-white"></i>${i18nText.btnCure}
-                            </button>
-                        ` : `
-                            <button class="tab-btn" onclick="resetCureState()" style="border-color: var(--neon-amber); color: var(--neon-amber);" ${state.isTransitioning ? 'disabled' : ''}>
-                                <i data-lucide="refresh-cw" class="w-4 h-4 inline-block mr-2 text-amber-400"></i>${i18nText.btnReset}
-                            </button>
-                        `}
-                    </div>
-                </div>
-            `;
-
-            let emergencyBanner = state.emergencyMode ? `
-                <div class="glass-card emergency-card" style="display: flex; gap: 20px; align-items: center; margin-bottom: 28px;">
-                    <div style="color: var(--neon-red);"><i data-lucide="alert-triangle" class="w-10 h-10"></i></div>
-                    <div>
-                        <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--neon-red);" class="glow-text-red">${i18nText.emergencyTitle}</h3>
-                        <p style="color: #fda4af; font-size: 0.85rem; margin-top: 4px; line-height: 1.5">
-                            ${i18nText.emergencyDesc}
-                        </p>
-                    </div>
-                </div>
-            ` : '';
-
-            let tabContent = '';
-            
-            if (state.activeTab === "dashboard") {
-                tabContent = `
-                    <div class="dashboard-grid">
-                        
-                        <!-- Left Column: Medical Analytics & Glycemic Curve -->
-                        <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px; justify-content: space-between;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                        <i data-lucide="trending-up" class="w-5 h-5 inline-block mr-2 text-purple-400"></i>${i18nText.glycemicTitle}
-                                    </h2>
-                                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
-                                        ${i18nText.glycemicDesc}
-                                    </p>
-                                </div>
-                                <div style="text-align: right;" class="mono">
-                                    <div style="font-size: 0.7rem; color: var(--text-secondary);">GLOBAL ENTROPY</div>
-                                    <div style="font-size: 1.6rem; font-weight: 900; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};" class="${state.curedState ? 'glow-text-emerald' : 'glow-text-red'}">
-                                        ${state.entropy.toFixed(2)}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Advanced SVG Rendering with Gradient Fills under the curve -->
-                            <div style="background: #070311; border-radius: 16px; padding: 20px; border: 1px solid rgba(181,95,230,0.08);">
-                                <svg viewBox="0 0 600 240" style="width: 100%; height: auto;">
-                                    <defs>
-                                        <linearGradient id="gradient-area" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stop-color="${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'}" stop-opacity="0.15" />
-                                            <stop offset="100%" stop-color="${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'}" stop-opacity="0.0" />
-                                        </linearGradient>
-                                    </defs>
-
-                                    <!-- Grid lines for medical look -->
-                                    <line x1="35" y1="40" x2="565" y2="40" stroke="rgba(255,255,255,0.02)" />
-                                    <line x1="35" y1="88" x2="565" y2="88" stroke="rgba(0, 240, 255, 0.15)" stroke-dasharray="3 3" />
-                                    <line x1="35" y1="136" x2="565" y2="136" stroke="rgba(255,255,255,0.02)" />
-                                    <line x1="35" y1="184" x2="565" y2="184" stroke="rgba(255, 59, 111, 0.15)" stroke-dasharray="3 3" />
-                                    
-                                    <!-- Shaded area under the curve -->
-                                    <path d="${buildSvgAreaPath()}" fill="url(#gradient-area)" />
-
-                                    <!-- Time X Labels -->
-                                    <text x="35" y="225" fill="#64748b" font-size="10" text-anchor="middle">00:00</text>
-                                    <text x="167" y="225" fill="#64748b" font-size="10" text-anchor="middle">06:00</text>
-                                    <text x="300" y="225" fill="#64748b" font-size="10" text-anchor="middle">12:00</text>
-                                    <text x="432" y="225" fill="#64748b" font-size="10" text-anchor="middle">18:00</text>
-                                    <text x="565" y="225" fill="#64748b" font-size="10" text-anchor="middle">23:00</text>
-
-                                    <!-- Glucose Y Labels -->
-                                    <text x="27" y="187" fill="var(--neon-red)" font-size="9" text-anchor="end">4.0</text>
-                                    <text x="27" y="91" fill="var(--neon-blue)" font-size="9" text-anchor="end">10.0</text>
-
-                                    <!-- Curve path -->
-                                    <path d="${buildSvgPath()}" fill="none" stroke="${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'}" stroke-width="3.5" style="transition: stroke 1s ease;" />
-                                </svg>
-                            </div>
-
-                            <!-- Biomarkers -->
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-                                <div style="border-left: 4px solid var(--neon-blue); padding-left: 12px;">
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${isBg ? 'Глюкоза (Glucose)' : 'Blood Glucose'}</div>
-                                    <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald' : 'glow-text-red'}">
-                                        ${state.curedState ? '4.80 mmol/L' : '16.50 mmol/L'}
-                                    </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${i18nText.glucoseNorm}</span>
-                                </div>
-                                <div style="border-left: 4px solid var(--neon-emerald); padding-left: 12px;">
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${isBg ? 'Ендогенен C-Пептид' : 'Endogenous C-Peptide'}</div>
-                                    <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald animate-pulse' : 'glow-text-red'}">
-                                        ${state.cPeptide.toFixed(2)} nmol/L
-                                    </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${i18nText.cPeptideNorm}</span>
-                                </div>
-                                <div style="border-left: 4px solid var(--neon-purple); padding-left: 12px;">
-                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${isBg ? 'HOMA-IR Индекс' : 'HOMA-IR Index'}</div>
-                                    <div style="font-size: 1.4rem; font-weight: 900;" class="mono ${state.curedState ? 'glow-text-emerald' : 'glow-text-purple'}">
-                                        ${state.homaIr.toFixed(2)}
-                                    </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-secondary);">${i18nText.homaIrNorm}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Patient Profile & Dynamic Substrate Telemetry Logs -->
-                        <div class="column-flex">
-                            <div class="glass-card glow-purple ${state.emergencyMode ? 'emergency-card' : ''}" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-                                <h3 style="font-size: 1.2rem; font-weight: 900; display: flex; align-items: center; gap: 8px;">
-                                    <i data-lucide="info" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>${i18nText.patientProfileTitle}
-                                </h3>
-                                
-                                <div style="display: flex; flex-direction: column; gap: 12px;" class="mono">
-                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">${i18nText.patientLabel}</span>
-                                        <span style="font-weight: 700;">${i18nText.patientVal}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">${i18nText.ageWeightLabel}</span>
-                                        <span style="font-weight: 700;">${i18nText.ageWeightVal}</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">${i18nText.bypassLabel}</span>
-                                        <span style="font-weight: 900; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
-                                            ${state.curedState ? 'BIOLOGICAL_REVERSION' : 'SEVERE_PANCREATIC_ATROPHY'}
-                                        </span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(181,95,230,0.08); padding-bottom: 6px;">
-                                        <span style="color: var(--text-secondary);">${i18nText.insulinLabel}</span>
-                                        <span style="font-weight: 700; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-amber)'};">
-                                            ${state.curedState ? i18nText.insulinValCured : i18nText.insulinValUncured}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div style="padding: 16px; background: ${state.curedState ? 'rgba(0, 255, 170, 0.04)' : 'rgba(255, 59, 111, 0.04)'}; border-radius: 12px; border: 1px solid ${state.curedState ? 'rgba(0,255,170,0.15)' : 'rgba(255,59,111,0.15)'};">
-                                    <div style="font-size: 0.8rem; font-weight: 700; color: ${state.curedState ? 'var(--neon-emerald)' : 'var(--neon-red)'};" class="mono">
-                                        <i data-lucide="flask-conical" class="w-4 h-4 inline-block mr-1.5 text-purple-400"></i>${i18nText.clinicalConclusionTitle}
-                                    </div>
-                                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
-                                        ${state.curedState ? i18nText.conclusionCured : i18nText.conclusionUncured}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Live Telemetry Stream Grid -->
-                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}" style="height: 185px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px;">
-                                    <i data-lucide="terminal" class="w-4 h-4 inline-block mr-1.5 text-emerald-400"></i>LIVE_SUBSTRATE_TELEMETRY_LOG
-                                </div>
-                                <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem;" class="mono text-slate-400">
-                                    ${state.logs.map(log => `<div>${log}</div>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                `;
-            } else if (state.activeTab === "cohort") {
-                tabContent = `
-                    <div class="glass-card glow-emerald ${state.emergencyMode ? 'emergency-card' : ''}" style="display: flex; flex-direction: column; gap: 24px;">
-                        <div>
-                            <h2 style="font-size: 1.5rem; font-weight: 900; display: flex; align-items: center; gap: 10px;">
-                                <i data-lucide="users" class="w-5 h-5 inline-block mr-2 text-emerald-400"></i>${i18nText.cohortTitle}
-                            </h2>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
-                                ${i18nText.cohortDesc}
-                            </p>
-                        </div>
-
-                        <table class="sovereign-table mono">
-                            <thead>
-                                <tr>
-                                    <th>${i18nText.thAge}</th>
-                                    <th>${i18nText.thCount}</th>
-                                    <th>${i18nText.thBaseTIR}</th>
-                                    <th>${i18nText.thConvTIR}</th>
-                                    <th style="color: var(--neon-purple);">${i18nText.thV3TIR}</th>
-                                    <th style="color: var(--neon-emerald);">${i18nText.thV4TIR}</th>
-                                    <th>${i18nText.thBaseHypo}</th>
-                                    <th style="color: var(--neon-emerald);">${i18nText.thV4Hypo}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${cohortData.map(row => `
-                                    <tr>
-                                        <td style="font-weight: 700;">${isBg ? row.group : row.group.replace('Педиатричен', 'Pediatric').replace('Младежка възраст', 'Youth').replace('Средна възраст', 'Middle Age').replace('Зряла възраст', 'Mature').replace('Старческа възраст', 'Elderly').replace('Дълголетници', 'Centenarians')}</td>
-                                        <td>${row.count}</td>
-                                        <td style="color: var(--neon-red);">${row.baseline}</td>
-                                        <td>${row.conv}</td>
-                                        <td style="color: var(--neon-purple);">${row.v3}</td>
-                                        <td style="color: var(--neon-emerald); font-weight: 900;" class="glow-text-emerald">
-                                            ${state.curedState ? row.v4 : '---'}
-                                        </td>
-                                        <td style="color: var(--neon-red);">${row.hypoConv}</td>
-                                        <td style="color: var(--neon-emerald); font-weight: 900;">
-                                            ${state.curedState ? row.hypoV4.toFixed(1) : '---'}
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-            } else if (state.activeTab === "pillars") {
-                tabContent = `
-                    <div style="display: flex; flex-direction: column; gap: 24px;">
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                                <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: 700; margin-bottom: 8px;">${isBg ? 'СТЪЛБ 1' : 'PILLAR 1'}</div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${isBg ? 'Фармакотерапевтичен Синхрон' : 'Pharmacotherapeutic Synchrony'}</h3>
-                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
-                                    ${isBg ? 'Математическа защита блокира опасни дози при концентрирани форми на прандиален инсулин (U-200, U-300) без съответна механична калибрация.' : 'Mathematical constraints prevent dangerous overdoses for concentrated prandial insulins (U-200, U-300) without hardware calibration.'}
-                                </p>
-                            </div>
-                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                                <div style="font-size: 0.75rem; color: var(--neon-purple); font-weight: 700; margin-bottom: 8px;">${isBg ? 'СТЪЛБ 2' : 'PILLAR 2'}</div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${isBg ? 'Диететичен Контрол' : 'Dietetic Control'}</h3>
-                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
-                                    ${isBg ? 'Динамично пресмятане на въглехидратния коефициент (ICR) сутрин чрез Emax Хил фармакодинамичен модел за блокиране на Dawn Phenomenon резистентността.' : 'Dynamic circadian calculation of insulin-to-carb ratio (ICR) via Emax Hill pharmacodynamic modeling to eliminate Dawn Phenomenon spikes.'}
-                                </p>
-                            </div>
-                            <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                                <div style="font-size: 0.75rem; color: var(--neon-amber); font-weight: 700; margin-bottom: 8px;">${isBg ? 'СТЪЛБ 3' : 'PILLAR 3'}</div>
-                                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 8px;">${isBg ? 'Физическа Активност' : 'Physical Activity Modeling'}</h3>
-                                <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
-                                    ${isBg ? 'Моделиране на GLUT4 транслокацията при аеробни спортове с извеждане от Закона на Стокс за вискозно триене.' : 'Modeling GLUT4 translocation during aerobic exertion with viscous chemotactic drag equations (Stokes Law).'}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="glass-card ${state.emergencyMode ? 'emergency-card' : ''}">
-                            <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 16px;">
-                                <i data-lucide="code" class="w-5 h-5 inline-block mr-2 text-blue-400"></i>${isBg ? 'Физиологичен код на безопасност (SOUL Safety Gate)' : 'Physiological Safety Gate Code (SOUL Engine)'}
-                            </h3>
-                            <pre class="code-container mono" style="white-space: pre-wrap; font-size: 0.85rem; color: #b2ccd6;">
-// ═══ METABOLIC_SAFETY_LAWS: Concentration & Dietetic Synchrony ═══
-assert(patient.verified_insulin_concentration == U_100 || patient.verified_insulin_concentration == U_200 || patient.verified_insulin_concentration == U_300);
-assert(device.technical_parameters_validated == true);
-
-// Circadian ICR calculation for morning cortisol spike (Dawn Phenomenon)
-process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
-    let morning_cortisol_factor = 0.85; // 15% increased insulin response
-    if time_of_day.is_morning() {
-        return base_icr * morning_cortisol_factor;
-    }
-    return base_icr;
-}
-                            </pre>
-                        </div>
-                    </div>
-                `;
-            }
-
-            root.innerHTML = `
-                <header style="border-bottom: 1px solid var(--purple-border); padding: 18px 40px; background: rgba(5, 2, 12, 0.8); backdrop-filter: blur(25px); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div class="status-dot ${state.emergencyMode ? 'bg-red' : 'bg-purple'}"></div>
-                        <span style="font-weight: 900; font-size: 1.25rem; letter-spacing: 1.5px;">${i18nText.title}</span>
-                    </div>
-
-                    <div style="display: flex; align-items: center; gap: 20px;">
-                        <!-- Language Switcher (EN / BG) -->
-                        <div style="display: flex; align-items: center; background: rgba(0,0,0,0.6); border: 1px solid var(--purple-border); border-radius: 8px; padding: 2px;">
-                            <button id="lang-btn-en" onclick="setLanguage('en')" style="padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; border: none; cursor: pointer; ${state.lang === 'en' ? 'background: var(--neon-purple); color: #fff; box-shadow: 0 0 10px var(--purple-glow);' : 'background: transparent; color: var(--text-secondary);'}">EN</button>
-                            <button id="lang-btn-bg" onclick="setLanguage('bg')" style="padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; border: none; cursor: pointer; ${state.lang === 'bg' ? 'background: var(--neon-purple); color: #fff; box-shadow: 0 0 10px var(--purple-glow);' : 'background: transparent; color: var(--text-secondary);'}">BG</button>
-                        </div>
-
-                        <div style="display: flex; align-items: center; gap: 8px; background: rgba(181,95,230,0.03); padding: 8px 16px; border-radius: 100px; border: 1px solid var(--purple-border);">
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${i18nText.neuralLink}</span>
-                            <span class="mono" style="font-size: 0.8rem; font-weight: 700; color: ${state.neuralLinkConnected ? 'var(--neon-emerald)' : 'var(--neon-red)'};">
-                                ${state.neuralLinkConnected ? i18nText.connected : i18nText.severed}
-                            </span>
-                            <input type="checkbox" ${state.neuralLinkConnected ? 'checked' : ''} onchange="handleNeuralLinkToggle(this)" style="cursor: pointer; margin-left: 8px;" />
-                        </div>
-
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 0.75rem; color: var(--text-secondary);">${i18nText.knoxHeartbeat}</span>
-                            <span class="status-dot ${state.neuralLinkConnected ? 'bg-blue' : 'bg-red'}"></span>
-                        </div>
-                    </div>
-                </header>
-
-                <main style="flex: 1; padding: 24px 32px; maxWidth: 1600px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 24px;">
-                    ${tabHeader}
-                    ${emergencyBanner}
-                    ${tabContent}
-                </main>
-
-                <footer style="border-top: 1px solid var(--purple-border); padding: 24px; text-align: center; font-size: 0.75rem; color: var(--text-secondary); background: rgba(3, 1, 8, 0.95);" class="mono">
-                    ${i18nText.footerText}
-                </footer>
-            `;
-            if (window.lucide) {
-                setTimeout(() => lucide.createIcons(), 0);
-            }
-        }
 
         // Run Vanilla engine
         window.addEventListener("DOMContentLoaded", () => {
@@ -1615,49 +1127,48 @@ process CALCULATE_ICR(time_of_day: Time, base_icr: Decimal) -> Decimal {
     </script>
 
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #06b6d499; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #06b6d466; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #06b6d426; border: 1px solid #06b6d466; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #06b6d4; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #06b6d44d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Sovereign Bio-Computational Matrix</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #06b6d4; font-size: 14px; padding: 2px 8px; background: #06b6d41a; border-radius: 6px; border: 1px solid #06b6d44d;">1 499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>1 499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: SOVEREIGN_CORE (1 499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 1 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 1 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-SOVEREIGN_CORE-1499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #06b6d4; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #06b6d459;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">

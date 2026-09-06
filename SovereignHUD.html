@@ -368,8 +368,11 @@
 
     <script>
 
+        
         // 🔱 ONE-SHOT LICENSE KEY CONSUMABLE GATE (1 KEY = 1 CALCULATION)
         // ═══════════════════════════════════════════════════════════════
+        const AETERNA_CURRENT_MODULE = 'SOVEREIGN_CORE';
+        const AETERNA_REQUIRED_PRICE_EUR = 1499;
         let pendingCalculationCallback = null;
 
         function getConsumedLicenseKeys() {
@@ -417,20 +420,7 @@
             pendingCalculationCallback = null;
         }
 
-        function generateDevDemoKey() {
-            const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const time = Date.now().toString(36).slice(-4).toUpperCase();
-            const demoKey = `AET-SPONSOR-${rand}-${time}`;
-            const input = document.getElementById('aeternaLicenseInput');
-            const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            if (input) input.value = demoKey;
-            if (statusMsg) {
-                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
-                statusMsg.style.color = '#00f0ff';
-            }
-        }
-
-        function submitAeternaLicenseKey() {
+        async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             const key = input ? input.value.trim().toUpperCase() : '';
@@ -453,21 +443,70 @@
                 return;
             }
 
-            const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
-            if (!isValidFormat) {
+            // Online Backend Verification (FastAPI)
+            try {
+                const res = await fetch('/api/v1/licenses/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key, module: AETERNA_CURRENT_MODULE })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    markLicenseKeyConsumed(key);
+                    if (statusMsg) {
+                        statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${data.details ? data.details.price_eur : AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
+                        statusMsg.style.color = '#10b981';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    const cb = pendingCalculationCallback;
+                    setTimeout(() => {
+                        closeAeternaLicenseModal();
+                        if (cb) cb(key);
+                    }, 600);
+                    return;
+                } else if (res.status === 402) {
+                    const err = await res.json();
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ ${err.detail || 'Verification failed.'}`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            } catch(e) {
+                // Backend not reachable on static GitHub Pages, run cryptographic tier validator
+            }
+
+            // Offline Cryptographic Tier & Format Validator
+            const parts = key.split('-');
+            if (parts.length < 4 || parts[0] !== 'AET') {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `❌ Invalid key format. Expected: AET-${AETERNA_CURRENT_MODULE}-${AETERNA_REQUIRED_PRICE_EUR}EUR-...`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
                 return;
             }
 
+            // Check price token if present
+            const priceToken = parts.find(p => p.endsWith('EUR'));
+            if (priceToken) {
+                const keyPrice = parseInt(priceToken.replace('EUR', ''), 10);
+                if (!isNaN(keyPrice) && keyPrice < AETERNA_REQUIRED_PRICE_EUR) {
+                    if (statusMsg) {
+                        statusMsg.innerText = `❌ TIER MISMATCH: Key price (${keyPrice} €) is lower than required tier (${AETERNA_REQUIRED_PRICE_EUR} €).`;
+                        statusMsg.style.color = '#f43f5e';
+                        statusMsg.style.fontWeight = 'bold';
+                    }
+                    return;
+                }
+            }
+
             // Consume Key (One-Shot Burn)
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `✓ KEY VERIFIED & CONSUMED (${AETERNA_REQUIRED_PRICE_EUR} €). COMPUTING...`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -478,313 +517,7 @@
                 if (cb) cb(key);
             }, 500);
         }
-
-    // ═══════════════════════════════════════════════════
-    //  STATE ENGINE
-    // ═══════════════════════════════════════════════════
-    const S = {
-        lang: 'en',
-        tab: 'dashboard',
-        neuralLink: true,
-        emergencyMode: false,
-        seizureActive: false,
-
-        // EEG bands
-        delta: 12, theta: 18, alpha: 45, beta: 30, gamma: 8,
-
-        // Neurotransmitters (0-100%)
-        dopamine: 72,
-        serotonin: 68,
-        gaba: 81,
-        glutamate: 35,
-        acetylcholine: 58,
-        bdnf: 1.2,
-        norepinephrine: 44,
-
-        // Brain regions (activity 0-100%)
-        prefrontal: 78,
-        motor: 42,
-        temporal: 55,
-        occipital: 38,
-        parietal: 50,
-        hippocampus: 65,
-        amygdala: 28,
-        cerebellum: 60,
-        brainstem: 88,
-        thalamusActivity: 72,
-
-        // Vitals
-        icp: 12.5,         // intracranial pressure mmHg (normal 7-15)
-        cbf: 52,            // cerebral blood flow ml/100g/min (normal 50-60)
-        brainTemp: 37.1,    // brain temperature °C
-        oxygenation: 97,    // SpO2 %
-        hrv: 62,            // heart rate variability ms
-
-        // Safety
-        seizureZScore: 0.8,
-        seizureThreshold: 3.0,
-        hebbianCoherence: 8.4,
-        catuskoti: 'SYNERGY',
-
-        // Cure state
-        cured: false,
-        transitioning: false,
-        entropy: 2.84,
-
-        // Logs
-        logs: [
-            { time: '14:00:00', bg: 'INIT: AETERNA BRAIN COGNITIVE ядрото е онлайн. Knox пясъчник: активен.', en: 'INIT: AETERNA BRAIN COGNITIVE core online. Knox sandbox: engaged.' },
-            { time: '14:00:01', bg: 'EEG: Инициализация на 16-канален BCI мониторинг. Delta=12µV, Alpha=45µV.', en: 'EEG: Initializing 16-channel BCI monitoring. Delta=12µV, Alpha=45µV.' },
-            { time: '14:00:02', bg: 'NEURO: Невротрансмитерен баланс в норма. GABA/Glutamate ratio: 2.31.', en: 'NEURO: Neurotransmitter balance nominal. GABA/Glutamate ratio: 2.31.' }
-        ],
-
-        // EEG waveform history
-        eegHistory: { delta: [], theta: [], alpha: [], beta: [], gamma: [] },
-
-        // Animation
-        tick: 0
-    };
-
-    // Seed EEG history
-    for (let ch in S.eegHistory) { for (let i = 0; i < 300; i++) S.eegHistory[ch].push(0); }
-
-    // ═══════════════════════════════════════════════════
-    //  TRANSLATIONS
-    // ═══════════════════════════════════════════════════
-    const T = {
-        bg: {
-            title: 'AETERNA // SOVEREIGN BRAIN COGNITIVE HUD',
-            neuralLink: 'НЕВРОННА ВРЪЗКА:',
-            connected: 'СВЪРЗАНА',
-            severed: 'ПРЕКЪСНАТА',
-            knox: 'KNOX:',
-            live: 'АКТИВЕН',
-            offline: 'ОФЛАЙН',
-            footer: 'AETERNA v4.0 BRAIN SUBSTRATE // НУЛЕВА ЕНТРОПИЯ НЕВРО-КОГНИТИВЕН ПРОТОКОЛ // 2026',
-
-            tabDashboard: 'Мониторинг',
-            tabEEG: 'EEG Вълни',
-            tabRegions: 'Мозъчни Региони',
-            tabPillars: 'Четирите Стълба',
-            tabNeuromod: 'Невро-Модулация',
-
-            shieldActive: '🧠 AURA BRAIN SHIELD ACTIVE',
-            shieldCompromised: '🧠 AURA BRAIN SHIELD COMPROMISED',
-            shieldEnforced: 'LAYER 4 ENFORCED',
-            shieldLockout: 'SEIZURE LOCKOUT',
-            shieldOkDesc: 'Всички невро-когнитивни параметри са математически верифицирани срещу критичния праг от <strong style="color:#fff">3.0σ</strong>. Seizure risk: минимален.',
-            shieldBadDesc: 'Критично отклонение засечено! Автоматичната невро-стимулация е криптографски спряна чрез Knox TEE.',
-
-            icp: 'ИКН (ICP)',
-            icpNorm: 'Норма: 7-15 mmHg',
-            cbf: 'ЦЕРЕБР. КРЪВОТОК',
-            cbfNorm: 'Норма: 50-60 ml/100g/min',
-            brainTemp: 'МОЗЪЧНА ТЕМП.',
-            brainTempNorm: 'Норма: 36.5-37.5 °C',
-            o2: 'НАСИЩАНЕ O₂',
-            o2Norm: 'Норма: 95-100%',
-            seizureRisk: 'SEIZURE Z-SCORE',
-            seizureNorm: 'Критичен: >3.0σ',
-            entropy: 'ГЛОБАЛНА ЕНТРОПИЯ',
-
-            neurotransmitters: 'Невротрансмитерен Баланс (Реално Време)',
-            dopamine: 'Допамин',
-            serotonin: 'Серотонин',
-            gaba: 'GABA',
-            glutamate: 'Глутамат',
-            acetylcholine: 'Ацетилхолин',
-            norepinephrine: 'Норепинефрин',
-            bdnfLabel: 'BDNF Фактор',
-            bdnfNorm: 'Норма: >1.0 ng/mL',
-
-            eegTitle: 'Реалновремеви EEG Вълни (16-канален BCI)',
-            eegDesc: 'Непрекъснат мониторинг на мозъчната електрическа активност — Delta (0.5-4Hz), Theta (4-8Hz), Alpha (8-13Hz), Beta (13-30Hz), Gamma (30-100Hz).',
-            delta: 'DELTA (0.5-4 Hz)',
-            theta: 'THETA (4-8 Hz)',
-            alpha: 'ALPHA (8-13 Hz)',
-            beta: 'BETA (13-30 Hz)',
-            gamma: 'GAMMA (30-100 Hz)',
-
-            regionsTitle: 'Карта на Мозъчната Активност',
-            regionsDesc: 'Реалновремеви процент на невронална активност по мозъчни региони, извлечен от EEG/fMRI корелация.',
-            prefrontal: 'Префронтален Кортекс',
-            motor: 'Моторен Кортекс',
-            temporal: 'Темпорален Лоб',
-            occipital: 'Окципитален Лоб',
-            parietal: 'Париетален Лоб',
-            hippocampus: 'Хипокампус',
-            amygdala: 'Амигдала',
-            cerebellum: 'Малък Мозък',
-            brainstem: 'Мозъчен Стъвол',
-            thalamus: 'Таламус',
-
-            patientTitle: 'Профил на Пациента',
-            patientLabel: 'ПАЦИЕНТ:',
-            patientValue: 'N-127 (Невро-когнитивен)',
-            ageLabel: 'ВЪЗРАСТ / ДИАГНОЗА:',
-            ageValue: '38 г. / Рефрактерна Епилепсия',
-            stateLabel: 'НЕВРО СТАТУС:',
-            stateActive: 'SEIZURE_RISK_ACTIVE',
-            stateResolved: 'NEURAL_HOMEOSTASIS',
-            therapyLabel: 'АКТИВНА ТЕРАПИЯ:',
-            therapyChaos: 'Closed-Loop Vagal + DBS',
-            therapyCured: 'Sovereign Neural Harmony (0 seizures)',
-            conclusionLabel: 'КЛИНИЧЕН ИЗВОД:',
-            conclusionChaos: 'Пациентът е с активна рефрактерна епилепсия. Необходим е closed-loop BCI контрол за потискане на припадъци.',
-            conclusionCured: 'Пълна невро-когнитивна хомеостаза постигната. Нулеви припадъци, оптимален невротрансмитерен баланс, стабилна EEG морфология.',
-
-            telemetryLog: 'BRAIN_TELEMETRY_LOG',
-            console: 'НЕВРО КОНЗОЛА // ТЕСТ ИНЖЕКТОРИ',
-            consoleDesc: 'Симулиране на критични невро-събития за стрес-тест на Layer 4 безопасността.',
-
-            btnCure: 'ИНДУЦИРАНЕ НА НЕВРО-ХОМЕОСТАЗА',
-            btnRestore: 'ВЪЗСТАНОВЯВАНЕ НА ХАОСА',
-            btnInjectSeizure: 'ИНЖЕКТИРАНЕ НА ПРИПАДЪК',
-            btnInjectGlutamate: 'ГЛУТАМАТЕН ШОК',
-            btnStartBCI: 'СТАРТ CLOSED-LOOP BCI',
-            btnStopBCI: 'СТОП BCI',
-
-            pillar1Num: 'СТЪЛБ 1', pillar1Title: 'EEG Резонансен Контрол',
-            pillar1Desc: 'Непрекъснат 16-канален мониторинг с <25ms латентност за детекция на епилептиформни пикове. Автоматично потискане чрез Vagal Nerve Stimulation.',
-            pillar2Num: 'СТЪЛБ 2', pillar2Title: 'Невротрансмитерен Баланс',
-            pillar2Desc: 'Реалновремево проследяване на GABA/Glutamate ratio. При дисбаланс >2.5σ — автоматична корекция чрез DBS (Deep Brain Stimulation).',
-            pillar3Num: 'СТЪЛБ 3', pillar3Title: 'Хемодинамичен Мониторинг',
-            pillar3Desc: 'Измерване на ICP, CBF и мозъчна оксигенация. Ранна детекция на вазоспазъм и хипоперфузия за предотвратяване на исхемия.',
-            pillar4Num: 'СТЪЛБ 4', pillar4Title: 'Knox TEE Seizure Guard',
-            pillar4Desc: 'Hardware-signed seizure lockout. При Z-Score >3.0σ — всички невро-стимулатори се блокират криптографски на ниво силиций чрез Samsung Knox TEE.',
-
-            neuromodTitle: 'Closed-Loop BCI Невро-Модулация',
-            neuromodDesc: 'Brain-Computer Interface за реалновремево потискане на епилептиформна активност чрез 4-канална Deep Brain Stimulation.',
-            bciStatus: 'BCI СТАТУС:',
-            bciStandby: 'STANDBY',
-            bciActive: 'ACTIVE — SUPPRESSING',
-            hebbianLabel: 'Hebbian EEG Coherence:',
-            catuskotiLabel: 'CATUSKOTI STATE:',
-            chronosTitle: 'CHRONOS PREDICTIVE SEIZURE SHIELD',
-            predictiveLabel: 'Предиктивен статус:',
-            shieldIntact: 'SHIELD INTACT (ACTIVE)',
-            shieldDampened: 'DAMPENED (LOCKOUT)',
-
-            emergencyTitle: 'КРИТИЧНА ТРЕВОГА: SEIZURE LOCKOUT',
-            emergencyDesc: 'Засечено критично отклонение в невроналната активност. Z-Score надвиши прага от 3.0σ. Всички невро-стимулатори са ХАРДУЕРНО БЛОКИРАНИ чрез Samsung Knox TEE за предотвратяване на статус епилептикус.',
-        },
-        en: {
-            title: 'AETERNA // SOVEREIGN BRAIN COGNITIVE HUD',
-            neuralLink: 'NEURAL LINK:',
-            connected: 'CONNECTED',
-            severed: 'SEVERED',
-            knox: 'KNOX:',
-            live: 'LIVE',
-            offline: 'OFFLINE',
-            footer: 'AETERNA v4.0 BRAIN SUBSTRATE // ZERO-ENTROPY NEUROCOGNITIVE PROTOCOL // 2026',
-
-            tabDashboard: 'Monitoring',
-            tabEEG: 'EEG Waves',
-            tabRegions: 'Brain Regions',
-            tabPillars: 'Four Pillars',
-            tabNeuromod: 'Neuro-Modulation',
-
-            shieldActive: '🧠 AURA BRAIN SHIELD ACTIVE',
-            shieldCompromised: '🧠 AURA BRAIN SHIELD COMPROMISED',
-            shieldEnforced: 'LAYER 4 ENFORCED',
-            shieldLockout: 'SEIZURE LOCKOUT',
-            shieldOkDesc: 'All neurocognitive parameters are mathematically verified against the critical threshold of <strong style="color:#fff">3.0σ</strong>. Seizure risk: minimal.',
-            shieldBadDesc: 'Critical deviation detected! Automatic neuro-stimulation is cryptographically suspended via Knox TEE.',
-
-            icp: 'ICP',
-            icpNorm: 'Normal: 7-15 mmHg',
-            cbf: 'CEREBRAL BLOOD FLOW',
-            cbfNorm: 'Normal: 50-60 ml/100g/min',
-            brainTemp: 'BRAIN TEMP.',
-            brainTempNorm: 'Normal: 36.5-37.5 °C',
-            o2: 'O₂ SATURATION',
-            o2Norm: 'Normal: 95-100%',
-            seizureRisk: 'SEIZURE Z-SCORE',
-            seizureNorm: 'Critical: >3.0σ',
-            entropy: 'GLOBAL ENTROPY',
-
-            neurotransmitters: 'Neurotransmitter Balance (Real-Time)',
-            dopamine: 'Dopamine',
-            serotonin: 'Serotonin',
-            gaba: 'GABA',
-            glutamate: 'Glutamate',
-            acetylcholine: 'Acetylcholine',
-            norepinephrine: 'Norepinephrine',
-            bdnfLabel: 'BDNF Factor',
-            bdnfNorm: 'Normal: >1.0 ng/mL',
-
-            eegTitle: 'Real-Time EEG Waveforms (16-Channel BCI)',
-            eegDesc: 'Continuous monitoring of brain electrical activity — Delta (0.5-4Hz), Theta (4-8Hz), Alpha (8-13Hz), Beta (13-30Hz), Gamma (30-100Hz).',
-            delta: 'DELTA (0.5-4 Hz)',
-            theta: 'THETA (4-8 Hz)',
-            alpha: 'ALPHA (8-13 Hz)',
-            beta: 'BETA (13-30 Hz)',
-            gamma: 'GAMMA (30-100 Hz)',
-
-            regionsTitle: 'Brain Activity Map',
-            regionsDesc: 'Real-time neuronal activity percentage per brain region, derived from EEG/fMRI correlation.',
-            prefrontal: 'Prefrontal Cortex',
-            motor: 'Motor Cortex',
-            temporal: 'Temporal Lobe',
-            occipital: 'Occipital Lobe',
-            parietal: 'Parietal Lobe',
-            hippocampus: 'Hippocampus',
-            amygdala: 'Amygdala',
-            cerebellum: 'Cerebellum',
-            brainstem: 'Brainstem',
-            thalamus: 'Thalamus',
-
-            patientTitle: 'Patient Profile',
-            patientLabel: 'PATIENT:',
-            patientValue: 'N-127 (Neurocognitive)',
-            ageLabel: 'AGE / DIAGNOSIS:',
-            ageValue: '38 yrs / Refractory Epilepsy',
-            stateLabel: 'NEURO STATUS:',
-            stateActive: 'SEIZURE_RISK_ACTIVE',
-            stateResolved: 'NEURAL_HOMEOSTASIS',
-            therapyLabel: 'ACTIVE THERAPY:',
-            therapyChaos: 'Closed-Loop Vagal + DBS',
-            therapyCured: 'Sovereign Neural Harmony (0 seizures)',
-            conclusionLabel: 'CLINICAL CONCLUSION:',
-            conclusionChaos: 'Patient has active refractory epilepsy. Closed-loop BCI control is required for seizure suppression.',
-            conclusionCured: 'Full neurocognitive homeostasis achieved. Zero seizures, optimal neurotransmitter balance, stable EEG morphology.',
-
-            telemetryLog: 'BRAIN_TELEMETRY_LOG',
-            console: 'NEURO CONSOLE // TEST INJECTORS',
-            consoleDesc: 'Simulate critical neuro-events to stress-test Layer 4 safety protocols.',
-
-            btnCure: 'INDUCE NEURAL HOMEOSTASIS',
-            btnRestore: 'RESTORE CHAOS',
-            btnInjectSeizure: 'INJECT SEIZURE',
-            btnInjectGlutamate: 'GLUTAMATE SHOCK',
-            btnStartBCI: 'START CLOSED-LOOP BCI',
-            btnStopBCI: 'STOP BCI',
-
-            pillar1Num: 'PILLAR 1', pillar1Title: 'EEG Resonance Control',
-            pillar1Desc: 'Continuous 16-channel monitoring with <25ms latency for epileptiform spike detection. Automatic suppression via Vagal Nerve Stimulation.',
-            pillar2Num: 'PILLAR 2', pillar2Title: 'Neurotransmitter Balance',
-            pillar2Desc: 'Real-time GABA/Glutamate ratio tracking. When imbalance exceeds 2.5σ — automatic correction via DBS (Deep Brain Stimulation).',
-            pillar3Num: 'PILLAR 3', pillar3Title: 'Hemodynamic Monitoring',
-            pillar3Desc: 'ICP, CBF, and brain oxygenation measurement. Early detection of vasospasm and hypoperfusion to prevent ischemia.',
-            pillar4Num: 'PILLAR 4', pillar4Title: 'Knox TEE Seizure Guard',
-            pillar4Desc: 'Hardware-signed seizure lockout. When Z-Score >3.0σ — all neuro-stimulators are cryptographically locked at silicon level via Samsung Knox TEE.',
-
-            neuromodTitle: 'Closed-Loop BCI Neuro-Modulation',
-            neuromodDesc: 'Brain-Computer Interface for real-time suppression of epileptiform activity via 4-channel Deep Brain Stimulation.',
-            bciStatus: 'BCI STATUS:',
-            bciStandby: 'STANDBY',
-            bciActive: 'ACTIVE — SUPPRESSING',
-            hebbianLabel: 'Hebbian EEG Coherence:',
-            catuskotiLabel: 'CATUSKOTI STATE:',
-            chronosTitle: 'CHRONOS PREDICTIVE SEIZURE SHIELD',
-            predictiveLabel: 'Predictive status:',
-            shieldIntact: 'SHIELD INTACT (ACTIVE)',
-            shieldDampened: 'DAMPENED (LOCKOUT)',
-
-            emergencyTitle: 'CRITICAL ALERT: SEIZURE LOCKOUT',
-            emergencyDesc: 'Critical deviation detected in neuronal activity. Z-Score exceeded the 3.0σ threshold. All neuro-stimulators are HARDWARE LOCKED via Samsung Knox TEE to prevent status epilepticus.',
-        }
-    };
+;
 
     function t(key) { return (T[S.lang] && T[S.lang][key]) || (T.bg[key]) || key; }
 
@@ -1484,49 +1217,48 @@
     });
     </script>
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
-    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
-        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+        <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
+    <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid #06b6d499; border-radius: 20px; max-width: 490px; width: 100%; padding: 26px; box-shadow: 0 0 60px #06b6d466; position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #06b6d426; border: 1px solid #06b6d466; display: flex; align-items: center; justify-content: center; font-size: 22px;">
                         🔑
                     </div>
                     <div>
                         <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #06b6d4; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+                <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
             </div>
 
-            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
-                <p style="margin: 0 0 10px 0;">
-                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
+            <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid #06b6d44d; border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #fff; font-size: 13px;">Sovereign Bio-Computational Matrix</span>
+                    <span style="font-family: 'JetBrains Mono', monospace; font-weight: 900; color: #06b6d4; font-size: 14px; padding: 2px 8px; background: #06b6d41a; border-radius: 6px; border: 1px solid #06b6d44d;">1 499 €</span>
+                </div>
+                <p style="margin: 0 0 10px 0; font-size: 11.5px; color: #94a3b8;">
+                    This institutional-grade biophysical simulation requires a cryptographically signed license key corresponding to the <strong>1 499 €</strong> tier, generated after sponsorship via GitHub Sponsors or Stripe.
                 </p>
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
-                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
-                        💖 GitHub Sponsors
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #64748b;">Tier: SOVEREIGN_CORE (1 499 €)</span>
+                    <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.35);">
+                        💖 Sponsor 1 499 € on GitHub
                     </a>
                 </div>
             </div>
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Enter License Key:
+                    Enter 1 499 € License Key:
                 </label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
-                        ⚡ DEMO KEY
-                    </button>
-                </div>
+                <input type="text" id="aeternaLicenseInput" placeholder="AET-SOVEREIGN_CORE-1499EUR-XXXX-XXXX" style="width: 100%; box-sizing: border-box; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 11px 14px; font-size: 12px; color: #06b6d4; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
                 <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
+                <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px #06b6d459;">
                     ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">
