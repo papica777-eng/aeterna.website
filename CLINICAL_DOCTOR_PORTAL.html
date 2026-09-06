@@ -252,16 +252,16 @@
                         <div class="flex items-center justify-between">
                             <label class="flex items-center gap-2 cursor-pointer select-none">
                                 <input type="checkbox" id="epigeneticActive" checked class="w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500 bg-slate-950">
-                                <span class="text-xs font-bold text-cyan-300">OSK Епигенетична Защита (c-Myc ≡ 0.00)</span>
+                                <span class="text-xs font-bold text-cyan-300" data-i18n="guardrailsTitle">OSK Epigenetic Protection (c-Myc ≡ 0.00)</span>
                             </label>
-                            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">ΔAge -4.4 г.</span>
+                            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30" data-i18n="guardrailsBadge">ΔAge -4.4 yrs</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 leading-snug">Инверсия по Хорват, +11.8% Cockcroft-Gault клирънс (52 mg/m² MTD) и нулев онкогенен риск ($P_{\text{cancer}} < 10^{-6}$).</p>
+                        <p class="text-[11px] text-slate-400 leading-snug" data-i18n="guardrailsDesc">Horvath clock inversion, +11.8% Cockcroft-Gault clearance (52 mg/m² MTD) and zero oncogenic risk (P_cancer &lt; 10⁻⁶).</p>
 
                         <!-- Chemical Drive Induction u (Hard Saddle-Node Ceiling u <= 0.35) -->
                         <div class="pt-2 border-t border-slate-800 space-y-1">
                             <div class="flex justify-between text-xs">
-                                <span class="font-bold text-slate-400">Химически Драйв Индуктор $u$ ($u_{\max} \le 0.35$)</span>
+                                <span class="font-bold text-slate-400" data-i18n="guardrailsDriveLabel">Chemical Drive Inducer u (u_max &le; 0.35)</span>
                                 <span id="driveUVal" class="font-bold text-cyan-400 mono">0.2000</span>
                             </div>
                             <input type="range" id="simulated_u_input" min="0.05" max="0.45" step="0.01" value="0.20" 
@@ -513,7 +513,13 @@
 
             if (num > AETERNA_GUARDRAILS.u_max) {
                 if (banner) {
-                    banner.innerHTML = `⚠️ <strong>CRITICAL_HAZARD (EU MDR IIb/III):</strong> Заявената индукция u=${num.toFixed(4)} надхвърля софтуерния таван от ${AETERNA_GUARDRAILS.u_max} (Saddle-Node limit u_SN=${AETERNA_GUARDRAILS.u_SN}). Опасност от де-диференциация [det(J) &le; 0]. Симулацията е блокирана!`;
+                    const msgs = {
+                        bg: `⚠️ <strong>КРИТИЧЕН ИНТЕРЛОК (EU MDR IIb/III):</strong> Заявената индукция u=${num.toFixed(4)} надхвърля софтуерния таван от ${AETERNA_GUARDRAILS.u_max} (Saddle-Node limit u_SN=${AETERNA_GUARDRAILS.u_SN}). Опасност от де-диференциация [det(J) &le; 0]. Симулацията е блокирана!`,
+                        en: `⚠️ <strong>CRITICAL HAZARD (EU MDR IIb/III):</strong> Requested induction u=${num.toFixed(4)} exceeds software ceiling of ${AETERNA_GUARDRAILS.u_max} (Saddle-Node limit u_SN=${AETERNA_GUARDRAILS.u_SN}). Danger of de-differentiation [det(J) &le; 0]. Simulation blocked!`,
+                        fr: `⚠️ <strong>DANGER CRITIQUE (EU MDR IIb/III):</strong> L'induction demandée u=${num.toFixed(4)} dépasse le plafond de ${AETERNA_GUARDRAILS.u_max} (Saddle-Node limit u_SN=${AETERNA_GUARDRAILS.u_SN}). Risque de dé-différenciation [det(J) &le; 0]. Simulation bloquée !`,
+                        hu: `⚠️ <strong>KRITIKUS VESZÉLY (EU MDR IIb/III):</strong> A kért indukció u=${num.toFixed(4)} meghaladja a(z) ${AETERNA_GUARDRAILS.u_max} szoftveres plafont (Saddle-Node limit u_SN=${AETERNA_GUARDRAILS.u_SN}). Dedifferenciálódás veszélye [det(J) &le; 0]. Szimuláció blokkolva!`
+                    };
+                    banner.innerHTML = msgs[currentLang] || msgs.en;
                     banner.classList.remove('hidden');
                 }
                 if (submitBtn) {
@@ -554,29 +560,100 @@
         }
 
         function renderTherapeuticProtocolHUD(phaseA, phaseB, telemetry, hash) {
+            window.activeProtocolData = { phaseA, phaseB, telemetry, hash };
             let protocolDiv = document.getElementById("approved_plan_protocol_display");
             if (!protocolDiv) return;
+
+            const t = {
+                bg: {
+                    title: "Двуфазен SaMD Клиничен Протокол (Class IIb/III)",
+                    tag: "160 Hz DARE Валидиран",
+                    phaseA: "ФАЗА А:",
+                    phaseB: "ФАЗА Б:",
+                    bioAge: "Биологична Възраст:",
+                    crcl: "Cockcroft-Gault CrCl:",
+                    darePoles: "DARE Полюси |z|:",
+                    driftRisk: "Риск от Раков Дрифт:",
+                    stable: "Стабилен",
+                    seal: "SHA-512 BIO-LEDGER VERITAS SEAL (EU AI ACT ART. 13 AUDIT):"
+                },
+                en: {
+                    title: "Biphasic SaMD Clinical Protocol (Class IIb/III)",
+                    tag: "160 Hz DARE Verified",
+                    phaseA: "PHASE A:",
+                    phaseB: "PHASE B:",
+                    bioAge: "Biological Age:",
+                    crcl: "Cockcroft-Gault CrCl:",
+                    darePoles: "DARE Poles |z|:",
+                    driftRisk: "Cancer Drift Risk:",
+                    stable: "Stable",
+                    seal: "SHA-512 BIO-LEDGER VERITAS SEAL (EU AI ACT ART. 13 AUDIT):"
+                },
+                fr: {
+                    title: "Protocole Clinique SaMD Biphasique (Classe IIb/III)",
+                    tag: "Validé DARE 160 Hz",
+                    phaseA: "PHASE A :",
+                    phaseB: "PHASE B :",
+                    bioAge: "Âge Biologique :",
+                    crcl: "Clairance Cockcroft-Gault :",
+                    darePoles: "Pôles DARE |z| :",
+                    driftRisk: "Risque de Dérive Cancéreuse :",
+                    stable: "Stable",
+                    seal: "SCEAU DE VÉRITÉ BIO-LEDGER SHA-512 (AUDIT ART. 13 EU AI ACT) :"
+                },
+                hu: {
+                    title: "Kétfázisú SaMD Klinikai Protokoll (Class IIb/III)",
+                    tag: "160 Hz DARE Hitelesítve",
+                    phaseA: "A FÁZIS:",
+                    phaseB: "B FÁZIS:",
+                    bioAge: "Biológiai Életkor:",
+                    crcl: "Cockcroft-Gault Klírensz:",
+                    darePoles: "DARE Pólusok |z|:",
+                    driftRisk: "Rákos Drift Kockázat:",
+                    stable: "Stabil",
+                    seal: "SHA-512 BIO-LEDGER VERITAS PECSÉT (EU AI ACT 13. CIKK AUDIT):"
+                }
+            };
+            const lang = t[currentLang] || t.en;
+
+            const localizedPhaseA = currentLang === 'bg'
+                ? `АКТИВЕН (Цитолитичен удар): Sotorasib / KRAS G12D Peptide (${telemetry.kras_dose_intensity} mg/m² IV) + Anti-PD-L1 чекпойнт суип (10 mg/kg).`
+                : (currentLang === 'fr'
+                    ? `ACTIF (Frappe Cytolytique) : Peptide Sotorasib / KRAS G12D (${telemetry.kras_dose_intensity} mg/m² IV) + Checkpoint Anti-PD-L1 (10 mg/kg).`
+                    : (currentLang === 'hu'
+                        ? `AKTÍV (Citotoxikus csapás): Sotorasib / KRAS G12D peptid (${telemetry.kras_dose_intensity} mg/m² IV) + Anti-PD-L1 ellenőrzőpont (10 mg/kg).`
+                        : `ACTIVE (Cytolytic Strike): Sotorasib / KRAS G12D Peptide (${telemetry.kras_dose_intensity} mg/m² IV) + Anti-PD-L1 Checkpoint Sweep (10 mg/kg).`));
+
+            const localizedPhaseB = telemetry.deltaAge !== 0
+                ? (currentLang === 'bg'
+                    ? `АКТИВЕН (Соматична защита): Метрономен OSK коктейл (u=${telemetry.simulated_u.toFixed(4)} ≤ 0.35, c-Myc≡0.00, T_on=${telemetry.t_on.toFixed(2)}s @ 160Hz) за органно възстановяване.`
+                    : (currentLang === 'fr'
+                        ? `ACTIF (Protection Somatique) : Cocktail métronomique OSK (u=${telemetry.simulated_u.toFixed(4)} ≤ 0.35, c-Myc≡0.00, T_on=${telemetry.t_on.toFixed(2)}s @ 160Hz) pour la régénération tissulaire.`
+                        : (currentLang === 'hu'
+                            ? `AKTÍV (Szomatikus védelem): Metronómikus OSK koktél (u=${telemetry.simulated_u.toFixed(4)} ≤ 0.35, c-Myc≡0.00, T_on=${telemetry.t_on.toFixed(2)}s @ 160Hz) szöveti regenerációhoz.`
+                            : `ACTIVE (Somatic Protection): Metronomic OSK cocktail (u=${telemetry.simulated_u.toFixed(4)} ≤ 0.35, c-Myc≡0.00, T_on=${telemetry.t_on.toFixed(2)}s @ 160Hz) for tissue recovery.`)))
+                : (currentLang === 'bg' ? 'ДЕАКТИВИРАН: Соматична защита не е заявена.' : 'DEACTIVATED: Somatic protection not requested.');
 
             protocolDiv.innerHTML = `
                 <div class="p-4 bg-slate-950/90 border-l-4 border-cyan-400 rounded-xl space-y-2.5 font-mono text-xs shadow-xl border border-slate-800">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                         <span class="font-bold text-cyan-400 flex items-center gap-1.5 uppercase tracking-wider">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i> Двуфазен SaMD Клиничен Протокол (Class IIb/III)
+                            <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i> ${lang.title}
                         </span>
-                        <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">160 Hz DARE Verified</span>
+                        <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">${lang.tag}</span>
                     </div>
                     <div class="space-y-1.5 text-slate-300">
-                        <p class="text-slate-100"><strong class="text-cyan-300">ФАЗА А:</strong> ${phaseA}</p>
-                        <p class="text-slate-100"><strong class="text-purple-300">ФАЗА Б:</strong> ${phaseB}</p>
+                        <p class="text-slate-100"><strong class="text-cyan-300">${lang.phaseA}</strong> ${localizedPhaseA}</p>
+                        <p class="text-slate-100"><strong class="text-purple-300">${lang.phaseB}</strong> ${localizedPhaseB}</p>
                     </div>
                     <div class="pt-2 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-400">
-                        <div><span class="text-slate-500 block">Биологична Възраст:</span> <strong class="text-emerald-400">${telemetry.biologicalAge} г. (Δ ${telemetry.deltaAge} г.)</strong></div>
-                        <div><span class="text-slate-500 block">Cockcroft-Gault CrCl:</span> <strong class="text-cyan-400">${telemetry.crcl} mL/min (+11.8%)</strong></div>
-                        <div><span class="text-slate-500 block">DARE Полюси |z|:</span> <strong class="text-emerald-400">${telemetry.zModulus} &lt; 1.0 (Стабилен)</strong></div>
-                        <div><span class="text-slate-500 block">Риск от Раков Дрифт:</span> <strong class="text-emerald-400">&lt; 10⁻⁶ (c-Myc ≡ 0.00)</strong></div>
+                        <div><span class="text-slate-500 block">${lang.bioAge}</span> <strong class="text-emerald-400">${telemetry.biologicalAge} (${telemetry.deltaAge} yrs)</strong></div>
+                        <div><span class="text-slate-500 block">${lang.crcl}</span> <strong class="text-cyan-400">${telemetry.crcl} mL/min (+11.8%)</strong></div>
+                        <div><span class="text-slate-500 block">${lang.darePoles}</span> <strong class="text-emerald-400">${telemetry.zModulus} &lt; 1.0 (${lang.stable})</strong></div>
+                        <div><span class="text-slate-500 block">${lang.driftRisk}</span> <strong class="text-emerald-400">&lt; 10⁻⁶ (c-Myc ≡ 0.00)</strong></div>
                     </div>
                     <div class="pt-2 border-t border-slate-800 text-[9px] text-slate-500 break-all leading-tight">
-                        <span class="text-slate-400 font-bold block mb-0.5">SHA-512 BIO-LEDGER VERITAS SEAL (EU AI ACT ART. 13 AUDIT):</span>
+                        <span class="text-slate-400 font-bold block mb-0.5">${lang.seal}</span>
                         <span class="text-cyan-500/90 select-all">${hash}</span>
                     </div>
                 </div>
@@ -1142,8 +1219,8 @@
                         <i data-lucide="shield-check" class="w-6 h-6"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-black text-slate-100 flex items-center gap-2" data-i18n="extModalTitle">
-                            <span>Суверенен Локален Backend Extension</span>
+                        <h3 class="text-base font-black text-slate-100 flex items-center gap-2">
+                            <span data-i18n="extModalTitle">Суверенен Локален Backend Extension</span>
                             <span class="text-[9px] px-2 py-0.5 bg-emerald-500/20 text-emerald-400 font-mono rounded font-bold">100% Cloud-Free</span>
                         </h3>
                         <p class="text-xs text-slate-400" data-i18n="extModalSub">Детерминистичен In-Silico субстрат за онкология</p>
@@ -1195,28 +1272,7 @@
             </div>
         </div>
     </div>
-                    <i data-lucide="arrow-right" class="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform"></i>
-                </button>
 
-                <button type="button" onclick="executeSimulation(false)" class="w-full p-3.5 bg-gradient-to-r from-emerald-950 to-slate-900 hover:from-emerald-900 hover:to-slate-850 border border-emerald-500/40 hover:border-emerald-400 text-left rounded-xl transition-all flex items-center justify-between group cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">🛡️</div>
-                        <div>
-                            <div class="text-xs font-bold text-emerald-300 group-hover:text-emerald-200" data-i18n="extBtnLocal">Локален WASM Tensor Core (Вграден 97.13%)</div>
-                            <div class="text-[10px] text-slate-400" data-i18n="extSubLocal">Незабавна In-Silico детерминистична ODE прецизност без сървър</div>
-                        </div>
-                    </div>
-                    <i data-lucide="arrow-right" class="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform"></i>
-                </button>
-            </div>
-
-            <div class="flex justify-end pt-2">
-                <button type="button" onclick="closeBackendModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-lg border border-slate-700 transition-colors" data-i18n="extBtnCancel">
-                    Отказ
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- AI Clinical Copilot Floating Agent Widget -->
     <div id="aiCopilotWidget" class="fixed bottom-6 right-6 z-50">
@@ -1541,7 +1597,22 @@
                 cellApoptosisLabel: "Апоптозен Лизис",
                 cellRiskLabel: "Остатъчен Раков Риск",
                 cellLoincCodeLabel: "LOINC Код",
-                cellGeneClassLabel: "Генен Клас"
+                cellGeneClassLabel: "Генен Клас",
+                guardrailsTitle: "OSK Епигенетична Защита (c-Myc ≡ 0.00)",
+                guardrailsBadge: "ΔAge -4.4 г.",
+                guardrailsDesc: "Инверсия по Хорват, +11.8% Cockcroft-Gault клирънс (52 mg/m² MTD) и нулев онкогенен риск (P_cancer < 10⁻⁶).",
+                guardrailsDriveLabel: "Химически Драйв Индуктор u (u_max ≤ 0.35)",
+                extModalTitle: "Суверенен Локален Backend Extension",
+                extModalSub: "Детерминистичен In-Silico субстрат за онкология",
+                extQuestionTitle: "Активиране на локално изчисление:",
+                extModalDesc: "Желаете ли да активирате Локалния Суверенен Backend Extension (WASM Tensor Core + RK4 Apoptosis Solver) за директно изчисление на вашето устройство без външни облачни зависимости (100% Cloud-Independent // GDPR Art. 9)?",
+                extBtnYesLocal: "🟢 ДА, АКТИВИРАЙ ЛОКАЛНИЯ BACKEND EXTENSION",
+                extSubYesLocal: "Директно In-Silico тензорно изчисление на това устройство (97.13% прецизност)",
+                extBtnBridge: "⚡ Свържи Native Desktop Bridge (Port 8890 / 8000)",
+                extSubBridge: "Mojo RK4 PK/PD + Rust Guardrails локален процес",
+                extBtnCancel: "Отказ",
+                extBtnLocal: "🛡️ Локален WASM Tensor Core (Вграден 97.13%)",
+                extSubLocal: "Незабавна In-Silico детерминистична ODE прецизност без сървър"
             },
             en: {
                 headerSub: "Sovereign Virtual Human Twin Oncology Optimizer — Doctor Interface",
@@ -1610,7 +1681,22 @@
                 cellApoptosisLabel: "Apoptotic Lysis",
                 cellRiskLabel: "Residual Malignant Risk",
                 cellLoincCodeLabel: "LOINC Code",
-                cellGeneClassLabel: "Gene Class"
+                cellGeneClassLabel: "Gene Class",
+                guardrailsTitle: "OSK Epigenetic Protection (c-Myc ≡ 0.00)",
+                guardrailsBadge: "ΔAge -4.4 yrs",
+                guardrailsDesc: "Horvath clock inversion, +11.8% Cockcroft-Gault clearance (52 mg/m² MTD) and zero oncogenic risk (P_cancer < 10⁻⁶).",
+                guardrailsDriveLabel: "Chemical Drive Inducer u (u_max ≤ 0.35)",
+                extModalTitle: "Sovereign Local Backend Extension",
+                extModalSub: "Deterministic In-Silico oncology compute substrate",
+                extQuestionTitle: "Activate local computation:",
+                extModalDesc: "Do you want to activate the Sovereign Local Backend Extension (WASM Tensor Core + RK4 Apoptosis Solver) for direct computing on your device with zero cloud dependencies (100% Cloud-Independent // GDPR Art. 9)?",
+                extBtnYesLocal: "🟢 YES, ACTIVATE LOCAL BACKEND EXTENSION",
+                extSubYesLocal: "Direct in-silico tensor computation on this device (97.13% precision)",
+                extBtnBridge: "⚡ Connect Native Desktop Bridge (Port 8890 / 8000)",
+                extSubBridge: "Mojo RK4 PK/PD + Rust Guardrails local process",
+                extBtnCancel: "Cancel",
+                extBtnLocal: "🛡️ Embedded WASM Tensor Core (97.13% In-Browser)",
+                extSubLocal: "Instant In-Silico deterministic ODE precision without external server"
             },
             fr: {
                 extModalTitle: "Extension Backend Locale Souveraine",
@@ -1691,7 +1777,18 @@
                 cellApoptosisLabel: "Lysis Apoptotique",
                 cellRiskLabel: "Risque Cancéreux Résiduel",
                 cellLoincCodeLabel: "Code LOINC",
-                cellGeneClassLabel: "Classe de Gène"
+                cellGeneClassLabel: "Classe de Gène",
+                guardrailsTitle: "Protection Épigénétique OSK (c-Myc ≡ 0.00)",
+                guardrailsBadge: "ΔÂge -4.4 ans",
+                guardrailsDesc: "Inversion de l'horloge de Horvath, clairance de Cockcroft-Gault +11.8% (MTD 52 mg/m²) et risque oncogène nul (P_cancer < 10⁻⁶).",
+                guardrailsDriveLabel: "Inducteur de Commande Chimique u (u_max ≤ 0.35)",
+                resSurvivalTitle: "Survie Attendue",
+                resCIndexTitle: "Indice de Concordance (C-Index)",
+                resMdrStatus: "Validé UNCAN.eu & VHT Avancé // TRL 6 Actif",
+                resShrinkageTitle: "Rétrécissement de la Marge Tumorale",
+                resApoptosisSub: "+91.3% par rapport au traitement standard",
+                trajectoryTitle: "Trajectoire Cinétique Tumorale & Courbe d'Apoptose (24 Mois)",
+                cellularTitle: "États Cellulaires & Profil des Biomarqueurs (APOPTOSIS_ENGINE)"
             },
             hu: {
                 extModalTitle: "Szuverén Helyi Backend Kiterjesztés",
@@ -1772,7 +1869,18 @@
                 cellApoptosisLabel: "Apoptotikus Lízis",
                 cellRiskLabel: "Maradvány Rákos Kockázat",
                 cellLoincCodeLabel: "LOINC Kód",
-                cellGeneClassLabel: "Gén Osztály"
+                cellGeneClassLabel: "Gén Osztály",
+                guardrailsTitle: "OSK Epigenetikai Védelem (c-Myc ≡ 0.00)",
+                guardrailsBadge: "ΔÉletkor -4.4 év",
+                guardrailsDesc: "Horvath-óra inverzió, +11.8% Cockcroft-Gault klírensz (52 mg/m² MTD) és nulla onkogén kockázat (P_cancer < 10⁻⁶).",
+                guardrailsDriveLabel: "Kémiai Vezérlő Induktor u (u_max ≤ 0.35)",
+                resSurvivalTitle: "Várható Túlélés",
+                resCIndexTitle: "Konkordancia Index (C-Index)",
+                resMdrStatus: "UNCAN.eu & Fejlett VHT Hitelesített // TRL 6 Aktív",
+                resShrinkageTitle: "Tumor Margó Lízis",
+                resApoptosisSub: "+91.3% a Standard Ellátáshoz Képest",
+                trajectoryTitle: "Tumor Kinetikai Pálya & Apoptózis Görbe (24 Hónap)",
+                cellularTitle: "Sejtes Állapotok & Biomarker Profil (APOPTOSIS_ENGINE)"
             }
         };
 
@@ -1820,6 +1928,22 @@
             const select = document.getElementById('langSelect');
             if (select) {
                 select.value = lang;
+            }
+
+            // Re-render Biphasic Protocol HUD in the selected language if already active
+            if (window.activeProtocolData) {
+                renderTherapeuticProtocolHUD(
+                    window.activeProtocolData.phaseA,
+                    window.activeProtocolData.phaseB,
+                    window.activeProtocolData.telemetry,
+                    window.activeProtocolData.hash
+                );
+            }
+
+            // Re-evaluate drive slider warning banner if active
+            const driveInput = document.getElementById('simulated_u_input');
+            if (driveInput) {
+                handleDriveInput(driveInput.value);
             }
         }
 
