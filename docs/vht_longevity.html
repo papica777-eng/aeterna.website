@@ -1024,9 +1024,7 @@
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             if (input) input.value = demoKey;
             if (statusMsg) {
-                statusMsg.innerText = currentLang === 'bg' 
-                    ? `⚡ Генериран еднократен лицензен ключ: ${demoKey}` 
-                    : `⚡ Generated one-shot license key: ${demoKey}`;
+                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                 statusMsg.style.color = '#00f0ff';
             }
         }
@@ -1038,9 +1036,7 @@
 
             if (!key) {
                 if (statusMsg) {
-                    statusMsg.innerText = currentLang === 'bg' 
-                        ? '❌ Моля въведете лицензен ключ от GitHub Sponsors!' 
-                        : '❌ Please enter a license key from GitHub Sponsors!';
+                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
@@ -1049,9 +1045,7 @@
 
             if (isLicenseKeyConsumed(key)) {
                 if (statusMsg) {
-                    statusMsg.innerText = currentLang === 'bg'
-                        ? '❌ ТОЗИ КЛЮЧ ВЕЧЕ Е ИЗПОЛЗВАН! (1 ключ = 1 изчисление). Вземете нов през GitHub Sponsors.'
-                        : '❌ THIS KEY HAS ALREADY BEEN CONSUMED! (1 key = 1 run). Get a new one via GitHub Sponsors.';
+                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
@@ -1061,9 +1055,7 @@
             const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
             if (!isValidFormat) {
                 if (statusMsg) {
-                    statusMsg.innerText = currentLang === 'bg'
-                        ? '❌ Невалиден формат на ключа. Формат: AET-SPONSOR-XXXX-XXXX'
-                        : '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
@@ -1074,9 +1066,7 @@
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = currentLang === 'bg'
-                    ? `✓ КЛЮЧЪТ Е ВЕРИФИЦИРАН И УСВОЕН (${key}). ИЗЧИСЛЯВАНЕ...`
-                    : `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                 statusMsg.style.color = '#10b981';
                 statusMsg.style.fontWeight = 'bold';
             }
@@ -3118,7 +3108,7 @@
     
     
     
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 КЛЮЧ = 1 ИЗЧИСЛЕНИЕ) -->
+            <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
     <div id="aeternaLicenseModal" style="display: none; position: fixed; inset: 0; z-index: 100020; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
         <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(2, 6, 23, 0.99) 100%); border: 2px solid rgba(6, 182, 212, 0.6); border-radius: 20px; max-width: 480px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(6, 182, 212, 0.4); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
             <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
@@ -3127,8 +3117,8 @@
                         🔑
                     </div>
                     <div>
-                        <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">ЛИЦЕНЗЕН КЛЮЧ ЗА ИЗЧИСЛЕНИЕ</h3>
-                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 КЛЮЧ = 1 ИЗЧИСЛЕНИЕ (ONE-SHOT CONSUMABLE)</p>
+                        <h3 style="font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">LICENSE KEY REQUIRED</h3>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #00f0ff; margin: 2px 0 0 0;">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 18px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
@@ -3136,10 +3126,10 @@
 
             <div style="padding: 14px; background: rgba(8, 47, 73, 0.3); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.5; color: #cbd5e1;">
                 <p style="margin: 0 0 10px 0;">
-                    Всички изчислителни симулации за дълголетие (EPO-PAT-05, Yamanaka OSK, Senolytic Dosing) изискват еднократен лицензен ключ, генериран след подкрепа през <strong>GitHub Sponsors</strong> или Stripe.
+                    All computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
                 </p>
                 <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 ключ = 1 изчисление (One-shot).</span>
+                    <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #94a3b8;">1 key = 1 calculation (One-shot).</span>
                     <a href="https://github.com/sponsors/papica777-eng" target="_blank" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; font-weight: 700; border-radius: 8px; font-size: 11px; box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);">
                         💖 GitHub Sponsors
                     </a>
@@ -3148,23 +3138,23 @@
 
             <div style="margin-bottom: 18px;">
                 <label style="display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 700; text-transform: uppercase; color: #cbd5e1; letter-spacing: 0.5px; margin-bottom: 6px;">
-                    Поставете лицензен ключ:
+                    Enter License Key:
                 </label>
                 <div style="display: flex; gap: 8px;">
                     <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" style="flex: 1; background: #020617; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; outline: none; text-transform: uppercase;">
-                    <button type="button" onclick="generateDevDemoKey()" title="Генерирай еднократен тестов ключ за разработка" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
+                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" style="padding: 10px 12px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #00f0ff; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; cursor: pointer; white-space: nowrap;">
                         ⚡ DEMO KEY
                     </button>
                 </div>
-                <div id="aeternaLicenseStatusMsg" style="min-h: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
+                <div id="aeternaLicenseStatusMsg" style="min-height: 18px; font-size: 11px; font-family: 'JetBrains Mono', monospace; margin-top: 6px;"></div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button type="button" onclick="submitAeternaLicenseKey()" style="width: 100%; padding: 12px 16px; background: linear-gradient(135deg, #06b6d4, #10b981); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);">
-                    ⚡ ПОТВЪРДИ И ИЗЧИСЛИ РЕЗУЛТАТА ВЕДНАГА
+                    ⚡ VERIFY & COMPUTE RESULT NOW
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">
-                    Отказ
+                    Cancel
                 </button>
             </div>
         </div>

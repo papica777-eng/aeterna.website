@@ -892,9 +892,7 @@
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
             if (input) input.value = demoKey;
             if (statusMsg) {
-                statusMsg.innerText = currentLang === 'bg' 
-                    ? `⚡ Генериран еднократен лицензен ключ: ${demoKey}` 
-                    : `⚡ Generated one-shot license key: ${demoKey}`;
+                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                 statusMsg.className = 'min-h-[18px] text-[11px] font-mono text-cyan-400';
             }
         }
@@ -906,9 +904,7 @@
 
             if (!key) {
                 if (statusMsg) {
-                    statusMsg.innerText = currentLang === 'bg' 
-                        ? '❌ Моля въведете лицензен ключ от GitHub Sponsors!' 
-                        : '❌ Please enter a license key from GitHub Sponsors!';
+                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                     statusMsg.className = 'min-h-[18px] text-[11px] font-mono text-rose-400 font-bold';
                 }
                 return;
@@ -916,9 +912,7 @@
 
             if (isLicenseKeyConsumed(key)) {
                 if (statusMsg) {
-                    statusMsg.innerText = currentLang === 'bg'
-                        ? '❌ ТОЗИ КЛЮЧ ВЕЧЕ Е ИЗПОЛЗВАН! (1 ключ = 1 изчисление). Вземете нов през GitHub Sponsors.'
-                        : '❌ THIS KEY HAS ALREADY BEEN CONSUMED! (1 key = 1 run). Get a new one via GitHub Sponsors.';
+                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                     statusMsg.className = 'min-h-[18px] text-[11px] font-mono text-rose-400 font-bold';
                 }
                 return;
@@ -928,9 +922,7 @@
             const isValidFormat = key.startsWith('AET-') || key.startsWith('SPONSOR-') || key.startsWith('PRO-') || key.startsWith('GH-') || key.length >= 8;
             if (!isValidFormat) {
                 if (statusMsg) {
-                    statusMsg.innerText = currentLang === 'bg'
-                        ? '❌ Невалиден формат на ключа. Формат: AET-SPONSOR-XXXX-XXXX'
-                        : '❌ Invalid key format. Expected: AET-SPONSOR-XXXX-XXXX';
+                    statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                     statusMsg.className = 'min-h-[18px] text-[11px] font-mono text-rose-400 font-bold';
                 }
                 return;
@@ -940,9 +932,7 @@
             markLicenseKeyConsumed(key);
 
             if (statusMsg) {
-                statusMsg.innerText = currentLang === 'bg'
-                    ? `✓ КЛЮЧЪТ Е ВЕРИФИЦИРАН И УСВОЕН (${key}). ИЗЧИСЛЯВАНЕ...`
-                    : `✓ KEY VERIFIED & CONSUMED (${key}). COMPUTING...`;
+                statusMsg.innerText = `⚡ Generated one-shot license key: ${demoKey}`;
                 statusMsg.className = 'min-h-[18px] text-[11px] font-mono text-emerald-400 font-bold';
             }
 
@@ -1397,7 +1387,7 @@
         </div>
     </div>
 
-    <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 КЛЮЧ = 1 ИЗЧИСЛЕНИЕ) -->
+            <!-- 🔱 AETERNA // ONE-SHOT LICENSE KEY GATE (1 KEY = 1 CALCULATION) -->
     <div id="aeternaLicenseModal" class="hidden fixed inset-0 z-[100010] bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
         <div class="bg-slate-900/95 border-2 border-cyan-500/60 shadow-[0_0_60px_rgba(6,182,212,0.4)] rounded-2xl max-w-md w-full p-6 space-y-5 font-['Outfit',sans-serif] text-slate-100 animate-in fade-in zoom-in duration-150">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -1406,8 +1396,8 @@
                         🔑
                     </div>
                     <div>
-                        <h3 class="text-sm font-black uppercase tracking-wider text-slate-100">ЛИЦЕНЗЕН КЛЮЧ ЗА ИЗЧИСЛЕНИЕ</h3>
-                        <p class="text-[11px] font-mono text-cyan-400">1 КЛЮЧ = 1 ИЗЧИСЛЕНИЕ (ONE-SHOT CONSUMABLE)</p>
+                        <h3 class="text-sm font-black uppercase tracking-wider text-slate-100">COMPUTATION LICENSE KEY</h3>
+                        <p class="text-[11px] font-mono text-cyan-400">1 KEY = 1 CALCULATION (ONE-SHOT CONSUMABLE)</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeAeternaLicenseModal()" class="text-slate-400 hover:text-slate-100 text-lg font-bold p-1">✕</button>
@@ -1415,10 +1405,10 @@
 
             <div class="p-3.5 bg-cyan-950/30 border border-cyan-500/30 rounded-xl space-y-2 text-xs leading-relaxed text-slate-300">
                 <p>
-                    Всички тензорни онкологични симулации изискват еднократен лицензен ключ, генериран автоматично след подкрепа / абонамент през <strong>GitHub Sponsors</strong> или Stripe.
+                    All oncology and computational simulations require a one-shot license key generated after sponsorship via <strong>GitHub Sponsors</strong> or Stripe.
                 </p>
                 <div class="pt-1 flex items-center justify-between">
-                    <span class="text-[10px] text-slate-400 font-mono">След използване ключът се деактивира.</span>
+                    <span class="text-[10px] text-slate-400 font-mono">1 key = 1 calculation (One-shot).</span>
                     <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold rounded-lg text-[11px] shadow-sm transition-transform hover:scale-105">
                         <span>💖 GitHub Sponsors</span>
                     </a>
@@ -1427,11 +1417,11 @@
 
             <div class="space-y-2">
                 <label class="block text-[11px] font-mono font-bold uppercase text-slate-300 tracking-wider">
-                    Поставете лицензен ключ:
+                    Enter License Key:
                 </label>
                 <div class="flex gap-2">
                     <input type="text" id="aeternaLicenseInput" placeholder="AET-SPONSOR-XXXX-XXXX" class="flex-1 bg-slate-950 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl px-3.5 py-2.5 text-xs text-cyan-300 font-mono outline-none uppercase placeholder:text-slate-600">
-                    <button type="button" onclick="generateDevDemoKey()" title="Генерирай еднократен тестов ключ за разработка" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 rounded-xl text-[10px] font-mono font-bold whitespace-nowrap cursor-pointer">
+                    <button type="button" onclick="generateDevDemoKey()" title="Generate one-shot demo key for development" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 rounded-xl text-[10px] font-mono font-bold whitespace-nowrap cursor-pointer">
                         ⚡ DEMO KEY
                     </button>
                 </div>
@@ -1440,10 +1430,10 @@
 
             <div class="space-y-2 pt-1">
                 <button type="button" onclick="submitAeternaLicenseKey()" class="w-full py-3 px-4 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer">
-                    <span>⚡ ПОТВЪРДИ И ИЗЧИСЛИ РЕЗУЛТАТА ВЕДНАГА</span>
+                    <span>⚡ VERIFY & COMPUTE RESULT NOW</span>
                 </button>
                 <button type="button" onclick="closeAeternaLicenseModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-750 text-slate-400 text-xs font-bold rounded-xl border border-slate-700 cursor-pointer">
-                    Отказ
+                    Cancel
                 </button>
             </div>
         </div>
