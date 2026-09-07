@@ -866,9 +866,22 @@ class AdminLoginRequest(BaseModel):
 async def api_admin_login(request: AdminLoginRequest):
     """
     Sovereign Administrator Login Endpoint.
-    Validates authority credentials (aeterna / aeterna9669).
+    Zero-Entropy verification: uses timing-safe HMAC/SHA-256 hash comparison.
+    No plaintext secrets exposed.
     """
-    if request.username == "aeterna" and request.password == "aeterna9669":
+    import hashlib
+    import hmac
+    import os
+
+    # Sovereign Authority Hash (SHA-256 of master secret or environment variable)
+    EXPECTED_USER = os.getenv("AETERNA_ADMIN_USER", "aeterna")
+    EXPECTED_HASH = os.getenv("AETERNA_ADMIN_HASH", "67ca5683afc38cdd1146c6994a5abb5ee99ecd85952a7f3adf06a619e027f08d")
+
+    req_pass_hash = hashlib.sha256(request.password.encode("utf-8")).hexdigest()
+    user_match = hmac.compare_digest(request.username.strip(), EXPECTED_USER)
+    pass_match = hmac.compare_digest(req_pass_hash, EXPECTED_HASH)
+
+    if user_match and pass_match:
         session_token = f"AETERNA_SOVEREIGN_{int(time.time())}_0x4121"
         return {
             "authenticated": True,
