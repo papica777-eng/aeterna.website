@@ -1475,38 +1475,74 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
 
             if (!username || !password) {
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Въведете потребител и парола!';
+                    statusMsg.innerText = '❌ Въведете потребителско име и парола!';
                     statusMsg.style.color = '#f43f5e';
                 }
                 return;
             }
 
-            // Verify Sovereign Credentials
-            if (username === 'aeterna' && password === 'aeterna9669') {
-                localStorage.setItem('aeterna_auth_user', 'aeterna');
-                localStorage.setItem('aeterna_auth_role', 'admin');
-                localStorage.setItem('aeterna_auth_token', 'AETERNA_SOVEREIGN_ADMIN_0x4121_9669');
-                
-                if (statusMsg) {
-                    statusMsg.innerText = '✓ АВТОРИЗИРАН АДМИНИСТРАТОР (0.0000 ЕНТРОПИЯ)';
-                    statusMsg.style.color = '#10b981';
-                }
+            if (statusMsg) {
+                statusMsg.innerText = '⚡ Валидиране на суверенни права...';
+                statusMsg.style.color = '#c084fc';
+            }
 
-                setTimeout(() => {
-                    closeAdminLoginModal();
-                    updateAuthUI();
-                    // If a pending calculation was blocked, immediately unblock and compute it!
-                    if (pendingCalculationCallback) {
-                        const cb = pendingCalculationCallback;
-                        pendingCalculationCallback = null;
-                        closeAeternaLicenseModal();
-                        cb('AETERNA-SOVEREIGN-ADMIN-OVERRIDE');
+            try {
+                // Cryptographic validation through isolated backend authority
+                const authHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                    ? 'http://127.0.0.1:8000'
+                    : 'https://api.aeterna.website';
+
+                const response = await fetch(`${authHost}/api/v1/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('aeterna_auth_user', data.user || username);
+                    localStorage.setItem('aeterna_auth_role', data.role || 'admin');
+                    localStorage.setItem('aeterna_auth_token', data.token);
+                    
+                    if (statusMsg) {
+                        statusMsg.innerText = '✓ АВТОРИЗИРАН АДМИНИСТРАТОР (0.0000 ЕНТРОПИЯ)';
+                        statusMsg.style.color = '#10b981';
                     }
-                }, 400);
-                return;
-            } else {
+
+                    setTimeout(() => {
+                        closeAdminLoginModal();
+                        updateAuthUI();
+                        if (pendingCalculationCallback) {
+                            const cb = pendingCalculationCallback;
+                            pendingCalculationCallback = null;
+                            closeAeternaLicenseModal();
+                            cb(data.token);
+                        }
+                    }, 400);
+                    return;
+                } else {
+                    const errData = await response.json().catch(() => ({}));
+                    if (statusMsg) {
+                        statusMsg.innerText = '❌ Невалидни администраторски данни!';
+                        statusMsg.style.color = '#f43f5e';
+                    }
+                }
+            } catch (networkErr) {
+                // Zero-Entropy offline fallback check: verifies if an already authenticated token exists
+                const existingToken = localStorage.getItem('aeterna_auth_token');
+                if (existingToken && existingToken.startsWith('AETERNA_SOVEREIGN_')) {
+                    if (statusMsg) {
+                        statusMsg.innerText = '✓ ОФЛАЙН СУВЕРЕНЕН ТОКЕН АКТИВИРАН';
+                        statusMsg.style.color = '#10b981';
+                    }
+                    setTimeout(() => {
+                        closeAdminLoginModal();
+                        updateAuthUI();
+                    }, 400);
+                    return;
+                }
                 if (statusMsg) {
-                    statusMsg.innerText = '❌ Невалидни администраторски данни!';
+                    statusMsg.innerText = '❌ Сървърът за автентикация не отговаря (503 Service Unavailable).';
                     statusMsg.style.color = '#f43f5e';
                 }
             }
@@ -1597,23 +1633,10 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
                 return;
             }
 
-            // Quick Sovereign Master Key / Credentials Passphrase
-            if (rawKey === 'aeterna9669' || rawKey === 'aeterna' || rawKey === 'aeterna:aeterna9669' || key === 'AETERNA-ADMIN') {
-                localStorage.setItem('aeterna_auth_user', 'aeterna');
-                localStorage.setItem('aeterna_auth_role', 'admin');
-                localStorage.setItem('aeterna_auth_token', 'AETERNA_SOVEREIGN_ADMIN_0x4121_9669');
-                updateAuthUI();
-                if (statusMsg) {
-                    statusMsg.innerText = '✓ SOVEREIGN ADMIN AUTHENTICATED! COMPUTING...';
-                    statusMsg.style.color = '#10b981';
-                    statusMsg.style.fontWeight = 'bold';
-                }
-                const cb = pendingCalculationCallback;
-                pendingCalculationCallback = null;
-                setTimeout(() => {
-                    closeAeternaLicenseModal();
-                    if (cb) cb('AETERNA-SOVEREIGN-ADMIN-OVERRIDE');
-                }, 400);
+            // If user enters admin keyword, direct to secure sovereign admin modal
+            if (rawKey.toLowerCase() === 'aeterna' || key === 'AETERNA-ADMIN') {
+                closeAeternaLicenseModal();
+                openAdminLoginModal();
                 return;
             }
 
@@ -2226,7 +2249,7 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
 
                 <div>
                     <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; letter-spacing: 0.5px;">Парола (Password)</label>
-                    <input type="password" id="adminPasswordInput" value="aeterna9669" autocomplete="current-password" required style="width: 100%; box-sizing: border-box; padding: 12px 14px; background: rgba(2, 6, 23, 0.85); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 10px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#c084fc'" onblur="this.style.borderColor='rgba(168, 85, 247, 0.4)'" />
+                    <input type="password" id="adminPasswordInput" value="" placeholder="Въведете суверенна парола..." autocomplete="current-password" required style="width: 100%; box-sizing: border-box; padding: 12px 14px; background: rgba(2, 6, 23, 0.85); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 10px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#c084fc'" onblur="this.style.borderColor='rgba(168, 85, 247, 0.4)'" />
                 </div>
 
                 <div id="adminLoginStatusMsg" style="min-height: 18px; font-size: 11.5px; font-family: 'JetBrains Mono', monospace;"></div>
