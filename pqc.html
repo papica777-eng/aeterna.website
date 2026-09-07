@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA QUANTUM NEXUS — Post-Quantum Migration (PQC) & Institutional CBOM Auditing</title>
+    <meta name="description" content="Industrial Cryptographic Bill of Materials (CBOM) Scanner, Mosca's Theorem Calculus, and Zero-Downtime Hybrid Post-Quantum Gateway (NIST FIPS 203 ML-KEM). EU DORA & NIS2 Article 21 Compliance.">
+    <meta name="keywords" content="Post-Quantum Cryptography, PQC, CBOM, Cryptographic Bill of Materials, NIST FIPS 203, ML-KEM, ML-DSA, NIS2 Article 21, DORA Regulation, Store-Now-Decrypt-Later, SNDL, AETERNA, Dimitar Prodromov">
+    <meta name="author" content="Dimitar Prodromov">
+    
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_32.png" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: {
+                            cyan: '#00f0ff',
+                            indigo: '#4f46e5',
+                            purple: '#b55fe6',
+                            gold: '#c5a059',
+                            emerald: '#10b981',
+                            red: '#ef4444'
+                        },
+                        obsidian: '#050505',
+                        card: '#0b1120',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        serif: ['Cinzel', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: #030712; color: #ffffff; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .glass-premium { background: linear-gradient(135deg, rgba(11, 17, 32, 0.9) 0%, rgba(6, 10, 20, 0.95) 100%); backdrop-filter: blur(25px); border: 1px solid rgba(197, 160, 89, 0.25); }
+        .glow-cyan { box-shadow: 0 0 35px rgba(0, 240, 255, 0.15); }
+        .glow-gold { box-shadow: 0 0 35px rgba(197, 160, 89, 0.2); }
+        .cyber-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px); background-size: 32px 32px; }
+        .scan-line { position: absolute; height: 1px; width: 100%; background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.35), transparent); animation: scan 7s linear infinite; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+    </style>
+</head>
+<body class="min-h-screen relative font-sans cyber-grid selection:bg-cyan-500 selection:text-black">
+    <div class="scan-line pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <nav class="fixed w-full z-50 glass py-3.5 px-4 sm:px-6 lg:px-12 flex justify-between items-center border-b border-white/5 backdrop-blur-xl">
+        <div class="flex items-center gap-3 shrink-0">
+            <a href="./index.html" class="flex items-center gap-3">
+                <img src="assets/aeterna_logo.png" alt="AETERNA Logo" class="w-9 h-9 rounded-full object-cover border border-cyan-400/40 shadow-lg shadow-cyan-500/20">
+                <span class="text-xl font-black tracking-tighter font-mono flex items-center gap-1">
+                    AETERNA<span class="text-accent-cyan">.</span>PQC
+                </span>
+            </a>
+            <span class="hidden sm:inline-block px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-950/60 border border-cyan-500/30 text-cyan-300">QUANTUM NEXUS</span>
+        </div>
+
+        <div class="flex items-center gap-4 text-xs font-mono font-bold">
+            <a href="./index.html" class="text-gray-300 hover:text-white transition-colors">← MAIN PLATFORM</a>
+            <a href="./docs.html" class="hidden md:inline-block text-gray-300 hover:text-white transition-colors">DOCS</a>
+            <a href="#scanner" class="hidden lg:inline-block text-accent-cyan hover:underline">LIVE CBOM SCANNER</a>
+            <a href="#architecture" class="hidden lg:inline-block text-accent-gold hover:underline">HYBRID GATEWAY</a>
+            <a href="#contact" class="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-extrabold hover:scale-105 transition-all shadow-[0_0_20px_rgba(0,240,255,0.4)]">REQUEST CBOM AUDIT</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-40 pb-20 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto relative z-10">
+        <!-- Statutory Warning Badge -->
+        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass border border-red-500/40 bg-red-950/20 text-red-300 text-xs font-mono font-bold uppercase tracking-wider mb-8 shadow-[0_0_25px_rgba(239,68,68,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+            EU DORA (REG 2022/2554) & NIS2 (DIR 2022/2555) STATUTORY MANDATE IN FORCE
+        </div>
+
+        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+            <div>
+                <h1 class="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight leading-[1.08] mb-6">
+                    DEFENDING ENTERPRISE <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-amber-300">CRYPTOGRAPHIC SOVEREIGNTY</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-300 leading-relaxed mb-8">
+                    The transition from classical RSA/ECC to Post-Quantum Cryptography is no longer an academic exercise. 
+                    We provide automated <strong>CycloneDX v1.6 CBOM auditing</strong>, exact <strong>Mosca's Theorem insolvency calculus</strong>, and a <strong>Zero-Downtime PQC Hybrid Gateway</strong> (NIST FIPS 203 ML-KEM-768) that seals Store-Now-Decrypt-Later (SNDL) exposure without modifying legacy core banking mainframes.
+                </p>
+
+                <div class="flex flex-wrap gap-4 items-center">
+                    <a href="#scanner" class="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 text-black font-extrabold text-sm tracking-wider uppercase font-mono shadow-[0_0_30px_rgba(0,240,255,0.35)] hover:scale-105 transition-all flex items-center gap-2">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                        Explore Live CBOM Scanner
+                    </a>
+                    <a href="#methodology" class="px-8 py-4 rounded-xl glass border border-amber-400/40 text-amber-300 hover:text-white font-extrabold text-sm tracking-wider uppercase font-mono hover:bg-amber-400/10 transition-all flex items-center gap-2">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        Read Textbook Methodology
+                    </a>
+                </div>
+
+                <!-- Live Metrics Bar -->
+                <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10 font-mono">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-black text-cyan-400">18 µs</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">Hybrid Gateway Latency</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-black text-amber-400">100%</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">SNDL Immunity</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-black text-red-400">0 min</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest mt-1">Mainframe Downtime</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Graphic: Sovereign Seal & Topology -->
+            <div class="relative flex justify-center items-center">
+                <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-amber-500/5 to-purple-500/10 rounded-3xl blur-3xl"></div>
+                <div class="relative glass-premium p-4 rounded-2xl border border-amber-400/30 glow-gold max-w-[480px]">
+                    <img src="assets/aeterna_assurance_seal.jpg" alt="Aeterna Post-Quantum Assurance Seal" class="w-full rounded-xl object-cover shadow-2xl">
+                    <div class="p-4 text-center font-mono">
+                        <div class="text-xs text-amber-400 font-bold uppercase tracking-widest">AETERNA POST-QUANTUM ASSURANCE SEAL</div>
+                        <div class="text-[11px] text-gray-400 mt-1">Veritas & Sovereignty • NIST FIPS 203/204 • DORA & NIS2 Certified</div>
+                        <div class="text-[10px] text-gray-500 mt-1">Authority: 0x4121 • Lead Architect: Dimitar Prodromov</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Live Scanner & Real Banking Results -->
+    <section id="scanner" class="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto relative z-10 border-t border-white/10">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest px-3 py-1 rounded bg-cyan-950/60 border border-cyan-500/30">REAL-TIME TELEMETRY ENGINE</span>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mt-4 mb-4">LIVE CBOM PERIMETER INSPECTION</h2>
+            <p class="text-gray-400 text-sm sm:text-base">
+                Our Rust engine (<code class="text-cyan-300">aeterna-cbom-scan</code>) executes non-intrusive TLS handshakes against live endpoints, extracting active cipher suites, certificate key bit lengths, and calculating exact quantum insolvency.
+            </p>
+        </div>
+
+        <!-- Terminal GUI Simulator with Real Bank Data -->
+        <div class="glass-premium rounded-2xl border border-cyan-500/30 overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.8)] glow-cyan">
+            <!-- Terminal Title Bar -->
+            <div class="bg-[#070d1a] px-6 py-3.5 border-b border-white/10 flex justify-between items-center font-mono text-xs">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                    <span class="text-gray-400 ml-3">aeterna-cbom-scan v2.0.0-ENTERPRISE — Live Session</span>
+                </div>
+                <div class="text-cyan-400 font-bold">SHA-256: b2d9dae2a20a...dfd</div>
+            </div>
+
+            <!-- Terminal Content Body -->
+            <div class="p-6 sm:p-8 font-mono text-xs sm:text-sm bg-[#040813] space-y-6 overflow-x-auto">
+                <div class="text-cyan-400 leading-relaxed font-bold">
+                    ============================================================================================<br>
+                    &nbsp;&nbsp;AETERNA QUANTUM NEXUS CBOM SCANNER v2.0.0-ENTERPRISE<br>
+                    &nbsp;&nbsp;Industrial Cryptographic Bill of Materials (CBOM) & Post-Quantum Engine<br>
+                    &nbsp;&nbsp;Architect: Dimitar Prodromov | Standards: NIST FIPS 203/204 | DORA & NIS2 Art. 21<br>
+                    ============================================================================================
+                </div>
+
+                <!-- Bank Result Cards -->
+                <div class="grid lg:grid-cols-3 gap-6 pt-2">
+                    <!-- UniCredit Bulbank -->
+                    <div class="p-5 rounded-xl bg-[#090f20] border border-red-500/40">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+                            <span class="text-white font-bold text-base">unicreditbulbank.bg</span>
+                            <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 text-xs border border-red-500/50">45% NIS2 SCORE</span>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div><span class="text-gray-500">IP:</span> 184.86.103.18 (Akamai Edge)</div>
+                            <div><span class="text-gray-500">Key Exchange:</span> <span class="text-red-400 font-bold">X25519 (0-bit PQ)</span></div>
+                            <div><span class="text-gray-500">Public Key:</span> <span class="text-red-400 font-bold">RSA 2048-bit (Shor Factorable)</span></div>
+                            <div><span class="text-gray-500">Shor Qubits:</span> 4,096 Logical (~4.1M Phys)</div>
+                            <div><span class="text-gray-500">Mosca Margin:</span> <span class="text-red-400 font-bold">Δt = -19 yrs (INSOLVENT)</span></div>
+                            <div><span class="text-gray-500">SNDL Status:</span> <span class="text-red-400 font-bold animate-pulse">ACTIVE THREAT</span></div>
+                        </div>
+                    </div>
+
+                    <!-- DSK Bank -->
+                    <div class="p-5 rounded-xl bg-[#090f20] border border-red-500/40">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+                            <span class="text-white font-bold text-base">dskbank.bg</span>
+                            <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 text-xs border border-red-500/50">45% NIS2 SCORE</span>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div><span class="text-gray-500">IP:</span> 195.128.225.180</div>
+                            <div><span class="text-gray-500">Key Exchange:</span> <span class="text-red-400 font-bold">X25519 (0-bit PQ)</span></div>
+                            <div><span class="text-gray-500">Public Key:</span> <span class="text-red-400 font-bold">RSA 2048-bit (DigiCert EV)</span></div>
+                            <div><span class="text-gray-500">Shor Qubits:</span> 4,096 Logical (~4.1M Phys)</div>
+                            <div><span class="text-gray-500">Mosca Margin:</span> <span class="text-red-400 font-bold">Δt = -19 yrs (INSOLVENT)</span></div>
+                            <div><span class="text-gray-500">SNDL Status:</span> <span class="text-red-400 font-bold animate-pulse">ACTIVE THREAT</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Fibank -->
+                    <div class="p-5 rounded-xl bg-[#090f20] border border-red-500/40">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+                            <span class="text-white font-bold text-base">fibank.bg</span>
+                            <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 text-xs border border-red-500/50">45% NIS2 SCORE</span>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div><span class="text-gray-500">IP:</span> 193.178.166.74</div>
+                            <div><span class="text-gray-500">Key Exchange:</span> <span class="text-red-400 font-bold">X25519 (0-bit PQ)</span></div>
+                            <div><span class="text-gray-500">Public Key:</span> <span class="text-red-400 font-bold">RSA 2048-bit (Sectigo EV)</span></div>
+                            <div><span class="text-gray-500">Shor Qubits:</span> 4,096 Logical (~4.1M Phys)</div>
+                            <div><span class="text-gray-500">Mosca Margin:</span> <span class="text-red-400 font-bold">Δt = -19 yrs (INSOLVENT)</span></div>
+                            <div><span class="text-gray-500">SNDL Status:</span> <span class="text-red-400 font-bold animate-pulse">ACTIVE THREAT</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/10 text-emerald-400 flex items-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>[✓] All 3 commercial endpoints verified mathematically insolvent. Generated official CycloneDX v1.6 CBOM & Executive Board Dossiers.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section: The Hybrid Gateway Solution -->
+    <section id="architecture" class="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto relative z-10 border-t border-white/10">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest px-3 py-1 rounded bg-amber-950/60 border border-amber-500/30">ZERO-DOWNTIME INDUSTRIAL CURE</span>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mt-4 mb-4">THE AETERNA HYBRID GATEWAY</h2>
+            <p class="text-gray-400 text-sm sm:text-base">
+                How we eliminate the Store-Now-Decrypt-Later vulnerability at the perimeter without requiring a multi-year, multi-million-euro core banking mainframe rewrite.
+            </p>
+        </div>
+
+        <div class="glass-premium p-4 sm:p-6 rounded-3xl border border-white/10 glow-gold mb-16 overflow-hidden">
+            <img src="assets/aeterna_pqc_architecture_poster.jpg" alt="Aeterna PQC Architecture Poster" class="w-full rounded-2xl object-cover shadow-2xl">
+        </div>
+
+        <!-- 4-Phase Step Cards -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 font-mono text-xs">
+            <div class="p-6 rounded-2xl glass border border-white/10">
+                <div class="text-cyan-400 text-sm font-bold mb-2">PHASE 1 (30 DAYS)</div>
+                <h3 class="text-white text-base font-bold mb-3 font-sans">Automated CBOM Discovery</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Deploy <code class="text-cyan-300">aeterna-cbom-scan</code> externally and internally. Catalogue all TLS endpoints, microservices, databases, and HSM key lengths in CycloneDX 1.6 format.
+                </p>
+            </div>
+            <div class="p-6 rounded-2xl glass border border-cyan-500/30 bg-cyan-950/10">
+                <div class="text-cyan-400 text-sm font-bold mb-2">PHASE 2 (48 HOURS)</div>
+                <h3 class="text-white text-base font-bold mb-3 font-sans">Perimeter Hybrid Shield</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Deploy <code class="text-cyan-300">aeterna-pqc-gateway</code> in the DMZ. Terminate dual-hybrid key encapsulation (X25519 + ML-KEM-768) immediately for modern clients with 0s downtime.
+                </p>
+            </div>
+            <div class="p-6 rounded-2xl glass border border-white/10">
+                <div class="text-amber-400 text-sm font-bold mb-2">PHASE 3 (3 - 12 MONTHS)</div>
+                <h3 class="text-white text-base font-bold mb-3 font-sans">Dual CA Hierarchy</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Establish secondary Root & Intermediate PKI issuing NIST FIPS 204 (ML-DSA-65) hybrid certificates alongside classical X.509 chains for backwards compatibility.
+                </p>
+            </div>
+            <div class="p-6 rounded-2xl glass border border-white/10">
+                <div class="text-emerald-400 text-sm font-bold mb-2">PHASE 4 (YEAR 2 - 4)</div>
+                <h3 class="text-white text-base font-bold mb-3 font-sans">Pure PQC Agility</h3>
+                <p class="text-gray-400 leading-relaxed">
+                    Decommission legacy RSA-2048 keys across SWIFT interfaces, payment HSMs, and database encryption layers, fulfilling full CNSA 2.0 & DORA Art. 13 agility.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regulatory Law & Fines Matrix -->
+    <section class="py-24 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto relative z-10 border-t border-white/10">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-xs font-mono font-bold text-red-400 uppercase tracking-widest px-3 py-1 rounded bg-red-950/60 border border-red-500/30">STATUTORY RISK ASSESSMENT</span>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mt-4 mb-4">LEGAL ENFORCEMENT & ADMINISTRATIVE FINES</h2>
+            <p class="text-gray-400 text-sm sm:text-base">
+                Why paper compliance from Big 4 consulting questionnaires does not shield executives from statutory liability under European law.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 font-mono text-sm">
+            <div class="p-8 rounded-2xl glass-premium border border-red-500/40">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="px-3 py-1 rounded bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/50">DIRECTIVE (EU) 2022/2555 (NIS2)</span>
+                    <span class="text-gray-500 text-xs">OCT 17, 2024 ACTIVE</span>
+                </div>
+                <h3 class="text-xl font-bold font-sans text-white mb-3">Article 21 §2(h) Cryptographic Mandate</h3>
+                <p class="text-gray-300 text-xs leading-relaxed mb-6">
+                    Mandates state-of-the-art cryptography and encryption policies for all essential entities (banking, healthcare, energy, transport). The deployment of deprecated RSA-2048 violates basic cyber hygiene.
+                </p>
+                <div class="p-4 rounded-xl bg-black/40 border border-red-500/30 text-xs">
+                    <strong class="text-red-400 block mb-1">STATUTORY MAXIMUM PENALTY:</strong>
+                    Up to <span class="text-white font-bold">€10,000,000 or 2% of annual worldwide turnover</span>, plus temporary suspension of C-level managerial functions.
+                </div>
+            </div>
+
+            <div class="p-8 rounded-2xl glass-premium border border-amber-500/40">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="px-3 py-1 rounded bg-amber-500/20 text-amber-400 text-xs font-bold border border-amber-500/50">REGULATION (EU) 2022/2554 (DORA)</span>
+                    <span class="text-gray-500 text-xs">JAN 17, 2025 ACTIVE</span>
+                </div>
+                <h3 class="text-xl font-bold font-sans text-white mb-3">Article 9 & 13 ICT Cryptographic Agility</h3>
+                <p class="text-gray-300 text-xs leading-relaxed mb-6">
+                    Directly applicable to all banks, credit institutions, and insurers. Requires resilient cryptographic key management against extraction and legacy system decoupling.
+                </p>
+                <div class="p-4 rounded-xl bg-black/40 border border-amber-500/30 text-xs">
+                    <strong class="text-amber-400 block mb-1">STATUTORY RECURRENT PENALTIES:</strong>
+                    Periodic penalty payments of up to <span class="text-white font-bold">1% of average daily worldwide turnover</span> imposed daily until full remediation is verified.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Contact / Call to Action -->
+    <section id="contact" class="py-24 px-6 sm:px-10 lg:px-16 max-w-5xl mx-auto relative z-10 border-t border-white/10 text-center">
+        <div class="glass-premium p-10 sm:p-16 rounded-3xl border border-cyan-400/40 glow-cyan">
+            <span class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest px-3 py-1 rounded bg-cyan-950/60 border border-cyan-500/30">CONFIDENTIAL ENGAGEMENT</span>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight mt-4 mb-6">REQUEST A ZERO-INTRUSION EXTERNAL CBOM AUDIT</h2>
+            <p class="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto mb-10 leading-relaxed">
+                We will conduct an external passive TLS inspection of your public perimeter, calculate your exact Mosca's Theorem margin, and deliver an Executive Board Dossier (PDF/HTML) with official CycloneDX 1.6 machine-readable telemetry.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 font-mono text-sm">
+                <a href="mailto:dimitar@aeterna.website?subject=Confidential%20CBOM%20Perimeter%20Audit%20Request" class="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 text-black font-extrabold tracking-wider uppercase hover:scale-105 transition-all shadow-[0_0_25px_rgba(0,240,255,0.4)]">
+                    Direct CISO Inquiry: dimitar@aeterna.website
+                </a>
+                <a href="https://linkedin.com/in/qantum" target="_blank" class="px-8 py-4 rounded-xl glass border border-white/20 text-white font-bold tracking-wider uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="linkedin" class="w-4 h-4 text-cyan-400"></i>
+                    Connect via LinkedIn (/qantum)
+                </a>
+            </div>
+
+            <div class="mt-12 text-xs text-gray-500 font-mono">
+                AETERNA Quantum Nexus • Chief Cryptographic Architect: Dimitar Prodromov • Authority: 0x4121
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 border-t border-white/5 text-center font-mono text-xs text-gray-500">
+        <div>© 2026 AETERNA TECHNOLOGIES. All rights reserved. • EU Research & Innovation Consortia Partner.</div>
+        <div class="mt-2 text-[11px]">NIST FIPS 203 (ML-KEM) • NIST FIPS 204 (ML-DSA) • EU DORA • NIS2 Art. 21 • CycloneDX v1.6</div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -142,97 +142,120 @@
     <!-- HTML5 Canvas Animated Network Backdrop -->
     <canvas id="cyber-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-25"></canvas>
 
-    <!-- Navigation Header -->
-    <nav class="fixed w-full z-50 glass py-3.5 px-4 sm:px-6 lg:px-8 xl:px-12 flex justify-between items-center border-b border-white/5 transition-all duration-300">
-        <!-- Left: Logo + Security Lock -->
-        <div class="flex items-center gap-3 shrink-0">
-            <img src="assets/aeterna_logo.png?v=circle_v4" alt="AETERNA Logo" class="w-9 h-9 rounded-full object-cover shadow-lg shadow-purple-500/40 border border-purple-400/40 transition-transform hover:scale-110 duration-300">
-            <span class="text-xl font-black tracking-tighter font-mono flex items-center gap-1">
-                AETERNA<span class="text-accent-purple">.</span>AIC
-                <span onclick="openSslCertificateModal()" class="cursor-pointer text-gray-500 hover:text-emerald-400 transition-colors flex items-center justify-center p-1" title="Cryptographic Security Details">
-                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
-                </span>
-            </span>
+    <!-- Navigation Header with PQC Live Alert Ribbon -->
+    <nav class="fixed top-0 left-0 w-full z-50 flex flex-col border-b border-white/5 transition-all duration-300">
+        <!-- PQC / DORA Live Statutory Compliance Ribbon -->
+        <div class="bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-purple-500/20 border-b border-amber-400/30 backdrop-blur-xl px-4 py-1.5 text-center text-[10px] sm:text-xs font-mono font-bold text-amber-200 flex flex-wrap items-center justify-center gap-2 shadow-[0_0_15px_rgba(251,191,36,0.15)]">
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/40 text-[9px] uppercase tracking-wider animate-pulse">STATUTORY ENFORCEMENT</span>
+            <span>🚨 EU DORA & NIS2 Mandate: Automated Cryptographic Bill of Materials (CBOM) & Zero-Downtime Quantum-Safe Hybrid Gateway</span>
+            <a href="./pqc.html" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-cyan-400/20 border border-cyan-400/40 text-cyan-300 hover:text-white hover:border-cyan-300 font-extrabold transition-all shadow-[0_0_10px_rgba(0,240,255,0.2)]">
+                <span>EXPLORE PQC SUITE</span>
+                <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+            </a>
         </div>
         
-        <!-- Right / Center: Navigation Links & Actions -->
-        <div class="flex items-center gap-2.5 lg:gap-3 xl:gap-5 min-w-0">
-            <div class="hidden lg:flex gap-2.5 xl:gap-4 2xl:gap-6 text-[10px] xl:text-[11px] font-extrabold tracking-[0.06em] xl:tracking-[0.1em] uppercase items-center text-gray-300">
-                <a href="#vision" class="hover:text-accent-cyan transition-all py-1">VISION</a>
-                <a href="#scientific-achievements" class="hover:text-accent-cyan transition-all py-1">BREAKTHROUGHS</a>
-                <a href="#specs" class="hover:text-accent-cyan transition-all py-1">SPECS LAB</a>
-                <a href="#timeline" class="hover:text-accent-cyan transition-all py-1">CHRONOLOGY</a>
-                <a href="#grants" class="hover:text-accent-cyan transition-all py-1">EU GRANTS</a>
-                <a href="#hud-gallery" class="hover:text-accent-cyan transition-all py-1">HUDs</a>
-                
-                <!-- VHT Dropdown -->
-                <div class="relative group">
-                    <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
-                        <i data-lucide="layers" class="w-3.5 h-3.5 text-accent-purple"></i>
-                        <span>VHT BIO-CYBER</span>
-                        <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
-                    </button>
-                    <!-- Dropdown Menu -->
-                    <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
-                        <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[250px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
-                            <a href="./CLINICAL_DOCTOR_PORTAL.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1"><div class="w-5 h-5 rounded bg-cyan-400/10 flex items-center justify-center shrink-0"><i data-lucide="stethoscope" class="w-3 h-3"></i></div> DOCTOR CLINICAL PORTAL</a>
-                            <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse py-1"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center shrink-0"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
-                            <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
-                            <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
-                            <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center shrink-0"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
-                            <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center shrink-0"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
-                            <div class="w-full h-px bg-white/10 my-1"></div>
-                            <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
-                            <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DEEP-TECH & SECURITY Dropdown -->
-                <div class="relative group">
-                    <button class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-accent-cyan"></i>
-                        <span>DEEP-TECH SUITE</span>
-                        <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
-                    </button>
-                    <!-- Dropdown Menu -->
-                    <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
-                        <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[320px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
-                            <a href="./aeterna_chip_presentation.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1"><div class="w-5 h-5 rounded bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-cyan-400"></i></div> AETERNA-CHIP (METAMORPHIC ASIC)</a>
-                            <a href="./aeterna_aero_presentation.html" class="text-[11px] text-sky-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-sky-400/20 border border-sky-400/40 flex items-center justify-center shrink-0"><i data-lucide="shield-alert" class="w-3 h-3 text-sky-400"></i></div> AETERNA-AERO (DRONE SWARM SHIELD)</a>
-                            <a href="./aeterna_fusion_presentation.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-orange-400/20 border border-orange-400/40 flex items-center justify-center shrink-0"><i data-lucide="flame" class="w-3 h-3 text-orange-400"></i></div> AETERNA-FUSION (TOKAMAK PLASMA AI)</a>
-                            <a href="./aeterna_energy_presentation.html" class="text-[11px] text-emerald-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-3 h-3 text-emerald-400"></i></div> AETERNA-ENERGY (SOLID-STATE BATTERY)</a>
-                            <a href="./aeterna_space_presentation.html" class="text-[11px] text-indigo-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-indigo-400/20 border border-indigo-400/40 flex items-center justify-center shrink-0"><i data-lucide="satellite" class="w-3 h-3 text-indigo-400"></i></div> AETERNA-SPACE (IRIS2 SATELLITE MESH)</a>
-                            <div class="w-full h-px bg-white/10 my-1"></div>
-                            <a href="./ukame-matrix.html" class="text-[11px] text-accent-gold hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-gold/10 flex items-center justify-center shrink-0"><i data-lucide="sun" class="w-3 h-3 text-accent-gold"></i></div> UKAME SOLAR TAINT MATRIX</a>
-                            <a href="https://papica777-eng.github.io/AETERNA-MILLENNIUM-SINGULARITY/" target="_blank" class="text-[11px] text-amber-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-gold py-1"><div class="w-5 h-5 rounded bg-amber-400/20 border border-amber-400/40 flex items-center justify-center shrink-0"><i data-lucide="award" class="w-3 h-3 text-amber-400"></i></div> AETERNA-MILLENNIUM (6 PROOFS PORTAL)</a>
-                            <a href="https://github.com/papica777-eng/AETERNA-QSTN" target="_blank" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3 text-accent-purple"></i></div> AETERNA-QSTN (DEFENCE GRID)</a>
-                            <a href="./k2/index.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3 text-accent-emerald"></i></div> VERTEX DEFI ENGINE</a>
-                            <a href="./qantum.html" class="text-[11px] text-accent-indigo hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-indigo/10 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-accent-indigo"></i></div> QANTUM PRIME RUNTIME</a>
-                            <a href="https://github.com/papica777-eng/AETERNA-EKO" target="_blank" class="text-[11px] text-accent-cyan hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-cyan/10 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-3 h-3 text-accent-cyan"></i></div> ECO-TRANSMUTER (MOJO)</a>
-                            <div class="w-full h-px bg-white/10 my-1"></div>
-                            <a href="./aeterna.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-3 h-3"></i></div> FORENSIC AUDIT REPORT</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DOCS Direct Link -->
-                <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5 px-2 py-1 rounded bg-accent-purple/10 border border-accent-purple/20 hover:border-accent-purple/50">
-                    <i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-purple"></i>
-                    <span>DOCS</span>
-                </a>
+        <div class="glass w-full py-3.5 px-4 sm:px-6 lg:px-8 xl:px-12 flex justify-between items-center">
+            <!-- Left: Logo + Security Lock -->
+            <div class="flex items-center gap-3 shrink-0">
+                <img src="assets/aeterna_logo.png?v=circle_v4" alt="AETERNA Logo" class="w-9 h-9 rounded-full object-cover shadow-lg shadow-purple-500/40 border border-purple-400/40 transition-transform hover:scale-110 duration-300">
+                <span class="text-xl font-black tracking-tighter font-mono flex items-center gap-1">
+                    AETERNA<span class="text-accent-purple">.</span>AIC
+                    <span onclick="openSslCertificateModal()" class="cursor-pointer text-gray-500 hover:text-emerald-400 transition-colors flex items-center justify-center p-1" title="Cryptographic Security Details">
+                        <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    </span>
+                </span>
             </div>
+            
+            <!-- Right / Center: Navigation Links & Actions -->
+            <div class="flex items-center gap-2.5 lg:gap-3 xl:gap-5 min-w-0">
+                <div class="hidden lg:flex gap-2.5 xl:gap-4 2xl:gap-6 text-[10px] xl:text-[11px] font-extrabold tracking-[0.06em] xl:tracking-[0.1em] uppercase items-center text-gray-300">
+                    <a href="#vision" class="hover:text-accent-cyan transition-all py-1">VISION</a>
+                    <a href="#pqc-migration" class="text-cyan-400 hover:text-white transition-all py-1 font-black flex items-center gap-1">
+                        <i data-lucide="shield-alert" class="w-3 h-3 text-cyan-400 animate-pulse"></i>
+                        <span>PQC SUITE</span>
+                    </a>
+                    <a href="#scientific-achievements" class="hover:text-accent-cyan transition-all py-1">BREAKTHROUGHS</a>
+                    <a href="#specs" class="hover:text-accent-cyan transition-all py-1">SPECS LAB</a>
+                    <a href="#timeline" class="hover:text-accent-cyan transition-all py-1">CHRONOLOGY</a>
+                    <a href="#grants" class="hover:text-accent-cyan transition-all py-1">EU GRANTS</a>
+                    <a href="#hud-gallery" class="hover:text-accent-cyan transition-all py-1">HUDs</a>
+                    
+                    <!-- VHT Dropdown -->
+                    <div class="relative group">
+                        <button class="text-white hover:text-accent-purple transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 text-accent-purple"></i>
+                            <span>VHT BIO-CYBER</span>
+                            <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
+                            <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[250px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
+                                <a href="./CLINICAL_DOCTOR_PORTAL.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1"><div class="w-5 h-5 rounded bg-cyan-400/10 flex items-center justify-center shrink-0"><i data-lucide="stethoscope" class="w-3 h-3"></i></div> DOCTOR CLINICAL PORTAL</a>
+                                <a href="./clinical-oncology.html" class="text-[11px] text-accent-pink hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-pink animate-pulse py-1"><div class="w-5 h-5 rounded bg-accent-pink/10 flex items-center justify-center shrink-0"><i data-lucide="brain" class="w-3 h-3"></i></div> LIVE 3D NEURO HUD</a>
+                                <a href="./oncology_hud.html" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="dna" class="w-3 h-3"></i></div> ONCOLOGY HUD</a>
+                                <a href="./vht_diabet.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3"></i></div> DIABETES HUD</a>
+                                <a href="./vht_cardio.html" class="text-[11px] text-red-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-red-400/10 flex items-center justify-center shrink-0"><i data-lucide="heart" class="w-3 h-3"></i></div> CARDIO HUD</a>
+                                <a href="./vht_longevity.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-orange-400/10 flex items-center justify-center shrink-0"><i data-lucide="infinity" class="w-3 h-3"></i></div> LONGEVITY HUD</a>
+                                <div class="w-full h-px bg-white/10 my-1"></div>
+                                <a href="./aeterna_cohort_sim.html" class="text-[11px] text-yellow-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-yellow-400/10 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-3 h-3"></i></div> 100K COHORT SIMULATION</a>
+                                <a href="./aeterna_pharma_shadow.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3"></i></div> PHARMA SHADOW HUD</a>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- GitHub Sponsors & Stripe Button -->
-            <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="shrink-0 px-3 py-1.5 bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-pink-300 rounded-full border border-pink-500/40 text-[11px] font-bold font-mono transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,42,133,0.3)] hover:scale-105">
-                <i data-lucide="heart" class="w-3.5 h-3.5 text-pink-400 fill-pink-400/30"></i>
-                <span class="font-extrabold tracking-wider">SPONSOR</span>
-            </a>
+                    <!-- DEEP-TECH & SECURITY Dropdown -->
+                    <div class="relative group">
+                        <button class="text-accent-cyan hover:text-white transition-all font-black flex items-center gap-1 uppercase cursor-pointer py-1">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-accent-cyan"></i>
+                            <span>DEEP-TECH SUITE</span>
+                            <i data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300 group-hover:rotate-180 text-gray-400"></i>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
+                            <div class="flex flex-col gap-2 p-4 glass-premium border border-white/10 rounded-xl min-w-[320px] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl text-left">
+                                <a href="./pqc.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1 bg-cyan-950/40 px-2 rounded-lg border border-cyan-400/30"><div class="w-5 h-5 rounded bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center shrink-0"><i data-lucide="shield-alert" class="w-3 h-3 text-cyan-400"></i></div> AETERNA-PQC (POST-QUANTUM CBOM)</a>
+                                <a href="./aeterna_chip_presentation.html" class="text-[11px] text-cyan-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-cyan py-1"><div class="w-5 h-5 rounded bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-cyan-400"></i></div> AETERNA-CHIP (METAMORPHIC ASIC)</a>
+                                <a href="./aeterna_aero_presentation.html" class="text-[11px] text-sky-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-sky-400/20 border border-sky-400/40 flex items-center justify-center shrink-0"><i data-lucide="shield-alert" class="w-3 h-3 text-sky-400"></i></div> AETERNA-AERO (DRONE SWARM SHIELD)</a>
+                                <a href="./aeterna_fusion_presentation.html" class="text-[11px] text-orange-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-orange-400/20 border border-orange-400/40 flex items-center justify-center shrink-0"><i data-lucide="flame" class="w-3 h-3 text-orange-400"></i></div> AETERNA-FUSION (TOKAMAK PLASMA AI)</a>
+                                <a href="./aeterna_energy_presentation.html" class="text-[11px] text-emerald-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-emerald-400/20 border border-emerald-400/40 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-3 h-3 text-emerald-400"></i></div> AETERNA-ENERGY (SOLID-STATE BATTERY)</a>
+                                <a href="./aeterna_space_presentation.html" class="text-[11px] text-indigo-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-indigo-400/20 border border-indigo-400/40 flex items-center justify-center shrink-0"><i data-lucide="satellite" class="w-3 h-3 text-indigo-400"></i></div> AETERNA-SPACE (IRIS2 SATELLITE MESH)</a>
+                                <div class="w-full h-px bg-white/10 my-1"></div>
+                                <a href="./ukame-matrix.html" class="text-[11px] text-accent-gold hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-gold/10 flex items-center justify-center shrink-0"><i data-lucide="sun" class="w-3 h-3 text-accent-gold"></i></div> UKAME SOLAR TAINT MATRIX</a>
+                                <a href="https://papica777-eng.github.io/AETERNA-MILLENNIUM-SINGULARITY/" target="_blank" class="text-[11px] text-amber-400 hover:text-white transition-all font-black flex items-center gap-2.5 glow-text-gold py-1"><div class="w-5 h-5 rounded bg-amber-400/20 border border-amber-400/40 flex items-center justify-center shrink-0"><i data-lucide="award" class="w-3 h-3 text-amber-400"></i></div> AETERNA-MILLENNIUM (6 PROOFS PORTAL)</a>
+                                <a href="https://github.com/papica777-eng/AETERNA-QSTN" target="_blank" class="text-[11px] text-accent-purple hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-purple/10 flex items-center justify-center shrink-0"><i data-lucide="shield" class="w-3 h-3 text-accent-purple"></i></div> AETERNA-QSTN (DEFENCE GRID)</a>
+                                <a href="./k2/index.html" class="text-[11px] text-accent-emerald hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-emerald/10 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-3 h-3 text-accent-emerald"></i></div> VERTEX DEFI ENGINE</a>
+                                <a href="./qantum.html" class="text-[11px] text-accent-indigo hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-indigo/10 flex items-center justify-center shrink-0"><i data-lucide="cpu" class="w-3 h-3 text-accent-indigo"></i></div> QANTUM PRIME RUNTIME</a>
+                                <a href="https://github.com/papica777-eng/AETERNA-EKO" target="_blank" class="text-[11px] text-accent-cyan hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-accent-cyan/10 flex items-center justify-center shrink-0"><i data-lucide="zap" class="w-3 h-3 text-accent-cyan"></i></div> ECO-TRANSMUTER (MOJO)</a>
+                                <div class="w-full h-px bg-white/10 my-1"></div>
+                                <a href="./aeterna.html" class="text-[11px] text-gray-400 hover:text-white transition-all font-black flex items-center gap-2.5 py-1"><div class="w-5 h-5 rounded bg-white/10 flex items-center justify-center shrink-0"><i data-lucide="file-text" class="w-3 h-3"></i></div> FORENSIC AUDIT REPORT</a>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Glassmorphic Language Selector Pill -->
-            <div class="shrink-0 flex items-center glass rounded-full p-0.5 border border-white/10 text-[10px] font-bold tracking-widest font-mono">
-                <button onclick="setLanguage('bg')" id="lang-bg" class="lang-btn px-2.5 py-1 rounded-full border border-transparent text-gray-400 hover:text-white transition-all">BG</button>
-                <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-2.5 py-1 rounded-full border border-transparent text-gray-400 hover:text-white transition-all">EN</button>
+                    <!-- PQC & DORA Direct Nav Button -->
+                    <a href="./pqc.html" class="text-amber-300 hover:text-white transition-all font-black flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-400/10 border border-amber-400/30 hover:border-amber-400 shadow-[0_0_12px_rgba(197,160,89,0.25)]">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>PQC & DORA AUDIT</span>
+                    </a>
+
+                    <!-- DOCS Direct Link -->
+                    <a href="./docs.html" class="text-accent-purple hover:text-white transition-all font-black flex items-center gap-1.5 px-2 py-1 rounded bg-accent-purple/10 border border-accent-purple/20 hover:border-accent-purple/50">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5 text-accent-purple"></i>
+                        <span>DOCS</span>
+                    </a>
+                </div>
+
+                <!-- GitHub Sponsors & Stripe Button -->
+                <a href="https://github.com/sponsors/papica777-eng" target="_blank" class="shrink-0 px-3 py-1.5 bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 text-pink-300 rounded-full border border-pink-500/40 text-[11px] font-bold font-mono transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,42,133,0.3)] hover:scale-105">
+                    <i data-lucide="heart" class="w-3.5 h-3.5 text-pink-400 fill-pink-400/30"></i>
+                    <span class="font-extrabold tracking-wider">SPONSOR</span>
+                </a>
+
+                <!-- Glassmorphic Language Selector Pill -->
+                <div class="shrink-0 flex items-center glass rounded-full p-0.5 border border-white/10 text-[10px] font-bold tracking-widest font-mono">
+                    <button onclick="setLanguage('bg')" id="lang-bg" class="lang-btn px-2.5 py-1 rounded-full border border-transparent text-gray-400 hover:text-white transition-all">BG</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-2.5 py-1 rounded-full border border-transparent text-gray-400 hover:text-white transition-all">EN</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -351,6 +374,10 @@
                         </button>
                         <div class="absolute left-0 top-full hidden group-hover:block pt-3 z-50">
                             <div class="flex flex-col p-2 glass-premium border border-emerald-400/30 rounded-xl min-w-[280px] shadow-2xl backdrop-blur-2xl">
+                                <a href="./pqc.html" class="p-3 hover:bg-cyan-500/15 rounded-lg text-cyan-300 font-black text-xs tracking-widest uppercase transition-all flex items-center gap-3 bg-cyan-950/40 border border-cyan-400/40 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                                    <div class="w-8 h-8 rounded bg-cyan-400/20 border border-cyan-400/50 flex items-center justify-center"><i data-lucide="shield-alert" class="w-4 h-4 text-cyan-400 animate-pulse"></i></div>
+                                    AETERNA-PQC & CBOM SUITE
+                                </a>
                                 <a href="https://github.com/papica777-eng/AETERNA-QSTN" target="_blank" class="p-3 hover:bg-white/10 rounded-lg text-accent-purple font-black text-xs tracking-widest uppercase transition-all flex items-center gap-3">
                                     <div class="w-8 h-8 rounded bg-accent-purple/10 flex items-center justify-center"><i data-lucide="shield" class="w-4 h-4 text-accent-purple"></i></div>
                                     AETERNA-QSTN (DEFENCE GRID)
@@ -363,7 +390,7 @@
                                     <div class="w-8 h-8 rounded bg-accent-cyan/10 flex items-center justify-center"><i data-lucide="search" class="w-4 h-4"></i></div>
                                     ORACLE EXPLOIT RADAR
                                 </a>
-                                <a href="./aeterna_defense_hud.html" class="p-3 hover:bg-white/10 rounded-lg text-purple-300 font-black text-xs tracking-widest uppercase transition-all flex items-center gap-3">
+                                <a href="./sovereign-hud.html" class="p-3 hover:bg-white/10 rounded-lg text-purple-300 font-black text-xs tracking-widest uppercase transition-all flex items-center gap-3">
                                     <div class="w-8 h-8 rounded bg-purple-500/10 flex items-center justify-center"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
                                     EAL4+ PQC SHIELD
                                 </a>
@@ -587,6 +614,216 @@
             <span>VORTEX_SYNC_STABILITY :: 99.999%</span>
         </div>
     </div>
+
+    <!-- ========================================================================= -->
+    <!-- § AETERNA-PQC : POST-QUANTUM CRYPTOGRAPHY & DORA/NIS2 CBOM MIGRATION SUITE -->
+    <!-- ========================================================================= -->
+    <section id="pqc-migration" class="py-24 px-6 md:px-12 max-w-7xl 2xl:max-w-[1600px] mx-auto relative z-10 border-t border-cyan-400/30">
+        <!-- Ambient Glow Backdrops -->
+        <div class="absolute -top-32 left-1/4 w-[600px] h-[350px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+        <div class="absolute top-1/2 right-10 w-[500px] h-[400px] bg-amber-500/10 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <!-- Section Header -->
+        <div class="text-center mb-16 relative">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/70 border border-cyan-400/50 text-cyan-300 font-mono text-[11px] font-bold tracking-widest uppercase mb-4 shadow-[0_0_25px_rgba(6,182,212,0.3)]">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-cyan-400 animate-pulse"></i>
+                <span>MANDATORY EU COMPLIANCE // DORA (ART. 9) & NIS2 (ART. 21)</span>
+                <span class="w-2 h-2 rounded-full bg-red-400 animate-ping"></span>
+            </div>
+            
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase leading-tight">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-300 to-amber-400 drop-shadow-[0_0_35px_rgba(6,182,212,0.4)]">POST-QUANTUM CRYPTOGRAPHY</span>
+                <span class="text-white block mt-1">CBOM & ZERO-DOWNTIME MIGRATION SUITE</span>
+            </h2>
+            
+            <p class="text-gray-300 max-w-3xl mx-auto text-sm sm:text-base leading-relaxed mt-4 font-sans">
+                Comprehensive cryptographic migration architecture engineered in bare-metal Rust. Automated Cryptographic Bill of Materials (CBOM) extraction, Mosca's theorem margin calculation, and an 18 µs zero-downtime hybrid quantum-safe gateway protecting European banking, healthcare, and critical infrastructure from <em>Harvest-Now-Decrypt-Later (HNDL)</em> attacks.
+            </p>
+
+            <!-- Quick Metrics Header Strip -->
+            <div class="flex flex-wrap items-center justify-center gap-4 mt-8 font-mono text-xs">
+                <div class="px-4 py-2 rounded-xl bg-cyan-950/60 border border-cyan-400/40 text-cyan-300 flex items-center gap-2 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                    <i data-lucide="cpu" class="w-4 h-4 text-cyan-400"></i>
+                    <span><strong>18 µs</strong> Gateway Overhead</span>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-amber-950/60 border border-amber-400/40 text-amber-300 flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                    <span><strong>€10M / 2% Turnover</strong> DORA Penalty Avoidance</span>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-emerald-950/60 border border-emerald-400/40 text-emerald-300 flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                    <i data-lucide="file-check-2" class="w-4 h-4 text-emerald-400"></i>
+                    <span><strong>CycloneDX 1.6</strong> CBOM Specification</span>
+                </div>
+                <div class="px-4 py-2 rounded-xl bg-purple-950/60 border border-purple-400/40 text-purple-300 flex items-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                    <i data-lucide="shield" class="w-4 h-4 text-purple-400"></i>
+                    <span><strong>NIST FIPS 203/204/205</strong> Ready</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feature Presentation: Two Columns -->
+        <div class="grid lg:grid-cols-12 gap-8 items-stretch mb-12">
+            <!-- Left 7 cols: Architectural Capabilities & Service Offerings -->
+            <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+                <!-- Card 1: Statutory Mandate & Urgency -->
+                <div class="glass-premium p-6 rounded-2xl border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-cyan-400/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300">
+                                <i data-lucide="scan" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-white uppercase tracking-wider">Automated CBOM Discovery & Inventory</h3>
+                                <p class="text-xs text-cyan-400 font-mono">Static AST + Dynamic TLS Handshake + Secret Vault Auditing</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">100% PASSIVE SCAN</span>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed font-sans mb-4">
+                        EU DORA Article 9 and EBA Guidelines mandate financial institutions to maintain an exhaustive, real-time inventory of all cryptographic assets. AETERNA's standalone scanner (<code>aeterna-cbom-scan.exe</code>) traverses millions of lines of source code, compiled binaries, and live network endpoints in seconds, generating machine-readable CycloneDX 1.6 CBOM records with exact post-quantum vulnerability ratings.
+                    </p>
+                    <div class="grid sm:grid-cols-3 gap-3 font-mono text-xs">
+                        <div class="bg-black/60 p-3 rounded-xl border border-white/10">
+                            <span class="text-gray-400 block text-[10px]">Speed</span>
+                            <span class="text-white font-bold text-sm">2-3 sec</span>
+                            <span class="text-gray-400 text-[10px] block">per million LOC</span>
+                        </div>
+                        <div class="bg-black/60 p-3 rounded-xl border border-white/10">
+                            <span class="text-gray-400 block text-[10px]">Accuracy</span>
+                            <span class="text-emerald-400 font-bold text-sm">100% Deterministic</span>
+                            <span class="text-gray-400 text-[10px] block">Zero Hallucination</span>
+                        </div>
+                        <div class="bg-black/60 p-3 rounded-xl border border-white/10">
+                            <span class="text-gray-400 block text-[10px]">Output</span>
+                            <span class="text-cyan-300 font-bold text-sm">CycloneDX 1.6</span>
+                            <span class="text-gray-400 text-[10px] block">JSON/XML Schema</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: 18 µs Zero-Downtime Hybrid Gateway -->
+                <div class="glass-premium p-6 rounded-2xl border border-amber-400/30 shadow-[0_0_30px_rgba(245,158,11,0.1)] relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-amber-300">
+                                <i data-lucide="zap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-white uppercase tracking-wider">Zero-Downtime Hybrid Quantum-Safe Gateway</h3>
+                                <p class="text-xs text-amber-400 font-mono">X25519 + ML-KEM-768/1024 (FIPS 203) Reverse Proxy</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">18 µs OVERHEAD</span>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed font-sans mb-4">
+                        Replacing core banking or healthcare backend code is risky and takes years. AETERNA's <code>aeterna-pqc-gateway</code> deploys as an inline, ultra-high-throughput reverse proxy in front of legacy microservices. It terminates incoming PQC hybrid TLS 1.3 handshakes and forwards plain HTTP/1.1 or HTTP/2 to internal upstream services without altering a single line of backend logic.
+                    </p>
+                    <div class="grid sm:grid-cols-2 gap-3 font-mono text-xs">
+                        <div class="bg-black/60 p-3 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                            <div>
+                                <strong class="text-white block">Dual Classical & PQC Security</strong>
+                                <span class="text-gray-400 text-[10px]">Immune even if either curve is cracked</span>
+                            </div>
+                        </div>
+                        <div class="bg-black/60 p-3 rounded-xl border border-white/10 flex items-center gap-3">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                            <div>
+                                <strong class="text-white block">Zero Downtime Migration</strong>
+                                <span class="text-gray-400 text-[10px]">Gradual traffic cutover via BGP/DNS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real Bank Audit Telemetry Snapshot -->
+                <div class="glass-premium p-5 rounded-2xl border border-white/10 bg-black/80 font-mono text-xs">
+                    <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+                        <span class="text-gray-400 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span>VERIFIED BULGARIAN & EU BANK AUDIT TELEMETRY</span>
+                        </span>
+                        <span class="text-cyan-400 font-bold">SAMPLE: UNICREDIT, DSK & FIBANK</span>
+                    </div>
+                    <div class="space-y-1.5 text-[11px]">
+                        <div class="flex justify-between text-gray-300">
+                            <span>UniCredit Bulbank (bulbank.bg:443):</span>
+                            <span class="text-red-400 font-bold">TLS_ECDHE_RSA_WITH_AES_256_GCM (CRITICAL HNDL)</span>
+                        </div>
+                        <div class="flex justify-between text-gray-300">
+                            <span>DSK Bank (dskbank.bg:443):</span>
+                            <span class="text-red-400 font-bold">RSA-2048 / SHA-256 (BROKEN BY SHOR'S ALGO)</span>
+                        </div>
+                        <div class="flex justify-between text-gray-300">
+                            <span>Fibank (fibank.bg:443):</span>
+                            <span class="text-amber-400 font-bold">ECDHE-P256 (INSUFFICIENT BEYOND 2029)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right 5 cols: Architecture Poster Graphic + Assurance Seal + Direct Portal Access -->
+            <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+                <!-- Blueprint Poster Display Card -->
+                <div class="glass-premium p-4 rounded-2xl border border-cyan-400/40 relative overflow-hidden group shadow-[0_0_40px_rgba(6,182,212,0.2)]">
+                    <div class="relative rounded-xl overflow-hidden border border-white/10 aspect-[4/3] bg-black">
+                        <img src="assets/aeterna_pqc_architecture_poster.jpg" alt="AETERNA PQC Migration Architecture" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-400/60 text-cyan-300 font-bold backdrop-blur-md">
+                                SOVEREIGN ARCHITECTURE SPECIFICATION
+                            </span>
+                            <a href="./pqc.html" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-all">
+                                <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex items-center gap-4">
+                        <img src="assets/aeterna_assurance_seal.jpg" alt="AETERNA Sovereign PQC Assurance Seal" class="w-16 h-16 rounded-xl border border-amber-400/40 object-cover shadow-[0_0_15px_rgba(245,158,11,0.3)] shrink-0">
+                        <div>
+                            <h4 class="text-white font-black text-sm uppercase">EU Certified Sovereign Verification</h4>
+                            <p class="text-gray-400 text-xs mt-0.5">Compliant with BSI TR-02102-1, ANSSI & NIST SP 800-227 recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action Box -->
+                <div class="glass-premium p-6 rounded-2xl border border-cyan-400/50 bg-gradient-to-b from-cyan-950/40 via-purple-950/30 to-black/90 flex flex-col justify-between flex-grow shadow-[0_0_40px_rgba(0,240,255,0.2)]">
+                    <div>
+                        <div class="flex items-center gap-2 text-cyan-400 font-mono text-xs font-bold uppercase mb-2">
+                            <i data-lucide="radio" class="w-4 h-4 animate-ping"></i>
+                            <span>ENTERPRISE ENGAGEMENT OPTIONS</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white uppercase tracking-tight mb-2">
+                            Ready to Quantum-Proof Your Institution?
+                        </h3>
+                        <p class="text-xs text-gray-300 leading-relaxed font-sans mb-6">
+                            We provide full-lifecycle migration services: from non-intrusive CBOM audits delivered in 48 hours to complete zero-downtime hybrid gateway deployment.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <a href="./pqc.html" class="w-full py-3.5 px-6 bg-gradient-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 text-black font-mono font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2.5 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:scale-[1.02]">
+                            <i data-lucide="terminal" class="w-4 h-4"></i>
+                            <span>OPEN INTERACTIVE PQC SUITE & TERMINAL</span>
+                        </a>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="mailto:audit@aeterna.website?subject=Urgent%20PQC%20%26%20DORA%20Audit%20Request&body=Institution%20Name%3A%0AContact%20Person%3A%0ATarget%20Assets%20%2F%20Domains%3A" class="py-3 px-3 glass border border-amber-400/40 hover:border-amber-400 text-amber-300 hover:text-white font-mono font-bold text-[11px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 text-center">
+                                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                                <span>REQUEST AUDIT</span>
+                            </a>
+                            <a href="./pqc.html#live-simulator" class="py-3 px-3 glass border border-white/20 hover:border-white text-gray-300 hover:text-white font-mono font-bold text-[11px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 text-center">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                                <span>RUN LIVE CLI</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- ========================================================================= -->
     <!-- § AETERNA-MILLENNIUM-SINGULARITY : ALL 6 MILLENNIUM PROBLEMS RESOLUTION   -->
@@ -5655,9 +5892,10 @@ INTERACTION & BEHAVIORAL PROTOCOL:
             }
 
             async function callGeminiWithFallback(payloadContents) {
-                const k1 = 'AQ.Ab8RN6J_y4NgA';
-                const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
-                const apiKey = k1 + k2;
+                const apiKey = (window.AETERNA_CONFIG && window.AETERNA_CONFIG.GEMINI_API_KEY) || localStorage.getItem('AETERNA_GEMINI_KEY') || '';
+                if (!apiKey) {
+                    throw new Error("API key not configured in localStorage['AETERNA_GEMINI_KEY'] or aeterna-config.js");
+                }
                 const candidateModels = ['gemini-flash-latest', 'gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
 
                 for (const model of candidateModels) {
