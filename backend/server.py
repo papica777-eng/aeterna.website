@@ -858,6 +858,29 @@ class LicenseIssueRequest(BaseModel):
     sponsor_login: str = "SPONSOR"
     authority_token: str
 
+class AdminLoginRequest(BaseModel):
+    username: str
+    password: str
+
+@app.post("/api/v1/auth/login")
+async def api_admin_login(request: AdminLoginRequest):
+    """
+    Sovereign Administrator Login Endpoint.
+    Validates authority credentials (aeterna / aeterna9669).
+    """
+    if request.username == "aeterna" and request.password == "aeterna9669":
+        session_token = f"AETERNA_SOVEREIGN_{int(time.time())}_0x4121"
+        return {
+            "authenticated": True,
+            "user": "aeterna",
+            "role": "admin",
+            "authority": "0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21",
+            "token": session_token,
+            "message": "Sovereign Administrator Access Granted. Zero Entropy."
+        }
+    raise HTTPException(status_code=401, detail="Invalid Sovereign Credentials")
+
+
 @app.post("/api/v1/licenses/verify")
 async def api_verify_license(request: LicenseVerifyRequest, req: Request):
     """

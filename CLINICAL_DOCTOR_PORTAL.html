@@ -115,6 +115,27 @@
                     <option value="hu" class="bg-slate-900 text-slate-100 font-bold">🇭🇺 Magyar (HU)</option>
                 </select>
             </div>
+
+            <!-- Admin Login & Sovereign Session Widget -->
+            <div id="adminAuthWidget" class="flex items-center">
+                <!-- Logged Out State Button -->
+                <button type="button" id="navAdminLoginBtn" onclick="openAdminLoginModal()" class="px-3 py-2 bg-slate-900/90 hover:bg-purple-950/60 text-purple-400 hover:text-purple-300 font-bold text-xs rounded-xl border border-purple-500/40 hover:border-purple-400 transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(168,85,247,0.2)] cursor-pointer">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-400"></i>
+                    <span>Admin Вход</span>
+                </button>
+                
+                <!-- Logged In State Badge -->
+                <div id="navAdminUserBadge" class="hidden items-center gap-2 bg-gradient-to-r from-purple-950/90 via-slate-900 to-emerald-950/90 border border-purple-500/50 px-3 py-1.5 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.35)]">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-xs font-black text-purple-300 flex items-center gap-1">
+                        👑 ADMIN: <span class="text-white">aeterna</span>
+                    </span>
+                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/40">SOVEREIGN</span>
+                    <button type="button" onclick="logoutAdmin()" title="Изход от акаунта" class="text-[10px] text-slate-400 hover:text-rose-400 font-bold ml-1 px-1.5 py-0.5 rounded bg-slate-800/80 hover:bg-rose-950/50 border border-slate-700 transition-all cursor-pointer">
+                        ✕
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -1421,7 +1442,123 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
             return consumed.includes(key);
         }
 
+        // ── 👑 SOVEREIGN ADMIN AUTHENTICATION SYSTEM ──────────────────────
+        function isAdminLoggedIn() {
+            return localStorage.getItem('aeterna_auth_user') === 'aeterna' &&
+                   localStorage.getItem('aeterna_auth_role') === 'admin';
+        }
+
+        function openAdminLoginModal() {
+            const modal = document.getElementById('adminLoginModal');
+            const statusMsg = document.getElementById('adminLoginStatusMsg');
+            if (statusMsg) {
+                statusMsg.innerText = '';
+                statusMsg.style.color = '#94a3b8';
+            }
+            if (modal) {
+                modal.style.display = 'flex';
+                const u = document.getElementById('adminUsernameInput');
+                if (u) setTimeout(() => u.focus(), 100);
+            }
+        }
+
+        function closeAdminLoginModal() {
+            const modal = document.getElementById('adminLoginModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function handleAdminLoginSubmit(e) {
+            if (e) e.preventDefault();
+            const username = (document.getElementById('adminUsernameInput')?.value || '').trim();
+            const password = (document.getElementById('adminPasswordInput')?.value || '').trim();
+            const statusMsg = document.getElementById('adminLoginStatusMsg');
+
+            if (!username || !password) {
+                if (statusMsg) {
+                    statusMsg.innerText = '❌ Въведете потребител и парола!';
+                    statusMsg.style.color = '#f43f5e';
+                }
+                return;
+            }
+
+            // Verify Sovereign Credentials
+            if (username === 'aeterna' && password === 'aeterna9669') {
+                localStorage.setItem('aeterna_auth_user', 'aeterna');
+                localStorage.setItem('aeterna_auth_role', 'admin');
+                localStorage.setItem('aeterna_auth_token', 'AETERNA_SOVEREIGN_ADMIN_0x4121_9669');
+                
+                if (statusMsg) {
+                    statusMsg.innerText = '✓ АВТОРИЗИРАН АДМИНИСТРАТОР (0.0000 ЕНТРОПИЯ)';
+                    statusMsg.style.color = '#10b981';
+                }
+
+                setTimeout(() => {
+                    closeAdminLoginModal();
+                    updateAuthUI();
+                    // If a pending calculation was blocked, immediately unblock and compute it!
+                    if (pendingCalculationCallback) {
+                        const cb = pendingCalculationCallback;
+                        pendingCalculationCallback = null;
+                        closeAeternaLicenseModal();
+                        cb('AETERNA-SOVEREIGN-ADMIN-OVERRIDE');
+                    }
+                }, 400);
+                return;
+            } else {
+                if (statusMsg) {
+                    statusMsg.innerText = '❌ Невалидни администраторски данни!';
+                    statusMsg.style.color = '#f43f5e';
+                }
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('aeterna_auth_user');
+            localStorage.removeItem('aeterna_auth_role');
+            localStorage.removeItem('aeterna_auth_token');
+            updateAuthUI();
+            alert('Успешен изход от администраторския профил.');
+        }
+
+        function updateAuthUI() {
+            const loggedIn = isAdminLoggedIn();
+            const loginBtn = document.getElementById('navAdminLoginBtn');
+            const userBadge = document.getElementById('navAdminUserBadge');
+            if (loggedIn) {
+                if (loginBtn) {
+                    loginBtn.classList.add('hidden');
+                    loginBtn.style.display = 'none';
+                }
+                if (userBadge) {
+                    userBadge.classList.remove('hidden');
+                    userBadge.style.display = 'flex';
+                }
+            } else {
+                if (loginBtn) {
+                    loginBtn.classList.remove('hidden');
+                    loginBtn.style.display = 'flex';
+                }
+                if (userBadge) {
+                    userBadge.classList.add('hidden');
+                    userBadge.style.display = 'none';
+                }
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Initialize Auth UI state on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+        });
+
         function requestAeternaLicenseKey(callback) {
+            // Sovereign Admin Bypass: if logged in as aeterna, grant instant unlimited access
+            if (isAdminLoggedIn()) {
+                console.log("Sovereign Admin Override active for aeterna");
+                if (callback) callback('AETERNA-SOVEREIGN-ADMIN-OVERRIDE');
+                return;
+            }
+
             pendingCalculationCallback = callback;
             const modal = document.getElementById('aeternaLicenseModal');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
@@ -1448,7 +1585,8 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
         async function submitAeternaLicenseKey() {
             const input = document.getElementById('aeternaLicenseInput');
             const statusMsg = document.getElementById('aeternaLicenseStatusMsg');
-            const key = input ? input.value.trim().toUpperCase() : '';
+            const rawKey = input ? input.value.trim() : '';
+            const key = rawKey.toUpperCase();
 
             if (!key) {
                 if (statusMsg) {
@@ -1456,6 +1594,26 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
                     statusMsg.style.color = '#f43f5e';
                     statusMsg.style.fontWeight = 'bold';
                 }
+                return;
+            }
+
+            // Quick Sovereign Master Key / Credentials Passphrase
+            if (rawKey === 'aeterna9669' || rawKey === 'aeterna' || rawKey === 'aeterna:aeterna9669' || key === 'AETERNA-ADMIN') {
+                localStorage.setItem('aeterna_auth_user', 'aeterna');
+                localStorage.setItem('aeterna_auth_role', 'admin');
+                localStorage.setItem('aeterna_auth_token', 'AETERNA_SOVEREIGN_ADMIN_0x4121_9669');
+                updateAuthUI();
+                if (statusMsg) {
+                    statusMsg.innerText = '✓ SOVEREIGN ADMIN AUTHENTICATED! COMPUTING...';
+                    statusMsg.style.color = '#10b981';
+                    statusMsg.style.fontWeight = 'bold';
+                }
+                const cb = pendingCalculationCallback;
+                pendingCalculationCallback = null;
+                setTimeout(() => {
+                    closeAeternaLicenseModal();
+                    if (cb) cb('AETERNA-SOVEREIGN-ADMIN-OVERRIDE');
+                }, 400);
                 return;
             }
 
@@ -2035,8 +2193,56 @@ COMPLIANCE  : EU AI Act High-Risk SaMD • GDPR Article 9 Cryptographically Seal
                     Cancel
                 </button>
             </div>
+
+            <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(51, 65, 85, 0.6); text-align: center;">
+                <button type="button" onclick="closeAeternaLicenseModal(); openAdminLoginModal();" style="background: transparent; border: none; color: #c084fc; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: underline;">
+                    👑 Вход като Администратор (aeterna Sovereign Override)
+                </button>
+            </div>
         </div>
     </div>
+
+    <!-- 🔱 AETERNA SOVEREIGN ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" style="display: none; position: fixed; inset: 0; z-index: 100030; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
+        <div style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.99) 0%, rgba(2, 6, 23, 1) 100%); border: 2px solid #a855f7; border-radius: 20px; max-width: 440px; width: 100%; padding: 26px; box-shadow: 0 0 60px rgba(168, 85, 247, 0.45); position: relative; font-family: 'Outfit', sans-serif; color: #f8fafc;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 14px; margin-bottom: 18px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.6); display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                        👑
+                    </div>
+                    <div>
+                        <h3 style="font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; color: #fff; margin: 0;">AETERNA // ADMIN LOGIN</h3>
+                        <p style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #c084fc; margin: 2px 0 0 0;">Sovereign Operational Authority</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeAdminLoginModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; font-weight: bold; cursor: pointer; padding: 4px;">✕</button>
+            </div>
+
+            <form onsubmit="handleAdminLoginSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                    <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; letter-spacing: 0.5px;">Потребителско Име (Username)</label>
+                    <input type="text" id="adminUsernameInput" value="aeterna" autocomplete="username" required style="width: 100%; box-sizing: border-box; padding: 12px 14px; background: rgba(2, 6, 23, 0.85); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 10px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#c084fc'" onblur="this.style.borderColor='rgba(168, 85, 247, 0.4)'" />
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; letter-spacing: 0.5px;">Парола (Password)</label>
+                    <input type="password" id="adminPasswordInput" value="aeterna9669" autocomplete="current-password" required style="width: 100%; box-sizing: border-box; padding: 12px 14px; background: rgba(2, 6, 23, 0.85); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 10px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#c084fc'" onblur="this.style.borderColor='rgba(168, 85, 247, 0.4)'" />
+                </div>
+
+                <div id="adminLoginStatusMsg" style="min-height: 18px; font-size: 11.5px; font-family: 'JetBrains Mono', monospace;"></div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+                    <button type="submit" style="width: 100%; padding: 13px 16px; background: linear-gradient(135deg, #a855f7, #06b6d4); border: none; border-radius: 10px; color: #020617; font-weight: 900; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
+                        ⚡ ВЛЕЗ КАТО ADMIN / LOGIN AS ADMIN
+                    </button>
+                    <button type="button" onclick="closeAdminLoginModal()" style="width: 100%; padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 10px; color: #94a3b8; font-size: 11px; font-weight: 700; cursor: pointer;">
+                        Отказ / Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- 🔱 SAMPLE CLINICAL EXPORT PREVIEW MODAL -->
     <div id="exportPreviewModal" style="display: none; position: fixed; inset: 0; z-index: 100025; align-items: center; justify-content: center; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 16px;">
