@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERTIFICATE OF CRYPTOGRAPHIC CONFORMITY | AETERNA TECHNOLOGIES</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cert-gold: #c5a059;
+            --cert-dark: #0b0f19;
+            --cert-border: #1e293b;
+            --cert-accent: #00f0ff;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #030712;
+            color: #f8fafc;
+            font-family: var(--font-sans);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .cert-container {
+            width: 100%;
+            max-width: 1050px;
+            background: linear-gradient(135deg, #090d16 0%, #0d1527 100%);
+            border: 2px solid var(--cert-gold);
+            border-radius: 4px;
+            padding: 50px 60px;
+            position: relative;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(197, 160, 89, 0.15);
+        }
+
+        .cert-inner-frame {
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            padding: 40px 50px;
+            position: relative;
+        }
+
+        /* Top Header */
+        .cert-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cert-authority-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            letter-spacing: 0.25em;
+            color: var(--cert-gold);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .cert-main-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            letter-spacing: 0.08em;
+            color: #ffffff;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .cert-ref-bar {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 0;
+            margin-bottom: 30px;
+        }
+
+        /* Certificate Body */
+        .cert-body {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .attestation-statement {
+            font-size: 1rem;
+            color: #cbd5e1;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .entity-name {
+            font-family: var(--font-serif);
+            font-size: 2.1rem;
+            color: #ffffff;
+            margin-bottom: 18px;
+            text-decoration: underline;
+            text-decoration-color: var(--cert-gold);
+            text-underline-offset: 8px;
+        }
+
+        .compliance-text {
+            font-size: 0.96rem;
+            line-height: 1.7;
+            color: #94a3b8;
+            max-width: 820px;
+            margin: 0 auto 30px auto;
+        }
+
+        /* Specifications Grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            text-align: left;
+            margin-bottom: 35px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .spec-item h5 {
+            font-size: 0.75rem;
+            color: var(--cert-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .spec-item p {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #f1f5f9;
+        }
+
+        /* Footer & Official Seal Layout */
+        .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 20px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(197, 160, 89, 0.3);
+        }
+
+        .signatory-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .signature-line {
+            width: 260px;
+            height: 1px;
+            background: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .signatory-name {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .signatory-role {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .signatory-cred {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--cert-gold);
+        }
+
+        .seal-wrapper {
+            text-align: center;
+        }
+
+        .seal-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: block;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+        }
+
+        .qr-placeholder {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--cert-gold);
+            color: #0b0f19;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
+        }
+
+        @media print {
+            .print-btn { display: none; }
+            body { background: #fff; padding: 0; }
+            .cert-container { border: 2px solid #000; box-shadow: none; background: #fff; color: #000; }
+            .cert-main-title, .entity-name, .signatory-name { color: #000; }
+            .compliance-text, .cert-ref-bar { color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">Print / Export Official PDF</button>
+
+    <div class="cert-container">
+        <div class="cert-inner-frame">
+            <!-- Header -->
+            <div class="cert-header">
+                <div class="cert-authority-title">Aeterna Technologies &bull; Independent Cryptographic Audit Authority</div>
+                <h1 class="cert-main-title">Certificate of Cryptographic Conformity</h1>
+            </div>
+
+            <!-- Meta Information -->
+            <div class="cert-ref-bar">
+                <span>CERTIFICATE ID: AET-PQC-2026-0889</span>
+                <span>STATUS: FORMALLY VERIFIED (eIDAS QES)</span>
+                <span>ISSUANCE: SEPTEMBER 07, 2026</span>
+            </div>
+
+            <!-- Body -->
+            <div class="cert-body">
+                <p class="attestation-statement">This is to officially certify that the digital enterprise infrastructure of</p>
+                <h2 class="entity-name">BULGARIAN BANKING & HEALTHCARE CONSORTIUM</h2>
+                <p class="compliance-text">
+                    has undergone exhaustive mathematical verification, symbolic AST dependency scanning, and zero-downtime Post-Quantum Cryptographic (PQC) integration under the direct supervision of AETERNA Technologies. All classical public-key vulnerabilities (RSA/ECC) have been decoupled and fortified with certified Module-Lattice Dual-Encapsulation.
+                </p>
+            </div>
+
+        <div class="specs-grid">
+            <div class="spec-item">
+                <h5>Key Encapsulation</h5>
+                <p>NIST FIPS 203 (ML-KEM-768)</p>
+            </div>
+            <div class="spec-item">
+                <h5>Digital Signatures</h5>
+                <p>NIST FIPS 204 (ML-DSA-65)</p>
+            </div>
+            <div class="spec-item">
+                <h5>Classical Layer</h5>
+                <p>RFC 7748 (X25519) Hybrid</p>
+            </div>
+            <div class="spec-item">
+                <h5>Statutory Alignment</h5>
+                <p>NIS2 Art. 21 / DORA Reg 2022/2554</p>
+            </div>
+            <div class="spec-item">
+                <h5>Execution Substrate</h5>
+                <p>Rust Industrial Core (AVX-512)</p>
+            </div>
+            <div class="spec-item">
+                <h5>Entropy Delta</h5>
+                <p>0.0000 (Deterministic Null)</p>
+            </div>
+        </div>
+
+        <!-- Institutional Consortium Provenance & Sovereign Backing -->
+        <div style="background: rgba(10, 16, 30, 0.85); border: 1px solid var(--cert-gold); border-radius: 4px; padding: 16px 20px; margin-bottom: 30px; text-align: left;">
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--cert-gold); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">
+                Institutional Consortia Provenance & Sovereign Endorsements
+            </div>
+            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.5; font-family: var(--font-sans);">
+                This cryptographic remediation framework is directly anchored to critical infrastructure projects endorsed by European public institutions:
+                <ul style="margin-top: 6px; margin-left: 20px; list-style-type: square; color: #94a3b8;">
+                    <li><strong>Republic of Bulgaria (Ministry of Innovation & Digital Transformation):</strong> Letter of Support Ref. № 94-00-322-3 (CEF-DIG-2026-SMART-CABLES-101354145).</li>
+                    <li><strong>Ludwig-Maximilians-Universität München (LMU Geophysics):</strong> €4,975,000 consortium commitment for acoustic perimeter resilience.</li>
+                    <li><strong>Hellenic Submarine Telecom Authority:</strong> €4,000,000 infrastructure security integration protocol.</li>
+                </ul>
+            </div>
+        </div>
+
+            <!-- Footer: Signatory & Seal -->
+            <div class="cert-footer">
+                <div class="signatory-box">
+                    <div class="signature-line"></div>
+                    <div class="signatory-name">Dimitar Prodromov</div>
+                    <div class="signatory-role">Chief Cryptographic System Architect & Lead Auditor</div>
+                    <div class="signatory-cred">AETERNA Technologies &bull; dimitar@aeterna.website</div>
+                    <div class="signatory-cred">Authority Key: 0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21</div>
+                </div>
+
+                <div class="seal-wrapper">
+                    <img src="aeterna_assurance_seal.jpg" alt="Aeterna Official Assurance Seal" class="seal-img">
+                    <div class="qr-placeholder">eIDAS QES Hash: 0x481bb0...f4580</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
