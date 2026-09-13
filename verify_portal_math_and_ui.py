@@ -55,8 +55,8 @@ def run_browser_ui_tests():
         page.on("pageerror", lambda err: page_errors.append(str(err)))
 
         print("• Зареждане на CLINICAL_DOCTOR_PORTAL.html в Chromium...", flush=True)
-        page.goto(file_url, wait_until="domcontentloaded", timeout=12000)
-        page.wait_for_timeout(400)
+        page.goto(file_url, wait_until="load", timeout=60000)
+        page.wait_for_timeout(500)
 
         # ----------------------------------------------------------------------
         # TEST 1: MOSTELLER BSA FORMULA VERIFICATION IN DOM
