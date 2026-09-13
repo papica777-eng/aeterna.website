@@ -284,13 +284,14 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- DISMISSIBLE OFFLINE / EDGE SERVER NOTIFICATION BANNER                     -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="edgeOfflineNotificationBanner" style="display: none;" class="px-5 py-1.5 bg-[#fffbeb] border-b border-[#fde68a] text-[#92400e] font-semibold text-xs flex items-center justify-between shrink-0">
+    <!-- Floating Non-Intrusive Toast for Offline Edge Notification (Zero Vertical Layout Shift) -->
+    <div id="edgeOfflineNotificationBanner" style="display: none;" class="fixed bottom-4 right-4 z-50 max-w-sm px-3.5 py-2.5 bg-[#fffbeb] border border-[#fde68a] text-[#92400e] text-[11px] font-medium rounded-xl shadow-xl flex items-center justify-between gap-3 transition-all duration-300">
         <div class="flex items-center gap-2">
-            <i data-lucide="alert-circle" class="w-4 h-4 text-[#d97706]"></i>
-            <span>Hospital Edge Server offline (Port 8890 not reachable). Running in deterministic In-Browser WebWorker mode.</span>
+            <i data-lucide="alert-circle" class="w-4 h-4 text-[#d97706] shrink-0"></i>
+            <span>Port 8890 unreachable. Active in local In-Browser WebWorker mode.</span>
         </div>
-        <button type="button" onclick="document.getElementById('edgeOfflineNotificationBanner').style.display='none'" class="text-[11px] bg-[#fef3c7] hover:bg-[#fde68a] text-[#92400e] border border-[#fde68a] px-2 py-0.5 rounded cursor-pointer transition-all">
-            Dismiss ✕
+        <button type="button" onclick="dismissEdgeOfflineBanner()" class="text-[10px] bg-[#fef3c7] hover:bg-[#fde68a] text-[#92400e] border border-[#fde68a] px-2 py-0.5 rounded-md cursor-pointer font-bold shrink-0">
+            ✕
         </button>
     </div>
 
@@ -452,7 +453,7 @@
                         </div>
                         <div>
                             <label class="text-[9px] font-bold text-slate-500 uppercase">Cr (mg/dL)</label>
-                            <input type="number" step="0.1" id="patientCreatinine" value="0.9" oninput="calculatePatientMetrics()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-1.5 py-1 text-xs mono text-slate-900">
+                            <input type="number" step="0.1" lang="en-US" inputmode="decimal" id="patientCreatinine" value="0.9" oninput="calculatePatientMetrics()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-1.5 py-1 text-xs mono text-slate-900">
                         </div>
                     </div>
 
@@ -476,7 +477,7 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-[9.5px] font-bold text-slate-500 uppercase" id="labelTumor">Tumor Diameter (cm)</label>
-                            <input type="number" step="0.1" id="tumorSize" value="3.4" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-1 text-xs mono text-slate-900">
+                            <input type="number" step="0.1" lang="en-US" inputmode="decimal" id="tumorSize" value="3.4" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-1 text-xs mono text-slate-900">
                         </div>
                         <div>
                             <label class="text-[9.5px] font-bold text-slate-500 uppercase">ApoE4 Genotype</label>
@@ -489,16 +490,20 @@
                     </div>
                 </div>
 
-                <!-- Autonomic Telemetry: Pan-Tompkins 250 Hz DSP ECG -->
-                <div class="mt-auto p-2 clinical-subcard">
-                    <div class="flex items-center justify-between text-[9.5px] font-bold text-slate-600 mb-1">
-                        <span class="flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                            <span id="labelTelemetry">Pan-Tompkins DSP (250 Hz Active)</span>
+                <!-- Autonomic Telemetry: Pan-Tompkins 250 Hz DSP ECG (Enhanced 60px Clinical Display) -->
+                <div class="mt-auto p-2.5 clinical-subcard">
+                    <div class="flex items-center justify-between text-[9.5px] font-bold text-slate-600 mb-1.5">
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span id="labelTelemetry" class="text-[#0f172a] font-extrabold uppercase text-[9px] tracking-wide">Pan-Tompkins DSP (250 Hz Active)</span>
                         </span>
-                        <span class="mono text-slate-700">HR: <strong id="hrVal" class="text-blue-700">74</strong> bpm | HRV: <strong id="hrvVal" class="text-emerald-700">42</strong> ms</span>
+                        <span class="mono text-[9.5px] text-emerald-700 font-bold bg-[#ecfdf5] border border-[#a7f3d0] px-1.5 py-0.5 rounded">
+                            HR: <span id="hrVal" class="text-emerald-900">74</span> bpm | HRV: <span id="hrvVal" class="text-emerald-900">42</span> ms
+                        </span>
                     </div>
-                    <canvas id="ecgCanvas" height="40" class="w-full rounded bg-slate-900"></canvas>
+                    <div class="relative w-full rounded-lg overflow-hidden border border-slate-800 shadow-inner bg-[#020617]">
+                        <canvas id="ecgCanvas" height="58" class="w-full block"></canvas>
+                    </div>
                 </div>
             </section>
 
@@ -546,46 +551,66 @@
                     </div>
                 </div>
 
-                <!-- Precision Dosing Sliders -->
-                <div class="space-y-1.5 p-2.5 clinical-subcard">
+                <!-- Precision Dosing Sliders with Synchronized Numeric Inputs -->
+                <div class="space-y-2 p-2.5 clinical-subcard">
                     <div class="flex justify-between items-center text-xs font-bold">
-                        <span class="text-slate-700" id="labelPrecisionSliders">Precision Sliders</span>
-                        <span class="text-[9.5px] text-slate-500 font-mono">Pharmacometric Titration</span>
+                        <span class="text-slate-700" id="labelPrecisionSliders">Precision Pharmacometrics</span>
+                        <span class="text-[9.5px] text-slate-500 font-mono">Slider & Direct Keyboard Input</span>
                     </div>
 
                     <!-- AP-90 Dose -->
                     <div>
-                        <div class="flex justify-between text-[10px] mb-0.5">
+                        <div class="flex justify-between text-[10px] mb-1 items-center">
                             <span class="text-slate-600 font-medium" id="labelEpitalonDose">1. AP-90 Liposomal Peptide (mg/m² IV)</span>
-                            <span id="epitalonVal" class="font-bold text-blue-700 mono">52.0 mg/m²</span>
+                            <span id="epitalonVal" class="font-bold text-[#0284c7] mono">52.0 mg/m²</span>
                         </div>
-                        <input type="range" id="epitalonDose" min="0" max="100" value="52" step="1" oninput="onDoseSliderChange('epitalon', this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="epitalonDose" min="0" max="100" value="52" step="1" oninput="syncDoseValue('epitalon', this.value, true)" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
+                            <div class="flex items-center gap-1 shrink-0">
+                                <input type="number" id="epitalonNum" min="0" max="100" value="52" step="1" lang="en-US" inputmode="decimal" oninput="syncDoseValue('epitalon', this.value, false)" class="w-14 text-center py-0.5 px-1 text-xs mono font-bold bg-[#ffffff] border border-[#cbd5e1] rounded-md focus:border-[#0284c7]">
+                                <span class="text-[9px] text-slate-500 font-mono">mg/m²</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Checkpoint Inhibitor -->
                     <div>
-                        <div class="flex justify-between text-[10px] mb-0.5">
+                        <div class="flex justify-between text-[10px] mb-1 items-center">
                             <span class="text-slate-600 font-medium" id="labelWithanolidesDose">2. Anti-PD-L1 Checkpoint (mg/kg Q3W)</span>
                             <span id="withanolidesVal" class="font-bold text-purple-700 mono">10.0 mg/kg</span>
                         </div>
-                        <input type="range" id="withanolidesDose" min="1" max="20" value="10" step="0.5" oninput="onDoseSliderChange('withanolides', this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="withanolidesDose" min="1" max="20" value="10" step="0.5" oninput="syncDoseValue('withanolides', this.value, true)" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
+                            <div class="flex items-center gap-1 shrink-0">
+                                <input type="number" id="withanolidesNum" min="1" max="20" value="10" step="0.5" lang="en-US" inputmode="decimal" oninput="syncDoseValue('withanolides', this.value, false)" class="w-14 text-center py-0.5 px-1 text-xs mono font-bold bg-[#ffffff] border border-[#cbd5e1] rounded-md focus:border-[#0284c7]">
+                                <span class="text-[9px] text-slate-500 font-mono">mg/kg</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Selye Adaptogen -->
                     <div>
-                        <div class="flex justify-between text-[10px] mb-0.5">
+                        <div class="flex justify-between text-[10px] mb-1 items-center">
                             <span class="text-slate-600 font-medium" id="labelPsDose">3. Selye Somatic Cushion (Withanolides / PS)</span>
                             <span id="psVal" class="font-bold text-emerald-700 mono">280 mg</span>
                         </div>
-                        <input type="range" id="psDose" min="50" max="500" value="280" step="10" oninput="onDoseSliderChange('ps', this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="psDose" min="50" max="500" value="280" step="10" oninput="syncDoseValue('ps', this.value, true)" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
+                            <div class="flex items-center gap-1 shrink-0">
+                                <input type="number" id="psNum" min="50" max="500" value="280" step="10" lang="en-US" inputmode="decimal" oninput="syncDoseValue('ps', this.value, false)" class="w-14 text-center py-0.5 px-1 text-xs mono font-bold bg-[#ffffff] border border-[#cbd5e1] rounded-md focus:border-[#0284c7]">
+                                <span class="text-[9px] text-slate-500 font-mono">mg</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Simulation Trigger Action -->
-                <button type="button" onclick="executeSimulation('full')" class="w-full py-2.5 bg-[#0284c7] hover:bg-[#0369a1] text-white font-extrabold text-xs uppercase tracking-wider rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
-                    <i data-lucide="play" class="w-4 h-4"></i>
-                    <span id="btnSimulateText">SIMULATE DIGITAL TWIN (O(1) AVX-512)</span>
-                </button>
+                <!-- Simulation Trigger Action (Pushed to bottom with mt-auto for perfect 3-column horizontal alignment) -->
+                <div class="mt-auto pt-1">
+                    <button type="button" id="btnSimulateAction" onclick="executeSimulation('full')" class="w-full py-2.5 bg-[#0284c7] hover:bg-[#0369a1] text-white font-extrabold text-xs uppercase tracking-wider rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
+                        <i data-lucide="play" id="btnSimulateIcon" class="w-4 h-4"></i>
+                        <span id="btnSimulateText">SIMULATE DIGITAL TWIN (O(1) AVX-512)</span>
+                    </button>
+                </div>
             </section>
 
             <!-- ─── COLUMN 3: CLINICAL DECISION & ACTION (25% WIDTH) ─── -->
@@ -1863,32 +1888,56 @@
             const canvas = document.getElementById('ecgCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const w = canvas.width = canvas.parentElement.clientWidth || 240;
-            const h = canvas.height = 40;
+            const w = canvas.width = canvas.parentElement.clientWidth || 260;
+            const h = canvas.height = 58;
+            const mid = 30;
 
-            let ecgData = new Array(w).fill(20);
+            let ecgData = new Array(w).fill(mid);
             let offset = 0;
 
             function renderEcg() {
                 offset = (offset + 1.8) % 180;
-                let s = 20;
-                if (offset > 20 && offset < 35) s = 20 - Math.sin((offset - 20) / 15 * Math.PI) * 3;
-                else if (offset >= 48 && offset < 52) s = 20 + 3;
-                else if (offset >= 52 && offset < 58) s = 20 - 18;
-                else if (offset >= 58 && offset < 64) s = 20 + 5;
-                else if (offset > 85 && offset < 115) s = 20 - Math.sin((offset - 85) / 30 * Math.PI) * 4;
+                let s = mid;
+                // P-wave
+                if (offset > 20 && offset < 35) s = mid - Math.sin((offset - 20) / 15 * Math.PI) * 5;
+                // Q-dip
+                else if (offset >= 48 && offset < 52) s = mid + 4;
+                // R-peak (High amplitude QRS spike)
+                else if (offset >= 52 && offset < 58) s = mid - 24;
+                // S-dip
+                else if (offset >= 58 && offset < 64) s = mid + 7;
+                // T-wave
+                else if (offset > 85 && offset < 115) s = mid - Math.sin((offset - 85) / 30 * Math.PI) * 6;
 
                 ecgData.shift();
                 ecgData.push(s);
 
-                ctx.clearRect(0, 0, w, h);
+                // Dark hospital oscilloscope background
+                ctx.fillStyle = '#020617';
+                ctx.fillRect(0, 0, w, h);
+
+                // Subtle telemetry grid lines
+                ctx.strokeStyle = 'rgba(16, 185, 129, 0.07)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < w; x += 20) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+                }
+                for (let y = 0; y < h; y += 15) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+                }
+
+                // Vibrant medical phosphor trace
                 ctx.strokeStyle = '#10b981';
-                ctx.lineWidth = 1.6;
+                ctx.lineWidth = 1.8;
+                ctx.shadowColor = 'rgba(16, 185, 129, 0.4)';
+                ctx.shadowBlur = 4;
                 ctx.beginPath();
                 for (let i = 0; i < ecgData.length; i++) {
                     if (i === 0) ctx.moveTo(i, ecgData[i]); else ctx.lineTo(i, ecgData[i]);
                 }
                 ctx.stroke();
+                ctx.shadowBlur = 0;
+
                 requestAnimationFrame(renderEcg);
             }
             requestAnimationFrame(renderEcg);
