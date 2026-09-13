@@ -9,20 +9,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-page: #f1f5f9;
+            <style>
+        /* ==========================================================================
+           AETERNA-VHT: EMERALD & MIDNIGHT PINE DESIGN SYSTEM (HIGH CONTRAST / CDSS)
+           ========================================================================== */
+        /* 1. СВЕТЪЛ РЕЖИМ (EMERALD CLEANROOM & WHITE) */
+        :root, body.daylight-mode {
+            --bg-page: #f8fafc;
+            --bg-main: #f8fafc;
             --bg-card: #ffffff;
-            --bg-subcard: #f8fafc;
-            --bg-input: #f8fafc;
+            --bg-subcard: #f0fdf4; /* Лек ментов релеф за капсулите */
+            --bg-input: #ffffff;
             --bg-input-focus: #ffffff;
+            --border-subtle: #cbd5e1;
+            --border-card: #cbd5e1;
+            --border-accent: #a7f3d0;
+            --border-input: #94a3b8;
+
             --text-main: #0f172a;
-            --text-muted: #64748b;
-            --primary-blue: #0284c7;
-            --primary-blue-hover: #0369a1;
-            --border-subtle: #e2e8f0;
-            --border-input: #cbd5e1;
-            --chart-bg: #0f172a;
+            --text-title: #064e3b;  /* Дълбок горски изумруд за заглавия */
+            --text-body: #0f172a;
+            --text-muted: #475569;
+
+            --primary-emerald: #059669;
+            --primary-hover: #047857;
+            --primary-blue: #059669;
+            --primary-blue-hover: #047857;
+            --kpi-number: #047857;
+
+            --slider-track: #d1fae5;
+            --slider-thumb: #059669;
+            --shadow-card: 0 4px 6px -1px rgba(5, 150, 105, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-subcard: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --chart-bg: #020617;
 
             /* Muted Clinical Status Tokens */
             --status-success-bg: #ecfdf5;
@@ -38,11 +57,45 @@
             --status-danger-text: #991b1b;
         }
 
-        /* 100% Unified Daylight Medical Standard (Default) */
+        /* 2. ТЪМЕН РЕЖИМ (MIDNIGHT PINE & CYBER-TEAL - НЕ Е ЧЕРНО!) */
+        body.dark-mode, html.dark body {
+            --bg-page: #041316;     /* Дълбок нощен петрол */
+            --bg-main: #041316;
+            --bg-card: #0b2327;     /* Релефен матов слейт */
+            --bg-subcard: #0f3238;  /* Капсули в дълбок кибер-теал */
+            --bg-input: #08282e;
+            --bg-input-focus: #0f3d44;
+            --border-subtle: #164e52;
+            --border-card: #164e52;
+            --border-accent: #2dd4bf;
+            --border-input: #206368;
+
+            --text-main: #f0fdf4;
+            --text-title: #5eead4;  /* Светещ аквамарин */
+            --text-body: #f0fdf4;
+            --text-muted: #94a3b8;
+
+            --primary-emerald: #10b981;
+            --primary-hover: #34d399;
+            --primary-blue: #10b981;
+            --primary-blue-hover: #34d399;
+            --kpi-number: #34d399;  /* Неонова мента */
+
+            --slider-track: #134e4a;
+            --slider-thumb: #34d399;
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 1px rgba(45, 212, 191, 0.2);
+            --shadow-subcard: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --chart-bg: #030a0d;
+        }
+
+        /* 3. ГЛОБАЛНА ТИПОГРАФИЯ - МАСИВНА И БОЛНИЧНО ЧЕТИМА */
         body {
-            background-color: var(--bg-page) !important;
-            color: var(--text-main) !important;
+            background-color: var(--bg-main) !important;
+            color: var(--text-body) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Outfit", sans-serif !important;
+            font-size: 14.5px !important;
+            line-height: 1.45 !important;
+            transition: background 0.3s ease, color 0.3s ease;
             height: 100vh;
             max-height: 100vh;
             overflow: hidden;
@@ -51,45 +104,66 @@
             min-height: 0;
         }
 
-        /* Cohesive Dark Mode when toggled */
-        body.dark-mode {
-            --bg-page: #0b0f19;
-            --bg-card: #0f172a;
-            --bg-subcard: #1e293b;
-            --bg-input: #1e293b;
-            --bg-input-focus: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-subtle: #1e293b;
-            --border-input: #334155;
-            --chart-bg: #070a12;
+        h2, h3 {
+            font-size: 13.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.01em !important;
+            color: var(--text-title) !important;
         }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* Unified 3-Column Hospital Cards */
-        .clinical-card {
+        /* Плътни колони и карти - край на стерилното голо пространство */
+        main > section, .dashboard-col, .clinical-card {
             background: var(--bg-card) !important;
-            border: 1px solid var(--border-subtle) !important;
-            border-radius: 8px !important;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-            transition: all 0.2s ease;
+            border: 1px solid var(--border-card) !important;
+            border-radius: 12px !important;
+            box-shadow: var(--shadow-card) !important;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .clinical-header {
             background: var(--bg-card) !important;
-            border-color: var(--border-subtle) !important;
+            border-color: var(--border-card) !important;
         }
 
         .clinical-patient-banner {
             background: var(--bg-card) !important;
-            border-color: var(--border-subtle) !important;
+            border-color: var(--border-card) !important;
         }
 
-        .clinical-subcard {
+        /* Релефни капсули вътре в картите (Sub-cards / Parameter Groups) */
+        .sub-card, .parameter-group, .panel-box, .clinical-subcard {
             background: var(--bg-subcard) !important;
-            border: 1px solid var(--border-subtle) !important;
-            border-radius: 8px !important;
+            border: 1px solid var(--border-card) !important;
+            border-radius: 9px !important;
+            box-shadow: var(--shadow-subcard) !important;
+        }
+
+        /* Специални релефни капсули за дозиране и прогнози */
+        .dosing-capsule, .prognosis-box {
+            background: #ffffff !important;
+            border: 1px solid var(--border-card) !important;
+            border-radius: 9px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        body.dark-mode .dosing-capsule,
+        body.dark-mode .prognosis-box,
+        html.dark .dosing-capsule,
+        html.dark .prognosis-box {
+            background: var(--bg-subcard) !important;
+            border-color: var(--border-card) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* Големи клинични числа (KPI Big Numbers & Doses: 24px-26px bold) */
+        .clinical-metric-value, .kpi-number, .kpi-metric-large, #epitalonVal, #withanolidesVal, #psVal, #resPredictedSurvival {
+            font-size: 24px !important;
+            font-weight: 800 !important;
+            color: var(--kpi-number) !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.02em !important;
         }
 
         /* Universal Form Fields (No Flashbang White on Dark) */
@@ -99,79 +173,154 @@
             background-color: var(--bg-input) !important;
             border: 1px solid var(--border-input) !important;
             color: var(--text-main) !important;
-            border-radius: 6px !important;
+            border-radius: 7px !important;
             transition: all 0.15s ease;
         }
         input[type="text"]:focus,
         input[type="number"]:focus,
         select:focus {
             background-color: var(--bg-input-focus) !important;
-            border-color: var(--primary-blue) !important;
+            border-color: var(--primary-emerald) !important;
             outline: none !important;
-            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15) !important;
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.18) !important;
         }
 
         /* Preset Buttons */
         .preset-btn {
             background-color: var(--bg-subcard) !important;
-            border: 1px solid var(--border-subtle) !important;
+            border: 1px solid var(--border-card) !important;
             color: var(--text-main) !important;
             transition: all 0.15s ease !important;
+            border-radius: 8px !important;
         }
         .preset-btn:hover {
-            background-color: #f0f9ff !important;
-            border-color: #bae6fd !important;
+            background-color: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
         }
-        body.dark-mode .preset-btn:hover {
-            background-color: #334155 !important;
-            border-color: #0284c7 !important;
+        body.dark-mode .preset-btn:hover,
+        html.dark .preset-btn:hover {
+            background-color: #134e4a !important;
+            border-color: #2dd4bf !important;
         }
 
-        /* Precision range sliders in Medical Blue */
-        input[type=range].custom-slider {
+        /* Масивни, удобни за хващане плъзгачи (Sliders: 8px track, 22px round thumb) */
+        input[type=range], input[type=range].custom-slider {
             -webkit-appearance: none;
             appearance: none;
-            background: #e2e8f0;
-            border-radius: 9999px;
-            height: 6px;
+            background: var(--slider-track) !important;
+            border-radius: 9999px !important;
+            height: 8px !important;
             outline: none;
-            accent-color: #0284c7;
+            accent-color: var(--slider-thumb);
+            cursor: pointer;
         }
-        body.dark-mode input[type=range].custom-slider {
-            background: #334155;
-        }
-        input[type=range].custom-slider::-webkit-slider-thumb {
+        input[type=range]::-webkit-slider-thumb, input[type=range].custom-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #0284c7;
+            width: 22px !important;
+            height: 22px !important;
+            border-radius: 50% !important;
+            background: var(--slider-thumb) !important;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.4);
-            border: 2px solid #ffffff;
-            transition: transform 0.1s ease, background-color 0.15s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+            border: 2.5px solid #ffffff !important;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
         }
-        input[type=range].custom-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
-            background: #0369a1;
+        input[type=range]::-webkit-slider-thumb:hover, input[type=range].custom-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+            box-shadow: 0 3px 8px rgba(5, 150, 105, 0.4) !important;
         }
-        input[type=range].custom-slider::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #0284c7;
+        input[type=range]::-moz-range-thumb, input[type=range].custom-slider::-moz-range-thumb {
+            width: 22px !important;
+            height: 22px !important;
+            border-radius: 50% !important;
+            background: var(--slider-thumb) !important;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.4);
-            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+            border: 2.5px solid #ffffff !important;
+        }
+
+        /* Пациентски банер с релефни чипове (Embossed Chips) */
+        .patient-badge-chip {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-card) !important;
+            padding: 4px 11px !important;
+            border-radius: 7px !important;
+            font-weight: 700 !important;
+            font-size: 13px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+            transition: all 0.15s ease;
+        }
+        body.dark-mode .patient-badge-chip,
+        html.dark .patient-badge-chip {
+            background: var(--bg-subcard) !important;
+            border-color: var(--border-card) !important;
+            color: var(--text-body) !important;
+        }
+        .chip-patient-id { border-left: 3.5px solid #0284c7 !important; }
+        .chip-bsa, .chip-gfr { border-left: 3.5px solid var(--primary-emerald) !important; }
+        .chip-driver { border-left: 3.5px solid #8b5cf6 !important; }
+        body.dark-mode .chip-driver,
+        html.dark .chip-driver { border-left: 3.5px solid #2dd4bf !important; }
+
+        body.dark-mode .patient-badge-chip strong,
+        html.dark .patient-badge-chip strong {
+            color: var(--text-main) !important;
+        }
+        body.dark-mode .patient-badge-chip span,
+        html.dark .patient-badge-chip span {
+            color: var(--text-muted) !important;
+        }
+        body.dark-mode #bannerApoE,
+        html.dark #bannerApoE {
+            color: #fde68a !important; /* Soft Amber */
+        }
+        body.dark-mode #bannerBSA,
+        body.dark-mode #bannerGFR,
+        html.dark #bannerBSA,
+        html.dark #bannerGFR {
+            color: #34d399 !important; /* Neon Mint */
+        }
+        body.dark-mode #bannerPatientId,
+        html.dark #bannerPatientId {
+            color: #38bdf8 !important; /* Luminous Sky */
+        }
+        body.dark-mode #bannerGene,
+        html.dark #bannerGene {
+            color: #5eead4 !important; /* Aquamarine */
+        }
+
+        /* Главен бутон за симулация - Изумруден градиент с авторитет */
+        #btnSimulateAction, #btnRunSimulation, .btn-primary-action {
+            background: linear-gradient(135deg, var(--primary-emerald), var(--primary-hover)) !important;
+            color: #ffffff !important;
+            font-size: 14.5px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.03em !important;
+            border: none !important;
+            border-radius: 9px !important;
+            padding: 12px 18px !important;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25) !important;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+        #btnSimulateAction:hover, #btnRunSimulation:hover, .btn-primary-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(5, 150, 105, 0.38) !important;
+        }
+        #btnSimulateAction:active, #btnRunSimulation:active, .btn-primary-action:active {
+            transform: translateY(1px);
         }
 
         /* Active Navigation Tab Style */
         .role-nav-tab {
             padding: 6px 14px;
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            border-radius: 6px;
+            border-radius: 7px;
             transition: all 0.18s ease;
             cursor: pointer;
             display: inline-flex;
@@ -182,32 +331,47 @@
             color: var(--text-muted);
         }
         .role-nav-tab:hover {
-            background: #e0f2fe;
-            color: #0284c7;
-        }
-        body.dark-mode .role-nav-tab:hover {
-            background: #1e293b;
-            color: #38bdf8;
+            background: var(--bg-subcard);
+            color: var(--text-title);
+            border-color: var(--border-card);
         }
         .role-nav-tab.active-tab {
-            background: #0284c7 !important;
+            background: var(--primary-emerald) !important;
             color: #ffffff !important;
-            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
-            border-color: #0284c7 !important;
+            border-color: var(--primary-hover) !important;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
         }
 
-        /* Subtle scrollbars for internal columns */
+        /* Medical Scrollbars */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        body.dark-mode ::-webkit-scrollbar-thumb { background: #334155; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body.dark-mode ::-webkit-scrollbar-thumb,
+        html.dark ::-webkit-scrollbar-thumb { background: #164e52; }
+        body.dark-mode ::-webkit-scrollbar-thumb:hover,
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #2dd4bf; }
 
-        /* Responsive compact styling for 1366x768, 1440x900 & 125%/150% Windows Scaling */
-        @media (max-height: 850px) {
-            header { height: 46px !important; }
+        /* Dialog & Modal */
+        .medical-dialog-overlay {
+            background: rgba(4, 19, 22, 0.65);
+            backdrop-filter: blur(4px);
+        }
+
+        /* 100vh Responsive Scaling */
+        @media (max-height: 860px) {
+            main { padding: 0.5rem !important; }
+            header { height: 48px !important; }
+            #patientBannerBar { height: 46px !important; }
+            .clinical-card { padding: 0.75rem !important; gap: 0.5rem !important; }
+            #chartCanvasContainer { height: 145px !important; }
+        }
+
+        @media (max-height: 750px) {
+            main { padding: 0.35rem !important; }
+            header { height: 44px !important; }
             #patientBannerBar { height: 42px !important; }
-            .clinical-card { padding: 0.65rem !important; gap: 0.5rem !important; }
+            .clinical-card { padding: 0.65rem !important; gap: 0.45rem !important; }
             #chartCanvasContainer { height: 135px !important; }
         }
 
@@ -226,37 +390,41 @@
         <!-- Brand & Clinical Certification Badges -->
         <!-- High-Tech AETERNA-VHT Brand Lockup (Quantum Infinity Shield) -->
         <div class="aeterna-brand-lockup flex items-center gap-3 shrink-0">
-            <svg width="38" height="38" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0 drop-shadow-sm">
+            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0 drop-shadow-sm">
                 <!-- Външен геометричен щит на суверенитета -->
                 <path d="M50 5 L88 20 V50 C88 74 50 94 50 94 C50 94 12 74 12 50 V20 Z" 
-                      stroke="url(#shield-grad)" stroke-width="4" fill="rgba(2, 132, 199, 0.05)"/>
+                      stroke="url(#shield-grad)" stroke-width="4.5" fill="rgba(5, 150, 105, 0.06)"/>
                 <!-- Вътрешна спирала / Безкрайност (Æterna Helix) -->
                 <path d="M30 42 C30 32, 45 32, 50 42 C55 52, 70 52, 70 42 C70 32, 55 32, 50 42 C45 52, 30 52, 30 42 Z" 
-                      stroke="url(#accent-grad)" stroke-width="4" stroke-linecap="round"/>
+                      stroke="url(#accent-grad)" stroke-width="4.5" stroke-linecap="round"/>
                 <!-- Квантово ядро (Zero Entropy Node) -->
-                <circle cx="50" cy="42" r="3.5" fill="#0284c7"/>
+                <circle cx="50" cy="42" r="3.8" fill="#10b981"/>
                 <defs>
                     <linearGradient id="shield-grad" x1="12" y1="5" x2="88" y2="94" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#0284c7"/>
-                        <stop offset="1" stop-color="#0f172a"/>
+                        <stop stop-color="#059669"/>
+                        <stop offset="0.5" stop-color="#0284c7"/>
+                        <stop offset="1" stop-color="#064e3b"/>
                     </linearGradient>
                     <linearGradient id="accent-grad" x1="30" y1="32" x2="70" y2="52" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#38bdf8"/>
-                        <stop offset="1" stop-color="#2563eb"/>
+                        <stop stop-color="#34d399"/>
+                        <stop offset="0.5" stop-color="#10b981"/>
+                        <stop offset="1" stop-color="#059669"/>
                     </linearGradient>
                 </defs>
             </svg>
             <div>
                 <div class="flex items-center gap-1.5">
-                    <span class="font-extrabold text-[16px] tracking-wider text-slate-900 dark:text-slate-100 uppercase" style="letter-spacing: 0.08em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Outfit', sans-serif;">
-                        AETERNA<span class="text-[#0284c7]">-VHT</span>
+                    <span class="font-black text-[17px] tracking-wider text-slate-900 dark:text-slate-100 uppercase" style="letter-spacing: 0.08em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Outfit', sans-serif;">
+                        AETERNA<span class="text-[#059669] dark:text-[#34d399]">-VHT</span>
                     </span>
-                    <span class="text-[9px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800">Class IIb</span>
+                    <span class="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 px-1.5 py-0.5 rounded dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-700">Class IIb</span>
                 </div>
-                <div class="text-[9.5px] font-semibold text-slate-500 uppercase tracking-wider" style="letter-spacing: 0.11em;" id="headerSubtitle">
+                <div class="text-[9.5px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider" style="letter-spacing: 0.11em;" id="headerSubtitle">
                     Virtual Human Twin • Enterprise CDSS
                 </div>
             </div>
+        </div>
+        </div>
         </div>
 
         <!-- System Status & Controls -->
@@ -335,22 +503,33 @@
     <!-- PERSISTENT PATIENT BANNER & 4 ROLE NAVIGATION TABS                        -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <div id="patientBannerBar" class="h-12 border-b border-[#e2e8f0] px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] clinical-patient-banner">
-        <!-- Patient Clinical Identity Bar -->
-        <div class="flex items-center gap-2.5 text-xs">
-            <div class="flex items-center gap-1.5 font-bold text-slate-900">
-                <span class="text-[10px] font-mono bg-[#e0f2fe] text-[#0369a1] border border-[#bae6fd] px-1.5 py-0.5 rounded" id="bannerLabelPatient">PATIENT</span>
-                <span id="bannerPatientId" class="mono font-black text-[#0284c7]">PT-2026-8890</span>
+        <!-- Patient Clinical Identity Bar with Embossed Chips -->
+        <div class="flex items-center gap-2 flex-wrap">
+            <div class="patient-badge-chip chip-patient-id">
+                <span class="text-[10px] font-mono font-extrabold uppercase px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300" id="bannerLabelPatient">ID</span>
+                <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-[#38bdf8] text-[14.5px]">PT-2026-8890</span>
             </div>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-600 font-medium"><span id="bannerLabelAge">Age</span>: <strong id="bannerAge" class="mono text-slate-900">62</strong> y/o</span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-600 font-medium">BSA: <strong id="bannerBSA" class="mono text-emerald-700 font-bold">1.85 m²</strong></span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-600 font-medium">CrCl (GFR): <strong id="bannerGFR" class="mono text-emerald-700 font-bold">94.0 mL/min</strong></span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-600 font-medium">ApoE4: <strong id="bannerApoE" class="mono text-slate-800">E3/E3</strong></span>
-            <span class="text-slate-300">|</span>
-            <span class="text-slate-600 font-medium"><span id="bannerLabelDriver">Driver</span>: <strong id="bannerGene" class="mono text-purple-700 font-bold">KRAS G12D</strong></span>
+            <div class="patient-badge-chip chip-age">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelAge">Age:</span>
+                <strong id="bannerAge" class="mono font-extrabold text-slate-900 dark:text-slate-100 text-[14px]">62</strong>
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">y/o</span>
+            </div>
+            <div class="patient-badge-chip chip-bsa">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">BSA:</span>
+                <strong id="bannerBSA" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[14px]">1.85 m²</strong>
+            </div>
+            <div class="patient-badge-chip chip-gfr">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">CrCl (GFR):</span>
+                <strong id="bannerGFR" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[14px]">94.0 mL/min</strong>
+            </div>
+            <div class="patient-badge-chip chip-apoe">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">ApoE4:</span>
+                <strong id="bannerApoE" class="mono font-extrabold text-slate-800 dark:text-slate-200 text-[13.5px]">E3/E3</strong>
+            </div>
+            <div class="patient-badge-chip chip-driver">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelDriver">Driver:</span>
+                <strong id="bannerGene" class="mono font-extrabold text-purple-700 dark:text-teal-300 text-[13.5px]">KRAS G12D</strong>
+            </div>
         </div>
 
         <!-- 4 Role Navigation Tabs -->
@@ -416,8 +595,8 @@
                 </div>
 
                 <!-- Quick Disease Presets -->
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1" id="presetsLabel">Quick Presets</label>
+                <div class="p-2 clinical-subcard">
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase mb-1" id="presetsLabel">Quick Presets</label>
                     <div class="grid grid-cols-2 gap-1.5">
                         <button type="button" onclick="loadPreset('pancreatic')" class="preset-btn p-1.5 text-left rounded-lg">
                             <div class="text-[11px] font-bold">Pancreatic</div>
@@ -484,7 +663,7 @@
                 </div>
 
                 <!-- Baseline Lab Inputs -->
-                <div class="space-y-1.5">
+                <div class="p-2.5 clinical-subcard space-y-1.5">
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-[9.5px] font-bold text-slate-500 uppercase" id="labelPatientId">Patient ID</label>
@@ -638,46 +817,46 @@
                     </div>
 
                     <!-- AP-90 Dose -->
-                    <div>
-                        <div class="flex justify-between text-[10px] mb-1 items-center">
-                            <span class="text-slate-600 font-medium" id="labelEpitalonDose">1. AP-90 Liposomal Peptide (mg/m² IV)</span>
-                            <span id="epitalonVal" class="font-bold text-[#0284c7] mono">52.0 mg/m²</span>
+                    <div class="dosing-capsule mb-2">
+                        <div class="flex justify-between text-[11px] mb-1.5 items-center">
+                            <span class="text-slate-700 dark:text-slate-200 font-bold" id="labelEpitalonDose">1. AP-90 Liposomal Peptide (mg/m² IV)</span>
+                            <span id="epitalonVal" class="kpi-number font-extrabold text-[#059669] dark:text-[#34d399] mono tracking-tight text-2xl">52.0 mg/m²</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <input type="range" id="epitalonDose" min="0" max="100" value="52" step="1" oninput="syncDoseValue('epitalon', this.value, true)" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
-                            <div class="flex items-center gap-1 shrink-0">
-                                <input type="number" id="epitalonNum" min="0" max="100" value="52" step="1" lang="en-US" inputmode="decimal" oninput="syncDoseValue('epitalon', this.value, false)" class="w-14 text-center py-0.5 px-1 text-xs mono font-bold bg-[#ffffff] border border-[#cbd5e1] rounded-md focus:border-[#0284c7]">
-                                <span class="text-[9px] text-slate-500 font-mono">mg/m²</span>
+                        <div class="flex items-center gap-2.5">
+                            <input type="range" id="epitalonDose" min="0" max="100" value="52" step="1" oninput="syncDoseValue('epitalon', this.value, true)" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none custom-slider">
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <input type="number" id="epitalonNum" min="0" max="100" value="52" step="1" lang="en-US" inputmode="decimal" oninput="syncDoseValue('epitalon', this.value, false)" class="w-16 text-center py-1 px-1 text-xs mono font-bold bg-[#ffffff] dark:bg-[#041316] border border-[#cbd5e1] dark:border-teal-800 rounded-md focus:border-[#059669]">
+                                <span class="text-[9.5px] text-slate-500 dark:text-slate-400 font-mono font-bold">mg/m²</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Checkpoint Inhibitor -->
-                    <div>
-                        <div class="flex justify-between text-[10px] mb-1 items-center">
-                            <span class="text-slate-600 font-medium" id="labelWithanolidesDose">2. Anti-PD-L1 Checkpoint (mg/kg Q3W)</span>
-                            <span id="withanolidesVal" class="font-bold text-purple-700 mono">10.0 mg/kg</span>
+                    <div class="dosing-capsule mb-2">
+                        <div class="flex justify-between text-[11px] mb-1.5 items-center">
+                            <span class="text-slate-700 dark:text-slate-200 font-bold" id="labelWithanolidesDose">2. Anti-PD-L1 Checkpoint (mg/kg Q3W)</span>
+                            <span id="withanolidesVal" class="kpi-number font-extrabold text-purple-700 dark:text-teal-300 mono tracking-tight text-2xl">10.0 mg/kg</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <input type="range" id="withanolidesDose" min="1" max="20" value="10" step="0.5" oninput="syncDoseValue('withanolides', this.value, true)" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
-                            <div class="flex items-center gap-1 shrink-0">
-                                <input type="number" id="withanolidesNum" min="1" max="20" value="10" step="0.5" lang="en-US" inputmode="decimal" oninput="syncDoseValue('withanolides', this.value, false)" class="w-14 text-center py-0.5 px-1 text-xs mono font-bold bg-[#ffffff] border border-[#cbd5e1] rounded-md focus:border-[#0284c7]">
-                                <span class="text-[9px] text-slate-500 font-mono">mg/kg</span>
+                        <div class="flex items-center gap-2.5">
+                            <input type="range" id="withanolidesDose" min="1" max="20" value="10" step="0.5" oninput="syncDoseValue('withanolides', this.value, true)" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none custom-slider">
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <input type="number" id="withanolidesNum" min="1" max="20" value="10" step="0.5" lang="en-US" inputmode="decimal" oninput="syncDoseValue('withanolides', this.value, false)" class="w-16 text-center py-1 px-1 text-xs mono font-bold bg-[#ffffff] dark:bg-[#041316] border border-[#cbd5e1] dark:border-teal-800 rounded-md focus:border-purple-600">
+                                <span class="text-[9.5px] text-slate-500 dark:text-slate-400 font-mono font-bold">mg/kg</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Selye Adaptogen -->
-                    <div>
-                        <div class="flex justify-between text-[10px] mb-1 items-center">
-                            <span class="text-slate-600 font-medium" id="labelPsDose">3. Selye Somatic Cushion (Withanolides / PS)</span>
-                            <span id="psVal" class="font-bold text-emerald-700 mono">280 mg</span>
+                    <div class="dosing-capsule">
+                        <div class="flex justify-between text-[11px] mb-1.5 items-center">
+                            <span class="text-slate-700 dark:text-slate-200 font-bold" id="labelPsDose">3. Selye Somatic Cushion (Withanolides / PS)</span>
+                            <span id="psVal" class="kpi-number font-extrabold text-emerald-700 dark:text-emerald-400 mono tracking-tight text-2xl">280 mg</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <input type="range" id="psDose" min="50" max="500" value="280" step="10" oninput="syncDoseValue('ps', this.value, true)" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
-                            <div class="flex items-center gap-1 shrink-0">
-                                <input type="number" id="psNum" min="50" max="500" value="280" step="10" lang="en-US" inputmode="decimal" oninput="syncDoseValue('ps', this.value, false)" class="w-14 text-center py-0.5 px-1 text-xs mono font-bold bg-[#ffffff] border border-[#cbd5e1] rounded-md focus:border-[#0284c7]">
-                                <span class="text-[9px] text-slate-500 font-mono">mg</span>
+                        <div class="flex items-center gap-2.5">
+                            <input type="range" id="psDose" min="50" max="500" value="280" step="10" oninput="syncDoseValue('ps', this.value, true)" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none custom-slider">
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <input type="number" id="psNum" min="50" max="500" value="280" step="10" lang="en-US" inputmode="decimal" oninput="syncDoseValue('ps', this.value, false)" class="w-16 text-center py-1 px-1 text-xs mono font-bold bg-[#ffffff] dark:bg-[#041316] border border-[#cbd5e1] dark:border-teal-800 rounded-md focus:border-emerald-600">
+                                <span class="text-[9.5px] text-slate-500 dark:text-slate-400 font-mono font-bold">mg</span>
                             </div>
                         </div>
                     </div>
@@ -728,22 +907,28 @@
                     </div>
                 </div>
 
-                <!-- Dynamic Prognostic Readouts -->
-                <div class="p-2.5 clinical-subcard space-y-1.5">
-                    <div class="text-[9.5px] font-bold text-slate-500 uppercase" id="labelDynamicPrognosis">Dynamic Clinical Prognosis</div>
-                    <div>
-                        <div class="text-[9.5px] text-slate-600" id="labelPredictedSurv">Predicted Overall Survival</div>
-                        <div id="resPredictedSurvival" class="text-lg font-black text-emerald-700 mono">88.4 months</div>
-                        <div class="text-[9px] text-emerald-600 font-bold">+346% vs Conventional Care</div>
+                <!-- Dynamic Prognostic Readouts (KPI Big Numbers) -->
+                <div class="p-3 clinical-subcard space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-teal-900/40 pb-1">
+                        <span class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider" id="labelDynamicPrognosis">Dynamic Clinical Prognosis</span>
+                        <span class="text-[9px] font-mono text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">O(1) Real-Time</span>
                     </div>
-                    <div class="border-t border-slate-200 pt-1 grid grid-cols-2 gap-2">
-                        <div>
-                            <div class="text-[9px] text-slate-500">RECIST 1.1 Lysis</div>
-                            <div id="resTumorLysis" class="text-xs font-black text-blue-700 mono">98.4%</div>
+                    <div class="bg-white dark:bg-[#08282e] p-2.5 rounded-lg border border-slate-200 dark:border-teal-900/60 shadow-sm">
+                        <div class="text-[10.5px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide" id="labelPredictedSurv">Predicted Overall Survival</div>
+                        <div id="resPredictedSurvival" class="kpi-number text-[26px] font-black text-emerald-700 dark:text-[#34d399] mono tracking-tight my-0.5">88.4 months</div>
+                        <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-extrabold flex items-center gap-1">
+                            <span>▲ +346%</span>
+                            <span class="text-slate-500 dark:text-slate-400 font-normal">vs Conventional Care</span>
                         </div>
-                        <div>
-                            <div class="text-[9px] text-slate-500">Adaptation Res.</div>
-                            <div id="resAdaptationReserve" class="text-xs font-black text-purple-700 mono">82.4%</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-0.5">
+                        <div class="bg-white dark:bg-[#08282e] p-2 rounded-lg border border-slate-200 dark:border-teal-900/60 shadow-sm">
+                            <div class="text-[9.5px] font-bold text-slate-500 dark:text-slate-400">RECIST 1.1 Lysis</div>
+                            <div id="resTumorLysis" class="text-base font-black text-emerald-700 dark:text-[#38bdf8] mono">98.4%</div>
+                        </div>
+                        <div class="bg-white dark:bg-[#08282e] p-2 rounded-lg border border-slate-200 dark:border-teal-900/60 shadow-sm">
+                            <div class="text-[9.5px] font-bold text-slate-500 dark:text-slate-400">Adaptation Res.</div>
+                            <div id="resAdaptationReserve" class="text-base font-black text-purple-700 dark:text-teal-300 mono">82.4%</div>
                         </div>
                     </div>
                 </div>
@@ -2213,9 +2398,23 @@
                 ctx.fillText(`M${m}`, x, h - 5);
             });
 
-            // Green Therapeutic Window Zone
-            ctx.fillStyle = "rgba(16, 185, 129, 0.08)";
-            ctx.fillRect(padLeft, padTop + graphH * 0.4, graphW, graphH * 0.45);
+            // Luminous Emerald Therapeutic Window Zone (High-Tech Gradient & Glow)
+            const windowGrad = ctx.createLinearGradient(0, padTop + graphH * 0.35, 0, padTop + graphH * 0.85);
+            windowGrad.addColorStop(0, "rgba(16, 185, 129, 0.22)");
+            windowGrad.addColorStop(1, "rgba(16, 185, 129, 0.05)");
+            ctx.fillStyle = windowGrad;
+            ctx.fillRect(padLeft, padTop + graphH * 0.35, graphW, graphH * 0.50);
+
+            // Therapeutic Window glowing boundary
+            ctx.strokeStyle = "rgba(16, 185, 129, 0.40)";
+            ctx.lineWidth = 1.2;
+            ctx.strokeRect(padLeft, padTop + graphH * 0.35, graphW, graphH * 0.50);
+
+            // Label for Therapeutic Window
+            ctx.fillStyle = "#10b981";
+            ctx.font = "bold 9px monospace";
+            ctx.textAlign = "left";
+            ctx.fillText("✦ THERAPEUTIC WINDOW (RECIST 1.1)", padLeft + 6, padTop + graphH * 0.35 + 11);
 
             // MTD Toxicity Ceiling (Dashed Red)
             ctx.strokeStyle = "rgba(239, 68, 68, 0.6)";
@@ -3427,10 +3626,12 @@
             const savedTheme = localStorage.getItem('aeterna_medical_theme');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
+                document.documentElement.classList.add('dark');
                 const themeIcon = document.getElementById('themeBtnIcon');
                 if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
             } else {
                 document.body.classList.remove('dark-mode');
+                document.documentElement.classList.remove('dark');
                 localStorage.setItem('aeterna_medical_theme', 'daylight');
                 const themeIcon = document.getElementById('themeBtnIcon');
                 if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
