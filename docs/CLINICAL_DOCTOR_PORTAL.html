@@ -11,24 +11,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #f8fafc;
-            --card-bg: #ffffff;
-            --border-ui: #cbd5e1;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
+            --bg-page: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --brand-blue: #2563eb;
-            --brand-cyan: #0284c7;
-            --brand-emerald: #16a34a;
-            --brand-rose: #dc2626;
-            --brand-amber: #d97706;
-            --brand-purple: #7c3aed;
+            --primary-blue: #0284c7;
+            --primary-blue-hover: #0369a1;
+            --border-subtle: #e2e8f0;
+
+            /* Muted Clinical Status Tokens */
+            --status-success-bg: #ecfdf5;
+            --status-success-border: #a7f3d0;
+            --status-success-text: #065f46;
+
+            --status-warning-bg: #fffbeb;
+            --status-warning-border: #fde68a;
+            --status-warning-text: #92400e;
+
+            --status-danger-bg: #fef2f2;
+            --status-danger-border: #fecaca;
+            --status-danger-text: #991b1b;
         }
 
         body.daylight-mode {
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-page) !important;
+            color: var(--text-main) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Outfit", sans-serif !important;
             height: 100vh;
             max-height: 100vh;
             overflow: hidden;
@@ -39,15 +47,14 @@
 
         /* Dark mode option */
         body:not(.daylight-mode) {
-            --bg-body: #07090e;
-            --card-bg: rgba(15, 23, 42, 0.95);
-            --border-ui: rgba(255, 255, 255, 0.12);
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
+            --bg-page: #0b0f19;
+            --bg-card: #111827;
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            font-family: 'Outfit', sans-serif;
+            --border-subtle: #1f2937;
+            background-color: var(--bg-page) !important;
+            color: var(--text-main) !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Outfit", sans-serif !important;
             height: 100vh;
             max-height: 100vh;
             overflow: hidden;
@@ -59,31 +66,55 @@
         .mono { font-family: 'JetBrains Mono', monospace; }
 
         .clinical-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-ui);
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
             transition: all 0.2s ease;
         }
 
-        /* Custom precision range sliders */
-        .custom-slider::-webkit-slider-thumb {
+        /* Precision range sliders in Medical Blue */
+        input[type=range].custom-slider {
             -webkit-appearance: none;
             appearance: none;
-            width: 15px;
-            height: 15px;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            height: 6px;
+            outline: none;
+            accent-color: #0284c7;
+        }
+        input[type=range].custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: var(--brand-blue);
+            background: #0284c7;
             cursor: pointer;
-            box-shadow: 0 0 6px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.4);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s ease, background-color 0.15s ease;
+        }
+        input[type=range].custom-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background: #0369a1;
+        }
+        input[type=range].custom-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0284c7;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.4);
+            border: 2px solid #ffffff;
         }
 
         /* Active Navigation Tab Style */
         .role-nav-tab {
-            padding: 5px 12px;
+            padding: 6px 14px;
             font-size: 11px;
             font-weight: 700;
-            border-radius: 8px;
+            border-radius: 6px;
             transition: all 0.18s ease;
             cursor: pointer;
             display: inline-flex;
@@ -91,17 +122,17 @@
             gap: 6px;
             white-space: nowrap;
             border: 1px solid transparent;
-            color: var(--text-secondary);
+            color: var(--text-muted);
         }
         .role-nav-tab:hover {
-            background: rgba(37, 99, 235, 0.08);
-            color: var(--brand-blue);
+            background: #e0f2fe;
+            color: #0284c7;
         }
         .role-nav-tab.active-tab {
-            background: #2563eb;
+            background: #0284c7;
             color: #ffffff !important;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-            border-color: #1d4ed8;
+            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);
+            border-color: #0284c7;
         }
 
         /* Subtle scrollbars for internal columns */
@@ -133,7 +164,7 @@
     <header class="h-14 border-b border-slate-200 bg-white/95 px-4 flex items-center justify-between shrink-0 shadow-sm z-30">
         <!-- Brand & Clinical Certification Badges -->
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-sm shadow-md">
+            <div class="w-8 h-8 rounded-lg bg-[#0284c7] flex items-center justify-center text-white font-black text-sm shadow-sm">
                 <i data-lucide="activity" class="w-5 h-5"></i>
             </div>
             <div>
@@ -192,12 +223,12 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- DISMISSIBLE OFFLINE / EDGE SERVER NOTIFICATION BANNER                     -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="edgeOfflineNotificationBanner" style="display: none;" class="px-5 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs flex items-center justify-between shadow-sm z-20 shrink-0">
+    <div id="edgeOfflineNotificationBanner" style="display: none;" class="px-5 py-1.5 bg-[#fffbeb] border-b border-[#fde68a] text-[#92400e] font-semibold text-xs flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2">
-            <i data-lucide="alert-circle" class="w-4 h-4 text-slate-950"></i>
+            <i data-lucide="alert-circle" class="w-4 h-4 text-[#d97706]"></i>
             <span>Hospital Edge Server offline (Port 8890 not reachable). Running in deterministic In-Browser WebWorker mode.</span>
         </div>
-        <button type="button" onclick="document.getElementById('edgeOfflineNotificationBanner').style.display='none'" class="text-[11px] bg-amber-700/30 hover:bg-amber-700/50 px-2 py-0.5 rounded text-slate-950 cursor-pointer">
+        <button type="button" onclick="document.getElementById('edgeOfflineNotificationBanner').style.display='none'" class="text-[11px] bg-[#fef3c7] hover:bg-[#fde68a] text-[#92400e] border border-[#fde68a] px-2 py-0.5 rounded cursor-pointer transition-all">
             Dismiss ✕
         </button>
     </div>
@@ -205,12 +236,12 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- PERSISTENT PATIENT BANNER & 4 ROLE NAVIGATION TABS                        -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="patientBannerBar" class="h-12 border-b border-slate-200 bg-slate-50/90 px-4 flex items-center justify-between shrink-0">
+    <div id="patientBannerBar" class="h-12 border-b border-[#e2e8f0] bg-white px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
         <!-- Patient Clinical Identity Bar -->
         <div class="flex items-center gap-2.5 text-xs">
             <div class="flex items-center gap-1.5 font-bold text-slate-900">
-                <span class="text-[10px] font-mono bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded" id="bannerLabelPatient">PATIENT</span>
-                <span id="bannerPatientId" class="mono font-black text-blue-700">PT-2026-8890</span>
+                <span class="text-[10px] font-mono bg-[#e0f2fe] text-[#0369a1] border border-[#bae6fd] px-1.5 py-0.5 rounded" id="bannerLabelPatient">PATIENT</span>
+                <span id="bannerPatientId" class="mono font-black text-[#0284c7]">PT-2026-8890</span>
             </div>
             <span class="text-slate-300">|</span>
             <span class="text-slate-600 font-medium"><span id="bannerLabelAge">Age</span>: <strong id="bannerAge" class="mono text-slate-900">62</strong> y/o</span>
@@ -248,20 +279,20 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- DYNAMIC SAFETY CLAMP ALARM BAR (SHOWN ONLY ON TP53 OR GFR < 30)           -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="safetyClampsContainer" style="display: none;" class="px-5 py-2 bg-rose-600 text-white shrink-0 shadow-md">
+    <div id="safetyClampsContainer" style="display: none;" class="px-5 py-2.5 bg-[#fef2f2] border-b border-[#fecaca] text-[#991b1b] shrink-0">
         <div id="safetyClampTP53" class="hidden flex items-center justify-between text-xs font-semibold">
-            <div class="flex items-center gap-2">
-                <i data-lucide="alert-octagon" class="w-4 h-4 text-white animate-pulse"></i>
-                <span id="clampTextTP53"><strong>CRITICAL CONTRAINDICATION (LOINC 85337-4):</strong> TP53 Loss of Function detected. Epitalon telomerase activation is locked to 0.0 mg (IEC 62304 Class C guardrail).</span>
+            <div class="flex items-center gap-2.5 border-l-4 border-[#dc2626] pl-2.5">
+                <i data-lucide="alert-octagon" class="w-4 h-4 text-[#dc2626] shrink-0"></i>
+                <span id="clampTextTP53"><strong class="text-[#991b1b]">CRITICAL CONTRAINDICATION (LOINC 85337-4):</strong> TP53 Loss of Function detected. Epitalon telomerase activation is locked to 0.0 mg (IEC 62304 Class C guardrail).</span>
             </div>
-            <span class="font-mono text-[10.5px] bg-rose-800 px-2 py-0.5 rounded" id="clampBadgeTP53">LOCKED: 0.0 mg</span>
+            <span class="font-mono text-[10.5px] bg-[#fee2e2] text-[#991b1b] border border-[#fecaca] px-2.5 py-0.5 rounded font-bold" id="clampBadgeTP53">LOCKED: 0.0 mg</span>
         </div>
         <div id="safetyClampRenal" class="hidden flex items-center justify-between text-xs font-semibold">
-            <div class="flex items-center gap-2">
-                <i data-lucide="alert-triangle" class="w-4 h-4 text-white animate-pulse"></i>
-                <span id="clampTextRenal"><strong>RENAL FAILURE ALERT (GFR &lt; 30 mL/min):</strong> CrCl is <span id="clampGfrValue">24.0</span> mL/min (CKD Stage 4/5). Nephrotoxic chemotherapeutics clamped to 0.0 mg pending hemodialysis.</span>
+            <div class="flex items-center gap-2.5 border-l-4 border-[#dc2626] pl-2.5">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-[#dc2626] shrink-0"></i>
+                <span id="clampTextRenal"><strong class="text-[#991b1b]">RENAL FAILURE ALERT (GFR &lt; 30 mL/min):</strong> CrCl is <span id="clampGfrValue">24.0</span> mL/min (CKD Stage 4/5). Nephrotoxic chemotherapeutics clamped to 0.0 mg pending hemodialysis.</span>
             </div>
-            <span class="font-mono text-[10.5px] bg-rose-800 px-2 py-0.5 rounded" id="clampBadgeRenal">RENAL STOP</span>
+            <span class="font-mono text-[10.5px] bg-[#fee2e2] text-[#991b1b] border border-[#fecaca] px-2.5 py-0.5 rounded font-bold" id="clampBadgeRenal">RENAL STOP</span>
         </div>
     </div>
 
@@ -290,21 +321,21 @@
                 <div>
                     <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1" id="presetsLabel">Quick Presets</label>
                     <div class="grid grid-cols-2 gap-1.5">
-                        <button type="button" onclick="loadPreset('pancreatic')" class="p-1.5 text-left bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-slate-900">Pancreatic</div>
-                            <div class="text-[9px] text-slate-500 font-mono">KRAS G12D</div>
+                        <button type="button" onclick="loadPreset('pancreatic')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#f0f9ff] border border-[#e2e8f0] hover:border-[#bae6fd] rounded-lg transition-all">
+                            <div class="text-[11px] font-bold text-[#0f172a]">Pancreatic</div>
+                            <div class="text-[9px] text-[#64748b] font-mono">KRAS G12D</div>
                         </button>
-                        <button type="button" onclick="loadPreset('glioblastoma')" class="p-1.5 text-left bg-slate-50 hover:bg-purple-50 border border-slate-200 hover:border-purple-400 rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-slate-900">GBM</div>
-                            <div class="text-[9px] text-slate-500 font-mono">TP53 Loss</div>
+                        <button type="button" onclick="loadPreset('glioblastoma')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#f5f3ff] border border-[#e2e8f0] hover:border-[#ddd6fe] rounded-lg transition-all">
+                            <div class="text-[11px] font-bold text-[#0f172a]">GBM</div>
+                            <div class="text-[9px] text-[#64748b] font-mono">TP53 Loss</div>
                         </button>
-                        <button type="button" onclick="loadPreset('lung')" class="p-1.5 text-left bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-slate-900">NSCLC</div>
-                            <div class="text-[9px] text-slate-500 font-mono">EGFR L858R</div>
+                        <button type="button" onclick="loadPreset('lung')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#f0fdf4] border border-[#e2e8f0] hover:border-[#bbf7d0] rounded-lg transition-all">
+                            <div class="text-[11px] font-bold text-[#0f172a]">NSCLC</div>
+                            <div class="text-[9px] text-[#64748b] font-mono">EGFR L858R</div>
                         </button>
-                        <button type="button" onclick="loadPreset('breast')" class="p-1.5 text-left bg-slate-50 hover:bg-rose-50 border border-slate-200 hover:border-rose-400 rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-slate-900">TNBC</div>
-                            <div class="text-[9px] text-slate-500 font-mono">BRCA1 Del</div>
+                        <button type="button" onclick="loadPreset('breast')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#fff1f2] border border-[#e2e8f0] hover:border-[#fecdd3] rounded-lg transition-all">
+                            <div class="text-[11px] font-bold text-[#0f172a]">TNBC</div>
+                            <div class="text-[9px] text-[#64748b] font-mono">BRCA1 Del</div>
                         </button>
                     </div>
                 </div>
@@ -427,12 +458,12 @@
                 </div>
 
                 <!-- Active Drug Regimen Badge -->
-                <div class="p-2 bg-blue-50/70 border border-blue-200 rounded-xl flex items-center justify-between">
+                <div class="p-2 bg-[#f0f9ff] border border-[#bae6fd] rounded-lg flex items-center justify-between">
                     <div>
-                        <div class="text-xs font-bold text-blue-950" id="activeProtocolTitle">Active Drug Regimen: AP-90 Liposomal Peptide + Pembrolizumab</div>
-                        <div class="text-[10px] text-blue-800 font-mono mt-0.5">Target: KRAS G12D Complex • CrCl: <span id="patientGfrVal">94.0 mL/min</span> (BSA: <span id="patientBsaVal">1.85 m²</span>)</div>
+                        <div class="text-xs font-bold text-[#0c4a6e]" id="activeProtocolTitle">Active Drug Regimen: AP-90 Liposomal Peptide + Pembrolizumab</div>
+                        <div class="text-[10px] text-[#0369a1] font-mono mt-0.5">Target: KRAS G12D Complex • CrCl: <span id="patientGfrVal">94.0 mL/min</span> (BSA: <span id="patientBsaVal">1.85 m²</span>)</div>
                     </div>
-                    <span class="text-[10.5px] font-mono font-bold text-blue-700 bg-white px-2 py-0.5 rounded border border-blue-200">
+                    <span class="text-[10.5px] font-mono font-bold text-[#0284c7] bg-white px-2 py-0.5 rounded border border-[#bae6fd]">
                         Kd = 0.12 nM
                     </span>
                 </div>
@@ -490,7 +521,7 @@
                 </div>
 
                 <!-- Simulation Trigger Action -->
-                <button type="button" onclick="executeSimulation('full')" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 shadow transition-all cursor-pointer">
+                <button type="button" onclick="executeSimulation('full')" class="w-full py-2.5 bg-[#0284c7] hover:bg-[#0369a1] text-white font-extrabold text-xs uppercase tracking-wider rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
                     <i data-lucide="play" class="w-4 h-4"></i>
                     <span id="btnSimulateText">SIMULATE DIGITAL TWIN (O(1) AVX-512)</span>
                 </button>
@@ -511,23 +542,23 @@
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1" id="labelSafetyTriage">Safety Triage (Traffic Light)</label>
                     <div class="space-y-1.5">
-                        <div id="gateRenal" class="p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs">
-                            <span class="font-medium text-slate-800 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Renal Function
+                        <div id="gateRenal" class="p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs">
+                            <span class="font-medium text-[#0f172a] flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Renal Function
                             </span>
-                            <span class="font-mono text-[10px] font-bold text-emerald-700">Optimal (GFR > 60)</span>
+                            <span class="font-mono text-[10px] font-bold text-[#065f46]">Optimal (GFR > 60)</span>
                         </div>
-                        <div id="gateApoE" class="p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs">
-                            <span class="font-medium text-slate-800 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> ApoE4 Clearance
+                        <div id="gateApoE" class="p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs">
+                            <span class="font-medium text-[#0f172a] flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-[#10b981]"></span> ApoE4 Clearance
                             </span>
-                            <span class="font-mono text-[10px] font-bold text-emerald-700">Normal (1.00x)</span>
+                            <span class="font-mono text-[10px] font-bold text-[#065f46]">Normal (1.00x)</span>
                         </div>
-                        <div id="gateTP53" class="p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs">
-                            <span class="font-medium text-slate-800 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> TP53 Gate
+                        <div id="gateTP53" class="p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs">
+                            <span class="font-medium text-[#0f172a] flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-[#10b981]"></span> TP53 Gate
                             </span>
-                            <span class="font-mono text-[10px] font-bold text-emerald-700">Wild-Type (Permissive)</span>
+                            <span class="font-mono text-[10px] font-bold text-[#065f46]">Wild-Type (Permissive)</span>
                         </div>
                     </div>
                 </div>
@@ -1412,6 +1443,21 @@
             if (bGene) bGene.innerText = gene.replace('_', ' ');
             if (bApoe) bApoe.innerText = apoe;
 
+            // Dynamic ApoE4 Traffic Light update
+            const gateApoE = document.getElementById('gateApoE');
+            if (gateApoE) {
+                if (apoe === 'E4/E4') {
+                    gateApoE.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e]">High Risk E4/E4 (0.42x)</span>';
+                } else if (apoe === 'E3/E4') {
+                    gateApoE.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e]">Moderate E3/E4 (0.75x)</span>';
+                } else {
+                    gateApoE.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#065f46]">Normal (1.00x)</span>';
+                }
+            }
+
             // Reset infusion timer & ward terminal when patient changes
             resetBedsideStateOnPatientChange(pid);
             calculatePatientMetrics();
@@ -1434,8 +1480,8 @@
                 hasHazard = true;
                 if (clampTP53) clampTP53.classList.remove('hidden');
                 if (gateTP53) {
-                    gateTP53.className = 'p-2 bg-rose-50 border border-rose-300 rounded-lg flex items-center justify-between text-xs';
-                    gateTP53.innerHTML = '<span class="font-medium text-slate-800 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-rose-700">LOCKED (0.0 mg)</span>';
+                    gateTP53.className = 'p-2 bg-[#fef2f2] border border-[#fecaca] rounded-lg flex items-center justify-between text-xs';
+                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-[#991b1b]">LOCKED (0.0 mg)</span>';
                 }
                 const epitalon = document.getElementById('epitalonDose');
                 const epitalonVal = document.getElementById('epitalonVal');
@@ -1444,8 +1490,8 @@
             } else {
                 if (clampTP53) clampTP53.classList.add('hidden');
                 if (gateTP53) {
-                    gateTP53.className = 'p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs';
-                    gateTP53.innerHTML = '<span class="font-medium text-slate-800 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-emerald-700">Wild-Type (Permissive)</span>';
+                    gateTP53.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs';
+                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-[#065f46]">Wild-Type (Permissive)</span>';
                 }
             }
 
@@ -1456,14 +1502,14 @@
                 const cGfrVal = document.getElementById('clampGfrValue');
                 if (cGfrVal) cGfrVal.innerText = crcl;
                 if (gateRenal) {
-                    gateRenal.className = 'p-2 bg-rose-50 border border-rose-300 rounded-lg flex items-center justify-between text-xs';
-                    gateRenal.innerHTML = `<span class="font-medium text-slate-800 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-600"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-rose-700">CrCl ${crcl} (CKD 4/5)</span>`;
+                    gateRenal.className = 'p-2 bg-[#fef2f2] border border-[#fecaca] rounded-lg flex items-center justify-between text-xs';
+                    gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#991b1b]">CrCl ${crcl} (CKD 4/5)</span>`;
                 }
             } else {
                 if (clampRenal) clampRenal.classList.add('hidden');
                 if (gateRenal) {
-                    gateRenal.className = 'p-2 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between text-xs';
-                    gateRenal.innerHTML = `<span class="font-medium text-slate-800 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-emerald-700">Optimal (GFR > 60)</span>`;
+                    gateRenal.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs';
+                    gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#065f46]">Optimal (GFR > 60)</span>`;
                 }
             }
 
