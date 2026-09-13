@@ -13,11 +13,16 @@
         :root {
             --bg-page: #f1f5f9;
             --bg-card: #ffffff;
+            --bg-subcard: #f8fafc;
+            --bg-input: #f8fafc;
+            --bg-input-focus: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --primary-blue: #0284c7;
             --primary-blue-hover: #0369a1;
             --border-subtle: #e2e8f0;
+            --border-input: #cbd5e1;
+            --chart-bg: #0f172a;
 
             /* Muted Clinical Status Tokens */
             --status-success-bg: #ecfdf5;
@@ -33,7 +38,8 @@
             --status-danger-text: #991b1b;
         }
 
-        body.daylight-mode {
+        /* 100% Unified Daylight Medical Standard (Default) */
+        body {
             background-color: var(--bg-page) !important;
             color: var(--text-main) !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Outfit", sans-serif !important;
@@ -45,32 +51,80 @@
             min-height: 0;
         }
 
-        /* Dark mode option */
-        body:not(.daylight-mode) {
+        /* Cohesive Dark Mode when toggled */
+        body.dark-mode {
             --bg-page: #0b0f19;
-            --bg-card: #111827;
+            --bg-card: #0f172a;
+            --bg-subcard: #1e293b;
+            --bg-input: #1e293b;
+            --bg-input-focus: #334155;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-subtle: #1f2937;
-            background-color: var(--bg-page) !important;
-            color: var(--text-main) !important;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Outfit", sans-serif !important;
-            height: 100vh;
-            max-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
+            --border-subtle: #1e293b;
+            --border-input: #334155;
+            --chart-bg: #070a12;
         }
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
+        /* Unified 3-Column Hospital Cards */
         .clinical-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-subtle) !important;
+            border-radius: 8px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
             transition: all 0.2s ease;
+        }
+
+        .clinical-header {
+            background: var(--bg-card) !important;
+            border-color: var(--border-subtle) !important;
+        }
+
+        .clinical-patient-banner {
+            background: var(--bg-card) !important;
+            border-color: var(--border-subtle) !important;
+        }
+
+        .clinical-subcard {
+            background: var(--bg-subcard) !important;
+            border: 1px solid var(--border-subtle) !important;
+            border-radius: 8px !important;
+        }
+
+        /* Universal Form Fields (No Flashbang White on Dark) */
+        input[type="text"],
+        input[type="number"],
+        select {
+            background-color: var(--bg-input) !important;
+            border: 1px solid var(--border-input) !important;
+            color: var(--text-main) !important;
+            border-radius: 6px !important;
+            transition: all 0.15s ease;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            background-color: var(--bg-input-focus) !important;
+            border-color: var(--primary-blue) !important;
+            outline: none !important;
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15) !important;
+        }
+
+        /* Preset Buttons */
+        .preset-btn {
+            background-color: var(--bg-subcard) !important;
+            border: 1px solid var(--border-subtle) !important;
+            color: var(--text-main) !important;
+            transition: all 0.15s ease !important;
+        }
+        .preset-btn:hover {
+            background-color: #f0f9ff !important;
+            border-color: #bae6fd !important;
+        }
+        body.dark-mode .preset-btn:hover {
+            background-color: #334155 !important;
+            border-color: #0284c7 !important;
         }
 
         /* Precision range sliders in Medical Blue */
@@ -82,6 +136,9 @@
             height: 6px;
             outline: none;
             accent-color: #0284c7;
+        }
+        body.dark-mode input[type=range].custom-slider {
+            background: #334155;
         }
         input[type=range].custom-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -128,18 +185,22 @@
             background: #e0f2fe;
             color: #0284c7;
         }
+        body.dark-mode .role-nav-tab:hover {
+            background: #1e293b;
+            color: #38bdf8;
+        }
         .role-nav-tab.active-tab {
-            background: #0284c7;
+            background: #0284c7 !important;
             color: #ffffff !important;
-            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3);
-            border-color: #0284c7;
+            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.3) !important;
+            border-color: #0284c7 !important;
         }
 
         /* Subtle scrollbars for internal columns */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        body:not(.daylight-mode) ::-webkit-scrollbar-thumb { background: #334155; }
+        body.dark-mode ::-webkit-scrollbar-thumb { background: #334155; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         /* Responsive compact styling for 1366x768, 1440x900 & 125%/150% Windows Scaling */
@@ -156,12 +217,12 @@
         }
     </style>
 </head>
-<body class="daylight-mode">
+<body>
 
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- TOP CLINICAL HEADER BAR (HOSPITAL EDGE & REGULATORY IDENTITY)              -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <header class="h-14 border-b border-slate-200 bg-white/95 px-4 flex items-center justify-between shrink-0 shadow-sm z-30">
+    <header class="h-14 border-b border-[#e2e8f0] px-4 flex items-center justify-between shrink-0 shadow-sm z-30 clinical-header">
         <!-- Brand & Clinical Certification Badges -->
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-lg bg-[#0284c7] flex items-center justify-center text-white font-black text-sm shadow-sm">
@@ -236,7 +297,7 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- PERSISTENT PATIENT BANNER & 4 ROLE NAVIGATION TABS                        -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="patientBannerBar" class="h-12 border-b border-[#e2e8f0] bg-white px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+    <div id="patientBannerBar" class="h-12 border-b border-[#e2e8f0] px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] clinical-patient-banner">
         <!-- Patient Clinical Identity Bar -->
         <div class="flex items-center gap-2.5 text-xs">
             <div class="flex items-center gap-1.5 font-bold text-slate-900">
@@ -321,20 +382,20 @@
                 <div>
                     <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1" id="presetsLabel">Quick Presets</label>
                     <div class="grid grid-cols-2 gap-1.5">
-                        <button type="button" onclick="loadPreset('pancreatic')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#f0f9ff] border border-[#e2e8f0] hover:border-[#bae6fd] rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-[#0f172a]">Pancreatic</div>
+                        <button type="button" onclick="loadPreset('pancreatic')" class="preset-btn p-1.5 text-left rounded-lg">
+                            <div class="text-[11px] font-bold">Pancreatic</div>
                             <div class="text-[9px] text-[#64748b] font-mono">KRAS G12D</div>
                         </button>
-                        <button type="button" onclick="loadPreset('glioblastoma')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#f5f3ff] border border-[#e2e8f0] hover:border-[#ddd6fe] rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-[#0f172a]">GBM</div>
+                        <button type="button" onclick="loadPreset('glioblastoma')" class="preset-btn p-1.5 text-left rounded-lg">
+                            <div class="text-[11px] font-bold">GBM</div>
                             <div class="text-[9px] text-[#64748b] font-mono">TP53 Loss</div>
                         </button>
-                        <button type="button" onclick="loadPreset('lung')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#f0fdf4] border border-[#e2e8f0] hover:border-[#bbf7d0] rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-[#0f172a]">NSCLC</div>
+                        <button type="button" onclick="loadPreset('lung')" class="preset-btn p-1.5 text-left rounded-lg">
+                            <div class="text-[11px] font-bold">NSCLC</div>
                             <div class="text-[9px] text-[#64748b] font-mono">EGFR L858R</div>
                         </button>
-                        <button type="button" onclick="loadPreset('breast')" class="p-1.5 text-left bg-[#f8fafc] hover:bg-[#fff1f2] border border-[#e2e8f0] hover:border-[#fecdd3] rounded-lg transition-all">
-                            <div class="text-[11px] font-bold text-[#0f172a]">TNBC</div>
+                        <button type="button" onclick="loadPreset('breast')" class="preset-btn p-1.5 text-left rounded-lg">
+                            <div class="text-[11px] font-bold">TNBC</div>
                             <div class="text-[9px] text-[#64748b] font-mono">BRCA1 Del</div>
                         </button>
                     </div>
@@ -429,7 +490,7 @@
                 </div>
 
                 <!-- Autonomic Telemetry: Pan-Tompkins 250 Hz DSP ECG -->
-                <div class="mt-auto p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                <div class="mt-auto p-2 clinical-subcard">
                     <div class="flex items-center justify-between text-[9.5px] font-bold text-slate-600 mb-1">
                         <span class="flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
@@ -486,7 +547,7 @@
                 </div>
 
                 <!-- Precision Dosing Sliders -->
-                <div class="space-y-1.5 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                <div class="space-y-1.5 p-2.5 clinical-subcard">
                     <div class="flex justify-between items-center text-xs font-bold">
                         <span class="text-slate-700" id="labelPrecisionSliders">Precision Sliders</span>
                         <span class="text-[9.5px] text-slate-500 font-mono">Pharmacometric Titration</span>
@@ -564,7 +625,7 @@
                 </div>
 
                 <!-- Dynamic Prognostic Readouts -->
-                <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+                <div class="p-2.5 clinical-subcard space-y-1.5">
                     <div class="text-[9.5px] font-bold text-slate-500 uppercase" id="labelDynamicPrognosis">Dynamic Clinical Prognosis</div>
                     <div>
                         <div class="text-[9.5px] text-slate-600" id="labelPredictedSurv">Predicted Overall Survival</div>
@@ -632,7 +693,7 @@
                     </span>
                 </div>
 
-                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+                <div class="p-3 clinical-subcard space-y-2 text-xs">
                     <div class="font-bold text-slate-900 border-b border-slate-200 pb-1 flex justify-between">
                         <span>Dispense Order Specifications</span>
                         <span class="mono text-blue-700" id="pharmacyPatientIdDisplay">PT-2026-8890</span>
@@ -1398,12 +1459,12 @@
         // ─────────────────────────────────────────────────────────────────────────
         function toggleMedicalTheme() {
             const b = document.body;
-            b.classList.toggle('daylight-mode');
-            const isDaylight = b.classList.contains('daylight-mode');
-            localStorage.setItem('aeterna_medical_theme', isDaylight ? 'daylight' : 'dark');
+            b.classList.toggle('dark-mode');
+            const isDark = b.classList.contains('dark-mode');
+            localStorage.setItem('aeterna_medical_theme', isDark ? 'dark' : 'daylight');
             const icon = document.getElementById('themeBtnIcon');
             if (icon) {
-                icon.setAttribute('data-lucide', isDaylight ? 'moon' : 'sun');
+                icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
                 if (window.lucide) lucide.createIcons();
             }
             renderTumorTrajectoryChart(latestSimulationData || getBaselineSimulationData(), getActiveFormPayload());
@@ -2879,12 +2940,17 @@
             await checkEdgeServerHealth();
             setInterval(checkEdgeServerHealth, 8000);
 
-            // Set medical theme from storage or default to daylight-mode
+            // Force Daylight Medical as permanent default unless dark mode is explicitly stored
             const savedTheme = localStorage.getItem('aeterna_medical_theme');
             if (savedTheme === 'dark') {
-                document.body.classList.remove('daylight-mode');
+                document.body.classList.add('dark-mode');
+                const themeIcon = document.getElementById('themeBtnIcon');
+                if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
             } else {
-                document.body.classList.add('daylight-mode');
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('aeterna_medical_theme', 'daylight');
+                const themeIcon = document.getElementById('themeBtnIcon');
+                if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
             }
 
             // Set saved language if any
