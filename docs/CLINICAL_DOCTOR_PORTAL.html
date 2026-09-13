@@ -272,7 +272,7 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     <span class="text-xs font-bold text-slate-900 flex items-center gap-1">
                         <i data-lucide="user" class="w-3 h-3 text-blue-600"></i>
-                        <span id="navAdminUserLabel">Prof. Pencheva (UIN 10482)</span>
+                        <span id="navAdminUserLabel">Attending Oncologist (ID: ONCO-104)</span>
                     </span>
                     <span id="navAdminUserRoleBadge" class="text-[9px] font-mono text-blue-700 bg-blue-50 px-1 py-0.2 rounded border border-blue-200">ONCOLOGIST</span>
                     <button type="button" onclick="logoutHospitalStaff()" title="Logout" class="text-[10px] text-slate-400 hover:text-rose-600 font-bold ml-1">✕</button>
@@ -701,8 +701,8 @@
                     <div class="grid grid-cols-2 gap-2 text-[11px]">
                         <div>Body Surface Area (BSA): <strong id="pharmacyBsaDisplay" class="mono text-slate-900">1.85 m²</strong></div>
                         <div>Cockcroft-Gault CrCl: <strong id="pharmacyGfrDisplay" class="mono text-slate-900">94.0 mL/min</strong></div>
-                        <div>Primary Oncologist: <strong class="text-slate-900">Prof. Pencheva (UIN 10482)</strong></div>
-                        <div>Verifying Pharmacist: <strong class="text-slate-900">PharmD D. Dimitrova (UIN 40912)</strong></div>
+                        <div>Primary Oncologist: <strong class="text-slate-900">Attending Oncologist (ID: ONCO-104)</strong></div>
+                        <div>Verifying Pharmacist: <strong class="text-slate-900">Clinical Pharmacist (ID: PHARM-409)</strong></div>
                     </div>
                 </div>
 
@@ -750,8 +750,8 @@
                         </div>
                         <div>Patient ID: <strong id="barcodeLabelPatientId" class="text-xs">PT-2026-8890</strong></div>
                         <div>BSA: <span id="barcodeLabelBsa">1.85 m²</span> | CrCl: <span id="barcodeLabelGfr">94.0 mL/min</span></div>
-                        <div>Prescriber: <span id="barcodeLabelDoctor">Prof. Pencheva (10482)</span></div>
-                        <div>Pharmacist: <span id="barcodeLabelPharmacist">PharmD Dimitrova (40912)</span></div>
+                        <div>Prescriber: <span id="barcodeLabelDoctor">Attending Oncologist (ID: ONCO-104)</span></div>
+                        <div>Pharmacist: <span id="barcodeLabelPharmacist">Clinical Pharmacist (ID: PHARM-409)</span></div>
                         <div class="border-t border-slate-300 pt-1">
                             <div>Rx: <strong id="barcodeLabelRegimen" class="text-rose-700">KRAS G12D Peptide (96.2 mg) + Anti-PD-L1 (760 mg)</strong></div>
                             <div>Vehicle: <strong id="barcodeLabelSol">250 mL 0.9% NaCl | 60 min infusion</strong></div>
@@ -1019,16 +1019,16 @@
 
             <form onsubmit="handleHospitalAuthSubmit(event)" style="display: flex; flex-direction: column; gap: 10px;">
                 <div>
-                    <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">Username / UIN</label>
-                    <input type="text" id="hospitalUsernameInput" value="" placeholder="e.g. pencheva or 10482" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
+                    <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">Username / Staff ID</label>
+                    <input type="text" id="hospitalUsernameInput" value="" placeholder="e.g. ONCO-104 or PHARM-409" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
                 </div>
                 <div>
                     <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">Password</label>
                     <input type="password" id="hospitalPasswordInput" value="" placeholder="Enter secure password" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
                 </div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 9.5px;">
-                    <button type="button" onclick="selectDemoProfile('pencheva')" style="padding: 3px 8px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; color: #0284c7; font-weight: 700; cursor: pointer;">Prof. Pencheva (Oncologist)</button>
-                    <button type="button" onclick="selectDemoProfile('auditor_ial')" style="padding: 3px 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; font-weight: 700; cursor: pointer;">Dr. Georgiev (Auditor)</button>
+                    <button type="button" onclick="selectDemoProfile('onco_104')" style="padding: 3px 8px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; color: #0284c7; font-weight: 700; cursor: pointer;">Attending Oncologist (ID: ONCO-104)</button>
+                    <button type="button" onclick="selectDemoProfile('audit_702')" style="padding: 3px 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; font-weight: 700; cursor: pointer;">Regulatory Auditor (ID: AUDIT-702)</button>
                 </div>
                 <div id="hospitalAuthStatusMsg" style="font-size: 10.5px; min-height: 14px;"></div>
                 <button type="submit" style="width: 100%; padding: 8px; background: #2563eb; color: #fff; font-weight: 800; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase;">
@@ -1049,10 +1049,10 @@
         let currentAuthToken = localStorage.getItem('aeterna_hospital_token') || null;
         let isEdgeServerOnline = false;
         let activeDoctor = {
-            name: "Prof. V. Pencheva, MD, PhD",
-            uin: "10482",
+            name: "Attending Oncologist",
+            uin: "ONCO-104",
             role: "SENIOR_ONCOLOGIST",
-            institution: "Medical University of Sofia",
+            institution: "University Hospital Comprehensive Cancer Center",
             department: "Clinical Oncology"
         };
         let activeTab = 'tabOncologist';
@@ -1980,7 +1980,7 @@
                 bsa: `${rx.bsa} m²`,
                 gfr: `${rx.crcl} mL/min`,
                 doc: activeDoctor.uin,
-                pharm: "PharmD D. Dimitrova (40912)",
+                pharm: "Clinical Pharmacist (ID: PHARM-409)",
                 rx: rx.regimen,
                 seal: rx.seal,
                 ts: rx.timestamp
@@ -2006,7 +2006,7 @@
                     signal: controller.signal,
                     body: JSON.stringify({
                         patient_id: rx.patientId,
-                        signer_name: "PharmD D. Dimitrova",
+                        signer_name: "Clinical Pharmacist (ID: PHARM-409)",
                         signer_role: "CLINICAL_PHARMACIST",
                         step: "PHARMACY_SECOND_VERIFICATION_COMPLETE",
                         decision: "APPROVED",
@@ -2118,7 +2118,7 @@
                 bsa: `${rx.bsa} m²`,
                 gfr: `${rx.crcl} mL/min`,
                 doc: activeDoctor.uin,
-                pharm: "PharmD D. Dimitrova (40912)",
+                pharm: "Clinical Pharmacist (ID: PHARM-409)",
                 rx: rx.regimen,
                 seal: rx.seal,
                 ts: pastDate
@@ -2153,8 +2153,8 @@
                     body: JSON.stringify({
                         wristband_patient_id: wristband,
                         bag_barcode_payload: bagData,
-                        nurse_uin: "NURSE-8812",
-                        nurse_name: "Charge Nurse Ivanova",
+                        nurse_uin: "RN-881",
+                        nurse_name: "Registered Nurse (ID: RN-881)",
                         room_bed_id: "Oncology Ward 302, Bed 2"
                     })
                 });
@@ -2349,7 +2349,7 @@
                     <h1>OFFICIAL REGULATORY INSPECTION AUDIT PROTCOL (IAL & EMA)</h1>
                     <div style="font-size: 10px; color: #475569;">Regulation (EU) 2017/745 (MDR) Class IIb • EU AI Act Art. 12 & 14 • IEC 62304 Class C</div>
                     <div class="box">
-                        <div><strong>Hospital Node:</strong> Medical University of Sofia // Clinical Oncology LAN Edge 127.0.0.1:8890</div>
+                        <div><strong>Hospital Node:</strong> Hospital Edge CDSS // Class IIb LAN Edge 127.0.0.1:8890</div>
                         <div><strong>Merkle Chain Integrity:</strong> <span style="color: green; font-weight: bold;">${d.merkle_chain_integrity}</span></div>
                         <div><strong>Total Blocks:</strong> ${d.total_audit_blocks} | <strong>Bedside 5-Rights Checks:</strong> ${d.closed_loop_verification_count} | <strong>Safety Clamp Stops:</strong> ${d.safety_clamp_interventions}</div>
                         <div><strong>Latest Block Hash:</strong> ${d.latest_block_hash}</div>
@@ -2376,6 +2376,12 @@
         function selectDemoProfile(role) {
             const userIn = document.getElementById('hospitalUsernameInput');
             const passIn = document.getElementById('hospitalPasswordInput');
+            const roleLabels = {
+                'onco_104': 'Attending Oncologist (ID: ONCO-104)',
+                'audit_702': 'Regulatory Auditor (ID: AUDIT-702)',
+                'pharm_409': 'Clinical Pharmacist (ID: PHARM-409)',
+                'rn_881': 'Registered Nurse (ID: RN-881)'
+            };
             if (userIn) {
                 userIn.value = role;
             }
@@ -2384,7 +2390,7 @@
                 passIn.focus();
             }
             const msg = document.getElementById('hospitalAuthStatusMsg');
-            if (msg) msg.innerHTML = '<span style="color: #64748b;">Selected profile: ' + role + '. Enter credentials to authenticate.</span>';
+            if (msg) msg.innerHTML = '<span style="color: #0284c7; font-weight: 600;">Selected: ' + (roleLabels[role] || role) + '. Enter secure password to sign in.</span>';
         }
         async function handleHospitalAuthSubmit(e) {
             if (e) e.preventDefault();
@@ -2408,7 +2414,7 @@
                     localStorage.setItem('aeterna_hospital_token', currentAuthToken);
                     activeDoctor = {
                         name: data.full_name,
-                        uin: data.doctor_uin || "10482",
+                        uin: data.doctor_uin || "ONCO-104",
                         role: data.role,
                         institution: data.institution || "MU-Sofia",
                         department: data.department || "Oncology"
