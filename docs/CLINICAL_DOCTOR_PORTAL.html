@@ -341,14 +341,14 @@
     <!-- DYNAMIC SAFETY CLAMP ALARM BAR (SHOWN ONLY ON TP53 OR GFR < 30)           -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <div id="safetyClampsContainer" style="display: none;" class="px-5 py-2.5 bg-[#fef2f2] border-b border-[#fecaca] text-[#991b1b] shrink-0">
-        <div id="safetyClampTP53" class="hidden flex items-center justify-between text-xs font-semibold">
+        <div id="safetyClampTP53" style="display: none;" class="items-center justify-between text-xs font-semibold">
             <div class="flex items-center gap-2.5 border-l-4 border-[#dc2626] pl-2.5">
                 <i data-lucide="alert-octagon" class="w-4 h-4 text-[#dc2626] shrink-0"></i>
                 <span id="clampTextTP53"><strong class="text-[#991b1b]">CRITICAL CONTRAINDICATION (LOINC 85337-4):</strong> TP53 Loss of Function detected. Epitalon telomerase activation is locked to 0.0 mg (IEC 62304 Class C guardrail).</span>
             </div>
             <span class="font-mono text-[10.5px] bg-[#fee2e2] text-[#991b1b] border border-[#fecaca] px-2.5 py-0.5 rounded font-bold" id="clampBadgeTP53">LOCKED: 0.0 mg</span>
         </div>
-        <div id="safetyClampRenal" class="hidden flex items-center justify-between text-xs font-semibold">
+        <div id="safetyClampRenal" style="display: none;" class="items-center justify-between text-xs font-semibold">
             <div class="flex items-center gap-2.5 border-l-4 border-[#dc2626] pl-2.5">
                 <i data-lucide="alert-triangle" class="w-4 h-4 text-[#dc2626] shrink-0"></i>
                 <span id="clampTextRenal"><strong class="text-[#991b1b]">RENAL FAILURE ALERT (GFR &lt; 30 mL/min):</strong> CrCl is <span id="clampGfrValue">24.0</span> mL/min (CKD Stage 4/5). Nephrotoxic chemotherapeutics clamped to 0.0 mg pending hemodialysis.</span>
@@ -1019,16 +1019,16 @@
 
             <form onsubmit="handleHospitalAuthSubmit(event)" style="display: flex; flex-direction: column; gap: 10px;">
                 <div>
-                    <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">Username</label>
-                    <input type="text" id="hospitalUsernameInput" value="pencheva" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
+                    <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">Username / UIN</label>
+                    <input type="text" id="hospitalUsernameInput" value="" placeholder="e.g. pencheva or 10482" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
                 </div>
                 <div>
                     <label style="display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px;">Password</label>
-                    <input type="password" id="hospitalPasswordInput" value="AeternaSofia2026!" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
+                    <input type="password" id="hospitalPasswordInput" value="" placeholder="Enter secure password" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs mono text-slate-900">
                 </div>
-                <div style="display: flex; gap: 4px; flex-wrap: wrap; font-size: 9.5px;">
-                    <button type="button" onclick="fillDemoCredentials('pencheva', 'AeternaSofia2026!')" style="padding: 2px 6px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; color: #1d4ed8; cursor: pointer;">Prof. Pencheva (Oncologist)</button>
-                    <button type="button" onclick="fillDemoCredentials('auditor_ial', 'AuditSofia2026!')" style="padding: 2px 6px; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 4px; color: #6d28d9; cursor: pointer;">Dr. Georgiev (Auditor)</button>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 9.5px;">
+                    <button type="button" onclick="selectDemoProfile('pencheva')" style="padding: 3px 8px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 6px; color: #0284c7; font-weight: 700; cursor: pointer;">Prof. Pencheva (Oncologist)</button>
+                    <button type="button" onclick="selectDemoProfile('auditor_ial')" style="padding: 3px 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; font-weight: 700; cursor: pointer;">Dr. Georgiev (Auditor)</button>
                 </div>
                 <div id="hospitalAuthStatusMsg" style="font-size: 10.5px; min-height: 14px;"></div>
                 <button type="submit" style="width: 100%; padding: 8px; background: #2563eb; color: #fff; font-weight: 800; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase;">
@@ -1534,12 +1534,13 @@
             const gateTP53 = document.getElementById('gateTP53');
             const gateRenal = document.getElementById('gateRenal');
 
-            let hasHazard = false;
+            const hasTP53Hazard = (gene === 'TP53_LOSS');
+            const hasRenalHazard = (crcl < 30.0);
+            const hasHazard = hasTP53Hazard || hasRenalHazard;
 
             // 1. TP53 Loss Check
-            if (gene === 'TP53_LOSS') {
-                hasHazard = true;
-                if (clampTP53) clampTP53.classList.remove('hidden');
+            if (hasTP53Hazard) {
+                if (clampTP53) clampTP53.style.display = 'flex';
                 if (gateTP53) {
                     gateTP53.className = 'p-2 bg-[#fef2f2] border border-[#fecaca] rounded-lg flex items-center justify-between text-xs';
                     gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-[#991b1b]">LOCKED (0.0 mg)</span>';
@@ -1549,7 +1550,7 @@
                 if (epitalon) epitalon.value = 0;
                 if (epitalonVal) epitalonVal.innerText = '0.0 mg/m² (LOCKED)';
             } else {
-                if (clampTP53) clampTP53.classList.add('hidden');
+                if (clampTP53) clampTP53.style.display = 'none';
                 if (gateTP53) {
                     gateTP53.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs';
                     gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-[#065f46]">Wild-Type (Permissive)</span>';
@@ -1557,9 +1558,8 @@
             }
 
             // 2. Renal Clearance Check
-            if (crcl < 30.0) {
-                hasHazard = true;
-                if (clampRenal) clampRenal.classList.remove('hidden');
+            if (hasRenalHazard) {
+                if (clampRenal) clampRenal.style.display = 'flex';
                 const cGfrVal = document.getElementById('clampGfrValue');
                 if (cGfrVal) cGfrVal.innerText = crcl;
                 if (gateRenal) {
@@ -1567,7 +1567,7 @@
                     gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#991b1b]">CrCl ${crcl} (CKD 4/5)</span>`;
                 }
             } else {
-                if (clampRenal) clampRenal.classList.add('hidden');
+                if (clampRenal) clampRenal.style.display = 'none';
                 if (gateRenal) {
                     gateRenal.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs';
                     gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#065f46]">Optimal (GFR > 60)</span>`;
@@ -1575,11 +1575,7 @@
             }
 
             if (container) {
-                if (hasHazard) {
-                    container.style.display = 'block';
-                } else {
-                    container.style.display = 'none';
-                }
+                container.style.display = hasHazard ? 'block' : 'none';
             }
 
             if (window.lucide) lucide.createIcons();
@@ -2377,11 +2373,18 @@
             const m = document.getElementById('hospitalAuthModal');
             if (m) m.style.display = 'none';
         }
-        function fillDemoCredentials(u, p) {
+        function selectDemoProfile(role) {
             const userIn = document.getElementById('hospitalUsernameInput');
             const passIn = document.getElementById('hospitalPasswordInput');
-            if (userIn) userIn.value = u;
-            if (passIn) passIn.value = p;
+            if (userIn) {
+                userIn.value = role;
+            }
+            if (passIn) {
+                passIn.value = '';
+                passIn.focus();
+            }
+            const msg = document.getElementById('hospitalAuthStatusMsg');
+            if (msg) msg.innerHTML = '<span style="color: #64748b;">Selected profile: ' + role + '. Enter credentials to authenticate.</span>';
         }
         async function handleHospitalAuthSubmit(e) {
             if (e) e.preventDefault();
