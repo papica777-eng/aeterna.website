@@ -408,23 +408,41 @@
                         <label class="text-[10px] font-bold text-slate-600 uppercase" id="driverLabel">Molecular Drivers (Searchable)</label>
                     </div>
                     <select id="geneMutation" onchange="onGeneSelectChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-900 font-mono focus:outline-none focus:border-blue-500">
-                        <optgroup label="── Oncogenes ──">
-                            <option value="KRAS_G12D" selected>KRAS G12D (LOINC 62358-7)</option>
-                            <option value="EGFR_L858R">EGFR L858R (LOINC 62357-9)</option>
-                            <option value="BRAF_V600E">BRAF V600E (LOINC 69548-6)</option>
-                            <option value="NRAS_Q61K">NRAS Q61K (LOINC 72347-1)</option>
-                            <option value="HER2">HER2 / ERBB2 (LOINC 48676-1)</option>
-                            <option value="ALK">ALK Fusion (LOINC 69549-4)</option>
-                            <option value="PIK3CA">PIK3CA (LOINC 72366-1)</option>
+                        <optgroup label="── Oncogenes & Kinases ──">
+                            <option value="KRAS_G12D" data-loinc="62358-7" selected>KRAS G12D (LOINC 62358-7)</option>
+                            <option value="EGFR_L858R" data-loinc="62357-9">EGFR L858R (LOINC 62357-9)</option>
+                            <option value="BRAF_V600E" data-loinc="69548-6">BRAF V600E (LOINC 69548-6)</option>
+                            <option value="NRAS_Q61K" data-loinc="72347-1">NRAS Q61K (LOINC 72347-1)</option>
+                            <option value="HER2" data-loinc="48676-1">HER2 / ERBB2 (LOINC 48676-1)</option>
+                            <option value="ALK" data-loinc="69549-4">ALK Fusion (LOINC 69549-4)</option>
+                            <option value="PIK3CA" data-loinc="72366-1">PIK3CA (LOINC 72366-1)</option>
+                            <option value="MET_EX14" data-loinc="82535-6">MET Exon 14 Skip (LOINC 82535-6)</option>
+                            <option value="RET_FUSION" data-loinc="93556-9">RET Fusion (LOINC 93556-9)</option>
+                            <option value="ROS1_FUSION" data-loinc="85149-3">ROS1 Fusion (LOINC 85149-3)</option>
+                            <option value="NTRK1_FUSION" data-loinc="93557-7">NTRK1 Fusion (LOINC 93557-7)</option>
+                            <option value="FGFR1_AMP" data-loinc="93558-5">FGFR1 Amplification (LOINC 93558-5)</option>
+                            <option value="FGFR2_ALT" data-loinc="93559-3">FGFR2 Alteration (LOINC 93559-3)</option>
+                            <option value="FGFR3_MUT" data-loinc="93560-1">FGFR3 Mutation (LOINC 93560-1)</option>
+                            <option value="DDR2_MUT" data-loinc="93561-9">DDR2 Mutation (LOINC 93561-9)</option>
+                            <option value="MAP2K1_MUT" data-loinc="93562-7">MAP2K1 / MEK1 (LOINC 93562-7)</option>
+                            <option value="AKT1_E17K" data-loinc="93563-5">AKT1 E17K (LOINC 93563-5)</option>
+                            <option value="IDH1_R132H" data-loinc="72349-7">IDH1 R132H (LOINC 72349-7)</option>
+                            <option value="IDH2_R172K" data-loinc="72350-5">IDH2 R172K (LOINC 72350-5)</option>
                         </optgroup>
-                        <optgroup label="── Tumor Suppressors ──">
-                            <option value="TP53_LOSS">TP53 Loss of Function (LOINC 85337-4)</option>
-                            <option value="BRCA1_DEL">BRCA1 185delAG (LOINC 55207-5)</option>
-                            <option value="PTEN">PTEN Deletion (LOINC 72348-9)</option>
-                            <option value="APC">APC Mutation (LOINC 62359-5)</option>
+                        <optgroup label="── Tumor Suppressors & Repair ──">
+                            <option value="TP53_LOSS" data-loinc="85337-4">TP53 Loss of Function (LOINC 85337-4)</option>
+                            <option value="BRCA1_DEL" data-loinc="55207-5">BRCA1 185delAG (LOINC 55207-5)</option>
+                            <option value="PTEN" data-loinc="72348-9">PTEN Deletion (LOINC 72348-9)</option>
+                            <option value="APC" data-loinc="62359-5">APC Mutation (LOINC 62359-5)</option>
+                            <option value="NOTCH1_MUT" data-loinc="93564-3">NOTCH1 Mutation (LOINC 93564-3)</option>
+                            <option value="RB1_LOSS" data-loinc="93565-0">RB1 Inactivation (LOINC 93565-0)</option>
+                            <option value="ATM_LOSS" data-loinc="93566-8">ATM Loss (LOINC 93566-8)</option>
+                            <option value="CDK4_AMP" data-loinc="93567-6">CDK4 Amplification (LOINC 93567-6)</option>
+                            <option value="CDKN2A_DEL" data-loinc="93568-4">CDKN2A Deletion (LOINC 93568-4)</option>
+                            <option value="STK11_LOSS" data-loinc="93569-2">STK11 / LKB1 Loss (LOINC 93569-2)</option>
                         </optgroup>
                         <optgroup label="── Immune Checkpoint ──">
-                            <option value="CD274">CD274 / PD-L1 (LOINC 85147-7)</option>
+                            <option value="CD274" data-loinc="85147-7">CD274 / PD-L1 (LOINC 85147-7)</option>
                         </optgroup>
                     </select>
                 </div>
@@ -1142,6 +1160,7 @@
         }
 
         // ─────────────────────────────────────────────────────────────────────────
+                // ─────────────────────────────────────────────────────────────────────────
         // § DYNAMIC DOSING & STATE CONTINUITY ENGINE (CRITERION 2)
         // ─────────────────────────────────────────────────────────────────────────
         function getCalculatedPrescription() {
@@ -1150,30 +1169,58 @@
             const wt = parseFloat(document.getElementById('patientWeight')?.value) || 76.0;
             const ht = parseFloat(document.getElementById('patientHeight')?.value) || 178.0;
             const cr = parseFloat(document.getElementById('patientCreatinine')?.value) || 0.9;
-            const gene = document.getElementById('geneMutation')?.value || 'KRAS_G12D';
+            const geneEl = document.getElementById('geneMutation');
+            const gene = geneEl?.value || 'KRAS_G12D';
+            const loincCode = geneEl?.options[geneEl.selectedIndex]?.getAttribute('data-loinc') || '62358-7';
+            const apoe = document.getElementById('inputApoE')?.value || 'E3/E3';
 
-            // Mosteller BSA
-            const bsa = parseFloat(Math.sqrt((ht * wt) / 3600.0).toFixed(2));
-            // Cockcroft-Gault CrCl
-            const crcl = parseFloat(Math.max(5.0, ((140.0 - age) * wt) / (72.0 * Math.max(0.1, cr))).toFixed(1));
+            // Mosteller BSA Formula: sqrt((ht * wt) / 3600)
+            const bsa = parseFloat(Math.sqrt((ht * wt) / 3600.0).toFixed(4));
+            const bsaDisplay = parseFloat(bsa.toFixed(2));
+
+            // Cockcroft-Gault CrCl Formula: ((140 - age) * wt) / (72 * cr)
+            const crcl = parseFloat((((140.0 - age) * wt) / (72.0 * Math.max(0.01, cr))).toFixed(2));
+            const crclDisplay = parseFloat(crcl.toFixed(1));
 
             // Dynamic slider readings
-            let ap90DosePerM2 = parseFloat(document.getElementById('epitalonDose')?.value) || 52.0;
-            const checkpointDosePerKg = parseFloat(document.getElementById('withanolidesDose')?.value) || 10.0;
-            const psDoseMg = parseFloat(document.getElementById('psDose')?.value) || 280.0;
+            let ap90DosePerM2 = parseFloat(document.getElementById('epitalonDose')?.value);
+            if (isNaN(ap90DosePerM2)) ap90DosePerM2 = 52.0;
+            let checkpointDosePerKg = parseFloat(document.getElementById('withanolidesDose')?.value);
+            if (isNaN(checkpointDosePerKg)) checkpointDosePerKg = 10.0;
+            let psDoseMg = parseFloat(document.getElementById('psDose')?.value);
+            if (isNaN(psDoseMg)) psDoseMg = 280.0;
 
-            // Clamping rules (TP53 locked to 0.0 mg)
-            if (gene === 'TP53_LOSS') {
+            // ApoE4 Modifiers: E3/E3 -> 1.00x, E3/E4 -> 0.80x, E4/E4 -> 0.60x
+            const apoeModifiers = { 'E3/E3': 1.00, 'E3/E4': 0.80, 'E4/E4': 0.60 };
+            const apoeMod = apoeModifiers[apoe] !== undefined ? apoeModifiers[apoe] : 1.00;
+
+            // Deterministic Hard Clamps (IEC 62304 Class C)
+            const isTP53 = (gene === 'TP53_LOSS' || loincCode === '85337-4');
+            const isRenalBlocked = (crcl < 30.0);
+
+            // Epitalon / AP-90 clamped strictly to 0.0 mg for TP53 loss
+            if (isTP53) {
                 ap90DosePerM2 = 0.0;
             }
 
-            const ap90TotalMg = parseFloat((ap90DosePerM2 * bsa).toFixed(1));
-            const checkpointTotalMg = parseFloat((checkpointDosePerKg * wt).toFixed(1));
+            let ap90TotalMg = 0.0;
+            let checkpointTotalMg = 0.0;
+
+            // Renal Stop clamps all cytostatic & targeted peptide boluses to 0.0 mg
+            if (isRenalBlocked) {
+                ap90TotalMg = 0.0;
+                checkpointTotalMg = 0.0;
+            } else {
+                ap90TotalMg = parseFloat((ap90DosePerM2 * bsaDisplay * apoeMod).toFixed(1));
+                checkpointTotalMg = parseFloat((checkpointDosePerKg * wt).toFixed(1));
+            }
 
             const geneName = gene.replace('_', ' ');
-            const regimenStr = `${geneName} Peptide (${ap90TotalMg} mg) + Anti-PD-L1 (${checkpointTotalMg} mg)`;
+            const regimenStr = isRenalBlocked
+                ? `RENAL CONTRAINDICATION (CrCl ${crclDisplay} < 30 mL/min) — Chemotherapeutics Clamped to 0.0 mg`
+                : `${geneName} Peptide (${ap90TotalMg} mg) + Anti-PD-L1 (${checkpointTotalMg} mg)`;
 
-            const rawPayloadStr = `${pid}|${bsa}|${crcl}|${gene}|${ap90TotalMg}|${checkpointTotalMg}|${psDoseMg}|${activeDoctor.uin}`;
+            const rawPayloadStr = `${pid}|${bsaDisplay}|${crclDisplay}|${gene}|${ap90TotalMg}|${checkpointTotalMg}|${psDoseMg}|${activeDoctor.uin}`;
             const sealHex = computeDeterministicSeal(rawPayloadStr);
 
             return {
@@ -1182,9 +1229,16 @@
                 weight: wt,
                 height: ht,
                 creatinine: cr,
-                bsa: bsa,
-                crcl: crcl,
+                bsa: bsaDisplay,
+                bsaPrecise: bsa,
+                crcl: crclDisplay,
+                crclPrecise: crcl,
                 gene: gene,
+                loinc: loincCode,
+                apoe: apoe,
+                apoeModifier: apoeMod,
+                isRenalBlocked: isRenalBlocked,
+                isTP53: isTP53,
                 ap90DosePerM2: ap90DosePerM2,
                 ap90TotalMg: ap90TotalMg,
                 checkpointDosePerKg: checkpointDosePerKg,
@@ -1196,24 +1250,49 @@
             };
         }
 
-        function onDoseSliderChange(type, val) {
-            if (type === 'epitalon') {
-                const el = document.getElementById('epitalonVal');
-                if (el) el.innerText = `${val}.0 mg/m²`;
-            } else if (type === 'withanolides') {
-                const el = document.getElementById('withanolidesVal');
-                if (el) el.innerText = `${val} mg/kg`;
-            } else if (type === 'ps') {
-                const el = document.getElementById('psVal');
-                if (el) el.innerText = `${val} mg`;
+        // Dual-input synchronization (Range Slider <-> Numeric Input)
+        function syncDoseValue(type, val, fromSlider) {
+            let numVal = parseFloat(val);
+            if (isNaN(numVal)) numVal = 0;
+
+            const sliderId = type === 'epitalon' ? 'epitalonDose' : (type === 'withanolides' ? 'withanolidesDose' : 'psDose');
+            const numId = type === 'epitalon' ? 'epitalonNum' : (type === 'withanolides' ? 'withanolidesNum' : 'psNum');
+            const labelId = type === 'epitalon' ? 'epitalonVal' : (type === 'withanolides' ? 'withanolidesVal' : 'psVal');
+
+            const sliderEl = document.getElementById(sliderId);
+            const numEl = document.getElementById(numId);
+            const labelEl = document.getElementById(labelId);
+
+            if (fromSlider) {
+                if (numEl) numEl.value = numVal;
+            } else {
+                if (sliderEl) sliderEl.value = numVal;
             }
 
-            // Immediately update active protocol badge & active formulation state
             const rx = getCalculatedPrescription();
-            const pGfr = document.getElementById('patientGfrVal');
-            const pBsa = document.getElementById('patientBsaVal');
-            if (pGfr) pGfr.innerText = `${rx.crcl} mL/min`;
-            if (pBsa) pBsa.innerText = `${rx.bsa} m²`;
+
+            if (labelEl) {
+                if (type === 'epitalon') {
+                    if (rx.isTP53) {
+                        labelEl.innerText = '0.0 mg/m² (LOCKED)';
+                    } else {
+                        labelEl.innerText = `${numVal.toFixed(1)} mg/m²`;
+                    }
+                } else if (type === 'withanolides') {
+                    labelEl.innerText = `${numVal.toFixed(1)} mg/kg`;
+                } else if (type === 'ps') {
+                    labelEl.innerText = `${Math.round(numVal)} mg`;
+                }
+            }
+
+            calculatePatientMetrics();
+            if (activeTab === 'tabPharmacy') {
+                renderPharmacyTab();
+            }
+        }
+
+        function onDoseSliderChange(type, val) {
+            syncDoseValue(type, val, true);
         }
 
         // ─────────────────────────────────────────────────────────────────────────
@@ -1514,6 +1593,7 @@
             if (pBsa) pBsa.innerText = `${rx.bsa} m²`;
 
             checkSafetyClamps(rx.gene, rx.crcl);
+            toggleSignButton();
         }
 
         function updatePatientBanner() {
@@ -1534,10 +1614,10 @@
             if (gateApoE) {
                 if (apoe === 'E4/E4') {
                     gateApoE.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs';
-                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e]">High Risk E4/E4 (0.42x)</span>';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e]">High Risk E4/E4 (0.60x)</span>';
                 } else if (apoe === 'E3/E4') {
                     gateApoE.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs';
-                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e]">Moderate E3/E4 (0.75x)</span>';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e]">Moderate E3/E4 (0.80x)</span>';
                 } else {
                     gateApoE.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs';
                     gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#065f46]">Normal (1.00x)</span>';
@@ -1946,10 +2026,27 @@
         // ─────────────────────────────────────────────────────────────────────────
         // § EU AI ACT ART. 14 SIGNING & DISPATCH TO PHARMACY
         // ─────────────────────────────────────────────────────────────────────────
-        function toggleSignButton() {
+                function toggleSignButton() {
             const cb = document.getElementById('doctorDecisionConfirmCheckbox');
             const btn = document.getElementById('signAndSendPharmacyBtn');
-            if (btn) btn.disabled = !(cb && cb.checked);
+            const btnTxt = document.getElementById('btnSignPharmacyText');
+            const rx = getCalculatedPrescription();
+
+            if (btn) {
+                if (rx.isRenalBlocked) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                    if (btnTxt) btnTxt.innerText = "CLINICAL HALT: RENAL STOP (0.0 mg)";
+                } else if (rx.isTP53) {
+                    btn.disabled = !(cb && cb.checked);
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    if (btnTxt) btnTxt.innerText = "SIGN (TP53 LOCKED: 0.0 mg EPITALON)";
+                } else {
+                    btn.disabled = !(cb && cb.checked);
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    if (btnTxt) btnTxt.innerText = "SIGN & DISPATCH TO PHARMACY";
+                }
+            }
         }
 
         async function signAndSendToPharmacy() {
@@ -2039,7 +2136,8 @@
             // 4. Render Dynamic Vector SVG QR Code
             if (qrContainer && window.AeternaQRCode) {
                 try {
-                    qrContainer.innerHTML = window.AeternaQRCode.generateSvg(JSON.stringify(qrPayload), 3, 3);
+                    const qrText = "GS1:" + rx.patientId + "|BSA:" + rx.bsa + "|GFR:" + rx.crcl + "|" + rx.seal.substring(0, 16);
+                    qrContainer.innerHTML = window.AeternaQRCode.generateSvg(qrText, 3, 3);
                 } catch(e) {}
             }
         }
@@ -2210,6 +2308,7 @@
                 clearTimeout(timeoutId);
                 const data = await res.json();
 
+                const statusBadge = document.getElementById('bedsideStatusBadge');
                 if (data.verified === true) {
                     if (awaitState) awaitState.style.display = 'none';
                     if (mismatchState) mismatchState.style.display = 'none';
@@ -2219,6 +2318,11 @@
                     const vReg = document.getElementById('bedsideVerifiedRegimen');
                     if (vPid) vPid.innerText = data.patient_id;
                     if (vReg) vReg.innerText = data.regimen;
+
+                    if (statusBadge) {
+                        statusBadge.innerText = 'VERIFIED_SAFE_FOR_INFUSION';
+                        statusBadge.className = 'text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded';
+                    }
 
                     playBedsideChime();
                     resetBedsideInfusion();
@@ -2246,6 +2350,7 @@
                 if (elapsedHrs > 4.0) expired = true;
             }
 
+            const statusBadge = document.getElementById('bedsideStatusBadge');
             if (bagPid && bagPid.trim() === wristband.trim() && !expired) {
                 if (awaitState) awaitState.style.display = 'none';
                 if (mismatchState) mismatchState.style.display = 'none';
@@ -2256,6 +2361,11 @@
                 if (vPid) vPid.innerText = bagPid;
                 if (vReg) vReg.innerText = bagData.rx || "KRAS G12D Peptide + Anti-PD-L1";
 
+                if (statusBadge) {
+                    statusBadge.innerText = 'VERIFIED_SAFE_FOR_INFUSION';
+                    statusBadge.className = 'text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded';
+                }
+
                 playBedsideChime();
                 resetBedsideInfusion();
                 startBedsideInfusion();
@@ -2264,10 +2374,20 @@
                 if (matchState) matchState.style.display = 'none';
                 if (mismatchState) mismatchState.style.display = 'block';
 
+                pauseBedsideInfusion();
+
                 if (expired) {
                     if (mismatchReason) mismatchReason.innerText = `CRITICAL EXPIRED PRODUCT: IV preparation stability window exceeded (> 4.0 hours)!`;
+                    if (statusBadge) {
+                        statusBadge.innerText = 'REJECTED_BAG_EXPIRED';
+                        statusBadge.className = 'text-[10px] font-mono font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded';
+                    }
                 } else {
                     if (mismatchReason) mismatchReason.innerText = `CRITICAL MISMATCH: Bag patient ID (${bagPid}) does not match wristband (${wristband})!`;
+                    if (statusBadge) {
+                        statusBadge.innerText = 'CRITICAL_PATIENT_MISMATCH_LOCKOUT';
+                        statusBadge.className = 'text-[10px] font-mono font-bold text-rose-700 bg-rose-100 border border-rose-300 px-2 py-0.5 rounded';
+                    }
                 }
                 playBedsideAlarm();
             }
