@@ -16,7 +16,9 @@ files_to_sync = [
     "install_hospital_ota_updater.ps1",
     "NZIS_FHIR_INTEGRATION_SPEC.md",
     "nzis_fhir_adapter.py",
-    "nzis_oncology_fhir_sample.json"
+    "nzis_oncology_fhir_sample.json",
+    "AETERNA_VHT_HOSPITAL_DEPLOYMENT_MANUAL.md",
+    "HOSPITAL_IT_DIRECTOR_TRANSMITTAL_LETTER_MU_SOFIA.md"
 ]
 
 src_dir = Path(r"z:\aeterna.website")
@@ -50,5 +52,21 @@ try:
     print(f"✓ Desktop/AETERNA_VHT_CLINICAL_DOCTOR_PORTAL.html")
 except Exception as e:
     print(f"❌ Desktop copy failed: {e}")
+
+# Copy generated PDFs to Desktop and docs
+desktop_dir = Path(r"C:\Users\papic\Desktop")
+for pdf_name in ["AETERNA_VHT_HOSPITAL_DEPLOYMENT_MANUAL.pdf", "HOSPITAL_IT_DIRECTOR_TRANSMITTAL_LETTER_MU_SOFIA.pdf"]:
+    pdf_src = src_dir / "generated" / pdf_name
+    if pdf_src.exists():
+        try:
+            shutil.copy2(pdf_src, desktop_dir / pdf_name)
+            print(f"✓ Desktop/{pdf_name}")
+        except Exception as e:
+            print(f"❌ Desktop copy {pdf_name} failed: {e}")
+        try:
+            shutil.copy2(pdf_src, docs_dir / pdf_name)
+            print(f"✓ docs/{pdf_name}")
+        except Exception as e:
+            print(f"❌ docs copy {pdf_name} failed: {e}")
 
 print("=== ALL ARTIFACTS FULLY SYNCHRONIZED ===")
