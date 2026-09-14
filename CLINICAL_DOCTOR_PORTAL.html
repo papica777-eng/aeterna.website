@@ -19,49 +19,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
                 <style>
         /* ==========================================================================
-           AETERNA-VHT: WELLSPRING CLINICAL DESIGN SYSTEM (DEEP TEAL, MINT, CREAM)
-           High-Contrast CDSS • Daylight Cleanroom & Midnight Pine Dark Mode
+           AETERNA-VHT: SWISS BIOTECH PRECISION (ALPINE PURE & FOREST JADE)
+           Variant 2 Enterprise SaMD Design System (EU MDR Class IIb / IEC 62304)
            ========================================================================== */
-        /* 1. СВЕТЪЛ РЕЖИМ (WELLSPRING CLINICAL: DEEP TEAL, PASTEL MINT, CREAM, WHITE) */
+        /* 1. СВЕТЪЛ РЕЖИМ (ALPINE PURE & FOREST JADE: #064e3b, #059669, #ffffff, #f4f6f5) */
         :root, body.daylight-mode {
-            --teal-header: #064e43;       /* Дълбок авторитетен петрол за хедъра */
-            --teal-dark: #0f2d27;         /* Тъмен ясен контрастен текст */
-            --teal-accent: #0f766e;       /* Акцентен петрол */
-            --teal-hover: #043830;
+            --header-bg: #064e3b;          /* Дълбок алпийски нефрит / Forest Jade */
+            --header-border: #043d2e;
+            --header-text: #ffffff;
+            --header-badge: #033628;
 
-            --bg-page: #f8faf9;           /* Успокояващ крем / оф-уайт фон */
-            --bg-main: #f8faf9;
-            --bg-card: #ffffff;           /* Чисто бели швейцарски работни карти */
-            --bg-subcard: #e6f7f2;        /* Пастелна мента за релефните капсули */
+            --bg-page: #f4f6f5;            /* Чист платинен фон с 1% топъл нюанс */
+            --bg-main: #f4f6f5;
+            --bg-card: #ffffff;            /* Чисто бели швейцарски работни карти */
+            --bg-subcard: #f0fdf4;         /* Много фина нефритена подложка */
             --bg-input: #ffffff;
             --bg-input-focus: #ffffff;
 
-            --mint-light: #e6f7f2;
-            --mint-border: #bbf0e1;       /* Деликатен ментов кант */
-            --mint-btn: #42d6a4;          /* Свежо ментово за бутони */
-            --mint-btn-hover: #32c493;
+            --accent-action: #059669;       /* Изумруден клиничен цвят за бутони */
+            --accent-action-hover: #047857;
+            --accent-border: #a7f3d0;
 
-            --border-subtle: #e2edea;
-            --border-card: #e2edea;
-            --border-accent: #bbf0e1;
-            --border-input: #99c2b8;
+            --border-subtle: #e2e8f0;      /* Неутрален деликатен кант */
+            --border-card: #e2e8f0;
+            --border-accent: #cbd5e1;
+            --border-input: #cbd5e1;
 
-            --text-main: #0f2d27;
-            --text-title: #064e43;        /* Дълбок петрол за заглавия */
-            --text-body: #0f2d27;
-            --text-muted: #527970;        /* Спокоен зелено-сив текст */
+            --text-main: #0f172a;          /* Висококонтрастно мастилено за заглавия */
+            --text-title: #064e3b;         /* Дълбок алпийски нефрит */
+            --text-body: #0f172a;
+            --text-muted: #475569;         /* Сериозно неутрално сиво за подзаглавия */
 
-            --primary-emerald: #064e43;
-            --primary-hover: #0f766e;
-            --primary-blue: #064e43;
-            --primary-blue-hover: #0f766e;
-            --kpi-number: #064e43;        /* Дълбоки контрастни медицински числа */
+            --primary-emerald: #059669;
+            --primary-hover: #047857;
+            --kpi-number: #064e3b;         /* Масивни дълбоки нефритени числа */
 
-            --slider-track: #bbf0e1;
-            --slider-thumb: #064e43;
-            --shadow-card: 0 4px 14px rgba(6, 78, 67, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-            --shadow-subcard: 0 1px 3px rgba(6, 78, 67, 0.03);
-            --chart-bg: #020617;
+            --slider-track: #e2e8f0;
+            --slider-thumb: #059669;
+            --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
+            --shadow-subcard: 0 1px 2px rgba(15, 23, 42, 0.03);
+
+            /* Хардуерни екрани (ЕКГ, 3D органоид, графики - Единен графитен дисплей) */
+            --screen-display-bg: #0f172a;
+            --screen-display-border: #1e293b;
+            --chart-bg: #0f172a;
 
             /* Universal Medical Traffic Lights (Зелено, Жълто, Червено) */
             --status-success-bg: #ecfdf5;
@@ -77,46 +78,46 @@
             --status-danger-text: #991b1b;
         }
 
-        /* 2. ТЪМЕН РЕЖИМ (MIDNIGHT PINE & CYBER-TEAL - ВИСОК КЛАС) */
+        /* 2. ТЪМЕН РЕЖИМ (ALPINE NIGHT & DEEP FOREST - ВИСОК КЛАС) */
         body.dark-mode, html.dark body {
-            --teal-header: #02181b;
-            --teal-dark: #f0fdf4;
-            --teal-accent: #164e52;
-            --teal-hover: #08282e;
+            --header-bg: #02231b;
+            --header-border: #064e3b;
+            --header-text: #f0fdf4;
+            --header-badge: #011611;
 
-            --bg-page: #041316;           /* Дълбок нощен петрол */
-            --bg-main: #041316;
-            --bg-card: #0b2327;           /* Релефен матов слейт */
-            --bg-subcard: #0f3238;        /* Капсули в дълбок кибер-теал */
-            --bg-input: #08282e;
-            --bg-input-focus: #0f3d44;
+            --bg-page: #0b1513;
+            --bg-main: #0b1513;
+            --bg-card: #0f2420;
+            --bg-subcard: #14332c;
+            --bg-input: #0c1f1b;
+            --bg-input-focus: #14332c;
 
-            --mint-light: #0f3238;
-            --mint-border: #164e52;
-            --mint-btn: #10b981;
-            --mint-btn-hover: #34d399;
+            --accent-action: #10b981;
+            --accent-action-hover: #34d399;
+            --accent-border: #059669;
 
-            --border-subtle: #164e52;
-            --border-card: #164e52;
-            --border-accent: #2dd4bf;
-            --border-input: #206368;
+            --border-subtle: #1b3d35;
+            --border-card: #1b3d35;
+            --border-accent: #26554a;
+            --border-input: #26554a;
 
             --text-main: #f0fdf4;
-            --text-title: #5eead4;        /* Светещ аквамарин */
+            --text-title: #34d399;
             --text-body: #f0fdf4;
             --text-muted: #94a3b8;
 
             --primary-emerald: #10b981;
             --primary-hover: #34d399;
-            --primary-blue: #10b981;
-            --primary-blue-hover: #34d399;
-            --kpi-number: #34d399;        /* Неонова мента за тъмен режим */
+            --kpi-number: #34d399;
 
-            --slider-track: #134e4a;
+            --slider-track: #1b3d35;
             --slider-thumb: #34d399;
-            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 1px rgba(45, 212, 191, 0.2);
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
             --shadow-subcard: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --chart-bg: #030a0d;
+
+            --screen-display-bg: #07100e;
+            --screen-display-border: #14332c;
+            --chart-bg: #07100e;
         }
 
         /* 3. ГЛОБАЛНА ТИПОГРАФИЯ - МАСИВНА И БОЛНИЧНО ЧЕТИМА */
@@ -144,22 +145,23 @@
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* ХЕДЪР В DEEP TEAL (Впечатляващ институционален блок) */
+        /* ХЕДЪР В FOREST JADE (Елегантен матов финиш) */
         header.clinical-header {
-            background-color: var(--teal-header) !important;
-            border-bottom: 2px solid var(--teal-accent) !important;
-            color: #ffffff !important;
-            box-shadow: 0 2px 8px rgba(6, 78, 67, 0.12) !important;
+            background-color: var(--header-bg) !important;
+            border-bottom: 1px solid var(--header-border) !important;
+            color: var(--header-text) !important;
+            box-shadow: 0 2px 8px rgba(6, 78, 59, 0.15) !important;
         }
 
-        /* ПАЦИЕНТСКИ БАНЕР (Wellspring Mint Accent Bar) */
+        /* ПАЦИЕНТСКИ БАНЕР (Alpine Pure Slate & White) */
         .clinical-patient-banner {
-            background: var(--bg-card) !important;
+            background: #ffffff !important;
             border-bottom: 1px solid var(--border-subtle) !important;
         }
-        body:not(.dark-mode) .clinical-patient-banner {
-            background: #f0fdf9 !important;
-            border-bottom: 1px solid #bbf0e1 !important;
+        body.dark-mode .clinical-patient-banner,
+        html.dark .clinical-patient-banner {
+            background: var(--bg-card) !important;
+            border-bottom: 1px solid var(--border-subtle) !important;
         }
 
         /* Трите работни колони - солидни бели карти със заоблени ъгли */
@@ -340,33 +342,33 @@
             color: #5eead4 !important; /* Aquamarine */
         }
 
-        /* Главен бутон за симулация - Wellspring Deep Teal & Mint Accent */
+        /* Главен бутон за симулация - Swiss Biotech Solid Emerald Action */
         #btnSimulateAction, #btnRunSimulation, .btn-primary-action {
-            background: linear-gradient(135deg, var(--teal-header), var(--teal-accent)) !important;
+            background: var(--accent-action) !important;
             color: #ffffff !important;
             font-size: 14.5px !important;
             font-weight: 800 !important;
             letter-spacing: 0.03em !important;
             border: none !important;
-            border-radius: 10px !important;
+            border-radius: 8px !important;
             padding: 12px 18px !important;
-            box-shadow: 0 4px 14px rgba(6, 78, 67, 0.28) !important;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25) !important;
             cursor: pointer;
             transition: all 0.18s ease;
         }
         #btnSimulateAction:hover, #btnRunSimulation:hover, .btn-primary-action:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(6, 78, 67, 0.4) !important;
-            background: linear-gradient(135deg, #0f766e, #064e43) !important;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35) !important;
+            background: var(--accent-action-hover) !important;
         }
         body.dark-mode #btnSimulateAction,
         html.dark #btnSimulateAction {
-            background: linear-gradient(135deg, #10b981, #34d399) !important;
-            color: #041316 !important;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important;
+            background: var(--accent-action) !important;
+            color: #07100e !important;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
         }
 
-        /* Active Navigation Tab Style (Wellspring Style) */
+        /* Active Navigation Tab Style (Swiss Biotech Precision) */
         .role-nav-tab {
             padding: 4px 10px;
             font-size: 11px;
@@ -378,20 +380,20 @@
             align-items: center;
             gap: 5px;
             white-space: nowrap;
-            border: 1px solid var(--border-accent);
+            border: 1px solid var(--border-subtle);
             background: #ffffff;
-            color: var(--teal-dark);
+            color: var(--text-muted);
         }
         .role-nav-tab:hover {
-            background: var(--mint-light);
-            color: var(--teal-header);
-            border-color: var(--mint-btn);
+            background: #f0fdf4;
+            color: var(--text-title);
+            border-color: var(--accent-border);
         }
         .role-nav-tab.active-tab {
-            background: var(--teal-header) !important;
+            background: var(--header-bg) !important;
             color: #ffffff !important;
-            border-color: var(--teal-accent) !important;
-            box-shadow: 0 2px 6px rgba(6, 78, 67, 0.25);
+            border-color: var(--header-border) !important;
+            box-shadow: 0 1px 3px rgba(6, 78, 59, 0.2);
         }
         body.dark-mode .role-nav-tab,
         html.dark .role-nav-tab {
@@ -401,10 +403,16 @@
         }
         body.dark-mode .role-nav-tab.active-tab,
         html.dark .role-nav-tab.active-tab {
-            background: var(--mint-btn) !important;
-            color: #041316 !important;
-            border-color: #34d399 !important;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            background: var(--accent-action) !important;
+            color: #07100e !important;
+            border-color: var(--accent-border) !important;
+            box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Уеднаквяване на тъмните хардуерни прозорци (ЕКГ, 3D органоид, графики) */
+        .hardware-screen, #canvasECG, .chart-container-card, [id*="displayBox"], #chartCanvasContainer > div {
+            background-color: var(--screen-display-bg) !important;
+            border-color: var(--screen-display-border) !important;
         }
 
         /* ==========================================================================
@@ -1186,30 +1194,30 @@
         <!-- System Status & Controls -->
         <div class="flex items-center gap-2.5">
             <!-- Regulatory & Quality Certification Badge -->
-            <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#093c34] border border-[#115e52] rounded-lg shadow-sm text-[10px] font-mono font-bold">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#42d6a4]"></i>
+            <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#043d2e] border border-[#065f46] rounded-lg shadow-sm text-[10px] font-mono font-bold">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#34d399]"></i>
                 <span class="text-[#f0fdf4]">EU MDR Class IIb</span>
-                <span class="text-[#527970]">•</span>
-                <span class="text-[#42d6a4]">IEC 62304 Class C</span>
+                <span class="text-[#64748b]">•</span>
+                <span class="text-[#34d399]">IEC 62304 Class C</span>
             </div>
 
             <!-- Port 8890 LAN Edge Status Indicator (Probed Dynamically) -->
-            <div id="edgeStatusContainer" class="flex items-center gap-1.5 px-2.5 py-1 bg-[#093c34] border border-[#115e52] rounded-lg text-[10.5px] font-mono text-[#a7f3d0] font-bold transition-all">
-                <span id="edgeStatusDot" class="w-2 h-2 rounded-full bg-[#42d6a4] animate-pulse"></span>
+            <div id="edgeStatusContainer" class="flex items-center gap-1.5 px-2.5 py-1 bg-[#043d2e] border border-[#065f46] rounded-lg text-[10.5px] font-mono text-[#a7f3d0] font-bold transition-all">
+                <span id="edgeStatusDot" class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
                 <span id="edgeStatusLabel">EDGE 8890: TLS 1.3 ONLINE</span>
             </div>
 
             <!-- Post-Quantum Cryptographic Shield Badge (NIST FIPS 203 / NIS2 Art. 21) -->
-            <div id="pqcShieldBadge" class="flex items-center gap-1.5 px-2 py-1 bg-[#093c34] border border-[#115e52] rounded-lg text-[10px] font-mono text-[#a7f3d0] font-bold transition-all">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#42d6a4]"></i>
+            <div id="pqcShieldBadge" class="flex items-center gap-1.5 px-2 py-1 bg-[#043d2e] border border-[#065f46] rounded-lg text-[10px] font-mono text-[#a7f3d0] font-bold transition-all">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#34d399]"></i>
                 <span class="text-[#f0fdf4]">PQC SHIELD:</span>
-                <span class="text-[#42d6a4]">NIST FIPS 203 (ML-KEM-768) • NIS2 ART. 21</span>
+                <span class="text-[#34d399]">NIST FIPS 203 (ML-KEM-768) • NIS2 ART. 21</span>
                 <span class="tip-icon tip-down" data-tooltip="Post-Quantum Cryptographic Shield protecting genomic patient records against Store-Now-Decrypt-Later (SNDL) harvesting via hybrid ML-KEM-768 encapsulation and ML-DSA-65 digital signatures (NIST FIPS 203/204).">?</span>
             </div>
 
             <!-- Language Dropdown (Medical English Default) -->
             <div class="relative">
-                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-[#093c34] hover:bg-[#0c4c42] text-[#f0fdf4] font-bold text-xs rounded-lg px-2.5 py-1.5 border border-[#115e52] focus:outline-none focus:border-[#42d6a4] cursor-pointer">
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-[#043d2e] hover:bg-[#065f46] text-[#f0fdf4] font-bold text-xs rounded-lg px-2.5 py-1.5 border border-[#065f46] focus:outline-none focus:border-[#34d399] cursor-pointer">
                     <option value="en" selected>English (EN)</option>
                     <option value="bg">Български (BG)</option>
                     <option value="fr">Français (FR)</option>
@@ -1218,24 +1226,24 @@
             </div>
 
             <!-- Daylight / Dark Mode Toggle -->
-            <button type="button" onclick="toggleMedicalTheme()" title="Toggle Visual Mode" class="p-1.5 rounded-lg bg-[#093c34] hover:bg-[#0c4c42] border border-[#115e52] text-[#a7f3d0] transition-all cursor-pointer">
+            <button type="button" onclick="toggleMedicalTheme()" title="Toggle Visual Mode" class="p-1.5 rounded-lg bg-[#043d2e] hover:bg-[#065f46] border border-[#065f46] text-[#a7f3d0] transition-all cursor-pointer">
                 <i data-lucide="moon" id="themeBtnIcon" class="w-4 h-4"></i>
             </button>
 
             <!-- Hospital Staff Login & Profile Widget -->
             <div id="adminAuthWidget" class="flex items-center">
-                <button type="button" id="navAdminLoginBtn" onclick="openHospitalAuthModal()" class="px-2.5 py-1.5 bg-[#42d6a4] hover:bg-[#32c493] text-[#064e43] font-black text-xs rounded-lg border border-[#34d399] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#064e43]"></i>
+                <button type="button" id="navAdminLoginBtn" onclick="openHospitalAuthModal()" class="px-2.5 py-1.5 bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs rounded-lg border border-[#10b981] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-white"></i>
                     <span id="staffLoginBtnText">Staff Login</span>
                 </button>
                 
-                <div id="navAdminUserBadge" class="hidden items-center gap-2 bg-[#093c34] border border-[#115e52] px-2.5 py-1 rounded-lg">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#42d6a4]"></span>
+                <div id="navAdminUserBadge" class="hidden items-center gap-2 bg-[#043d2e] border border-[#065f46] px-2.5 py-1 rounded-lg">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
                     <span class="text-xs font-bold text-white flex items-center gap-1">
-                        <i data-lucide="user" class="w-3 h-3 text-[#42d6a4]"></i>
+                        <i data-lucide="user" class="w-3 h-3 text-[#34d399]"></i>
                         <span id="navAdminUserLabel">Attending Oncologist (ID: ONCO-104)</span>
                     </span>
-                    <span id="navAdminUserRoleBadge" class="text-[9px] font-mono text-[#064e43] bg-[#42d6a4] px-1 py-0.2 rounded font-black">ONCOLOGIST</span>
+                    <span id="navAdminUserRoleBadge" class="text-[9px] font-mono text-white bg-[#059669] px-1 py-0.2 rounded font-black">ONCOLOGIST</span>
                     <button type="button" onclick="logoutHospitalStaff()" title="Logout" class="text-[10px] text-[#a7f3d0] hover:text-rose-300 ml-1 flex items-center"><i data-lucide="log-out" class="w-3 h-3"></i></button>
                 </div>
             </div>
@@ -1351,16 +1359,16 @@
         <!-- ══════════════════════════════════════════════════════════════════════════ -->
         <!-- PUBLIC CLINICAL COHORTS SELECTOR BAR (TCGA / cBioPortal / GDC)            -->
         <!-- ══════════════════════════════════════════════════════════════════════════ -->
-        <div id="tcgaCohortBar" class="px-3 py-1.5 bg-gradient-to-r from-sky-50 via-teal-50 to-emerald-50 dark:from-[#06242a] dark:via-[#08282e] dark:to-[#05221c] border border-sky-200 dark:border-teal-800/70 rounded-xl flex items-center justify-between gap-3 shrink-0 shadow-sm text-xs">
+        <div id="tcgaCohortBar" class="px-3 py-1.5 bg-white dark:bg-[#0f2420] border border-slate-200 dark:border-[#1b3d35] rounded-xl flex items-center justify-between gap-3 shrink-0 shadow-sm text-xs">
             <!-- Cohort Brand Badge -->
             <div class="flex items-center gap-2 shrink-0">
-                <span class="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold shadow-sm">
-                    <i data-lucide="database" class="w-4 h-4"></i>
+                <span class="w-7 h-7 rounded-lg bg-[#064e3b] text-white flex items-center justify-center font-bold shadow-sm">
+                    <i data-lucide="database" class="w-4 h-4 text-emerald-300"></i>
                 </span>
                 <div class="leading-tight">
                     <div class="font-extrabold text-slate-900 dark:text-slate-100 uppercase text-[11px] flex items-center gap-1.5">
                         <span>Public Clinical Cohort:</span>
-                        <span class="text-[9.5px] font-mono font-bold bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300 px-1.5 py-0.2 rounded border border-sky-200 dark:border-sky-800">TCGA / cBioPortal</span>
+                        <span class="text-[9.5px] font-mono font-bold bg-[#f0fdf4] dark:bg-[#14332c] text-[#065f46] dark:text-[#34d399] px-1.5 py-0.2 rounded border border-[#a7f3d0] dark:border-[#26554a]">TCGA / cBioPortal</span>
                     </div>
                     <div class="text-[9.5px] text-slate-500 dark:text-slate-400">GA4GH Phenopackets v2 • De-Identified Public Subjects (GDPR Art. 9(2)(j))</div>
                 </div>
@@ -1370,7 +1378,7 @@
             <div class="flex items-center gap-2 flex-1 max-w-3xl">
                 <div class="flex items-center gap-1 shrink-0">
                     <span class="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase">Cohort:</span>
-                    <select id="tcgaCohortSelect" onchange="onTcgaCohortChange()" class="bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-lg px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-sm focus:border-sky-500 cursor-pointer">
+                    <select id="tcgaCohortSelect" onchange="onTcgaCohortChange()" class="bg-white dark:bg-[#0c1f1b] border border-slate-300 dark:border-[#26554a] rounded-lg px-2 py-1 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-sm focus:border-[#059669] cursor-pointer">
                         <option value="TCGA-PAAD">TCGA-PAAD (Pancreatic, N=185)</option>
                         <option value="TCGA-GBM">TCGA-GBM (Glioblastoma, N=585)</option>
                         <option value="TCGA-LUAD">TCGA-LUAD (Lung Adeno, N=515)</option>
@@ -1379,19 +1387,19 @@
                 </div>
                 <div class="flex items-center gap-1 flex-1 min-w-0">
                     <span class="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase shrink-0">Subject:</span>
-                    <select id="tcgaCaseSelect" onchange="onTcgaCaseSelect()" class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-lg px-2 py-1 text-xs font-mono font-bold text-slate-900 dark:text-slate-100 shadow-sm focus:border-sky-500 cursor-pointer truncate">
+                    <select id="tcgaCaseSelect" onchange="onTcgaCaseSelect()" class="w-full bg-white dark:bg-[#0c1f1b] border border-slate-300 dark:border-[#26554a] rounded-lg px-2 py-1 text-xs font-mono font-bold text-slate-900 dark:text-slate-100 shadow-sm focus:border-[#059669] cursor-pointer truncate">
                         <!-- Populated dynamically by initTcgaCohortUI() -->
                     </select>
                 </div>
-                <button type="button" id="btnLoadTcgaCase" onclick="loadSelectedTcgaCase()" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold uppercase rounded-lg shadow-sm flex items-center gap-1 transition-all cursor-pointer shrink-0">
+                <button type="button" id="btnLoadTcgaCase" onclick="loadSelectedTcgaCase()" class="px-3 py-1 bg-[#059669] hover:bg-[#047857] text-white text-xs font-extrabold uppercase rounded-lg shadow-sm flex items-center gap-1 transition-all cursor-pointer shrink-0">
                     <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i>
                     <span>Load Patient</span>
                 </button>
             </div>
 
             <!-- Case Metadata Chip -->
-            <div id="tcgaCaseSummaryChip" class="shrink-0 px-2.5 py-1 bg-white dark:bg-[#041d21] border border-sky-200 dark:border-teal-800/60 rounded-lg font-mono text-[10.5px] text-slate-700 dark:text-slate-300 flex items-center gap-1.5 shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <div id="tcgaCaseSummaryChip" class="shrink-0 px-2.5 py-1 bg-[#f0fdf4] dark:bg-[#14332c] border border-[#a7f3d0] dark:border-[#26554a] rounded-lg font-mono text-[10.5px] text-slate-800 dark:text-slate-200 flex items-center gap-1.5 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
                 <span id="tcgaActiveCaseText">Active Case: TCGA-IB-7651 (Stage IV • Actual OS: 14.2 mo)</span>
             </div>
         </div>
@@ -1404,10 +1412,10 @@
                 <!-- Header -->
                 <div class="flex items-center justify-between pb-1.5 border-b border-slate-200">
                     <h2 class="text-xs font-extrabold uppercase tracking-wide text-slate-800 flex items-center gap-1.5" id="col1Title">
-                        <i data-lucide="dna" class="w-4 h-4 text-blue-600"></i>
+                        <i data-lucide="dna" class="w-4 h-4 text-emerald-600"></i>
                         <span>1. Patient & Genomics</span>
                     </h2>
-                    <span class="text-[9px] font-mono text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">LOINC Suite</span>
+                    <span class="text-[9.5px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 font-bold">LOINC Suite</span>
                 </div>
 
                 <!-- Quick Disease Presets -->
@@ -1576,7 +1584,7 @@
                             HR: <span id="hrVal" class="text-emerald-900">74</span> bpm | HRV: <span id="hrvVal" class="text-emerald-900">42</span> ms
                         </span>
                     </div>
-                    <div class="relative w-full rounded-lg overflow-hidden border border-slate-800 shadow-inner bg-[#020617]">
+                    <div class="relative w-full rounded-lg overflow-hidden border border-[#1e293b] shadow-inner bg-[#0f172a]">
                         <canvas id="ecgCanvas" height="58" class="w-full block"></canvas>
                     </div>
                 </div>
@@ -1588,7 +1596,7 @@
                 <div class="flex items-center justify-between pb-1.5 border-b border-slate-200">
                     <div>
                         <h2 class="text-xs font-extrabold uppercase tracking-wide text-slate-800 flex items-center gap-1.5" id="col2Title">
-                            <i data-lucide="calculator" class="w-4 h-4 text-blue-600"></i>
+                            <i data-lucide="calculator" class="w-4 h-4 text-emerald-600"></i>
                             <span>2. PK/PD Dosing Simulator</span>
                         </h2>
                         <p class="text-[10px] text-slate-500" id="col2Subtitle">Interactive Digital Twin • Cockcroft-Gault CrCl • Selye Adaptation</p>
@@ -1599,23 +1607,23 @@
                 </div>
 
                 <!-- Active Drug Regimen Badge -->
-                <div class="p-2 bg-[#f0f9ff] border border-[#bae6fd] rounded-lg flex items-center justify-between">
+                <div class="p-2 bg-[#f0fdf4] border border-[#a7f3d0] rounded-lg flex items-center justify-between">
                     <div>
-                        <div class="text-xs font-bold text-[#0c4a6e]" id="activeProtocolTitle">Active Drug Regimen: AP-90 Liposomal Peptide + Pembrolizumab</div>
-                        <div class="text-[10px] text-[#0369a1] font-mono mt-0.5">Target: KRAS G12D Complex • CrCl: <span id="patientGfrVal">94.0 mL/min</span> (BSA: <span id="patientBsaVal">1.85 m²</span>)</div>
+                        <div class="text-xs font-bold text-[#064e3b]" id="activeProtocolTitle">Active Drug Regimen: AP-90 Liposomal Peptide + Pembrolizumab</div>
+                        <div class="text-[10px] text-[#047857] font-mono mt-0.5">Target: KRAS G12D Complex • CrCl: <span id="patientGfrVal">94.0 mL/min</span> (BSA: <span id="patientBsaVal">1.85 m²</span>)</div>
                     </div>
-                    <span class="text-[10.5px] font-mono font-bold text-[#0284c7] bg-white px-2 py-0.5 rounded border border-[#bae6fd]">
+                    <span class="text-[10.5px] font-mono font-bold text-[#065f46] bg-white px-2 py-0.5 rounded border border-[#a7f3d0]">
                         Kd = 0.12 nM
                     </span>
                 </div>
 
                 <!-- Visual Hero: Real-Time PK/PD Kinetic Window & 3D Interactive Tumor Organoid -->
-                <div class="clinical-card p-2 bg-slate-950 flex flex-col chart-container-card">
+                <div class="clinical-card p-2 bg-[#0f172a] border border-[#1e293b] flex flex-col chart-container-card">
                     <!-- Dual Header -->
                     <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1 px-1">
                         <div class="flex items-center gap-2">
                             <span class="flex items-center gap-1 text-slate-300 font-bold">
-                                <i data-lucide="activity" class="w-3.5 h-3.5 text-cyan-400"></i>
+                                <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
                                 <span id="labelKineticCurve">In-Silico Digital Twin Visualizer</span>
                             </span>
                             <span class="text-[9px] text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800 px-1 rounded">60 FPS AVX-512</span>
@@ -1630,21 +1638,21 @@
                     <!-- Dual Split Canvas Layout -->
                     <div id="chartCanvasContainer" class="h-44 w-full chart-canvas-wrap grid grid-cols-5 gap-2">
                         <!-- Left 3 Cols: 2D Kinetic Response Curve -->
-                        <div class="col-span-3 relative h-full rounded-lg overflow-hidden border border-slate-800/80 bg-slate-950">
+                        <div class="col-span-3 relative h-full rounded-lg overflow-hidden border border-[#1e293b] bg-[#0f172a]">
                             <canvas id="tumorTrajectoryCanvas" class="w-full h-full block"></canvas>
                         </div>
 
                         <!-- Right 2 Cols: 3D Interactive Tumor Organoid Sphere -->
-                        <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-slate-800/80 bg-[#030712] flex flex-col items-center justify-center p-1">
+                        <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-[#1e293b] bg-[#0f172a] flex flex-col items-center justify-center p-1">
                             <canvas id="tumorOrganoidCanvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
                             <!-- Live Telemetry Badges over Organoid -->
                             <div class="absolute top-1.5 left-2 pointer-events-none flex flex-col gap-0.5">
-                                <span class="text-[8.5px] font-mono font-extrabold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> 3D Organoid
+                                <span class="text-[8.5px] font-mono font-extrabold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 3D Organoid
                                 </span>
-                                <span id="organoidVolumeLabel" class="text-[9px] font-mono text-emerald-400 font-bold">Vol: 18.2 mm³ (-78%)</span>
+                                <span id="organoidVolumeLabel" class="text-[9px] font-mono text-emerald-300 font-bold">Vol: 18.2 mm³ (-78%)</span>
                             </div>
-                            <div class="absolute bottom-1 right-2 pointer-events-none text-[8px] font-mono text-slate-500">
+                            <div class="absolute bottom-1 right-2 pointer-events-none text-[8px] font-mono text-slate-400">
                                 VEGF: <span id="organoidVegfLabel" class="text-rose-400 font-bold">0.14</span> | Drag to rotate
                             </div>
                         </div>
@@ -1816,21 +1824,21 @@
                         </div>
 
                     <!-- Real TCGA Historical Survival Benchmark Card -->
-                    <div id="tcgaBenchmarkCard" class="p-2.5 bg-sky-50/70 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-900/60 rounded-xl space-y-1 text-xs shadow-sm">
-                        <div class="flex items-center justify-between border-b border-sky-200 dark:border-sky-900/40 pb-1 font-extrabold text-sky-950 dark:text-sky-300">
+                    <div id="tcgaBenchmarkCard" class="p-2.5 bg-slate-50 dark:bg-[#14332c] border border-slate-200 dark:border-[#26554a] rounded-xl space-y-1 text-xs shadow-sm">
+                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-[#26554a] pb-1 font-extrabold text-slate-900 dark:text-slate-100">
                             <span class="uppercase tracking-wide text-[10px] flex items-center gap-1">
-                                <i data-lucide="git-compare" class="w-3.5 h-3.5 text-sky-600"></i>
+                                <i data-lucide="git-compare" class="w-3.5 h-3.5 text-[#059669]"></i>
                                 <span>TCGA Real Historical Benchmark:</span><span class="tip-icon" data-tooltip="Empirical Kaplan-Meier survival curve from The Cancer Genome Atlas (TCGA / cBioPortal) under standard-of-care, serving as a ground-truth baseline to quantify Digital Twin survival extension.">?</span>
                             </span>
-                            <span id="tcgaBenchmarkCaseId" class="text-[9.5px] font-mono text-sky-700 dark:text-sky-300 bg-sky-100 dark:bg-sky-900/80 px-1.5 py-0.2 rounded font-bold">TCGA-IB-7651</span>
+                            <span id="tcgaBenchmarkCaseId" class="text-[9.5px] font-mono text-[#065f46] dark:text-[#34d399] bg-[#f0fdf4] dark:bg-[#0c1f1b] px-1.5 py-0.2 rounded font-bold border border-[#a7f3d0] dark:border-[#26554a]">TCGA-IB-7651</span>
                         </div>
                         <div class="grid grid-cols-2 gap-1.5 pt-0.5 text-[10.5px]">
-                            <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-sky-200 dark:border-sky-900/40">
+                            <div class="p-1.5 bg-white dark:bg-[#0c1f1b] rounded border border-slate-200 dark:border-[#26554a]">
                                 <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Real TCGA Overall Survival</div>
                                 <div id="tcgaHistSurvivalVal" class="mono font-black text-rose-700 dark:text-rose-400 text-xs mt-0.5">14.2 months</div>
                                 <div id="tcgaHistSocVal" class="text-[8.5px] text-slate-500 dark:text-slate-400 truncate" title="Standard of Care: Gemcitabine + Nab-Paclitaxel">Gemcitabine + Nab-Paclitaxel</div>
                             </div>
-                            <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-sky-200 dark:border-sky-900/40">
+                            <div class="p-1.5 bg-white dark:bg-[#0c1f1b] rounded border border-slate-200 dark:border-[#26554a]">
                                 <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase">VHT Extension Delta</div>
                                 <div id="tcgaSurvivalDeltaVal" class="mono font-black text-emerald-700 dark:text-emerald-400 text-xs mt-0.5">+14.4 mo (+101%)</div>
                                 <div id="tcgaHazardRatioVal" class="text-[8.5px] text-emerald-600 dark:text-emerald-400 font-bold">HR: 0.48 (p &lt; 0.001)</div>
@@ -1891,10 +1899,10 @@
                 </div>
 
                 <!-- EU AI Act Article 14 Sign-off Checkbox -->
-                <div class="p-2 bg-blue-50/50 border border-blue-200 rounded-xl">
+                <div class="p-2 bg-[#f0fdf4] dark:bg-[#14332c] border border-[#a7f3d0] dark:border-[#26554a] rounded-xl">
                     <label class="flex items-start gap-2 cursor-pointer">
-                        <input type="checkbox" id="doctorDecisionConfirmCheckbox" onchange="toggleSignButton()" class="mt-0.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
-                        <span class="text-[9.5px] text-slate-700 leading-tight font-medium flex items-center flex-wrap gap-1" id="labelArt14Checkbox">
+                        <input type="checkbox" id="doctorDecisionConfirmCheckbox" onchange="toggleSignButton()" class="mt-0.5 rounded text-[#059669] focus:ring-[#059669] cursor-pointer">
+                        <span class="text-[9.5px] text-slate-700 dark:text-slate-300 leading-tight font-medium flex items-center flex-wrap gap-1" id="labelArt14Checkbox">
                             <span>I confirm clinical review of the biophysical twin recommendation in compliance with <strong>EU AI Act Article 14</strong> (Human-in-the-Loop).</span>
                             <span class="tip-icon" data-tooltip="Regulatory requirement ensuring autonomous algorithmic recommendations are formally verified and digitally authorized by a licensed attending clinician before compounding or dispensing.">?</span>
                         </span>
@@ -4787,7 +4795,7 @@ function updateTcgaSurvivalComparison() {
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 1200);
+                const timeoutId = setTimeout(() => controller.abort(), 200);
                 const res = await fetch(`${HOSPITAL_EDGE_BASE_URL}/api/v1/bedside/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
