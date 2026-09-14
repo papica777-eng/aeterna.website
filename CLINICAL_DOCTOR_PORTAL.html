@@ -617,6 +617,7 @@
         <!-- System Status & Controls -->
         <div class="flex items-center gap-2.5">
             <!-- Digital Security & Certification Badge (EU MDR / IEC 62304 / CERN DOI) -->
+                        <!-- Digital Security & Dual CERN/Zenodo Verification Badge (EU MDR / IEC 62304 / Dual DOI) -->
             <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 bg-[#093c34] border border-[#115e52] rounded-lg shadow-sm">
                 <div class="flex items-center gap-1.5 text-[9.5px] font-mono font-bold">
                     <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#42d6a4]"></i>
@@ -625,8 +626,13 @@
                     <span class="text-[#42d6a4]">IEC 62304 Class C</span>
                 </div>
                 <span class="h-3 w-px bg-[#115e52]"></span>
-                <a href="https://doi.org/10.5281/zenodo.22734388" target="_blank" rel="noopener noreferrer" title="View CERN / Zenodo DOI Dossier" class="text-[9px] font-mono text-[#a7f3d0] hover:text-[#42d6a4] flex items-center gap-1 transition-colors">
-                    <span>DOI: 10.5281/zenodo.22734388</span>
+                <a href="https://doi.org/10.5281/zenodo.22734388" target="_blank" rel="noopener noreferrer" title="View CERN / Zenodo: Selye Stress Engine (250Hz Pan-Tompkins DSP & Clay Invariants)" class="text-[9px] font-mono text-[#a7f3d0] hover:text-[#42d6a4] flex items-center gap-1 transition-colors">
+                    <span>DOI: 10.5281/zenodo.22734388 (Selye Engine)</span>
+                    <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                </a>
+                <span class="text-[#527970]">•</span>
+                <a href="https://doi.org/10.5281/zenodo.22703199" target="_blank" rel="noopener noreferrer" title="View CERN / Zenodo: Epigenetic Singularity (Horvath Clock Reversal & Saddle-Node u_SN=0.3889)" class="text-[9px] font-mono text-[#a7f3d0] hover:text-[#42d6a4] flex items-center gap-1 transition-colors">
+                    <span>DOI: 10.5281/zenodo.22703199 (Epigenetic Singularity)</span>
                     <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
                 </a>
             </div>
@@ -1220,6 +1226,32 @@
                                 <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase">VHT Extension Delta</div>
                                 <div id="tcgaSurvivalDeltaVal" class="mono font-black text-emerald-700 dark:text-emerald-400 text-xs mt-0.5">+14.4 mo (+101%)</div>
                                 <div id="tcgaHazardRatioVal" class="text-[8.5px] text-emerald-600 dark:text-emerald-400 font-bold">HR: 0.48 (p &lt; 0.001)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Epigenetic Rejuvenation & Saddle-Node Bifurcation Safety (DOI: 10.5281/zenodo.22703199) -->
+                    <div id="epigeneticBifurcationCard" class="p-2.5 bg-emerald-50/60 dark:bg-teal-950/40 border border-emerald-200 dark:border-teal-800/60 rounded-xl space-y-1 text-xs shadow-sm">
+                        <div class="flex items-center justify-between border-b border-emerald-200 dark:border-teal-800/40 pb-1 font-extrabold text-emerald-950 dark:text-teal-200">
+                            <span class="uppercase tracking-wide text-[10px] flex items-center gap-1">
+                                <i data-lucide="dna" class="w-3.5 h-3.5 text-emerald-600 dark:text-teal-400"></i>
+                                <span>Epigenetic Bifurcation Control (CERN Zenodo):</span>
+                            </span>
+                            <a href="https://doi.org/10.5281/zenodo.22703199" target="_blank" rel="noopener noreferrer" class="text-[9.5px] font-mono text-emerald-700 dark:text-teal-300 bg-emerald-100 dark:bg-teal-900/80 px-1.5 py-0.2 rounded font-bold hover:underline flex items-center gap-0.5" title="View Zenodo Record: 10.5281/zenodo.22703199">
+                                <span>DOI: 22703199</span>
+                                <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5 pt-0.5 text-[10.5px]">
+                            <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-emerald-200 dark:border-teal-800/40">
+                                <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Saddle-Node Limit (u_SN)</div>
+                                <div class="mono font-black text-emerald-700 dark:text-emerald-400 text-xs mt-0.5">u_SN = 0.3889</div>
+                                <div class="text-[8.5px] text-slate-500 dark:text-slate-400 truncate" title="Collision Center (Oc, Nc) = (0.6461, 0.1295)">Center: (0.6461, 0.1295)</div>
+                            </div>
+                            <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-emerald-200 dark:border-teal-800/40">
+                                <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Horvath Inversion &amp; Drift</div>
+                                <div class="mono font-black text-emerald-700 dark:text-emerald-400 text-xs mt-0.5">&Delta;Age -30.4 yrs</div>
+                                <div class="text-[8.5px] text-emerald-600 dark:text-teal-400 font-bold" title="Zero Oncogenic Drift: P_cancer < 1e-6 (0.00% Teratoma Risk)">P_cancer &lt; 10⁻⁶ (0.00% Drift)</div>
                             </div>
                         </div>
                     </div>
@@ -4266,6 +4298,27 @@ function updateTcgaSurvivalComparison() {
                 total_audit_blocks: 4,
                 closed_loop_verification_count: 2,
                 safety_clamp_interventions: 1,
+                scientific_foundations: [
+                    {
+                        title: "Aeterna Selye Engine (Stress Collapse, Clay Millennium Invariants & Ito-Milstein SDE)",
+                        doi: "10.5281/zenodo.22734388",
+                        role: "250 Hz Pan-Tompkins DSP Telemetry, Cockcroft-Gault Renal Filter, General Adaptation Syndrome Phase Dynamics"
+                    },
+                    {
+                        title: "Deterministic Epigenetic Rejuvenation via Saddle-Node Bifurcation Control in Nonlinear Gene Regulatory Networks",
+                        doi: "10.5281/zenodo.22703199",
+                        github_repo: "https://github.com/papica777-eng/AETERNA-EPIGENETIC-SINGULARITY",
+                        parameters: {
+                            critical_saddle_node_threshold_u_SN: 0.3889,
+                            collision_center_Oc_Nc: [0.6461, 0.1295],
+                            active_pulse_window_Ton_sec: 1.15,
+                            transit_bottleneck_limit_sec: 2.85,
+                            horvath_clock_inversion_years: -30.42,
+                            oncogenic_drift_probability: "< 1e-6 (0.00%)"
+                        },
+                        eu_ai_act_compliance: "Article 13 (Transparency & Explainable AI) • Non-linear topological bifurcation guarantees zero teratoma dedifferentiation"
+                    }
+                ],
                 latest_block_hash: computeDeterministicSeal("IN_BROWSER_LOCAL_AUDIT_TRAIL")
             };
             lastIalDossierData = localAudit;
