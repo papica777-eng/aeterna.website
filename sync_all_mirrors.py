@@ -12,6 +12,7 @@ files_to_sync = [
     "GDPR_ART9_ETHICS_DECLARATION.md",
     "run_hospital_edge_service.bat",
     "install_hospital_windows_service.ps1",
+    "run_hospital_pqc_gateway.bat",
     "aeterna_hospital_ota_updater.py",
     "install_hospital_ota_updater.ps1",
     "NZIS_FHIR_INTEGRATION_SPEC.md",
