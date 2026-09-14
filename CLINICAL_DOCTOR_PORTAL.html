@@ -568,6 +568,104 @@
         .edge-offline-hidden {
             display: none !important;
         }
+
+        /* ═════════════════════════════════════════════════════════════════════
+           § CLINICAL INTERACTIVE TOOLTIPS (EU AI ACT ART. 13 EXPLAINABLE AI)
+           ═════════════════════════════════════════════════════════════════════ */
+        .tip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #e6f7f2;
+            color: #064e43;
+            font-size: 10px;
+            font-weight: 800;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            cursor: help;
+            position: relative;
+            margin-left: 5px;
+            border: 1px solid #bbf0e1;
+            vertical-align: middle;
+            line-height: 1;
+            user-select: none;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+        .tip-icon:hover {
+            background: #42d6a4;
+            color: #062c24;
+            border-color: #065f46;
+            transform: scale(1.1);
+        }
+        html.dark .tip-icon,
+        body.dark-mode .tip-icon {
+            background: #08282e;
+            color: #42d6a4;
+            border-color: #115e59;
+        }
+        html.dark .tip-icon:hover,
+        body.dark-mode .tip-icon:hover {
+            background: #10b981;
+            color: #022c22;
+        }
+        /* Default: Pop Upwards */
+        .tip-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 135%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 270px;
+            background: #0f2d27;
+            color: #ffffff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.45;
+            box-shadow: 0 8px 24px rgba(6, 78, 67, 0.4);
+            border: 1px solid #42d6a4;
+            z-index: 999999;
+            pointer-events: none;
+            white-space: normal;
+            text-align: left;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .tip-icon:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 118%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #0f2d27 transparent transparent transparent;
+            z-index: 999999;
+        }
+        /* Variant: Pop Downwards (for top banner or near top boundary) */
+        .tip-down:hover::after {
+            bottom: auto;
+            top: 135%;
+        }
+        .tip-down:hover::before {
+            bottom: auto;
+            top: 118%;
+            border-color: transparent transparent #0f2d27 transparent;
+        }
+        /* Variant: Align Right / Left */
+        .tip-right:hover::after {
+            left: 0;
+            transform: none;
+        }
+        .tip-left:hover::after {
+            left: auto;
+            right: 0;
+            transform: none;
+        }
 </style>
 </head>
 <body>
@@ -697,7 +795,7 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <div id="patientBannerBar" class="h-12 border-b border-[#e2e8f0] px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] clinical-patient-banner">
         <!-- Patient Clinical Identity Bar with Embossed Chips -->
-        <div class="flex items-center gap-2 flex-nowrap shrink-0 overflow-x-auto">
+        <div class="flex items-center gap-2 flex-nowrap shrink-0 overflow-visible">
             <div class="patient-badge-chip chip-patient-id">
                 <span class="text-[10px] font-mono font-extrabold uppercase px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300" id="bannerLabelPatient">ID</span>
                 <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-[#38bdf8] text-[14.5px]">PT-2026-8890</span>
@@ -712,11 +810,11 @@
                 <strong id="bannerBSA" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[14px]">1.85 m²</strong>
             </div>
             <div class="patient-badge-chip chip-gfr">
-                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">CrCl (GFR):</span>
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>CrCl (GFR):</span><span class="tip-icon tip-down" data-tooltip="Calculated creatinine clearance via Cockcroft-Gault formula. Severe impairment (< 30.0 mL/min) immediately triggers RENAL FAILURE ALERT, clamping nephrotoxic cytostatics to 0.0 mg.">?</span></span>
                 <strong id="bannerGFR" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[14px]">94.0 mL/min</strong>
             </div>
             <div class="patient-badge-chip chip-apoe">
-                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">ApoE4:</span>
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>ApoE4:</span><span class="tip-icon tip-down" data-tooltip="Pharmacogenetic vascular permeability modifier. Down-calibrates active drug flux to 0.80x (1 allele) or 0.60x (2 alleles) to protect cerebrovascular endothelium from microvascular leakage.">?</span></span>
                 <strong id="bannerApoE" class="mono font-extrabold text-slate-800 dark:text-slate-200 text-[13.5px]">E3/E3</strong>
             </div>
             <div class="patient-badge-chip chip-driver">
@@ -863,7 +961,7 @@
                 <!-- Searchable Molecular Driver Dropdown -->
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <label class="text-[10px] font-bold text-slate-600 uppercase" id="driverLabel">Molecular Drivers (Searchable)</label>
+                        <label class="text-[10px] font-bold text-slate-600 uppercase flex items-center justify-between" id="driverLabel"><span>Molecular Drivers (Searchable)</span><span class="tip-icon" data-tooltip="Oncogenetic Safety Clamp (IEC 62304 Class C). When TP53 tumor suppressor loss is detected, telomerase elongation (Epitalon) is unconditionally locked to 0.0 mg to prevent tumor dedifferentiation or oncogenic drift.">?</span></label>
                     </div>
                     <select id="geneMutation" onchange="onGeneSelectChange()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-900 font-mono focus:outline-none focus:border-blue-500">
                         <optgroup label="── Oncogenes & Kinases ──">
@@ -956,7 +1054,7 @@
                             <input type="number" step="0.1" lang="en-US" inputmode="decimal" id="tumorSize" value="3.4" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-2 py-1 text-xs mono text-slate-900">
                         </div>
                         <div>
-                            <label class="text-[9.5px] font-bold text-slate-500 uppercase">ApoE4 Genotype</label>
+                            <label class="text-[9.5px] font-bold text-slate-500 uppercase flex items-center"><span>ApoE4 Genotype</span><span class="tip-icon" data-tooltip="Pharmacogenetic vascular permeability modifier. Down-calibrates active drug flux to 0.80x (1 allele) or 0.60x (2 alleles) to protect cerebrovascular endothelium from microvascular leakage.">?</span></label>
                             <select id="inputApoE" onchange="updatePatientBanner()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-1.5 py-1 text-xs mono text-slate-900">
                                 <option value="E3/E3" selected>E3/E3 (Normal)</option>
                                 <option value="E3/E4">E3/E4 (1 Allele)</option>
@@ -997,7 +1095,7 @@
 <div class="flex items-center justify-between text-[9.5px] font-bold text-slate-600 mb-1.5">
                         <span class="flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span id="labelTelemetry" class="text-[#0f172a] font-extrabold uppercase text-[9px] tracking-wide">Pan-Tompkins DSP (250 Hz Active)</span>
+                            <span id="labelTelemetry" class="text-[#0f172a] font-extrabold uppercase text-[9px] tracking-wide flex items-center"><span>Pan-Tompkins DSP (250 Hz Active)</span><span class="tip-icon" data-tooltip="Real-time QRS detection via 5–15 Hz bandpass filtering, squaring, and moving-window integration. Evaluates autonomic sympathovagal balance (RMSSD / HRV) to track systemic allostatic distress.">?</span></span>
                         </span>
                         <span class="mono text-[9.5px] text-emerald-700 font-bold bg-[#ecfdf5] border border-[#a7f3d0] px-1.5 py-0.5 rounded">
                             HR: <span id="hrVal" class="text-emerald-900">74</span> bpm | HRV: <span id="hrvVal" class="text-emerald-900">42</span> ms
@@ -1176,7 +1274,9 @@
                         </div>
                         <div id="gateTP53" class="p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs status-correct">
                             <span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-[#10b981]"></span> TP53 Gate
+                                <span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+                                <span>TP53 Gate</span>
+                                <span class="tip-icon" data-tooltip="Oncogenetic Safety Clamp (IEC 62304 Class C). When TP53 tumor suppressor loss is detected, telomerase elongation (Epitalon) is unconditionally locked to 0.0 mg to prevent tumor dedifferentiation or oncogenic drift.">?</span>
                             </span>
                             <span class="font-mono text-[10px] font-bold text-[#065f46] bg-[#d1fae5] dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-[#6ee7b7] flex items-center gap-1">CORRECT: Wild-Type (Permissive)</span>
                         </div>
@@ -1212,7 +1312,7 @@
                         <div class="flex items-center justify-between border-b border-sky-200 dark:border-sky-900/40 pb-1 font-extrabold text-sky-950 dark:text-sky-300">
                             <span class="uppercase tracking-wide text-[10px] flex items-center gap-1">
                                 <i data-lucide="git-compare" class="w-3.5 h-3.5 text-sky-600"></i>
-                                <span>TCGA Real Historical Benchmark:</span>
+                                <span>TCGA Real Historical Benchmark:</span><span class="tip-icon" data-tooltip="Empirical Kaplan-Meier survival curve from The Cancer Genome Atlas (TCGA / cBioPortal) under standard-of-care, serving as a ground-truth baseline to quantify Digital Twin survival extension.">?</span>
                             </span>
                             <span id="tcgaBenchmarkCaseId" class="text-[9.5px] font-mono text-sky-700 dark:text-sky-300 bg-sky-100 dark:bg-sky-900/80 px-1.5 py-0.2 rounded font-bold">TCGA-IB-7651</span>
                         </div>
@@ -1244,7 +1344,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-1.5 pt-0.5 text-[10.5px]">
                             <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-emerald-200 dark:border-teal-800/40">
-                                <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Saddle-Node Limit (u_SN)</div>
+                                <div class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold uppercase flex items-center justify-between"><span>Saddle-Node Limit (u_SN)</span><span class="tip-icon" data-tooltip="Topological saddle-node bifurcation boundary (CERN Zenodo DOI: 10.5281/zenodo.22703199). Limits cellular reprogramming dynamics within stable energy wells, ensuring biological rejuvenation with P_cancer < 10⁻⁶.">?</span></div>
                                 <div class="mono font-black text-emerald-700 dark:text-emerald-400 text-xs mt-0.5">u_SN = 0.3889</div>
                                 <div class="text-[8.5px] text-slate-500 dark:text-slate-400 truncate" title="Collision Center (Oc, Nc) = (0.6461, 0.1295)">Center: (0.6461, 0.1295)</div>
                             </div>
@@ -1286,8 +1386,9 @@
                 <div class="p-2 bg-blue-50/50 border border-blue-200 rounded-xl">
                     <label class="flex items-start gap-2 cursor-pointer">
                         <input type="checkbox" id="doctorDecisionConfirmCheckbox" onchange="toggleSignButton()" class="mt-0.5 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
-                        <span class="text-[9.5px] text-slate-700 leading-tight font-medium" id="labelArt14Checkbox">
-                            I confirm clinical review of the biophysical twin recommendation in compliance with <strong>EU AI Act Article 14</strong> (Human-in-the-Loop).
+                        <span class="text-[9.5px] text-slate-700 leading-tight font-medium flex items-center flex-wrap gap-1" id="labelArt14Checkbox">
+                            <span>I confirm clinical review of the biophysical twin recommendation in compliance with <strong>EU AI Act Article 14</strong> (Human-in-the-Loop).</span>
+                            <span class="tip-icon" data-tooltip="Regulatory requirement ensuring autonomous algorithmic recommendations are formally verified and digitally authorized by a licensed attending clinician before compounding or dispensing.">?</span>
                         </span>
                     </label>
                 </div>
@@ -2754,7 +2855,7 @@
                 if (bannerTp53) bannerTp53.style.setProperty('display', 'flex', 'important');
                 if (gateTP53) {
                     gateTP53.className = 'p-2 bg-[#fef2f2] border border-[#fecaca] rounded-lg flex items-center justify-between text-xs status-danger';
-                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-[#991b1b] bg-[#fee2e2] dark:bg-rose-950/80 px-2 py-0.5 rounded border border-[#fca5a5] flex items-center gap-1">ERROR: LOCKED (0.0 mg)</span>';
+                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span><span>TP53 Gate</span><span class="tip-icon" data-tooltip="Oncogenetic Safety Clamp (IEC 62304 Class C). When TP53 tumor suppressor loss is detected, telomerase elongation (Epitalon) is unconditionally locked to 0.0 mg to prevent tumor dedifferentiation or oncogenic drift.">?</span></span><span class="font-mono text-[10px] font-bold text-[#991b1b] bg-[#fee2e2] dark:bg-rose-950/80 px-2 py-0.5 rounded border border-[#fca5a5] flex items-center gap-1">ERROR: LOCKED (0.0 mg)</span>';
                 }
                 const epitalon = document.getElementById('epitalonDose');
                 const epitalonVal = document.getElementById('epitalonVal');
@@ -2765,7 +2866,7 @@
                 if (bannerTp53) bannerTp53.style.setProperty('display', 'none', 'important');
                 if (gateTP53) {
                     gateTP53.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs status-correct';
-                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> TP53 Gate</span><span class="font-mono text-[10px] font-bold text-[#065f46] bg-[#d1fae5] dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-[#6ee7b7] flex items-center gap-1">CORRECT: Wild-Type (Permissive)</span>';
+                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span><span>TP53 Gate</span><span class="tip-icon" data-tooltip="Oncogenetic Safety Clamp (IEC 62304 Class C). When TP53 tumor suppressor loss is detected, telomerase elongation (Epitalon) is unconditionally locked to 0.0 mg to prevent tumor dedifferentiation or oncogenic drift.">?</span></span><span class="font-mono text-[10px] font-bold text-[#065f46] bg-[#d1fae5] dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-[#6ee7b7] flex items-center gap-1">CORRECT: Wild-Type (Permissive)</span>';
                 }
                 const epitalon = document.getElementById('epitalonDose');
                 const epitalonVal = document.getElementById('epitalonVal');
