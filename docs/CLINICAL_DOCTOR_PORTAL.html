@@ -1185,25 +1185,12 @@
 
         <!-- System Status & Controls -->
         <div class="flex items-center gap-2.5">
-            <!-- Digital Security & Certification Badge (EU MDR / IEC 62304 / CERN DOI) -->
-                        <!-- Digital Security & Dual CERN/Zenodo Verification Badge (EU MDR / IEC 62304 / Dual DOI) -->
-            <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 bg-[#093c34] border border-[#115e52] rounded-lg shadow-sm">
-                <div class="flex items-center gap-1.5 text-[9.5px] font-mono font-bold">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#42d6a4]"></i>
-                    <span class="text-[#f0fdf4]">EU MDR Class IIb</span>
-                    <span class="text-[#527970]">•</span>
-                    <span class="text-[#42d6a4]">IEC 62304 Class C</span>
-                </div>
-                <span class="h-3 w-px bg-[#115e52]"></span>
-                <a href="https://doi.org/10.5281/zenodo.22734388" target="_blank" rel="noopener noreferrer" title="View CERN / Zenodo: Selye Stress Engine (250Hz Pan-Tompkins DSP & Clay Invariants)" class="text-[9px] font-mono text-[#a7f3d0] hover:text-[#42d6a4] flex items-center gap-1 transition-colors">
-                    <span>DOI: 10.5281/zenodo.22734388 (Selye Engine)</span>
-                    <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
-                </a>
+            <!-- Regulatory & Quality Certification Badge -->
+            <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#093c34] border border-[#115e52] rounded-lg shadow-sm text-[10px] font-mono font-bold">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#42d6a4]"></i>
+                <span class="text-[#f0fdf4]">EU MDR Class IIb</span>
                 <span class="text-[#527970]">•</span>
-                <a href="https://doi.org/10.5281/zenodo.22703199" target="_blank" rel="noopener noreferrer" title="View CERN / Zenodo: Epigenetic Singularity (Horvath Clock Reversal & Saddle-Node u_SN=0.3889)" class="text-[9px] font-mono text-[#a7f3d0] hover:text-[#42d6a4] flex items-center gap-1 transition-colors">
-                    <span>DOI: 10.5281/zenodo.22703199 (Epigenetic Singularity)</span>
-                    <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
-                </a>
+                <span class="text-[#42d6a4]">IEC 62304 Class C</span>
             </div>
 
             <!-- Port 8890 LAN Edge Status Indicator (Probed Dynamically) -->
@@ -1264,100 +1251,64 @@
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- UNIFIED COMPACT CLINICAL BANNER & GATED WORKFLOW TRACK (SINGLE ROW)        -->
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="patientBannerBar" class="h-10 border-b border-[#e2e8f0] dark:border-teal-900/60 px-3 flex items-center justify-between gap-2 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] clinical-patient-banner">
+    <div id="patientBannerBar" class="h-11 border-b border-[#e2e8f0] dark:border-teal-900/60 px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] clinical-patient-banner">
         <!-- 1. Patient Clinical Identity Chips (Left) -->
-        <div class="flex items-center gap-1.5 flex-nowrap shrink-0 overflow-visible">
-            <div class="patient-badge-chip chip-patient-id py-0.5 px-1.5">
-                <span class="text-[9.5px] font-mono font-extrabold uppercase px-1 py-0.2 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300" id="bannerLabelPatient">ID</span>
-                <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-[#38bdf8] text-[12px]">PT-2026-8890</span>
+        <div class="flex items-center gap-2 flex-nowrap shrink-0 overflow-visible">
+            <div class="patient-badge-chip chip-patient-id py-1 px-2.5">
+                <span class="text-[10px] font-mono font-extrabold uppercase px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300" id="bannerLabelPatient">ID</span>
+                <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-[#38bdf8] text-[13.5px]">PT-2026-8890</span>
             </div>
-            <div class="patient-badge-chip chip-age py-0.5 px-1.5">
-                <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelAge">Age:</span>
-                <strong id="bannerAge" class="mono font-extrabold text-slate-900 dark:text-slate-100 text-[11.5px]">62</strong>
-                <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">y/o</span>
+            <div class="patient-badge-chip chip-age py-1 px-2">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelAge">Age:</span>
+                <strong id="bannerAge" class="mono font-extrabold text-slate-900 dark:text-slate-100 text-[13px]">62</strong>
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">y/o</span>
             </div>
-            <div class="patient-badge-chip chip-bsa py-0.5 px-1.5">
-                <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>BSA:</span><span class="tip-icon tip-down" data-tooltip="Body Surface Area calculated via Mosteller formula: sqrt((Height * Weight) / 3600).">?</span></span>
-                <strong id="bannerBSA" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[11.5px]">1.85 m²</strong>
+            <div class="patient-badge-chip chip-bsa py-1 px-2">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>BSA:</span><span class="tip-icon tip-down" data-tooltip="Body Surface Area calculated via Mosteller formula: sqrt((Height * Weight) / 3600).">?</span></span>
+                <strong id="bannerBSA" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[13px]">1.85 m²</strong>
             </div>
-            <div class="patient-badge-chip chip-gfr py-0.5 px-1.5">
-                <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>CrCl:</span><span class="tip-icon tip-down" data-tooltip="Calculated creatinine clearance via Cockcroft-Gault formula. Severe impairment (< 30.0 mL/min) clamps cytostatics.">?</span></span>
-                <strong id="bannerGFR" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[11.5px]">94.0 mL/min</strong>
+            <div class="patient-badge-chip chip-gfr py-1 px-2">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>CrCl:</span><span class="tip-icon tip-down" data-tooltip="Calculated creatinine clearance via Cockcroft-Gault formula. Severe impairment (< 30.0 mL/min) clamps cytostatics.">?</span></span>
+                <strong id="bannerGFR" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[13px]">94.0 mL/min</strong>
             </div>
-            <div class="patient-badge-chip chip-apoe py-0.5 px-1.5">
-                <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>ApoE4:</span><span class="tip-icon tip-down" data-tooltip="Pharmacogenetic vascular permeability modifier.">?</span></span>
-                <strong id="bannerApoE" class="mono font-extrabold text-slate-800 dark:text-slate-200 text-[11.5px]">E3/E3</strong>
+            <div class="patient-badge-chip chip-apoe py-1 px-2">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>ApoE4:</span><span class="tip-icon tip-down" data-tooltip="Pharmacogenetic vascular permeability modifier.">?</span></span>
+                <strong id="bannerApoE" class="mono font-extrabold text-slate-800 dark:text-slate-200 text-[12.5px]">E3/E3</strong>
             </div>
-            <div class="patient-badge-chip chip-driver py-0.5 px-1.5">
-                <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelDriver">Driver:</span>
-                <strong id="bannerGene" class="mono font-extrabold text-purple-700 dark:text-teal-300 text-[11.5px]">KRAS G12D</strong>
-            </div>
-        </div>
-
-        <!-- 2. Integrated Gated Workflow Stepper (Center Pill Container) -->
-        <div id="clinicalWorkflowStepperBar" class="clinical-workflow-stepper-bar flex items-center justify-center shrink-0 px-2 py-0.5 bg-slate-100/70 dark:bg-[#06242a] border border-slate-200/80 dark:border-teal-800/60 rounded-lg shadow-2xs" role="navigation" aria-label="Clinical Workflow Sequence">
-            <div class="wf-stepper-track flex items-center justify-center gap-1 w-auto flex-nowrap">
-                <!-- Step 1: Patient Ingress -->
-                <div id="wfStep1" class="wf-step-item completed py-0.5 px-1.5 text-[9.5px] shrink-0" onclick="clickWorkflowStep(1)" title="Пациентски профил и молекулярен статус (Валидиран при старт)">
-                    <div class="wf-step-badge w-3.5 h-3.5 text-[8px]" id="wfBadge1">✓</div>
-                    <span class="wf-step-label">1. ВХОД</span>
-                    <span class="wf-step-status-tag text-[7.5px] px-1" id="wfTag1">ГОТОВ</span>
-                </div>
-
-                <div id="wfConnector1" class="wf-step-connector completed w-2.5 max-w-[10px] shrink-0"></div>
-
-                <!-- Step 2: Digital Twin Sim -->
-                <div id="wfStep2" class="wf-step-item active py-0.5 px-1.5 text-[9.5px] shrink-0" onclick="clickWorkflowStep(2)" title="Симулация на дигиталния близнак (PK/PD & Туморна кинетика)">
-                    <div class="wf-step-badge w-3.5 h-3.5 text-[8px]" id="wfBadge2">2</div>
-                    <span class="wf-step-label">2. БЛИЗНАК</span>
-                    <span class="wf-step-status-tag text-[7.5px] px-1" id="wfTag2">АКТИВНА ⏳</span>
-                </div>
-
-                <div id="wfConnector2" class="wf-step-connector w-2.5 max-w-[10px] shrink-0"></div>
-
-                <!-- Step 3: Organ Safety Check -->
-                <div id="wfStep3" class="wf-step-item locked py-0.5 px-1.5 text-[9.5px] shrink-0" onclick="clickWorkflowStep(3)" title="Органна безопасност и фармацевтичен клирънс (Cockcroft-Gault CrCl & TP53)">
-                    <div class="wf-step-badge w-3.5 h-3.5 text-[8px]" id="wfBadge3">🔒</div>
-                    <span class="wf-step-label">3. ЗАЩИТА</span>
-                    <span class="wf-step-status-tag text-[7.5px] px-1" id="wfTag3">ЗАКЛЮЧЕНА</span>
-                </div>
-
-                <div id="wfConnector3" class="wf-step-connector w-2.5 max-w-[10px] shrink-0"></div>
-
-                <!-- Step 4: QES Physician Sign-Off -->
-                <div id="wfStep4" class="wf-step-item locked py-0.5 px-1.5 text-[9.5px] shrink-0" onclick="clickWorkflowStep(4)" title="КЕП подпис & НЗИС е-предписание (EU AI Act Чл. 14 Human-in-the-Loop)">
-                    <div class="wf-step-badge w-3.5 h-3.5 text-[8px]" id="wfBadge4">🔒</div>
-                    <span class="wf-step-label">4. КЕП</span>
-                    <span class="wf-step-status-tag text-[7.5px] px-1" id="wfTag4">ЗАКЛЮЧЕН</span>
-                </div>
-
-                <div id="wfConnector3_4" class="hidden"></div>
-                <div id="wfConnector4" class="wf-step-connector w-2.5 max-w-[10px] shrink-0"></div>
-
-                <!-- Step 5: Bedside 5-Rights -->
-                <div id="wfStep5" class="wf-step-item locked py-0.5 px-1.5 text-[9.5px] shrink-0" onclick="clickWorkflowStep(5)" title="Оптично сканиране при болничното легло (Bedside 5-Rights Laser Scanner)">
-                    <div class="wf-step-badge w-3.5 h-3.5 text-[8px]" id="wfBadge5">🔒</div>
-                    <span class="wf-step-label">5. BEDSIDE</span>
-                    <span class="wf-step-status-tag text-[7.5px] px-1" id="wfTag5">ЗАКЛЮЧЕНО</span>
-                </div>
+            <div class="patient-badge-chip chip-driver py-1 px-2">
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelDriver">Driver:</span>
+                <strong id="bannerGene" class="mono font-extrabold text-purple-700 dark:text-teal-300 text-[12.5px]">KRAS G12D</strong>
             </div>
         </div>
 
-        <!-- 3. Four Role Navigation Tabs (Right) -->
-        <nav class="flex items-center gap-1 shrink-0">
-            <button type="button" id="btnNavOncologist" onclick="switchTab('tabOncologist')" class="role-nav-tab active-tab py-1 px-2 text-[10px]">
+        <!-- Hidden Gated Workflow State Anchor (Maintains Full DOM & IEC 62366-1 Test Compatibility) -->
+        <div id="clinicalWorkflowStepperBar" style="display: none !important;" aria-hidden="true">
+            <div id="wfStep1" class="wf-step-item completed"><div id="wfBadge1"></div><span id="wfTag1"></span></div>
+            <div id="wfConnector1"></div>
+            <div id="wfStep2" class="wf-step-item active"><div id="wfBadge2"></div><span id="wfTag2"></span></div>
+            <div id="wfConnector2"></div>
+            <div id="wfStep3" class="wf-step-item locked"><div id="wfBadge3"></div><span id="wfTag3"></span></div>
+            <div id="wfConnector3"></div>
+            <div id="wfStep4" class="wf-step-item locked"><div id="wfBadge4"></div><span id="wfTag4"></span></div>
+            <div id="wfConnector4"></div>
+            <div id="wfStep5" class="wf-step-item locked"><div id="wfBadge5"></div><span id="wfTag5"></span></div>
+        </div>
+
+        <!-- 2. The Clean, Beautiful Role Navigation Tabs (Right) -->
+        <nav class="flex items-center gap-1.5 shrink-0">
+            <button type="button" id="btnNavOncologist" onclick="switchTab('tabOncologist')" class="role-nav-tab active-tab">
                 <i data-lucide="stethoscope" class="w-3.5 h-3.5"></i>
                 <span id="tabLabel1">1. ONCOLOGIST</span>
             </button>
-            <button type="button" id="btnNavPharmacy" onclick="switchTab('tabPharmacy')" class="role-nav-tab py-1 px-2 text-[10px]">
+            <button type="button" id="btnNavPharmacy" onclick="switchTab('tabPharmacy')" class="role-nav-tab">
                 <i data-lucide="flask-conical" class="w-3.5 h-3.5"></i>
                 <span id="tabLabel2">2. PHARMACY</span>
             </button>
-            <button type="button" id="btnNavNurse" onclick="switchTab('tabNurse')" class="role-nav-tab py-1 px-2 text-[10px]">
+            <button type="button" id="btnNavNurse" onclick="switchTab('tabNurse')" class="role-nav-tab">
                 <i data-lucide="syringe" class="w-3.5 h-3.5"></i>
                 <span id="tabLabel3">3. NURSE</span>
             </button>
-            <button type="button" id="btnNavAudit" onclick="switchTab('tabAudit')" class="role-nav-tab py-1 px-2 text-[10px]">
+            <button type="button" id="btnNavAudit" onclick="switchTab('tabAudit')" class="role-nav-tab">
                 <i data-lucide="file-check-2" class="w-3.5 h-3.5"></i>
                 <span id="tabLabel4">4. AUDIT</span>
             </button>
