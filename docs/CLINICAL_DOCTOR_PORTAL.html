@@ -1617,37 +1617,78 @@
                     </div>
 
                     <div class="space-y-2.5">
-                        <!-- Optical Input 1: Wristband Barcode -->
-                        <div class="p-3 bg-slate-50 dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase mb-1.5 flex justify-between">
-                                <span>1. Patient Wristband Barcode</span>
-                                <span class="text-[10px] text-slate-400 font-mono font-normal">Optical Laser / Manual Input</span>
-                            </label>
-                            <input type="text" id="bedsideWristbandInput" value="PT-2026-8890" placeholder="Scan wristband barcode..." class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-lg px-3.5 py-2 text-sm mono font-black text-slate-900 dark:text-slate-100 shadow-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
-                            <div class="flex gap-2.5 mt-2">
-                                <button type="button" onclick="setBedsideWristband('PT-2026-8890')" class="px-3 py-1.5 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg transition-colors cursor-pointer">
-                                    Load Valid PT-2026-8890
-                                </button>
-                                <button type="button" onclick="setBedsideWristband('PT-WRONG-PATIENT-9999')" class="px-3 py-1.5 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg transition-colors cursor-pointer">
-                                    Simulate Patient Mismatch (Lockout)
-                                </button>
+                        <!-- Optical Dual Scanner Grid: Distributed side-by-side for optimal height & zero-scroll payload -->
+                        <div class="grid grid-cols-2 gap-3 items-stretch">
+                            <!-- Optical Input 1: Patient Wristband Barcode -->
+                            <div class="p-3.5 bg-slate-50 dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm flex flex-col justify-between">
+                                <div class="space-y-2.5">
+                                    <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase flex justify-between items-center">
+                                        <span class="flex items-center gap-1.5">
+                                            <i data-lucide="scan-line" class="w-3.5 h-3.5 text-blue-600"></i>
+                                            <span>1. Patient Wristband Barcode</span>
+                                        </span>
+                                        <span class="text-[9.5px] text-slate-400 font-mono">Laser / RFID Link</span>
+                                    </label>
+                                    <input type="text" id="bedsideWristbandInput" value="PT-2026-8890" placeholder="Scan wristband barcode..." class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-lg px-3 py-2 text-sm mono font-black text-slate-900 dark:text-slate-100 shadow-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                                    
+                                    <!-- Patient Verification & Bedside Profile Details -->
+                                    <div class="p-3 bg-white dark:bg-[#041d21] rounded-xl border border-slate-200 dark:border-teal-900/40 text-[11px] space-y-2 shadow-inner">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Active Tag:</span>
+                                            <span class="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs" id="wristbandActiveTag">PT-2026-8890</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Matched Identity:</span>
+                                            <span class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                <span>Dimitar Prodromov (A Rh+)</span>
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-teal-900/30">
+                                            <span>Allergies:</span>
+                                            <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300">NKDA (None Documented)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400">
+                                            <span>Location Anchor:</span>
+                                            <span class="font-bold text-blue-700 dark:text-blue-400">Oncology Day Clinic • Bed 02</span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono pt-1 border-t border-slate-100 dark:border-teal-900/30">
+                                            <span>Verification Standard:</span>
+                                            <span class="text-emerald-600 font-bold">IEC 62304 Class C Safe</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200 dark:border-teal-900/40">
+                                    <button type="button" onclick="setBedsideWristband('PT-2026-8890')" class="flex-1 py-2 px-2 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                        Load Valid PT-2026-8890
+                                    </button>
+                                    <button type="button" onclick="setBedsideWristband('PT-WRONG-PATIENT-9999')" class="flex-1 py-2 px-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                        Simulate Mismatch
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Optical Input 2: IV Compounding Bag 2D Code -->
-                        <div class="p-3 bg-slate-50 dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase mb-1.5 flex justify-between">
-                                <span>2. Compounded IV Bag 2D Barcode (GS1)</span>
-                                <span class="text-[10px] text-slate-400 font-mono font-normal">2D Imager Optical Stream</span>
-                            </label>
-                            <textarea id="bedsideBagPayloadInput" rows="2" placeholder="Scan 2D barcode payload from IV bag..." class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-lg px-3.5 py-2 text-xs mono text-slate-800 dark:text-slate-200 shadow-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"></textarea>
-                            <div class="flex gap-2.5 mt-2">
-                                <button type="button" onclick="loadCurrentBagIntoBedside()" class="px-3 py-1.5 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg transition-colors cursor-pointer">
-                                    Load Verified Cleanroom Bag
-                                </button>
-                                <button type="button" onclick="loadExpiredBagIntoBedside()" class="px-3 py-1.5 text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg transition-colors cursor-pointer">
-                                    Simulate Expired Bag (&gt;4h)
-                                </button>
+                            <!-- Optical Input 2: IV Compounding Bag 2D Code (Taller, high-clarity zero-scroll payload) -->
+                            <div class="p-3.5 bg-slate-50 dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm flex flex-col justify-between">
+                                <div class="flex-1 flex flex-col space-y-2">
+                                    <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase flex justify-between items-center">
+                                        <span class="flex items-center gap-1.5">
+                                            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-emerald-600"></i>
+                                            <span>2. Compounded IV Bag 2D Barcode (GS1)</span>
+                                        </span>
+                                        <span class="text-[9.5px] text-slate-400 font-mono">2D Imager Stream</span>
+                                    </label>
+                                    <textarea id="bedsideBagPayloadInput" placeholder="Scan 2D barcode payload from IV bag..." style="height: 225px; min-height: 225px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10.5px; line-height: 1.35;" class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-xl p-3 text-slate-800 dark:text-slate-200 shadow-inner focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-none"></textarea>
+                                </div>
+                                <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200 dark:border-teal-900/40">
+                                    <button type="button" onclick="loadCurrentBagIntoBedside()" class="flex-1 py-2 px-2 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                        Load Cleanroom Bag
+                                    </button>
+                                    <button type="button" onclick="loadExpiredBagIntoBedside()" class="flex-1 py-2 px-2 text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                        Simulate Expired (&gt;4h)
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -4068,6 +4109,8 @@ function updateTcgaSurvivalComparison() {
         function setBedsideWristband(pid) {
             const w = document.getElementById('bedsideWristbandInput');
             if (w) w.value = pid;
+            const tag = document.getElementById('wristbandActiveTag');
+            if (tag) tag.textContent = pid;
         }
 
         function loadCurrentBagIntoBedside() {
