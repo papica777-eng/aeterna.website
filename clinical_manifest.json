@@ -1,0 +1,48 @@
+{
+  "name": "AETERNA VHT — Clinical Decision Support System",
+  "short_name": "VHT Clinical",
+  "description": "IEC 62304 Class C & EU MDR Class IIb In Silico Oncology Clinical Portal",
+  "start_url": "./CLINICAL_DOCTOR_PORTAL.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#064e43",
+  "theme_color": "#064e43",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./assets/favicon_192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/favicon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/aeterna_official_stamp_transparent.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["medical", "health", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Bedside Nurse Terminal",
+      "short_name": "Bedside",
+      "description": "Bedside 5-Rights Optical Barcode Scanner",
+      "url": "./CLINICAL_DOCTOR_PORTAL.html#tabNurse",
+      "icons": [{ "src": "./assets/favicon_192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Oncology CDSS Simulator",
+      "short_name": "Simulator",
+      "description": "Digital Twin PK/PD Tumor Kinetics",
+      "url": "./CLINICAL_DOCTOR_PORTAL.html#tabOncologist",
+      "icons": [{ "src": "./assets/favicon_192.png", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -4,7 +4,15 @@
     <script>if(location.protocol==="http:"&&location.hostname!=="localhost"&&location.hostname!=="127.0.0.1"){location.replace("https://"+location.host+location.pathname+location.search+location.hash);}</script>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AETERNA VHT">
+    <meta name="theme-color" content="#064e43">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="manifest" href="clinical_manifest.json">
+    <link rel="apple-touch-icon" href="./assets/aeterna_official_stamp_transparent.png">
     <title>AETERNA VHT — Clinical Decision Support System (SaMD)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -875,6 +883,251 @@
         }
         .shake-element {
             animation: shakeError 0.35s ease-in-out;
+        }
+
+        /* ═════════════════════════════════════════════════════════════════════
+           § ADAPTIVE MEDICAL RESPONSIVE CSS & PWA LAYER (IEC 62366-1 / EU MDR)
+           TABLETS (1024px) & MOBILE WORKSTATIONS / ZEBRA TC52-HC (768px)
+           ═════════════════════════════════════════════════════════════════════ */
+
+        /* ── 1. TABLETS & TOUCH WORKSTATIONS (<= 1024px) ─────────────────── */
+        @media (max-width: 1024px) {
+            html, body {
+                height: auto !important;
+                min-height: 100vh !important;
+                max-height: none !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+
+            main {
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                flex: none !important;
+                padding: 10px 8px !important;
+            }
+
+            /* Tab containers expand vertically */
+            #tabOncologist, #tabPharmacy, #tabNurse, #tabAudit {
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                flex: none !important;
+                gap: 12px !important;
+            }
+
+            /* Tab 1: Convert 3-Column horizontal grid into 1-Column vertical sequence */
+            #tabOncologist > .flex-1.flex.gap-2\.5 {
+                flex-direction: column !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                gap: 12px !important;
+            }
+
+            #tabOncologist section.clinical-card {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+                flex: none !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+            }
+
+            /* Tab 2 (Pharmacy): Convert 2-Column horizontal split to vertical sequence */
+            #tabPharmacy {
+                flex-direction: column !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                gap: 12px !important;
+            }
+
+            #tabPharmacy > div.w-1\/2 {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+                flex: none !important;
+            }
+
+            /* Tab 3 (Bedside Nurse): Full-Width Tablet Optimization */
+            #tabNurse {
+                flex-direction: column !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                gap: 14px !important;
+            }
+
+            #tabNurse > div.w-1\/2 {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+                flex: none !important;
+            }
+
+            /* Specialized High-Tactile Bedside Nurse Controls for Nitrile Gloves */
+            #bedsideWristbandInput {
+                height: 52px !important;
+                font-size: 18px !important;
+                font-weight: 800 !important;
+                border-radius: 12px !important;
+                letter-spacing: 0.04em !important;
+            }
+
+            #bedsideVerifyBtn {
+                min-height: 58px !important;
+                font-size: 16px !important;
+                font-weight: 900 !important;
+                border-radius: 12px !important;
+                letter-spacing: 0.04em !important;
+                box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3) !important;
+            }
+
+            #bedsideInfusionTimerDisplay {
+                font-size: 3.6rem !important;
+                font-weight: 900 !important;
+                line-height: 1 !important;
+            }
+
+            #bedsideStatusBadge {
+                font-size: 13.5px !important;
+                font-weight: 800 !important;
+                padding: 10px 14px !important;
+                border-radius: 8px !important;
+            }
+
+            /* Patient Banner bar wrapping for tablets */
+            #patientBannerBar {
+                height: auto !important;
+                min-height: 48px !important;
+                padding: 8px 12px !important;
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+
+            #patientBannerBar > div:first-child {
+                flex-wrap: wrap !important;
+                gap: 6px !important;
+            }
+
+            #patientBannerBar nav {
+                width: 100% !important;
+                justify-content: flex-start !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                padding-top: 6px !important;
+                border-top: 1px solid #e2edea;
+            }
+            body.dark-mode #patientBannerBar nav,
+            html.dark #patientBannerBar nav {
+                border-top-color: #164e52;
+            }
+
+            .tab-btn {
+                padding: 6px 12px !important;
+                font-size: 11.5px !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+                min-height: 38px !important;
+            }
+
+            /* Stepper bar horizontal scroll */
+            .clinical-workflow-stepper-bar {
+                height: auto !important;
+                min-height: 36px !important;
+                padding: 6px 12px !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
+
+            .wf-stepper-track {
+                width: auto !important;
+                min-width: 100% !important;
+                gap: 6px !important;
+                overflow-x: auto !important;
+            }
+
+            .wf-step-item {
+                flex-shrink: 0 !important;
+                padding: 4px 8px !important;
+                font-size: 10.5px !important;
+            }
+
+            .wf-step-connector {
+                min-width: 14px !important;
+                max-width: 20px !important;
+                flex-shrink: 0 !important;
+            }
+
+            /* Modals scale gracefully */
+            #safetyOverrideModal > div,
+            #staffAuthModal > div {
+                max-width: 95vw !important;
+                margin: 16px auto !important;
+            }
+        }
+
+        /* ── 2. MOBILE PHONES & COMPACT HANDHELD SCANNERS (<= 768px) ────── */
+        @media (max-width: 768px) {
+            header.clinical-header {
+                height: auto !important;
+                min-height: 52px !important;
+                padding: 8px 10px !important;
+                flex-wrap: wrap !important;
+                gap: 6px !important;
+            }
+
+            #headerSubtitle {
+                display: none !important;
+            }
+
+            .aeterna-brand-lockup h1 {
+                font-size: 13px !important;
+            }
+
+            #pqcShieldBadge {
+                padding: 2px 6px !important;
+                font-size: 9px !important;
+            }
+
+            #pqcShieldBadge span:last-child {
+                display: none !important;
+            }
+
+            #bannerPatientId {
+                font-size: 11.5px !important;
+            }
+
+            /* Sliders touch area enlarged for finger interaction */
+            input[type="range"] {
+                height: 34px !important;
+                touch-action: pan-y !important;
+            }
+
+            /* Big touch targets */
+            button, select, input {
+                touch-action: manipulation !important;
+            }
+
+            #bedsideInfusionTimerDisplay {
+                font-size: 2.8rem !important;
+            }
+
+            /* Toast container mobile alignment */
+            #clinicalWorkflowGatingToast {
+                left: 12px !important;
+                right: 12px !important;
+                bottom: 12px !important;
+                max-width: calc(100vw - 24px) !important;
+            }
         }
 </style>
 </head>

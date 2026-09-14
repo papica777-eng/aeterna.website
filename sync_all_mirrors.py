@@ -18,6 +18,7 @@ files_to_sync = [
     "NZIS_FHIR_INTEGRATION_SPEC.md",
     "nzis_fhir_adapter.py",
     "nzis_oncology_fhir_sample.json",
+    "clinical_manifest.json",
     "AETERNA_VHT_HOSPITAL_DEPLOYMENT_MANUAL.md",
     "HOSPITAL_IT_DIRECTOR_TRANSMITTAL_LETTER_MU_SOFIA.md"
 ]
