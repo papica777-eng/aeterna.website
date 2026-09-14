@@ -12,8 +12,9 @@ build/
 *CREDENTIALS*
 *.secret
 *.pem
-*.key
 *.shadow.*
+.shadow_update/
+.backup_rollback/
 
 # Proprietary Biophysical Modules & Soul Manifolds (NEVER PUSH TO GIT)
 *.soul

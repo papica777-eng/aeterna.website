@@ -806,7 +806,7 @@
                 <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">y/o</span>
             </div>
             <div class="patient-badge-chip chip-bsa">
-                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">BSA:</span>
+                <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>BSA:</span><span class="tip-icon tip-down" data-tooltip="Body Surface Area calculated via Mosteller formula: sqrt((Height * Weight) / 3600). Serves as the primary pharmacokinetic scaling factor for IV cytostatic dosing.">?</span></span>
                 <strong id="bannerBSA" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[14px]">1.85 m²</strong>
             </div>
             <div class="patient-badge-chip chip-gfr">
@@ -1034,7 +1034,7 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <div class="flex justify-between text-[9.5px] font-bold text-slate-500">
-                                <span id="labelKi67">Ki-67 Index</span>
+                                <span id="labelKi67" class="flex items-center"><span>Ki-67 Index</span><span class="tip-icon" data-tooltip="Cellular proliferation biomarker. Values > 30% denote high-grade aggressiveness, driving accelerated metabolic consumption and shorter doubling times in the Digital Twin simulation.">?</span></span>
                                 <span id="ki67Val" class="text-blue-700 mono">78%</span>
                             </div>
                             <input type="range" id="ki67" min="10" max="95" value="78" oninput="document.getElementById('ki67Val').innerText = this.value + '%'" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none custom-slider">
@@ -1299,7 +1299,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2 pt-0.5">
                         <div class="bg-white dark:bg-[#08282e] p-2 rounded-lg border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                            <div class="text-[9.5px] font-bold text-slate-500 dark:text-slate-400">RECIST 1.1 Lysis</div>
+                            <div class="text-[9.5px] font-bold text-slate-500 dark:text-slate-400 flex items-center justify-between"><span>RECIST 1.1 Lysis</span><span class="tip-icon" data-tooltip="Response Evaluation Criteria in Solid Tumors (RECIST 1.1). Projected anatomical tumor shrinkage percentage across simulated therapeutic cycles.">?</span></div>
                             <div id="resTumorLysis" class="text-base font-black text-emerald-700 dark:text-[#38bdf8] mono">98.4%</div>
                         </div>
                         <div class="bg-white dark:bg-[#08282e] p-2 rounded-lg border border-slate-200 dark:border-teal-900/60 shadow-sm">
@@ -1497,7 +1497,7 @@
                             </div>
                             <div class="flex items-center gap-2 p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
                                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
-                                <span>3. CSTD ChemoLock needle-free transfer attached</span>
+                                <span class="flex items-center gap-1"><span>3. CSTD ChemoLock needle-free transfer attached</span><span class="tip-icon" data-tooltip="Closed-System Drug-Transfer Device (USP <800> compliant). Mechanically prohibits the transfer of environmental contaminants into the sterile vial and prevents hazardous aerosolized drug escape.">?</span></span>
                             </div>
                             <div class="flex items-center gap-2 p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
                                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
@@ -1511,7 +1511,7 @@
                         <div class="font-extrabold text-emerald-950 dark:text-emerald-300 flex items-center justify-between">
                             <span class="flex items-center gap-1.5">
                                 <i data-lucide="scale" class="w-4 h-4 text-emerald-600"></i>
-                                <span class="uppercase tracking-wide">Cleanroom In-Line Quality Control (QC) &amp; Gravimetric Scale:</span>
+                                <span class="uppercase tracking-wide flex items-center gap-1"><span>Cleanroom In-Line Quality Control (QC) &amp; Gravimetric Scale:</span><span class="tip-icon" data-tooltip="ISO 17025 in-line mass verification. Compares measured mass against target specific density to detect reconstitution volume errors prior to bedside release.">?</span></span>
                             </span>
                             <span class="text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded">ISO 17025 CALIBRATED</span>
                         </div>
@@ -1522,7 +1522,7 @@
                                 <div class="text-[9.5px] text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">Tolerance &plusmn;2% (Δ = -0.1%)</div>
                             </div>
                             <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase">0.22 µm PES In-Line Filter</div>
+                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase flex items-center justify-between"><span>0.22 µm PES In-Line Filter</span><span class="tip-icon" data-tooltip="Sterilizing-grade polyethersulfone filter integrity test. Verifies retention of sub-micron particulates and microbial contaminants at bubble-point pressure > 3.2 bar.">?</span></div>
                                 <div class="mono font-black text-emerald-700 dark:text-emerald-400 text-sm mt-0.5">BUBBLE-POINT PASS</div>
                                 <div class="text-[9.5px] text-slate-500 dark:text-slate-400 mt-0.5">Pressure: 3.4 bar (&gt;3.2 req)</div>
                             </div>
@@ -1682,7 +1682,7 @@
                                 <i data-lucide="syringe" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h2 class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide">Bedside 5-Rights Scan &amp; Administration</h2>
+                                <h2 class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide flex items-center gap-1.5"><span>Bedside 5-Rights Scan &amp; Administration</span><span class="tip-icon" data-tooltip="IEC 62304 Class C verification enforcing the 5 core clinical checks: Right Patient, Right Drug, Right Dose, Right Route, and Right Time via dual optical barcode scan.">?</span></h2>
                                 <p class="text-[11px] text-slate-500 dark:text-slate-400">IEC 62304 Class C Closed-Loop Verification • Station 302, Bed 2</p>
                             </div>
                         </div>
@@ -1827,7 +1827,7 @@
                             <div class="font-extrabold text-slate-800 dark:text-slate-200 flex items-center justify-between border-b border-slate-200 dark:border-teal-900/40 pb-1">
                                 <span class="flex items-center gap-1.5">
                                     <i data-lucide="pill" class="w-3.5 h-3.5 text-purple-600"></i>
-                                    <span class="uppercase tracking-wide text-[11px]">Pre-Medication Protocol Administered:</span>
+                                    <span class="uppercase tracking-wide text-[11px] flex items-center gap-1"><span>Pre-Medication Protocol Administered:</span><span class="tip-icon" data-tooltip="Prophylactic dexamethasone, ondansetron, and diphenhydramine administration to suppress acute cytokine storm and hypersensitivity infusion reactions.">?</span></span>
                                 </span>
                                 <span class="text-[9.5px] font-mono font-bold text-purple-700 dark:text-teal-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded">3 / 3 COMPLETE</span>
                             </div>
@@ -1919,7 +1919,7 @@
                                     <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5">18 mmHg</div>
                                 </div>
                                 <div class="p-2 bg-slate-800/80 rounded-xl border border-slate-700">
-                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Air Ultrasonic</div>
+                                    <div class="text-[10px] text-slate-400 font-semibold uppercase flex items-center justify-between"><span>Air Ultrasonic</span><span class="tip-icon" data-tooltip="In-line ultrasonic bubble detector on smart infusion pump. Automatically arrests fluid delivery if micro-bubbles exceed safety thresholds to prevent air embolism.">?</span></div>
                                     <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5">0.0 µL (SAFE)</div>
                                 </div>
                             </div>
@@ -2042,7 +2042,7 @@
                         </div>
                         <div>
                             <h2 class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide">Regulatory Audit Trail (IAL &amp; EMA Inspection)</h2>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400">EU AI Act Art. 12/14 Record-Keeping • Cryptographic Merkle Chain (SHA-512)</p>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">EU AI Act Art. 12/14 Record-Keeping • Cryptographic Merkle Chain (SHA-512) <span class="tip-icon" data-tooltip="Immutable forward-secure cryptographic ledger conforming to EU AI Act Art. 12. Every clinical calculation, override, and bedside scan is anchored with 128-hex tamper-evident hashes.">?</span></p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -2105,7 +2105,7 @@
                                         <td class="py-2.5 px-2 font-bold text-blue-600">#0001</td>
                                         <td class="py-2.5 px-2 text-slate-500">2026-09-14 01:10:04</td>
                                         <td class="py-2.5 px-2 font-semibold">Hospital SaMD Engine</td>
-                                        <td class="py-2.5 px-2">Genesis Root Anchor Initialized</td>
+                                        <td class="py-2.5 px-2 flex items-center gap-1"><span>Genesis Root Anchor Initialized</span><span class="tip-icon" data-tooltip="Cryptographic root block linking the local hospital runtime to the official CERN / Zenodo sovereign release baseline.">?</span></td>
                                         <td class="py-2.5 px-2"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[9.5px]">VERIFIED</span></td>
                                     </tr>
                                     <tr class="hover:bg-slate-50 dark:hover:bg-teal-950/40 transition-colors">

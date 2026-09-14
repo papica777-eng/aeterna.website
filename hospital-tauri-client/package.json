@@ -1,0 +1,14 @@
+{
+  "name": "aeterna-vht-hospital-client",
+  "version": "2.4.0",
+  "description": "AETERNA-VHT Clinical Doctor & Bedside Safety Desktop Shell (IEC 62304 / EU MDR Class IIb)",
+  "private": true,
+  "scripts": {
+    "tauri": "tauri",
+    "build": "tauri build",
+    "dev": "tauri dev"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.6.0"
+  }
+}
