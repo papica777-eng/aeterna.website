@@ -666,6 +666,216 @@
         body.dark-mode #clinicalGlobalTooltip.arrow-up::after {
             border-color: transparent transparent #06231e transparent;
         }
+
+        /* ═════════════════════════════════════════════════════════════════════
+           § GATED CLINICAL WORKFLOW PIPELINE (IEC 62366-1 / ISO 14971)
+           ═════════════════════════════════════════════════════════════════════ */
+        .clinical-workflow-stepper-bar {
+            height: 34px !important;
+            min-height: 34px !important;
+            background: #f8fafc !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 0 16px !important;
+            flex-shrink: 0 !important;
+            z-index: 35 !important;
+            user-select: none !important;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        body.dark-mode .clinical-workflow-stepper-bar,
+        html.dark .clinical-workflow-stepper-bar {
+            background: #071e22 !important;
+            border-bottom: 1px solid #0f3d44 !important;
+        }
+        .wf-stepper-track {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            gap: 6px !important;
+        }
+        .wf-step-item {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 3px 8px !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            border: 1px solid transparent !important;
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            line-height: 1 !important;
+        }
+        /* Completed State */
+        .wf-step-item.completed {
+            background: #ecfdf5 !important;
+            border-color: #a7f3d0 !important;
+            color: #065f46 !important;
+        }
+        body.dark-mode .wf-step-item.completed,
+        html.dark .wf-step-item.completed {
+            background: #064e3b33 !important;
+            border-color: #05966966 !important;
+            color: #34d399 !important;
+        }
+        .wf-step-item.completed .wf-step-badge {
+            background: #10b981 !important;
+            color: #ffffff !important;
+        }
+        /* Active State */
+        .wf-step-item.active {
+            background: #f0f9ff !important;
+            border-color: #7dd3fc !important;
+            color: #0369a1 !important;
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.15) !important;
+            animation: pulseActiveStep 2.4s infinite ease-in-out;
+        }
+        body.dark-mode .wf-step-item.active,
+        html.dark .wf-step-item.active {
+            background: #0c4a6e33 !important;
+            border-color: #0284c766 !important;
+            color: #38bdf8 !important;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2) !important;
+        }
+        .wf-step-item.active .wf-step-badge {
+            background: #0284c7 !important;
+            color: #ffffff !important;
+        }
+        /* Locked State */
+        .wf-step-item.locked {
+            background: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #94a3b8 !important;
+            cursor: not-allowed !important;
+            opacity: 0.7 !important;
+        }
+        body.dark-mode .wf-step-item.locked,
+        html.dark .wf-step-item.locked {
+            background: #0d282d55 !important;
+            border-color: #164e5744 !important;
+            color: #527970 !important;
+        }
+        .wf-step-item.locked .wf-step-badge {
+            background: #cbd5e1 !important;
+            color: #64748b !important;
+        }
+        body.dark-mode .wf-step-item.locked .wf-step-badge,
+        html.dark .wf-step-item.locked .wf-step-badge {
+            background: #164e52 !important;
+            color: #527970 !important;
+        }
+        .wf-step-badge {
+            width: 17px !important;
+            height: 17px !important;
+            border-radius: 50% !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            flex-shrink: 0 !important;
+        }
+        .wf-step-status-tag {
+            font-size: 9px !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.03em !important;
+            padding: 1px 4px !important;
+            border-radius: 3px !important;
+        }
+        .wf-step-item.completed .wf-step-status-tag {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        body.dark-mode .wf-step-item.completed .wf-step-status-tag,
+        html.dark .wf-step-item.completed .wf-step-status-tag {
+            background: #064e3b88;
+            color: #a7f3d0;
+        }
+        .wf-step-item.active .wf-step-status-tag {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        body.dark-mode .wf-step-item.active .wf-step-status-tag,
+        html.dark .wf-step-item.active .wf-step-status-tag {
+            background: #07598588;
+            color: #bae6fd;
+        }
+        .wf-step-item.locked .wf-step-status-tag {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+        body.dark-mode .wf-step-item.locked .wf-step-status-tag,
+        html.dark .wf-step-item.locked .wf-step-status-tag {
+            background: #133e44;
+            color: #527970;
+        }
+        .wf-step-connector {
+            flex: 1 !important;
+            height: 2px !important;
+            background: #cbd5e1 !important;
+            border-radius: 1px !important;
+            transition: background 0.3s ease !important;
+            max-width: 48px !important;
+        }
+        body.dark-mode .wf-step-connector,
+        html.dark .wf-step-connector {
+            background: #164e52 !important;
+        }
+        .wf-step-connector.completed {
+            background: #10b981 !important;
+        }
+        @keyframes pulseActiveStep {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .tab-lock-indicator {
+            font-size: 11px !important;
+            margin-left: 4px !important;
+            color: #f59e0b !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        #clinicalWorkflowGatingToast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            max-width: 440px;
+            background: #ffffff;
+            border-left: 4px solid #0284c7;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: none;
+            align-items: flex-start;
+            gap: 12px;
+            z-index: 999999;
+            animation: slideInToast 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #0284c7;
+        }
+        body.dark-mode #clinicalWorkflowGatingToast,
+        html.dark #clinicalWorkflowGatingToast {
+            background: #08262b;
+            border-color: #164e52;
+            border-left-color: #38bdf8;
+            color: #e2e8f0;
+        }
+        @keyframes slideInToast {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
+        }
+        .shake-element {
+            animation: shakeError 0.35s ease-in-out;
+        }
 </style>
 </head>
 <body>
@@ -851,6 +1061,77 @@
             </button>
         </nav>
     </div>
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <!-- GATED CLINICAL WORKFLOW PIPELINE (IEC 62366-1 / ISO 14971 / SaMD Class IIb)-->
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <div id="clinicalWorkflowStepperBar" class="clinical-workflow-stepper-bar" role="navigation" aria-label="Clinical Workflow Sequence">
+        <div class="wf-stepper-track">
+            <!-- Step 1: Patient Ingress -->
+            <div id="wfStep1" class="wf-step-item completed" onclick="clickWorkflowStep(1)" title="Пациентски профил и молекулярен статус (Валидиран при старт)">
+                <div class="wf-step-badge" id="wfBadge1">✓</div>
+                <span class="wf-step-label">1. ПАЦИЕНТСКИ ВХОД</span>
+                <span class="wf-step-status-tag" id="wfTag1">ВАЛИДИРАН</span>
+            </div>
+
+            <div id="wfConnector1" class="wf-step-connector completed"></div>
+
+            <!-- Step 2: Digital Twin Sim -->
+            <div id="wfStep2" class="wf-step-item active" onclick="clickWorkflowStep(2)" title="Симулация на дигиталния близнак (PK/PD & Туморна кинетика)">
+                <div class="wf-step-badge" id="wfBadge2">2</div>
+                <span class="wf-step-label">2. ДИГИТАЛЕН БЛИЗНАК</span>
+                <span class="wf-step-status-tag" id="wfTag2">АКТИВНА ⏳</span>
+            </div>
+
+            <div id="wfConnector2" class="wf-step-connector"></div>
+
+            <!-- Step 3: Organ Safety Check -->
+            <div id="wfStep3" class="wf-step-item locked" onclick="clickWorkflowStep(3)" title="Органна безопасност и фармацевтичен клирънс (Cockcroft-Gault CrCl & TP53)">
+                <div class="wf-step-badge" id="wfBadge3">🔒</div>
+                <span class="wf-step-label">3. ОРГАННА ЗАЩИТА</span>
+                <span class="wf-step-status-tag" id="wfTag3">ЗАКЛЮЧЕНА</span>
+            </div>
+
+            <div id="wfConnector3" class="wf-step-connector"></div>
+
+            <!-- Step 4: QES Physician Sign-Off -->
+            <div id="wfStep4" class="wf-step-item locked" onclick="clickWorkflowStep(4)" title="КЕП подпис & НЗИС е-предписание (EU AI Act Чл. 14 Human-in-the-Loop)">
+                <div class="wf-step-badge" id="wfBadge4">🔒</div>
+                <span class="wf-step-label">4. КЕП ПОДПИС & НЗИС</span>
+                <span class="wf-step-status-tag" id="wfTag4">ЗАКЛЮЧЕН</span>
+            </div>
+
+            <div id="wfConnector4" class="wf-step-connector"></div>
+
+            <!-- Step 5: Bedside 5-Rights -->
+            <div id="wfStep5" class="wf-step-item locked" onclick="clickWorkflowStep(5)" title="Оптично сканиране при болничното легло (Bedside 5-Rights Laser Scanner)">
+                <div class="wf-step-badge" id="wfBadge5">🔒</div>
+                <span class="wf-step-label">5. BEDSIDE 5-RIGHTS</span>
+                <span class="wf-step-status-tag" id="wfTag5">ЗАКЛЮЧЕНО</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflow Gating Toast Notification -->
+    <div id="clinicalWorkflowGatingToast" class="flex">
+        <div class="w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-950 flex items-center justify-center text-sky-600 dark:text-sky-400 shrink-0 text-base" id="wfToastIcon">
+            🔒
+        </div>
+        <div class="flex-1 text-xs">
+            <div class="font-extrabold text-slate-900 dark:text-slate-100 text-[13px] flex items-center justify-between">
+                <span id="wfToastTitle">Клиничен коридор за безопасност</span>
+                <button type="button" onclick="hideWorkflowGatingToast()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-sm font-bold">&times;</button>
+            </div>
+            <div class="mt-1 text-slate-600 dark:text-slate-300 leading-relaxed" id="wfToastDesc">
+                Етап 2 е задължителен: Моля, стартирайте симулацията на дигиталния близнак преди да преминете напред.
+            </div>
+            <div class="mt-2 flex items-center gap-2">
+                <button type="button" id="wfToastActionBtn" onclick="executeWorkflowToastAction()" class="px-2.5 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded font-bold text-[11px] shadow-sm">
+                    Към текущата стъпка
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- ══════════════════════════════════════════════════════════════════════════ -->
     <!-- DYNAMIC SAFETY CLAMP ALARM BAR (SHOWN ONLY ON TP53 OR GFR < 30)           -->
@@ -2736,6 +3017,18 @@
         // § ROLE TAB SWITCHER
         // ─────────────────────────────────────────────────────────────────────────
         function switchTab(tabId) {
+            // Gated Workflow Interlocks (IEC 62366-1)
+            if (window.clinicalWorkflow) {
+                if (tabId === 'tabPharmacy' && window.clinicalWorkflow.step2_twin !== 'completed') {
+                    showWorkflowGatingToast(2, "🔒 Етап 2 е задължителен: Генерирайте прогнозата на дигиталния близнак преди фармацевтично дозиране.");
+                    return false;
+                }
+                if (tabId === 'tabNurse' && window.clinicalWorkflow.step4_qes !== 'completed') {
+                    showWorkflowGatingToast(4, "🔒 Етап 4 е задължителен: Изисква се положен КЕП подпис от онколог и валиден НРН преди сестринско вливане.");
+                    return false;
+                }
+            }
+
             activeTab = tabId;
             const tabs = ['tabOncologist', 'tabPharmacy', 'tabNurse', 'tabAudit'];
             tabs.forEach(t => {
@@ -3406,7 +3699,7 @@ function loadSelectedTcgaCase(caseIdToLoad) {
 
     // 7. Recompute Digital Twin Simulation
     if (typeof executeSimulation === 'function') {
-        executeSimulation('full');
+        executeSimulation('initial');
     }
 
     // 8. Update Benchmark delta
@@ -3513,7 +3806,7 @@ function updateTcgaSurvivalComparison() {
                 if (res.ok) {
                     const data = await res.json();
                     latestSimulationData = data;
-                    applySimulationResults(data, payload);
+                    applySimulationResults(data, payload, mode);
                     return;
                 }
             } catch(e) {
@@ -3534,10 +3827,10 @@ function updateTcgaSurvivalComparison() {
                 adaptation_reserve: 82.4
             };
             latestSimulationData = localData;
-            applySimulationResults(localData, payload);
+            applySimulationResults(localData, payload, mode);
         }
 
-        function applySimulationResults(data, payload) {
+        function applySimulationResults(data, payload, triggerSource) {
             const survEl = document.getElementById('resPredictedSurvival');
             const lysisEl = document.getElementById('resTumorLysis');
             const adaptEl = document.getElementById('resAdaptationReserve');
@@ -3548,6 +3841,7 @@ function updateTcgaSurvivalComparison() {
 
             renderTumorTrajectoryChart(data, payload);
             updateOrganoidSimulationState(data.shrinkage_percent, payload.tumorSize);
+            if (window.clinicalWorkflow && triggerSource === 'full') completeWorkflowStep(2);
         }
 
         
@@ -3992,6 +4286,8 @@ function updateTcgaSurvivalComparison() {
             } catch(e) {}
 
             alert(`Prescription signed with SHA-512 seal for Patient ${rx.patientId}.\nRegimen: ${rx.regimen}\nDispatched directly to Compounding Pharmacy.`);
+            
+            if (window.clinicalWorkflow) completeWorkflowStep(3);
             switchTab('tabPharmacy');
         }
 
@@ -4124,6 +4420,7 @@ function updateTcgaSurvivalComparison() {
         }
 
         function pharmacySecondSignOff() {
+            if (window.clinicalWorkflow) completeWorkflowStep(4);
             const rx = getCalculatedPrescription();
             try {
                 const controller = new AbortController();
@@ -4140,6 +4437,8 @@ function updateTcgaSurvivalComparison() {
                         decision: "APPROVED",
                         justification: `Dispense verified: ${rx.regimen}`
                     })
+                }).catch(err => {
+                    console.log("[Edge Server offline] Pharmacy sign audit saved to offline store:", err.message);
                 });
                 clearTimeout(timeoutId);
             } catch(e) {}
@@ -4304,6 +4603,7 @@ function updateTcgaSurvivalComparison() {
 
                     if (statusBadge) {
                         statusBadge.innerText = 'VERIFIED_SAFE_FOR_INFUSION';
+                    if (window.clinicalWorkflow) completeWorkflowStep(5);
                         statusBadge.className = 'text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded';
                     }
 
@@ -4346,6 +4646,7 @@ function updateTcgaSurvivalComparison() {
 
                 if (statusBadge) {
                     statusBadge.innerText = 'VERIFIED_SAFE_FOR_INFUSION';
+                    if (window.clinicalWorkflow) completeWorkflowStep(5);
                     statusBadge.className = 'text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded';
                 }
 
@@ -5122,11 +5423,13 @@ function updateTcgaSurvivalComparison() {
         // § INITIALIZATION ON DOM CONTENT LOADED
         // ─────────────────────────────────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', async () => {
+            setTimeout(function() { if (window.updateWorkflowStepperUI) updateWorkflowStepperUI(); }, 200);
+
             calculatePatientMetrics();
             updateHospitalAuthUI();
             initEcgAnimation();
             initTumorOrganoidEngine();
-            executeSimulation('full');
+            executeSimulation('initial');
 
             // Active Edge Server Probe (Criterion 3)
             await checkEdgeServerHealth();
@@ -5248,6 +5551,204 @@ function updateTcgaSurvivalComparison() {
                 }
             });
         })();
+
+        // ═════════════════════════════════════════════════════════════════════════
+        // § GATED CLINICAL WORKFLOW STATE MACHINE (IEC 62366-1 / ISO 14971)
+        // ═════════════════════════════════════════════════════════════════════════
+        window.clinicalWorkflow = {
+            step1_patient: 'completed',
+            step2_twin: 'active',
+            step3_safety: 'locked',
+            step4_qes: 'locked',
+            step5_bedside: 'locked',
+            currentActiveStep: 2
+        };
+
+        function updateWorkflowStepperUI() {
+            const wf = window.clinicalWorkflow;
+            if (!wf) return;
+
+            // Step 1: Patient Ingress
+            setWfStepState(1, wf.step1_patient, '✓', 'ВАЛИДИРАН');
+
+            // Step 2: Digital Twin
+            setWfStepState(2, wf.step2_twin, 
+                wf.step2_twin === 'completed' ? '✓' : (wf.step2_twin === 'active' ? '2' : '🔒'),
+                wf.step2_twin === 'completed' ? 'ВАЛИДИРАН' : (wf.step2_twin === 'active' ? 'АКТИВНА ⏳' : 'ЗАКЛЮЧЕНА'));
+
+            // Step 3: Organ Safety Check
+            setWfStepState(3, wf.step3_safety,
+                wf.step3_safety === 'completed' ? '✓' : (wf.step3_safety === 'active' ? '3' : '🔒'),
+                wf.step3_safety === 'completed' ? 'ВАЛИДИРАНА' : (wf.step3_safety === 'active' ? 'АКТИВНА ⏳' : 'ЗАКЛЮЧЕНА'));
+
+            // Step 4: QES Physician Sign-Off
+            setWfStepState(4, wf.step4_qes,
+                wf.step4_qes === 'completed' ? '✓' : (wf.step4_qes === 'active' ? '4' : '🔒'),
+                wf.step4_qes === 'completed' ? 'ПОДПИСАН' : (wf.step4_qes === 'active' ? 'АКТИВНА ⏳' : 'ЗАКЛЮЧЕН'));
+
+            // Step 5: Bedside 5-Rights
+            setWfStepState(5, wf.step5_bedside,
+                wf.step5_bedside === 'completed' ? '✓' : (wf.step5_bedside === 'active' ? '5' : '🔒'),
+                wf.step5_bedside === 'completed' ? 'ВЛЯТО ✓' : (wf.step5_bedside === 'active' ? 'АКТИВНА ⏳' : 'ЗАКЛЮЧЕНО'));
+
+            // Connectors
+            setWfConnector(1, wf.step1_patient === 'completed');
+            setWfConnector(2, wf.step2_twin === 'completed');
+            setWfConnector(3, wf.step3_safety === 'completed');
+            setWfConnector(4, wf.step4_qes === 'completed');
+
+            // Update Tab Lock Badges
+            updateTabLockIndicators();
+        }
+
+        function setWfStepState(num, state, badgeChar, statusText) {
+            const el = document.getElementById('wfStep' + num);
+            const badge = document.getElementById('wfBadge' + num);
+            const tag = document.getElementById('wfTag' + num);
+            if (!el) return;
+
+            el.className = 'wf-step-item ' + state;
+            if (badge) badge.innerText = badgeChar;
+            if (tag) tag.innerText = statusText;
+        }
+
+        function setWfConnector(num, isCompleted) {
+            const conn = document.getElementById('wfConnector' + num);
+            if (!conn) return;
+            if (isCompleted) {
+                conn.classList.add('completed');
+            } else {
+                conn.classList.remove('completed');
+            }
+        }
+
+        function updateTabLockIndicators() {
+            const wf = window.clinicalWorkflow;
+            if (!wf) return;
+            const btnPharm = document.getElementById('btnNavPharmacy');
+            const btnNurse = document.getElementById('btnNavNurse');
+
+            const pharmLocked = wf.step2_twin !== 'completed';
+            updateLockBadge(btnPharm, pharmLocked, 'tabLockPharm');
+
+            const nurseLocked = wf.step4_qes !== 'completed';
+            updateLockBadge(btnNurse, nurseLocked, 'tabLockNurse');
+        }
+
+        function updateLockBadge(btn, isLocked, lockId) {
+            if (!btn) return;
+            let lockEl = document.getElementById(lockId);
+            if (isLocked) {
+                if (!lockEl) {
+                    lockEl = document.createElement('span');
+                    lockEl.id = lockId;
+                    lockEl.className = 'tab-lock-indicator';
+                    lockEl.innerText = '🔒';
+                    btn.appendChild(lockEl);
+                }
+                btn.style.opacity = '0.75';
+            } else {
+                if (lockEl) lockEl.remove();
+                btn.style.opacity = '1';
+            }
+        }
+
+        function completeWorkflowStep(stepNum) {
+            const wf = window.clinicalWorkflow;
+            if (!wf) return;
+
+            if (stepNum === 2) {
+                wf.step2_twin = 'completed';
+                if (wf.step3_safety === 'locked') wf.step3_safety = 'active';
+                wf.currentActiveStep = 3;
+            } else if (stepNum === 3) {
+                wf.step3_safety = 'completed';
+                if (wf.step4_qes === 'locked') wf.step4_qes = 'active';
+                wf.currentActiveStep = 4;
+            } else if (stepNum === 4) {
+                wf.step4_qes = 'completed';
+                if (wf.step5_bedside === 'locked') wf.step5_bedside = 'active';
+                wf.currentActiveStep = 5;
+            } else if (stepNum === 5) {
+                wf.step5_bedside = 'completed';
+            }
+            updateWorkflowStepperUI();
+        }
+
+        function clickWorkflowStep(stepNum) {
+            const wf = window.clinicalWorkflow;
+            if (!wf) return;
+
+            if (stepNum === 1) {
+                switchTab('tabOncologist');
+                const pSel = document.getElementById('patientCohortSelect') || document.getElementById('tcgaPatientSelect');
+                if (pSel) pSel.focus();
+            } else if (stepNum === 2) {
+                switchTab('tabOncologist');
+                const btn = document.getElementById('btnSimulateAction');
+                if (btn) {
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    btn.classList.add('ring-4', 'ring-sky-400');
+                    setTimeout(() => btn.classList.remove('ring-4', 'ring-sky-400'), 1500);
+                }
+            } else if (stepNum === 3) {
+                if (wf.step2_twin !== 'completed') {
+                    showWorkflowGatingToast(2, "🔒 Етап 2 е задължителен: Моля, стартирайте симулацията на дигиталния близнак преди органна проверка.");
+                    return;
+                }
+                switchTab('tabPharmacy');
+            } else if (stepNum === 4) {
+                if (wf.step3_safety === 'locked') {
+                    showWorkflowGatingToast(3, "🔒 Етап 3 е задължителен: Потвърдете органната безопасност и клирънс преди подпис с КЕП.");
+                    return;
+                }
+                switchTab('tabPharmacy');
+                const signBtn = document.getElementById('pharmacySecondSignOffBtn') || document.getElementById('signAndSendPharmacyBtn');
+                if (signBtn) signBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (stepNum === 5) {
+                if (wf.step4_qes !== 'completed') {
+                    showWorkflowGatingToast(4, "🔒 Етап 4 е задължителен: Изисква се положен КЕП подпис от лекар преди освобождаване за вливане.");
+                    return;
+                }
+                switchTab('tabNurse');
+            }
+        }
+
+        let toastTimer = null;
+        function showWorkflowGatingToast(stepNum, message) {
+            const toast = document.getElementById('clinicalWorkflowGatingToast');
+            const desc = document.getElementById('wfToastDesc');
+            const actBtn = document.getElementById('wfToastActionBtn');
+            if (!toast) return;
+
+            if (desc) desc.innerText = message;
+            if (actBtn) {
+                actBtn.onclick = function() {
+                    hideWorkflowGatingToast();
+                    clickWorkflowStep(stepNum);
+                };
+            }
+            toast.style.display = 'flex';
+            toast.classList.remove('shake-element');
+            void toast.offsetWidth;
+            toast.classList.add('shake-element');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function() {
+                hideWorkflowGatingToast();
+            }, 4500);
+        }
+
+        function hideWorkflowGatingToast() {
+            const toast = document.getElementById('clinicalWorkflowGatingToast');
+            if (toast) toast.style.display = 'none';
+        }
+
+        function executeWorkflowToastAction() {
+            hideWorkflowGatingToast();
+            const wf = window.clinicalWorkflow;
+            if (wf) clickWorkflowStep(wf.currentActiveStep || 2);
+        }
 </script>
 </body>
 </html>

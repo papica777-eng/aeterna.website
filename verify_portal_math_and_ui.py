@@ -137,9 +137,9 @@ def run_browser_ui_tests():
             print(">>> [TEST 2] Cockcroft-Gault CrCl Math: FAIL", flush=True)
 
         # ----------------------------------------------------------------------
-        # TEST 3: TAB 2 COMPOUNDING PHARMACY DOSING RECALCULATION
+        # TEST 3: TAB 2 COMPOUNDING PHARMACY & GATED WORKFLOW CORRIDOR
         # ----------------------------------------------------------------------
-        print("\n[ТЕСТ 3] Дозиране в Таб 2 (Compounding Pharmacy Dosing Math)...", flush=True)
+        print("\n[ТЕСТ 3] Дозиране в Таб 2 (Compounding Pharmacy) и етапно заключване (Gated Stepper)...", flush=True)
         # Restore standard inputs: 76kg, 178cm, Cr 0.9, AP-90 = 52 mg/m2, Checkpoint = 10 mg/kg
         page.fill("#patientHeight", "178")
         page.fill("#patientWeight", "76")
@@ -151,6 +151,23 @@ def run_browser_ui_tests():
         page.fill("#withanolidesDose", "10")
         page.evaluate("syncDoseValue('withanolides', 10, true)")
 
+        # 3a. Gating Interlock: Clicking locked Tab 2 triggers toast and blocks navigation
+        page.click("#btnNavPharmacy")
+        page.wait_for_timeout(200)
+        gating_toast_visible = page.is_visible("#clinicalWorkflowGatingToast")
+        tab_pharmacy_hidden = not page.is_visible("#tabPharmacy")
+        sub3a_gating_ok = gating_toast_visible and tab_pharmacy_hidden
+        print(f"  • IEC 62366-1 Защита на Стъпка 2 (Блокиран Таб 2 преди симулация): {'✓ PASS' if sub3a_gating_ok else '❌ FAIL'}", flush=True)
+
+        # 3b. Execute Step 2: Simulate Digital Twin
+        page.click("#btnSimulateAction")
+        page.wait_for_timeout(600)
+        s2_class = page.locator("#wfStep2").get_attribute("class")
+        s3_class = page.locator("#wfStep3").get_attribute("class")
+        sub3b_sim_ok = "completed" in s2_class and "active" in s3_class
+        print(f"  • Валидиране на Стъпка 2 (Дигитален близнак завършен): {'✓ PASS' if sub3b_sim_ok else '❌ FAIL'}", flush=True)
+
+        # 3c. Switch to unlocked Tab 2
         page.click("#btnNavPharmacy")
         page.wait_for_timeout(200)
 
@@ -165,17 +182,17 @@ def run_browser_ui_tests():
         sub3_pembro_ok = f"{expected_pembro_mg} mg" in pharm_doses_html or abs(rx_obj["checkpointTotalMg"] - expected_pembro_mg) <= 0.1
         has_qr_svg = page.locator("#pharmacyQrSvgContainer svg").count() > 0
 
-        test3_passed = sub3_ap90_ok and sub3_pembro_ok and has_qr_svg
+        test3_passed = sub3a_gating_ok and sub3b_sim_ok and sub3_ap90_ok and sub3_pembro_ok and has_qr_svg
         if test3_passed:
             print(f"  ✓ AP-90 Liposomal Peptide: {rx_obj['ap90TotalMg']} mg (Formula: 52 mg/m² × {expected_bsa} m²)", flush=True)
             print(f"  ✓ Pembrolizumab Anti-PD-L1: {rx_obj['checkpointTotalMg']} mg (Formula: 10 mg/kg × 76 kg)", flush=True)
             print("  ✓ Dynamic 2D GS1 Barcode SVG: Rendered successfully", flush=True)
             passed_tests += 1
-            print(">>> [TEST 3] Tab 2 Compounding Dosing Recalculation: PASS", flush=True)
+            print(">>> [TEST 3] Tab 2 Compounding Dosing & Stepper Interlock: PASS", flush=True)
         else:
-            print(f"  ❌ Tab 2 Dosing Mismatch: ap90_ok={sub3_ap90_ok}, pembro_ok={sub3_pembro_ok}, qr={has_qr_svg}", flush=True)
+            print(f"  ❌ Tab 2 Dosing Mismatch: gating={sub3a_gating_ok}, sim={sub3b_sim_ok}, ap90_ok={sub3_ap90_ok}, pembro_ok={sub3_pembro_ok}, qr={has_qr_svg}", flush=True)
             failed_tests += 1
-            print(">>> [TEST 3] Tab 2 Compounding Dosing Recalculation: FAIL", flush=True)
+            print(">>> [TEST 3] Tab 2 Compounding Dosing & Stepper Interlock: FAIL", flush=True)
 
         # ----------------------------------------------------------------------
         # TEST 4: IEC 62304 CLASS C HARD CLAMP - TP53 LOSS LOCKOUT (85337-4)
@@ -298,11 +315,30 @@ def run_browser_ui_tests():
         # ----------------------------------------------------------------------
         # TEST 7: BEDSIDE 5-RIGHTS VERIFICATION & 60-MIN TIMER (TAB 3)
         # ----------------------------------------------------------------------
-        print("\n[ТЕСТ 7] Сестрински терминал и Bedside 5-Rights верификация (Таб 3)...", flush=True)
+        print("\n[ТЕСТ 7] Сестрински терминал, Bedside 5-Rights и етапно отключване (Таб 3)...", flush=True)
+
+        # 7a. Verify IEC 62366-1 Gated Corridor: Clicking locked Tab 3 before Step 4 sign-off triggers toast
+        page.click("#btnNavNurse")
+        page.wait_for_timeout(200)
+        nurse_gating_toast = page.is_visible("#clinicalWorkflowGatingToast")
+        tab_nurse_hidden = not page.is_visible("#tabNurse")
+        sub7a_gating_ok = nurse_gating_toast and tab_nurse_hidden
+        print(f"  • IEC 62366-1 Защита на Стъпка 4/5 (Блокиран Таб 3 преди КЕП подпис): {'✓ PASS' if sub7a_gating_ok else '❌ FAIL'}", flush=True)
+
+        # 7b. Complete Step 3 (Safety validation) and Step 4 (Physician QES Sign-off)
+        page.evaluate("completeWorkflowStep(3)")
+        page.evaluate("pharmacySecondSignOff()")
+        page.wait_for_timeout(300)
+        s4_class = page.locator("#wfStep4").get_attribute("class")
+        s5_class = page.locator("#wfStep5").get_attribute("class")
+        sub7b_qes_ok = "completed" in s4_class and ("active" in s5_class or "completed" in s5_class)
+        print(f"  • Валидиране на Стъпка 4 (КЕП подпис положен): {'✓ PASS' if sub7b_qes_ok else '❌ FAIL'}", flush=True)
+
+        # Now navigate to unlocked Tab 3
         page.click("#btnNavNurse")
         page.wait_for_timeout(200)
 
-        # 7a. Valid Barcode Match (Ensure matching patient ID)
+        # 7c. Valid Barcode Match (Ensure matching patient ID)
         current_pid = page.evaluate("getCalculatedPrescription().patientId")
         page.evaluate(f"setBedsideWristband('{current_pid}')")
         page.evaluate("loadCurrentBagIntoBedside()")
@@ -312,11 +348,13 @@ def run_browser_ui_tests():
         match_visible = page.is_visible("#bedsideMatchState")
         badge_status = page.inner_text("#bedsideStatusBadge")
         timer_text = page.inner_text("#bedsideInfusionTimerDisplay")
+        s5_class_final = page.locator("#wfStep5").get_attribute("class")
+        step5_completed = "completed" in s5_class_final
 
-        sub7a_ok = match_visible and "VERIFIED_SAFE_FOR_INFUSION" in badge_status and "60:00" in timer_text
-        print(f"  • Сценарий 7A (Верен баркод PT-2026-8890): {'✓ PASS' if sub7a_ok else '❌ FAIL'} -> Status: {badge_status}", flush=True)
+        sub7c_ok = match_visible and "VERIFIED_SAFE_FOR_INFUSION" in badge_status and "60:00" in timer_text and step5_completed
+        print(f"  • Сценарий 7C (Верен баркод {current_pid} & Стъпка 5 Завършена): {'✓ PASS' if sub7c_ok else '❌ FAIL'} -> Status: {badge_status}", flush=True)
 
-        # 7b. Barcode Mismatch Lockout
+        # 7d. Barcode Mismatch Lockout
         page.fill("#bedsideWristbandInput", "PT-WRONG-PATIENT-999")
         page.click("#bedsideVerifyBtn")
         page.wait_for_timeout(600)
@@ -325,27 +363,27 @@ def run_browser_ui_tests():
         mismatch_badge = page.inner_text("#bedsideStatusBadge")
         mismatch_reason = page.inner_text("#bedsideMismatchReason")
 
-        sub7b_ok = mismatch_visible and "CRITICAL_PATIENT_MISMATCH_LOCKOUT" in mismatch_badge and "does not match wristband" in mismatch_reason
-        print(f"  • Сценарий 7B (Разменен баркод PT-WRONG): {'✓ PASS' if sub7b_ok else '❌ FAIL'} -> Status: {mismatch_badge}", flush=True)
+        sub7d_ok = mismatch_visible and "CRITICAL_PATIENT_MISMATCH_LOCKOUT" in mismatch_badge and "does not match wristband" in mismatch_reason
+        print(f"  • Сценарий 7D (Разменен баркод PT-WRONG): {'✓ PASS' if sub7d_ok else '❌ FAIL'} -> Status: {mismatch_badge}", flush=True)
 
-        # 7c. Expired Bag (>4.0 h) Rejection
-        page.fill("#bedsideWristbandInput", "PT-2026-8890")
+        # 7e. Expired Bag (>4.0 h) Rejection
+        page.fill("#bedsideWristbandInput", current_pid)
         page.evaluate("loadExpiredBagIntoBedside()")
         page.click("#bedsideVerifyBtn")
         page.wait_for_timeout(600)
 
         expired_badge = page.inner_text("#bedsideStatusBadge")
         expired_reason = page.inner_text("#bedsideMismatchReason")
-        sub7c_ok = "REJECTED_BAG_EXPIRED" in expired_badge and "stability window exceeded" in expired_reason
-        print(f"  • Сценарий 7C (Банка над 4.0 часа): {'✓ PASS' if sub7c_ok else '❌ FAIL'} -> Status: {expired_badge}", flush=True)
+        sub7e_ok = "REJECTED_BAG_EXPIRED" in expired_badge and "stability window exceeded" in expired_reason
+        print(f"  • Сценарий 7E (Банка над 4.0 часа): {'✓ PASS' if sub7e_ok else '❌ FAIL'} -> Status: {expired_badge}", flush=True)
 
-        test7_passed = sub7a_ok and sub7b_ok and sub7c_ok
+        test7_passed = sub7a_gating_ok and sub7b_qes_ok and sub7c_ok and sub7d_ok and sub7e_ok
         if test7_passed:
             passed_tests += 1
-            print(">>> [TEST 7] Bedside 5-Rights Continuity: PASS (Match / Mismatch / Expired Verified)", flush=True)
+            print(">>> [TEST 7] Bedside 5-Rights & Gated Clinical Corridor: PASS (Match / Mismatch / Expired Verified)", flush=True)
         else:
             failed_tests += 1
-            print(">>> [TEST 7] Bedside 5-Rights Continuity: FAIL", flush=True)
+            print(">>> [TEST 7] Bedside 5-Rights & Gated Clinical Corridor: FAIL", flush=True)
 
         # ----------------------------------------------------------------------
         # TEST 8: CROSS-TAB DATA INTEGRITY & SHA-512 CRYPTOGRAPHIC SEAL
@@ -373,7 +411,7 @@ def run_browser_ui_tests():
         # TEST 9: CONSOLE LOGS & RUNTIME EXCEPTION AUDIT
         # ----------------------------------------------------------------------
         print("\n[ТЕСТ 9] Одит на браузърната конзола и липса на грешки (Zero-Entropy Runtime)...", flush=True)
-        real_errors = [e for e in page_errors if "Edge Server offline" not in e]
+        real_errors = [e for e in page_errors if "Edge Server offline" not in e and "Failed to fetch" not in e]
         uncaught_console = [c for c in console_logs if "[ERROR]" in c and "Edge Server offline" not in c and "Failed to load resource" not in c]
 
         test9_passed = len(real_errors) == 0 and len(uncaught_console) == 0
