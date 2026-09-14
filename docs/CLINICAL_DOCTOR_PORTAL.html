@@ -611,60 +611,60 @@
             background: #10b981;
             color: #022c22;
         }
-        /* Default: Pop Upwards */
-        .tip-icon:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 135%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 270px;
+        /* Global High-Z-Index Floating Clinical Tooltip (Zero Clipping, Above All Windows & Cards) */
+        #clinicalGlobalTooltip {
+            position: fixed;
+            z-index: 99999999;
+            width: 280px;
             background: #0f2d27;
             color: #ffffff;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 10px 13px;
+            border-radius: 9px;
+            font-size: 11.5px;
             font-weight: 400;
             line-height: 1.45;
-            box-shadow: 0 8px 24px rgba(6, 78, 67, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
             border: 1px solid #42d6a4;
-            z-index: 999999;
             pointer-events: none;
             white-space: normal;
             text-align: left;
             text-transform: none;
             letter-spacing: normal;
+            transition: opacity 0.12s ease-out, transform 0.12s ease-out;
         }
-        .tip-icon:hover::before {
+        #clinicalGlobalTooltip::after {
             content: '';
             position: absolute;
-            bottom: 118%;
-            left: 50%;
-            transform: translateX(-50%);
             border-width: 6px;
             border-style: solid;
+        }
+        /* When tooltip is ABOVE the target, arrow points down */
+        #clinicalGlobalTooltip.arrow-down::after {
+            top: 100%;
+            left: var(--arrow-pos, 50%);
+            transform: translateX(-50%);
             border-color: #0f2d27 transparent transparent transparent;
-            z-index: 999999;
         }
-        /* Variant: Pop Downwards (for top banner or near top boundary) */
-        .tip-down:hover::after {
-            bottom: auto;
-            top: 135%;
-        }
-        .tip-down:hover::before {
-            bottom: auto;
-            top: 118%;
+        /* When tooltip is BELOW the target, arrow points up */
+        #clinicalGlobalTooltip.arrow-up::after {
+            bottom: 100%;
+            left: var(--arrow-pos, 50%);
+            transform: translateX(-50%);
             border-color: transparent transparent #0f2d27 transparent;
         }
-        /* Variant: Align Right / Left */
-        .tip-right:hover::after {
-            left: 0;
-            transform: none;
+        html.dark #clinicalGlobalTooltip,
+        body.dark-mode #clinicalGlobalTooltip {
+            background: #06231e;
+            border-color: #2dd4bf;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
         }
-        .tip-left:hover::after {
-            left: auto;
-            right: 0;
-            transform: none;
+        html.dark #clinicalGlobalTooltip.arrow-down::after,
+        body.dark-mode #clinicalGlobalTooltip.arrow-down::after {
+            border-color: #06231e transparent transparent transparent;
+        }
+        html.dark #clinicalGlobalTooltip.arrow-up::after,
+        body.dark-mode #clinicalGlobalTooltip.arrow-up::after {
+            border-color: transparent transparent #06231e transparent;
         }
 </style>
 </head>
@@ -5136,6 +5136,97 @@ function updateTcgaSurvivalComparison() {
 
             if (window.lucide) lucide.createIcons();
         });
-    </script>
+    
+        // ─────────────────────────────────────────────────────────────────────────
+        // § GLOBAL CLINICAL TOOLTIP ENGINE (EU AI ACT ART. 13 EXPLAINABLE AI)
+        // Strictly attaches to document.body with position:fixed & z-index:99999999
+        // Guaranteed ZERO clipping from column boundaries or scroll containers.
+        // ─────────────────────────────────────────────────────────────────────────
+        (function initGlobalTooltipEngine() {
+            let tipEl = null;
+
+            function getOrCreateTooltip() {
+                if (!tipEl) {
+                    tipEl = document.getElementById('clinicalGlobalTooltip');
+                    if (!tipEl) {
+                        tipEl = document.createElement('div');
+                        tipEl.id = 'clinicalGlobalTooltip';
+                        tipEl.style.display = 'none';
+                        document.body.appendChild(tipEl);
+                    }
+                }
+                return tipEl;
+            }
+
+            function showTooltip(target, text) {
+                const tip = getOrCreateTooltip();
+                tip.textContent = text;
+                tip.style.display = 'block';
+                tip.style.opacity = '0';
+                tip.style.transform = 'translateY(2px)';
+
+                const rect = target.getBoundingClientRect();
+                const tipWidth = 280;
+                const tipHeight = tip.offsetHeight;
+
+                // Default: place above the icon
+                let top = rect.top - tipHeight - 9;
+                let arrowClass = 'arrow-down';
+
+                // If not enough room above, place below
+                if (top < 10) {
+                    top = rect.bottom + 9;
+                    arrowClass = 'arrow-up';
+                }
+
+                // Center horizontally relative to target icon
+                const targetCenter = rect.left + (rect.width / 2);
+                let left = targetCenter - (tipWidth / 2);
+
+                // Viewport boundary clamping (12px margin)
+                const minLeft = 12;
+                const maxLeft = window.innerWidth - tipWidth - 12;
+                const clampedLeft = Math.max(minLeft, Math.min(maxLeft, left));
+
+                // Position the arrow so it points directly at the icon center
+                let arrowOffset = targetCenter - clampedLeft;
+                arrowOffset = Math.max(14, Math.min(tipWidth - 14, arrowOffset));
+
+                tip.className = arrowClass;
+                tip.style.setProperty('--arrow-pos', arrowOffset + 'px');
+                tip.style.left = clampedLeft + 'px';
+                tip.style.top = top + 'px';
+
+                requestAnimationFrame(() => {
+                    tip.style.opacity = '1';
+                    tip.style.transform = 'translateY(0)';
+                });
+            }
+
+            function hideTooltip() {
+                if (tipEl) {
+                    tipEl.style.opacity = '0';
+                    tipEl.style.display = 'none';
+                }
+            }
+
+            document.addEventListener('mouseover', function(e) {
+                const target = e.target.closest('[data-tooltip]');
+                if (target) {
+                    const text = target.getAttribute('data-tooltip');
+                    if (text) {
+                        showTooltip(target, text);
+                    }
+                }
+            });
+
+            document.addEventListener('mouseout', function(e) {
+                const target = e.target.closest('[data-tooltip]');
+                if (target) {
+                    hideTooltip();
+                }
+            });
+        })();
+</script>
 </body>
 </html>
