@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AETERNA // IN SILICO PHARMA & LONGEVITY B2B HUD</title>
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="icon" type="image/png" href="../assets/favicon.png" />
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -663,7 +663,7 @@
                 </div>
                 <div class="flex gap-4">
                     <a href="https://github.com/papica777-eng/-AETERNA-Mainnet-Deployment-Pipeline/blob/main/docs/ZERO_ENTROPY_MEV_MODEL.md" target="_blank" class="hover:text-cyan-300 transition-all underline">Whitepaper</a>
-                    <a href="./docs.html" class="hover:text-cyan-300 transition-all underline">Regulatory Docs</a>
+                    <a href="../docs.html" class="hover:text-cyan-300 transition-all underline">Regulatory Docs</a>
                     <a href="./index.html#terms" class="hover:text-cyan-300 transition-all underline">Terms of Service (SLA)</a>
                 </div>
             </div>
@@ -1589,8 +1589,12 @@ LANGUAGE INSTRUCTION:
                 let botReply = "";
 
                 try {
-                    const k1 = 'AQ.Ab8RN6J_y4NgA';
-                    const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
+                    const apiKey = (window.AETERNA_CONFIG && window.AETERNA_CONFIG.GEMINI_API_KEY) || localStorage.getItem('AETERNA_GEMINI_KEY') || '';
+                    if (!apiKey) {
+                        appendMessage("⚠️ AI assistant requires an API key. Set it in localStorage as 'AETERNA_GEMINI_KEY' or through aeterna-config.js.");
+                        loadingIndicator.classList.remove('show');
+                        return;
+                    }
                     const payloadContents = [
                         { role: "user", parts: [{ text: "SYSTEM INSTRUCTION: " + getSystemPrompt() }] },
                         { role: "model", parts: [{ text: "Understood. Awaiting user input." }] },
@@ -1601,7 +1605,7 @@ LANGUAGE INSTRUCTION:
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-goog-api-key': k1 + k2
+                            'X-goog-api-key': apiKey
                         },
                         body: JSON.stringify({ contents: payloadContents })
                     });
