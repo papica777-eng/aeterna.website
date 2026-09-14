@@ -31,18 +31,39 @@ $Trigger = New-ScheduledTaskTrigger -AtStartup
 $Principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RestartCount 5 -RestartInterval (New-TimeSpan -Minutes 1)
 
-try {
-    Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue
-    Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Principal $Principal -Settings $Settings -Description "AETERNA-VHT Hospital Edge Clinical Audit & Simulation Daemon on Port $ServerPort" | Out-Null
-    Write-Host "[OK] Successfully registered persistent hospital edge daemon: $TaskName" -ForegroundColor Green
-    Write-Host "[OK] Trigger: Automatic on System Startup" -ForegroundColor Green
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if ($isAdmin) {
+    try {
+        Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue
+        Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Principal $Principal -Settings $Settings -Description "AETERNA-VHT Hospital Edge Clinical Audit & Simulation Daemon on Port $ServerPort" -ErrorAction Stop | Out-Null
+        Write-Host "[OK] Successfully registered SYSTEM daemon (Scheduled Task): $TaskName" -ForegroundColor Green
+        Write-Host "[OK] Trigger: Automatic on System Startup" -ForegroundColor Green
+        Write-Host "[OK] Port: https://127.0.0.1:$ServerPort" -ForegroundColor Green
+    } catch {
+        Write-Warning "Scheduled task registration error: $_"
+    }
+} else {
+    Write-Warning "Running in non-elevated user mode. Registering autonomous background startup launcher..."
+    $StartupFolder = [Environment]::GetFolderPath("Startup")
+    $VbsLauncher = Join-Path $CurrentDir "launch_hospital_edge_silent.vbs"
+    $VbsContent = "Set WshShell = CreateObject(""WScript.Shell"")" + "`r`n" + "WshShell.Run """"$BatchScript"""", 0, False"
+    Set-Content -Path $VbsLauncher -Value $VbsContent -Encoding ASCII
+    
+    $ShortcutPath = Join-Path $StartupFolder "AETERNA_Hospital_Edge_8890.lnk"
+    $WshShell = New-Object -ComObject WScript.Shell
+    $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+    $Shortcut.TargetPath = "wscript.exe"
+    $Shortcut.Arguments = """$VbsLauncher"""
+    $Shortcut.WorkingDirectory = $CurrentDir
+    $Shortcut.Description = "AETERNA-VHT Hospital Edge Server Background Daemon (Port $ServerPort)"
+    $Shortcut.Save()
+    
+    Write-Host "[OK] Successfully registered persistent user startup launcher (Silent VBS Lnk)" -ForegroundColor Green
+    Write-Host "[OK] Path: $ShortcutPath" -ForegroundColor Green
+    Write-Host "[OK] Trigger: Automatic on User Login" -ForegroundColor Green
+    Write-Host "[OK] Console: Hidden Background Process" -ForegroundColor Green
     Write-Host "[OK] Port: https://127.0.0.1:$ServerPort" -ForegroundColor Green
-} catch {
-    Write-Warning "Could not register SYSTEM task (requires Administrator privileges). Falling back to CurrentUser Logon trigger..."
-    $TriggerLogon = New-ScheduledTaskTrigger -AtLogOn
-    $PrincipalUser = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Highest
-    Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $TriggerLogon -Principal $PrincipalUser -Settings $Settings -Description "AETERNA-VHT Hospital Edge Clinical Daemon (User Session)" | Out-Null
-    Write-Host "[OK] Successfully registered user startup task: $TaskName" -ForegroundColor Green
 }
 
 Write-Host "`nTo start the service immediately, execute:" -ForegroundColor Yellow

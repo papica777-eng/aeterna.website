@@ -28,7 +28,11 @@ gleam/
 *.gleam
 rust_core/
 core-engine/target/
+target/
+hospital-tauri-client/src-tauri/target/
+hospital-tauri-client/dist/
 backend/
 backend/.env
 backend/secrets/
 tests/test_extended_physiology.py
+
