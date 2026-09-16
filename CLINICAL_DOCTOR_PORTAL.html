@@ -1861,6 +1861,72 @@
             font-weight: 900 !important;
         }
 
+        /* ═══════════════════════════════════════════════════════════════════════
+           HARMONIZATION OF ALL TABS (ONCOLOGIST, PHARMACY, NURSE, AUDIT)
+           Unified Swiss/Siemens Healthineers Clinical EHR White-Gray Palette
+           ═══════════════════════════════════════════════════════════════════════ */
+        body:not(.dark-mode) #tabPharmacy,
+        body:not(.dark-mode) #tabNurse,
+        body:not(.dark-mode) #tabAudit {
+            color: #0f172a !important;
+        }
+
+        body:not(.dark-mode) #tabPharmacy .clinical-card,
+        body:not(.dark-mode) #tabNurse .clinical-card,
+        body:not(.dark-mode) #tabAudit .clinical-card {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        body:not(.dark-mode) #tabPharmacy table,
+        body:not(.dark-mode) #tabNurse table,
+        body:not(.dark-mode) #tabAudit table {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        body:not(.dark-mode) #tabAudit table thead tr {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            border-bottom: 1.5px solid #cbd5e1 !important;
+        }
+
+        body:not(.dark-mode) #tabAudit table tbody tr {
+            border-bottom: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
+        body:not(.dark-mode) #tabAudit table tbody tr:hover {
+            background-color: #f1f5f9 !important;
+        }
+
+        body:not(.dark-mode) #ialAuditJsonDisplay {
+            background-color: transparent !important;
+            color: #0f172a !important;
+        }
+
+        body:not(.dark-mode) #pharmacyRawGs1Stream {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #047857 !important;
+            font-weight: 800 !important;
+        }
+
+        body:not(.dark-mode) #bedsideBagPayloadInput {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        body:not(.dark-mode) #bedsideWristbandInput {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            font-weight: 800 !important;
+        }
+
     </style>
 </head>
 <body>
@@ -2706,88 +2772,88 @@
         <!-- ───────────────────────────────────────────────────────────────────── -->
         <div id="tabPharmacy" class="h-full hidden gap-3.5 overflow-hidden min-h-0">
             <!-- Left Side: Pharmacist Prescription Verification & Formulation -->
-            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between">
+            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between bg-white border border-slate-300 rounded-2xl shadow-xs">
                 <div class="space-y-3">
                     <!-- Cleanroom Station Header -->
-                    <div class="flex items-center justify-between pb-2.5 border-b border-slate-200 dark:border-teal-900/50">
+                    <div class="flex items-center justify-between pb-2.5 border-b border-slate-200">
                         <div class="flex items-center gap-2.5">
                             <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center font-bold shadow-sm">
                                 <i data-lucide="flask-conical" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h2 class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide">Compounding Verification & Clean Room Station</h2>
-                                <p class="text-[11px] text-slate-500 dark:text-slate-400">ISO 14644-1 Class 5 Laminar Flow Hood #04 • Sterile Cytostatic Protocol</p>
+                                <h2 class="text-sm font-black text-[#0f172a] uppercase tracking-wide">Compounding Verification & Clean Room Station</h2>
+                                <p class="text-[11px] text-slate-600">ISO 14644-1 Class 5 Laminar Flow Hood #04 • Sterile Cytostatic Protocol</p>
                             </div>
                         </div>
-                        <span class="text-xs font-mono font-extrabold text-cyan-700 bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800 px-3 py-1.5 rounded-lg shadow-sm">
+                        <span class="text-xs font-mono font-black text-cyan-800 bg-cyan-50 border border-cyan-300 px-3 py-1.5 rounded-lg shadow-xs">
                             Dispense Gateway Active
                         </span>
                     </div>
 
                     <!-- 1. Patient & Order Clinical Clearance -->
-                    <div class="p-3.5 clinical-subcard space-y-2.5 text-xs">
-                        <div class="font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-teal-900/50 pb-1.5 flex justify-between items-center">
-                            <span class="text-xs font-extrabold uppercase text-slate-700 dark:text-slate-200 tracking-wide">Dispense Order Specifications & Clinical Clearance</span>
-                            <span class="mono font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-0.5 rounded border border-blue-200 dark:border-blue-800 text-xs" id="pharmacyPatientIdDisplay">PT-2026-8890</span>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 text-xs">
+                        <div class="font-bold text-[#0f172a] border-b border-slate-200 pb-1.5 flex justify-between items-center">
+                            <span class="text-xs font-black uppercase text-slate-700 tracking-wide">Dispense Order Specifications & Clinical Clearance</span>
+                            <span class="mono font-bold text-[#0047BB] bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200 text-xs" id="pharmacyPatientIdDisplay">PT-2026-8890</span>
                         </div>
                         <div class="grid grid-cols-4 gap-2.5 pt-1">
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                                <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Body Surface (BSA)</div>
-                                <div id="pharmacyBsaDisplay" class="mono font-black text-slate-900 dark:text-slate-100 text-base mt-0.5">1.94 m²</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10.5px] text-slate-600 font-bold uppercase">Body Surface (BSA)</div>
+                                <div id="pharmacyBsaDisplay" class="mono font-black text-[#0f172a] text-base mt-0.5">1.94 m²</div>
                             </div>
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                                <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Renal CrCl (Cockcroft)</div>
-                                <div id="pharmacyGfrDisplay" class="mono font-black text-[#047857] font-black text-base mt-0.5">91.5 mL/min</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10.5px] text-slate-600 font-bold uppercase">Renal CrCl (Cockcroft)</div>
+                                <div id="pharmacyGfrDisplay" class="mono font-black text-[#047857] text-base mt-0.5">91.5 mL/min</div>
                             </div>
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                                <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-semibold uppercase">ApoE4 Clearance</div>
-                                <div id="pharmacyApoeDisplay" class="mono font-black text-slate-900 dark:text-slate-100 text-base mt-0.5">E3/E3 (1.00x)</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10.5px] text-slate-600 font-bold uppercase">ApoE4 Clearance</div>
+                                <div id="pharmacyApoeDisplay" class="mono font-black text-[#0f172a] text-base mt-0.5">E3/E3 (1.00x)</div>
                             </div>
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
-                                <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Order Protocol</div>
-                                <div class="mono font-black text-purple-700 dark:text-teal-300 text-sm mt-0.5">KRAS G12D / STAT</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10.5px] text-slate-600 font-bold uppercase">Order Protocol</div>
+                                <div class="mono font-black text-purple-700 text-sm mt-0.5">KRAS G12D / STAT</div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-xs pt-1 text-slate-600 dark:text-slate-300 font-medium">
-                            <div>Prescribing Oncologist: <strong class="text-slate-900 dark:text-slate-100 font-bold" id="pharmacyDoctorName">Attending Oncologist (ID: ONCO-104)</strong></div>
-                            <div>Verifying Pharmacist: <strong class="text-slate-900 dark:text-slate-100 font-bold" id="pharmacyStaffName">Clinical Pharmacist (ID: PHARM-409)</strong></div>
+                        <div class="grid grid-cols-2 gap-2 text-xs pt-1 text-slate-700 font-medium">
+                            <div>Prescribing Oncologist: <strong class="text-[#0f172a] font-bold" id="pharmacyDoctorName">Attending Oncologist (ID: ONCO-104)</strong></div>
+                            <div>Verifying Pharmacist: <strong class="text-[#0f172a] font-bold" id="pharmacyStaffName">Clinical Pharmacist (ID: PHARM-409)</strong></div>
                         </div>
                     </div>
 
                     <!-- 2. Dynamic Calculated Sterile Doses List -->
-                    <div class="p-3.5 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-xl space-y-2 text-xs">
-                        <div class="font-black text-blue-950 dark:text-blue-300 flex items-center justify-between">
+                    <div class="p-3.5 bg-blue-50/80 border border-blue-200 rounded-xl space-y-2 text-xs">
+                        <div class="font-black text-blue-950 flex items-center justify-between">
                             <span class="text-xs uppercase tracking-wide">Calculated Sterile Formulation & Dilution Math:</span>
-                            <span class="text-[10.5px] font-mono text-blue-700 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/60 px-2.5 py-0.5 rounded font-bold">Closed-System Transfer Device (CSTD)</span>
+                            <span class="text-[10.5px] font-mono text-[#0047BB] bg-white border border-blue-200 px-2.5 py-0.5 rounded font-bold">Closed-System Transfer Device (CSTD)</span>
                         </div>
-                        <ul id="pharmacyCalculatedDosesList" class="space-y-2 text-slate-800 dark:text-slate-200 text-xs font-mono">
+                        <ul id="pharmacyCalculatedDosesList" class="space-y-2 text-[#0f172a] text-xs font-mono font-semibold">
                             <!-- Injected dynamically by renderPharmacyTab() -->
                         </ul>
                     </div>
 
                     <!-- 3. Cleanroom Aseptic Compounding SOP Checklist -->
-                    <div class="p-3 bg-slate-50 dark:bg-[#08282e] border border-slate-200 dark:border-teal-900/60 rounded-xl space-y-2 text-xs">
-                        <div class="font-extrabold text-slate-800 dark:text-slate-200 flex items-center justify-between border-b border-slate-200 dark:border-teal-900/40 pb-1.5">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+                        <div class="font-black text-[#0f172a] flex items-center justify-between border-b border-slate-200 pb-1.5">
                             <span class="flex items-center gap-1.5">
                                 <i data-lucide="clipboard-check" class="w-4 h-4 text-cyan-600"></i>
                                 <span class="uppercase tracking-wide">Sterile Reconstitution SOP Verification (USP &lt;797&gt; &amp; &lt;800&gt;):</span>
                             </span>
-                            <span class="text-[9.5px] font-mono font-bold text-cyan-800 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-950/60 px-2 py-0.5 rounded">ALL 5 VERIFIED</span>
+                            <span class="text-[9.5px] font-mono font-bold text-cyan-800 bg-cyan-100 border border-cyan-300 px-2 py-0.5 rounded">ALL 5 VERIFIED</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-700 dark:text-slate-300">
-                            <div class="flex items-center gap-2 p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-700">
+                            <div class="flex items-center gap-2 p-1.5 bg-white rounded border border-slate-200">
                                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
                                 <span>1. Hood ISO Class 5 laminar airflow verified (>30 min)</span>
                             </div>
-                            <div class="flex items-center gap-2 p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                            <div class="flex items-center gap-2 p-1.5 bg-white rounded border border-slate-200">
                                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
                                 <span>2. Septum wiped with 70% sterile IPA (dry time 30s)</span>
                             </div>
-                            <div class="flex items-center gap-2 p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                            <div class="flex items-center gap-2 p-1.5 bg-white rounded border border-slate-200">
                                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
                                 <span class="flex items-center gap-1"><span>3. CSTD ChemoLock needle-free transfer attached</span><span class="tip-icon" data-tooltip="Closed-System Drug-Transfer Device (USP <800> compliant). Mechanically prohibits the transfer of environmental contaminants into the sterile vial and prevents hazardous aerosolized drug escape.">?</span></span>
                             </div>
-                            <div class="flex items-center gap-2 p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                            <div class="flex items-center gap-2 p-1.5 bg-white rounded border border-slate-200">
                                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i>
                                 <span>4. Lyophilized cake dissolved in 10.0 mL SWFI</span>
                             </div>
@@ -2795,36 +2861,36 @@
                     </div>
 
                     <!-- 4. Cleanroom Quality Control (QC) & Gravimetric Verification Matrix -->
-                    <div class="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 rounded-xl space-y-2 text-xs">
-                        <div class="font-extrabold text-emerald-950 dark:text-emerald-300 flex items-center justify-between">
+                    <div class="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2 text-xs">
+                        <div class="font-black text-emerald-950 flex items-center justify-between">
                             <span class="flex items-center gap-1.5">
                                 <i data-lucide="scale" class="w-4 h-4 text-emerald-600"></i>
                                 <span class="uppercase tracking-wide flex items-center gap-1"><span>Cleanroom In-Line Quality Control (QC) &amp; Gravimetric Scale:</span><span class="tip-icon" data-tooltip="ISO 17025 in-line mass verification. Compares measured mass against target specific density to detect reconstitution volume errors prior to bedside release.">?</span></span>
                             </span>
-                            <span class="text-[10px] font-mono font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded">ISO 17025 CALIBRATED</span>
+                            <span class="text-[10px] font-mono font-black text-[#047857] bg-white border border-emerald-300 px-2.5 py-0.5 rounded">ISO 17025 CALIBRATED</span>
                         </div>
                         <div class="grid grid-cols-3 gap-2.5 text-xs">
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Gravimetric Target / Measured</div>
-                                <div class="mono font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5"><span id="pharmacyGravTarget">280.4 g</span> / <span id="pharmacyGravMeasured" class="text-[#047857] font-black font-black">280.1 g</span></div>
-                                <div class="text-[9.5px] text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">Tolerance &plusmn;2% (Δ = -0.1%)</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase">Gravimetric Target / Measured</div>
+                                <div class="mono font-bold text-[#0f172a] text-sm mt-0.5"><span id="pharmacyGravTarget">280.4 g</span> / <span id="pharmacyGravMeasured" class="text-[#047857] font-black">280.1 g</span></div>
+                                <div class="text-[9.5px] text-[#047857] font-bold mt-0.5">Tolerance &plusmn;2% (Δ = -0.1%)</div>
                             </div>
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase flex items-center justify-between"><span>0.22 µm PES In-Line Filter</span><span class="tip-icon" data-tooltip="Sterilizing-grade polyethersulfone filter integrity test. Verifies retention of sub-micron particulates and microbial contaminants at bubble-point pressure > 3.2 bar.">?</span></div>
-                                <div class="mono font-black text-[#047857] font-black text-sm mt-0.5">BUBBLE-POINT PASS</div>
-                                <div class="text-[9.5px] text-slate-500 dark:text-slate-400 mt-0.5">Pressure: 3.4 bar (&gt;3.2 req)</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase flex items-center justify-between"><span>0.22 µm PES In-Line Filter</span><span class="tip-icon" data-tooltip="Sterilizing-grade polyethersulfone filter integrity test. Verifies retention of sub-micron particulates and microbial contaminants at bubble-point pressure > 3.2 bar.">?</span></div>
+                                <div class="mono font-black text-[#047857] text-sm mt-0.5">BUBBLE-POINT PASS</div>
+                                <div class="text-[9.5px] text-slate-600 mt-0.5">Pressure: 3.4 bar (&gt;3.2 req)</div>
                             </div>
-                            <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Visual Inspection (Particulate)</div>
-                                <div class="mono font-black text-[#047857] font-black text-sm mt-0.5">CLEAR OPALESCENT</div>
-                                <div class="text-[9.5px] text-slate-500 dark:text-slate-400 mt-0.5">Zero precipitates / Tyndall OK</div>
+                            <div class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase">Visual Inspection (Particulate)</div>
+                                <div class="mono font-black text-[#047857] text-sm mt-0.5">CLEAR OPALESCENT</div>
+                                <div class="text-[9.5px] text-slate-600 mt-0.5">Zero precipitates / Tyndall OK</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Bottom Action Buttons -->
-                <div class="pt-3 border-t border-slate-200 dark:border-teal-900/50 flex gap-3">
+                <div class="pt-3 border-t border-slate-200 flex gap-3">
                     <button type="button" onclick="pharmacySecondSignOff()" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer">
                         <i data-lucide="check-check" class="w-4 h-4"></i>
                         <span>Pharmacist Secondary Sign-off</span>
@@ -2837,120 +2903,120 @@
             </div>
 
             <!-- Right Side: Thermal Label Preview, Barcode, Cleanroom Sensors & Chain of Custody -->
-            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between">
+            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between bg-white border border-slate-300 rounded-2xl shadow-xs">
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-teal-900/50">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="qr-code" class="w-4 h-4 text-slate-700 dark:text-teal-400"></i>
-                            <h3 class="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wide">2D Barcode Label Preview (100mm × 60mm Hospital Spec)</h3>
+                            <i data-lucide="qr-code" class="w-4 h-4 text-slate-700"></i>
+                            <h3 class="text-xs font-black text-[#0f172a] uppercase tracking-wide">2D Barcode Label Preview (100mm × 60mm Hospital Spec)</h3>
                         </div>
-                        <button type="button" onclick="printHospitalPharmacyLabel()" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow">
-                            <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                        <button type="button" onclick="printHospitalPharmacyLabel()" class="px-3.5 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-[#0f172a] text-xs font-black rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs">
+                            <i data-lucide="printer" class="w-3.5 h-3.5 text-slate-600"></i>
                             <span>Print Thermal Label</span>
                         </button>
                     </div>
 
                     <!-- Printable Container (#pharmacyBarcodeLabelArea) -->
-                    <div id="pharmacyBarcodeLabelArea" class="p-4 bg-white border-2 border-slate-900 rounded-xl flex gap-4 text-slate-950 font-mono shadow-md">
+                    <div id="pharmacyBarcodeLabelArea" class="p-4 bg-white border border-slate-300 rounded-xl flex gap-4 text-slate-950 font-mono shadow-xs">
                         <!-- Vector SVG QR -->
-                        <div id="pharmacyQrSvgContainer" class="w-36 h-36 shrink-0 flex items-center justify-center bg-white p-1 border-2 border-slate-300 rounded-lg shadow-inner">
+                        <div id="pharmacyQrSvgContainer" class="w-36 h-36 shrink-0 flex items-center justify-center bg-white p-1 border border-slate-300 rounded-lg shadow-inner">
                             <!-- Pure JS SVG QR injected dynamically -->
                         </div>
                         <!-- Label Metadata -->
                         <div class="flex-1 text-xs space-y-1.5 leading-tight">
-                            <div class="border-b-2 border-slate-900 pb-1 font-black text-xs flex justify-between items-center">
-                                <span class="tracking-tight text-[11.5px]">AETERNA ONCOLOGY PHARMACY DISPENSE</span>
-                                <span class="text-[9px] bg-slate-900 text-white px-2 py-0.5 rounded font-bold">GS1-DATA</span>
+                            <div class="border-b border-slate-300 pb-1 font-black text-xs flex justify-between items-center">
+                                <span class="tracking-tight text-[11.5px] text-[#0f172a]">AETERNA ONCOLOGY PHARMACY DISPENSE</span>
+                                <span class="text-[9px] bg-[#0047BB] text-white px-2 py-0.5 rounded font-bold">GS1-DATA</span>
                             </div>
                             <div class="grid grid-cols-2 gap-1 text-xs">
-                                <div>Patient ID: <strong id="barcodeLabelPatientId" class="text-sm font-black text-blue-900">PT-2026-8890</strong></div>
-                                <div>BSA: <span id="barcodeLabelBsa" class="font-bold">1.94 m²</span> | CrCl: <span id="barcodeLabelGfr" class="font-bold">91.5 mL/min</span></div>
+                                <div>Patient ID: <strong id="barcodeLabelPatientId" class="text-sm font-black text-[#0047BB]">PT-2026-8890</strong></div>
+                                <div>BSA: <span id="barcodeLabelBsa" class="font-bold text-[#0f172a]">1.94 m²</span> | CrCl: <span id="barcodeLabelGfr" class="font-bold text-[#047857]">91.5 mL/min</span></div>
                             </div>
                             <div class="text-[11px] text-slate-700">
-                                <div>Prescriber: <span id="barcodeLabelDoctor" class="font-semibold">Attending Oncologist (ID: ONCO-104)</span></div>
-                                <div>Pharmacist: <span id="barcodeLabelPharmacist" class="font-semibold">Clinical Pharmacist (ID: PHARM-409)</span></div>
+                                <div>Prescriber: <span id="barcodeLabelDoctor" class="font-semibold text-[#0f172a]">Attending Oncologist (ID: ONCO-104)</span></div>
+                                <div>Pharmacist: <span id="barcodeLabelPharmacist" class="font-semibold text-[#0f172a]">Clinical Pharmacist (ID: PHARM-409)</span></div>
                             </div>
                             <div class="border-t border-slate-300 pt-1.5 space-y-1">
                                 <div>Rx: <strong id="barcodeLabelRegimen" class="text-rose-700 font-bold text-xs">KRAS G12D Peptide (100.9 mg) + Anti-PD-L1 (760 mg)</strong></div>
-                                <div>Vehicle: <strong id="barcodeLabelSol" class="text-slate-900">250 mL 0.9% NaCl | 60 min infusion</strong></div>
-                                <div class="text-[9.5px] text-slate-500 truncate pt-0.5">SHA-512 Seal: <span id="barcodeLabelShaHead" class="font-mono font-semibold">--</span></div>
+                                <div>Vehicle: <strong id="barcodeLabelSol" class="text-[#0f172a]">250 mL 0.9% NaCl | 60 min infusion</strong></div>
+                                <div class="text-[9.5px] text-slate-500 truncate pt-0.5">SHA-512 Seal: <span id="barcodeLabelShaHead" class="font-mono font-semibold text-[#0f172a]">--</span></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Compounding Guardrails -->
-                    <div class="p-3.5 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl text-xs text-slate-700 dark:text-slate-300 space-y-1.5">
-                        <div class="font-extrabold text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+                    <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-950 space-y-1.5">
+                        <div class="font-extrabold text-amber-950 flex items-center gap-1.5">
                             <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600"></i>
                             <span class="uppercase tracking-wide">Cleanroom Compounding &amp; Handling Guardrails:</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-xs pt-1">
-                            <div>• Stability Window: <strong class="text-amber-900 dark:text-amber-200">&le; 4.0 hours</strong> post-reconstitution at 20-25°C.</div>
-                            <div>• Beyond-Use Date (BUD): <strong class="text-amber-900 dark:text-amber-200">24 hours</strong> refrigerated at 2-8°C.</div>
-                            <div>• Light Protection: <strong class="text-slate-900 dark:text-slate-100">Amber light-blocking sleeve mandatory</strong> during transit &amp; bedside.</div>
-                            <div>• PPE &amp; Handling: <strong class="text-slate-900 dark:text-slate-100">NIOSH Hazardous Category 3</strong> (Double glove + closed gown).</div>
+                            <div>• Stability Window: <strong class="text-amber-900">&le; 4.0 hours</strong> post-reconstitution at 20-25°C.</div>
+                            <div>• Beyond-Use Date (BUD): <strong class="text-amber-900">24 hours</strong> refrigerated at 2-8°C.</div>
+                            <div>• Light Protection: <strong class="text-[#0f172a]">Amber light-blocking sleeve mandatory</strong> during transit &amp; bedside.</div>
+                            <div>• PPE &amp; Handling: <strong class="text-[#0f172a]">NIOSH Hazardous Category 3</strong> (Double glove + closed gown).</div>
                         </div>
                     </div>
 
                     <!-- Continuous Cleanroom Environmental Telemetry -->
-                    <div class="p-3 bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-900/50 rounded-xl space-y-2 text-xs">
-                        <div class="font-extrabold text-cyan-950 dark:text-cyan-300 flex items-center justify-between border-b border-cyan-200 dark:border-cyan-900/40 pb-1.5">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+                        <div class="font-extrabold text-[#0f172a] flex items-center justify-between border-b border-slate-200 pb-1.5">
                             <span class="flex items-center gap-1.5">
                                 <i data-lucide="gauge" class="w-4 h-4 text-cyan-600"></i>
                                 <span class="uppercase tracking-wide">Continuous Cleanroom Environmental Telemetry (In-Situ):</span>
                             </span>
-                            <span class="text-[9.5px] font-mono text-cyan-800 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-950/60 px-2 py-0.5 rounded font-bold">ALL SENSORS NORMAL</span>
+                            <span class="text-[9.5px] font-mono text-[#047857] font-black bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">ALL SENSORS NORMAL</span>
                         </div>
                         <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                            <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-cyan-200 dark:border-cyan-900/40">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Airflow Velocity</div>
-                                <div class="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs mt-0.5">0.45 m/s</div>
-                                <div class="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">ISO 5 Compliant</div>
+                            <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-semibold">Airflow Velocity</div>
+                                <div class="font-mono font-black text-[#0f172a] text-xs mt-0.5">0.45 m/s</div>
+                                <div class="text-[9px] text-[#047857] font-semibold">ISO 5 Compliant</div>
                             </div>
-                            <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-cyan-200 dark:border-cyan-900/40">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Diff. Pressure</div>
-                                <div class="font-mono font-bold text-cyan-700 dark:text-cyan-400 text-xs mt-0.5">+34.2 Pa</div>
-                                <div class="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">Positive Flow</div>
+                            <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-semibold">Diff. Pressure</div>
+                                <div class="font-mono font-black text-[#0047BB] text-xs mt-0.5">+34.2 Pa</div>
+                                <div class="text-[9px] text-[#047857] font-semibold">Positive Flow</div>
                             </div>
-                            <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-cyan-200 dark:border-cyan-900/40">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Particles &ge;0.5µm</div>
+                            <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-semibold">Particles &ge;0.5µm</div>
                                 <div class="font-mono font-bold text-[#047857] font-black text-xs mt-0.5">14 / m³</div>
-                                <div class="text-[9px] text-slate-400 font-semibold">&lt; 3,520 Limit</div>
+                                <div class="text-[9px] text-slate-500 font-semibold">&lt; 3,520 Limit</div>
                             </div>
-                            <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-cyan-200 dark:border-cyan-900/40">
-                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Temp / RH</div>
-                                <div class="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs mt-0.5">19.8°C | 43%</div>
-                                <div class="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">Optimal Range</div>
+                            <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-semibold">Temp / RH</div>
+                                <div class="font-mono font-black text-[#0f172a] text-xs mt-0.5">19.8°C | 43%</div>
+                                <div class="text-[9px] text-[#047857] font-semibold">Optimal Range</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Electronic Chain-of-Custody & Serialized GS1 Stream -->
-                    <div class="p-3 bg-slate-50 dark:bg-[#08282e] border border-slate-200 dark:border-teal-900/60 rounded-xl text-xs space-y-2">
-                        <div class="font-extrabold text-slate-800 dark:text-slate-200 flex items-center justify-between">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2">
+                        <div class="font-extrabold text-[#0f172a] flex items-center justify-between">
                             <span class="flex items-center gap-1.5">
-                                <i data-lucide="file-check" class="w-4 h-4 text-blue-600"></i>
+                                <i data-lucide="file-check" class="w-4 h-4 text-[#0047BB]"></i>
                                 <span class="uppercase tracking-wide">Dual-Signer Chain of Custody &amp; GS1-128 Telemetry:</span>
                             </span>
-                            <span class="text-[10px] font-mono text-[#047857] font-black bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-bold">ISMP DUAL CHECK OK</span>
+                            <span class="text-[10px] font-mono text-[#047857] font-black bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">ISMP DUAL CHECK OK</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-slate-200 dark:border-teal-900/40">
+                            <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
                                 <div class="text-[10px] text-slate-500 font-semibold">Primary Reconstitution Signer</div>
-                                <div class="font-mono font-bold text-slate-800 dark:text-slate-200 text-xs">PHARM-409 (PharmD D. Dimitrova)</div>
+                                <div class="font-mono font-bold text-[#0f172a] text-xs">PHARM-409 (PharmD D. Dimitrova)</div>
                             </div>
-                            <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-slate-200 dark:border-teal-900/40">
+                            <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
                                 <div class="text-[10px] text-slate-500 font-semibold">Independent Dual Witness</div>
-                                <div class="font-mono font-bold text-slate-800 dark:text-slate-200 text-xs">PHARM-201 (Senior Cleanroom Pharmacist)</div>
+                                <div class="font-mono font-bold text-[#0f172a] text-xs">PHARM-201 (Senior Cleanroom Pharmacist)</div>
                             </div>
                         </div>
-                        <div class="p-2.5 bg-slate-900 rounded-lg text-xs font-mono text-emerald-400 overflow-x-auto whitespace-nowrap" id="pharmacyRawGs1Stream">
+                        <div class="p-2.5 bg-white border border-slate-300 rounded-lg text-xs font-mono text-[#047857] font-black overflow-x-auto whitespace-nowrap shadow-xs" id="pharmacyRawGs1Stream">
                             (01)03800202688901(17)260914(10)LOT-2026-KRAS(21)SN-8890-01|CRYPTO-SHA512-SEALED
                         </div>
                     </div>
                 </div>
 
-                <div class="text-xs text-slate-400 dark:text-slate-500 flex justify-between items-center pt-2.5 border-t border-slate-200 dark:border-teal-900/40 font-mono">
+                <div class="text-xs text-slate-500 flex justify-between items-center pt-2.5 border-t border-slate-200 font-mono">
                     <span>Cleanroom Pressure: +34.2 Pa • HEPA Filter: H14 Certified • Hood: #04</span>
                     <span>Substrate: Cleanroom Suite B • Terminal 04 • Zero-Entropy Active</span>
                 </div>
@@ -2962,45 +3028,45 @@
         <!-- ───────────────────────────────────────────────────────────────────── -->
         <div id="tabNurse" class="h-full hidden gap-3.5 overflow-hidden min-h-0">
             <!-- Left Side: Scanner Inputs, Patient Profile, Vitals & Controls -->
-            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between">
+            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between bg-white border border-slate-300 rounded-2xl shadow-xs">
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between pb-2.5 border-b border-slate-200 dark:border-teal-900/50">
+                    <div class="flex items-center justify-between pb-2.5 border-b border-slate-200">
                         <div class="flex items-center gap-2.5">
                             <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-sm">
                                 <i data-lucide="syringe" class="w-5 h-5"></i>
                             </div>
                             <div>
-                                <h2 class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide flex items-center gap-1.5"><span>Bedside 5-Rights Scan &amp; Administration</span><span class="tip-icon" data-tooltip="IEC 62304 Class C verification enforcing the 5 core clinical checks: Right Patient, Right Drug, Right Dose, Right Route, and Right Time via dual optical barcode scan.">?</span></h2>
-                                <p class="text-[11px] text-slate-500 dark:text-slate-400">IEC 62304 Class C Closed-Loop Verification • Station 302, Bed 2</p>
+                                <h2 class="text-sm font-black text-[#0f172a] uppercase tracking-wide flex items-center gap-1.5"><span>Bedside 5-Rights Scan &amp; Administration</span><span class="tip-icon" data-tooltip="IEC 62304 Class C verification enforcing the 5 core clinical checks: Right Patient, Right Drug, Right Dose, Right Route, and Right Time via dual optical barcode scan.">?</span></h2>
+                                <p class="text-[11px] text-slate-600">IEC 62304 Class C Closed-Loop Verification • Station 302, Bed 2</p>
                             </div>
                         </div>
-                        <span class="text-xs font-mono font-extrabold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-lg shadow-sm">
+                        <span class="text-xs font-mono font-black text-emerald-800 bg-emerald-50 border border-emerald-300 px-3 py-1.5 rounded-lg shadow-xs">
                             Ward Terminal
                         </span>
                     </div>
 
                     <!-- Patient Bedside Profile & Allergy Alert -->
-                    <div class="p-3 clinical-subcard space-y-1.5 text-xs">
-                        <div class="flex justify-between items-center font-extrabold border-b border-slate-200 dark:border-teal-900/40 pb-1 text-slate-800 dark:text-slate-200">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 text-xs">
+                        <div class="flex justify-between items-center font-extrabold border-b border-slate-200 pb-1 text-[#0f172a]">
                             <span class="uppercase tracking-wide text-[11px]">Patient Bedside Profile &amp; Location:</span>
-                            <span class="mono text-blue-700 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200">Oncology Day Clinic • Room 302, Bed 02</span>
+                            <span class="mono text-[#0047BB] font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Oncology Day Clinic • Room 302, Bed 02</span>
                         </div>
                         <div class="grid grid-cols-4 gap-2 pt-1 text-center">
-                            <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
-                                <div class="text-[10px] text-slate-500">Patient Name</div>
-                                <div class="font-extrabold text-slate-900 dark:text-slate-100 text-xs">Dimitar Prodromov</div>
+                            <div class="p-1.5 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase">Patient Name</div>
+                                <div class="font-extrabold text-[#0f172a] text-xs">Dimitar Prodromov</div>
                             </div>
-                            <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
-                                <div class="text-[10px] text-slate-500">Blood Group</div>
+                            <div class="p-1.5 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase">Blood Group</div>
                                 <div class="font-extrabold text-[#047857] font-black text-xs">A Rh+ (Positive)</div>
                             </div>
-                            <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
-                                <div class="text-[10px] text-slate-500">Allergy Alert</div>
+                            <div class="p-1.5 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase">Allergy Alert</div>
                                 <div class="font-extrabold text-[#047857] font-black text-xs">NKDA (None)</div>
                             </div>
-                            <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
-                                <div class="text-[10px] text-slate-500">Cycle / Day</div>
-                                <div class="font-extrabold text-purple-700 dark:text-teal-300 text-xs">Cycle 1 • Day 1</div>
+                            <div class="p-1.5 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                <div class="text-[10px] text-slate-600 font-bold uppercase">Cycle / Day</div>
+                                <div class="font-extrabold text-purple-700 text-xs">Cycle 1 • Day 1</div>
                             </div>
                         </div>
                     </div>
@@ -3009,72 +3075,72 @@
                         <!-- Optical Dual Scanner Grid: Distributed side-by-side for optimal height & zero-scroll payload -->
                         <div class="grid grid-cols-2 gap-3 items-stretch">
                             <!-- Optical Input 1: Patient Wristband Barcode -->
-                            <div class="p-3.5 bg-slate-50 dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm flex flex-col justify-between">
+                            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
                                 <div class="space-y-2.5">
-                                    <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase flex justify-between items-center">
+                                    <label class="block text-xs font-black text-[#0f172a] uppercase flex justify-between items-center">
                                         <span class="flex items-center gap-1.5">
-                                            <i data-lucide="scan-line" class="w-3.5 h-3.5 text-blue-600"></i>
+                                            <i data-lucide="scan-line" class="w-3.5 h-3.5 text-[#0047BB]"></i>
                                             <span>1. Patient Wristband Barcode</span>
                                         </span>
-                                        <span class="text-[9.5px] text-slate-400 font-mono">Laser / RFID Link</span>
+                                        <span class="text-[9.5px] text-slate-500 font-mono">Laser / RFID Link</span>
                                     </label>
-                                    <input type="text" id="bedsideWristbandInput" value="PT-2026-8890" placeholder="Scan wristband barcode..." class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-lg px-3 py-2 text-sm mono font-black text-slate-900 dark:text-slate-100 shadow-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                                    <input type="text" id="bedsideWristbandInput" value="PT-2026-8890" placeholder="Scan wristband barcode..." class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm mono font-black text-[#0f172a] shadow-xs focus:border-[#0047BB] focus:ring-1 focus:ring-[#0047BB]">
                                     
                                     <!-- Patient Verification & Bedside Profile Details -->
-                                    <div class="p-3 bg-white dark:bg-[#041d21] rounded-xl border border-slate-200 dark:border-teal-900/40 text-[11px] space-y-2 shadow-inner">
+                                    <div class="p-3 bg-white rounded-xl border border-slate-300 text-[11px] space-y-2 shadow-xs">
                                         <div class="flex items-center justify-between">
-                                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Active Tag:</span>
-                                            <span class="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs" id="wristbandActiveTag">PT-2026-8890</span>
+                                            <span class="text-slate-600 font-bold">Active Tag:</span>
+                                            <span class="font-mono font-bold text-[#0f172a] text-xs" id="wristbandActiveTag">PT-2026-8890</span>
                                         </div>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Matched Identity:</span>
-                                            <span class="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                                            <span class="text-slate-600 font-bold">Matched Identity:</span>
+                                            <span class="font-bold text-[#047857] flex items-center gap-1.5">
                                                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                                 <span>Dimitar Prodromov (A Rh+)</span>
                                             </span>
                                         </div>
-                                        <div class="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-teal-900/30">
+                                        <div class="flex items-center justify-between text-[10.5px] text-slate-600 pt-1 border-t border-slate-200">
                                             <span>Allergies:</span>
-                                            <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300">NKDA (None Documented)</span>
+                                            <span class="font-mono font-bold text-[#047857]">NKDA (None Documented)</span>
                                         </div>
-                                        <div class="flex items-center justify-between text-[10.5px] text-slate-500 dark:text-slate-400">
+                                        <div class="flex items-center justify-between text-[10.5px] text-slate-600">
                                             <span>Location Anchor:</span>
-                                            <span class="font-bold text-blue-700 dark:text-blue-400">Oncology Day Clinic • Bed 02</span>
+                                            <span class="font-bold text-[#0047BB]">Oncology Day Clinic • Bed 02</span>
                                         </div>
-                                        <div class="flex items-center justify-between text-[10px] text-slate-400 font-mono pt-1 border-t border-slate-100 dark:border-teal-900/30">
+                                        <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono pt-1 border-t border-slate-200">
                                             <span>Verification Standard:</span>
-                                            <span class="text-emerald-600 font-bold">IEC 62304 Class C Safe</span>
+                                            <span class="text-[#047857] font-bold">IEC 62304 Class C Safe</span>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200 dark:border-teal-900/40">
-                                    <button type="button" onclick="setBedsideWristband('PT-2026-8890')" class="flex-1 py-2 px-2 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200">
+                                    <button type="button" onclick="setBedsideWristband('PT-2026-8890')" class="flex-1 py-2 px-2 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-[#0047BB] border border-blue-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
                                         Load Valid PT-2026-8890
                                     </button>
-                                    <button type="button" onclick="setBedsideWristband('PT-WRONG-PATIENT-9999')" class="flex-1 py-2 px-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                    <button type="button" onclick="setBedsideWristband('PT-WRONG-PATIENT-9999')" class="flex-1 py-2 px-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
                                         Simulate Mismatch
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Optical Input 2: IV Compounding Bag 2D Code (Taller, high-clarity zero-scroll payload) -->
-                            <div class="p-3.5 bg-slate-50 dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm flex flex-col justify-between">
+                            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
                                 <div class="flex-1 flex flex-col space-y-2">
-                                    <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase flex justify-between items-center">
+                                    <label class="block text-xs font-black text-[#0f172a] uppercase flex justify-between items-center">
                                         <span class="flex items-center gap-1.5">
-                                            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-emerald-600"></i>
+                                            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-[#047857]"></i>
                                             <span>2. Compounded IV Bag 2D Barcode (GS1)</span>
                                         </span>
-                                        <span class="text-[9.5px] text-slate-400 font-mono">2D Imager Stream</span>
+                                        <span class="text-[9.5px] text-slate-500 font-mono">2D Imager Stream</span>
                                     </label>
-                                    <textarea id="bedsideBagPayloadInput" placeholder="Scan 2D barcode payload from IV bag..." style="height: 225px; min-height: 225px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10.5px; line-height: 1.35;" class="w-full bg-white dark:bg-[#041d21] border border-slate-300 dark:border-teal-800 rounded-xl p-3 text-slate-800 dark:text-slate-200 shadow-inner focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-none"></textarea>
+                                    <textarea id="bedsideBagPayloadInput" placeholder="Scan 2D barcode payload from IV bag..." style="height: 225px; min-height: 225px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10.5px; line-height: 1.35;" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-[#0f172a] shadow-xs focus:border-[#0047BB] focus:ring-1 focus:ring-[#0047BB] resize-none"></textarea>
                                 </div>
-                                <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200 dark:border-teal-900/40">
-                                    <button type="button" onclick="loadCurrentBagIntoBedside()" class="flex-1 py-2 px-2 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200">
+                                    <button type="button" onclick="loadCurrentBagIntoBedside()" class="flex-1 py-2 px-2 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-[#047857] border border-emerald-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
                                         Load Cleanroom Bag
                                     </button>
-                                    <button type="button" onclick="loadExpiredBagIntoBedside()" class="flex-1 py-2 px-2 text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg transition-colors cursor-pointer text-center shadow-sm">
+                                    <button type="button" onclick="loadExpiredBagIntoBedside()" class="flex-1 py-2 px-2 text-xs font-bold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
                                         Simulate Expired (&gt;4h)
                                     </button>
                                 </div>
@@ -3082,86 +3148,86 @@
                         </div>
 
                         <!-- Pre-Infusion Patient Vital Signs & Vascular Assessment -->
-                        <div class="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 rounded-xl space-y-1.5 text-xs">
-                            <div class="font-extrabold text-emerald-950 dark:text-emerald-300 flex items-center justify-between">
+                        <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 text-xs">
+                            <div class="font-extrabold text-[#0f172a] flex items-center justify-between">
                                 <span class="flex items-center gap-1.5">
-                                    <i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i>
+                                    <i data-lucide="activity" class="w-4 h-4 text-[#047857]"></i>
                                     <span class="uppercase tracking-wide">Pre-Infusion Patient Vitals &amp; Vascular Access Triage:</span>
                                 </span>
-                                <span class="text-[10px] font-mono text-[#047857] font-black bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded font-bold">ALL VITALS NORMAL</span>
+                                <span class="text-[10px] font-mono text-[#047857] font-black bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded font-bold">ALL VITALS NORMAL</span>
                             </div>
                             <div class="grid grid-cols-4 gap-2 text-xs pt-1">
-                                <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
-                                    <div class="text-[10px] text-slate-500 uppercase">Blood Pressure</div>
-                                    <div class="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs">122 / 80 mmHg</div>
+                                <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">Blood Pressure</div>
+                                    <div class="font-mono font-bold text-[#0f172a] text-xs">122 / 80 mmHg</div>
                                 </div>
-                                <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
-                                    <div class="text-[10px] text-slate-500 uppercase">Pulse / ECG</div>
+                                <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">Pulse / ECG</div>
                                     <div class="font-mono font-bold text-[#047857] font-black text-xs">74 bpm (Sinus)</div>
                                 </div>
-                                <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
-                                    <div class="text-[10px] text-slate-500 uppercase">SpO2 Oxygen</div>
-                                    <div class="font-mono font-bold text-blue-700 dark:text-blue-400 text-xs">98% Room Air</div>
+                                <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">SpO2 Oxygen</div>
+                                    <div class="font-mono font-bold text-[#0047BB] text-xs">98% Room Air</div>
                                 </div>
-                                <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
-                                    <div class="text-[10px] text-slate-500 uppercase">IV Vascular Line</div>
-                                    <div class="font-mono font-bold text-slate-900 dark:text-slate-100 text-xs">18G Left Forearm</div>
+                                <div class="p-2 bg-white rounded-lg border border-slate-300 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">IV Vascular Line</div>
+                                    <div class="font-mono font-bold text-[#0f172a] text-xs">18G Left Forearm</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Pre-Medication Administration Protocol -->
-                        <div class="p-3 bg-slate-50 dark:bg-[#08282e] border border-slate-200 dark:border-teal-900/60 rounded-xl space-y-1.5 text-xs">
-                            <div class="font-extrabold text-slate-800 dark:text-slate-200 flex items-center justify-between border-b border-slate-200 dark:border-teal-900/40 pb-1">
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 text-xs">
+                            <div class="font-extrabold text-[#0f172a] flex items-center justify-between border-b border-slate-200 pb-1">
                                 <span class="flex items-center gap-1.5">
                                     <i data-lucide="pill" class="w-3.5 h-3.5 text-purple-600"></i>
                                     <span class="uppercase tracking-wide text-[11px] flex items-center gap-1"><span>Pre-Medication Protocol Administered:</span><span class="tip-icon" data-tooltip="Prophylactic dexamethasone, ondansetron, and diphenhydramine administration to suppress acute cytokine storm and hypersensitivity infusion reactions.">?</span></span>
                                 </span>
-                                <span class="text-[9.5px] font-mono font-bold text-purple-700 dark:text-teal-400 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded">3 / 3 COMPLETE</span>
+                                <span class="text-[9.5px] font-mono font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">3 / 3 COMPLETE</span>
                             </div>
-                            <div class="grid grid-cols-3 gap-2 text-[10.5px] text-slate-700 dark:text-slate-300">
-                                <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
-                                    <div class="font-bold text-slate-900 dark:text-slate-100">Dexamethasone 8 mg IV</div>
-                                    <div class="text-[9.5px] text-emerald-600 font-semibold">Administered 08:30</div>
+                            <div class="grid grid-cols-3 gap-2 text-[10.5px] text-slate-700">
+                                <div class="p-1.5 bg-white rounded border border-slate-300 shadow-xs">
+                                    <div class="font-bold text-[#0f172a]">Dexamethasone 8 mg IV</div>
+                                    <div class="text-[9.5px] text-[#047857] font-semibold">Administered 08:30</div>
                                 </div>
-                                <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
-                                    <div class="font-bold text-slate-900 dark:text-slate-100">Ondansetron 8 mg IV</div>
-                                    <div class="text-[9.5px] text-emerald-600 font-semibold">Administered 08:45</div>
+                                <div class="p-1.5 bg-white rounded border border-slate-300 shadow-xs">
+                                    <div class="font-bold text-[#0f172a]">Ondansetron 8 mg IV</div>
+                                    <div class="text-[9.5px] text-[#047857] font-semibold">Administered 08:45</div>
                                 </div>
-                                <div class="p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
-                                    <div class="font-bold text-slate-900 dark:text-slate-100">Diphenhydramine 25 mg IV</div>
-                                    <div class="text-[9.5px] text-emerald-600 font-semibold">Administered 08:45</div>
+                                <div class="p-1.5 bg-white rounded border border-slate-300 shadow-xs">
+                                    <div class="font-bold text-[#0f172a]">Diphenhydramine 25 mg IV</div>
+                                    <div class="text-[9.5px] text-[#047857] font-semibold">Administered 08:45</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Bedside 5-Rights Checklist Badges -->
                         <div class="grid grid-cols-5 gap-2 text-center text-xs font-black font-mono pt-1">
-                            <div class="p-2 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 rounded-lg border border-emerald-300 shadow-sm">1. RIGHT PATIENT</div>
-                            <div class="p-2 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 rounded-lg border border-emerald-300 shadow-sm">2. RIGHT DRUG</div>
-                            <div class="p-2 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 rounded-lg border border-emerald-300 shadow-sm">3. RIGHT DOSE</div>
-                            <div class="p-2 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 rounded-lg border border-emerald-300 shadow-sm">4. RIGHT ROUTE</div>
-                            <div class="p-2 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 rounded-lg border border-emerald-300 shadow-sm">5. RIGHT TIME</div>
+                            <div class="p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 shadow-xs">1. RIGHT PATIENT</div>
+                            <div class="p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 shadow-xs">2. RIGHT DRUG</div>
+                            <div class="p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 shadow-xs">3. RIGHT DOSE</div>
+                            <div class="p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 shadow-xs">4. RIGHT ROUTE</div>
+                            <div class="p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 shadow-xs">5. RIGHT TIME</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Verify Button -->
-                <button type="button" id="bedsideVerifyBtn" onclick="verifyBedsideScan()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider rounded-xl flex items-center justify-center gap-2.5 shadow-lg transition-all cursor-pointer">
+                <button type="button" id="bedsideVerifyBtn" onclick="verifyBedsideScan()" class="w-full py-4 bg-[#047857] hover:bg-[#065f46] text-white font-black text-sm uppercase tracking-wider rounded-xl flex items-center justify-center gap-2.5 shadow-sm transition-all cursor-pointer">
                     <i data-lucide="check-circle" class="w-5 h-5"></i>
                     <span>VERIFY 5-RIGHTS &amp; EXECUTE (PORT 8890)</span>
                 </button>
             </div>
 
             <!-- Right Side: Verification State & Live Countdown Timer & Pump Telemetry -->
-            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between">
+            <div class="w-1/2 h-full clinical-card p-4 flex flex-col gap-3 overflow-y-auto min-h-0 justify-between bg-white border border-slate-300 rounded-2xl shadow-xs">
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-teal-900/50">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
                         <div class="flex items-center gap-2">
-                            <i data-lucide="timer" class="w-4 h-4 text-slate-700 dark:text-teal-400"></i>
-                            <h3 class="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wide">Verification State &amp; Infusion Monitor</h3>
+                            <i data-lucide="timer" class="w-4 h-4 text-slate-700"></i>
+                            <h3 class="text-xs font-black text-[#0f172a] uppercase tracking-wide">Verification State &amp; Infusion Monitor</h3>
                         </div>
-                        <span id="bedsideStatusBadge" class="text-xs font-mono font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-lg">
+                        <span id="bedsideStatusBadge" class="text-xs font-mono font-bold text-slate-700 bg-slate-100 border border-slate-300 px-3 py-1 rounded-lg">
                             STANDBY
                         </span>
                     </div>
@@ -3169,151 +3235,151 @@
                     <!-- Standby Prompt (#bedsideAwaitingState) -->
                     <div id="bedsideAwaitingState" class="space-y-3">
                         <!-- Optical Scanner Reticle HUD -->
-                        <div class="p-5 border-2 border-dashed border-slate-300 dark:border-teal-900/60 rounded-2xl text-center text-slate-500 dark:text-slate-400 text-xs space-y-2.5 bg-slate-50/50 dark:bg-[#08282e]/40 shadow-sm">
-                            <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-teal-950/60 border border-slate-200 dark:border-teal-800 mx-auto flex items-center justify-center shadow-inner">
-                                <i data-lucide="scan-barcode" class="w-6 h-6 text-slate-500 dark:text-teal-400 animate-pulse"></i>
+                        <div class="p-5 border-2 border-dashed border-slate-300 rounded-2xl text-center text-slate-600 text-xs space-y-2.5 bg-slate-50 shadow-xs">
+                            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-300 mx-auto flex items-center justify-center shadow-xs">
+                                <i data-lucide="scan-barcode" class="w-6 h-6 text-slate-500 animate-pulse"></i>
                             </div>
                             <div>
-                                <h4 class="font-black text-sm text-slate-800 dark:text-slate-200 uppercase tracking-wide">Awaiting Patient &amp; IV Bag Optical Scans</h4>
-                                <p class="text-xs max-w-md mx-auto leading-relaxed text-slate-600 dark:text-slate-300 pt-0.5">
+                                <h4 class="font-black text-sm text-[#0f172a] uppercase tracking-wide">Awaiting Patient &amp; IV Bag Optical Scans</h4>
+                                <p class="text-xs max-w-md mx-auto leading-relaxed text-slate-600 pt-0.5">
                                     Scan the physical patient wristband barcode and the 2D DataMatrix code on the compounded cytostatic IV bag. The dual cryptographic handshake guarantees zero mismatch before infusion pump activation.
                                 </p>
                             </div>
-                            <div class="text-[10.5px] font-mono text-slate-400 pt-1.5 border-t border-slate-200 dark:border-teal-900/40">
+                            <div class="text-[10.5px] font-mono text-slate-500 pt-1.5 border-t border-slate-200">
                                 Protocol: Hospital LAN Mutual TLS 1.3 • AES-256-GCM
                             </div>
                         </div>
 
                         <!-- Smart Infusion Pump Telemetry Controller (BD Alaris / Braun Space) -->
-                        <div class="p-3.5 bg-slate-900 text-white rounded-2xl space-y-2.5 shadow-md">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <div class="p-3.5 bg-white border border-slate-300 rounded-2xl space-y-2.5 shadow-xs">
+                            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
                                 <div class="flex items-center gap-2">
-                                    <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
-                                    <span class="text-xs font-mono font-extrabold uppercase tracking-wide text-slate-200">Smart Infusion Pump Channel A (Cytostatic Line)</span>
+                                    <i data-lucide="cpu" class="w-4 h-4 text-[#047857]"></i>
+                                    <span class="text-xs font-mono font-black uppercase tracking-wide text-[#0f172a]">Smart Infusion Pump Channel A (Cytostatic Line)</span>
                                 </div>
-                                <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">TELEMETRY LINK READY</span>
+                                <span class="text-[10px] font-mono font-bold text-[#047857] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">TELEMETRY LINK READY</span>
                             </div>
                             <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                                <div class="p-2 bg-slate-800/80 rounded-xl border border-slate-700">
-                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Target VTBI</div>
-                                    <div class="font-mono font-black text-emerald-400 text-base mt-0.5">280.4 mL</div>
+                                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">Target VTBI</div>
+                                    <div class="font-mono font-black text-[#0f172a] text-base mt-0.5">280.4 mL</div>
                                 </div>
-                                <div class="p-2 bg-slate-800/80 rounded-xl border border-slate-700">
-                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Preset Rate</div>
-                                    <div class="font-mono font-black text-slate-200 text-base mt-0.5">280.4 mL/h</div>
+                                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">Preset Rate</div>
+                                    <div class="font-mono font-black text-[#0047BB] text-base mt-0.5">280.4 mL/h</div>
                                 </div>
-                                <div class="p-2 bg-slate-800/80 rounded-xl border border-slate-700">
-                                    <div class="text-[10px] text-slate-400 font-semibold uppercase">Line Pressure</div>
-                                    <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5">18 mmHg</div>
+                                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase">Line Pressure</div>
+                                    <div class="font-mono font-bold text-[#047857] font-black text-sm mt-0.5">18 mmHg</div>
                                 </div>
-                                <div class="p-2 bg-slate-800/80 rounded-xl border border-slate-700">
-                                    <div class="text-[10px] text-slate-400 font-semibold uppercase flex items-center justify-between"><span>Air Ultrasonic</span><span class="tip-icon" data-tooltip="In-line ultrasonic bubble detector on smart infusion pump. Automatically arrests fluid delivery if micro-bubbles exceed safety thresholds to prevent air embolism.">?</span></div>
-                                    <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5">0.0 µL (SAFE)</div>
+                                <div class="p-2 bg-slate-50 rounded-xl border border-slate-200 shadow-xs">
+                                    <div class="text-[10px] text-slate-600 font-bold uppercase flex items-center justify-between"><span>Air Ultrasonic</span><span class="tip-icon" data-tooltip="In-line ultrasonic bubble detector on smart infusion pump. Automatically arrests fluid delivery if micro-bubbles exceed safety thresholds to prevent air embolism.">?</span></div>
+                                    <div class="font-mono font-bold text-[#047857] font-black text-sm mt-0.5">0.0 µL (SAFE)</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Bedside Nursing Clinical Administration Log -->
-                        <div class="p-3 bg-slate-50 dark:bg-[#08282e] border border-slate-200 dark:border-teal-900/60 rounded-xl space-y-2 text-xs">
-                            <div class="font-extrabold text-slate-800 dark:text-slate-200 flex items-center justify-between border-b border-slate-200 dark:border-teal-900/40 pb-1">
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+                            <div class="font-extrabold text-[#0f172a] flex items-center justify-between border-b border-slate-200 pb-1">
                                 <span class="flex items-center gap-1.5">
-                                    <i data-lucide="list-checks" class="w-4 h-4 text-blue-600"></i>
+                                    <i data-lucide="list-checks" class="w-4 h-4 text-[#0047BB]"></i>
                                     <span class="uppercase tracking-wide">Bedside Nursing Clinical Administration Log:</span>
                                 </span>
                                 <span class="text-[9.5px] font-mono text-slate-500">Live Ward Timeline</span>
                             </div>
-                            <div class="space-y-1.5 font-mono text-[11px] text-slate-700 dark:text-slate-300">
-                                <div class="flex items-center justify-between p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                            <div class="space-y-1.5 font-mono text-[11px] text-[#0f172a]">
+                                <div class="flex items-center justify-between p-1.5 bg-white rounded border border-slate-300 shadow-xs">
                                     <span>[08:15] Patient admitted to Day Ward Bed 02, biometric verified</span>
-                                    <span class="text-emerald-600 font-bold">CONFIRMED</span>
+                                    <span class="text-[#047857] font-bold">CONFIRMED</span>
                                 </div>
-                                <div class="flex items-center justify-between p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                                <div class="flex items-center justify-between p-1.5 bg-white rounded border border-slate-300 shadow-xs">
                                     <span>[08:30] Pre-medication Dexamethasone 8mg IV push administered</span>
-                                    <span class="text-emerald-600 font-bold">COMPLETED</span>
+                                    <span class="text-[#047857] font-bold">COMPLETED</span>
                                 </div>
-                                <div class="flex items-center justify-between p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                                <div class="flex items-center justify-between p-1.5 bg-white rounded border border-slate-300 shadow-xs">
                                     <span>[08:45] Peripheral IV 18G left forearm flushed with 10 mL saline</span>
-                                    <span class="text-emerald-600 font-bold">PATENT</span>
+                                    <span class="text-[#047857] font-bold">PATENT</span>
                                 </div>
-                                <div class="flex items-center justify-between p-1.5 bg-white dark:bg-[#041d21] rounded border border-slate-200 dark:border-teal-900/40">
+                                <div class="flex items-center justify-between p-1.5 bg-white rounded border border-slate-300 shadow-xs">
                                     <span>[09:00] Awaiting cleanroom IV cytostatic bag delivery for 5-rights scan</span>
-                                    <span class="text-amber-600 font-bold">PENDING SCAN</span>
+                                    <span class="text-amber-700 font-bold">PENDING SCAN</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Bedside Match & Infusion Timer Screen (#bedsideMatchState) -->
-                    <div id="bedsideMatchState" class="hidden p-4 bg-emerald-50 dark:bg-[#062c26] border-2 border-emerald-400 dark:border-emerald-600 rounded-2xl space-y-3 shadow-md">
+                    <div id="bedsideMatchState" class="hidden p-4 bg-emerald-50 border-2 border-emerald-300 rounded-2xl space-y-3 shadow-xs">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2.5">
-                                <span class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                                <span class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
                                     <i data-lucide="check" class="w-5 h-5"></i>
                                 </span>
                                 <div>
-                                    <h4 class="text-xs font-black text-emerald-950 dark:text-emerald-200 uppercase tracking-wide">VERIFIED SAFE FOR INFUSION</h4>
-                                    <p class="text-[11px] text-emerald-800 dark:text-emerald-300">5-Rights Validated • Dual SHA-512 Seal Confirmed</p>
+                                    <h4 class="text-xs font-black text-emerald-950 uppercase tracking-wide">VERIFIED SAFE FOR INFUSION</h4>
+                                    <p class="text-[11px] text-emerald-800">5-Rights Validated • Dual SHA-512 Seal Confirmed</p>
                                 </div>
                             </div>
-                            <span class="text-xs font-mono font-black bg-emerald-600 text-white px-3 py-1 rounded-lg shadow-sm">MATCH OK</span>
+                            <span class="text-xs font-mono font-black bg-emerald-600 text-white px-3 py-1 rounded-lg shadow-xs">MATCH OK</span>
                         </div>
 
-                        <div class="text-xs grid grid-cols-2 gap-2.5 font-medium text-slate-800 dark:text-slate-200 bg-white/70 dark:bg-[#041d21]/70 p-3 rounded-xl border border-emerald-200 dark:border-emerald-900/60 shadow-sm">
-                            <div>Patient: <strong id="bedsideVerifiedPatient" class="mono text-emerald-900 dark:text-emerald-300 text-sm font-black">PT-2026-8890</strong></div>
-                            <div>Regimen: <strong id="bedsideVerifiedRegimen" class="text-emerald-900 dark:text-emerald-300 text-xs font-bold">KRAS G12D Peptide</strong></div>
-                            <div>Rate: <strong class="mono text-blue-700 dark:text-blue-300 text-xs font-bold">280.4 mL/h (~93 gtt/min)</strong></div>
-                            <div>Line: <strong class="text-slate-900 dark:text-slate-100 text-xs">Amber Light-Protected (0.22µm Filter)</strong></div>
+                        <div class="text-xs grid grid-cols-2 gap-2.5 font-medium text-[#0f172a] bg-white p-3 rounded-xl border border-emerald-200 shadow-xs">
+                            <div>Patient: <strong id="bedsideVerifiedPatient" class="mono text-emerald-900 text-sm font-black">PT-2026-8890</strong></div>
+                            <div>Regimen: <strong id="bedsideVerifiedRegimen" class="text-emerald-900 text-xs font-bold">KRAS G12D Peptide</strong></div>
+                            <div>Rate: <strong class="mono text-[#0047BB] text-xs font-bold">280.4 mL/h (~93 gtt/min)</strong></div>
+                            <div>Line: <strong class="text-[#0f172a] text-xs">Amber Light-Protected (0.22µm Filter)</strong></div>
                         </div>
 
                         <!-- Live 60-Min Infusion Timer Display -->
-                        <div class="p-5 bg-slate-900 rounded-2xl text-center text-white space-y-3 shadow-inner">
-                            <div class="text-xs font-mono text-emerald-400 uppercase tracking-widest font-extrabold">PRECISION INFUSION COUNTDOWN</div>
-                            <div id="bedsideInfusionTimerDisplay" class="text-6xl font-black mono text-emerald-400 tracking-wider my-1">60:00</div>
-                            <div class="w-full bg-slate-800 h-3 rounded-full overflow-hidden p-0.5 shadow-inner">
-                                <div id="bedsideInfusionProgressBar" class="h-full bg-emerald-400 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                        <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl text-center text-[#0f172a] space-y-3 shadow-xs">
+                            <div class="text-xs font-mono text-emerald-800 uppercase tracking-widest font-black">PRECISION INFUSION COUNTDOWN</div>
+                            <div id="bedsideInfusionTimerDisplay" class="text-6xl font-black mono text-[#047857] tracking-wider my-1">60:00</div>
+                            <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden p-0.5 shadow-inner">
+                                <div id="bedsideInfusionProgressBar" class="h-full bg-[#047857] rounded-full transition-all duration-300" style="width: 0%;"></div>
                             </div>
                             <div class="flex justify-center gap-3 pt-1">
-                                <button type="button" onclick="startBedsideInfusion()" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-black rounded-lg transition-colors cursor-pointer shadow">Start</button>
-                                <button type="button" onclick="pauseBedsideInfusion()" class="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer">Pause</button>
-                                <button type="button" onclick="resetBedsideInfusion()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-lg transition-colors cursor-pointer">Reset</button>
+                                <button type="button" onclick="startBedsideInfusion()" class="px-5 py-2 bg-[#047857] hover:bg-[#065f46] text-white text-xs font-black rounded-lg transition-colors cursor-pointer shadow-xs">Start</button>
+                                <button type="button" onclick="pauseBedsideInfusion()" class="px-5 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-[#0f172a] text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs">Pause</button>
+                                <button type="button" onclick="resetBedsideInfusion()" class="px-5 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs">Reset</button>
                             </div>
                         </div>
 
                         <!-- Live Infusion Pump Telemetry Card -->
-                        <div class="p-3 bg-white/70 dark:bg-[#041d21]/70 rounded-xl border border-emerald-200 dark:border-emerald-900/60 grid grid-cols-3 gap-2 text-center text-xs shadow-sm">
+                        <div class="p-3 bg-white rounded-xl border border-emerald-200 grid grid-cols-3 gap-2 text-center text-xs shadow-xs text-[#0f172a]">
                             <div>
-                                <div class="text-slate-500 text-[10px] uppercase font-semibold">Flow Rate</div>
-                                <div class="font-mono font-black text-slate-900 dark:text-slate-100 text-sm mt-0.5">280.4 mL/h</div>
+                                <div class="text-slate-600 text-[10px] uppercase font-bold">Flow Rate</div>
+                                <div class="font-mono font-black text-[#0f172a] text-sm mt-0.5">280.4 mL/h</div>
                             </div>
                             <div>
-                                <div class="text-slate-500 text-[10px] uppercase font-semibold">Line Pressure</div>
-                                <div class="font-mono font-black text-[#047857] font-black text-sm mt-0.5">18 mmHg (Norm)</div>
+                                <div class="text-slate-600 text-[10px] uppercase font-bold">Line Pressure</div>
+                                <div class="font-mono font-black text-[#047857] text-sm mt-0.5">18 mmHg (Norm)</div>
                             </div>
                             <div>
-                                <div class="text-slate-500 text-[10px] uppercase font-semibold">Air Ultrasonic</div>
-                                <div class="font-mono font-black text-[#047857] font-black text-sm mt-0.5">SAFE (0.0 µL)</div>
+                                <div class="text-slate-600 text-[10px] uppercase font-bold">Air Ultrasonic</div>
+                                <div class="font-mono font-black text-[#047857] text-sm mt-0.5">SAFE (0.0 µL)</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Bedside Mismatch Screen (#bedsideMismatchState) -->
-                    <div id="bedsideMismatchState" class="hidden p-4 bg-rose-50 dark:bg-[#2a0c10] border-2 border-rose-400 dark:border-rose-600 rounded-2xl space-y-3 shadow-md">
+                    <div id="bedsideMismatchState" class="hidden p-4 bg-rose-50 border-2 border-rose-300 rounded-2xl space-y-3 shadow-xs">
                         <div class="flex items-center gap-2.5">
-                            <span class="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                            <span class="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
                                 <i data-lucide="x" class="w-5 h-5"></i>
                             </span>
                             <div>
-                                <h4 class="text-xs font-black text-rose-950 dark:text-rose-200 uppercase tracking-wide">CRITICAL BEDSIDE SAFETY LOCKOUT</h4>
-                                <p id="bedsideMismatchReason" class="text-xs text-rose-800 dark:text-rose-300 font-semibold">Verification mismatch detected!</p>
+                                <h4 class="text-xs font-black text-rose-950 uppercase tracking-wide">CRITICAL BEDSIDE SAFETY LOCKOUT</h4>
+                                <p id="bedsideMismatchReason" class="text-xs text-rose-800 font-semibold">Verification mismatch detected!</p>
                             </div>
                         </div>
-                        <div class="p-3 bg-white/80 dark:bg-[#1a080a]/80 rounded-xl border border-rose-200 dark:border-rose-900/60 text-xs text-rose-900 dark:text-rose-200 leading-relaxed font-mono">
+                        <div class="p-3 bg-white rounded-xl border border-rose-200 text-xs text-rose-900 leading-relaxed font-mono shadow-xs">
                             INFUSION PUMP LOCKED OUT. DO NOT CONNECT IV SET. Notify Attending Oncologist and Hospital Pharmacy immediately. Event logged to cryptographic audit Merkle chain.
                         </div>
                     </div>
                 </div>
 
-                <div class="text-xs text-slate-400 dark:text-slate-500 flex justify-between items-center pt-2.5 border-t border-slate-200 dark:border-teal-900/40 font-mono">
+                <div class="text-xs text-slate-500 flex justify-between items-center pt-2.5 border-t border-slate-200 font-mono">
                     <span>Registered Nurse: RN-881 • Room 302, Bed 02 • Mutual TLS 1.3</span>
                     <span>Infusion Pump: BD Alaris Unit #09 • Closed-Loop Protected</span>
                 </div>
@@ -3321,26 +3387,26 @@
         </div>
 
         <div id="tabAudit" class="h-full hidden gap-3 overflow-hidden min-h-0">
-            <div class="w-full h-full clinical-card p-4 flex flex-col gap-3 overflow-hidden min-h-0 justify-between">
+            <div class="w-full h-full clinical-card p-4 flex flex-col gap-3 overflow-hidden min-h-0 justify-between bg-white border border-slate-300 rounded-2xl shadow-xs">
                 <!-- Header -->
-                <div class="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-teal-900/50 shrink-0">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-200 shrink-0">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold shadow-sm">
+                        <div class="w-10 h-10 rounded-xl bg-[#0047BB] text-white flex items-center justify-center font-bold shadow-sm">
                             <i data-lucide="file-check-2" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h2 class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wide">Regulatory Audit Trail (IAL &amp; EMA Inspection)</h2>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400">EU AI Act Art. 12/14 Record-Keeping • Cryptographic Merkle Chain (SHA-512) • Quantum Shield (NIST FIPS 204 ML-DSA-65) <span class="tip-icon" data-tooltip="Immutable forward-secure cryptographic ledger conforming to EU AI Act Art. 12 & NIS2 Directive Art. 21. Every clinical calculation, override, and bedside scan is anchored with 128-hex SHA-512 hashes and post-quantum ML-DSA-65 digital signatures.">?</span></p>
+                            <h2 class="text-sm font-black text-[#0f172a] uppercase tracking-wide">Regulatory Audit Trail (IAL &amp; EMA Inspection)</h2>
+                            <p class="text-[11px] text-slate-600">EU AI Act Art. 12/14 Record-Keeping • Cryptographic Merkle Chain (SHA-512) • Quantum Shield (NIST FIPS 204 ML-DSA-65) <span class="tip-icon" data-tooltip="Immutable forward-secure cryptographic ledger conforming to EU AI Act Art. 12 & NIS2 Directive Art. 21. Every clinical calculation, override, and bedside scan is anchored with 128-hex SHA-512 hashes and post-quantum ML-DSA-65 digital signatures.">?</span></p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button type="button" onclick="refreshIalAuditData()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-teal-800 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm">
-                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> <span>Refresh</span>
+                        <button type="button" onclick="refreshIalAuditData()" class="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-[#0f172a] flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-slate-600"></i> <span>Refresh</span>
                         </button>
-                        <button type="button" onclick="downloadIalAuditJson()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm">
+                        <button type="button" onclick="downloadIalAuditJson()" class="px-3 py-1.5 bg-[#0047BB] hover:bg-[#00368a] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i> <span>Download JSON</span>
                         </button>
-                        <button type="button" onclick="printIalAuditReport()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-sm">
+                        <button type="button" onclick="printIalAuditReport()" class="px-3 py-1.5 bg-[#047857] hover:bg-[#065f46] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs">
                             <i data-lucide="printer" class="w-3.5 h-3.5"></i> <span>Print Protocol</span>
                         </button>
                     </div>
@@ -3348,96 +3414,96 @@
 
                 <!-- 4 Live Audit Metric Cards -->
                 <div class="grid grid-cols-4 gap-3 shrink-0">
-                    <div class="p-3 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl shadow-sm">
-                        <div class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide">Merkle Chain Integrity</div>
-                        <div id="ialMerkleIntegrityBadge" class="text-base font-black text-[#047857] font-black mono mt-0.5">100% UNBROKEN</div>
+                    <div class="p-3 bg-white border border-slate-300 rounded-xl shadow-xs">
+                        <div class="text-[10px] font-black text-slate-600 uppercase tracking-wide">Merkle Chain Integrity</div>
+                        <div id="ialMerkleIntegrityBadge" class="text-base font-black text-[#047857] mono mt-0.5">100% UNBROKEN (IN-BROWSER CBOM)</div>
                     </div>
-                    <div class="p-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-xl shadow-sm">
-                        <div class="text-[10px] font-bold text-blue-800 dark:text-blue-300 uppercase tracking-wide">Total Audit Blocks</div>
-                        <div id="ialTotalBlocksCount" class="text-base font-black text-blue-700 dark:text-blue-400 mono mt-0.5">4 Blocks</div>
+                    <div class="p-3 bg-white border border-slate-300 rounded-xl shadow-xs">
+                        <div class="text-[10px] font-black text-slate-600 uppercase tracking-wide">Total Audit Blocks</div>
+                        <div id="ialTotalBlocksCount" class="text-base font-black text-[#0047BB] mono mt-0.5">4 Blocks</div>
                     </div>
-                    <div class="p-3 bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/60 rounded-xl shadow-sm">
-                        <div class="text-[10px] font-bold text-purple-800 dark:text-purple-300 uppercase tracking-wide">Bedside Verifications</div>
-                        <div id="ialBedsideChecksCount" class="text-base font-black text-purple-700 dark:text-teal-300 mono mt-0.5">2 Verified</div>
+                    <div class="p-3 bg-white border border-slate-300 rounded-xl shadow-xs">
+                        <div class="text-[10px] font-black text-slate-600 uppercase tracking-wide">Bedside Verifications</div>
+                        <div id="ialBedsideChecksCount" class="text-base font-black text-purple-700 mono mt-0.5">2 Verified</div>
                     </div>
-                    <div class="p-3 bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-xl shadow-sm">
-                        <div class="text-[10px] font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wide">Safety Clamp Interventions</div>
-                        <div id="ialSafetyClampsCount" class="text-base font-black text-rose-700 dark:text-rose-400 mono mt-0.5">1 Intercepted</div>
+                    <div class="p-3 bg-white border border-slate-300 rounded-xl shadow-xs">
+                        <div class="text-[10px] font-black text-slate-600 uppercase tracking-wide">Safety Clamp Interventions</div>
+                        <div id="ialSafetyClampsCount" class="text-base font-black text-rose-700 mono mt-0.5">1 Intercepted</div>
                     </div>
                 </div>
 
                 <!-- Split Workspace: Immutable Ledger Table (Left) + Cryptographic Raw JSON (Right) -->
                 <div class="flex-1 flex gap-3.5 min-h-0 overflow-hidden">
                     <!-- Left: Immutable Merkle Ledger Table -->
-                    <div class="w-3/5 h-full bg-white dark:bg-[#08282e] border border-slate-200 dark:border-teal-900/60 rounded-2xl p-3.5 flex flex-col gap-2.5 overflow-hidden shadow-sm">
-                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-teal-900/40 pb-2">
-                            <span class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wide flex items-center gap-1.5">
-                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                    <div class="w-3/5 h-full bg-white border border-slate-300 rounded-2xl p-3.5 flex flex-col gap-2.5 overflow-hidden shadow-xs">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                            <span class="text-xs font-black text-[#0f172a] uppercase tracking-wide flex items-center gap-1.5">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-[#047857]"></i>
                                 <span>Cryptographic Chain-of-Custody Blocks (SHA-512):</span>
                             </span>
-                            <span class="text-[10px] font-mono text-slate-400">EU AI Act Art. 12 Compliant</span>
+                            <span class="text-[10px] font-mono text-slate-500 font-bold">EU AI Act Art. 12 Compliant</span>
                         </div>
                         <div class="flex-1 overflow-y-auto">
                             <table class="w-full text-left text-xs font-mono">
                                 <thead>
-                                    <tr class="border-b border-slate-200 dark:border-teal-900/40 text-[10.5px] text-slate-500 uppercase">
-                                        <th class="py-2 px-2">Block</th>
-                                        <th class="py-2 px-2">Timestamp (UTC)</th>
-                                        <th class="py-2 px-2">Signer &amp; Actor</th>
-                                        <th class="py-2 px-2">Action / Decision</th>
-                                        <th class="py-2 px-2">Status</th>
+                                    <tr class="border-b border-slate-200 text-[10.5px] text-slate-600 font-bold uppercase bg-slate-50">
+                                        <th class="py-2.5 px-2.5">Block</th>
+                                        <th class="py-2.5 px-2.5">Timestamp (UTC)</th>
+                                        <th class="py-2.5 px-2.5">Signer &amp; Actor</th>
+                                        <th class="py-2.5 px-2.5">Action / Decision</th>
+                                        <th class="py-2.5 px-2.5">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-teal-900/30 text-[11px] text-slate-800 dark:text-slate-200">
-                                    <tr class="hover:bg-slate-50 dark:hover:bg-teal-950/40 transition-colors">
-                                        <td class="py-2.5 px-2 font-bold text-blue-600">#0001</td>
-                                        <td class="py-2.5 px-2 text-slate-500">2026-09-14 01:10:04</td>
-                                        <td class="py-2.5 px-2 font-semibold">Hospital SaMD Engine</td>
-                                        <td class="py-2.5 px-2 flex items-center gap-1"><span>Genesis Root Anchor Initialized</span><span class="tip-icon" data-tooltip="Cryptographic root block linking the local hospital runtime to the official CERN / Zenodo sovereign release baseline.">?</span></td>
-                                        <td class="py-2.5 px-2"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[9.5px]">VERIFIED</span></td>
+                                <tbody class="divide-y divide-slate-200 text-[11px] text-[#0f172a]">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="py-2.5 px-2.5 font-black text-[#0047BB]">#0001</td>
+                                        <td class="py-2.5 px-2.5 text-slate-600 font-mono">2026-09-14 01:10:04</td>
+                                        <td class="py-2.5 px-2.5 font-bold text-[#0f172a]">Hospital SaMD Engine</td>
+                                        <td class="py-2.5 px-2.5 flex items-center gap-1"><span class="text-[#0f172a] font-medium">Genesis Root Anchor Initialized</span><span class="tip-icon" data-tooltip="Cryptographic root block linking the local hospital runtime to the official CERN / Zenodo sovereign release baseline.">?</span></td>
+                                        <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 bg-emerald-50 text-[#047857] border border-emerald-300 rounded font-black text-[9.5px]">VERIFIED</span></td>
                                     </tr>
-                                    <tr class="hover:bg-slate-50 dark:hover:bg-teal-950/40 transition-colors">
-                                        <td class="py-2.5 px-2 font-bold text-blue-600">#0002</td>
-                                        <td class="py-2.5 px-2 text-slate-500">2026-09-14 01:12:30</td>
-                                        <td class="py-2.5 px-2 font-semibold">Attending Oncologist (ONCO-104)</td>
-                                        <td class="py-2.5 px-2">Prescription Approved &amp; Dispatched</td>
-                                        <td class="py-2.5 px-2"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[9.5px]">SIGNED</span></td>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="py-2.5 px-2.5 font-black text-[#0047BB]">#0002</td>
+                                        <td class="py-2.5 px-2.5 text-slate-600 font-mono">2026-09-14 01:12:30</td>
+                                        <td class="py-2.5 px-2.5 font-bold text-[#0f172a]">Attending Oncologist (ONCO-104)</td>
+                                        <td class="py-2.5 px-2.5 text-[#0f172a] font-medium">Prescription Approved &amp; Dispatched</td>
+                                        <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 bg-blue-50 text-[#0047BB] border border-blue-200 rounded font-black text-[9.5px]">SIGNED</span></td>
                                     </tr>
-                                    <tr class="hover:bg-slate-50 dark:hover:bg-teal-950/40 transition-colors">
-                                        <td class="py-2.5 px-2 font-bold text-blue-600">#0003</td>
-                                        <td class="py-2.5 px-2 text-slate-500">2026-09-14 01:14:15</td>
-                                        <td class="py-2.5 px-2 font-semibold">Clinical Pharmacist (PHARM-409)</td>
-                                        <td class="py-2.5 px-2">Reconstitution Verified &amp; QC Passed</td>
-                                        <td class="py-2.5 px-2"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold text-[9.5px]">ISMP OK</span></td>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="py-2.5 px-2.5 font-black text-[#0047BB]">#0003</td>
+                                        <td class="py-2.5 px-2.5 text-slate-600 font-mono">2026-09-14 01:14:15</td>
+                                        <td class="py-2.5 px-2.5 font-bold text-[#0f172a]">Clinical Pharmacist (PHARM-409)</td>
+                                        <td class="py-2.5 px-2.5 text-[#0f172a] font-medium">Reconstitution Verified &amp; QC Passed</td>
+                                        <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 bg-cyan-50 text-cyan-800 border border-cyan-200 rounded font-black text-[9.5px]">ISMP OK</span></td>
                                     </tr>
-                                    <tr class="hover:bg-slate-50 dark:hover:bg-teal-950/40 transition-colors">
-                                        <td class="py-2.5 px-2 font-bold text-blue-600">#0004</td>
-                                        <td class="py-2.5 px-2 text-slate-500">2026-09-14 01:15:00</td>
-                                        <td class="py-2.5 px-2 font-semibold">Registered Nurse (RN-881)</td>
-                                        <td class="py-2.5 px-2">Bedside 5-Rights Closed-Loop Administered</td>
-                                        <td class="py-2.5 px-2"><span class="px-2 py-0.5 bg-purple-100 text-purple-800 rounded font-bold text-[9.5px]">EXECUTED</span></td>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="py-2.5 px-2.5 font-black text-[#0047BB]">#0004</td>
+                                        <td class="py-2.5 px-2.5 text-slate-600 font-mono">2026-09-14 01:15:00</td>
+                                        <td class="py-2.5 px-2.5 font-bold text-[#0f172a]">Registered Nurse (RN-881)</td>
+                                        <td class="py-2.5 px-2.5 text-[#0f172a] font-medium">Bedside 5-Rights Closed-Loop Administered</td>
+                                        <td class="py-2.5 px-2.5"><span class="px-2 py-0.5 bg-purple-50 text-purple-800 border border-purple-200 rounded font-black text-[9.5px]">EXECUTED</span></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- Right: Raw Ledger & CBOM Viewer -->
-                    <div class="w-2/5 h-full bg-slate-900 rounded-2xl p-3.5 flex flex-col gap-2 border border-slate-700 shadow-inner overflow-hidden">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5 shrink-0">
-                            <span class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
-                                <i data-lucide="terminal" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    <!-- Right: Raw Ledger & CBOM Viewer (Hospital White-Gray EHR) -->
+                    <div class="w-2/5 h-full bg-white border border-slate-300 rounded-2xl p-3.5 flex flex-col gap-2 shadow-xs overflow-hidden">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-1.5 shrink-0">
+                            <span class="text-xs font-mono font-black text-[#0f172a] uppercase tracking-wide flex items-center gap-1.5">
+                                <i data-lucide="terminal" class="w-3.5 h-3.5 text-[#0047BB]"></i>
                                 <span>Live CBOM &amp; Cryptographic JSON Feed</span>
                             </span>
-                            <span class="text-[9.5px] font-mono text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800 font-bold">MUTUAL TLS 1.3</span>
+                            <span class="text-[9.5px] font-mono text-[#0047BB] bg-blue-50 px-2 py-0.5 rounded border border-blue-200 font-bold">MUTUAL TLS 1.3</span>
                         </div>
-                        <div class="flex-1 overflow-y-auto">
-                            <pre id="ialAuditJsonDisplay" class="text-xs font-mono text-cyan-300 leading-relaxed m-0 whitespace-pre-wrap">Loading audit ledger from https://127.0.0.1:8890/api/v1/audit/export/ial ...</pre>
+                        <div class="flex-1 overflow-y-auto bg-slate-50 border border-slate-200 rounded-xl p-3">
+                            <pre id="ialAuditJsonDisplay" class="text-xs font-mono text-[#0f172a] font-semibold leading-relaxed m-0 whitespace-pre-wrap">Loading audit ledger from https://127.0.0.1:8890/api/v1/audit/export/ial ...</pre>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-xs text-slate-400 dark:text-slate-500 flex justify-between items-center pt-2 border-t border-slate-200 dark:border-teal-900/40 font-mono">
+                <div class="text-xs text-slate-500 flex justify-between items-center pt-2 border-t border-slate-200 font-mono">
                     <span>Cryptographic Standard: SHA-512 Merkle Block Chain • Post-Quantum ML-DSA-65 (NIST FIPS 204) Attested • NIS2 Art. 21 Compliant</span>
                     <span>Regulatory Body: Bulgarian BDA (ИАЛ) &amp; European Medicines Agency (EMA)</span>
                 </div>
