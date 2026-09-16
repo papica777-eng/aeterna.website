@@ -58,17 +58,14 @@ const sovereignShield = `
         const key = e.key ? e.key.toLowerCase() : '';
         if (e.keyCode === 123 || e.key === 'F12') {
             e.preventDefault(); e.stopPropagation();
-            triggerSovereignTombstone("DEVTOOLS_F12_KEY_INTERCEPTED");
             return false;
         }
         if (e.ctrlKey && e.shiftKey && (key === 'i' || key === 'j' || key === 'c')) {
             e.preventDefault(); e.stopPropagation();
-            triggerSovereignTombstone("DEVTOOLS_INSPECTOR_KEY_COMBINATION");
             return false;
         }
         if (e.ctrlKey && (key === 'u' || key === 's')) {
             e.preventDefault(); e.stopPropagation();
-            triggerSovereignTombstone("SOURCE_EXTRACTION_ATTEMPT");
             return false;
         }
     }, { capture: true });
@@ -88,28 +85,9 @@ const sovereignShield = `
         }
     });
 
-    // 4. Active Polymorphic Debugger Trap
-    (function installDebuggerTrap() {
-        function dbg() {
-            if (window.__AETERNA_TEST_ENV__) return;
-            try {
-                (function() { return false; }['constructor']('debugger')['call']());
-            } catch(e) {}
-        }
-        setInterval(dbg, 120);
-    })();
-
-    // 5. DevTools Dimension Check
-    setInterval(function() {
-        if (window.__AETERNA_TEST_ENV__) return;
-        if (window.outerWidth && window.outerHeight) {
-            const diffW = window.outerWidth - window.innerWidth;
-            const diffH = window.outerHeight - window.innerHeight;
-            if (diffW > 180 || diffH > 180) {
-                triggerSovereignTombstone("DEVTOOLS_DOCK_OPEN_DETECTED");
-            }
-        }
-    }, 1200);
+    // 4. Keyboard Shortcuts Shield (Suppress Inspect & View-Source Keys)
+    // Silently blocks F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S without false positive locks
+    // Selection & Copy protections remain strictly enforced
 
     // 6. Console Annihilation in Production
     if (!window.__AETERNA_TEST_ENV__) {
