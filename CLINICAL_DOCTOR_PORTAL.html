@@ -14,14 +14,12 @@
     <link rel="manifest" href="clinical_manifest.json">
     <link rel="apple-touch-icon" href="./assets/aeterna_official_stamp_transparent.png">
     <title>AETERNA VHT — Clinical Decision Support System (SaMD)</title>
-        <script>
-        tailwind = {
-            config: {
-                darkMode: 'class'
-            }
-        }
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        };
+    </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
                 <style>
@@ -1927,6 +1925,22 @@
             font-weight: 800 !important;
         }
 
+        /* Calculated Sterile Doses List: Hospital White-Gray EHR Guarantee */
+        #pharmacyCalculatedDosesList li {
+            background-color: #ffffff !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #0f172a !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+        #pharmacyCalculatedDosesList li .text-[#0f172a],
+        #pharmacyCalculatedDosesList li .font-extrabold {
+            color: #0f172a !important;
+        }
+        #pharmacyCalculatedDosesList li .text-slate-700,
+        #pharmacyCalculatedDosesList li .text-slate-600 {
+            color: #334155 !important;
+        }
+
     </style>
 </head>
 <body>
@@ -2821,9 +2835,12 @@
                     </div>
 
                     <!-- 2. Dynamic Calculated Sterile Doses List -->
-                    <div class="p-3.5 bg-blue-50/80 border border-blue-200 rounded-xl space-y-2 text-xs">
-                        <div class="font-black text-blue-950 flex items-center justify-between">
-                            <span class="text-xs uppercase tracking-wide">Calculated Sterile Formulation & Dilution Math:</span>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+                        <div class="font-black text-[#0f172a] flex items-center justify-between border-b border-slate-200 pb-1.5">
+                            <span class="text-xs uppercase tracking-wide flex items-center gap-1.5">
+                                <i data-lucide="calculator" class="w-4 h-4 text-[#0047BB]"></i>
+                                <span>Calculated Sterile Formulation & Dilution Math:</span>
+                            </span>
                             <span class="text-[10.5px] font-mono text-[#0047BB] bg-white border border-blue-200 px-2.5 py-0.5 rounded font-bold">Closed-System Transfer Device (CSTD)</span>
                         </div>
                         <ul id="pharmacyCalculatedDosesList" class="space-y-2 text-[#0f172a] text-xs font-mono font-semibold">
@@ -4182,13 +4199,13 @@
             if (gateApoE) {
                 if (apoe === 'E4/E4') {
                     gateApoE.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs status-warning';
-                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e] bg-[#fef3c7] dark:bg-amber-950/80 px-2 py-0.5 rounded border border-[#fcd34d] flex items-center gap-1">WARNING: High Risk E4/E4 (0.60x)</span>';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e] bg-[#fef3c7] px-2 py-0.5 rounded border border-[#fcd34d] flex items-center gap-1">WARNING: High Risk E4/E4 (0.60x)</span>';
                 } else if (apoe === 'E3/E4') {
                     gateApoE.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs status-warning';
-                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e] bg-[#fef3c7] dark:bg-amber-950/80 px-2 py-0.5 rounded border border-[#fcd34d] flex items-center gap-1">WARNING: Moderate E3/E4 (0.80x)</span>';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#92400e] bg-[#fef3c7] px-2 py-0.5 rounded border border-[#fcd34d] flex items-center gap-1">WARNING: Moderate E3/E4 (0.80x)</span>';
                 } else {
                     gateApoE.className = 'p-2 bg-[#ecfdf5] border border-[#a7f3d0] rounded-lg flex items-center justify-between text-xs status-correct';
-                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#065f46] bg-[#d1fae5] dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-[#6ee7b7] flex items-center gap-1">CORRECT: Normal (1.00x)</span>';
+                    gateApoE.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> ApoE4 Clearance</span><span class="font-mono text-[10px] font-bold text-[#065f46] bg-[#d1fae5] px-2 py-0.5 rounded border border-[#6ee7b7] flex items-center gap-1">CORRECT: Normal (1.00x)</span>';
                 }
             }
 
@@ -4219,7 +4236,7 @@
                 if (bannerTp53) bannerTp53.style.setProperty('display', 'flex', 'important');
                 if (gateTP53) {
                     gateTP53.className = 'p-2 bg-[#fef2f2] border border-[#fecaca] rounded-lg flex items-center justify-between text-xs status-danger';
-                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span><span>TP53 Gate</span><span class="tip-icon" data-tooltip="Oncogenetic Safety Clamp (IEC 62304 Class C). When TP53 tumor suppressor loss is detected, telomerase elongation (Epitalon) is unconditionally locked to 0.0 mg to prevent tumor dedifferentiation or oncogenic drift.">?</span></span><span class="font-mono text-[10px] font-bold text-[#991b1b] bg-[#fee2e2] dark:bg-rose-950/80 px-2 py-0.5 rounded border border-[#fca5a5] flex items-center gap-1">ERROR: LOCKED (0.0 mg)</span>';
+                    gateTP53.innerHTML = '<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span><span>TP53 Gate</span><span class="tip-icon" data-tooltip="Oncogenetic Safety Clamp (IEC 62304 Class C). When TP53 tumor suppressor loss is detected, telomerase elongation (Epitalon) is unconditionally locked to 0.0 mg to prevent tumor dedifferentiation or oncogenic drift.">?</span></span><span class="font-mono text-[10px] font-bold text-[#991b1b] bg-[#fee2e2] px-2 py-0.5 rounded border border-[#fca5a5] flex items-center gap-1">ERROR: LOCKED (0.0 mg)</span>';
                 }
                 const epitalon = document.getElementById('epitalonDose');
                 const epitalonVal = document.getElementById('epitalonVal');
@@ -4250,14 +4267,14 @@
                 if (cGfrVal) cGfrVal.innerText = crcl;
                 if (gateRenal) {
                     gateRenal.className = 'p-2 bg-[#fef2f2] border border-[#fecaca] rounded-lg flex items-center justify-between text-xs status-danger';
-                    gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#991b1b] bg-[#fee2e2] dark:bg-rose-950/80 px-2 py-0.5 rounded border border-[#fca5a5] flex items-center gap-1">ERROR: CrCl ${crcl} (CKD 4/5)</span>`;
+                    gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#991b1b] bg-[#fee2e2] px-2 py-0.5 rounded border border-[#fca5a5] flex items-center gap-1">ERROR: CrCl ${crcl} (CKD 4/5)</span>`;
                 }
             } else if (crcl < 60.0) {
                 if (clampRenal) clampRenal.style.setProperty('display', 'none', 'important');
                 if (bannerRenal) bannerRenal.style.setProperty('display', 'none', 'important');
                 if (gateRenal) {
                     gateRenal.className = 'p-2 bg-[#fffbeb] border border-[#fde68a] rounded-lg flex items-center justify-between text-xs status-warning';
-                    gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] dark:text-[#f0fdf4] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#92400e] bg-[#fef3c7] dark:bg-amber-950/80 px-2 py-0.5 rounded border border-[#fcd34d] flex items-center gap-1">WARNING: CrCl ${crcl} (CKD 3)</span>`;
+                    gateRenal.innerHTML = `<span class="font-medium text-[#0f172a] flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> Renal Function</span><span class="font-mono text-[10px] font-bold text-[#92400e] bg-[#fef3c7] px-2 py-0.5 rounded border border-[#fcd34d] flex items-center gap-1">WARNING: CrCl ${crcl} (CKD 3)</span>`;
                 }
             } else {
                 if (clampRenal) clampRenal.style.setProperty('display', 'none', 'important');
@@ -5392,60 +5409,60 @@ function updateTcgaSurvivalComparison() {
             const dosesList = document.getElementById('pharmacyCalculatedDosesList');
             if (dosesList) {
                 dosesList.innerHTML = `
-                    <li class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-blue-200 dark:border-blue-900/60 flex items-start justify-between">
+                    <li class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs flex items-start justify-between">
                         <div>
-                            <div class="font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                            <div class="font-extrabold text-[#0f172a] flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-[#0047BB]"></span>
                                 <span>AP-90 Liposomal Peptide:</span>
-                                <span class="text-blue-700 dark:text-blue-400 font-black text-sm">${rx.ap90TotalMg} mg</span>
-                                <span class="text-slate-500 dark:text-slate-400 font-normal">(${rx.ap90DosePerM2} mg/m² × ${rx.bsa} m²)</span>
+                                <span class="text-[#0047BB] font-black text-sm">${rx.ap90TotalMg} mg</span>
+                                <span class="text-slate-600 font-semibold text-[11px]">(${rx.ap90DosePerM2} mg/m² × ${rx.bsa} m²)</span>
                             </div>
-                            <div class="text-[10.5px] text-slate-600 dark:text-slate-300 font-sans mt-0.5">
+                            <div class="text-[11px] text-slate-700 font-medium font-sans mt-1">
                                 Reconstitute lyophilized vial with 10.0 mL SWFI &rarr; 10.09 mg/mL sterile liposomal dispersion.
                             </div>
                         </div>
-                        <span class="text-[9.5px] font-mono font-bold bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">CYTOSTATIC</span>
+                        <span class="text-[9.5px] font-mono font-black bg-blue-50 text-[#0047BB] px-2.5 py-1 rounded border border-blue-200">CYTOSTATIC</span>
                     </li>
-                    <li class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-purple-200 dark:border-purple-900/60 flex items-start justify-between">
+                    <li class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs flex items-start justify-between">
                         <div>
-                            <div class="font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                            <div class="font-extrabold text-[#0f172a] flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-purple-600"></span>
                                 <span>Pembrolizumab Anti-PD-L1:</span>
-                                <span class="text-purple-700 dark:text-purple-400 font-black text-sm">${rx.checkpointTotalMg} mg</span>
-                                <span class="text-slate-500 dark:text-slate-400 font-normal">(${rx.checkpointDosePerKg} mg/kg × ${rx.weight} kg)</span>
+                                <span class="text-purple-700 font-black text-sm">${rx.checkpointTotalMg} mg</span>
+                                <span class="text-slate-600 font-semibold text-[11px]">(${rx.checkpointDosePerKg} mg/kg × ${rx.weight} kg)</span>
                             </div>
-                            <div class="text-[10.5px] text-slate-600 dark:text-slate-300 font-sans mt-0.5">
+                            <div class="text-[11px] text-slate-700 font-medium font-sans mt-1">
                                 Add ${pembroMl} mL from 25 mg/mL stock vials to 250 mL 0.9% NaCl infusion bag via 0.22 µm filter.
                             </div>
                         </div>
-                        <span class="text-[9.5px] font-mono font-bold bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 px-2 py-0.5 rounded border border-purple-200 dark:border-purple-800">IMMUNOTHERAPY</span>
+                        <span class="text-[9.5px] font-mono font-black bg-purple-50 text-purple-800 px-2.5 py-1 rounded border border-purple-200">IMMUNOTHERAPY</span>
                     </li>
-                    <li class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/60 flex items-start justify-between">
+                    <li class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs flex items-start justify-between">
                         <div>
-                            <div class="font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            <div class="font-extrabold text-[#0f172a] flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-[#047857]"></span>
                                 <span>Selye Somatic Cushion:</span>
-                                <span class="text-[#047857] font-black font-black text-sm">${rx.psDoseMg} mg</span>
-                                <span class="text-slate-500 dark:text-slate-400 font-normal">oral daily post-infusion</span>
+                                <span class="text-[#047857] font-black text-sm">${rx.psDoseMg} mg</span>
+                                <span class="text-slate-600 font-semibold text-[11px]">oral daily post-infusion</span>
                             </div>
-                            <div class="text-[10.5px] text-slate-600 dark:text-slate-300 font-sans mt-0.5">
+                            <div class="text-[11px] text-slate-700 font-medium font-sans mt-1">
                                 Phosphatidylserine + standardized Withanolides somatic adaptation shield.
                             </div>
                         </div>
-                        <span class="text-[9.5px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">ORAL ADJUNCT</span>
+                        <span class="text-[9.5px] font-mono font-black bg-emerald-50 text-[#047857] px-2.5 py-1 rounded border border-emerald-300">ORAL ADJUNCT</span>
                     </li>
-                    <li class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/50 flex items-start justify-between">
+                    <li class="p-2.5 bg-white rounded-xl border border-slate-300 shadow-xs flex items-start justify-between">
                         <div>
-                            <div class="font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                            <div class="font-extrabold text-[#0f172a] flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                                 <span>Carrier Solution & Infusion Parameters:</span>
-                                <span class="text-slate-800 dark:text-slate-200 font-black text-xs">${totalVolMl} mL Total</span>
+                                <span class="text-[#0047BB] font-black text-xs">${totalVolMl} mL Total</span>
                             </div>
-                            <div class="text-[10.5px] text-slate-600 dark:text-slate-300 font-sans mt-0.5">
+                            <div class="text-[11px] text-slate-700 font-medium font-sans mt-1">
                                 Infusion Rate: ${totalVolMl} mL/h (~${dropsMin} drops/min) over 60 min &bull; Amber light-protected set required.
                             </div>
                         </div>
-                        <span class="text-[9.5px] font-mono font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">LIGHT-PROTECT</span>
+                        <span class="text-[9.5px] font-mono font-black bg-amber-50 text-amber-900 px-2.5 py-1 rounded border border-amber-300">LIGHT-PROTECT</span>
                     </li>
                 `;
             }
