@@ -14,6 +14,13 @@
     <link rel="manifest" href="clinical_manifest.json">
     <link rel="apple-touch-icon" href="./assets/aeterna_official_stamp_transparent.png">
     <title>AETERNA VHT — Clinical Decision Support System (SaMD)</title>
+        <script>
+        tailwind = {
+            config: {
+                darkMode: 'class'
+            }
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -1556,7 +1563,147 @@
             height: 54px !important;
         }
 
-</style>
+
+        /* ═══════════════════════════════════════════════════════════════════════
+           HOSPITAL CLINICAL SUITE: HIGH CONTRAST & MAXIMUM LEGIBILITY (IEC 62366-1)
+           Eliminate all low-contrast grey-on-white text; pure medical EHR clarity
+           ═══════════════════════════════════════════════════════════════════════ */
+        :root, body:not(.dark-mode) {
+            --text-main: #0f172a !important;
+            --text-body: #1e293b !important;
+            --text-muted: #475569 !important;
+            --kpi-number: #0f172a !important;
+            --bg-page: #f1f5f9 !important;
+            --bg-card: #ffffff !important;
+            --border-card: #cbd5e1 !important;
+        }
+
+        /* Mandatory High Contrast on All Form & Slider Labels in Light Mode */
+        body:not(.dark-mode) .text-slate-700,
+        body:not(.dark-mode) .text-slate-800,
+        body:not(.dark-mode) .text-slate-900,
+        body:not(.dark-mode) .text-slate-600,
+        body:not(.dark-mode) #labelEpitalonDose,
+        body:not(.dark-mode) #labelWithanolidesDose,
+        body:not(.dark-mode) #labelPsDose,
+        body:not(.dark-mode) #labelKi67,
+        body:not(.dark-mode) #labelSpo2,
+        body:not(.dark-mode) #col2Title,
+        body:not(.dark-mode) #col1Title,
+        body:not(.dark-mode) #col3Title {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        body:not(.dark-mode) .text-slate-500 {
+            color: #334155 !important;
+            font-weight: 600 !important;
+        }
+
+        /* Form Field Labels (High Contrast & Clear Medical Units) */
+        body:not(.dark-mode) label,
+        body:not(.dark-mode) .form-label {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            letter-spacing: 0.02em !important;
+        }
+
+        /* Professional Hospital Form Inputs (Epic Systems / Cerner Style) */
+        body:not(.dark-mode) input[type="text"],
+        body:not(.dark-mode) input[type="number"],
+        body:not(.dark-mode) select {
+            background-color: #ffffff !important;
+            border: 1px solid #94a3b8 !important;
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        body:not(.dark-mode) input[type="text"]:focus,
+        body:not(.dark-mode) input[type="number"]:focus,
+        body:not(.dark-mode) select:focus {
+            border-color: #0047BB !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.12) !important;
+        }
+
+        /* Quick Profile Buttons: Crisp High-Contrast Medical Tiles */
+        body:not(.dark-mode) .quick-profile-tile {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        body:not(.dark-mode) .quick-profile-tile:hover {
+            border-color: #0047BB !important;
+            background: #f8faff !important;
+        }
+
+        /* Hospital Telemetry Box: Clean Medical Monitor (Not Hacker Black) */
+        body:not(.dark-mode) .telemetry-card-container {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Chart Container: Clean Medical Field */
+        body:not(.dark-mode) .medical-chart-box {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Range Sliders */
+        body:not(.dark-mode) input[type="range"].custom-slider {
+            background: #cbd5e1 !important;
+        }
+        body:not(.dark-mode) input[type="range"].custom-slider::-webkit-slider-thumb {
+            background: #0047BB !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 2px 5px rgba(0, 71, 187, 0.3) !important;
+        }
+
+        /* TCGA Cohort Bar: Clean Clinical Header */
+        body:not(.dark-mode) #tcgaCohortBar {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        /* Prognosis Card in Col 3: Clean Medical Card */
+        body:not(.dark-mode) #col3PrognosisCard,
+        body:not(.dark-mode) .prognosis-card-wrapper {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+    
+        /* Epic/Cerner Style Medical Form Groupings */
+        .medical-input-group label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #1e293b !important;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .medical-input-group input, .medical-input-group select {
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            padding: 5px 8px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            background: #ffffff !important;
+            transition: all 0.15s ease-in-out;
+        }
+        .medical-input-group input:focus, .medical-input-group select:focus {
+            border-color: #0047BB !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -1641,7 +1788,7 @@
 
             <!-- Hospital Staff Login & Profile Widget -->
             <div id="adminAuthWidget" class="flex items-center">
-                <button type="button" id="navAdminLoginBtn" onclick="openHospitalAuthModal()" class="px-2.5 py-1.5 bg-[#059669] hover:bg-[#047857] text-white font-extrabold text-xs rounded-lg border border-[#10b981] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+                <button type="button" id="navAdminLoginBtn" onclick="openHospitalAuthModal()" class="px-2.5 py-1.5 bg-[#0047BB] hover:bg-[#00368a] text-white font-extrabold text-xs rounded-lg border border-[#10b981] transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
                     <i data-lucide="shield-check" class="w-3.5 h-3.5 text-white"></i>
                     <span id="staffLoginBtnText">Staff Login</span>
                 </button>
@@ -1673,7 +1820,7 @@
         <div class="flex items-center gap-2 flex-nowrap shrink-0 overflow-visible">
             <div class="patient-badge-chip chip-patient-id py-1 px-2.5">
                 <span class="text-[10px] font-mono font-extrabold uppercase px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300" id="bannerLabelPatient">ID</span>
-                <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-[#38bdf8] text-[13.5px]">PT-2026-8890</span>
+                <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-sky-300 text-[13.5px]">PT-2026-8890</span>
             </div>
             <div class="patient-badge-chip chip-age py-1 px-2">
                 <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400" id="bannerLabelAge">Age:</span>
@@ -1768,10 +1915,10 @@
         <!-- ══════════════════════════════════════════════════════════════════════════ -->
         <!-- PUBLIC CLINICAL COHORTS SELECTOR BAR (TCGA / cBioPortal / GDC)            -->
         <!-- ══════════════════════════════════════════════════════════════════════════ -->
-        <div id="tcgaCohortBar" class="px-3 py-1.5 bg-white dark:bg-[#0f2420] border border-slate-200 dark:border-[#1b3d35] rounded-xl flex items-center justify-between gap-3 shrink-0 shadow-sm text-xs">
+        <div id="tcgaCohortBar" class="px-3 py-1.5 bg-white border border-slate-300 rounded-xl flex items-center justify-between gap-3 shrink-0 shadow-sm text-xs">
             <!-- Cohort Brand Badge -->
             <div class="flex items-center gap-2 shrink-0">
-                <span class="cohort-brand-icon w-7 h-7 rounded-lg bg-[#064e3b] text-white flex items-center justify-center font-bold shadow-sm">
+                <span class="cohort-brand-icon w-7 h-7 rounded-lg bg-[#0047BB] text-white flex items-center justify-center font-bold shadow-sm">
                     <i data-lucide="database" class="w-4 h-4 text-emerald-300"></i>
                 </span>
                 <div class="leading-tight">
@@ -1800,7 +1947,7 @@
                         <!-- Populated dynamically by initTcgaCohortUI() -->
                     </select>
                 </div>
-                <button type="button" id="btnLoadTcgaCase" onclick="loadSelectedTcgaCase()" class="px-3 py-1 bg-[#059669] hover:bg-[#047857] text-white text-xs font-extrabold uppercase rounded-lg shadow-sm flex items-center gap-1 transition-all cursor-pointer shrink-0">
+                <button type="button" id="btnLoadTcgaCase" onclick="loadSelectedTcgaCase()" class="px-3 py-1 bg-[#0047BB] hover:bg-[#00368a] text-white text-xs font-extrabold uppercase rounded-lg shadow-sm flex items-center gap-1 transition-all cursor-pointer shrink-0">
                     <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i>
                     <span>Load Patient</span>
                 </button>
@@ -2031,7 +2178,7 @@
                             HR: <span id="hrVal" class="text-emerald-900">74</span> bpm | HRV: <span id="hrvVal" class="text-emerald-900">42</span> ms
                         </span>
                     </div>
-                    <div class="relative w-full rounded-lg overflow-hidden border border-[#1e293b] shadow-inner bg-[#0f172a]">
+                    <div class="relative w-full rounded-lg overflow-hidden border border-slate-300 shadow-inner bg-slate-50 telemetry-card-container">
                         <canvas id="ecgCanvas" height="58" class="w-full block"></canvas>
                     </div>
                 </div>
@@ -2050,7 +2197,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-[9.5px] font-mono text-emerald-700 bg-emerald-50 dark:bg-[#14332c] dark:text-[#34d399] px-2 py-0.5 rounded border border-emerald-200 dark:border-[#26554a] font-bold">
-                            O(1) AVX-512 Solver
+                            Class IIb Bio-ODE Engine
                         </span>
                         <button type="button" id="btnToggleCol3" onclick="toggleDecisionDrawer()" title="Превключи страничното меню за Решения (Alt+D)" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 dark:bg-[#14332c] dark:hover:bg-[#1f4a40] border border-slate-300 dark:border-[#26554a] text-slate-700 dark:text-[#a7f3d0] rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer">
                             <i data-lucide="panel-right" class="w-3.5 h-3.5 text-emerald-600 dark:text-[#34d399]"></i>
@@ -2079,7 +2226,7 @@
                                 <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
                                 <span id="labelKineticCurve">In-Silico Digital Twin Visualizer</span>
                             </span>
-                            <span class="text-[9px] text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800 px-1 rounded">60 FPS AVX-512</span>
+                            <span class="text-[9px] text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800 px-1 rounded">Real-Time ODE Engine</span>
                         </div>
                         <div class="flex items-center gap-3 text-[9.5px]">
                             <span class="flex items-center gap-1 text-emerald-400"><span class="w-2 h-0.5 bg-emerald-400"></span> Kinetic Lysis</span>
@@ -2091,12 +2238,12 @@
                     <!-- Dual Split Canvas Layout -->
                     <div id="chartCanvasContainer" class="h-44 w-full chart-canvas-wrap grid grid-cols-5 gap-2">
                         <!-- Left 3 Cols: 2D Kinetic Response Curve -->
-                        <div class="col-span-3 relative h-full rounded-lg overflow-hidden border border-[#1e293b] bg-[#0f172a]">
+                        <div class="col-span-3 relative h-full rounded-lg overflow-hidden border border-slate-300 bg-white medical-chart-box">
                             <canvas id="tumorTrajectoryCanvas" class="w-full h-full block"></canvas>
                         </div>
 
                         <!-- Right 2 Cols: 3D Interactive Tumor Organoid Sphere -->
-                        <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-[#1e293b] bg-[#0f172a] flex flex-col items-center justify-center p-1">
+                        <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-slate-300 bg-[#07101e] flex flex-col items-center justify-center p-1">
                             <canvas id="tumorOrganoidCanvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
                             <!-- Live Telemetry Badges over Organoid -->
                             <div class="absolute top-1.5 left-2 pointer-events-none flex flex-col gap-0.5">
@@ -2169,7 +2316,7 @@
                 <div class="mt-auto pt-1">
                     <button type="button" id="btnSimulateAction" onclick="executeSimulation('full')" class="w-full py-2.5 bg-[#0284c7] hover:bg-[#0369a1] text-white font-extrabold text-xs uppercase tracking-wider rounded-lg flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer">
                         <i data-lucide="play" id="btnSimulateIcon" class="w-4 h-4"></i>
-                        <span id="btnSimulateText">SIMULATE DIGITAL TWIN (O(1) AVX-512)</span>
+                        <span id="btnSimulateText">CALCULATE THERAPEUTIC RESPONSE (DIGITAL TWIN)</span>
                     </button>
                 </div>
             </section>
@@ -3541,7 +3688,7 @@
                 labelEpitalonDose: "1. AP-90 Liposomal Peptide (mg/m² IV)",
                 labelWithanolidesDose: "2. Anti-PD-L1 Checkpoint (mg/kg Q3W)",
                 labelPsDose: "3. Selye Somatic Cushion (Withanolides / PS)",
-                btnSimulate: "SIMULATE DIGITAL TWIN (O(1) AVX-512)",
+                btnSimulate: "ИЗЧИСЛИ ТЕРАПЕВТИЧЕН ОТГОВОР (DIGITAL TWIN)",
                 col3Title: "3. Decision & Action",
                 labelSafetyTriage: "Safety Triage (Traffic Light)",
                 labelDynamicPrognosis: "Dynamic Clinical Prognosis",
@@ -3576,7 +3723,7 @@
                 labelEpitalonDose: "1. AP-90 Липозомен Пептид (mg/m² IV)",
                 labelWithanolidesDose: "2. Анти-PD-L1 Чекпойнт (mg/kg Q3W)",
                 labelPsDose: "3. Селие Соматичен Буфер (Витанолиди / PS)",
-                btnSimulate: "СИМУЛИРАЙ ДИГИТАЛЕН БЛИЗНАК (O(1) AVX-512)",
+                btnSimulate: "ИЗЧИСЛИ ТЕРАПЕВТИЧЕН ОТГОВОР (DIGITAL TWIN)",
                 col3Title: "3. Клинично Решение и Действие",
                 labelSafetyTriage: "Триаж за Безопасност (Светофар)",
                 labelDynamicPrognosis: "Динамична Клинична Прогноза",
@@ -3611,7 +3758,7 @@
                 labelEpitalonDose: "1. Peptide Liposomal AP-90 (mg/m² IV)",
                 labelWithanolidesDose: "2. Checkpoint Anti-PD-L1 (mg/kg Q3W)",
                 labelPsDose: "3. Coussin Somatique Selye (Withanolides / PS)",
-                btnSimulate: "SIMULER LE JUMEAU NUMÉRIQUE (O(1) AVX-512)",
+                btnSimulate: "ИЗЧИСЛИ ТЕРАПЕВТИЧЕН ОТГОВОР (DIGITAL TWIN)",
                 col3Title: "3. Décision Clinique & Action",
                 labelSafetyTriage: "Triage de Sécurité (Feu Tricolore)",
                 labelDynamicPrognosis: "Pronostic Clinique Dynamique",
@@ -3646,7 +3793,7 @@
                 labelEpitalonDose: "1. AP-90 Liposzomális Peptid (mg/m² IV)",
                 labelWithanolidesDose: "2. Anti-PD-L1 Checkpoint (mg/kg Q3W)",
                 labelPsDose: "3. Selye Szomatikus Csillapító (Withanolides / PS)",
-                btnSimulate: "DIGITÁLIS IKER SZIMULÁLÁSA (O(1) AVX-512)",
+                btnSimulate: "ИЗЧИСЛИ ТЕРАПЕВТИЧЕН ОТГОВОР (DIGITAL TWIN)",
                 col3Title: "3. Döntéshozatal & Beavatkozás",
                 labelSafetyTriage: "Biztonsági Triage (Jelzőlámpa)",
                 labelDynamicPrognosis: "Dinamikus Klinikai Prognózis",
@@ -4771,8 +4918,13 @@ function updateTcgaSurvivalComparison() {
             const initialSize = payload.tumorSize || 3.4;
             const lysisRatio = Math.abs(data.shrinkage_percent || 98.4) / 100.0;
 
-            // Background & Grid Lines
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+            const isDark = document.body.classList.contains('dark-mode');
+            // Clean white/dark adaptive background fill
+            ctx.fillStyle = isDark ? '#0f172a' : '#ffffff';
+            ctx.fillRect(0, 0, w, h);
+
+            // Clinical Grid Lines
+            ctx.strokeStyle = isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(15, 23, 42, 0.08)";
             ctx.lineWidth = 1;
             for (let i = 0; i <= 3; i++) {
                 const y = padTop + (graphH / 3) * i;
@@ -4894,12 +5046,13 @@ function updateTcgaSurvivalComparison() {
                 ecgData.shift();
                 ecgData.push(s);
 
-                // Dark hospital oscilloscope background
-                ctx.fillStyle = '#020617';
+                const isDark = document.body.classList.contains('dark-mode');
+                // Hospital telemetry background (Sterile Paper / Night Mode)
+                ctx.fillStyle = isDark ? '#0b1120' : '#f8fafc';
                 ctx.fillRect(0, 0, w, h);
 
-                // Subtle telemetry grid lines
-                ctx.strokeStyle = 'rgba(16, 185, 129, 0.07)';
+                // Subtle clinical millimeter grid lines
+                ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(225, 29, 72, 0.09)';
                 ctx.lineWidth = 1;
                 for (let x = 0; x < w; x += 20) {
                     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
@@ -4908,8 +5061,8 @@ function updateTcgaSurvivalComparison() {
                     ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
                 }
 
-                // Vibrant medical phosphor trace
-                ctx.strokeStyle = '#10b981';
+                // Authentic medical diagnostic trace (Deep Sapphire / Emerald)
+                ctx.strokeStyle = isDark ? '#38bdf8' : '#0047BB';
                 ctx.lineWidth = 1.8;
                 ctx.shadowColor = 'rgba(16, 185, 129, 0.4)';
                 ctx.shadowBlur = 4;
@@ -5149,7 +5302,147 @@ function updateTcgaSurvivalComparison() {
             if (!printWindow) { window.print(); return; }
             printWindow.document.write(`
                 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>AETERNA Dispense - ${pid}</title>
-                <style>@page { size: 100mm 60mm; margin: 3mm; } body { font-family: monospace; margin: 0; padding: 6px; } button { display: none; } svg { width: 110px !important; height: 110px !important; }</style></head>
+                <style>@page { size: 100mm 60mm; margin: 3mm; } body { font-family: monospace; margin: 0; padding: 6px; } button { display: none; } svg { width: 110px !important; height: 110px !important; }
+        /* ═══════════════════════════════════════════════════════════════════════
+           HOSPITAL CLINICAL SUITE: HIGH CONTRAST & MAXIMUM LEGIBILITY (IEC 62366-1)
+           Eliminate all low-contrast grey-on-white text; pure medical EHR clarity
+           ═══════════════════════════════════════════════════════════════════════ */
+        :root, body:not(.dark-mode) {
+            --text-main: #0f172a !important;
+            --text-body: #1e293b !important;
+            --text-muted: #475569 !important;
+            --kpi-number: #0f172a !important;
+            --bg-page: #f1f5f9 !important;
+            --bg-card: #ffffff !important;
+            --border-card: #cbd5e1 !important;
+        }
+
+        /* Mandatory High Contrast on All Form & Slider Labels in Light Mode */
+        body:not(.dark-mode) .text-slate-700,
+        body:not(.dark-mode) .text-slate-800,
+        body:not(.dark-mode) .text-slate-900,
+        body:not(.dark-mode) .text-slate-600,
+        body:not(.dark-mode) #labelEpitalonDose,
+        body:not(.dark-mode) #labelWithanolidesDose,
+        body:not(.dark-mode) #labelPsDose,
+        body:not(.dark-mode) #labelKi67,
+        body:not(.dark-mode) #labelSpo2,
+        body:not(.dark-mode) #col2Title,
+        body:not(.dark-mode) #col1Title,
+        body:not(.dark-mode) #col3Title {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        body:not(.dark-mode) .text-slate-500 {
+            color: #334155 !important;
+            font-weight: 600 !important;
+        }
+
+        /* Form Field Labels (High Contrast & Clear Medical Units) */
+        body:not(.dark-mode) label,
+        body:not(.dark-mode) .form-label {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            letter-spacing: 0.02em !important;
+        }
+
+        /* Professional Hospital Form Inputs (Epic Systems / Cerner Style) */
+        body:not(.dark-mode) input[type="text"],
+        body:not(.dark-mode) input[type="number"],
+        body:not(.dark-mode) select {
+            background-color: #ffffff !important;
+            border: 1px solid #94a3b8 !important;
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        body:not(.dark-mode) input[type="text"]:focus,
+        body:not(.dark-mode) input[type="number"]:focus,
+        body:not(.dark-mode) select:focus {
+            border-color: #0047BB !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.12) !important;
+        }
+
+        /* Quick Profile Buttons: Crisp High-Contrast Medical Tiles */
+        body:not(.dark-mode) .quick-profile-tile {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        body:not(.dark-mode) .quick-profile-tile:hover {
+            border-color: #0047BB !important;
+            background: #f8faff !important;
+        }
+
+        /* Hospital Telemetry Box: Clean Medical Monitor (Not Hacker Black) */
+        body:not(.dark-mode) .telemetry-card-container {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Chart Container: Clean Medical Field */
+        body:not(.dark-mode) .medical-chart-box {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Range Sliders */
+        body:not(.dark-mode) input[type="range"].custom-slider {
+            background: #cbd5e1 !important;
+        }
+        body:not(.dark-mode) input[type="range"].custom-slider::-webkit-slider-thumb {
+            background: #0047BB !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 2px 5px rgba(0, 71, 187, 0.3) !important;
+        }
+
+        /* TCGA Cohort Bar: Clean Clinical Header */
+        body:not(.dark-mode) #tcgaCohortBar {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        /* Prognosis Card in Col 3: Clean Medical Card */
+        body:not(.dark-mode) #col3PrognosisCard,
+        body:not(.dark-mode) .prognosis-card-wrapper {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+    
+        /* Epic/Cerner Style Medical Form Groupings */
+        .medical-input-group label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #1e293b !important;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .medical-input-group input, .medical-input-group select {
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            padding: 5px 8px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            background: #ffffff !important;
+            transition: all 0.15s ease-in-out;
+        }
+        .medical-input-group input:focus, .medical-input-group select:focus {
+            border-color: #0047BB !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
+        }
+
+    </style></head>
                 <body>${printArea.innerHTML}<script>window.onload = function() { window.print(); setTimeout(() => window.close(), 600); };<\/script></body></html>
             `);
             printWindow.document.close();
@@ -5519,7 +5812,147 @@ function updateTcgaSurvivalComparison() {
 
             printWindow.document.write(`
                 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Official Regulatory Audit Dossier - IAL/EMA</title>
-                <style>body { font-family: sans-serif; padding: 20px; color: #0f172a; margin: 0; } h1 { font-size: 15px; text-transform: uppercase; color: #1e3a8a; margin: 0 0 4px 0; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th { background: #f1f5f9; padding: 6px; font-size: 10px; text-align: left; } .box { border: 1px solid #94a3b8; padding: 10px; border-radius: 6px; font-size: 11px; margin-top: 8px; }</style></head>
+                <style>body { font-family: sans-serif; padding: 20px; color: #0f172a; margin: 0; } h1 { font-size: 15px; text-transform: uppercase; color: #1e3a8a; margin: 0 0 4px 0; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th { background: #f1f5f9; padding: 6px; font-size: 10px; text-align: left; } .box { border: 1px solid #94a3b8; padding: 10px; border-radius: 6px; font-size: 11px; margin-top: 8px; }
+        /* ═══════════════════════════════════════════════════════════════════════
+           HOSPITAL CLINICAL SUITE: HIGH CONTRAST & MAXIMUM LEGIBILITY (IEC 62366-1)
+           Eliminate all low-contrast grey-on-white text; pure medical EHR clarity
+           ═══════════════════════════════════════════════════════════════════════ */
+        :root, body:not(.dark-mode) {
+            --text-main: #0f172a !important;
+            --text-body: #1e293b !important;
+            --text-muted: #475569 !important;
+            --kpi-number: #0f172a !important;
+            --bg-page: #f1f5f9 !important;
+            --bg-card: #ffffff !important;
+            --border-card: #cbd5e1 !important;
+        }
+
+        /* Mandatory High Contrast on All Form & Slider Labels in Light Mode */
+        body:not(.dark-mode) .text-slate-700,
+        body:not(.dark-mode) .text-slate-800,
+        body:not(.dark-mode) .text-slate-900,
+        body:not(.dark-mode) .text-slate-600,
+        body:not(.dark-mode) #labelEpitalonDose,
+        body:not(.dark-mode) #labelWithanolidesDose,
+        body:not(.dark-mode) #labelPsDose,
+        body:not(.dark-mode) #labelKi67,
+        body:not(.dark-mode) #labelSpo2,
+        body:not(.dark-mode) #col2Title,
+        body:not(.dark-mode) #col1Title,
+        body:not(.dark-mode) #col3Title {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        body:not(.dark-mode) .text-slate-500 {
+            color: #334155 !important;
+            font-weight: 600 !important;
+        }
+
+        /* Form Field Labels (High Contrast & Clear Medical Units) */
+        body:not(.dark-mode) label,
+        body:not(.dark-mode) .form-label {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            letter-spacing: 0.02em !important;
+        }
+
+        /* Professional Hospital Form Inputs (Epic Systems / Cerner Style) */
+        body:not(.dark-mode) input[type="text"],
+        body:not(.dark-mode) input[type="number"],
+        body:not(.dark-mode) select {
+            background-color: #ffffff !important;
+            border: 1px solid #94a3b8 !important;
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        body:not(.dark-mode) input[type="text"]:focus,
+        body:not(.dark-mode) input[type="number"]:focus,
+        body:not(.dark-mode) select:focus {
+            border-color: #0047BB !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.12) !important;
+        }
+
+        /* Quick Profile Buttons: Crisp High-Contrast Medical Tiles */
+        body:not(.dark-mode) .quick-profile-tile {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        body:not(.dark-mode) .quick-profile-tile:hover {
+            border-color: #0047BB !important;
+            background: #f8faff !important;
+        }
+
+        /* Hospital Telemetry Box: Clean Medical Monitor (Not Hacker Black) */
+        body:not(.dark-mode) .telemetry-card-container {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Chart Container: Clean Medical Field */
+        body:not(.dark-mode) .medical-chart-box {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Range Sliders */
+        body:not(.dark-mode) input[type="range"].custom-slider {
+            background: #cbd5e1 !important;
+        }
+        body:not(.dark-mode) input[type="range"].custom-slider::-webkit-slider-thumb {
+            background: #0047BB !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 2px 5px rgba(0, 71, 187, 0.3) !important;
+        }
+
+        /* TCGA Cohort Bar: Clean Clinical Header */
+        body:not(.dark-mode) #tcgaCohortBar {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        /* Prognosis Card in Col 3: Clean Medical Card */
+        body:not(.dark-mode) #col3PrognosisCard,
+        body:not(.dark-mode) .prognosis-card-wrapper {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+    
+        /* Epic/Cerner Style Medical Form Groupings */
+        .medical-input-group label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #1e293b !important;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .medical-input-group input, .medical-input-group select {
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            padding: 5px 8px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            background: #ffffff !important;
+            transition: all 0.15s ease-in-out;
+        }
+        .medical-input-group input:focus, .medical-input-group select:focus {
+            border-color: #0047BB !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
+        }
+
+    </style></head>
                 <body>
                     <h1>OFFICIAL REGULATORY INSPECTION AUDIT PROTCOL (IAL & EMA)</h1>
                     <div style="font-size: 10px; color: #475569;">Regulation (EU) 2017/745 (MDR) Class IIb • EU AI Act Art. 12 & 14 • IEC 62304 Class C</div>
@@ -5650,7 +6083,147 @@ function updateTcgaSurvivalComparison() {
                     th { background: #f1f5f9; padding: 7px; text-align: left; border: 1px solid #cbd5e1; font-weight: bold; }
                     td { padding: 7px; border: 1px solid #e2e8f0; }
                     .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #cbd5e1; font-size: 9.5px; color: #64748b; display: flex; justify-content: space-between; }
-                </style></head>
+                
+        /* ═══════════════════════════════════════════════════════════════════════
+           HOSPITAL CLINICAL SUITE: HIGH CONTRAST & MAXIMUM LEGIBILITY (IEC 62366-1)
+           Eliminate all low-contrast grey-on-white text; pure medical EHR clarity
+           ═══════════════════════════════════════════════════════════════════════ */
+        :root, body:not(.dark-mode) {
+            --text-main: #0f172a !important;
+            --text-body: #1e293b !important;
+            --text-muted: #475569 !important;
+            --kpi-number: #0f172a !important;
+            --bg-page: #f1f5f9 !important;
+            --bg-card: #ffffff !important;
+            --border-card: #cbd5e1 !important;
+        }
+
+        /* Mandatory High Contrast on All Form & Slider Labels in Light Mode */
+        body:not(.dark-mode) .text-slate-700,
+        body:not(.dark-mode) .text-slate-800,
+        body:not(.dark-mode) .text-slate-900,
+        body:not(.dark-mode) .text-slate-600,
+        body:not(.dark-mode) #labelEpitalonDose,
+        body:not(.dark-mode) #labelWithanolidesDose,
+        body:not(.dark-mode) #labelPsDose,
+        body:not(.dark-mode) #labelKi67,
+        body:not(.dark-mode) #labelSpo2,
+        body:not(.dark-mode) #col2Title,
+        body:not(.dark-mode) #col1Title,
+        body:not(.dark-mode) #col3Title {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
+        body:not(.dark-mode) .text-slate-500 {
+            color: #334155 !important;
+            font-weight: 600 !important;
+        }
+
+        /* Form Field Labels (High Contrast & Clear Medical Units) */
+        body:not(.dark-mode) label,
+        body:not(.dark-mode) .form-label {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            letter-spacing: 0.02em !important;
+        }
+
+        /* Professional Hospital Form Inputs (Epic Systems / Cerner Style) */
+        body:not(.dark-mode) input[type="text"],
+        body:not(.dark-mode) input[type="number"],
+        body:not(.dark-mode) select {
+            background-color: #ffffff !important;
+            border: 1px solid #94a3b8 !important;
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+        }
+
+        body:not(.dark-mode) input[type="text"]:focus,
+        body:not(.dark-mode) input[type="number"]:focus,
+        body:not(.dark-mode) select:focus {
+            border-color: #0047BB !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.12) !important;
+        }
+
+        /* Quick Profile Buttons: Crisp High-Contrast Medical Tiles */
+        body:not(.dark-mode) .quick-profile-tile {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        body:not(.dark-mode) .quick-profile-tile:hover {
+            border-color: #0047BB !important;
+            background: #f8faff !important;
+        }
+
+        /* Hospital Telemetry Box: Clean Medical Monitor (Not Hacker Black) */
+        body:not(.dark-mode) .telemetry-card-container {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Chart Container: Clean Medical Field */
+        body:not(.dark-mode) .medical-chart-box {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* Hospital Range Sliders */
+        body:not(.dark-mode) input[type="range"].custom-slider {
+            background: #cbd5e1 !important;
+        }
+        body:not(.dark-mode) input[type="range"].custom-slider::-webkit-slider-thumb {
+            background: #0047BB !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 2px 5px rgba(0, 71, 187, 0.3) !important;
+        }
+
+        /* TCGA Cohort Bar: Clean Clinical Header */
+        body:not(.dark-mode) #tcgaCohortBar {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        /* Prognosis Card in Col 3: Clean Medical Card */
+        body:not(.dark-mode) #col3PrognosisCard,
+        body:not(.dark-mode) .prognosis-card-wrapper {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+    
+        /* Epic/Cerner Style Medical Form Groupings */
+        .medical-input-group label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #1e293b !important;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .medical-input-group input, .medical-input-group select {
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            padding: 5px 8px !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            background: #ffffff !important;
+            transition: all 0.15s ease-in-out;
+        }
+        .medical-input-group input:focus, .medical-input-group select:focus {
+            border-color: #0047BB !important;
+            box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
+        }
+
+    </style></head>
                 <body>
                     <div class="header">
                         <div>
