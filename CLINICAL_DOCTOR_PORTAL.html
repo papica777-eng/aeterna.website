@@ -2280,6 +2280,38 @@
                     </select>
                 </div>
 
+                <!-- NGS Genomic Variant Importer (.VCF / .MAF) -->
+                <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5 shadow-2xs">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black text-[#0f172a] uppercase flex items-center gap-1.5">
+                            <i data-lucide="dna" class="w-3.5 h-3.5 text-[#0047BB]"></i>
+                            <span>NGS Variant Call (.VCF)</span>
+                        </span>
+                        <span class="text-[9px] font-mono text-slate-500 font-bold">Illumina / TSO500</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <label for="vcfFileInput" class="flex-1 py-1 px-1.5 bg-white hover:bg-slate-50 border border-slate-300 hover:border-[#0047BB] text-[#0047BB] rounded-lg font-mono font-bold text-[9.5px] text-center cursor-pointer shadow-xs transition-all flex items-center justify-center gap-1">
+                            <i data-lucide="upload" class="w-3 h-3"></i>
+                            <span>Upload VCF</span>
+                        </label>
+                        <input type="file" id="vcfFileInput" accept=".vcf,.maf,.txt" onchange="handleVcfUpload(event)" class="hidden">
+                        
+                        <button type="button" onclick="loadSampleNgsVcf('KRAS')" class="py-1 px-1.5 bg-blue-50 hover:bg-blue-100 text-[#0047BB] border border-blue-200 rounded-lg font-mono font-bold text-[9.5px] shadow-xs transition-colors cursor-pointer" title="Load KRAS G12D NGS VCF">
+                            KRAS VCF
+                        </button>
+                        <button type="button" onclick="loadSampleNgsVcf('TP53')" class="py-1 px-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg font-mono font-bold text-[9.5px] shadow-xs transition-colors cursor-pointer" title="Load TP53 Loss NGS VCF">
+                            TP53 VCF
+                        </button>
+                        <button type="button" onclick="loadSampleNgsVcf('BRCA1')" class="py-1 px-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg font-mono font-bold text-[9.5px] shadow-xs transition-colors cursor-pointer" title="Load BRCA1 Del NGS VCF">
+                            BRCA1 VCF
+                        </button>
+                    </div>
+                    <div id="vcfParsedChip" class="hidden p-1.5 bg-emerald-50 border border-emerald-300 rounded-lg text-[10px] font-mono font-bold text-emerald-900 flex items-center justify-between">
+                        <span id="vcfParsedText" class="truncate">chr12:25398284 C&gt;T (KRAS G12D • VAF 48%)</span>
+                        <span id="vcfParsedLoinc" class="text-[9px] bg-emerald-100 text-[#047857] px-1.5 py-0.5 rounded ml-1 shrink-0 font-black">LOINC 62358-7</span>
+                    </div>
+                </div>
+
                 <!-- Baseline Lab Inputs -->
                 <div class="p-2.5 clinical-subcard space-y-1.5">
                     <div class="grid grid-cols-2 gap-2">
@@ -2480,18 +2512,30 @@
                             <canvas id="tumorTrajectoryCanvas" class="w-full h-full block"></canvas>
                         </div>
 
-                        <!-- Right 2 Cols: 3D Interactive Tumor Organoid Sphere -->
+                        <!-- Right 2 Cols: 3D Interactive Tumor Organoid / Waddington Epigenetic Landscape (EPO-PAT-05) -->
                         <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-slate-300 bg-slate-50 flex flex-col items-center justify-center p-1">
+                            <!-- View mode switcher -->
+                            <div class="absolute top-1.5 right-1.5 z-10 flex items-center gap-0.5 bg-white/95 border border-slate-300 p-0.5 rounded shadow-2xs">
+                                <button type="button" id="btnModeOrganoid" onclick="setOrganoidViewMode('organoid')" class="px-1.5 py-0.5 rounded text-[8px] font-bold bg-[#0047BB] text-white cursor-pointer shadow-xs">Organoid</button>
+                                <button type="button" id="btnModeWaddington" onclick="setOrganoidViewMode('waddington')" class="px-1.5 py-0.5 rounded text-[8px] font-bold text-slate-700 hover:text-[#0047BB] cursor-pointer">EPO-PAT-05</button>
+                            </div>
                             <canvas id="tumorOrganoidCanvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
                             <!-- Live Telemetry Badges over Organoid -->
-                            <div class="absolute top-1.5 left-2 pointer-events-none flex flex-col gap-0.5">
-                                <span class="text-[8.5px] font-mono font-extrabold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 3D Organoid
+                            <div id="organoidTelemetryOverlay" class="absolute top-1.5 left-2 pointer-events-none flex flex-col gap-0.5">
+                                <span class="text-[8.5px] font-mono font-extrabold text-[#047857] uppercase tracking-wider flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> 3D Organoid
                                 </span>
-                                <span id="organoidVolumeLabel" class="text-[9px] font-mono text-emerald-300 font-bold">Vol: 18.2 mm³ (-78%)</span>
+                                <span id="organoidVolumeLabel" class="text-[9px] font-mono text-[#047857] font-bold">Vol: 18.2 mm³ (-78%)</span>
                             </div>
-                            <div class="absolute bottom-1 right-2 pointer-events-none text-[8px] font-mono text-slate-400">
-                                VEGF: <span id="organoidVegfLabel" class="text-rose-400 font-bold">0.14</span> | Drag to rotate
+                            <!-- Live Telemetry Badges over Waddington Potential -->
+                            <div id="waddingtonTelemetryOverlay" class="hidden absolute top-1.5 left-2 pointer-events-none flex flex-col gap-0.5">
+                                <span class="text-[8px] font-mono font-black text-[#0047BB] uppercase tracking-wider flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#0047BB] animate-pulse"></span> EPO-PAT-05 Quasipotential
+                                </span>
+                                <span id="waddingtonStatusLabel" class="text-[8.5px] font-mono text-[#047857] font-bold">COLLAPSED (NORMAL)</span>
+                            </div>
+                            <div class="absolute bottom-1 right-2 pointer-events-none text-[8px] font-mono text-slate-500">
+                                <span id="organoidSubLabel">VEGF: <span id="organoidVegfLabel" class="text-rose-600 font-bold">0.14</span> | Drag to rotate</span>
                             </div>
                         </div>
                     </div>
@@ -5188,6 +5232,129 @@ function updateTcgaSurvivalComparison() {
         let lastMouseX = 0;
         let lastMouseY = 0;
 
+        // ─────────────────────────────────────────────────────────────────────────
+        // § NGS GENOMIC VARIANT IMPORTER (.VCF / .MAF)
+        // ─────────────────────────────────────────────────────────────────────────
+        function handleVcfUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                parseVcfText(e.target.result, file.name);
+            };
+            reader.readAsText(file);
+        }
+
+        function loadSampleNgsVcf(geneType) {
+            let sampleVcf = '';
+            let fileName = '';
+            if (geneType === 'KRAS') {
+                fileName = 'patient_tso500_kras.vcf';
+                sampleVcf = "##fileformat=VCFv4.2\n##source=Illumina_TSO500\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\nchr12\t25398284\trs121913529\tC\tT\t.\tPASS\tGENE=KRAS;HGVS=c.35G>A;VAF=0.48;DP=642;LOINC=62358-7\n";
+            } else if (geneType === 'TP53') {
+                fileName = 'patient_tso500_tp53.vcf';
+                sampleVcf = "##fileformat=VCFv4.2\n##source=Illumina_TSO500\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\nchr17\t7577538\trs28934578\tC\tT\t.\tPASS\tGENE=TP53;HGVS=c.524G>A;VAF=0.74;DP=812;LOINC=85337-4\n";
+            } else {
+                fileName = 'patient_tso500_brca1.vcf';
+                sampleVcf = "##fileformat=VCFv4.2\n##source=Illumina_TSO500\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\nchr17\t41276045\trs80357906\tAG\tA\t.\tPASS\tGENE=BRCA1;HGVS=c.68_69delAG;VAF=0.51;DP=518;LOINC=55207-5\n";
+            }
+            parseVcfText(sampleVcf, fileName);
+        }
+
+        function parseVcfText(text, fileName) {
+            const lines = text.split('\n');
+            let matchedGene = null;
+            let chrom = 'chr12';
+            let pos = '25398284';
+            let ref = 'C';
+            let alt = 'T';
+            let vaf = '48%';
+            let depth = '642x';
+            let loinc = '62358-7';
+            let hgvs = 'c.35G>A (p.G12D)';
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed || trimmed.startsWith('#')) continue;
+                const cols = trimmed.split('\t');
+                if (cols.length >= 5) {
+                    chrom = cols[0];
+                    pos = cols[1];
+                    ref = cols[3];
+                    alt = cols[4];
+                    const info = cols[7] || '';
+                    if (info.includes('KRAS') || cols.some(c => c.includes('KRAS'))) {
+                        matchedGene = 'KRAS_G12D';
+                        loinc = '62358-7';
+                        hgvs = 'KRAS G12D (c.35G>A)';
+                    } else if (info.includes('TP53') || cols.some(c => c.includes('TP53'))) {
+                        matchedGene = 'TP53_LOSS';
+                        loinc = '85337-4';
+                        hgvs = 'TP53 Loss (p.R175H)';
+                    } else if (info.includes('BRCA1') || cols.some(c => c.includes('BRCA1'))) {
+                        matchedGene = 'BRCA1_DEL';
+                        loinc = '55207-5';
+                        hgvs = 'BRCA1 185delAG';
+                    } else if (info.includes('EGFR') || cols.some(c => c.includes('EGFR'))) {
+                        matchedGene = 'EGFR_L858R';
+                        loinc = '62357-9';
+                        hgvs = 'EGFR L858R';
+                    }
+                    const vafMatch = info.match(/VAF=([0-9.]+)/);
+                    if (vafMatch) vaf = `${Math.round(parseFloat(vafMatch[1]) * 100)}%`;
+                    const dpMatch = info.match(/DP=([0-9]+)/);
+                    if (dpMatch) depth = `${dpMatch[1]}x`;
+                    break;
+                }
+            }
+
+            if (!matchedGene) matchedGene = 'KRAS_G12D';
+
+            const geneSelect = document.getElementById('geneMutation');
+            if (geneSelect) {
+                geneSelect.value = matchedGene;
+                onGeneSelectChange();
+            }
+
+            const chip = document.getElementById('vcfParsedChip');
+            const txt = document.getElementById('vcfParsedText');
+            const lnc = document.getElementById('vcfParsedLoinc');
+            if (chip && txt && lnc) {
+                chip.classList.remove('hidden');
+                txt.innerText = `${chrom}:${pos} ${ref}>${alt} (${hgvs} • VAF ${vaf} • Depth ${depth})`;
+                lnc.innerText = `LOINC ${loinc}`;
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // ─────────────────────────────────────────────────────────────────────────
+        // § WADDINGTON EPIGENETIC LANDSCAPE VIEW TOGGLE (EPO-PAT-05)
+        // ─────────────────────────────────────────────────────────────────────────
+        let organoidViewMode = 'organoid'; // 'organoid' | 'waddington'
+
+        function setOrganoidViewMode(mode) {
+            organoidViewMode = mode;
+            const btnOrg = document.getElementById('btnModeOrganoid');
+            const btnWad = document.getElementById('btnModeWaddington');
+            const ovOrg = document.getElementById('organoidTelemetryOverlay');
+            const ovWad = document.getElementById('waddingtonTelemetryOverlay');
+            const subLabel = document.getElementById('organoidSubLabel');
+
+            if (mode === 'waddington') {
+                if (btnWad) { btnWad.className = 'px-1.5 py-0.5 rounded text-[8px] font-bold bg-[#0047BB] text-white cursor-pointer shadow-xs'; }
+                if (btnOrg) { btnOrg.className = 'px-1.5 py-0.5 rounded text-[8px] font-bold text-slate-700 hover:text-[#0047BB] cursor-pointer'; }
+                if (ovOrg) ovOrg.classList.add('hidden');
+                if (ovWad) ovWad.classList.remove('hidden');
+                if (subLabel) subLabel.innerHTML = 'EPO-PAT-05 | Drag to tilt surface';
+            } else {
+                if (btnOrg) { btnOrg.className = 'px-1.5 py-0.5 rounded text-[8px] font-bold bg-[#0047BB] text-white cursor-pointer shadow-xs'; }
+                if (btnWad) { btnWad.className = 'px-1.5 py-0.5 rounded text-[8px] font-bold text-slate-700 hover:text-[#0047BB] cursor-pointer'; }
+                if (ovOrg) ovOrg.classList.remove('hidden');
+                if (ovWad) ovWad.classList.add('hidden');
+                if (subLabel) subLabel.innerHTML = 'VEGF: <span id="organoidVegfLabel" class="text-rose-600 font-bold">0.14</span> | Drag to rotate';
+            }
+        }
+
         function initTumorOrganoidEngine() {
             const canvas = document.getElementById('tumorOrganoidCanvas');
             if (!canvas) return;
@@ -5276,6 +5443,136 @@ function updateTcgaSurvivalComparison() {
 
                 const cosY = Math.cos(organoidRotY), sinY = Math.sin(organoidRotY);
                 const cosX = Math.cos(organoidRotX), sinX = Math.sin(organoidRotX);
+
+                if (organoidViewMode === 'waddington') {
+                    // ── EPO-PAT-05 WADDINGTON EPIGENETIC LANDSCAPE ENGINE ──────
+                    const ap90Input = parseFloat(document.getElementById('epitalonDose')?.value);
+                    const ap90Dose = isNaN(ap90Input) ? 52.0 : ap90Input;
+                    const mu = (ap90Dose / 100.0) * 3.6; // Bifurcation parameter
+                    const isReprogrammed = (mu >= 1.6); // Critical Saddle-Node transition
+
+                    const wadStatus = document.getElementById('waddingtonStatusLabel');
+                    if (wadStatus) {
+                        if (isReprogrammed) {
+                            wadStatus.innerText = 'COLLAPSED (NORMAL)';
+                            wadStatus.className = 'text-[8.5px] font-mono text-[#047857] font-bold';
+                        } else {
+                            const barrier = Math.max(0.1, (1.6 - mu) * 1.8).toFixed(1);
+                            wadStatus.innerText = `BARRIER: ΔU=${barrier} kcal`;
+                            wadStatus.className = 'text-[8.5px] font-mono text-rose-600 font-bold';
+                        }
+                    }
+
+                    // Precompute 3D topographical mesh (11x11 grid)
+                    const gridSteps = 11;
+                    const gridPoints = [];
+                    const xRange = 1.6;
+                    const yRange = 1.1;
+
+                    for (let gy = 0; gy < gridSteps; gy++) {
+                        const row = [];
+                        const yVal = -yRange + (gy / (gridSteps - 1)) * 2 * yRange;
+                        for (let gx = 0; gx < gridSteps; gx++) {
+                            const xVal = -xRange + (gx / (gridSteps - 1)) * 2 * xRange;
+                            // EPO-PAT-05 Quasipotential well formula:
+                            // U(x,y) = -2.2*x^2 + 0.95*x^4 - mu*x + 1.2*y^2
+                            const uVal = -2.2 * Math.pow(xVal, 2) + 0.95 * Math.pow(xVal, 4) - mu * xVal + 1.2 * Math.pow(yVal, 2);
+
+                            const x3D = xVal * 28;
+                            const y3D = uVal * 11; // potential height
+                            const z3D = yVal * 24;
+
+                            // 3D rotation
+                            const x1 = x3D * cosY - z3D * sinY;
+                            const z1 = z3D * cosY + x3D * sinY;
+                            const y1 = y3D * cosX - z1 * sinX;
+                            const z2 = z1 * cosX + y3D * sinX;
+
+                            const fov = 160;
+                            const scale = fov / (fov + z2 + 80);
+                            const sx = cx + x1 * scale;
+                            const sy = cy + y1 * scale + 15;
+
+                            row.push({ sx, sy, z: z2, u: uVal, xVal, yVal });
+                        }
+                        gridPoints.push(row);
+                    }
+
+                    // Render surface grid ribbons
+                    ctx.lineWidth = 0.9;
+                    for (let gy = 0; gy < gridSteps; gy++) {
+                        for (let gx = 0; gx < gridSteps; gx++) {
+                            const p = gridPoints[gy][gx];
+                            if (gx < gridSteps - 1) {
+                                const pNext = gridPoints[gy][gx + 1];
+                                const avgU = (p.u + pNext.u) / 2;
+                                if (p.xVal < 0 && !isReprogrammed) {
+                                    ctx.strokeStyle = `rgba(225, 29, 72, ${Math.max(0.18, 0.7 - avgU * 0.12)})`;
+                                } else if (p.xVal > 0) {
+                                    ctx.strokeStyle = `rgba(4, 120, 87, ${Math.max(0.2, 0.8 - avgU * 0.12)})`;
+                                } else {
+                                    ctx.strokeStyle = `rgba(217, 119, 6, 0.45)`;
+                                }
+                                ctx.beginPath();
+                                ctx.moveTo(p.sx, p.sy);
+                                ctx.lineTo(pNext.sx, pNext.sy);
+                                ctx.stroke();
+                            }
+                            if (gy < gridSteps - 1) {
+                                const pDown = gridPoints[gy + 1][gx];
+                                ctx.strokeStyle = `rgba(100, 116, 139, 0.22)`;
+                                ctx.beginPath();
+                                ctx.moveTo(p.sx, p.sy);
+                                ctx.lineTo(pDown.sx, pDown.sy);
+                                ctx.stroke();
+                            }
+                        }
+                    }
+
+                    // Render Cellular State Orb rolling down the attractor
+                    let cellX = -1.1 + (mu / 1.6) * 0.35;
+                    let cellY = 0;
+                    if (isReprogrammed) {
+                        cellX = 1.05 + Math.sin(Date.now() * 0.003) * 0.04;
+                    }
+                    const cellU = -2.2 * Math.pow(cellX, 2) + 0.95 * Math.pow(cellX, 4) - mu * cellX;
+                    const cX3D = cellX * 28;
+                    const cY3D = cellU * 11;
+                    const cZ3D = cellY * 24;
+
+                    const cX1 = cX3D * cosY - cZ3D * sinY;
+                    const cZ1 = cZ3D * cosY + cX3D * sinY;
+                    const cY1 = cY3D * cosX - cZ1 * sinX;
+                    const cZ2 = cZ1 * cosX + cY3D * sinX;
+
+                    const cFov = 160;
+                    const cScale = cFov / (cFov + cZ2 + 80);
+                    const csx = cx + cX1 * cScale;
+                    const csy = cy + cY1 * cScale + 15;
+
+                    // Glowing cellular state orb
+                    ctx.beginPath();
+                    ctx.arc(csx, csy, 5.5 * cScale, 0, Math.PI * 2);
+                    ctx.fillStyle = isReprogrammed ? '#10b981' : '#ef4444';
+                    ctx.shadowColor = isReprogrammed ? '#10b981' : '#ef4444';
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    // Core highlight
+                    ctx.beginPath();
+                    ctx.arc(csx - 1.5, csy - 1.5, 2 * cScale, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+
+                    // Cellular State Label
+                    ctx.font = 'bold 8px monospace';
+                    ctx.fillStyle = isReprogrammed ? '#047857' : '#be123c';
+                    ctx.fillText(isReprogrammed ? 'NORMAL ATTRACTOR' : 'MALIGNANT CELL', csx - 28, csy - 9);
+
+                    organoidAnimFrame = requestAnimationFrame(renderOrganoid);
+                    return;
+                }
 
                 // Project 3D nodes to 2D screen
                 const projected = [];
