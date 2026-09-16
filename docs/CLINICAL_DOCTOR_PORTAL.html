@@ -1703,6 +1703,33 @@
             box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
         }
 
+    
+        /* Enforce Hospital White-Gray Nuances in Daylight Mode */
+        body:not(.dark-mode) .hardware-screen,
+        body:not(.dark-mode) #canvasECG,
+        body:not(.dark-mode) .chart-container-card,
+        body:not(.dark-mode) [id*="displayBox"],
+        body:not(.dark-mode) #chartCanvasContainer > div {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:first-child {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:last-child {
+            background-color: #f8fafc !important;
+        }
+
+        body:not(.dark-mode) #tumorTrajectoryCanvas {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #tumorOrganoidCanvas {
+            background-color: #f8fafc !important;
+        }
+
     </style>
 </head>
 <body>
@@ -1818,7 +1845,7 @@
     <div id="patientBannerBar" class="h-11 border-b border-[#e2e8f0] dark:border-teal-900/60 px-4 flex items-center justify-between shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] clinical-patient-banner">
         <!-- 1. Patient Clinical Identity Chips (Left) -->
         <div class="flex items-center gap-2 flex-nowrap shrink-0 overflow-visible">
-            <div class="patient-badge-chip chip-patient-id py-1 px-2.5">
+            <div class="patient-badge-chip chip-patient-id py-1 px-2.5 bg-sky-50 border border-sky-300">
                 <span class="text-[10px] font-mono font-extrabold uppercase px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-950/80 text-sky-800 dark:text-sky-300" id="bannerLabelPatient">ID</span>
                 <span id="bannerPatientId" class="mono font-black text-[#0284c7] dark:text-sky-300 text-[13.5px]">PT-2026-8890</span>
             </div>
@@ -1829,11 +1856,11 @@
             </div>
             <div class="patient-badge-chip chip-bsa py-1 px-2">
                 <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>BSA:</span><span class="tip-icon tip-down" data-tooltip="Body Surface Area calculated via Mosteller formula: sqrt((Height * Weight) / 3600).">?</span></span>
-                <strong id="bannerBSA" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[13px]">1.85 m²</strong>
+                <strong id="bannerBSA" class="mono font-extrabold text-[#047857] font-black text-[13px]">1.85 m²</strong>
             </div>
             <div class="patient-badge-chip chip-gfr py-1 px-2">
                 <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>CrCl:</span><span class="tip-icon tip-down" data-tooltip="Calculated creatinine clearance via Cockcroft-Gault formula. Severe impairment (< 30.0 mL/min) clamps cytostatics.">?</span></span>
-                <strong id="bannerGFR" class="mono font-extrabold text-emerald-700 dark:text-emerald-400 text-[13px]">94.0 mL/min</strong>
+                <strong id="bannerGFR" class="mono font-extrabold text-[#047857] font-black text-[13px]">94.0 mL/min</strong>
             </div>
             <div class="patient-badge-chip chip-apoe py-1 px-2">
                 <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center"><span>ApoE4:</span><span class="tip-icon tip-down" data-tooltip="Pharmacogenetic vascular permeability modifier.">?</span></span>
@@ -2104,12 +2131,12 @@
                 </div>
 
                 <!-- Autonomic Telemetry: Pan-Tompkins 250 Hz DSP ECG (Enhanced 60px Clinical Display) -->
-                <div class="mt-auto p-2.5 clinical-subcard">
+                <div class="mt-auto p-2.5 bg-white border border-slate-300 rounded-xl shadow-xs">
                 <!-- Organ Reserves: Multi-Ring Radial SVG Gauge (UPGRADE 2) -->
-                <div class="p-2 bg-slate-50 dark:bg-[#08282e] border border-slate-200 dark:border-teal-900/60 rounded-xl shadow-sm">
-                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-teal-900/40 pb-1 mb-2 font-extrabold text-slate-800 dark:text-slate-200">
+                <div class="p-2 bg-slate-50/80 border border-slate-200 rounded-xl">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-1 mb-2 font-extrabold text-[#0f172a]">
                         <span class="uppercase tracking-wide text-[10.5px]">Organ Reserves &amp; ECOG Performance</span>
-                        <span id="organGradeBadge" class="text-[9.5px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-bold">GRADE 0 FIT</span>
+                        <span id="organGradeBadge" class="text-[9.5px] font-mono text-[#047857] font-black bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-bold">GRADE 0 FIT</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <!-- SVG Radial Multi-Ring Gauge -->
@@ -2139,31 +2166,31 @@
                                         stroke-dasharray="89.5 94.2" stroke-dashoffset="23.6"
                                         stroke-linecap="round" transform="rotate(-90 50 50)"
                                         style="transition: stroke-dasharray 0.8s ease;"/>
-                                <text x="50" y="46" text-anchor="middle" font-size="7" font-weight="800" fill="#064e3b" font-family="monospace">GRADE</text>
-                                <text id="gaugeGradeText" x="50" y="57" text-anchor="middle" font-size="9" font-weight="900" fill="#059669">0 FIT</text>
+                                <text x="50" y="46" text-anchor="middle" font-size="7" font-weight="900" fill="#0f172a" font-family="monospace">GRADE</text>
+                                <text id="gaugeGradeText" x="50" y="57" text-anchor="middle" font-size="9" font-weight="900" fill="#047857">0 FIT</text>
                             </svg>
                         </div>
                         <!-- Legend with live values -->
                         <div class="flex flex-col gap-1.5 text-[9.5px] w-full">
                             <div class="flex items-center justify-between">
-                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">GFR / Renal</span></span>
-                                <span class="font-mono font-bold text-emerald-700 dark:text-emerald-400">91.5 mL/min</span>
+                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span><span class="text-[#0f172a] font-bold">GFR / Renal</span></span>
+                                <span class="font-mono font-bold text-[#047857] font-black">91.5 mL/min</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">LVEF Echo</span></span>
+                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span><span class="text-[#0f172a] font-bold">LVEF Echo</span></span>
                                 <span class="font-mono font-bold text-blue-600 dark:text-blue-400">62% (Norm)</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">ALT Hepatic</span></span>
+                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span><span class="text-[#0f172a] font-bold">ALT Hepatic</span></span>
                                 <span class="font-mono font-bold text-amber-600 dark:text-amber-400">22 U/L</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span><span class="text-slate-600 dark:text-slate-300 font-semibold">ANC Count</span></span>
+                                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span><span class="text-[#0f172a] font-bold">ANC Count</span></span>
                                 <span class="font-mono font-bold text-emerald-700 dark:text-emerald-300">4.2x10⁹</span>
                             </div>
                             <div class="flex items-center justify-between pt-0.5 border-t border-slate-200 dark:border-teal-900/40 mt-0.5">
-                                <span class="text-slate-500 dark:text-slate-400 font-medium">ECOG PS</span>
-                                <span class="font-mono font-bold text-slate-900 dark:text-slate-100">0 (Active)</span>
+                                <span class="text-[#0f172a] font-bold">ECOG PS</span>
+                                <span class="font-mono font-extrabold text-[#0f172a]">0 (Active)</span>
                             </div>
                         </div>
                     </div>
@@ -2172,10 +2199,10 @@
 <div class="flex items-center justify-between text-[9.5px] font-bold text-slate-600 mb-1.5">
                         <span class="flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span id="labelTelemetry" class="text-[#0f172a] font-extrabold uppercase text-[9px] tracking-wide flex items-center"><span>Pan-Tompkins DSP (250 Hz Active)</span><span class="tip-icon" data-tooltip="Real-time QRS detection via 5–15 Hz bandpass filtering, squaring, and moving-window integration. Evaluates autonomic sympathovagal balance (RMSSD / HRV) to track systemic allostatic distress.">?</span></span>
+                            <span id="labelTelemetry" class="text-[#0f172a] font-black uppercase text-[10px] tracking-wide flex items-center"><span>Pan-Tompkins DSP (250 Hz Active)</span><span class="tip-icon" data-tooltip="Real-time QRS detection via 5–15 Hz bandpass filtering, squaring, and moving-window integration. Evaluates autonomic sympathovagal balance (RMSSD / HRV) to track systemic allostatic distress.">?</span></span>
                         </span>
-                        <span class="mono text-[9.5px] text-emerald-700 font-bold bg-[#ecfdf5] border border-[#a7f3d0] px-1.5 py-0.5 rounded">
-                            HR: <span id="hrVal" class="text-emerald-900">74</span> bpm | HRV: <span id="hrvVal" class="text-emerald-900">42</span> ms
+                        <span class="mono text-[9.5px] text-[#0f172a] font-bold bg-white border border-slate-300 px-1.5 py-0.5 rounded shadow-xs">
+                            HR: <span id="hrVal" class="text-[#0f172a] font-black">74</span> bpm | HRV: <span id="hrvVal" class="text-[#0f172a] font-black">42</span> ms
                         </span>
                     </div>
                     <div class="relative w-full rounded-lg overflow-hidden border border-slate-300 shadow-inner bg-slate-50 telemetry-card-container">
@@ -2218,20 +2245,20 @@
                 </div>
 
                 <!-- Visual Hero: Real-Time PK/PD Kinetic Window & 3D Interactive Tumor Organoid -->
-                <div class="clinical-card p-2 bg-[#0f172a] border border-[#1e293b] flex flex-col chart-container-card">
+                <div class="p-2.5 bg-white border border-slate-300 rounded-xl flex flex-col chart-container-card shadow-xs">
                     <!-- Dual Header -->
-                    <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1 px-1">
+                    <div class="flex items-center justify-between text-[10px] font-mono text-slate-700 mb-1.5 px-1">
                         <div class="flex items-center gap-2">
-                            <span class="flex items-center gap-1 text-slate-300 font-bold">
+                            <span class="flex items-center gap-1 text-[#0f172a] font-bold">
                                 <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
                                 <span id="labelKineticCurve">In-Silico Digital Twin Visualizer</span>
                             </span>
-                            <span class="text-[9px] text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800 px-1 rounded">Real-Time ODE Engine</span>
+                            <span class="text-[9px] text-[#0047BB] font-mono font-bold bg-slate-100 border border-slate-300 px-1 rounded">Real-Time ODE Engine</span>
                         </div>
                         <div class="flex items-center gap-3 text-[9.5px]">
-                            <span class="flex items-center gap-1 text-emerald-400"><span class="w-2 h-0.5 bg-emerald-400"></span> Kinetic Lysis</span>
-                            <span class="flex items-center gap-1 text-fuchsia-400"><span class="w-2 h-0.5 bg-fuchsia-400"></span> SOC</span>
-                            <span class="flex items-center gap-1 text-rose-400"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> 3D VEGF Organoid</span>
+                            <span class="flex items-center gap-1 text-[#0047BB] font-bold"><span class="w-2.5 h-1 bg-[#0047BB] rounded-full"></span> Kinetic Lysis</span>
+                            <span class="flex items-center gap-1 text-[#e11d48] font-bold"><span class="w-2.5 h-1 bg-[#e11d48] rounded-full"></span> SOC Reference</span>
+                            <span class="flex items-center gap-1 text-[#047857] font-bold"><span class="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span> 3D Tumor Organoid</span>
                         </div>
                     </div>
 
@@ -2243,7 +2270,7 @@
                         </div>
 
                         <!-- Right 2 Cols: 3D Interactive Tumor Organoid Sphere -->
-                        <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-slate-300 bg-[#07101e] flex flex-col items-center justify-center p-1">
+                        <div class="col-span-2 relative h-full rounded-lg overflow-hidden border border-slate-300 bg-slate-50 flex flex-col items-center justify-center p-1">
                             <canvas id="tumorOrganoidCanvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
                             <!-- Live Telemetry Badges over Organoid -->
                             <div class="absolute top-1.5 left-2 pointer-events-none flex flex-col gap-0.5">
@@ -2300,7 +2327,7 @@
                     <div class="dosing-capsule">
                         <div class="flex justify-between text-[11px] mb-1.5 items-center">
                             <span class="text-slate-700 dark:text-slate-200 font-bold" id="labelPsDose">3. Selye Somatic Cushion (Withanolides / PS)</span>
-                            <span id="psVal" class="kpi-number font-extrabold text-emerald-700 dark:text-emerald-400 mono tracking-tight text-2xl">280 mg</span>
+                            <span id="psVal" class="kpi-number font-extrabold text-[#047857] font-black mono tracking-tight text-2xl">280 mg</span>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <input type="range" id="psDose" min="50" max="500" value="280" step="10" oninput="syncDoseValue('ps', this.value, true)" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none custom-slider">
@@ -2403,28 +2430,24 @@
                     </div>
 
                     <!-- 1. Safety Triage & Organ Clamps (Hospital Grade Checklist) -->
-                    <div class="p-2.5 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700/80">
+                    <div class="p-2.5 bg-white border border-slate-300 rounded-xl shadow-xs space-y-2">
                         <div class="flex items-center justify-between mb-1.5" id="labelSafetyTriage">
-                            <label class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                            <label class="text-[11px] font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-1">
                                 <i data-lucide="shield" class="w-3 h-3 text-slate-500"></i>
                                 <span>Safety &amp; Contraindications (IEC 62304-C)</span>
                             </label>
-                            <span class="text-[9px] font-mono text-emerald-700 dark:text-emerald-400 font-bold">PASS</span>
+                            <span class="text-[9px] font-mono text-[#047857] font-black font-bold">PASS</span>
                         </div>
                         <div class="space-y-1.5">
-                            <div id="gateRenal" class="p-2 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg flex items-center justify-between text-xs status-correct shadow-xs">
-                                <span class="font-medium text-slate-800 dark:text-slate-200 flex items-center gap-1.5 text-[11px]">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Renal Function
-                                </span>
+                            <div id="gateRenal" class="p-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs shadow-xs">
+                                <span class="font-bold text-[#0f172a] flex items-center gap-1.5 text-[11.5px]"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span> Renal Function</span>
                                 <span class="font-mono text-[10px] font-bold text-emerald-800 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">CORRECT: Optimal (GFR > 60)</span>
                             </div>
-                            <div id="gateApoE" class="p-2 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg flex items-center justify-between text-xs status-correct shadow-xs">
-                                <span class="font-medium text-slate-800 dark:text-slate-200 flex items-center gap-1.5 text-[11px]">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> ApoE4 Clearance
-                                </span>
+                            <div id="gateApoE" class="p-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs shadow-xs">
+                                <span class="font-bold text-[#0f172a] flex items-center gap-1.5 text-[11.5px]"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span> ApoE4 Clearance</span>
                                 <span class="font-mono text-[10px] font-bold text-emerald-800 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">CORRECT: Normal (1.00x)</span>
                             </div>
-                            <div id="gateTP53" class="p-2 bg-white dark:bg-[#0f172a] border border-slate-200 dark:border-slate-700 rounded-lg flex items-center justify-between text-xs status-correct shadow-xs">
+                            <div id="gateTP53" class="p-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs shadow-xs">
                                 <span class="font-medium text-slate-800 dark:text-slate-200 flex items-center gap-1.5 text-[11px]">
                                     <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                     <span>TP53 Gate</span>
@@ -2436,9 +2459,9 @@
                     </div>
 
                     <!-- 2. Clinical Bullet Chart (UPGRADE 1) - Tufte Data-Ink Ratio -->
-                    <div class="p-2.5 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700/80 space-y-2">
+                    <div class="p-2.5 bg-white border border-slate-300 rounded-xl shadow-xs space-y-2">
                         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-1.5">
-                            <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1" id="labelDynamicPrognosis">
+                            <span class="text-[11px] font-black text-[#0f172a] uppercase tracking-wider flex items-center gap-1" id="labelDynamicPrognosis">
                                 <i data-lucide="bar-chart-2" class="w-3 h-3 text-emerald-600"></i>
                                 <span>Clinical Endpoints &amp; Prognosis</span>
                             </span>
@@ -2450,13 +2473,13 @@
                             <!-- ROW 1: Overall Survival (Hero Bullet Bar) -->
                             <div class="bullet-chart-row">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-[9.5px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide" id="labelPredictedSurv">Overall Survival (OS)</span>
+                                    <span class="text-[10.5px] font-black text-[#0f172a] uppercase tracking-wide" id="labelPredictedSurv">Overall Survival (OS)</span>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-[8.5px] font-mono text-slate-400">TCGA: <span id="tcgaHistSurvivalVal" class="font-bold text-slate-600 dark:text-slate-300">14.2 mo</span></span>
+                                        <span class="text-[9px] font-mono text-[#334155] font-bold">TCGA: <span id="tcgaHistSurvivalVal" class="font-black text-[#0f172a]">14.2 mo</span></span>
                                         <span id="tcgaHazardRatioVal" class="text-[8px] font-mono text-slate-400">HR: 0.48</span>
                                     </div>
                                 </div>
-                                <div class="relative h-6 bg-slate-100 dark:bg-slate-800 rounded-md overflow-hidden">
+                                <div class="relative h-6 bg-slate-100 border border-slate-300 rounded-md overflow-hidden">
                                     <div class="absolute inset-y-0 left-0 bg-red-200 dark:bg-red-900/60 rounded-l-md flex items-center pl-1.5" style="width: 14.2%">
                                         <span class="text-[7.5px] font-bold text-red-700 dark:text-red-300 whitespace-nowrap">14.2 mo</span>
                                     </div>
@@ -2466,8 +2489,8 @@
                                     <div class="absolute inset-y-0 border-l-2 border-red-500/70 border-dashed" style="left: 14.2%"></div>
                                 </div>
                                 <div class="flex items-center justify-between mt-0.5">
-                                    <span class="text-[7.5px] text-slate-400">SOC: <span id="tcgaHistSocVal">Gemcitabine + Nab-P</span></span>
-                                    <span id="tcgaSurvivalDeltaVal" class="text-[8.5px] font-mono font-bold text-emerald-700 dark:text-emerald-400">+346% vs control</span>
+                                    <span class="text-[8.5px] text-[#475569] font-semibold">SOC: <span id="tcgaHistSocVal" class="font-bold text-[#0f172a]">Gemcitabine + Nab-P</span></span>
+                                    <span id="tcgaSurvivalDeltaVal" class="text-[9.5px] font-mono font-black text-[#047857]">+346% vs control</span>
                                 </div>
                                 <span id="tcgaBenchmarkCard" class="hidden"></span>
                                 <span id="tcgaBenchmarkCaseId" class="hidden">TCGA-IB-7651</span>
@@ -2476,10 +2499,10 @@
                             <!-- ROW 2: RECIST 1.1 Tumor Lysis -->
                             <div class="bullet-chart-row">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-[9.5px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">RECIST 1.1 Lysis <span class="tip-icon" data-tooltip="Response Evaluation Criteria in Solid Tumors.">?</span></span>
-                                    <span id="resTumorLysis" class="text-[10px] font-black text-emerald-700 dark:text-emerald-400 font-mono">98.4%</span>
+                                    <span class="text-[10.5px] font-black text-[#0f172a] uppercase tracking-wide">RECIST 1.1 Lysis <span class="tip-icon" data-tooltip="Response Evaluation Criteria in Solid Tumors.">?</span></span>
+                                    <span id="resTumorLysis" class="text-[10px] font-black text-[#047857] font-black font-mono">98.4%</span>
                                 </div>
-                                <div class="relative h-4 bg-slate-100 dark:bg-slate-800 rounded-md overflow-hidden">
+                                <div class="relative h-4 bg-slate-100 border border-slate-300 rounded-md overflow-hidden">
                                     <div id="bulletBarLysis" class="absolute inset-y-0 left-0 bg-emerald-500 dark:bg-emerald-600 rounded-md flex items-center justify-end pr-1" style="width: 98.4%">
                                         <span class="text-[7.5px] font-bold text-white">Partial/Complete</span>
                                     </div>
@@ -2489,10 +2512,10 @@
                             <!-- ROW 3: Adaptation Reserve -->
                             <div class="bullet-chart-row">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-[9.5px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">Adaptation Reserve</span>
+                                    <span class="text-[10.5px] font-black text-[#0f172a] uppercase tracking-wide">Adaptation Reserve</span>
                                     <span id="resAdaptationReserve" class="text-[10px] font-black text-sky-600 dark:text-sky-400 font-mono">82.4%</span>
                                 </div>
-                                <div class="relative h-4 bg-slate-100 dark:bg-slate-800 rounded-md overflow-hidden">
+                                <div class="relative h-4 bg-slate-100 border border-slate-300 rounded-md overflow-hidden">
                                     <div id="bulletBarAdaptation" class="absolute inset-y-0 left-0 bg-sky-500 dark:bg-sky-600 rounded-md flex items-center justify-end pr-1" style="width: 82.4%">
                                         <span class="text-[7.5px] font-bold text-white">Selye 94/100</span>
                                     </div>
@@ -2502,10 +2525,10 @@
                             <!-- ROW 4: Epigenetic Delta Age -->
                             <div class="bullet-chart-row">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-[9.5px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">Epigenetic Δ Age</span>
+                                    <span class="text-[10.5px] font-black text-[#0f172a] uppercase tracking-wide">Epigenetic Δ Age</span>
                                     <span class="text-[10px] font-black text-violet-600 dark:text-violet-400 font-mono">-30.4 yrs</span>
                                 </div>
-                                <div class="relative h-4 bg-slate-100 dark:bg-slate-800 rounded-md overflow-hidden">
+                                <div class="relative h-4 bg-slate-100 border border-slate-300 rounded-md overflow-hidden">
                                     <div id="bulletBarEpigenetic" class="absolute inset-y-0 left-0 bg-violet-500 dark:bg-violet-600 rounded-md flex items-center justify-end pr-1" style="width: 76%">
                                         <span class="text-[7.5px] font-bold text-white">Kd 0.12nM • TIL +312%</span>
                                     </div>
@@ -2583,7 +2606,7 @@
                             </div>
                             <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
                                 <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Renal CrCl (Cockcroft)</div>
-                                <div id="pharmacyGfrDisplay" class="mono font-black text-emerald-700 dark:text-emerald-400 text-base mt-0.5">91.5 mL/min</div>
+                                <div id="pharmacyGfrDisplay" class="mono font-black text-[#047857] font-black text-base mt-0.5">91.5 mL/min</div>
                             </div>
                             <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-slate-200 dark:border-teal-900/60 shadow-sm">
                                 <div class="text-[10.5px] text-slate-500 dark:text-slate-400 font-semibold uppercase">ApoE4 Clearance</div>
@@ -2652,17 +2675,17 @@
                         <div class="grid grid-cols-3 gap-2.5 text-xs">
                             <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
                                 <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Gravimetric Target / Measured</div>
-                                <div class="mono font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5"><span id="pharmacyGravTarget">280.4 g</span> / <span id="pharmacyGravMeasured" class="text-emerald-700 dark:text-emerald-400 font-black">280.1 g</span></div>
+                                <div class="mono font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5"><span id="pharmacyGravTarget">280.4 g</span> / <span id="pharmacyGravMeasured" class="text-[#047857] font-black font-black">280.1 g</span></div>
                                 <div class="text-[9.5px] text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">Tolerance &plusmn;2% (Δ = -0.1%)</div>
                             </div>
                             <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
                                 <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase flex items-center justify-between"><span>0.22 µm PES In-Line Filter</span><span class="tip-icon" data-tooltip="Sterilizing-grade polyethersulfone filter integrity test. Verifies retention of sub-micron particulates and microbial contaminants at bubble-point pressure > 3.2 bar.">?</span></div>
-                                <div class="mono font-black text-emerald-700 dark:text-emerald-400 text-sm mt-0.5">BUBBLE-POINT PASS</div>
+                                <div class="mono font-black text-[#047857] font-black text-sm mt-0.5">BUBBLE-POINT PASS</div>
                                 <div class="text-[9.5px] text-slate-500 dark:text-slate-400 mt-0.5">Pressure: 3.4 bar (&gt;3.2 req)</div>
                             </div>
                             <div class="p-2.5 bg-white dark:bg-[#08282e] rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm">
                                 <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase">Visual Inspection (Particulate)</div>
-                                <div class="mono font-black text-emerald-700 dark:text-emerald-400 text-sm mt-0.5">CLEAR OPALESCENT</div>
+                                <div class="mono font-black text-[#047857] font-black text-sm mt-0.5">CLEAR OPALESCENT</div>
                                 <div class="text-[9.5px] text-slate-500 dark:text-slate-400 mt-0.5">Zero precipitates / Tyndall OK</div>
                             </div>
                         </div>
@@ -2760,7 +2783,7 @@
                             </div>
                             <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-cyan-200 dark:border-cyan-900/40">
                                 <div class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Particles &ge;0.5µm</div>
-                                <div class="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-xs mt-0.5">14 / m³</div>
+                                <div class="font-mono font-bold text-[#047857] font-black text-xs mt-0.5">14 / m³</div>
                                 <div class="text-[9px] text-slate-400 font-semibold">&lt; 3,520 Limit</div>
                             </div>
                             <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-cyan-200 dark:border-cyan-900/40">
@@ -2778,7 +2801,7 @@
                                 <i data-lucide="file-check" class="w-4 h-4 text-blue-600"></i>
                                 <span class="uppercase tracking-wide">Dual-Signer Chain of Custody &amp; GS1-128 Telemetry:</span>
                             </span>
-                            <span class="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-bold">ISMP DUAL CHECK OK</span>
+                            <span class="text-[10px] font-mono text-[#047857] font-black bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-bold">ISMP DUAL CHECK OK</span>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-xs">
                             <div class="p-2 bg-white dark:bg-[#041d21] rounded-lg border border-slate-200 dark:border-teal-900/40">
@@ -2838,11 +2861,11 @@
                             </div>
                             <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
                                 <div class="text-[10px] text-slate-500">Blood Group</div>
-                                <div class="font-extrabold text-emerald-700 dark:text-emerald-400 text-xs">A Rh+ (Positive)</div>
+                                <div class="font-extrabold text-[#047857] font-black text-xs">A Rh+ (Positive)</div>
                             </div>
                             <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
                                 <div class="text-[10px] text-slate-500">Allergy Alert</div>
-                                <div class="font-extrabold text-emerald-700 dark:text-emerald-400 text-xs">NKDA (None)</div>
+                                <div class="font-extrabold text-[#047857] font-black text-xs">NKDA (None)</div>
                             </div>
                             <div class="p-1.5 bg-white dark:bg-[#08282e] rounded-lg border border-slate-200 dark:border-teal-900/40">
                                 <div class="text-[10px] text-slate-500">Cycle / Day</div>
@@ -2934,7 +2957,7 @@
                                     <i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i>
                                     <span class="uppercase tracking-wide">Pre-Infusion Patient Vitals &amp; Vascular Access Triage:</span>
                                 </span>
-                                <span class="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded font-bold">ALL VITALS NORMAL</span>
+                                <span class="text-[10px] font-mono text-[#047857] font-black bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded font-bold">ALL VITALS NORMAL</span>
                             </div>
                             <div class="grid grid-cols-4 gap-2 text-xs pt-1">
                                 <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
@@ -2943,7 +2966,7 @@
                                 </div>
                                 <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
                                     <div class="text-[10px] text-slate-500 uppercase">Pulse / ECG</div>
-                                    <div class="font-mono font-bold text-emerald-700 dark:text-emerald-400 text-xs">74 bpm (Sinus)</div>
+                                    <div class="font-mono font-bold text-[#047857] font-black text-xs">74 bpm (Sinus)</div>
                                 </div>
                                 <div class="p-2 bg-white dark:bg-[#08282e] rounded-lg border border-emerald-200 dark:border-emerald-900/50">
                                     <div class="text-[10px] text-slate-500 uppercase">SpO2 Oxygen</div>
@@ -3133,11 +3156,11 @@
                             </div>
                             <div>
                                 <div class="text-slate-500 text-[10px] uppercase font-semibold">Line Pressure</div>
-                                <div class="font-mono font-black text-emerald-700 dark:text-emerald-400 text-sm mt-0.5">18 mmHg (Norm)</div>
+                                <div class="font-mono font-black text-[#047857] font-black text-sm mt-0.5">18 mmHg (Norm)</div>
                             </div>
                             <div>
                                 <div class="text-slate-500 text-[10px] uppercase font-semibold">Air Ultrasonic</div>
-                                <div class="font-mono font-black text-emerald-700 dark:text-emerald-400 text-sm mt-0.5">SAFE (0.0 µL)</div>
+                                <div class="font-mono font-black text-[#047857] font-black text-sm mt-0.5">SAFE (0.0 µL)</div>
                             </div>
                         </div>
                     </div>
@@ -3196,7 +3219,7 @@
                 <div class="grid grid-cols-4 gap-3 shrink-0">
                     <div class="p-3 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl shadow-sm">
                         <div class="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide">Merkle Chain Integrity</div>
-                        <div id="ialMerkleIntegrityBadge" class="text-base font-black text-emerald-700 dark:text-emerald-400 mono mt-0.5">100% UNBROKEN</div>
+                        <div id="ialMerkleIntegrityBadge" class="text-base font-black text-[#047857] font-black mono mt-0.5">100% UNBROKEN</div>
                     </div>
                     <div class="p-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-xl shadow-sm">
                         <div class="text-[10px] font-bold text-blue-800 dark:text-blue-300 uppercase tracking-wide">Total Audit Blocks</div>
@@ -4626,30 +4649,32 @@ function updateTcgaSurvivalComparison() {
             const payload = getActiveFormPayload();
             pendingPayload = payload;
 
-            // Attempt Edge backend call on port 8890 with strict 1200ms timeout
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 1200);
-                const res = await fetch(`${HOSPITAL_EDGE_BASE_URL}/api/v1/simulate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    signal: controller.signal,
-                    body: JSON.stringify({
-                        patient_id: payload.patientId,
-                        driver_mutation: payload.driver_mutation,
-                        gfr_ml_min: payload.gfr_ml_min,
-                        age: payload.age
-                    })
-                });
-                clearTimeout(timeoutId);
-                if (res.ok) {
-                    const data = await res.json();
-                    latestSimulationData = data;
-                    applySimulationResults(data, payload, mode);
-                    return;
+            // Attempt Edge backend call on port 8890 only if server is known online
+            if (isEdgeServerOnline) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 300);
+                    const res = await fetch(`${HOSPITAL_EDGE_BASE_URL}/api/v1/simulate`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        signal: controller.signal,
+                        body: JSON.stringify({
+                            patient_id: payload.patientId,
+                            driver_mutation: payload.driver_mutation,
+                            gfr_ml_min: payload.gfr_ml_min,
+                            age: payload.age
+                        })
+                    });
+                    clearTimeout(timeoutId);
+                    if (res.ok) {
+                        const data = await res.json();
+                        latestSimulationData = data;
+                        applySimulationResults(data, payload, mode);
+                        return;
+                    }
+                } catch(e) {
+                    // Smooth deterministic fallback (Criterion 3)
                 }
-            } catch(e) {
-                // Smooth deterministic fallback (Criterion 3)
             }
 
             // High-precision local numerical ODE fallback (zero freezing)
@@ -5203,7 +5228,7 @@ function updateTcgaSurvivalComparison() {
                             <div class="font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
                                 <span>Selye Somatic Cushion:</span>
-                                <span class="text-emerald-700 dark:text-emerald-400 font-black text-sm">${rx.psDoseMg} mg</span>
+                                <span class="text-[#047857] font-black font-black text-sm">${rx.psDoseMg} mg</span>
                                 <span class="text-slate-500 dark:text-slate-400 font-normal">oral daily post-infusion</span>
                             </div>
                             <div class="text-[10.5px] text-slate-600 dark:text-slate-300 font-sans mt-0.5">
@@ -5440,6 +5465,33 @@ function updateTcgaSurvivalComparison() {
         .medical-input-group input:focus, .medical-input-group select:focus {
             border-color: #0047BB !important;
             box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
+        }
+
+    
+        /* Enforce Hospital White-Gray Nuances in Daylight Mode */
+        body:not(.dark-mode) .hardware-screen,
+        body:not(.dark-mode) #canvasECG,
+        body:not(.dark-mode) .chart-container-card,
+        body:not(.dark-mode) [id*="displayBox"],
+        body:not(.dark-mode) #chartCanvasContainer > div {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:first-child {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:last-child {
+            background-color: #f8fafc !important;
+        }
+
+        body:not(.dark-mode) #tumorTrajectoryCanvas {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #tumorOrganoidCanvas {
+            background-color: #f8fafc !important;
         }
 
     </style></head>
@@ -5952,6 +6004,33 @@ function updateTcgaSurvivalComparison() {
             box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
         }
 
+    
+        /* Enforce Hospital White-Gray Nuances in Daylight Mode */
+        body:not(.dark-mode) .hardware-screen,
+        body:not(.dark-mode) #canvasECG,
+        body:not(.dark-mode) .chart-container-card,
+        body:not(.dark-mode) [id*="displayBox"],
+        body:not(.dark-mode) #chartCanvasContainer > div {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:first-child {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:last-child {
+            background-color: #f8fafc !important;
+        }
+
+        body:not(.dark-mode) #tumorTrajectoryCanvas {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #tumorOrganoidCanvas {
+            background-color: #f8fafc !important;
+        }
+
     </style></head>
                 <body>
                     <h1>OFFICIAL REGULATORY INSPECTION AUDIT PROTCOL (IAL & EMA)</h1>
@@ -6221,6 +6300,33 @@ function updateTcgaSurvivalComparison() {
         .medical-input-group input:focus, .medical-input-group select:focus {
             border-color: #0047BB !important;
             box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.15) !important;
+        }
+
+    
+        /* Enforce Hospital White-Gray Nuances in Daylight Mode */
+        body:not(.dark-mode) .hardware-screen,
+        body:not(.dark-mode) #canvasECG,
+        body:not(.dark-mode) .chart-container-card,
+        body:not(.dark-mode) [id*="displayBox"],
+        body:not(.dark-mode) #chartCanvasContainer > div {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:first-child {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #chartCanvasContainer > div:last-child {
+            background-color: #f8fafc !important;
+        }
+
+        body:not(.dark-mode) #tumorTrajectoryCanvas {
+            background-color: #ffffff !important;
+        }
+
+        body:not(.dark-mode) #tumorOrganoidCanvas {
+            background-color: #f8fafc !important;
         }
 
     </style></head>
@@ -6795,19 +6901,12 @@ function updateTcgaSurvivalComparison() {
             setInterval(checkEdgeServerHealth, 8000);
 
             // Force Daylight Medical as permanent default unless dark mode is explicitly stored
-            const savedTheme = localStorage.getItem('aeterna_medical_theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                document.documentElement.classList.add('dark');
-                const themeIcon = document.getElementById('themeBtnIcon');
-                if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('aeterna_medical_theme', 'daylight');
-                const themeIcon = document.getElementById('themeBtnIcon');
-                if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
-            }
+            // Hospital daylight white-gray mode is the absolute standard
+            document.body.classList.remove('dark-mode');
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('aeterna_medical_theme', 'daylight');
+            const themeIcon = document.getElementById('themeBtnIcon');
+            if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
 
             // Set saved language if any
             const savedLang = localStorage.getItem('aeterna_medical_lang');
@@ -7108,6 +7207,19 @@ function updateTcgaSurvivalComparison() {
             const wf = window.clinicalWorkflow;
             if (wf) clickWorkflowStep(wf.currentActiveStep || 2);
         }
+        window.addEventListener('resize', () => {
+            if (typeof renderTumorTrajectoryChart === 'function') {
+                renderTumorTrajectoryChart(latestSimulationData || getBaselineSimulationData(), getActiveFormPayload());
+            }
+        });
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (typeof renderTumorTrajectoryChart === 'function') {
+                    renderTumorTrajectoryChart(latestSimulationData || getBaselineSimulationData(), getActiveFormPayload());
+                }
+            }, 150);
+        });
+
 </script>
 </body>
 </html>
