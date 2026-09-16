@@ -19,105 +19,167 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
                 <style>
         /* ==========================================================================
-           AETERNA-VHT: SWISS BIOTECH PRECISION (ALPINE PURE & FOREST JADE)
-           Variant 2 Enterprise SaMD Design System (EU MDR Class IIb / IEC 62304)
+           AETERNA-VHT: CLINICAL PRECISION DESIGN SYSTEM v3.0
+           Enterprise SaMD — EU MDR Class IIb / IEC 62304 / ISO 13485
+           Visual Reference: Siemens Healthineers · Philips IntelliSpace · Epic Systems
            ========================================================================== */
-        /* 1. СВЕТЪЛ РЕЖИМ (ALPINE PURE & FOREST JADE: #064e3b, #059669, #ffffff, #f4f6f5) */
+
+        /* ═══════════════════════════════════════════════════════════════════════
+           1. LIGHT MODE — Clinical Daylight (Default)
+           Palette: Sapphire Blue #0047BB · Institutional White #F8FAFD · Clinical Gray #64748B
+           ═══════════════════════════════════════════════════════════════════════ */
         :root, body.daylight-mode {
-            --header-bg: #064e3b;          /* Дълбок алпийски нефрит / Forest Jade */
-            --header-border: #043d2e;
+            /* ── Header: Deep Clinical Sapphire (Institution Grade) ── */
+            --header-bg: linear-gradient(135deg, #00368a 0%, #0047BB 60%, #0052d4 100%);
+            --header-bg-solid: #0047BB;
+            --header-border: #003a9e;
             --header-text: #ffffff;
-            --header-badge: #033628;
+            --header-badge: #002d85;
+            --header-accent: #60a5fa;
 
-            --bg-page: #f4f6f5;            /* Чист платинен фон с 1% топъл нюанс */
-            --bg-main: #f4f6f5;
-            --bg-card: #ffffff;            /* Чисто бели швейцарски работни карти */
-            --bg-subcard: #f0fdf4;         /* Много фина нефритена подложка */
+            /* ── Page & Card Backgrounds: Sterile Clinical White ── */
+            --bg-page: #f0f4f8;              /* Institutional cool gray — hospital corridor */
+            --bg-main: #f0f4f8;
+            --bg-card: #ffffff;              /* Pure white clinical cards */
+            --bg-subcard: #f5f8ff;           /* Sapphire-tinted panel background */
             --bg-input: #ffffff;
-            --bg-input-focus: #ffffff;
+            --bg-input-focus: #f8faff;
 
-            --accent-action: #059669;       /* Изумруден клиничен цвят за бутони */
-            --accent-action-hover: #047857;
-            --accent-border: #a7f3d0;
+            /* ── Primary Action: Clinical Sapphire Blue ── */
+            --accent-action: #0047BB;
+            --accent-action-hover: #003a9e;
+            --accent-border: #bfdbfe;
+            --accent-light: #eff6ff;
 
-            --border-subtle: #e2e8f0;      /* Неутрален деликатен кант */
-            --border-card: #e2e8f0;
-            --border-accent: #cbd5e1;
-            --border-input: #cbd5e1;
+            /* ── Borders: Precise, Hairline Clinical Lines ── */
+            --border-subtle: #e1e8f0;
+            --border-card: #dde5ef;
+            --border-accent: #c7d9f0;
+            --border-input: #c7d9f0;
 
-            --text-main: #0f172a;          /* Висококонтрастно мастилено за заглавия */
-            --text-title: #064e3b;         /* Дълбок алпийски нефрит */
-            --text-body: #0f172a;
-            --text-muted: #475569;         /* Сериозно неутрално сиво за подзаглавия */
+            /* ── Typography: Maximum Readability (Radiology-grade contrast) ── */
+            --text-main: #0d1b2e;            /* Near-black — maximum legibility */
+            --text-title: #0047BB;           /* Clinical sapphire for section headers */
+            --text-body: #1e293b;
+            --text-muted: #4a6080;           /* Medium-blue gray for secondary labels */
+            --text-caption: #64748b;
 
-            --primary-emerald: #059669;
-            --primary-hover: #047857;
-            --kpi-number: #064e3b;         /* Масивни дълбоки нефритени числа */
+            /* ── KPI Numbers: Bold Clinical Data Display ── */
+            --primary-emerald: #0047BB;
+            --primary-hover: #003a9e;
+            --kpi-number: #0d1b2e;           /* High-contrast black for critical values */
 
-            --slider-track: #e2e8f0;
-            --slider-thumb: #059669;
-            --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
-            --shadow-subcard: 0 1px 2px rgba(15, 23, 42, 0.03);
+            /* ── Sliders & Controls ── */
+            --slider-track: #dde5ef;
+            --slider-thumb: #0047BB;
 
-            /* Хардуерни екрани (ЕКГ, 3D органоид, графики - Единен графитен дисплей) */
-            --screen-display-bg: #0f172a;
-            --screen-display-border: #1e293b;
-            --chart-bg: #0f172a;
+            /* ── Shadows: Subtle Depth (Clinical Card Elevation) ── */
+            --shadow-card: 0 1px 4px rgba(0, 71, 187, 0.06), 0 1px 2px rgba(13, 27, 46, 0.04);
+            --shadow-subcard: 0 1px 2px rgba(0, 71, 187, 0.04);
+            --shadow-header: 0 2px 8px rgba(0, 56, 148, 0.18);
 
-            /* Universal Medical Traffic Lights (Зелено, Жълто, Червено) */
+            /* ── Hardware Screens: ECG, Charts — Dark clinical display ── */
+            --screen-display-bg: #060d1a;
+            --screen-display-border: #0f1f3a;
+            --chart-bg: #060d1a;
+
+            /* ══ Medical Traffic Light Semantics (ISO 62366-1 Compliant) ══ */
+            /* GREEN — Normal / Pass / Optimal */
             --status-success-bg: #ecfdf5;
-            --status-success-border: #a7f3d0;
-            --status-success-text: #065f46;
+            --status-success-border: #86efac;
+            --status-success-text: #14532d;
 
+            /* AMBER — Suboptimal / Impaired / Caution */
             --status-warning-bg: #fffbeb;
-            --status-warning-border: #fde68a;
-            --status-warning-text: #92400e;
+            --status-warning-border: #fcd34d;
+            --status-warning-text: #78350f;
 
-            --status-danger-bg: #fef2f2;
-            --status-danger-border: #fecaca;
-            --status-danger-text: #991b1b;
+            /* RED — Critical / Contraindication / Lockout */
+            --status-danger-bg: #fff1f2;
+            --status-danger-border: #fda4af;
+            --status-danger-text: #881337;
+
+            /* BLUE — Informational / Clinical Note */
+            --status-info-bg: #eff6ff;
+            --status-info-border: #93c5fd;
+            --status-info-text: #1e3a8a;
         }
 
-        /* 2. ТЪМЕН РЕЖИМ (ALPINE NIGHT & DEEP FOREST - ВИСОК КЛАС) */
+        /* ═══════════════════════════════════════════════════════════════════════
+           2. DARK MODE — Clinical Night (Midnight Navy — True Hospital Grade)
+           NOT green-tinted. True institutional midnight for night-shift reading.
+           ═══════════════════════════════════════════════════════════════════════ */
         body.dark-mode, html.dark body {
-            --header-bg: #02231b;
-            --header-border: #064e3b;
-            --header-text: #f0fdf4;
-            --header-badge: #011611;
+            /* ── Header: Deep Midnight with Sapphire Accent ── */
+            --header-bg: linear-gradient(135deg, #0a0f1e 0%, #0d1635 60%, #0f1d45 100%);
+            --header-bg-solid: #0d1635;
+            --header-border: #1a2d5a;
+            --header-text: #e2eeff;
+            --header-badge: #07102a;
+            --header-accent: #60a5fa;
 
-            --bg-page: #0b1513;
-            --bg-main: #0b1513;
-            --bg-card: #0f2420;
-            --bg-subcard: #14332c;
-            --bg-input: #0c1f1b;
-            --bg-input-focus: #14332c;
+            /* ── Backgrounds: True Dark Navy (Not Dark Green) ── */
+            --bg-page: #070c18;
+            --bg-main: #070c18;
+            --bg-card: #0c1425;
+            --bg-subcard: #101d38;
+            --bg-input: #08102a;
+            --bg-input-focus: #0f1d3a;
 
-            --accent-action: #10b981;
-            --accent-action-hover: #34d399;
-            --accent-border: #059669;
+            /* ── Action: Bright Sapphire for Dark Backgrounds ── */
+            --accent-action: #3b82f6;
+            --accent-action-hover: #60a5fa;
+            --accent-border: #1d4ed8;
+            --accent-light: #172554;
 
-            --border-subtle: #1b3d35;
-            --border-card: #1b3d35;
-            --border-accent: #26554a;
-            --border-input: #26554a;
+            /* ── Borders: Subtle Dark Navy ── */
+            --border-subtle: #162040;
+            --border-card: #1a2a4a;
+            --border-accent: #243558;
+            --border-input: #243558;
 
-            --text-main: #f0fdf4;
-            --text-title: #34d399;
-            --text-body: #f0fdf4;
-            --text-muted: #94a3b8;
+            /* ── Typography: High Contrast for Night Use ── */
+            --text-main: #e2eeff;
+            --text-title: #93c5fd;           /* Bright sky-blue for section titles at night */
+            --text-body: #c8daee;
+            --text-muted: #7f9bb5;
+            --text-caption: #5e7a98;
 
-            --primary-emerald: #10b981;
-            --primary-hover: #34d399;
-            --kpi-number: #34d399;
+            /* ── KPI Numbers: High-visibility at night ── */
+            --primary-emerald: #3b82f6;
+            --primary-hover: #60a5fa;
+            --kpi-number: #93c5fd;           /* Glowing blue for KPI numbers at night */
 
-            --slider-track: #1b3d35;
-            --slider-thumb: #34d399;
-            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
-            --shadow-subcard: 0 2px 8px rgba(0, 0, 0, 0.3);
+            /* ── Sliders & Controls ── */
+            --slider-track: #162040;
+            --slider-thumb: #3b82f6;
 
-            --screen-display-bg: #07100e;
-            --screen-display-border: #14332c;
-            --chart-bg: #07100e;
+            /* ── Shadows: Night Depth ── */
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.55);
+            --shadow-subcard: 0 2px 10px rgba(0, 0, 0, 0.35);
+            --shadow-header: 0 2px 16px rgba(0, 0, 0, 0.5);
+
+            /* ── Hardware Screens ── */
+            --screen-display-bg: #030710;
+            --screen-display-border: #0a1428;
+            --chart-bg: #030710;
+
+            /* ══ Medical Traffic Lights — Night Mode ══ */
+            --status-success-bg: rgba(20, 83, 45, 0.35);
+            --status-success-border: #16a34a;
+            --status-success-text: #86efac;
+
+            --status-warning-bg: rgba(120, 53, 15, 0.35);
+            --status-warning-border: #d97706;
+            --status-warning-text: #fcd34d;
+
+            --status-danger-bg: rgba(136, 19, 55, 0.35);
+            --status-danger-border: #e11d48;
+            --status-danger-text: #fda4af;
+
+            --status-info-bg: rgba(30, 58, 138, 0.35);
+            --status-info-border: #2563eb;
+            --status-info-text: #93c5fd;
         }
 
         /* 3. ГЛОБАЛНА ТИПОГРАФИЯ - МАСИВНА И БОЛНИЧНО ЧЕТИМА */
@@ -145,12 +207,12 @@
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* ХЕДЪР В FOREST JADE (Елегантен матов финиш) */
+        /* ── HEADER: Clinical Sapphire Institution Grade ── */
         header.clinical-header {
-            background-color: var(--header-bg) !important;
+            background: var(--header-bg) !important;
             border-bottom: 1px solid var(--header-border) !important;
             color: var(--header-text) !important;
-            box-shadow: 0 2px 8px rgba(6, 78, 59, 0.15) !important;
+            box-shadow: var(--shadow-header) !important;
         }
 
         /* ПАЦИЕНТСКИ БАНЕР (Alpine Pure Slate & White) */
@@ -308,12 +370,13 @@
             background: var(--bg-subcard) !important;
             border-color: var(--border-card) !important;
             color: var(--text-body) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
         }
-        .chip-patient-id { border-left: 3.5px solid #0284c7 !important; }
+        .chip-patient-id { border-left: 3.5px solid #0047BB !important; }
         .chip-bsa, .chip-gfr { border-left: 3.5px solid #059669 !important; }
-        .chip-driver { border-left: 3.5px solid #8b5cf6 !important; }
+        .chip-driver { border-left: 3.5px solid #7c3aed !important; }
         body.dark-mode .chip-driver,
-        html.dark .chip-driver { border-left: 3.5px solid #2dd4bf !important; }
+        html.dark .chip-driver { border-left: 3.5px solid #818cf8 !important; }
 
         body.dark-mode .patient-badge-chip strong,
         html.dark .patient-badge-chip strong {
@@ -325,47 +388,47 @@
         }
         body.dark-mode #bannerApoE,
         html.dark #bannerApoE {
-            color: #fde68a !important; /* Soft Amber */
+            color: #fcd34d !important; /* Amber — Clinical Caution */
         }
         body.dark-mode #bannerBSA,
         body.dark-mode #bannerGFR,
         html.dark #bannerBSA,
         html.dark #bannerGFR {
-            color: #34d399 !important; /* Neon Mint */
+            color: #4ade80 !important; /* Fresh Green — Normal Values */
         }
         body.dark-mode #bannerPatientId,
         html.dark #bannerPatientId {
-            color: #38bdf8 !important; /* Luminous Sky */
+            color: #93c5fd !important; /* Sapphire Blue — Patient ID */
         }
         body.dark-mode #bannerGene,
         html.dark #bannerGene {
-            color: #5eead4 !important; /* Aquamarine */
+            color: #a5b4fc !important; /* Indigo — Genomic Marker */
         }
 
-        /* Главен бутон за симулация - Swiss Biotech Solid Emerald Action */
+        /* ── Primary Action Button: Clinical Sapphire (IEC 62366-1 Affordance) ── */
         #btnSimulateAction, #btnRunSimulation, .btn-primary-action {
-            background: var(--accent-action) !important;
+            background: linear-gradient(135deg, #0047BB 0%, #0052d4 100%) !important;
             color: #ffffff !important;
-            font-size: 14.5px !important;
-            font-weight: 800 !important;
-            letter-spacing: 0.03em !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.025em !important;
             border: none !important;
-            border-radius: 8px !important;
-            padding: 12px 18px !important;
-            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25) !important;
+            border-radius: 7px !important;
+            padding: 11px 18px !important;
+            box-shadow: 0 2px 6px rgba(0, 71, 187, 0.28) !important;
             cursor: pointer;
-            transition: all 0.18s ease;
+            transition: all 0.16s ease;
         }
         #btnSimulateAction:hover, #btnRunSimulation:hover, .btn-primary-action:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35) !important;
-            background: var(--accent-action-hover) !important;
+            box-shadow: 0 4px 14px rgba(0, 71, 187, 0.38) !important;
+            background: linear-gradient(135deg, #003a9e 0%, #0047BB 100%) !important;
         }
         body.dark-mode #btnSimulateAction,
         html.dark #btnSimulateAction {
-            background: var(--accent-action) !important;
-            color: #07100e !important;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35) !important;
         }
 
         /* Active Navigation Tab Style (Swiss Biotech Precision) */
@@ -390,10 +453,10 @@
             border-color: var(--accent-border);
         }
         .role-nav-tab.active-tab {
-            background: var(--header-bg) !important;
+            background: var(--header-bg-solid) !important;
             color: #ffffff !important;
             border-color: var(--header-border) !important;
-            box-shadow: 0 1px 3px rgba(6, 78, 59, 0.2);
+            box-shadow: 0 1px 4px rgba(0, 71, 187, 0.25);
         }
         body.dark-mode .role-nav-tab,
         html.dark .role-nav-tab {
@@ -404,9 +467,9 @@
         body.dark-mode .role-nav-tab.active-tab,
         html.dark .role-nav-tab.active-tab {
             background: var(--accent-action) !important;
-            color: #07100e !important;
+            color: #ffffff !important;
             border-color: var(--accent-border) !important;
-            box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 1px 4px rgba(59, 130, 246, 0.35);
         }
 
         /* Уеднаквяване на тъмните хардуерни прозорци (ЕКГ, 3D органоид, графики) */
@@ -430,14 +493,14 @@
         }
         body.dark-mode .status-correct, html.dark .status-correct,
         body.dark-mode .bg-\[\#ecfdf5\], html.dark .bg-\[\#ecfdf5\] {
-            background-color: rgba(6, 78, 59, 0.45) !important;
-            border-color: #10b981 !important;
+            background-color: var(--status-success-bg) !important;
+            border-color: var(--status-success-border) !important;
         }
         body.dark-mode .text-\[\#065f46\], html.dark .text-\[\#065f46\] {
-            color: #a7f3d0 !important;
+            color: var(--status-success-text) !important;
         }
 
-        /* 2. YELLOW / AMBER (WARNING / CAUTION / IMPAIRED) */
+        /* 2. AMBER — Warning / Impaired */
         .status-warning, .gate-warning {
             background: var(--status-warning-bg) !important;
             border: 1px solid var(--status-warning-border) !important;
@@ -445,14 +508,14 @@
         }
         body.dark-mode .status-warning, html.dark .status-warning,
         body.dark-mode .bg-\[\#fffbeb\], html.dark .bg-\[\#fffbeb\] {
-            background-color: rgba(120, 53, 15, 0.45) !important;
-            border-color: #f59e0b !important;
+            background-color: var(--status-warning-bg) !important;
+            border-color: var(--status-warning-border) !important;
         }
         body.dark-mode .text-\[\#92400e\], html.dark .text-\[\#92400e\] {
-            color: #fde68a !important;
+            color: var(--status-warning-text) !important;
         }
 
-        /* 3. RED (CRITICAL CONTRAINDICATION / ERROR / LOCKOUT) */
+        /* 3. RED — Critical / Lockout */
         .status-danger, .status-error, .gate-danger {
             background: var(--status-danger-bg) !important;
             border: 1px solid var(--status-danger-border) !important;
@@ -460,28 +523,28 @@
         }
         body.dark-mode .status-danger, html.dark .status-danger,
         body.dark-mode .bg-\[\#fef2f2\], html.dark .bg-\[\#fef2f2\] {
-            background-color: rgba(153, 27, 27, 0.45) !important;
-            border-color: #ef4444 !important;
+            background-color: var(--status-danger-bg) !important;
+            border-color: var(--status-danger-border) !important;
         }
         body.dark-mode .text-\[\#991b1b\], html.dark .text-\[\#991b1b\] {
-            color: #fca5a5 !important;
+            color: var(--status-danger-text) !important;
         }
 
-        /* High-Contrast Badges & Text in Dark Mode */
+        /* High-Contrast Badges — Night Mode */
         body.dark-mode .bg-\[\#d1fae5\], html.dark .bg-\[\#d1fae5\] {
-            background-color: rgba(6, 78, 59, 0.7) !important;
-            border-color: #10b981 !important;
-            color: #a7f3d0 !important;
+            background-color: var(--status-success-bg) !important;
+            border-color: var(--status-success-border) !important;
+            color: var(--status-success-text) !important;
         }
         body.dark-mode .bg-\[\#fef3c7\], html.dark .bg-\[\#fef3c7\] {
-            background-color: rgba(120, 53, 15, 0.7) !important;
-            border-color: #f59e0b !important;
-            color: #fde68a !important;
+            background-color: var(--status-warning-bg) !important;
+            border-color: var(--status-warning-border) !important;
+            color: var(--status-warning-text) !important;
         }
         body.dark-mode .bg-\[\#fee2e2\], html.dark .bg-\[\#fee2e2\] {
-            background-color: rgba(153, 27, 27, 0.7) !important;
-            border-color: #ef4444 !important;
-            color: #fca5a5 !important;
+            background-color: var(--status-danger-bg) !important;
+            border-color: var(--status-danger-border) !important;
+            color: var(--status-danger-text) !important;
         }
 
         /* Universal Dark Mode Text Legibility */
@@ -495,44 +558,44 @@
         html.dark .text-slate-700,
         html.dark .text-\[\#0f172a\],
         html.dark .text-\[\#0f2d27\] {
-            color: #f0fdf4 !important;
+            color: var(--text-main) !important;
         }
         body.dark-mode .text-slate-600,
         body.dark-mode .text-slate-500,
         html.dark .text-slate-600,
         html.dark .text-slate-500 {
-            color: #94a3b8 !important;
+            color: var(--text-muted) !important;
         }
         body.dark-mode .border-slate-200,
         body.dark-mode .border-slate-300,
         html.dark .border-slate-200,
         html.dark .border-slate-300 {
-            border-color: #164e52 !important;
+            border-color: var(--border-card) !important;
         }
         body.dark-mode .bg-slate-50,
         html.dark .bg-slate-50 {
-            background-color: #08282e !important;
-            color: #f0fdf4 !important;
+            background-color: var(--bg-subcard) !important;
+            color: var(--text-main) !important;
         }
         body.dark-mode .bg-white,
         html.dark .bg-white {
-            background-color: #0b2327 !important;
-            color: #f0fdf4 !important;
+            background-color: var(--bg-card) !important;
+            color: var(--text-main) !important;
         }
 
         /* Medical Scrollbars */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #bbf0e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #527970; }
+        ::-webkit-scrollbar-thumb { background: #c7d9f0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #93b4d8; }
         body.dark-mode ::-webkit-scrollbar-thumb,
-        html.dark ::-webkit-scrollbar-thumb { background: #164e52; }
+        html.dark ::-webkit-scrollbar-thumb { background: #1a2d5a; }
         body.dark-mode ::-webkit-scrollbar-thumb:hover,
-        html.dark ::-webkit-scrollbar-thumb:hover { background: #2dd4bf; }
+        html.dark ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
 
         /* Dialog & Modal */
         .medical-dialog-overlay {
-            background: rgba(4, 19, 22, 0.65);
+            background: rgba(7, 12, 24, 0.70);
             backdrop-filter: blur(4px);
         }
 
@@ -597,15 +660,15 @@
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background: #e6f7f2;
-            color: #064e43;
+            background: #eff6ff;
+            color: #0047BB;
             font-size: 10px;
             font-weight: 800;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             cursor: help;
             position: relative;
             margin-left: 5px;
-            border: 1px solid #bbf0e1;
+            border: 1px solid #bfdbfe;
             vertical-align: middle;
             line-height: 1;
             user-select: none;
@@ -613,36 +676,36 @@
             transition: all 0.15s ease;
         }
         .tip-icon:hover {
-            background: #42d6a4;
-            color: #062c24;
-            border-color: #065f46;
+            background: #0047BB;
+            color: #ffffff;
+            border-color: #003a9e;
             transform: scale(1.1);
         }
         html.dark .tip-icon,
         body.dark-mode .tip-icon {
-            background: #08282e;
-            color: #42d6a4;
-            border-color: #115e59;
+            background: #0f1d45;
+            color: #93c5fd;
+            border-color: #1d4ed8;
         }
         html.dark .tip-icon:hover,
         body.dark-mode .tip-icon:hover {
-            background: #10b981;
-            color: #022c22;
+            background: #3b82f6;
+            color: #ffffff;
         }
-        /* Global High-Z-Index Floating Clinical Tooltip (Zero Clipping, Above All Windows & Cards) */
+        /* Global High-Z-Index Floating Clinical Tooltip (EU AI Act Art. 13) */
         #clinicalGlobalTooltip {
             position: fixed;
             z-index: 99999999;
             width: 280px;
-            background: #0f2d27;
-            color: #ffffff;
+            background: #0d1b2e;
+            color: #e2eeff;
             padding: 10px 13px;
             border-radius: 9px;
             font-size: 11.5px;
             font-weight: 400;
             line-height: 1.45;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-            border: 1px solid #42d6a4;
+            border: 1px solid #3b82f6;
             pointer-events: none;
             white-space: normal;
             text-align: left;
@@ -661,28 +724,28 @@
             top: 100%;
             left: var(--arrow-pos, 50%);
             transform: translateX(-50%);
-            border-color: #0f2d27 transparent transparent transparent;
+            border-color: #0d1b2e transparent transparent transparent;
         }
         /* When tooltip is BELOW the target, arrow points up */
         #clinicalGlobalTooltip.arrow-up::after {
             bottom: 100%;
             left: var(--arrow-pos, 50%);
             transform: translateX(-50%);
-            border-color: transparent transparent #0f2d27 transparent;
+            border-color: transparent transparent #0d1b2e transparent;
         }
         html.dark #clinicalGlobalTooltip,
         body.dark-mode #clinicalGlobalTooltip {
-            background: #06231e;
-            border-color: #2dd4bf;
+            background: #07102a;
+            border-color: #3b82f6;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
         }
         html.dark #clinicalGlobalTooltip.arrow-down::after,
         body.dark-mode #clinicalGlobalTooltip.arrow-down::after {
-            border-color: #06231e transparent transparent transparent;
+            border-color: #07102a transparent transparent transparent;
         }
         html.dark #clinicalGlobalTooltip.arrow-up::after,
         body.dark-mode #clinicalGlobalTooltip.arrow-up::after {
-            border-color: transparent transparent #06231e transparent;
+            border-color: transparent transparent #07102a transparent;
         }
 
         /* ═════════════════════════════════════════════════════════════════════
@@ -1269,28 +1332,28 @@
         }
         body.dark-mode .col-section-header h2,
         html.dark .col-section-header h2 {
-            color: #a7f3d0 !important;
+            color: #93c5fd !important;
         }
         body.dark-mode .col-section-header,
         html.dark .col-section-header {
-            border-bottom-color: #1b3d35 !important;
+            border-bottom-color: #1a2d5a !important;
         }
         .col-section-badge {
             font-size: 9px !important;
             font-family: 'JetBrains Mono', monospace !important;
             font-weight: 700 !important;
-            color: #047857;
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
+            color: #0047BB;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
             padding: 2px 6px;
             border-radius: 5px;
             letter-spacing: 0.02em;
         }
         body.dark-mode .col-section-badge,
         html.dark .col-section-badge {
-            color: #34d399 !important;
-            background: #14332c !important;
-            border-color: #26554a !important;
+            color: #93c5fd !important;
+            background: #172554 !important;
+            border-color: #1d4ed8 !important;
         }
 
         /* ── TCGA Cohort Bar: Compact Clinical Selector Strip ─────────────────── */
@@ -1368,12 +1431,12 @@
         #resPredictedSurvival {
             font-size: 28px !important;
             letter-spacing: -0.03em !important;
-            color: #064e3b !important;
+            color: #0d1b2e !important;
             line-height: 1.05 !important;
         }
         body.dark-mode #resPredictedSurvival,
         html.dark #resPredictedSurvival {
-            color: #34d399 !important;
+            color: #93c5fd !important;
         }
 
         /* ── FHIR R4 / OMOP Export buttons: clean medical row ────────────────── */
