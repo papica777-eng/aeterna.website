@@ -3071,7 +3071,7 @@
                         <div class="grid grid-cols-4 gap-2 pt-1 text-center">
                             <div class="p-1.5 bg-white rounded-lg border border-slate-300 shadow-xs">
                                 <div class="text-[10px] text-slate-600 font-bold uppercase">Patient Name</div>
-                                <div class="font-extrabold text-[#0f172a] text-xs">Dimitar Prodromov</div>
+                                <div id="bedsidePatientName" class="font-extrabold text-[#0f172a] text-xs">Dimitar Prodromov</div>
                             </div>
                             <div class="p-1.5 bg-white rounded-lg border border-slate-300 shadow-xs">
                                 <div class="text-[10px] text-slate-600 font-bold uppercase">Blood Group</div>
@@ -3113,7 +3113,7 @@
                                             <span class="text-slate-600 font-bold">Matched Identity:</span>
                                             <span class="font-bold text-[#047857] flex items-center gap-1.5">
                                                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                <span>Dimitar Prodromov (A Rh+)</span>
+                                                <span id="bedsideMatchedIdentity">Dimitar Prodromov (A Rh+)</span>
                                             </span>
                                         </div>
                                         <div class="flex items-center justify-between text-[10.5px] text-slate-600 pt-1 border-t border-slate-200">
@@ -3132,7 +3132,7 @@
                                 </div>
                                 
                                 <div class="flex gap-2 pt-2.5 mt-2 border-t border-slate-200">
-                                    <button type="button" onclick="setBedsideWristband('PT-2026-8890')" class="flex-1 py-2 px-2 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-[#0047BB] border border-blue-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
+                                    <button type="button" id="btnLoadValidWristband" onclick="setBedsideWristband('PT-2026-8890')" class="flex-1 py-2 px-2 text-xs font-bold bg-blue-50 hover:bg-blue-100 text-[#0047BB] border border-blue-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
                                         Load Valid PT-2026-8890
                                     </button>
                                     <button type="button" onclick="setBedsideWristband('PT-WRONG-PATIENT-9999')" class="flex-1 py-2 px-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg transition-colors cursor-pointer text-center shadow-xs">
@@ -3889,8 +3889,28 @@
                 statusBadge.innerText = 'STANDBY';
                 statusBadge.className = 'text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded';
             }
-            if (wristInput && newPid) {
-                wristInput.value = newPid;
+            if (newPid) {
+                if (wristInput) wristInput.value = newPid;
+                const tag = document.getElementById('wristbandActiveTag');
+                if (tag) tag.textContent = newPid;
+                const btnLoad = document.getElementById('btnLoadValidWristband');
+                if (btnLoad) {
+                    btnLoad.innerText = `Load Valid ${newPid}`;
+                    btnLoad.setAttribute('onclick', `setBedsideWristband('${newPid}')`);
+                }
+                const nameDisplay = document.getElementById('bedsidePatientName');
+                const matchDisplay = document.getElementById('bedsideMatchedIdentity');
+                if (window.currentActiveTcgaSample && window.currentActiveTcgaSample.case_id === newPid) {
+                    const stage = window.currentActiveTcgaSample.clinical_stage || 'Stage II';
+                    if (nameDisplay) nameDisplay.innerText = `${newPid} (${stage})`;
+                    if (matchDisplay) matchDisplay.innerText = `${newPid} (${stage} • A Rh+)`;
+                } else if (newPid === 'PT-2026-8890') {
+                    if (nameDisplay) nameDisplay.innerText = 'Dimitar Prodromov';
+                    if (matchDisplay) matchDisplay.innerText = 'Dimitar Prodromov (A Rh+)';
+                } else {
+                    if (nameDisplay) nameDisplay.innerText = newPid;
+                    if (matchDisplay) matchDisplay.innerText = `${newPid} (A Rh+)`;
+                }
             }
         }
 
@@ -6134,6 +6154,10 @@ function updateTcgaSurvivalComparison() {
         }
 
         function setBedsideWristband(pid) {
+            if (!pid) {
+                const rx = getCalculatedPrescription();
+                pid = rx.patientId || 'PT-2026-8890';
+            }
             const w = document.getElementById('bedsideWristbandInput');
             if (w) w.value = pid;
             const tag = document.getElementById('wristbandActiveTag');
