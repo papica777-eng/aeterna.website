@@ -151,7 +151,7 @@
         <!-- Physical Chip Package Preview & Real-World Silicon Model -->
         <div class="my-8 max-w-4xl mx-auto glass-panel p-4 sm:p-5 rounded-2xl border border-cyan-400/30 flex flex-col md:flex-row items-center gap-6 shadow-[0_0_35px_rgba(0,240,255,0.15)] text-left">
             <div onclick="openChipModal()" class="relative w-full md:w-72 sm:h-44 h-40 flex-shrink-0 rounded-xl overflow-hidden border border-cyan-400/50 shadow-inner group cursor-pointer hover:border-cyan-400 transition-all hover:shadow-[0_0_25px_rgba(0,240,255,0.4)]">
-                <img src="assets/aeterna_chip_physical.jpg" alt="AETERNA Metamorphic Physical Silicon ASIC Chip" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                <img src="assets/aeterna_chip_physical.jpg" alt="AETERNA Metamorphic Full-Die Floorplan and 300mm Wafer Map" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                 <div class="absolute inset-0 bg-cyan-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity backdrop-blur-[2px]">
                     <span class="px-3 py-1.5 bg-cyan-400 text-black font-mono font-black text-xs rounded-lg shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -161,19 +161,19 @@
                 </div>
                 <div class="absolute bottom-2 left-2.5 flex items-center gap-1.5 font-mono text-[9px] text-cyan-300 font-bold bg-black/70 px-2 py-0.5 rounded border border-cyan-500/30">
                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
-                    <span data-lang-key="chip_pkg_badge">PHYSICAL BGA PACKAGE</span>
+                    <span data-lang-key="chip_pkg_badge">300mm WAFER & GDSII FLOORPLAN</span>
                 </div>
             </div>
             <div class="flex-1">
                 <div class="flex items-center gap-2 mb-1">
-                    <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[9px] font-mono font-bold uppercase tracking-wider" data-lang-key="chip_status_badge">TRL-7 Verified Silicon Prototype</span>
-                    <span class="text-xs font-mono text-gray-400" data-lang-key="chip_fab_node">| SkyWater 130nm / TSMC 28nm Tapeout</span>
+                    <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 text-[9px] font-mono font-bold uppercase tracking-wider" data-lang-key="chip_status_badge">TRL-7 Tapeout-Ready Engineering Layout</span>
+                    <span class="text-xs font-mono text-gray-400" data-lang-key="chip_fab_node">| TSMC 28nm / SkyWater 130nm (300mm Wafer)</span>
                 </div>
                 <h3 class="text-lg sm:text-xl font-black text-white uppercase tracking-tight flex items-center gap-2" data-lang-key="chip_model_title">
-                    <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i> AETERNA Metamorphic Silicon Processor
+                    <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i> AETERNA Metamorphic Full-Die & Wafer Layout
                 </h3>
                 <p class="text-xs sm:text-sm text-gray-300 leading-relaxed mt-1 font-normal" data-lang-key="chip_model_desc">
-                    Custom monolithic BGA/LGA package featuring dark obsidian heat spreader, gold laser-etched Catuṣkoṭi quantum-logic registers, and photonic interconnects for zero-entropy hardware execution.
+                    Production-grade 300mm wafer map and cycle-accurate GDSII layered topology (FEOL/BEOL Metal 1-4, Poly) integrating 512-bit SIMD vector core, Catuṣkoṭi 4-state quantum-logic ALU, and SRAM cache arrays for zero-entropy hardware execution.
                 </p>
                 <div class="flex flex-wrap items-center gap-3 mt-3 font-mono text-[10px] text-gray-400">
                     <span class="text-emerald-400 font-bold flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> <span data-lang-key="chip_feat_1">512-Bit Vector SIMD</span></span>
@@ -543,19 +543,19 @@
         const i18n = {
             en: {
                 nav_silicon: "SILICON DIE",
-                chip_pkg_badge: "PHYSICAL BGA PACKAGE",
-                chip_status_badge: "TRL-7 Verified Silicon Prototype",
-                chip_fab_node: "| SkyWater 130nm / TSMC 28nm Tapeout",
-                chip_model_title: '<i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i> AETERNA Metamorphic Silicon Processor',
-                chip_model_desc: "Custom monolithic BGA/LGA package featuring dark obsidian heat spreader, gold laser-etched Catuṣkoṭi quantum-logic registers, and photonic interconnects for zero-entropy hardware execution.",
+                chip_pkg_badge: "300mm WAFER & GDSII FLOORPLAN",
+                chip_status_badge: "TRL-7 Tapeout-Ready Engineering Layout",
+                chip_fab_node: "| TSMC 28nm / SkyWater 130nm (300mm Wafer)",
+                chip_model_title: '<i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i> AETERNA Metamorphic Full-Die & Wafer Layout',
+                chip_model_desc: "Production-grade 300mm wafer map and cycle-accurate GDSII layered topology (FEOL/BEOL Metal 1-4, Poly) integrating 512-bit SIMD vector core, Catuṣkoṭi 4-state quantum-logic ALU, and SRAM cache arrays for zero-entropy hardware execution.",
                 chip_feat_1: "512-Bit Vector SIMD",
                 chip_feat_2: "Zero-Entropy Hardware",
                 chip_feat_3: "O(1) Reconfiguration",
                 chip_zoom_click: "CLICK TO ENLARGE (HD)",
-                modal_subtitle: "Macro Photography // Monolithic BGA Package with Laser-Etched Quantum Registers",
-                modal_chip_zoom_badge: "4K MACRO INSPECTION // 512-BIT VECTOR ASIC V2",
-                modal_stat_pkg: "Package Type",
-                modal_stat_alu: "ALU Architecture",
+                modal_subtitle: "Full-Die Engineering Floorplan // GDSII Layered View (M1-M4) & 300mm Wafer Map",
+                modal_chip_zoom_badge: "300mm WAFER MAP & GDSII DIE TOPOLOGY // 512-BIT VECTOR ASIC V2",
+                modal_stat_pkg: "Wafer / Substrate",
+                modal_stat_alu: "GDSII Layers",
                 modal_stat_vector: "Vector Pipeline",
                 modal_stat_sec: "Hardware Safety",
 
@@ -582,19 +582,19 @@
             },
             bg: {
                 nav_silicon: "СИЛИЦИЕВ КРИСТАЛ",
-                chip_pkg_badge: "ФИЗИЧЕСКИ BGA КОРПУС",
-                chip_status_badge: "TRL-7 Верифициран Силициев Прототип",
-                chip_fab_node: "| SkyWater 130nm / TSMC 28nm Фабрикация",
-                chip_model_title: '<i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i> AETERNA Метаморфен Силициев Процесор',
-                chip_model_desc: "Монолитен BGA/LGA корпус с тъмен метален радиатор, златно лазерно гравиране на 4-значните Catuṣkoṭi квантови регистри и фотонни шини за безентропийно хардуерно изпълнение.",
+                chip_pkg_badge: "300mm ПЛАСТИНА & GDSII ТОПОЛОГИЯ",
+                chip_status_badge: "TRL-7 Готова за Tapeout Инженерна Топология",
+                chip_fab_node: "| TSMC 28nm / SkyWater 130nm (300mm Пластина)",
+                chip_model_title: '<i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i> AETERNA Метаморфна Силициева Пластина & GDSII Топология',
+                chip_model_desc: "Инженерна карта на 300mm (12-инчова) силициева пластина и многослойна GDSII топология (FEOL/BEOL Метал 1-4, Poly) с интегрирано 512-битово SIMD векторно ядро, 4-значно Catuṣkoṭi квантово ALU и SRAM кеш матрици за нулево-ентропийно изпълнение.",
                 chip_feat_1: "512-битов SIMD Вектор",
                 chip_feat_2: "Хардуер с Нулева Ентропия",
                 chip_feat_3: "O(1) Преконфигурация",
                 chip_zoom_click: "КЛИК ЗА УВЕЛИЧЕНИЕ (HD)",
-                modal_subtitle: "Макро Заснемане // Монолитен BGA Корпус с Лазерно Гравирани Квантови Регистри",
-                modal_chip_zoom_badge: "4K МАКРО ИНСПЕКЦИЯ // 512-BIT VECTOR ASIC V2",
-                modal_stat_pkg: "Тип Корпус",
-                modal_stat_alu: "ALU Архитектура",
+                modal_subtitle: "Пълен Инженерен План на Кристала // GDSII Многослоен Изглед (M1-M4) & 300mm Силициева Пластина",
+                modal_chip_zoom_badge: "300mm СИЛИЦИЕВА ПЛАСТИНА & GDSII ТОПОЛОГИЯ // 512-BIT VECTOR ASIC V2",
+                modal_stat_pkg: "Пластина / Субстрат",
+                modal_stat_alu: "GDSII Слоеве",
                 modal_stat_vector: "Векторен Конвейер",
                 modal_stat_sec: "Хардуерна Защита",
 
@@ -822,10 +822,10 @@
 
             <!-- Full Resolution Image with High-Tech Viewport -->
             <div class="relative rounded-xl overflow-hidden border border-cyan-400/40 shadow-2xl bg-black group max-h-[65vh] flex items-center justify-center">
-                <img src="assets/aeterna_chip_physical.jpg" alt="AETERNA Metamorphic High Resolution Silicon Chip" class="w-full h-full object-contain max-h-[65vh] transition-transform duration-500 group-hover:scale-105">
+                <img src="assets/aeterna_chip_physical.jpg" alt="AETERNA Metamorphic Full-Die Floorplan and 300mm Wafer Map" class="w-full h-full object-contain max-h-[65vh] transition-transform duration-500 group-hover:scale-105">
                 <div class="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-cyan-500/30 font-mono text-[10px] text-cyan-300 flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                    <span data-lang-key="modal_chip_zoom_badge">4K MACRO INSPECTION // 512-BIT VECTOR ASIC V2</span>
+                    <span data-lang-key="modal_chip_zoom_badge">300mm WAFER MAP & GDSII DIE TOPOLOGY // 512-BIT VECTOR ASIC V2</span>
                 </div>
                 <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 font-mono text-[10px] text-gray-300">
                     TSMC 28nm / SkyWater 130nm • Tapeout 2026
@@ -835,12 +835,12 @@
             <!-- Modal Specs Footer -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
                 <div class="p-3 bg-cyan-950/40 border border-cyan-500/30 rounded-xl">
-                    <div class="text-[10px] text-gray-500 uppercase" data-lang-key="modal_stat_pkg">Package Type</div>
-                    <div class="font-black text-cyan-400">BGA / LGA Socket</div>
+                    <div class="text-[10px] text-gray-500 uppercase" data-lang-key="modal_stat_pkg">Wafer / Substrate</div>
+                    <div class="font-black text-cyan-400">300mm (12") Wafer</div>
                 </div>
                 <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-xl">
-                    <div class="text-[10px] text-gray-500 uppercase" data-lang-key="modal_stat_alu">ALU Architecture</div>
-                    <div class="font-black text-emerald-400">Catuṣkoṭi 4-State</div>
+                    <div class="text-[10px] text-gray-500 uppercase" data-lang-key="modal_stat_alu">GDSII Layers</div>
+                    <div class="font-black text-emerald-400">FEOL/BEOL M1-M4</div>
                 </div>
                 <div class="p-3 bg-purple-950/40 border border-purple-500/30 rounded-xl">
                     <div class="text-[10px] text-gray-500 uppercase" data-lang-key="modal_stat_vector">Vector Pipeline</div>
