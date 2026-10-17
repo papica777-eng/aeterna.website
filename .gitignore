@@ -71,3 +71,7 @@ __pycache__/
 !assets/*.jpg
 !assets/**/*.jpg
 audit_results.json
+
+# Confidential Discovery Dossiers
+*AETERNA_DISCOVERY_DOSSIER*
+
