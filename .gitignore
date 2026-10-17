@@ -17,6 +17,7 @@ build/
 .backup_rollback/
 
 # Proprietary Biophysical Modules & Soul Manifolds (NEVER PUSH TO GIT)
+# Proprietary Biophysical Modules & Soul Manifolds (NEVER PUSH TO GIT)
 *.soul
 soul/
 soul/**
@@ -27,43 +28,42 @@ zig/
 gleam/
 *.gleam
 rust_core/
-core-engine/target/
-target/
-hospital-tauri-client/src-tauri/target/
-hospital-tauri-client/dist/
+
+# Zero Code Standard: Pure Static Web Only (No backend / native code / scripts / test suites)
 backend/
-backend/.env
-backend/secrets/
-tests/test_extended_physiology.py
+backend/**
+core-engine/
+core-engine/**
+hospital-tauri-client/
+hospital-tauri-client/**
+eic/
+eic/**
+tests/
+tests/**
+scripts/
+scripts/**
+playwright-report/
+test-results/
 
-# Scratch testing and patch scripts
-scripts/*.py
-scripts/*.cjs
-apply_*.py
-check_*.py
-find_*.py
-inspect_*.py
-patch_*.py
-print_*.py
-test_*.py
-tune_*.py
-make_*.py
-build_*.py
-capture_*.py
-clean_*.py
-diagnose_*.py
-expand_*.py
-fine_tune_*.py
-fix_*.py
-generate_*.py
-promote_*.py
-remove_*.py
-reproduce_*.py
-search_*.py
-update_compact_bar.py
-upgrade_middle_and_first_diagrams.py
+# Scripting and compiled extensions
+*.py
+*.pyc
+*.rs
+*.zig
+*.cu
+*.comp
+*.spv
+*.c
+*.cpp
+*.h
+*.ps1
+*.bat
+*.vbs
+*.ts
+*.conf
+__pycache__/
 
-# Scratch screenshots in root
+# Scratch testing and screenshots
 *.png
 !assets/*.png
 !assets/**/*.png
@@ -71,5 +71,3 @@ upgrade_middle_and_first_diagrams.py
 !assets/*.jpg
 !assets/**/*.jpg
 audit_results.json
-__pycache__/
-*.pyc

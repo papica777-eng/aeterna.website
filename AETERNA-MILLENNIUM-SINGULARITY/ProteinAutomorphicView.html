@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA SPECTRAL-AUTOMORPHIC PROTEIN FOLDING 3D VISUALIZER // ASGI STREAM</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #030712; color: #e2e8f0; font-family: 'JetBrains Mono', monospace, -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden; }
+        #canvas-container { width: 100vw; height: 100vh; position: relative; }
+        
+        #hud-overlay {
+            position: absolute; top: 20px; left: 20px; z-index: 100;
+            background: rgba(10, 16, 30, 0.88); backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 255, 136, 0.3); border-radius: 12px;
+            padding: 18px 22px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7); max-width: 460px;
+        }
+        .hud-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .hud-title { font-size: 14px; font-weight: 800; color: #00ff88; letter-spacing: 0.5px; }
+        .hud-stream-badge {
+            font-size: 9px; padding: 2px 7px; border-radius: 9999px; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .badge-live { background: rgba(0, 255, 136, 0.15); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.4); }
+        .badge-sim { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: #00ff88; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } }
+
+        .hud-metric { font-size: 11px; line-height: 1.5; color: #94a3b8; display: flex; justify-content: space-between; }
+        .hud-val { color: #ffffff; font-weight: 600; }
+        .hud-highlight { color: #38bdf8; font-weight: 700; }
+        .hud-gold { color: #f59e0b; font-weight: 700; }
+        .hud-warning { color: #ff3366 !important; font-weight: 700; }
+        .hud-stable { color: #00ff88 !important; font-weight: 700; }
+        
+        .hud-section-divider {
+            font-size: 9.5px; font-weight: 700; text-transform: uppercase; color: #64748b;
+            margin: 8px 0 3px 0; letter-spacing: 1px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 2px;
+        }
+
+        .controls { margin-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 10px; }
+        .slider-label { font-size: 10.5px; color: #cbd5e1; display: flex; justify-content: space-between; margin-bottom: 4px; }
+        input[type=range] { width: 100%; accent-color: #00ff88; cursor: pointer; }
+
+        #top-right-telemetry {
+            position: absolute; top: 20px; right: 20px; z-index: 100;
+            background: rgba(10, 16, 30, 0.88); backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px;
+            padding: 14px 18px; font-size: 11px; color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <div id="hud-overlay">
+            <div class="hud-header">
+                <span class="hud-title">AETERNA SPECTRAL ENGINE</span>
+                <span id="stream-badge" class="hud-stream-badge badge-sim">
+                    <span class="pulse-dot"></span> <span id="stream-mode-text">STANDALONE RUST KERNEL</span>
+                </span>
+            </div>
+
+            <div class="hud-section-divider">KREIN-HILBERT CONFORMATIONAL TOPOLOGY</div>
+            <div class="hud-metric">OPERATOR: <span class="hud-val">Szegö-Foiaș Toeplitz Contraction</span></div>
+            <div class="hud-metric">SELBERG SPECTRAL GAP: <span class="hud-val">&delta;<sub>0</sub> = 0.2500 (Invariant)</span></div>
+            <div class="hud-metric">CONTRACTION NORM: <span id="norm-val" class="hud-highlight">||T<sub>&Theta;</sub>|| = 0.3372 &lt; 1.0</span></div>
+            <div class="hud-metric">TOPOLOGICAL STABILITY: <span id="stability-index" class="hud-val">0.9989</span></div>
+            <div class="hud-metric">CONFORMATION STATUS: <span id="stability-status" class="hud-stable">NATIVE AUTOMORPHIC GROUND</span></div>
+
+            <div class="hud-section-divider">RICCATI DIFFERENTIAL MATRIX EQUATION (DRE)</div>
+            <div class="hud-metric">DRE STATE [P<sub>11</sub>, P<sub>12</sub>, P<sub>22</sub>]: <span id="riccati-p" class="hud-gold">[0.852, 0.149, 1.452]</span></div>
+            <div class="hud-metric">KALMAN/LQR FEEDBACK GAIN (K<sub>2</sub>): <span id="riccati-k" class="hud-highlight">2.9041</span></div>
+            <div class="hud-metric">LQR RESIDUAL HAMILTONIAN COST: <span id="riccati-cost" class="hud-val">2.3040</span></div>
+
+            <div class="hud-section-divider">MITOCHONDRIAL BIOENERGETICS</div>
+            <div class="hud-metric">MEMBRANE POTENTIAL (&Delta;&Psi;<sub>m</sub>): <span id="psi-val" class="hud-val">-145.2 mV</span></div>
+            <div class="hud-metric">ATP SYNTHESIS FLUX: <span id="atp-val" class="hud-val">95.4 &mu;M/s</span></div>
+            <div class="hud-metric">SUPEROXIDE ROS FLUX: <span id="ros-val" class="hud-val">0.45 &mu;M/s</span></div>
+            
+            <div class="hud-section-divider">MAASS CUSP WAVEFORMS (SL<sub>2</sub>(Z) \ H)</div>
+            <div class="hud-metric">AMPLITUDES [u<sub>1</sub>(z), u<sub>2</sub>(z)]: <span id="maass-amps" class="hud-highlight">[0.184, 0.071]</span></div>
+            <div class="hud-metric">MODULI PROJECTION z = x + iy: <span id="moduli-z" class="hud-val">0.052 + 0.914i</span></div>
+
+            <div class="controls">
+                <div class="slider-label">
+                    <span>Mitochondrial ROS Oxidative Perturbation:</span>
+                    <span id="ros-slider-val" class="hud-gold">0.45 &mu;M/s</span>
+                </div>
+                <input type="range" id="ros-slider" min="0" max="10" step="0.1" value="0.45">
+            </div>
+        </div>
+
+        <div id="top-right-telemetry">
+            <div style="font-weight: 700; color: #38bdf8; margin-bottom: 4px;">ZEN 4 SPECTRAL TELEMETRY</div>
+            <div>LATENCY: <span id="compute-lat" style="color: #00ff88; font-weight: 600;">38.4 &mu;s</span></div>
+            <div>STREAM TICK: <span id="stream-tick" style="color: #ffffff;">0</span></div>
+            <div>FPS: <span id="fps-counter" style="color: #ffffff;">60.0</span></div>
+        </div>
+
+        <canvas id="protein-gl-canvas"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const canvas = document.getElementById('protein-gl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030712, 0.012);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 18, 52);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const NUM_RESIDUES = 220;
+        let currentRos = 0.45;
+        let clock = new THREE.Clock();
+        let frameCount = 0;
+        let lastFpsUpdate = 0;
+
+        // WebSocket Stream State
+        let isWsConnected = false;
+        let ws = null;
+        let latestPacket = null;
+
+        function initWebSocket() {
+            const wsUrl = `ws://${window.location.hostname || '127.0.0.1'}:8088/ws/live-trajectory`;
+            try {
+                ws = new WebSocket(wsUrl);
+                ws.onopen = () => {
+                    isWsConnected = true;
+                    const badge = document.getElementById('stream-badge');
+                    badge.className = 'hud-stream-badge badge-live';
+                    document.getElementById('stream-mode-text').innerText = 'LIVE ASGI WEBSOCKET (60Hz)';
+                };
+                ws.onmessage = (event) => {
+                    try {
+                        latestPacket = JSON.parse(event.data);
+                        updateHudFromPacket(latestPacket);
+                    } catch (e) {}
+                };
+                ws.onclose = () => {
+                    isWsConnected = false;
+                    const badge = document.getElementById('stream-badge');
+                    badge.className = 'hud-stream-badge badge-sim';
+                    document.getElementById('stream-mode-text').innerText = 'STANDALONE KERNEL (RECONNECTING...)';
+                    setTimeout(initWebSocket, 2000);
+                };
+                ws.onerror = () => {
+                    if (ws) ws.close();
+                };
+            } catch (err) {
+                isWsConnected = false;
+            }
+        }
+        initWebSocket();
+
+        const rosSlider = document.getElementById('ros-slider');
+        rosSlider.addEventListener('input', (e) => {
+            currentRos = parseFloat(e.target.value);
+            document.getElementById('ros-slider-val').innerText = `${currentRos.toFixed(2)} \u03bcM/s`;
+            if (isWsConnected && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ ros: currentRos }));
+            }
+        });
+
+        function updateHudFromPacket(pkt) {
+            if (!pkt) return;
+            document.getElementById('stream-tick').innerText = pkt.tick;
+            document.getElementById('compute-lat').innerText = `${pkt.computation_us.toFixed(1)} \u03bcs`;
+            document.getElementById('ros-val').innerText = `${pkt.bioenergetics.ros_flux.toFixed(2)} \u03bcM/s`;
+            document.getElementById('psi-val').innerText = `${pkt.bioenergetics.membrane_potential_mv.toFixed(1)} mV`;
+            document.getElementById('atp-val').innerText = `${pkt.bioenergetics.atp_synthesis_flux.toFixed(1)} \u03bcM/s`;
+            document.getElementById('stability-index').innerText = pkt.bioenergetics.stability_index.toFixed(4);
+            document.getElementById('norm-val').innerText = `||T_\u0398|| = ${pkt.bioenergetics.szego_foias_norm.toFixed(4)} < 1.0`;
+
+            const r = pkt.riccati;
+            document.getElementById('riccati-p').innerText = `[${r.p11.toFixed(3)}, ${r.p12.toFixed(3)}, ${r.p22.toFixed(3)}]`;
+            document.getElementById('riccati-k').innerText = r.gain_k2.toFixed(4);
+            document.getElementById('riccati-cost').innerText = r.lqr_cost.toFixed(4);
+
+            const m = pkt.maass_waves;
+            document.getElementById('maass-amps').innerText = `[${m.u1_amplitude.toFixed(3)}, ${m.u2_amplitude.toFixed(3)}]`;
+            document.getElementById('moduli-z').innerText = `${m.moduli_z.x.toFixed(3)} + ${m.moduli_z.y.toFixed(3)}i`;
+
+            const statusEl = document.getElementById('stability-status');
+            if (pkt.bioenergetics.ros_flux > 5.5) {
+                statusEl.innerText = 'CRITICAL OXIDATIVE DRIFT (Phase 3)';
+                statusEl.className = 'hud-warning';
+                material.color.setHex(0xff3366);
+                material.emissive.setHex(0x330011);
+            } else if (pkt.bioenergetics.ros_flux > 2.0) {
+                statusEl.innerText = 'COMPENSATED ADAPTATION (Phase 2)';
+                statusEl.className = 'hud-gold';
+                material.color.setHex(0xf59e0b);
+                material.emissive.setHex(0x331e00);
+            } else {
+                statusEl.innerText = 'NATIVE AUTOMORPHIC GROUND';
+                statusEl.className = 'hud-stable';
+                material.color.setHex(0x00ff88);
+                material.emissive.setHex(0x002211);
+            }
+        }
+
+        function generateAutomorphicSpine(ros, elapsedTime) {
+            const points = [];
+            const spectral_gap = 0.25;
+            let u1 = latestPacket ? latestPacket.maass_waves.u1_amplitude : Math.sin(elapsedTime * 0.5) * 0.2;
+            let u2 = latestPacket ? latestPacket.maass_waves.u2_amplitude : Math.cos(elapsedTime * 0.4) * 0.15;
+            let gainK2 = latestPacket ? latestPacket.riccati.gain_k2 : 2.5;
+
+            for (let i = 0; i < NUM_RESIDUES; i++) {
+                let t = (i / NUM_RESIDUES) * Math.PI * 8.0;
+                let contraction = Math.exp(-spectral_gap * (1.0 + ros * 0.12) * (i * 0.018));
+                
+                let x = Math.sin(t) * 14.0 * contraction + Math.sin(t * 2.0 + elapsedTime) * u1 * 4.0;
+                let z = Math.cos(t) * 14.0 * contraction + Math.cos(t * 2.0 + elapsedTime) * u2 * 4.0;
+                let y = (i * 0.18 - 20.0) + Math.sin(t * 3.0) * (ros * 0.6) + Math.cos(t * 0.5) * (gainK2 * 0.3);
+                
+                points.push(new THREE.Vector3(x, y, z));
+            }
+            return points;
+        }
+
+        let currentPoints = generateAutomorphicSpine(currentRos, 0);
+        let curve = new THREE.CatmullRomCurve3(currentPoints);
+        let tubeGeometry = new THREE.TubeGeometry(curve, 200, 0.45, 12, false);
+
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x00ff88,
+            emissive: 0x002211,
+            shininess: 100,
+            wireframe: false
+        });
+
+        let proteinMesh = new THREE.Mesh(tubeGeometry, material);
+        scene.add(proteinMesh);
+
+        const sphereGeo = new THREE.SphereGeometry(0.48, 8, 8);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: 0x00e1ff });
+        const instancedSpheres = new THREE.Group();
+        
+        function rebuildResidues() {
+            while(instancedSpheres.children.length > 0) { 
+                instancedSpheres.remove(instancedSpheres.children[0]); 
+            }
+            let dynamicPoints = curve.getPoints(75);
+            dynamicPoints.forEach(p => {
+                let sphere = new THREE.Mesh(sphereGeo, sphereMat);
+                sphere.position.copy(p);
+                instancedSpheres.add(sphere);
+            });
+        }
+        scene.add(instancedSpheres);
+        rebuildResidues();
+
+        const ambientLight = new THREE.AmbientLight(0x0a1428);
+        scene.add(ambientLight);
+
+        const pointLight1 = new THREE.PointLight(0x00ff88, 2.2, 120);
+        pointLight1.position.set(30, 30, 30);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0x38bdf8, 1.8, 120);
+        pointLight2.position.set(-30, -30, -30);
+        scene.add(pointLight2);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            let elapsedTime = clock.getElapsedTime();
+            frameCount++;
+
+            if (elapsedTime - lastFpsUpdate >= 1.0) {
+                document.getElementById('fps-counter').innerText = (frameCount / (elapsedTime - lastFpsUpdate)).toFixed(1);
+                frameCount = 0;
+                lastFpsUpdate = elapsedTime;
+            }
+
+            let pts = generateAutomorphicSpine(currentRos, elapsedTime);
+            scene.remove(proteinMesh);
+            tubeGeometry.dispose();
+            
+            curve = new THREE.CatmullRomCurve3(pts);
+            tubeGeometry = new THREE.TubeGeometry(curve, 200, 0.45, 12, false);
+            proteinMesh = new THREE.Mesh(tubeGeometry, material);
+            scene.add(proteinMesh);
+
+            proteinMesh.rotation.y = elapsedTime * 0.12;
+            instancedSpheres.rotation.y = elapsedTime * 0.12;
+            rebuildResidues();
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

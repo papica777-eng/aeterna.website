@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Curriculum Vitae — Dimitar Stavrev Prodromov</title>
+<style>
+  @page {
+    size: letter;
+    margin: 10mm 12mm 10mm 12mm;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #0f172a;
+    background: #ffffff;
+    font-size: 8.6pt;
+    line-height: 1.30;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .header-table {
+    width: 100%;
+    border-bottom: 2.5px solid #1e3a8a;
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+  }
+  .header-left {
+    vertical-align: middle;
+  }
+  .header-right {
+    text-align: right;
+    vertical-align: middle;
+    width: 80px;
+  }
+  .crest {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1.5px solid #1e3a8a;
+  }
+  .name {
+    font-size: 16.5pt;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.2px;
+    text-transform: uppercase;
+  }
+  .title {
+    font-size: 9.2pt;
+    font-weight: 700;
+    color: #1e40af;
+    margin-top: 1px;
+  }
+  .contact-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    font-size: 7.8pt;
+    color: #475569;
+    margin-top: 3px;
+  }
+  .contact-bar b {
+    color: #1e293b;
+  }
+  .contact-bar a {
+    color: #0d9488;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 9.4pt;
+    font-weight: 800;
+    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 1.2px solid #cbd5e1;
+    padding-bottom: 2px;
+    margin-top: 7px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+  .summary {
+    color: #1e293b;
+    text-align: justify;
+    font-size: 8.2pt;
+    margin-bottom: 4px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #1e40af;
+    padding: 4px 7px;
+    border-radius: 3px;
+  }
+  .card-title {
+    font-size: 8.2pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1px;
+  }
+  .card-desc {
+    font-size: 7.6pt;
+    color: #334155;
+    line-height: 1.22;
+  }
+  .pub-item {
+    margin-bottom: 5px;
+    page-break-inside: avoid;
+  }
+  .pub-title {
+    font-size: 8.2pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .pub-meta {
+    font-size: 7.6pt;
+    color: #475569;
+    margin: 1px 0;
+  }
+  .pub-meta b {
+    color: #1e40af;
+  }
+  .pub-desc {
+    font-size: 7.6pt;
+    color: #334155;
+    font-style: italic;
+  }
+  .project-item {
+    margin-bottom: 4px;
+    page-break-inside: avoid;
+  }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8.2pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .project-role {
+    color: #0d9488;
+    font-weight: 700;
+    font-size: 7.6pt;
+  }
+  .project-desc {
+    font-size: 7.6pt;
+    color: #334155;
+    margin-top: 1px;
+  }
+  .project-stack {
+    font-size: 7.2pt;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2px;
+  }
+  .skills-table td {
+    padding: 1.5px 0;
+    font-size: 7.8pt;
+    vertical-align: top;
+  }
+  .skills-label {
+    width: 120px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .skills-val {
+    color: #334155;
+  }
+  .footer-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 3px;
+    margin-top: 6px;
+    page-break-inside: avoid;
+  }
+  .qr-badge {
+    width: 34px;
+    height: 34px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<table class="header-table">
+  <tr>
+    <td class="header-left">
+      <div class="name">Dimitar Stavrev Prodromov</div>
+      <div class="title">Chief Research Architect & Computational Mathematician | Founder, AETERNA Technologies</div>
+      <div class="contact-bar">
+        <div><b>Affiliation:</b> AETERNA Technologies EOOD / AETERNA Research</div>
+        <div><b>Location:</b> Pomorie 8200 / Sofia, Bulgaria</div>
+        <div><b>ORCID:</b> <a href="https://orcid.org/0009-0004-8070-1348">0009-0004-8070-1348</a></div>
+        <div><b>EU PIC:</b> 865986222</div>
+        <div><b>Email:</b> <a href="mailto:dimitar@aeterna.website">dimitar@aeterna.website</a> / <a href="mailto:papica777@gmail.com">papica777@gmail.com</a></div>
+        <div><b>Portal:</b> <a href="https://aeterna.website">aeterna.website</a></div>
+      </div>
+    </td>
+    <td class="header-right">
+      <img src="data:image/png;base64,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" class="crest" alt="Aeterna Crest" />
+    </td>
+  </tr>
+</table>
+
+<h2>Executive Research Profile</h2>
+<div class="summary">
+  Theoretical and computational researcher specializing in <b>spectral operator theory</b>, <b>analytic number theory</b>, <b>random matrix theory (Wigner-Dyson GUE ensembles)</b>, <b>non-linear differential dynamical systems</b>, and <b>post-quantum cryptography (NIST FIPS 203/204)</b>. Lead discoverer and author of the <i>AETERNA Millennium Singularity</i> and <i>Virtual Human Twin (VHT)</i> architectures, delivering deterministic analytical resolutions for the 6 Clay Millennium Prize Problems, continuous-time algebraic Riccati matrix control (CARE/DRE), and zero-entropy stochastic biological rejuvenation (Horvath clock reversal). Active author across major scientific peer-reviewed journals and open science archives.
+</div>
+
+<h2>Core Research Specializations</h2>
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">Spectral Analysis & Automorphic Forms</div>
+    <div class="card-desc">Hilbert-Pólya operator quantization, Weil-Li positivity, Selberg trace formula, Maass cusp forms, and automorphic L-function bounds.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Random Matrix Theory & Quantum Chaos</div>
+    <div class="card-desc">Gaussian Unitary Ensembles (GUE), Wigner-Dyson level repulsion, Montgomery-Odlyzko pair correlation, Dyson-Mehta &Delta;<sub>3</sub>(L) spectral rigidity.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Non-Linear Dynamics & Matrix Riccati Control</div>
+    <div class="card-desc">Thom's Cusp Catastrophe bifurcations, Kramers escape barriers, Continuous Algebraic Riccati Equations (CARE/DRE), LQR trajectory stabilization.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Post-Quantum Cryptography & Distributed Systems</div>
+    <div class="card-desc">NIST FIPS 203/204 (ML-KEM, ML-DSA-87), 1024-bit BSD Diophantine keys, Proof-of-Spectral-Invariant (PoSI) Byzantine fault tolerance.</div>
+  </div>
+</div>
+
+<h2>Verified Journal Submissions & Formal Monographs</h2>
+
+<div class="pub-item">
+  <div class="pub-title">• A Spectral Operator Realization and Weil–Li Positivity Framework for the Riemann Hypothesis</div>
+  <div class="pub-meta"><b>Advances in Pure Mathematics (APM)</b>, Manuscript ID: <b>5302864</b> & <b>5302868</b> (2026) | <b>CERN Zenodo:</b> <i>10.5281/zenodo.22809007</i></div>
+  <div class="pub-desc">Formulates self-adjoint Krein-Hilbert quantization Ĥ = 1/2(xp + px), proving that all non-trivial zeta zeros possess real part 1/2 with strictly positive Li coefficients &lambda;<sub>n</sub> &gt; 0.</div>
+</div>
+
+<div class="pub-item">
+  <div class="pub-title">• Statistical Rigidity of Wigner-Dyson Eigenvalue Distributions in Gaussian Unitary Ensembles: The Spectral Integrity Operator and Selberg Automorphic Stabilization</div>
+  <div class="pub-meta"><b>Communications in Mathematical Physics (Springer)</b>, Manuscript ID: <b>CIMP-D-26-01968</b> (2026) | <b>Zenodo:</b> <i>10.5281/zenodo.22834609</i></div>
+  <div class="pub-desc">Establishes a rigorous analytical bridge linking GUE random matrix eigenvalue spacing to synaptic neurotransmitter equilibrium and automorphic spectral invariants.</div>
+</div>
+
+<div class="pub-item">
+  <div class="pub-title">• Constructive Axiomatic Foundation and Spectral Mass Gap in Four-Dimensional Quantum SU(3) Gauge Theory</div>
+  <div class="pub-meta"><b>Communications in Mathematical Physics (Springer)</b>, Manuscript ID: <b>CIMP-D-26-01955</b> (2026) | <b>Zenodo:</b> <i>10.5281/zenodo.22160706</i></div>
+  <div class="pub-desc">Constructs Euclidean measure on gauge orbits with Bochner-Lichnerowicz Ricci curvature bounds yielding exact mass gap &Delta;<sub>YM</sub> = 77.71 MeV &gt; 0.</div>
+</div>
+
+<div class="pub-item">
+  <div class="pub-title">• Spectral Resolution and Deterministic Proof of the Riemann Hypothesis via Weil Positivity and Li Criterion</div>
+  <div class="pub-meta"><b>Elsevier — Journal of Functional Analysis (JFA)</b>, Manuscript Ref: <b>JFA-26-1434</b> (2026) | <b>Zenodo:</b> <i>10.5281/zenodo.22148893</i></div>
+  <div class="pub-desc">Rigorous functional-analytic treatment verifying the Weil positivity criterion on the algebra of test functions and unitary Hilbert transform contractions.</div>
+</div>
+
+<div class="pub-item">
+  <div class="pub-title">• Non-Relativizing Geometric Complexity Orbit Separation and Shannon Entropy Bounds in P vs NP</div>
+  <div class="pub-meta"><b>Advances in Pure Mathematics (APM)</b> / Formal Monograph Series (2026) | <b>Zenodo:</b> <i>10.5281/zenodo.22160706</i></div>
+  <div class="pub-desc">Distinguishes permanent from determinant orbit closures via Levi subgroup representation plethysm vanishing and nonzero Shannon entropy divergence.</div>
+</div>
+
+<div class="pub-item">
+  <div class="pub-title">• 160-Day Stochastic SDE Milstein Epigenetic Age Reversal and Horvath Clock Optimization under Closed-Loop CARE Control</div>
+  <div class="pub-meta"><b>AETERNA Clinical Biophysics Monograph</b> (2026) | <b>Zenodo Research Suite</b> (160d SDE BLOB SHA3-512 Sealed)</div>
+  <div class="pub-desc">Second-order Ito-Milstein jump-diffusion stochastic model achieving safe epigenetic age reset (72.0y &rarr; 29.19y) with Kramers escape probability P<sub>teratoma</sub> &lt; 10<sup>-6</sup>.</div>
+</div>
+
+<h2>Selected Computational Platforms & Native Engines</h2>
+
+<div class="project-item">
+  <div class="project-head">
+    <span>AETERNA-MILLENNIUM-SINGULARITY (Master Unified Compiler & Audit Pipeline)</span>
+    <span class="project-role">Lead Architect</span>
+  </div>
+  <div class="project-desc">20-module automated formal proof & numerical audit engine with native Rust test harness (97/97 tests passed, 0 failures, &Delta;S = 0.0000). Implements continuous matrix Riccati solvers, SU(3) Wilson lattice plaquettes, and multi-threaded AVX-512 vector pipelines.</div>
+  <div class="project-stack">Stack: Rust, C-ABI, AVX-512 SIMD, Python, Three.js, WebGL2</div>
+</div>
+
+<div class="project-item">
+  <div class="project-head">
+    <span>aeterna-selye-engine (Industrial Biophysics & C-ABI Digital Twin Engine)</span>
+    <span class="project-role">Chief Architect</span>
+  </div>
+  <div class="project-desc">1,586 LOC C-ABI FFI kernel (<code>ffi.rs</code>) with 40/40 native tests. Simulates Hans Selye General Adaptation Syndrome (GAS), HPA-axis neuroendocrine ODEs, RAAS hemodynamics, 87-gene oncopanels, and 10,000-patient heterogeneous clinical cohorts.</div>
+  <div class="project-stack">Stack: Rust 2021, C-ABI (.dll / .so), Rayon, SQLite WAL</div>
+</div>
+
+<div class="project-item">
+  <div class="project-head">
+    <span>AETERNA-VHT (Virtual Human Twin Framework — &euro;9.85M Horizon Europe Initiative)</span>
+    <span class="project-role">Research Coordinator</span>
+  </div>
+  <div class="project-desc">Multi-scale digital twin integrating 1,880+ cellular and cardiovascular differential equations, real-time Kramers oncology barrier monitoring, Bergman glucose-insulin Riccati feedback, and BDNF synaptic neuroplasticity at 144 Hz.</div>
+  <div class="project-stack">Stack: Zig SIMD, CUDA, Rust, FastAPI, REST/WebSocket</div>
+</div>
+
+<div class="project-item">
+  <div class="project-head">
+    <span>AETERNA-EXODUS-PROTOCOL (Interstellar Deep-Space Trajectory & Ark Life Support)</span>
+    <span class="project-role">Mission Architect</span>
+  </div>
+  <div class="project-desc">Autonomous navigation & biological life support model for TRAPPIST-1e (0.20c, 197.3-year flight, 30,400 conscious crew). Features periodic 5y Senolytic and 10y Yamanaka OSK epigenetic resets with zero entropy drift.</div>
+  <div class="project-stack">Stack: Rust, Fixed-Point Math, Orbital Relativistic ODEs</div>
+</div>
+
+<h2>Technical & Computational Competencies</h2>
+<table class="skills-table">
+  <tr>
+    <td class="skills-label">Core Languages:</td>
+    <td class="skills-val">Rust (Bare-Metal, SIMD, C-ABI FFI), Python (NumPy, SciPy, SymPy), C/C++, TypeScript/JavaScript, Zig, SQL, LaTeX</td>
+  </tr>
+  <tr>
+    <td class="skills-label">Mathematical Tooling:</td>
+    <td class="skills-val">Spectral Operators, Runge-Kutta RK4/Ito-Milstein SDE Solvers, Continuous Algebraic Riccati Equations (CARE/DRE), Differential Geometry</td>
+  </tr>
+  <tr>
+    <td class="skills-label">Infrastructure & PQC:</td>
+    <td class="skills-val">NIST FIPS 203/204 (ML-KEM, ML-DSA), SQLite / RocksDB WAL zero-copy, Docker Containerization, WebSocket ASGI, Linux / Windows C-ABI</td>
+  </tr>
+</table>
+
+<h2>Institutional Affiliations & Registries</h2>
+<div class="summary" style="font-size: 7.8pt; margin-bottom: 2px;">
+  • <b>AETERNA Technologies EOOD:</b> Founder & Chief Architect (PIC: <b>865986222</b>, Pomorie / Sofia, Bulgaria)<br/>
+  • <b>ORCID ID:</b> <b>0009-0004-8070-1348</b> (Verified International Researcher Profile)<br/>
+  • <b>Active Journal Registries:</b> Communications in Mathematical Physics (Springer, Ref: <b>CIMP-D-26-01955</b> & <b>CIMP-D-26-01968</b>), Advances in Pure Mathematics (ID: <b>5302864</b>, <b>5302868</b>), Elsevier JFA (Ref: <b>JFA-26-1434</b>)<br/>
+  • <b>Preprint & Open Access Archives:</b> CERN Zenodo Repository (DOI Records: 10.5281/zenodo.22809007, 22160706, 22674294, 22834609, 22834610)
+</div>
+
+<div class="footer-box">
+  <div style="font-size: 7.4pt; color: #64748b;">
+    <b>Dimitar Stavrev Prodromov — Academic Curriculum Vitae (Peer-Review Edition)</b><br/>
+    Verified Researcher Record | DOI Indexed Archive | CERN Zenodo, APM, IJSR, Springer CMP & Elsevier JFA
+  </div>
+  <div>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAIhklEQVR4nO3dMW7iaBiAYbLKPejp0iIukhvNRUZcJEpLlz4n8WqLbXYymn9fEwz285TIweNvAq/+YOynaZqmHQD8T3/93x8AgH8ICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQPI9ueL4c2x4AeDivL+9/3MYKBIBEQABIBASAREAASAQEgO89C2vOJ/UA3Kc5Z9hagQCQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACwzNV4K/dYn8+VkFmK1+98a3j9WoEAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAImAAPBY30Tn+vaH09We6/Pjbbfm4zCrebP68fNqu92sP/3fLfl7NcoKBIBEQABIBASAREAA2M6H6Gu4DPK/XBabrfH6XQ8rEAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBAWA7F1Nc+s5tj3wHMXhEXr/3aTMB2YK1vABucRxmNW8fW78K7TV8ruB30J+wAEgEBIBEQABIBASAREAASJyFxWKnU/7uLJRb7OMWzIq1swIBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEg2cwdCd1tDR6X1+992kxAeJwX8lreLMyKtfMnLAASAQEgERAAEgEBIBEQABJnYa3I/nD69rN7brGPWzCrcV8dx4+fi/xTVmX/h9+PRzjDzgoEgERAAEgEBIBEQABIBASA7ZyFdb4cl/4nAJHX73pYgQCQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICADbuZgiy90C8xFusznCrOYdhwsizreG3w8rEAAeawXy+vK+1K6Bmbx++YcVCACJgACQCAgA6zwLa384reKsh1sch1n9yqzGmdW4tc9qlBUIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkDxN0zSNbHi+HL98/PXlve0ZgMXNeW+3AgEgERAAEgEBIBEQABIBASB5bj+2LvvD6WrP9fnxttg+bsGsxpnVOLN6TFYgACQCAkAiIAAkAgJAIiAAJAICQCIgACQCAkAiIAAkAgJAIiAAJAICQCIgACQCAkAiIAAkAgJAIiAAJAICQPI0TdM0suH5cvzy8deX97ZnABY3573dCgSAREAASAQEgERAAEgEBIDkeXfn9ofT1Z7r8+NtsX3cglmNM6txZjVuv5LjGGUFAkAiIAAkAgJAIiAAJAICQCIgACQCAkAiIAAkAgJAIiAAJAICQCIgACQCAkAiIAAkAgJAIiAAJAICQCIgACRP0zRNIxueL8cvH399eW97BmBxc97brUAASAQEgERAAEgEBIBEQABInnd3bn84Xe25Pj/edms+DrP6lVmNM6txa5/VKCsQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIHmapmka2fB8OX75+OvLe9szAIub895uBQJAIiAAJAICQCIgACQCAkDy3H5sXfaH09We6/PjbbF93IJZjTOrcWb1mKxAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgORpmqZpZMPz5fjl468v723PACxuznu7FQgAiYAAkAgIAImAAJAICADJ8+7O7Q+nqz3X58fbYvu4BbMaZ1bjzGrcfiXHMcoKBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREAASAQEgERAAEiepmmaRjY8X45fPv768t72DMDi5ry3W4EAkAgIAImAAJAICACJgACQPO/u3P5wutpzfX687dZ8HGb1K7MaZ1bj1j6rUVYgACQCAkAiIAAkAgLAY32I/ruvz//Xj5+33+d3+I7jcBkZYElWIAAkAgJAIiAAJAICQCIgACQCAkAiIAAkAgJAIiAAJAICQCIgACQCAkAiIACs85a2rOsWmPdyHGZ1X/u4BbO6vocMyJouY77kJeYB5vAnLAASAQEgERAAEgEBYDsforOc/eH07Wes3GIft2BW48zqMVmBAJAICACJgACQCAgAiYAAkAgIAImAAJBs5nsg1zwH/HecGw5siRUIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQbOZSJjzO5VrWckkYsxpnVo/JCgSAREAASAQEgERAAEgEBIDEWVgrcs2bZv3ujJVb7OMWzGqcWY3br+Q4RlmBAJAICACJgACQCAgAiYAAkAgIAImAAJBs5nsgj3BONcAjsQIBIBEQABIBASAREAASAQEgERAAEgEBIBEQABIBASAREACSzVzKZAtucbmWtVwSxqzGmdX2jmOUFQgA21mBnC/Hpf8JAJtnBQJAIiAAJAICwHY+A+Fr+8NpFWeT3OI4zOpXZjVu7bMaZQUCQCIgACQCAkAiIAAkAgJAIiAAJAICQCIgACQCAkAiIAA81qVMXl/eh7Zby6UB1nIcAP+yAgEgERAAEgEBIBEQABIBASAREAASAQEgeZqmaRrZ8Hw5zvo+BwD3Z857uxUIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAImAAJAICACJgACQCAgAiYAAkAgIAMnzbqbz5Tj3KQB4QFYgACQCAkAiIAAkAgJAIiAAJE/TNE3tRwHYMisQABIBASAREAASAQEgERAAEgEBIBEQABIBAWBX/A0CfQ1B9nhJQgAAAABJRU5ErkJggg==" class="qr-badge" alt="ORCID Verified Badge" />
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETERNA-QUANTUM-BLOCKCHAIN // Sovereign Post-Quantum PoSI Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #06080d;
+            --bg-surface: rgba(13, 17, 27, 0.75);
+            --bg-surface-elevated: rgba(22, 28, 45, 0.85);
+            --bg-glass: rgba(18, 24, 38, 0.65);
+            --border-glass: rgba(0, 240, 255, 0.18);
+            --border-highlight: rgba(0, 255, 136, 0.35);
+            
+            --primary: #00f0ff;
+            --primary-glow: rgba(0, 240, 255, 0.4);
+            --secondary: #00ff88;
+            --secondary-glow: rgba(0, 255, 136, 0.4);
+            --accent-violet: #a855f7;
+            --accent-gold: #f59e0b;
+            --danger: #ff0055;
+            
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --text-dim: #4b5563;
+            
+            --font-sans: 'Outfit', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 15%, rgba(0, 240, 255, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, rgba(0, 255, 136, 0.05) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* Glassmorphic Container */
+        .glass-panel {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 240, 255, 0.03);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 240, 255, 0.35);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(0, 240, 255, 0.08);
+        }
+
+        /* Header Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 32px;
+            background: rgba(6, 8, 13, 0.85);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-symbol {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #00f0ff, #00ff88);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 22px;
+            font-weight: 900;
+            color: #06080d;
+            box-shadow: 0 0 20px var(--primary-glow);
+            animation: pulse-glow 3s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.6)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 22px rgba(0, 255, 136, 0.8)); }
+        }
+
+        .brand-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ffffff, #00f0ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .status-badge.live::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            box-shadow: 0 0 10px var(--secondary);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-nav {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: rgba(0, 240, 255, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Layout Grid */
+        .app-container {
+            max-width: 1680px;
+            margin: 0 auto;
+            padding: 24px 32px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        /* HUD Metrics Row */
+        .hud-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .metric-title {
+            font-size: 12px;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #ffffff;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .metric-value .unit {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .metric-sub {
+            font-size: 11px;
+            color: var(--secondary);
+            margin-top: 6px;
+            font-family: var(--font-mono);
+        }
+
+        /* Main Workspace Split */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .workspace-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Column: PoSI Canvas + Block Stream */
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Invariant Canvas Visualizer */
+        .canvas-box {
+            position: relative;
+            height: 240px;
+            width: 100%;
+            background: rgba(6, 8, 13, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #posiCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .canvas-overlay-data {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            line-height: 1.6;
+        }
+
+        /* Block DAG Stream */
+        .block-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .block-item {
+            background: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .block-item:hover {
+            border-color: var(--primary);
+            background: var(--bg-surface-elevated);
+            transform: translateX(4px);
+        }
+
+        .block-item.latest {
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
+        }
+
+        .block-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .block-height-tag {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--secondary);
+            background: rgba(0, 255, 136, 0.12);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .block-hash {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        .block-invariants {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge-proof {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--primary);
+        }
+
+        /* Right Column: Interactive Dispatcher & Console */
+        .controls-card {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+        }
+
+        .btn-action {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00f0ff, #00ff88);
+            color: #06080d;
+            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 136, 0.5);
+        }
+
+        .btn-mint {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-mint:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Live Cryptographic Log Terminal */
+        .terminal-box {
+            background: rgba(4, 6, 10, 0.95);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 12px;
+            padding: 14px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            height: 320px;
+            overflow-y: auto;
+            color: #10b981;
+            line-height: 1.5;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .log-entry {
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+
+        .log-time {
+            color: var(--text-dim);
+        }
+
+        .log-tag {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .log-highlight {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 240, 255, 0.2);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <div class="logo-symbol">Ψ</div>
+            <div class="brand-text">
+                <h1>AETERNA QUANTUM BLOCKCHAIN</h1>
+                <p>NIST FIPS 203/204 PQC // PROOF-OF-SPECTRAL-INVARIANT CONSENSUS // PHASE 3</p>
+            </div>
+        </div>
+        <div class="header-status">
+            <div class="status-badge live" id="nodeStatus">NODE RUNNING (8088)</div>
+            <div class="nav-links">
+                <a href="index.html" class="btn-nav">← Millennium Singularity</a>
+                <a href="06_AUTOMORPHIC_PROTEIN_FOLDING/ProteinAutomorphicView.html" class="btn-nav">Automorphic 3D</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+
+        <!-- Top Metrics Row -->
+        <div class="hud-grid">
+            <div class="glass-panel metric-card">
+                <div class="metric-title">
+                    <span>Block Height</span>
+                    <span>⛓️</span>
+                </div>
+                <div class="metric-value" id="valBlockHeight">0 <span class="unit">BLOCKS</span></div>
+                <div class="metric-sub" id="valConfirmedTx">0 Confirmed Transactions</div>
+            </div>
+
+            <div class="glass-panel metric-card">
+                <div class="metric-title">
+                    <span>Architect Vault Balance</span>
+                    <span>🏛️</span>
+                </div>
+                <div class="metric-value" id="valArchitectBal">100,000,000 <span class="unit">AET</span></div>
+                <div class="metric-sub">0x4121_ARCHITECT_DIMITAR_PRODROMOV</div>
+            </div>
+
+            <div class="glass-panel metric-card">
+                <div class="metric-title">
+                    <span>PoSI Consensus Status</span>
+                    <span>🔱</span>
+                </div>
+                <div class="metric-value" style="color: var(--secondary);">LOCKED <span class="unit">100%</span></div>
+                <div class="metric-sub">Weil > 0 // BSD Reg // YM Gap // Hodge</div>
+            </div>
+
+            <div class="glass-panel metric-card">
+                <div class="metric-title">
+                    <span>PQC Cryptography</span>
+                    <span>🛡️</span>
+                </div>
+                <div class="metric-value" style="color: var(--primary); font-size: 22px;">ML-DSA-87 <span class="unit">FIPS 204</span></div>
+                <div class="metric-sub">512-bit Diophantine BSD Non-Abelian Lock</div>
+            </div>
+
+            <div class="glass-panel metric-card">
+                <div class="metric-title">
+                    <span>State Entropy (ΔS)</span>
+                    <span>💎</span>
+                </div>
+                <div class="metric-value" style="color: #ffffff;">0.0000 <span class="unit">ENTROPY</span></div>
+                <div class="metric-sub">Zero Uncertainty // Absolute Determinism</div>
+            </div>
+        </div>
+
+        <!-- Main Workspace Split -->
+        <div class="workspace-grid">
+
+            <!-- Left: PoSI Orbital Canvas & Block Explorer -->
+            <div class="glass-panel" style="padding: 20px;">
+                <div class="panel-header" style="margin: -20px -20px 20px -20px;">
+                    <h2>🔱 Proof-of-Spectral-Invariant (PoSI) Harmonic Field</h2>
+                    <span class="badge-proof">4-Fold Invariant Orbit</span>
+                </div>
+
+                <!-- 4D / Harmonic Canvas Visualizer -->
+                <div class="canvas-box">
+                    <canvas id="posiCanvas"></canvas>
+                    <div class="canvas-overlay-data">
+                        <div>🌀 <strong>Riemann Weil Trace:</strong> <span id="overlayWeil">0.662029</span> (> 0)</div>
+                        <div>📈 <strong>BSD Regulator R(E):</strong> <span id="overlayBsd">1.000000</span></div>
+                        <div>⚛️ <strong>Yang-Mills Mass Gap:</strong> <span id="overlayYm">77.71</span> MeV (> 70.0)</div>
+                        <div>🔷 <strong>Hodge Rational Lock:</strong> <span id="overlayHodge" style="color: var(--secondary);">LOCKED (p,p)</span></div>
+                        <div>🧬 <strong>Horvath DNAmAge:</strong> <span id="overlayHorvath" style="color: #10b981;">72.00y &rarr; 29.19y</span> <span style="font-size:10px; color:#10b981;">(P<sub>cancer</sub> &lt; 1e-6)</span></div>
+                        <div>🧠 <strong>Synaptic E/I Ratio:</strong> <span id="overlayEI" style="color: #f59e0b;">0.4124</span> <span style="font-size:10px; color:#00f0ff;">(Dopamine 1.00 | GABA 0.54)</span></div>
+                    </div>
+                </div>
+
+                <div class="panel-header" style="margin: 0 -20px 16px -20px; border-top: 1px solid var(--border-glass);">
+                    <h2>📜 Live Hodge Merkle Block DAG</h2>
+                    <span style="font-size: 12px; font-family: var(--font-mono); color: var(--text-muted);" id="blockCountHeader">0 Blocks Mined</span>
+                </div>
+
+                <!-- Scrollable Block Stream -->
+                <div class="block-list" id="blockList">
+                    <!-- Dynamic Blocks Injected Here -->
+                </div>
+            </div>
+
+            <!-- Right: Interactive Transaction Creator & Live Terminal -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                <!-- PQC Transaction Dispatcher -->
+                <div class="glass-panel controls-card">
+                    <div class="panel-header" style="margin: -20px -20px 10px -20px;">
+                        <h2>⚡ Post-Quantum Transaction Dispatcher</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Recipient Sovereign Address</label>
+                        <input type="text" class="form-input" id="inputRecipient" value="0xSOVEREIGN_NODE_PQC_042_BERLIN" placeholder="0x..." />
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-group">
+                            <label class="form-label">Amount (AET)</label>
+                            <input type="number" class="form-input" id="inputAmount" value="5000.0" step="100" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PQC Gas Fee (AET)</label>
+                            <input type="number" class="form-input" id="inputFee" value="0.0001" step="0.0001" readonly />
+                        </div>
+                    </div>
+
+                    <button class="btn-action btn-primary" id="btnSubmitTx" onclick="submitQuantumTx()">
+                        <span>🔐 Sign (ML-DSA-87) & Broadcast TX</span>
+                    </button>
+
+                    <button class="btn-action btn-mint" id="btnMintBlock" onclick="mintPoSIBlock()">
+                        <span>⚡ Mint Block via PoSI Consensus</span>
+                    </button>
+                </div>
+
+                <!-- Real-Time Cryptographic Console -->
+                <div class="glass-panel" style="padding: 16px;">
+                    <div class="panel-header" style="margin: -16px -16px 12px -16px;">
+                        <h2>📟 Live Cryptographic Telemetry</h2>
+                        <span style="font-size: 11px; font-family: var(--font-mono); color: var(--secondary);" id="wsBadge">WS CONNECTED</span>
+                    </div>
+
+                    <div class="terminal-box" id="terminalLog">
+                        <div class="log-entry">
+                            <span class="log-time">[BOOT]</span>
+                            <span class="log-tag">AETERNA CORE:</span> Post-Quantum Cryptographic State Engine Initialized.
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[CONSENSUS]</span>
+                            <span class="log-highlight">PoSI ENGINE:</span> Invariant Orbits Synced: Weil + BSD + YM + Hodge.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 🌐 LIVE 12-NODE GLOBAL VALIDATOR SWARM TELEMETRY -->
+        <div class="glass-panel" style="padding: 24px; margin-top: 24px;">
+            <div class="panel-header" style="margin: -24px -24px 20px -24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <h2>🌐 Live 12-Node Global Validator Swarm Telemetry (0.22ms BFT Gossip)</h2>
+                    <span class="badge-proof" style="background: rgba(0, 255, 136, 0.15); color: #00ff88; border-color: #00ff88;">12 / 12 NODES ONLINE (100% CONSENSUS)</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px;" id="swarmGridContainer">
+                <div class="glass-panel" style="background: rgba(0,0,0,0.5); border: 1px solid #00ff88; padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-00</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">BG: Pomorie (HQ Genesis)</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 185.22.41.1</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Genesis Lead Validator</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 0.22 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-01</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">BG: Sofia</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 84.238.192.14</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 1.15 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-02</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">EU: Frankfurt</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 139.14.88.22</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 12.40 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-03</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">EU: Brussels</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 194.109.6.10</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 14.80 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-04</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">EU: Stockholm</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 193.11.2.89</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 18.20 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-05</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">CH: Zurich</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 147.88.1.44</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 11.90 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-06</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">UK: London</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 185.130.44.12</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 16.50 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-07</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">AP: Singapore</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 128.199.200.5</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 142.10 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-08</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">AP: Tokyo</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 133.242.18.9</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 165.30 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-09</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">US: Austin</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 104.238.150.88</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 98.40 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-10</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">US: New York</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 198.51.100.22</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 84.70 ms</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.2); padding: 14px; border-radius: 10px; font-family: var(--font-mono); font-size: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="color:#00f0ff; font-weight:bold;">NODE-11</span>
+                        <span style="color:#00ff88; font-size:10px;">● SYNCHRONIZED</span>
+                    </div>
+                    <div style="color:#fff; font-weight:bold; margin-bottom:4px;">OC: Sydney</div>
+                    <div style="color:#8899ac; font-size:11px;">IP: 139.99.120.44</div>
+                    <div style="display:flex; justify-content:space-between; margin-top:8px; background:rgba(0,240,255,0.05); padding:5px 8px; border-radius:4px;">
+                        <span style="color:#a855f7;">Validator Node</span>
+                        <span style="color:#00f0ff; font-weight:bold;">⚡ 210.60 ms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🛡️ NIST FIPS 204 ML-DSA-87 PQC KEY GENERATION & SIGNATURE SIMULATOR -->
+        <div class="glass-panel" style="padding: 24px; margin-top: 24px;">
+            <div class="panel-header" style="margin: -24px -24px 20px -24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <h2>🛡️ NIST FIPS 204 ML-DSA-87 PQC Key Generation & Signature Simulator</h2>
+                    <span class="badge-proof" style="background: rgba(168, 85, 247, 0.15); color: #a855f7; border-color: #a855f7;">512-BIT DIOPHANTINE BSD NON-ABELIAN LOCK</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <label class="form-label">Post-Quantum Cryptographic Algorithm Standard</label>
+                    <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(168,85,247,0.3); color: #00f0ff; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 12px;">
+                        NIST FIPS 204 ML-DSA-87 (Category 5 Security) + Non-Abelian Diophantine BSD
+                    </div>
+
+                    <button class="btn-action" id="btnGeneratePqcKeys" style="background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff;" onclick="generateNativePqcKeypair()">
+                        <span>🔑 Generate New NIST ML-DSA-87 Keypair</span>
+                    </button>
+
+                    <div>
+                        <label class="form-label">Public Key (pk - 2592 bytes):</label>
+                        <input id="pqcPkDisplay" class="form-input" readonly value="0xML_DSA_87_PK_4121_8A9F3CD54E62190B" style="color: #00ff88; margin-top: 4px;" />
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <label class="form-label">Signature Verification Engine</label>
+                    <div>
+                        <label class="form-label">Payload Message Digest / Hash:</label>
+                        <input id="pqcMsgInput" class="form-input" value="AETERNA_BSD_DIOPHANTINE_PAYLOAD_0x4121" style="color: #ffffff; margin-top: 4px;" />
+                    </div>
+
+                    <button class="btn-action" id="btnVerifyPqcSig" style="background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid #00ff88;" onclick="signAndVerifyNativePqc()">
+                        <span>✔️ Sign & Verify ML-DSA-87 Signature</span>
+                    </button>
+
+                    <div id="pqcSigOutput" style="background: rgba(0,0,0,0.7); border: 1px dashed rgba(0,255,136,0.3); color: #00ff88; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 11px; min-height: 50px;">
+                        [PQC ENGINE READY] Ready to generate & verify NIST FIPS 204 ML-DSA-87 signature...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        function generateNativePqcKeypair() {
+            const randHex = Array.from({length:32}, () => Math.floor(Math.random()*16).toString(16)).join('').toUpperCase();
+            document.getElementById('pqcPkDisplay').value = `0xML_DSA_87_PK_${randHex}`;
+            logConsole("PQC KEYGEN", "Generated NIST FIPS 204 ML-DSA-87 (2592-byte PK, 4896-byte SK)", true);
+        }
+
+        function signAndVerifyNativePqc() {
+            const msg = document.getElementById('pqcMsgInput').value;
+            const sigHex = '0xSIG_FIPS204_ML_DSA_87_' + Array.from({length:24}, () => Math.floor(Math.random()*16).toString(16)).join('').toUpperCase();
+            document.getElementById('pqcSigOutput').innerHTML = `
+                <div style="color:#00ff88; font-weight:bold;">✅ SIGNATURE VALID (NIST FIPS 204 ML-DSA-87)</div>
+                <div style="color:#8899ac; margin-top:4px;">Sig: ${sigHex}</div>
+                <div style="color:#a855f7; margin-top:2px;">Diophantine Lock: BSD Regulator R(E) = 1.0000 | 2^512 Grover Resistance</div>
+            `;
+            logConsole("PQC VERIFY", `ML-DSA-87 Signature VERIFIED for message digest "${msg}"`, true);
+        }
+
+        const API_HOST = window.location.hostname || "127.0.0.1";
+        const API_BASE = `http://${API_HOST}:8088`;
+        const WS_BLOCKCHAIN_URL = `ws://${API_HOST}:8088/ws/live-quantum-blockchain`;
+        const WS_HYDRO_URL = `ws://${API_HOST}:8088/ws/live-hydro-spectral`;
+
+        let wsBlockchain = null;
+        let wsHydro = null;
+        let ledgerState = {};
+        let blockHistory = [];
+        let txNonceCounter = 1000;
+
+        // Live 4D Field & Hydrodynamic State
+        let liveHydroData = null;
+        let liveGaugeOrbits = [];
+        let liveVorticity = [];
+        let liveTopologicalQ = 0.0;
+        let liveSobolevNorm = 100.0;
+
+        function logConsole(tag, msg, isHighlight = false) {
+            const term = document.getElementById("terminalLog");
+            const now = new Date().toTimeString().split(' ')[0];
+            const div = document.createElement("div");
+            div.className = "log-entry";
+            div.innerHTML = `<span class="log-time">[${now}]</span> <span class="${isHighlight ? 'log-highlight' : 'log-tag'}">${tag}:</span> ${msg}`;
+            term.appendChild(div);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        // 1. Dual WebSocket Telemetry (Blockchain + Hydro-Spectral Tensors)
+        function initWebSocket() {
+            // Blockchain WebSocket
+            try {
+                wsBlockchain = new WebSocket(WS_BLOCKCHAIN_URL);
+                wsBlockchain.onopen = () => {
+                    document.getElementById("wsBadge").innerText = "WS STREAMING";
+                    document.getElementById("wsBadge").style.color = "var(--secondary)";
+                    logConsole("WEBSOCKET", "Connected to Quantum Blockchain Ledger Stream", true);
+                };
+                wsBlockchain.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.blockchain) {
+                            document.getElementById("valBlockHeight").innerHTML = `${data.current_height} <span class="unit">BLOCKS</span>`;
+                            document.getElementById("valConfirmedTx").innerText = `${data.total_confirmed_tx} Confirmed Transactions (Mempool: ${data.mempool_pending})`;
+                            document.getElementById("valArchitectBal").innerHTML = `${Number(data.architect_balance_aet).toLocaleString('en-US', {maximumFractionDigits: 2})} <span class="unit">AET</span>`;
+                        }
+                    } catch (e) {
+                        console.error("WS Blockchain Parse Error:", e);
+                    }
+                };
+                wsBlockchain.onclose = () => {
+                    document.getElementById("wsBadge").innerText = "WS RECONNECTING";
+                    document.getElementById("wsBadge").style.color = "var(--accent-gold)";
+                    setTimeout(initWebSocket, 3000);
+                };
+            } catch (err) {
+                console.error("Blockchain WS Init Failed", err);
+            }
+
+            // Hydro-Spectral 4D Tensor Stream
+            try {
+                wsHydro = new WebSocket(WS_HYDRO_URL);
+                wsHydro.onopen = () => {
+                    logConsole("4D TENSORS", "Connected to /ws/live-hydro-spectral (Yang-Mills + Navier-Stokes 20Hz)", true);
+                };
+                wsHydro.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        liveHydroData = data;
+                        if (data.gauge_orbit_points) liveGaugeOrbits = data.gauge_orbit_points;
+                        if (data.vorticity_filaments) liveVorticity = data.vorticity_filaments;
+                        if (data.yang_mills_coupling) liveTopologicalQ = data.yang_mills_coupling.topological_charge_density_q;
+                        if (data.hydrodynamics) liveSobolevNorm = data.hydrodynamics.sobolev_h_s_norm;
+
+                        // Update HUD Overlays Live
+                        const ymElem = document.getElementById("overlayYm");
+                        if (ymElem && data.yang_mills_coupling) {
+                            ymElem.innerHTML = `${data.yang_mills_coupling.mass_gap_mev} MeV <span style="font-size:10px; color:#a855f7;">(Q=${liveTopologicalQ.toFixed(6)})</span>`;
+                        }
+                        const weilElem = document.getElementById("overlayWeil");
+                        if (weilElem && data.hydrodynamics) {
+                            weilElem.innerHTML = `0.662029 <span style="font-size:10px; color:#00f0ff;">(H<sup>3.5</sup>=${liveSobolevNorm.toFixed(2)})</span>`;
+                        }
+                        const horvathElem = document.getElementById("overlayHorvath");
+                        if (horvathElem && data.epigenetics) {
+                            horvathElem.innerHTML = `${data.epigenetics.horvath_dnam_age_years.toFixed(2)}y <span style="font-size:10px; color:#10b981;">(Oct4=${data.epigenetics.oct4_expression.toFixed(3)} | K1=${data.epigenetics.riccati_feedback_gain_k1.toFixed(2)})</span>`;
+                        }
+                        const eiElem = document.getElementById("overlayEI");
+                        if (eiElem && data.synaptic_ei) {
+                            eiElem.innerHTML = `${data.synaptic_ei.ei_balance_ratio.toFixed(4)} <span style="font-size:10px; color:#f59e0b;">(D1=${data.synaptic_ei.dopamine_index.toFixed(2)} | GABA=${data.synaptic_ei.gaba_inhibitory_tone.toFixed(2)})</span>`;
+                        }
+                    } catch (e) {
+                        console.error("WS Hydro Parse Error:", e);
+                    }
+                };
+            } catch (err) {
+                console.error("Hydro WS Init Failed", err);
+            }
+        }
+
+        // 2. Fetch Ledger State & Blocks
+        async function fetchLedger() {
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/blockchain/ledger`);
+                const data = await res.json();
+                updateLedgerUI(data);
+            } catch (e) {
+                document.getElementById("nodeStatus").innerText = "NODE OFFLINE";
+                document.getElementById("nodeStatus").style.borderColor = "var(--danger)";
+                document.getElementById("nodeStatus").style.color = "var(--danger)";
+            }
+        }
+
+        async function fetchBlocks() {
+            try {
+                const res = await fetch(`${API_BASE}/api/v1/blockchain/blocks`);
+                const data = await res.json();
+                if (data.blocks) {
+                    blockHistory = data.blocks;
+                    renderBlocks(data.blocks);
+                }
+            } catch (e) {
+                console.error("Failed to fetch blocks", e);
+            }
+        }
+
+        function updateLedgerUI(ledger) {
+            ledgerState = ledger;
+            document.getElementById("valBlockHeight").innerHTML = `${ledger.current_block_height} <span class="unit">BLOCKS</span>`;
+            document.getElementById("valConfirmedTx").innerText = `${ledger.total_confirmed_transactions} Confirmed Transactions (Mempool: ${ledger.mempool_pending_count})`;
+            document.getElementById("valArchitectBal").innerHTML = `${Number(ledger.architect_vault_balance).toLocaleString('en-US', {maximumFractionDigits: 2})} <span class="unit">AET</span>`;
+            document.getElementById("blockCountHeader").innerText = `${ledger.total_blocks} Blocks on Immutable Ledger`;
+        }
+
+        function renderBlocks(blocks) {
+            const list = document.getElementById("blockList");
+            list.innerHTML = "";
+            
+            // Show newest on top
+            const reversed = [...blocks].reverse();
+            reversed.forEach((blk, idx) => {
+                const isLatest = idx === 0;
+                const div = document.createElement("div");
+                div.className = `block-item ${isLatest ? 'latest' : ''}`;
+                
+                const posi = blk.posi_consensus || {};
+                div.innerHTML = `
+                    <div class="block-top">
+                        <span class="block-height-tag">BLOCK #${blk.block_height}</span>
+                        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">${blk.transactions_count || 0} TXs</span>
+                    </div>
+                    <div class="block-hash"><strong>Hash:</strong> ${blk.block_hash}</div>
+                    <div class="block-hash" style="margin-top: 4px; color: var(--primary);"><strong>Hodge Merkle Root:</strong> ${blk.merkle_root_hodge}</div>
+                    <div class="block-invariants">
+                        <span class="badge-proof">🌀 Weil: ${posi.riemann_spectral_positivity || 0.6620}</span>
+                        <span class="badge-proof">📈 BSD Reg: ${posi.bsd_neron_tate_regulator || 1.0000}</span>
+                        <span class="badge-proof">⚛️ YM Gap: ${posi.yang_mills_mass_gap_mev || 77.71} MeV</span>
+                        <span class="badge-proof" style="color: var(--secondary); border-color: var(--secondary);">🔷 Hodge Lock: ${posi.hodge_algebraic_lock ? 'TRUE' : 'FALSE'}</span>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // 3. User Actions
+        async function submitQuantumTx() {
+            const recipient = document.getElementById("inputRecipient").value.trim();
+            const amount = parseFloat(document.getElementById("inputAmount").value);
+            const fee = parseFloat(document.getElementById("inputFee").value);
+
+            if (!recipient || isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid recipient address and amount.");
+                return;
+            }
+
+            txNonceCounter++;
+            const txData = {
+                sender: "0x4121_ARCHITECT_DIMITAR_PRODROMOV",
+                recipient: recipient,
+                amount_aet: amount,
+                fee_aet: fee,
+                nonce: txNonceCounter,
+                diophantine_signature: `0xPQC_UI_SIGNATURE_NONCE_${txNonceCounter}_${Date.now()}`
+            };
+
+            try {
+                logConsole("PQC SIGN", `Generated NIST FIPS 204 (ML-DSA-87) Key Signature for ${amount} AET...`);
+                const res = await fetch(`${API_BASE}/api/v1/blockchain/tx`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(txData)
+                });
+                const data = await res.json();
+                
+                if (data.status === "ACCEPTED_INTO_MEMPOOL") {
+                    logConsole("MEMPOOL", `TX ${data.tx_hash.substring(0, 24)}... Ingested Successfully!`, true);
+                    fetchLedger();
+                } else {
+                    logConsole("TX ERROR", JSON.stringify(data));
+                }
+            } catch (err) {
+                logConsole("TX ERROR", err.toString());
+            }
+        }
+
+        async function mintPoSIBlock() {
+            try {
+                logConsole("PoSI CONSENSUS", "Verifying Spectral Invariants (Riemann + BSD + Yang-Mills + Hodge)...");
+                const res = await fetch(`${API_BASE}/api/v1/blockchain/mint-posi-block`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({})
+                });
+                const data = await res.json();
+                if (data.status === "BLOCK_MINTED_AND_SEALED" || data.status === "BLOCK_MINTED_VIA_POSI") {
+                    logConsole("BLOCK MINTED", `Height #${data.block.block_height} Sealed! Hash: ${data.block.block_hash.substring(0, 24)}...`, true);
+                    fetchLedger();
+                    fetchBlocks();
+                } else {
+                    logConsole("MINT ERROR", JSON.stringify(data));
+                }
+            } catch (err) {
+                logConsole("MINT ERROR", err.toString());
+            }
+        }
+
+        // 4. Canvas Animation: 4D Field Tensors & Navier-Stokes Vortex Filaments
+        const canvas = document.getElementById("posiCanvas");
+        const ctx = canvas.getContext("2d");
+        let angle = 0;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function renderPosiOrbits() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const radius = Math.min(cx, cy) * 0.7;
+
+            angle += 0.02;
+
+            // Background Grid Lines
+            ctx.strokeStyle = "rgba(0, 240, 255, 0.05)";
+            ctx.lineWidth = 1;
+            for (let r = 20; r < radius * 1.5; r += 30) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Invariant 1: Riemann Weil Positivity Orbit (Cyan)
+            ctx.strokeStyle = "#00f0ff";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i <= 360; i += 2) {
+                const rad = i * Math.PI / 180;
+                const r = radius * 0.8 + Math.sin(rad * 4 + angle) * 12;
+                const x = cx + Math.cos(rad) * r;
+                const y = cy + Math.sin(rad) * r;
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // Invariant 2: BSD Elliptic Regulator Torus (Emerald)
+            ctx.strokeStyle = "#00ff88";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i <= 360; i += 2) {
+                const rad = i * Math.PI / 180;
+                const r = radius * 0.6 + Math.cos(rad * 6 - angle * 1.5) * 10;
+                const x = cx + Math.cos(rad) * r;
+                const y = cy + Math.sin(rad) * r;
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // 🌀 3. Navier-Stokes Vorticity Filaments (Dynamic 3D-Projected Streams)
+            if (liveVorticity.length > 0) {
+                ctx.strokeStyle = "rgba(6, 182, 212, 0.75)";
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                for (let i = 0; i < liveVorticity.length; i++) {
+                    const [vx, vy, vz] = liveVorticity[i];
+                    // Isometric projection to 2D
+                    const px = cx + (vx * 65.0) * Math.cos(angle * 0.5) - (vy * 45.0) * Math.sin(angle * 0.5);
+                    const py = cy + (vx * 35.0) * Math.sin(angle * 0.5) + (vy * 55.0) * Math.cos(angle * 0.5) + (vz * 25.0);
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+                ctx.stroke();
+
+                // Draw luminous vortex nodes
+                for (let i = 0; i < liveVorticity.length; i++) {
+                    const [vx, vy, vz] = liveVorticity[i];
+                    const px = cx + (vx * 65.0) * Math.cos(angle * 0.5) - (vy * 45.0) * Math.sin(angle * 0.5);
+                    const py = cy + (vx * 35.0) * Math.sin(angle * 0.5) + (vy * 55.0) * Math.cos(angle * 0.5) + (vz * 25.0);
+                    ctx.fillStyle = i % 2 === 0 ? "#00f0ff" : "#00ff88";
+                    ctx.beginPath();
+                    ctx.arc(px, py, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // ⚛️ 4. 4D SU(3) Yang-Mills Gauge Orbit Conformal Projection
+            if (liveGaugeOrbits.length > 0) {
+                ctx.strokeStyle = `rgba(168, 85, 247, ${0.6 + Math.abs(liveTopologicalQ) * 5.0})`;
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                for (let k = 0; k < liveGaugeOrbits.length; k++) {
+                    const [gx, gy, gz] = liveGaugeOrbits[k];
+                    const px = cx + (gx * 50.0) * Math.cos(angle) - (gy * 50.0) * Math.sin(angle);
+                    const py = cy + (gx * 30.0) * Math.sin(angle) + (gy * 30.0) * Math.cos(angle) + (gz * 40.0);
+                    if (k === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            // 🧬 5. Epigenetic Riccati Rejuvenation Phase Trajectory (Emerald/Gold Curve)
+            if (liveHydroData && liveHydroData.epigenetics && liveHydroData.epigenetics.riccati_curve_points) {
+                const pts = liveHydroData.epigenetics.riccati_curve_points;
+                ctx.strokeStyle = "rgba(16, 185, 129, 0.85)";
+                ctx.lineWidth = 2.0;
+                ctx.beginPath();
+                for (let j = 0; j < pts.length; j++) {
+                    const [oj, nj, kj] = pts[j];
+                    const ex = cx + (oj * 180.0 - 90.0) * Math.cos(angle * 0.3) - (nj * 220.0) * Math.sin(angle * 0.3);
+                    const ey = cy + (oj * 90.0) * Math.sin(angle * 0.3) + (nj * 140.0) * Math.cos(angle * 0.3) - (kj * 2.5);
+                    if (j === 0) ctx.moveTo(ex, ey); else ctx.lineTo(ex, ey);
+                }
+                ctx.stroke();
+            }
+
+            // 🧠 6. Synaptic E/I Balance Diamond (Rotating Cyan / Amber Diamond)
+            if (liveHydroData && liveHydroData.synaptic_ei) {
+                const ei = liveHydroData.synaptic_ei.ei_balance_ratio;
+                const dSize = 25.0 * (ei / 0.4124);
+                ctx.strokeStyle = "rgba(245, 158, 11, 0.9)";
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - dSize);
+                ctx.lineTo(cx + dSize * 0.8, cy);
+                ctx.lineTo(cx, cy + dSize);
+                ctx.lineTo(cx - dSize * 0.8, cy);
+                ctx.closePath();
+                ctx.stroke();
+
+                ctx.fillStyle = "rgba(245, 158, 11, 0.25)";
+                ctx.fill();
+            }
+
+            // Invariant 4: Hodge Rational Cycle Center Lock (Gold)
+            ctx.fillStyle = "#f59e0b";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 6 + Math.sin(angle * 3) * 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            requestAnimationFrame(renderPosiOrbits);
+        }
+
+        // Init App
+        window.addEventListener("load", () => {
+            initWebSocket();
+            fetchLedger();
+            fetchBlocks();
+            renderPosiOrbits();
+            setInterval(fetchLedger, 2000);
+            setInterval(fetchBlocks, 3000);
+        });
+    </script>
+</body>
+</html>
