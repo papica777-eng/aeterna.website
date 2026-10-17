@@ -23,11 +23,7 @@ rand = "0.8.5"
 # Currently wrapping existing AES-256-GCM + ChaCha20 as the quantum-safe fallback
 ring = "0.16.20"
 pqcrypto-kyber = "0.7.7" # ML-KEM-1024
-pqcrypto-dilithium = "0.4.7" # ML-DSA-87
+pqcrypto-dilithium = "0.5.0" # ML-DSA-87
 
 [dev-dependencies]
 criterion = "0.5.1"
-
-[[bench]]
-name = "engine_latency"
-harness = false

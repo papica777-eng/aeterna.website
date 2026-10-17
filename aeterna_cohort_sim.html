@@ -444,10 +444,63 @@
                 if (cb) cb(key);
             }, 500);
         }
-
-        render();
-    }
     
+    // ===================================================================
+    //  AETERNA — IN SILICO CLINICAL TRIALS ENGINE
+    //  100,000 Virtual Patient Cohort Simulator
+    // ===================================================================
+
+    const COHORT_SIZE = 100000;
+
+    // --- COHORT GENERATION ---
+    const ETHNICITIES = [
+        { name: 'Caucasian', pct: 0.38, color: '#4a8fe7' },
+        { name: 'Asian', pct: 0.25, color: '#e8963e' },
+        { name: 'African', pct: 0.18, color: '#8b6cdf' },
+        { name: 'Hispanic', pct: 0.12, color: '#3daa6d' },
+        { name: 'Middle Eastern', pct: 0.05, color: '#e05252' },
+        { name: 'Other', pct: 0.02, color: '#6a7a8e' },
+    ];
+
+    // MUTATION PREVALENCE — Source: TCGA Pan-Cancer Atlas (Cell, 2018) & COSMIC v99
+    const GENES = [
+        { name: 'TP53', desc: 'Тумор-супресор (Li-Fraumeni)', mutRate: 0.36, color: '#e05252', source: 'TCGA Pan-Cancer: 36% across 33 cancer types' },
+        { name: 'BRCA1/2', desc: 'ДНК репарация (наследствен рак)', mutRate: 0.035, color: '#e8963e', source: 'TCGA: ~3-5% germline across solid tumors' },
+        { name: 'EGFR', desc: 'Тирозин-киназен рецептор', mutRate: 0.14, color: '#4a8fe7', source: 'COSMIC: 10-15% NSCLC (до 50% в Азия)' },
+        { name: 'KRAS', desc: 'RAS/MAPK сигнален път', mutRate: 0.25, color: '#8b6cdf', source: 'TCGA: 25% pan-cancer (до 90% в панкреас)' },
+        { name: 'ALK', desc: 'Анапластична лимфома-киназа', mutRate: 0.04, color: '#3daa6d', source: 'COSMIC: 3-5% NSCLC транслокации' },
+        { name: 'HER2/neu', desc: 'Рецепторна свръхекспресия', mutRate: 0.17, color: '#d97ab5', source: 'TCGA: 15-20% breast cancer amplification' },
+        { name: 'BRAF', desc: 'RAF/MEK/ERK каскада', mutRate: 0.07, color: '#5ec4c8', source: 'COSMIC: 7% pan-cancer (50% в меланом)' },
+        { name: 'PD-L1', desc: 'Имунен чекпойнт лиганд (>1% TPS)', mutRate: 0.32, color: '#c4a840', source: 'KEYNOTE trials: 30-50% NSCLC PD-L1 TPS≥1%' },
+    ];
+
+    // DRUG DATA — Source: Published Phase III Clinical Trials (ClinicalTrials.gov)
+    const DRUGS = [
+        { id: 'dasatinib', name: 'Dasatinib (Sprycel)', cls: 'TKI (Тирозин-киназен инхибитор)', target: 'BCR-ABL, SRC', fdaName: 'dasatinib',
+          trial: 'DASISION', nct: 'NCT00481247', citation: 'Kantarjian et al. NEJM 2010;362:2260-70',
+          realORR: 0.77, realTox: 0.35, realN: 519, realPFS: '24.7 мес.' },
+        { id: 'pembrolizumab', name: 'Pembrolizumab (Keytruda)', cls: 'Anti-PD-1 (Имунотерапия)', target: 'PD-1 рецептор', fdaName: 'pembrolizumab',
+          trial: 'KEYNOTE-024', nct: 'NCT02142738', citation: 'Reck et al. NEJM 2016;375:1823-33',
+          realORR: 0.448, realTox: 0.267, realN: 305, realPFS: '10.3 мес.' },
+        { id: 'osimertinib', name: 'Osimertinib (Tagrisso)', cls: 'EGFR TKI (3-та генерация)', target: 'EGFR T790M/del19/L858R', fdaName: 'osimertinib',
+          trial: 'FLAURA', nct: 'NCT02296125', citation: 'Soria et al. NEJM 2018;378:113-25',
+          realORR: 0.80, realTox: 0.34, realN: 556, realPFS: '18.9 мес.' },
+        { id: 'olaparib', name: 'Olaparib (Lynparza)', cls: 'PARP инхибитор', target: 'BRCA1/2 дефицит (HRD)', fdaName: 'olaparib',
+          trial: 'OlympiAD', nct: 'NCT02000622', citation: 'Robson et al. NEJM 2017;377:523-33',
+          realORR: 0.599, realTox: 0.368, realN: 302, realPFS: '7.0 мес.' },
+    ];
+
+    // Generate cohort summary
+    const cohort = {
+        total: COHORT_SIZE,
+        male: Math.round(COHORT_SIZE * 0.52),
+        female: Math.round(COHORT_SIZE * 0.48),
+        ageMedian: 58,
+        ageRange: '22–84',
+        ethnicities: ETHNICITIES.map(e => ({ ...e, count: Math.round(COHORT_SIZE * e.pct) })),
+        genes: GENES.map(g => ({ ...g, mutCount: Math.round(COHORT_SIZE * g.mutRate) })),
+    };
+
     let selectedDrug = null;
     let simStatus = 'IDLE'; // IDLE | RUNNING | DONE
     let simProgress = 0;
@@ -1417,13 +1470,17 @@
                 ];
 
                 try {
-                    const k1 = 'AQ.Ab8RN6J_y4NgA';
-                    const k2 = 'PFokmUxIboDtN5DBfTMnNDMfB4aKd7V1AAsPg';
+                    const apiKey = (window.AETERNA_CONFIG && window.AETERNA_CONFIG.GEMINI_API_KEY) || localStorage.getItem('AETERNA_GEMINI_KEY') || '';
+                    if (!apiKey) {
+                        appendMessage("⚠️ AI assistant requires an API key. Set it in localStorage as 'AETERNA_GEMINI_KEY' or through aeterna-config.js.");
+                        loadingIndicator.classList.remove('show');
+                        return;
+                    }
                     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-goog-api-key': k1 + k2
+                            'X-goog-api-key': apiKey
                         },
                         body: JSON.stringify({
                             contents: payloadContents

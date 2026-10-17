@@ -36,3 +36,40 @@ backend/.env
 backend/secrets/
 tests/test_extended_physiology.py
 
+# Scratch testing and patch scripts
+scripts/*.py
+scripts/*.cjs
+apply_*.py
+check_*.py
+find_*.py
+inspect_*.py
+patch_*.py
+print_*.py
+test_*.py
+tune_*.py
+make_*.py
+build_*.py
+capture_*.py
+clean_*.py
+diagnose_*.py
+expand_*.py
+fine_tune_*.py
+fix_*.py
+generate_*.py
+promote_*.py
+remove_*.py
+reproduce_*.py
+search_*.py
+update_compact_bar.py
+upgrade_middle_and_first_diagrams.py
+
+# Scratch screenshots in root
+*.png
+!assets/*.png
+!assets/**/*.png
+*.jpg
+!assets/*.jpg
+!assets/**/*.jpg
+audit_results.json
+__pycache__/
+*.pyc

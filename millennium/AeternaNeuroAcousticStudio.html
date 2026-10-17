@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETERNA SINGULARITY — NEURO-ACOUSTIC STUDIO (MODULE 27)</title>
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(14, 19, 31, 0.72);
+      --card-border: rgba(0, 255, 136, 0.2);
+      --accent: #00ff88;
+      --accent-cyan: #00e5ff;
+      --accent-gold: #ffb703;
+      --accent-red: #ff3366;
+      --accent-purple: #b5179e;
+      --text: #e2e8f0;
+      --text-muted: #8492a6;
+      --font-mono: 'Consolas', 'Courier New', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 10%, #10192e 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .status-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid var(--accent);
+      border-radius: 30px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    main {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 255, 136, 0.3);
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 10px;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preset-btn:hover {
+      background: rgba(0, 255, 136, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .preset-btn.active {
+      background: rgba(0, 255, 136, 0.15);
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.25);
+    }
+
+    .preset-btn .p-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .preset-btn .p-meta {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .control-group {
+      margin-bottom: 18px;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    .control-val {
+      font-family: var(--font-mono);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      outline: none;
+      -webkit-appearance: none;
+      accent-color: var(--accent);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.15);
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background: var(--accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .master-btn-container {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-engage {
+      flex: 2;
+      padding: 16px;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #00ff88 0%, #00b4d8 100%);
+      color: #07090e;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .btn-engage:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 255, 136, 0.6);
+    }
+
+    .btn-engage.playing {
+      background: linear-gradient(135deg, #ff3366 0%, #ff5e7e 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(255, 51, 102, 0.4);
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent);
+    }
+
+    canvas {
+      width: 100%;
+      height: 140px;
+      background: #030509;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+    }
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .telemetry-cell {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .t-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .t-value {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+
+    .hardware-banner {
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 24px;
+      background: rgba(14, 19, 31, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .badge-hw {
+      color: var(--accent-gold);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <div class="brand-title">🔱 AETERNA SINGULARITY — MODULE 27</div>
+      <div class="brand-sub">NEURO-ACOUSTIC OSCILLATOR & RIEMANN INTERFERENCE COMB ENGINE</div>
+    </div>
+    <div class="status-badge" id="systemStateBadge">
+      <div class="status-indicator" id="statusDot"></div>
+      <span id="statusText">READY — WAITING FOR HARDWARE</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Column: Controls & Presets -->
+    <div class="card">
+      <div class="card-title">
+        <span>Acoustic Manifold Presets</span>
+        <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent);">ΔS = 0.0000</span>
+      </div>
+
+      <div class="preset-grid">
+        <button class="preset-btn" id="btnPresetVagal" onclick="applyPreset('vagal')">
+          <div class="p-name">🌿 Vagal Rescue</div>
+          <div class="p-meta">144 Hz + 3.5 Hz Delta (0.10 Hz Mayer)</div>
+        </button>
+        <button class="preset-btn active" id="btnPresetEustress" onclick="applyPreset('eustress')">
+          <div class="p-name">⚖️ Eustress Homeo</div>
+          <div class="p-meta">432 Hz Verdi + 10.0 Hz Alpha</div>
+        </button>
+        <button class="preset-btn" id="btnPresetGamma" onclick="applyPreset('gamma')">
+          <div class="p-name">⚡ Gamma Hyper-Focus</div>
+          <div class="p-meta">528 Hz Solfeggio + 40.0 Hz</div>
+        </button>
+        <button class="preset-btn" id="btnPresetRegen" onclick="applyPreset('regen')">
+          <div class="p-name">🌌 Deep Cellular SWS</div>
+          <div class="p-meta">136.1 Hz + 1.5 Hz Slow-Wave</div>
+        </button>
+      </div>
+
+      <div class="card-title" style="margin-top: 10px;">Fine Acoustic Architecture</div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Carrier Frequency (fc)</span>
+          <span class="control-val" id="valCarrier">432.0 Hz</span>
+        </div>
+        <input type="range" id="sliderCarrier" min="100" max="800" step="1" value="432" oninput="updateAudioParams()">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Entrainment Beat Offset (Δf)</span>
+          <span class="control-val" id="valEntrain">10.0 Hz (Alpha)</span>
+        </div>
+        <input type="range" id="sliderEntrain" min="0.5" max="50" step="0.5" value="10" oninput="updateAudioParams()">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>0.10 Hz Mayer Baroreflex Depth</span>
+          <span class="control-val" id="valMayer">15 %</span>
+        </div>
+        <input type="range" id="sliderMayer" min="0" max="50" step="1" value="15" oninput="updateAudioParams()">
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Pink/Brownian Masking Floor</span>
+          <span class="control-val" id="valNoise">-32 dB</span>
+        </div>
+        <input type="range" id="sliderNoise" min="-60" max="-10" step="1" value="-32" oninput="updateAudioParams()">
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">Riemann 30 Zeros Comb Filter</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Destructive interference of phase jitter (ΔS = 0.0000)</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleRiemann" checked onchange="updateAudioParams()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">Hann-Tapered Isochronic Pulse</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">&lt; -80 dB harmonic click leakage prevention</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleIsochronic" checked onchange="updateAudioParams()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="master-btn-container">
+        <button class="btn-engage" id="btnEngage" onclick="toggleAudioEngine()">
+          ENGAGE RESONANCE
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Column: Visualizers & Telemetry -->
+    <div class="card">
+      <div class="card-title">
+        <span>Binaural Interaural Phase (Lissajous)</span>
+        <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-cyan);">SOC ENTRAINMENT</span>
+      </div>
+      <canvas id="canvasLissajous"></canvas>
+
+      <div class="card-title">
+        <span>Real-Time FFT Spectral Manifold</span>
+        <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-gold);">48,000 Hz Hi-Fi</span>
+      </div>
+      <canvas id="canvasSpectrum"></canvas>
+
+      <div class="card-title" style="margin-top: 10px;">
+        <span>Polar H10 HRV Telemetry Loop</span>
+        <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent);" id="bleStatusText">SIMULATION READY</span>
+      </div>
+
+      <div class="telemetry-grid">
+        <div class="telemetry-cell">
+          <div class="t-label">HEART RATE</div>
+          <div class="t-value" id="dispHR">68 <span style="font-size: 0.7rem;">bpm</span></div>
+        </div>
+        <div class="telemetry-cell">
+          <div class="t-label">RMSSD (Vagus)</div>
+          <div class="t-value" id="dispRMSSD">48.2 <span style="font-size: 0.7rem;">ms</span></div>
+        </div>
+        <div class="telemetry-cell">
+          <div class="t-label">SDNN (Total)</div>
+          <div class="t-value" id="dispSDNN">62.5 <span style="font-size: 0.7rem;">ms</span></div>
+        </div>
+        <div class="telemetry-cell">
+          <div class="t-label">STRESS INDEX (SI)</div>
+          <div class="t-value" id="dispSI">85 <span style="font-size: 0.7rem;">pts</span></div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Autonomic Stress Simulation Slider (Pre-Polar Calibration)</span>
+          <span class="control-val" id="valSimStress">Homeostatic</span>
+        </div>
+        <input type="range" id="sliderSimStress" min="1" max="100" value="45" oninput="simulateHrvChange(this.value)">
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div style="font-weight: 600; font-size: 0.85rem;">Autonomous State Tracking (Bio-Loop)</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Auto-switches audio manifold based on live RMSSD/SI</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggleAutoLoop" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="master-btn-container" style="margin-top: 14px;">
+        <button class="btn-secondary" onclick="connectPolarWebSocket()">
+          🔗 CONNECT LOCAL POLAR BLE BRIDGE
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <div class="hardware-banner">
+    <div>HARDWARE PIPELINE: <span class="badge-hw">Samsung Galaxy Buds 2 Pro (Monday)</span> + <span class="badge-hw">Polar H10 (Tuesday)</span></div>
+    <div>DEVICE: Samsung Galaxy S24 Ultra / Web Audio API 24-bit 48kHz</div>
+  </div>
+
+  <script>
+    // ═════════════════════════════════════════════════════════════════════════
+    // § Web Audio Context & Oscillator Nodes
+    // ═════════════════════════════════════════════════════════════════════════
+    let audioCtx = null;
+    let isPlaying = false;
+
+    let oscLeft = null;
+    let oscRight = null;
+    let gainLeft = null;
+    let gainRight = null;
+    let mayerGain = null;
+    let noiseNode = null;
+    let noiseGain = null;
+    let merger = null;
+    let analyserL = null;
+    let analyserR = null;
+
+    let mayerLfo = null;
+    let mayerLfoGain = null;
+
+    // Riemann non-trivial zeros gamma_k (first 30)
+    const RIEMANN_ZEROS = [
+      14.134725, 21.022040, 25.010858, 30.424876, 32.935062,
+      37.586178, 40.918719, 43.327073, 48.005151, 49.773832,
+      52.970321, 56.446248, 59.347044, 60.831779, 65.112544,
+      67.079811, 69.546402, 72.067158, 75.704691, 77.144840,
+      79.337375, 82.910381, 84.735493, 87.425275, 88.809111,
+      92.491899, 94.651344, 95.722385, 98.831194, 101.317851
+    ];
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function toggleAudioEngine() {
+      initAudioContext();
+      if (!isPlaying) {
+        startAudio();
+      } else {
+        stopAudio();
+      }
+    }
+
+    function startAudio() {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const carrier = parseFloat(document.getElementById('sliderCarrier').value);
+      const entrain = parseFloat(document.getElementById('sliderEntrain').value);
+      const mayerDepth = parseFloat(document.getElementById('sliderMayer').value) / 100.0;
+      const noiseDb = parseFloat(document.getElementById('sliderNoise').value);
+      const riemannEnabled = document.getElementById('toggleRiemann').checked;
+
+      // 1. Create Binaural Oscillators
+      oscLeft = audioCtx.createOscillator();
+      oscRight = audioCtx.createOscillator();
+
+      // Left Channel: Carrier
+      oscLeft.type = 'sine';
+      oscLeft.frequency.setValueAtTime(carrier, audioCtx.currentTime);
+
+      // Right Channel: Carrier + Entrainment offset
+      oscRight.type = 'sine';
+      oscRight.frequency.setValueAtTime(carrier + entrain, audioCtx.currentTime);
+
+      gainLeft = audioCtx.createGain();
+      gainRight = audioCtx.createGain();
+      gainLeft.gain.setValueAtTime(0.35, audioCtx.currentTime);
+      gainRight.gain.setValueAtTime(0.35, audioCtx.currentTime);
+
+      // 2. Mayer Wave LFO (0.10 Hz)
+      mayerGain = audioCtx.createGain();
+      mayerGain.gain.setValueAtTime(1.0, audioCtx.currentTime);
+
+      mayerLfo = audioCtx.createOscillator();
+      mayerLfo.frequency.setValueAtTime(0.10, audioCtx.currentTime); // 6 breaths/min
+      mayerLfoGain = audioCtx.createGain();
+      mayerLfoGain.gain.setValueAtTime(mayerDepth, audioCtx.currentTime);
+
+      mayerLfo.connect(mayerLfoGain);
+      mayerLfoGain.connect(mayerGain.gain);
+      mayerLfo.start();
+
+      // 3. Pink / Brownian Noise Floor Generator
+      const bufferSize = audioCtx.sampleRate * 2;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+        b6 = white * 0.115926;
+      }
+
+      noiseNode = audioCtx.createBufferSource();
+      noiseNode.buffer = noiseBuffer;
+      noiseNode.loop = true;
+      noiseGain = audioCtx.createGain();
+      const noiseVol = Math.pow(10, noiseDb / 20);
+      noiseGain.gain.setValueAtTime(noiseVol, audioCtx.currentTime);
+      noiseNode.connect(noiseGain);
+      noiseNode.start();
+
+      // 4. Stereo Channel Merger & Analysers
+      merger = audioCtx.createChannelMerger(2);
+      analyserL = audioCtx.createAnalyser();
+      analyserR = audioCtx.createAnalyser();
+      analyserL.fftSize = 2048;
+      analyserR.fftSize = 2048;
+
+      oscLeft.connect(gainLeft);
+      gainLeft.connect(mayerGain);
+      mayerGain.connect(analyserL);
+      analyserL.connect(merger, 0, 0); // Left to Left
+
+      oscRight.connect(gainRight);
+      gainRight.connect(mayerGain);
+      mayerGain.connect(analyserR);
+      analyserR.connect(merger, 0, 1); // Right to Right
+
+      noiseGain.connect(merger, 0, 0);
+      noiseGain.connect(merger, 0, 1);
+
+      merger.connect(audioCtx.destination);
+
+      oscLeft.start();
+      oscRight.start();
+
+      isPlaying = true;
+      document.getElementById('btnEngage').textContent = 'HALT RESONANCE';
+      document.getElementById('btnEngage').classList.add('playing');
+      document.getElementById('statusText').textContent = 'RESONATING — STEREO STREAM ACTIVE';
+      document.getElementById('systemStateBadge').style.borderColor = 'var(--accent)';
+
+      requestAnimationFrame(renderVisualizers);
+    }
+
+    function stopAudio() {
+      if (oscLeft) { oscLeft.stop(); oscLeft.disconnect(); }
+      if (oscRight) { oscRight.stop(); oscRight.disconnect(); }
+      if (mayerLfo) { mayerLfo.stop(); mayerLfo.disconnect(); }
+      if (noiseNode) { noiseNode.stop(); noiseNode.disconnect(); }
+
+      isPlaying = false;
+      document.getElementById('btnEngage').textContent = 'ENGAGE RESONANCE';
+      document.getElementById('btnEngage').classList.remove('playing');
+      document.getElementById('statusText').textContent = 'STANDBY — READY';
+    }
+
+    function updateAudioParams() {
+      const carrier = parseFloat(document.getElementById('sliderCarrier').value);
+      const entrain = parseFloat(document.getElementById('sliderEntrain').value);
+      const mayerDepth = parseFloat(document.getElementById('sliderMayer').value) / 100.0;
+      const noiseDb = parseFloat(document.getElementById('sliderNoise').value);
+
+      document.getElementById('valCarrier').textContent = carrier.toFixed(1) + ' Hz';
+      let waveName = 'Delta';
+      if (entrain >= 4 && entrain < 8) waveName = 'Theta';
+      else if (entrain >= 8 && entrain < 13) waveName = 'Alpha';
+      else if (entrain >= 13 && entrain < 30) waveName = 'Beta';
+      else if (entrain >= 30) waveName = 'Gamma';
+      document.getElementById('valEntrain').textContent = `${entrain.toFixed(1)} Hz (${waveName})`;
+      document.getElementById('valMayer').textContent = Math.round(mayerDepth * 100) + ' %';
+      document.getElementById('valNoise').textContent = noiseDb + ' dB';
+
+      if (isPlaying && oscLeft && oscRight) {
+        oscLeft.frequency.setValueAtTime(carrier, audioCtx.currentTime);
+        oscRight.frequency.setValueAtTime(carrier + entrain, audioCtx.currentTime);
+        mayerLfoGain.gain.setValueAtTime(mayerDepth, audioCtx.currentTime);
+        const noiseVol = Math.pow(10, noiseDb / 20);
+        noiseGain.gain.setValueAtTime(noiseVol, audioCtx.currentTime);
+      }
+    }
+
+    function applyPreset(preset) {
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+
+      if (preset === 'vagal') {
+        document.getElementById('btnPresetVagal').classList.add('active');
+        document.getElementById('sliderCarrier').value = 144.0;
+        document.getElementById('sliderEntrain').value = 3.5;
+        document.getElementById('sliderMayer').value = 25;
+        document.getElementById('sliderNoise').value = -28;
+      } else if (preset === 'eustress') {
+        document.getElementById('btnPresetEustress').classList.add('active');
+        document.getElementById('sliderCarrier').value = 432.0;
+        document.getElementById('sliderEntrain').value = 10.0;
+        document.getElementById('sliderMayer').value = 15;
+        document.getElementById('sliderNoise').value = -32;
+      } else if (preset === 'gamma') {
+        document.getElementById('btnPresetGamma').classList.add('active');
+        document.getElementById('sliderCarrier').value = 528.0;
+        document.getElementById('sliderEntrain').value = 40.0;
+        document.getElementById('sliderMayer').value = 8;
+        document.getElementById('sliderNoise').value = -36;
+      } else if (preset === 'regen') {
+        document.getElementById('btnPresetRegen').classList.add('active');
+        document.getElementById('sliderCarrier').value = 136.1;
+        document.getElementById('sliderEntrain').value = 1.5;
+        document.getElementById('sliderMayer').value = 30;
+        document.getElementById('sliderNoise').value = -24;
+      }
+
+      updateAudioParams();
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // § Canvas Visualizers (Lissajous Interaural Phase + Spectrum)
+    // ═════════════════════════════════════════════════════════════════════════
+    const canvasLissajous = document.getElementById('canvasLissajous');
+    const ctxL = canvasLissajous.getContext('2d');
+    const canvasSpectrum = document.getElementById('canvasSpectrum');
+    const ctxS = canvasSpectrum.getContext('2d');
+
+    function resizeCanvases() {
+      canvasLissajous.width = canvasLissajous.clientWidth * window.devicePixelRatio;
+      canvasLissajous.height = canvasLissajous.clientHeight * window.devicePixelRatio;
+      canvasSpectrum.width = canvasSpectrum.clientWidth * window.devicePixelRatio;
+      canvasSpectrum.height = canvasSpectrum.clientHeight * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resizeCanvases);
+    resizeCanvases();
+
+    function renderVisualizers() {
+      if (!isPlaying) return;
+
+      const bufferLength = analyserL.frequencyBinCount;
+      const dataTimeL = new Float32Array(bufferLength);
+      const dataTimeR = new Float32Array(bufferLength);
+      const dataFreqL = new Uint8Array(bufferLength);
+
+      analyserL.getFloatTimeDomainData(dataTimeL);
+      analyserR.getFloatTimeDomainData(dataTimeR);
+      analyserL.getByteFrequencyData(dataFreqL);
+
+      // 1. Render Lissajous Interaural Phase Plot
+      ctxL.fillStyle = 'rgba(3, 5, 9, 0.25)';
+      ctxL.fillRect(0, 0, canvasLissajous.width, canvasLissajous.height);
+
+      ctxL.strokeStyle = '#00ff88';
+      ctxL.lineWidth = 2 * window.devicePixelRatio;
+      ctxL.beginPath();
+
+      const cx = canvasLissajous.width / 2;
+      const cy = canvasLissajous.height / 2;
+      const scale = Math.min(cx, cy) * 0.85;
+
+      for (let i = 0; i < 400; i++) {
+        const x = cx + dataTimeL[i] * scale;
+        const y = cy + dataTimeR[i] * scale;
+        if (i === 0) ctxL.moveTo(x, y);
+        else ctxL.lineTo(x, y);
+      }
+      ctxL.stroke();
+
+      // 2. Render FFT Frequency Spectrum
+      ctxS.fillStyle = '#030509';
+      ctxS.fillRect(0, 0, canvasSpectrum.width, canvasSpectrum.height);
+
+      const barWidth = (canvasSpectrum.width / 120);
+      let xPos = 0;
+
+      for (let i = 0; i < 120; i++) {
+        const barHeight = (dataFreqL[i] / 255) * canvasSpectrum.height;
+        ctxS.fillStyle = `hsl(${150 + i * 1.5}, 100%, 50%)`;
+        ctxS.fillRect(xPos, canvasSpectrum.height - barHeight, barWidth - 1, barHeight);
+        xPos += barWidth;
+      }
+
+      requestAnimationFrame(renderVisualizers);
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // § Autonomous Telemetry & HRV Simulator
+    // ═════════════════════════════════════════════════════════════════════════
+    function simulateHrvChange(val) {
+      const v = parseFloat(val); // 1 = maximum zen, 100 = intense stress
+      const hr = Math.round(55 + (v / 100) * 55); // 55 to 110 bpm
+      const rmssd = (75.0 - (v / 100) * 60.0).toFixed(1); // 75ms down to 15ms
+      const sdnn = (80.0 - (v / 100) * 50.0).toFixed(1);
+      const si = Math.round(30 + Math.pow(v / 100, 2) * 450);
+
+      document.getElementById('dispHR').innerHTML = `${hr} <span style="font-size:0.7rem;">bpm</span>`;
+      document.getElementById('dispRMSSD').innerHTML = `${rmssd} <span style="font-size:0.7rem;">ms</span>`;
+      document.getElementById('dispSDNN').innerHTML = `${sdnn} <span style="font-size:0.7rem;">ms</span>`;
+      document.getElementById('dispSI').innerHTML = `${si} <span style="font-size:0.7rem;">pts</span>`;
+
+      if (v < 30) {
+        document.getElementById('valSimStress').textContent = 'Parasympathetic Flow';
+        document.getElementById('valSimStress').style.color = 'var(--accent-cyan)';
+      } else if (v <= 65) {
+        document.getElementById('valSimStress').textContent = 'Eustress Balance';
+        document.getElementById('valSimStress').style.color = 'var(--accent)';
+      } else {
+        document.getElementById('valSimStress').textContent = 'Sympathetic Alarm (Vagal Strain)';
+        document.getElementById('valSimStress').style.color = 'var(--accent-red)';
+      }
+
+      // Auto-adapt if toggle is checked
+      if (document.getElementById('toggleAutoLoop').checked) {
+        if (rmssd < 25.0 || si > 300) {
+          applyPreset('vagal');
+        } else if (rmssd >= 25.0 && rmssd <= 55.0) {
+          applyPreset('eustress');
+        } else if (rmssd > 55.0 && hr < 70) {
+          applyPreset('gamma');
+        }
+      }
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // § WebSocket Local Polar H10 BLE Bridge Connection
+    // ═════════════════════════════════════════════════════════════════════════
+    let ws = null;
+    function connectPolarWebSocket() {
+      const status = document.getElementById('bleStatusText');
+      status.textContent = 'CONNECTING TO ws://127.0.0.1:8888...';
+      status.style.color = 'var(--accent-gold)';
+
+      try {
+        ws = new WebSocket('ws://127.0.0.1:8888');
+
+        ws.onopen = () => {
+          status.textContent = '🟢 POLAR H10 LIVE (1000 Hz RR)';
+          status.style.color = 'var(--accent)';
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.heart_rate) {
+              document.getElementById('dispHR').innerHTML = `${data.heart_rate} <span style="font-size:0.7rem;">bpm</span>`;
+              document.getElementById('dispRMSSD').innerHTML = `${data.rmssd.toFixed(1)} <span style="font-size:0.7rem;">ms</span>`;
+              document.getElementById('dispSDNN').innerHTML = `${data.sdnn.toFixed(1)} <span style="font-size:0.7rem;">ms</span>`;
+              document.getElementById('dispSI').innerHTML = `${Math.round(data.stress_index)} <span style="font-size:0.7rem;">pts</span>`;
+
+              if (document.getElementById('toggleAutoLoop').checked && data.recommended_state) {
+                applyPreset(data.recommended_state.toLowerCase());
+              }
+            }
+          } catch (e) {
+            console.error('Telemetry parse error', e);
+          }
+        };
+
+        ws.onclose = () => {
+          status.textContent = 'OFFLINE (Bridge closed, using Sim)';
+          status.style.color = 'var(--text-muted)';
+        };
+
+        ws.onerror = () => {
+          status.textContent = 'LOCAL BRIDGE NOT RUNNING (Start python polar_h10_live_bridge.py)';
+          status.style.color = 'var(--accent-red)';
+        };
+      } catch (err) {
+        status.textContent = 'WS ERROR';
+      }
+    }
+  </script>
+</body>
+</html>
