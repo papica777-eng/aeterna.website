@@ -4,8 +4,8 @@
   "architect": "Dimitar Prodromov",
   "authority": "0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21",
   "contact": "dimitar@aeterna.website",
-  "scan_timestamp": "2026-10-23T19:54:34.539446200+00:00",
-  "report_verification_hash_sha256": "1c70e08769936a97bf3e6c3c9ba0a7484b8af5e8883fa371ac5d6ab2891d19d4",
+  "scan_timestamp": "2026-10-23T20:42:09.673101500+00:00",
+  "report_verification_hash_sha256": "9efcead1005233597fe52251e4f927aa0bcec5bbb9d761fba66d0658e09b949b",
   "standards_referenced": [
     "NIST FIPS 203 (ML-KEM Module-Lattice Key Encapsulation Mechanism)",
     "NIST FIPS 204 (ML-DSA Module-Lattice Digital Signature Algorithm)",
@@ -46,7 +46,7 @@
         "key_exchange_quantum_safe": true,
         "authentication_quantum_safe": false,
         "symmetric_quantum_safe": true,
-        "nist_quantum_security_level": 3
+        "nist_quantum_security_level": 5
       },
       "certificate": {
         "subject_cn": "aeterna.website",
@@ -67,15 +67,15 @@
         "security_margin_delta_t_years": -19,
         "is_cryptographically_insolvent": false,
         "sndl_threat_active": false,
-        "mosca_equation_repr": "Δt = Z(6) - [X(20) + Y(5)] = -19 years",
-        "mathematical_proof": "POST-QUANTUM STABLE: Key encapsulation primitive meets NIST FIPS 203 standards.",
-        "verdict": "POST-QUANTUM RESILIENT"
+        "mosca_equation_repr": "Δt = Z(6) - [X(20) + Y(5)] = -19 yrs (Classical) | OVERRIDDEN: Ephemeral Session Immune (NIST FIPS 203 ML-KEM-768)",
+        "mathematical_proof": "POST-QUANTUM RESILIENT: Ephemeral session key encapsulation negotiated via NIST FIPS 203 (ML-KEM-768). Store-Now-Decrypt-Later (SNDL) attacks are rendered mathematically ineffective as session keys are protected by lattice-based Module Learning with Errors (ML-KEM), regardless of classical shelf-life X.",
+        "verdict": "POST-QUANTUM RESILIENT (NIST FIPS 203)"
       },
       "quantum_complexity": {
-        "shor_target_primitive": "ECDSA 256-bit Elliptic Curve DLP",
-        "shor_logical_qubits_required": 1536,
-        "shor_physical_qubits_surface_code": 1536000,
-        "shor_time_complexity_big_o": "O(k³) — Polynomial Time via Shor's Algorithm",
+        "shor_target_primitive": "ECDSA 256-bit Elliptic Curve Discrete Logarithm (ECDLP)",
+        "shor_logical_qubits_required": 2330,
+        "shor_physical_qubits_surface_code": 2330000,
+        "shor_time_complexity_big_o": "O(k³) — Polynomial Time via Shor's Discrete Logarithm Algorithm (ECDLP)",
         "grover_symmetric_cipher": "AES-256-GCM",
         "grover_classical_bits": 256,
         "grover_effective_quantum_bits": 128,
@@ -108,8 +108,8 @@
           "severity": "HIGH",
           "cwe_id": "CWE-326: Inadequate Encryption Strength",
           "component": "X.509 Server Identity Certificate",
-          "primitive": "ECDSA 256-bit Public Key",
-          "description": "Server certificate uses ECDSA 256-bit public key. Factorable via Shor's algorithm on a quantum computer with ~512 logical qubits, allowing adversary impersonation, rogue certificate creation, and MITM.",
+          "primitive": "ECDSA 256-bit Public Key (Classical 128 bits)",
+          "description": "Server certificate uses ECDSA 256-bit public key (providing 128-bit classical security). Solvable via Shor's discrete logarithm algorithm (ECDLP) on a quantum computer with ~2330 logical qubits (Roetteler et al.), allowing adversary impersonation, rogue certificate creation, and MITM once a CRQC is operational.",
           "statutory_breach": "BSI TR-02102-2 & DORA Art. 9 §4 (Cryptographic Agility)",
           "remediation": "Transition to dual-certificate configuration supporting NIST FIPS 204 ML-DSA-65 signatures"
         }
