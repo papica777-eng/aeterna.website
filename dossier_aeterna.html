@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-LEVEL EXECUTIVE AUDIT DOSSIER | AETERNA POST-QUANTUM CRYPTOGRAPHY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #030712;
+            --bg-card: #0b1120;
+            --bg-card-hover: #111a2e;
+            --border-card: #1e293b;
+            --gold: #c5a059;
+            --gold-glow: rgba(197, 160, 89, 0.2);
+            --cyan: #00f0ff;
+            --cyan-glow: rgba(0, 240, 255, 0.2);
+            --red: #ef4444;
+            --green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #090d16 0%, #111a2e 100%);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px var(--gold-glow);
+            position: relative;
+        }
+        .badge-authority {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .header h1 {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 800px;
+        }
+        .header-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-card);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .header-meta span strong { color: #ffffff; }
+        .verdict-banner {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-left: 4px solid var(--red);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        .verdict-title {
+            font-family: var(--font-serif);
+            color: var(--red);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .verdict-text {
+            color: #e2e8f0;
+            font-size: 1rem;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        .kpi-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .kpi-label {
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .kpi-val {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            margin-bottom: 4px;
+        }
+        .kpi-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .target-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 35px;
+            margin-bottom: 40px;
+        }
+        .target-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-card);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .target-domain {
+            font-family: var(--font-mono);
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+        .target-ip {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        .section-subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 30px 0 15px 0;
+        }
+        .cbom-table-wrap {
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+        .cbom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        .cbom-table th {
+            background-color: #070c17;
+            color: var(--gold);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--border-card);
+        }
+        .cbom-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-card);
+            color: #e2e8f0;
+        }
+        .proof-box {
+            background: #060a14;
+            border: 1px solid #1e293b;
+            border-left: 3px solid var(--cyan);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 25px 0;
+            font-family: var(--font-mono);
+        }
+        .proof-title {
+            color: var(--cyan);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+        .proof-equation {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: #0b1120;
+            display: inline-block;
+            border-radius: 4px;
+        }
+        .proof-text {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .vuln-card {
+            background: #090e1a;
+            border: 1px solid var(--border-card);
+            border-radius: 6px;
+            padding: 18px;
+            margin-bottom: 14px;
+        }
+        .vuln-critical { border-left: 4px solid var(--red); }
+        .vuln-high { border-left: 4px solid #f59e0b; }
+        .vuln-medium { border-left: 4px solid var(--cyan); }
+        .vuln-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .vuln-id {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .vuln-sev {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+        }
+        .vuln-title {
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .vuln-desc {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        .vuln-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            background: #040711;
+            padding: 10px 14px;
+            border-radius: 4px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: var(--red); border: 1px solid var(--red); }
+        .badge-warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: var(--green); border: 1px solid var(--green); }
+        .text-red { color: var(--red); }
+        .text-green { color: var(--green); }
+        .text-cyan { color: var(--cyan); }
+        .text-gold { color: var(--gold); }
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .roadmap-card {
+            background: #080d19;
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .roadmap-step {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .roadmap-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        .roadmap-body {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .footer {
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 1px solid var(--border-card);
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer-seal {
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        @media print {
+            body { background: #ffffff; color: #000000; padding: 0; }
+            .header, .target-section, .kpi-box, .proof-box, .vuln-card {
+                background: #ffffff !important;
+                border: 1px solid #cccccc !important;
+                box-shadow: none !important;
+                color: #000000 !important;
+            }
+            .header h1, .section-subtitle, .target-domain { color: #000000 !important; }
+            .text-gold, .text-cyan { color: #333333 !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge-authority">SOVEREIGN AUDIT AUTHORITY: 0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21</div>
+            <h1>C-Level Executive Cryptographic Audit Dossier</h1>
+            <p>Formal Post-Quantum Vulnerability Assessment, Mosca Insolvency Proof & Regulatory Non-Conformity Audit under EU NIS2 Directive & DORA Regulation.</p>
+            <div class="header-meta">
+                <span>Auditor: <strong>Dimitar Prodromov</strong></span>
+                <span>Contact: <strong>dimitar@aeterna.website</strong></span>
+                <span>Timestamp: <strong>2026-10-23T18:07:31.378585+00:00</strong></span>
+                <span>Verification SHA-256: <strong>6d60e4b8a00fc2d5cdec30f5794ad425637f10eac48ab79f95d5a030f1f4f049</strong></span>
+            </div>
+        </div>
+
+        <div class="verdict-banner">
+            <div class="verdict-title">EXECUTIVE FINDING: STATUTORY NON-CONFORMITY & SNDL EXPOSURE</div>
+            <p class="verdict-text">UP TO EUR 10,000,000 OR 2% OF GLOBAL ANNUAL TURNOVER PER ESSENTIAL ENTITY (NIS2 Art. 34 / DORA Art. 50)</p>
+        </div>
+
+        <div class='target-section'>
+                <div class='target-header'>
+                    <div>
+                        <h2 class='target-domain'>aeterna.website:443</h2>
+                        <div class='target-ip'>Resolved IPv4/IPv6: <code>185.199.108.153</code></div>
+                    </div>
+                    <div><span class='badge badge-success'>POST-QUANTUM RESILIENT</span></div>
+                </div>
+
+                <div class='grid-4'>
+                    <div class='kpi-box'>
+                        <div class='kpi-label'>NIS2 Compliance Score</div>
+                        <div class='kpi-val text-green'>80%</div>
+                        <div class='kpi-sub'>Art. 21 §2(h) Mandatory</div>
+                    </div>
+                    <div class='kpi-box'>
+                        <div class='kpi-label'>DORA Compliance Score</div>
+                        <div class='kpi-val text-green'>80%</div>
+                        <div class='kpi-sub'>Reg 2022/2554 Art. 9</div>
+                    </div>
+                    <div class='kpi-box'>
+                        <div class='kpi-label'>Mosca Secrecy Margin (Δt)</div>
+                        <div class='kpi-val text-red'>-19 yrs</div>
+                        <div class='kpi-sub'>Insolvent Secrecy Window</div>
+                    </div>
+                    <div class='kpi-box'>
+                        <div class='kpi-label'>Shor Factorization Qubits</div>
+                        <div class='kpi-val text-cyan'>4096 Logical</div>
+                        <div class='kpi-sub'>~4M Surface Code</div>
+                    </div>
+                </div>
+
+                <div class='cbom-table-wrap'>
+                    <h3 class='section-subtitle'>Cryptographic Bill of Materials (CBOM) Inventory</h3>
+                    <table class='cbom-table'>
+                        <thead>
+                            <tr>
+                                <th>Primitive Layer</th>
+                                <th>Active Algorithm</th>
+                                <th>Key Length</th>
+                                <th>Classical Security</th>
+                                <th>Post-Quantum Status</th>
+                                <th>Shor / Grover Attack</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Negotiated Suite</td>
+                                <td colspan='5'><code>TLS13_AES_128_GCM_SHA256</code></td>
+                            </tr>
+                            <tr>
+                                <td>Key Exchange</td>
+                                <td><strong>X25519MLKEM768 (NIST FIPS 203 Hybrid Level 3)</strong></td>
+                                <td>Ephemeral</td>
+                                <td>128 bits</td>
+                                <td><span class='badge badge-danger'>VULNERABLE</span></td>
+                                <td>Shor's Discrete Log (Poly-Time)</td>
+                            </tr>
+                            <tr>
+                                <td>Bulk Encryption</td>
+                                <td><strong>AES-128-GCM</strong></td>
+                                <td>256 bits</td>
+                                <td>256 bits</td>
+                                <td><span class='badge badge-success'>RESISTANT</span></td>
+                                <td>Grover's Quadratic (128-bit margin)</td>
+                            </tr>
+                            <tr>
+                                <td>Identity Certificate</td>
+                                <td><strong>RSA 2048-bit</strong></td>
+                                <td>Public Key</td>
+                                <td>112 bits</td>
+                                <td><span class='badge badge-danger'>FACTORABLE</span></td>
+                                <td>Shor's Factorization (CRQC)</td>
+                            </tr>
+                            <tr>
+                                <td>CA Issuer & Expiry</td>
+                                <td>YR2</td>
+                                <td>45 days left</td>
+                                <td>X.509 v3</td>
+                                <td><span class='badge badge-success'>VALID</span></td>
+                                <td>N/A</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class='proof-box'>
+                    <div class='proof-title'>MATHEMATICAL PROOF: MOSCA'S THEOREM COLLAPSE</div>
+                    <div class='proof-equation'>Δt = Z(6) - [X(20) + Y(5)] = -19 years</div>
+                    <p class='proof-text'>POST-QUANTUM STABLE: Key encapsulation primitive meets NIST FIPS 203 standards.</p>
+                </div>
+
+                <div class='vulnerabilities-block'>
+                    <h3 class='section-subtitle'>Identified Vulnerabilities & Statutory Non-Conformities (1)</h3>
+                    <div class='vuln-card vuln-critical'>
+                    <div class='vuln-header'>
+                        <span class='vuln-id'>AET-PQC-0001</span>
+                        <span class='vuln-sev'>CRITICAL</span>
+                        <span class='vuln-title'>X.509 Server Identity Certificate</span>
+                    </div>
+                    <p class='vuln-desc'>Server certificate uses RSA 2048-bit public key. Factorable via Shor's algorithm on a quantum computer with ~4096 logical qubits, allowing adversary impersonation, rogue certificate creation, and MITM.</p>
+                    <div class='vuln-meta'>
+                        <div><strong>Statutory Breach:</strong> BSI TR-02102-2 & DORA Art. 9 §4 (Cryptographic Agility)</div>
+                        <div><strong>Technical Fix:</strong> <span class='text-gold'>Transition to dual-certificate configuration supporting NIST FIPS 204 ML-DSA-65 signatures</span></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        <div class="target-section">
+            <h2 class="section-subtitle">Prescriptive 4-Phase Industrial Remediation Roadmap</h2>
+            <div class="roadmap-grid">
+                <div class="roadmap-card">
+                    <div class="roadmap-step">Phase 1 (Immediate - 30 Days)</div>
+                    <div class="roadmap-title">Automated CBOM Ingestion</div>
+                    <div class="roadmap-body">
+                        Deploy Aeterna CBOM Scanner internally to discover all internal microservices, database encryption keys, and hardware security module (HSM) dependencies.
+                    </div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-step">Phase 2 (Day 30 - 90)</div>
+                    <div class="roadmap-title">Aeterna Hybrid Gateway</div>
+                    <div class="roadmap-body">
+                        Deploy zero-downtime Aeterna Reverse Proxy with hybrid key exchange (X25519 + ML-KEM-768 / FIPS 203) terminating public client sessions immediately.
+                    </div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-step">Phase 3 (Month 3 - 12)</div>
+                    <div class="roadmap-title">Dual Certificate CA Hierarchy</div>
+                    <div class="roadmap-body">
+                        Establish secondary Root & Intermediate CA supporting NIST FIPS 204 (ML-DSA-65) alongside classical certificates for backwards-compatible authentication.
+                    </div>
+                </div>
+                <div class="roadmap-card">
+                    <div class="roadmap-step">Phase 4 (Year 2 - 4)</div>
+                    <div class="roadmap-title">Pure PQC Agility (CNSA 2.0)</div>
+                    <div class="roadmap-body">
+                        Decommission legacy RSA/ECC primitives across all core banking databases, SWIFT messaging links, and payment HSMs, achieving complete quantum immunity.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-seal">AETERNA QUANTUM ASSURANCE SEAL — ARCHITECTURAL VERIFICATION</div>
+            <div>Generated by AETERNA POST-QUANTUM CRYPTOGRAPHY CBOM SCANNER v2.0.0-ENTERPRISE</div>
+            <div>Standards: NIST FIPS 203/204/205 | EU NIS2 Art. 21 | EU DORA Reg 2022/2554 | BSI TR-02102 | CycloneDX v1.6 CBOM</div>
+        </div>
+    </div>
+</body>
+</html>

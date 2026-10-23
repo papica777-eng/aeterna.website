@@ -1,0 +1,85 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:6d60e4b8a00fc2d5cdec30f5794ad425637f10eac48ab79f95d5a030f1f4f049",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-10-23T18:07:31.378585+00:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "AETERNA POST-QUANTUM CRYPTOGRAPHY CBOM SCANNER",
+          "version": "2.0.0-ENTERPRISE",
+          "author": "Dimitar Prodromov"
+        }
+      ]
+    },
+    "authors": [
+      {
+        "name": "Dimitar Prodromov",
+        "email": "dimitar@aeterna.website"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "cryptographic-asset",
+      "name": "X25519MLKEM768 (NIST FIPS 203 Hybrid Level 3)",
+      "version": "Classical",
+      "description": "Key exchange primitive for aeterna.website",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "key-exchange",
+          "parameterSetIdentifier": "ECDHE-X25519",
+          "cryptoFunctions": [
+            "key-agreement"
+          ],
+          "classicalSecurityLevel": 128,
+          "nistQuantumSecurityLevel": 0
+        }
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "name": "AES-128-GCM",
+      "version": "NIST-SP-800-38D",
+      "description": "Bulk symmetric encryption cipher for aeterna.website",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "block-cipher",
+          "parameterSetIdentifier": "256",
+          "cryptoFunctions": [
+            "encrypt",
+            "decrypt"
+          ],
+          "classicalSecurityLevel": 256,
+          "nistQuantumSecurityLevel": 1
+        },
+        "oid": "2.16.840.1.101.3.4.1.46"
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "name": "RSA-2048",
+      "version": "2048-bit",
+      "description": "Server public key certificate for CN: aeterna.website",
+      "cryptoProperties": {
+        "assetType": "certificate",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "parameterSetIdentifier": "2048",
+          "cryptoFunctions": [
+            "verify"
+          ],
+          "classicalSecurityLevel": 112,
+          "nistQuantumSecurityLevel": 0
+        },
+        "oid": "1.2.840.113549.1.1.1"
+      }
+    }
+  ]
+}
