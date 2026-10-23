@@ -4,8 +4,8 @@
   "architect": "Dimitar Prodromov",
   "authority": "0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21",
   "contact": "dimitar@aeterna.website",
-  "scan_timestamp": "2026-10-23T18:52:34.026390+00:00",
-  "report_verification_hash_sha256": "cb0ba5b7a5284e7cd0065effefdc870811cb909df638576daadbee48e95358e5",
+  "scan_timestamp": "2026-10-23T19:54:34.539446200+00:00",
+  "report_verification_hash_sha256": "1c70e08769936a97bf3e6c3c9ba0a7484b8af5e8883fa371ac5d6ab2891d19d4",
   "standards_referenced": [
     "NIST FIPS 203 (ML-KEM Module-Lattice Key Encapsulation Mechanism)",
     "NIST FIPS 204 (ML-DSA Module-Lattice Digital Signature Algorithm)",
@@ -20,45 +20,45 @@
   "total_targets": 1,
   "total_vulnerabilities": 1,
   "global_compliance_summary": {
-    "all_compliant_nis2": false,
-    "all_compliant_dora": false,
-    "average_nis2_score_percent": 80.0,
-    "average_dora_score_percent": 80.0,
-    "critical_vulnerabilities_count": 1,
-    "high_vulnerabilities_count": 0,
+    "all_compliant_nis2": true,
+    "all_compliant_dora": true,
+    "average_nis2_score_percent": 100.0,
+    "average_dora_score_percent": 100.0,
+    "critical_vulnerabilities_count": 0,
+    "high_vulnerabilities_count": 1,
     "sndl_exposed_targets_count": 0,
-    "statutory_exposure_summary": "UP TO EUR 10,000,000 OR 2% OF GLOBAL ANNUAL TURNOVER PER ESSENTIAL ENTITY (NIS2 Art. 34 / DORA Art. 50)"
+    "statutory_exposure_summary": "Zero statutory exposure — compliant configuration"
   },
   "targets": [
     {
       "domain": "aeterna.website",
       "port": 443,
-      "resolved_ip": "185.199.108.153",
+      "resolved_ip": "172.67.130.74",
       "status": "SCANNED_VERIFIED",
       "error_message": null,
       "tls_version": "TLS 1.3",
       "cipher_suite": {
-        "suite_name": "TLS13_AES_128_GCM_SHA256",
+        "suite_name": "TLS13_AES_256_GCM_SHA384",
         "key_exchange_algorithm": "X25519MLKEM768 (NIST FIPS 203 Hybrid Level 3)",
         "authentication_algorithm": "Certificate-based Digital Signature (RSA/ECDSA)",
-        "symmetric_cipher": "AES-128-GCM",
-        "hash_function": "SHA-256",
+        "symmetric_cipher": "AES-256-GCM",
+        "hash_function": "SHA-384",
         "key_exchange_quantum_safe": true,
         "authentication_quantum_safe": false,
         "symmetric_quantum_safe": true,
-        "nist_quantum_security_level": 1
+        "nist_quantum_security_level": 3
       },
       "certificate": {
         "subject_cn": "aeterna.website",
-        "issuer_cn": "YR2",
-        "valid_not_before": "Sep  8 22:19:22 2026 +00:00",
-        "valid_not_after": "Dec  7 22:19:21 2026 +00:00",
-        "public_key_algorithm": "RSA",
-        "public_key_bits": 2048,
-        "signature_algorithm": "SHA-256 with RSA",
-        "serial_number_hex": "05:43:05:fe:c4:09:ba:d6:36:11:be:3c:dc:a4:0d:93:82:b6",
+        "issuer_cn": "YE2",
+        "valid_not_before": "Oct 23 18:53:51 2026 +00:00",
+        "valid_not_after": "Jan 21 18:53:50 2027 +00:00",
+        "public_key_algorithm": "ECDSA",
+        "public_key_bits": 256,
+        "signature_algorithm": "ECDSA with SHA-384",
+        "serial_number_hex": "06:5b:8e:14:9b:5f:35:7e:bc:24:17:b2:42:b1:87:84:0e:75",
         "is_expired": false,
-        "days_until_expiry": 45
+        "days_until_expiry": 89
       },
       "mosca_theorem": {
         "shelf_life_years_x": 20,
@@ -72,56 +72,44 @@
         "verdict": "POST-QUANTUM RESILIENT"
       },
       "quantum_complexity": {
-        "shor_target_primitive": "RSA-2048-bit Integer Factorization",
-        "shor_logical_qubits_required": 4096,
-        "shor_physical_qubits_surface_code": 4096000,
-        "shor_time_complexity_big_o": "O((log N)² log log N) — Polynomial Time via Shor's Algorithm",
-        "grover_symmetric_cipher": "AES-128-GCM",
-        "grover_classical_bits": 128,
-        "grover_effective_quantum_bits": 64,
-        "grover_nist_level": "NIST Level 1 Deficient (<128-bit PQ Margin)",
+        "shor_target_primitive": "ECDSA 256-bit Elliptic Curve DLP",
+        "shor_logical_qubits_required": 1536,
+        "shor_physical_qubits_surface_code": 1536000,
+        "shor_time_complexity_big_o": "O(k³) — Polynomial Time via Shor's Algorithm",
+        "grover_symmetric_cipher": "AES-256-GCM",
+        "grover_classical_bits": 256,
+        "grover_effective_quantum_bits": 128,
+        "grover_nist_level": "NIST Level 5 (Fully Compliant)",
         "grover_time_complexity_big_o": "O(2^(k/2)) — Quadratic Search via Grover's Algorithm",
         "lattice_post_quantum_alternative": "NIST FIPS 203 ML-KEM-768 (Module-LWE) + FIPS 204 ML-DSA-65 (Module-SIS)",
         "lattice_security_bits": 192
       },
       "regulatory_compliance": {
-        "nis2_compliant": false,
-        "nis2_score_percent": 80,
-        "nis2_gaps": [
-          "NIS2 Art. 21 §2(e): Substandard RSA key length (2048 bits < 3072 bits transitional threshold)"
-        ],
-        "nis2_actions": [
-          "Upgrade RSA certificate to minimum 3072-bit or adopt ML-DSA-65"
-        ],
-        "nis2_penalty": "Up to EUR 10,000,000 or 2% of annual worldwide turnover (NIS2 Art. 34)",
-        "dora_compliant": false,
-        "dora_score_percent": 80,
-        "dora_gaps": [
-          "DORA Art. 9 §4: Legacy RSA-2048 key does not guarantee long-term operational resilience"
-        ],
-        "dora_actions": [
-          "Rotate certificates to PQC-ready hybrid or 4096-bit RSA immediately"
-        ],
-        "dora_penalty": "Periodic penalty payments up to 1% of average daily worldwide turnover (DORA Art. 50)",
-        "bsi_tr02102_compliant": false,
-        "bsi_gaps": [
-          "BSI TR-02102-2: RSA-2048 is deprecated beyond 2024"
-        ],
+        "nis2_compliant": true,
+        "nis2_score_percent": 100,
+        "nis2_gaps": [],
+        "nis2_actions": [],
+        "nis2_penalty": "Compliant — No statutory exposure",
+        "dora_compliant": true,
+        "dora_score_percent": 100,
+        "dora_gaps": [],
+        "dora_actions": [],
+        "dora_penalty": "Compliant — No statutory exposure",
+        "bsi_tr02102_compliant": true,
+        "bsi_gaps": [],
         "anssi_pqc_compliant": true,
         "anssi_gaps": [],
-        "nist_sp800_131a_compliant": false,
-        "nist_gaps": [
-          "NIST SP 800-131A: RSA-2048 disallowed after 2030"
-        ]
+        "nist_sp800_131a_compliant": true,
+        "nist_gaps": []
       },
       "vulnerabilities": [
         {
           "id": "AET-PQC-0001",
-          "severity": "CRITICAL",
+          "severity": "HIGH",
           "cwe_id": "CWE-326: Inadequate Encryption Strength",
           "component": "X.509 Server Identity Certificate",
-          "primitive": "RSA 2048-bit Public Key",
-          "description": "Server certificate uses RSA 2048-bit public key. Factorable via Shor's algorithm on a quantum computer with ~4096 logical qubits, allowing adversary impersonation, rogue certificate creation, and MITM.",
+          "primitive": "ECDSA 256-bit Public Key",
+          "description": "Server certificate uses ECDSA 256-bit public key. Factorable via Shor's algorithm on a quantum computer with ~512 logical qubits, allowing adversary impersonation, rogue certificate creation, and MITM.",
           "statutory_breach": "BSI TR-02102-2 & DORA Art. 9 §4 (Cryptographic Agility)",
           "remediation": "Transition to dual-certificate configuration supporting NIST FIPS 204 ML-DSA-65 signatures"
         }

@@ -356,8 +356,8 @@
             <div class="header-meta">
                 <span>Auditor: <strong>Dimitar Prodromov</strong></span>
                 <span>Contact: <strong>dimitar@aeterna.website</strong></span>
-                <span>Timestamp: <strong>2026-10-23T18:52:34.026390+00:00</strong></span>
-                <span>Verification SHA-256: <strong>cb0ba5b7a5284e7cd0065effefdc870811cb909df638576daadbee48e95358e5</strong></span>
+                <span>Timestamp: <strong>2026-10-23T19:54:34.539446200+00:00</strong></span>
+                <span>Verification SHA-256: <strong>1c70e08769936a97bf3e6c3c9ba0a7484b8af5e8883fa371ac5d6ab2891d19d4</strong></span>
             </div>
         </div>
 
@@ -370,7 +370,7 @@
                 <div class='target-header'>
                     <div>
                         <h2 class='target-domain'>aeterna.website:443</h2>
-                        <div class='target-ip'>Resolved IPv4/IPv6: <code>185.199.108.153</code></div>
+                        <div class='target-ip'>Resolved IPv4/IPv6: <code>172.67.130.74</code></div>
                     </div>
                     <div><span class='badge badge-success'>POST-QUANTUM RESILIENT</span></div>
                 </div>
@@ -378,12 +378,12 @@
                 <div class='grid-4'>
                     <div class='kpi-box'>
                         <div class='kpi-label'>NIS2 Compliance Score</div>
-                        <div class='kpi-val text-green'>80%</div>
+                        <div class='kpi-val text-green'>100%</div>
                         <div class='kpi-sub'>Art. 21 §2(h) Mandatory</div>
                     </div>
                     <div class='kpi-box'>
                         <div class='kpi-label'>DORA Compliance Score</div>
-                        <div class='kpi-val text-green'>80%</div>
+                        <div class='kpi-val text-green'>100%</div>
                         <div class='kpi-sub'>Reg 2022/2554 Art. 9</div>
                     </div>
                     <div class='kpi-box'>
@@ -393,8 +393,8 @@
                     </div>
                     <div class='kpi-box'>
                         <div class='kpi-label'>Shor Factorization Qubits</div>
-                        <div class='kpi-val text-cyan'>4096 Logical</div>
-                        <div class='kpi-sub'>~4M Surface Code</div>
+                        <div class='kpi-val text-cyan'>1536 Logical</div>
+                        <div class='kpi-sub'>~1M Surface Code</div>
                     </div>
                 </div>
 
@@ -414,7 +414,7 @@
                         <tbody>
                             <tr>
                                 <td>Negotiated Suite</td>
-                                <td colspan='5'><code>TLS13_AES_128_GCM_SHA256</code></td>
+                                <td colspan='5'><code>TLS13_AES_256_GCM_SHA384</code></td>
                             </tr>
                             <tr>
                                 <td>Key Exchange</td>
@@ -426,7 +426,7 @@
                             </tr>
                             <tr>
                                 <td>Bulk Encryption</td>
-                                <td><strong>AES-128-GCM</strong></td>
+                                <td><strong>AES-256-GCM</strong></td>
                                 <td>256 bits</td>
                                 <td>256 bits</td>
                                 <td><span class='badge badge-success'>RESISTANT</span></td>
@@ -434,7 +434,7 @@
                             </tr>
                             <tr>
                                 <td>Identity Certificate</td>
-                                <td><strong>RSA 2048-bit</strong></td>
+                                <td><strong>ECDSA 256-bit</strong></td>
                                 <td>Public Key</td>
                                 <td>112 bits</td>
                                 <td><span class='badge badge-danger'>FACTORABLE</span></td>
@@ -442,8 +442,8 @@
                             </tr>
                             <tr>
                                 <td>CA Issuer & Expiry</td>
-                                <td>YR2</td>
-                                <td>45 days left</td>
+                                <td>YE2</td>
+                                <td>89 days left</td>
                                 <td>X.509 v3</td>
                                 <td><span class='badge badge-success'>VALID</span></td>
                                 <td>N/A</td>
@@ -460,13 +460,13 @@
 
                 <div class='vulnerabilities-block'>
                     <h3 class='section-subtitle'>Identified Vulnerabilities & Statutory Non-Conformities (1)</h3>
-                    <div class='vuln-card vuln-critical'>
+                    <div class='vuln-card vuln-high'>
                     <div class='vuln-header'>
                         <span class='vuln-id'>AET-PQC-0001</span>
-                        <span class='vuln-sev'>CRITICAL</span>
+                        <span class='vuln-sev'>HIGH</span>
                         <span class='vuln-title'>X.509 Server Identity Certificate</span>
                     </div>
-                    <p class='vuln-desc'>Server certificate uses RSA 2048-bit public key. Factorable via Shor's algorithm on a quantum computer with ~4096 logical qubits, allowing adversary impersonation, rogue certificate creation, and MITM.</p>
+                    <p class='vuln-desc'>Server certificate uses ECDSA 256-bit public key. Factorable via Shor's algorithm on a quantum computer with ~512 logical qubits, allowing adversary impersonation, rogue certificate creation, and MITM.</p>
                     <div class='vuln-meta'>
                         <div><strong>Statutory Breach:</strong> BSI TR-02102-2 & DORA Art. 9 §4 (Cryptographic Agility)</div>
                         <div><strong>Technical Fix:</strong> <span class='text-gold'>Transition to dual-certificate configuration supporting NIST FIPS 204 ML-DSA-65 signatures</span></div>
