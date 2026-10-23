@@ -1,4 +1,4 @@
-# AETERNA QUANTUM NEXUS — MASTER TEXTBOOK METHODOLOGY
+# AETERNA POST-QUANTUM CRYPTOGRAPHY (PQC) — MASTER TEXTBOOK METHODOLOGY
 ## The Definitive Standard for Post-Quantum Cryptographic Migration (PQC) & Institutional CBOM Compliance
 **Architect:** Dimitar Prodromov  
 **Authority:** `0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21`  
