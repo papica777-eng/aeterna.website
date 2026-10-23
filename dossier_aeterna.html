@@ -80,26 +80,35 @@
             font-size: 0.85rem;
             color: var(--text-muted);
         }
-        .header-meta span strong { color: #ffffff; }
-        .verdict-banner {
+        .verdict-banner, .verdict-banner-danger {
             background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
             border-left: 4px solid var(--red);
             border-radius: 6px;
             padding: 24px;
             margin-bottom: 30px;
         }
-        .verdict-title {
-            font-family: var(--font-serif);
+        .verdict-banner .verdict-title, .verdict-banner-danger .verdict-title {
             color: var(--red);
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
-        .verdict-text {
-            color: #e2e8f0;
-            font-size: 1rem;
+        .verdict-banner-transitional {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-left: 4px solid #f59e0b;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        .verdict-banner-transitional .verdict-title {
+            color: #f59e0b;
+        }
+        .verdict-banner-success {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-left: 4px solid var(--green);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+        .verdict-banner-success .verdict-title {
+            color: var(--green);
         }
         .grid-4 {
             display: grid;
@@ -347,14 +356,14 @@
             <div class="header-meta">
                 <span>Auditor: <strong>Dimitar Prodromov</strong></span>
                 <span>Contact: <strong>dimitar@aeterna.website</strong></span>
-                <span>Timestamp: <strong>2026-10-23T18:07:31.378585+00:00</strong></span>
-                <span>Verification SHA-256: <strong>6d60e4b8a00fc2d5cdec30f5794ad425637f10eac48ab79f95d5a030f1f4f049</strong></span>
+                <span>Timestamp: <strong>2026-10-23T18:52:34.026390+00:00</strong></span>
+                <span>Verification SHA-256: <strong>cb0ba5b7a5284e7cd0065effefdc870811cb909df638576daadbee48e95358e5</strong></span>
             </div>
         </div>
 
-        <div class="verdict-banner">
-            <div class="verdict-title">EXECUTIVE FINDING: STATUTORY NON-CONFORMITY & SNDL EXPOSURE</div>
-            <p class="verdict-text">UP TO EUR 10,000,000 OR 2% OF GLOBAL ANNUAL TURNOVER PER ESSENTIAL ENTITY (NIS2 Art. 34 / DORA Art. 50)</p>
+        <div class="verdict-banner-transitional">
+            <div class="verdict-title">EXECUTIVE FINDING: POST-QUANTUM SESSION RESILIENCE ACTIVE (TRANSITIONAL CERTIFICATE REMEDIATION REQUIRED)</div>
+            <p class="verdict-text">Key encapsulation primitive meets NIST FIPS 203 standards (Zero SNDL Risk). Transitional certificate rotation to NIST FIPS 204 (ML-DSA-65) required for full long-term compliance under EU DORA & NIS2.</p>
         </div>
 
         <div class='target-section'>
@@ -379,8 +388,8 @@
                     </div>
                     <div class='kpi-box'>
                         <div class='kpi-label'>Mosca Secrecy Margin (Δt)</div>
-                        <div class='kpi-val text-red'>-19 yrs</div>
-                        <div class='kpi-sub'>Insolvent Secrecy Window</div>
+                        <div class='kpi-val text-green'>-19 yrs</div>
+                        <div class='kpi-sub'>Solvent / SNDL Immune</div>
                     </div>
                     <div class='kpi-box'>
                         <div class='kpi-label'>Shor Factorization Qubits</div>
@@ -411,9 +420,9 @@
                                 <td>Key Exchange</td>
                                 <td><strong>X25519MLKEM768 (NIST FIPS 203 Hybrid Level 3)</strong></td>
                                 <td>Ephemeral</td>
-                                <td>128 bits</td>
-                                <td><span class='badge badge-danger'>VULNERABLE</span></td>
-                                <td>Shor's Discrete Log (Poly-Time)</td>
+                                <td>192 bits (PQ Category 3)</td>
+                                <td><span class='badge badge-success'>RESILIENT</span></td>
+                                <td>Immune (NIST FIPS 203 Lattice / Module-LWE)</td>
                             </tr>
                             <tr>
                                 <td>Bulk Encryption</td>

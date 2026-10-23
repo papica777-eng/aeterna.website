@@ -4,8 +4,8 @@
   "architect": "Dimitar Prodromov",
   "authority": "0x41_45_54_45_52_4e_41_5f_4c_4f_47_4f_53_5f_44_49_4d_49_54_41_52_5f_50_52_4f_44_52_4f_4d_56_21",
   "contact": "dimitar@aeterna.website",
-  "scan_timestamp": "2026-10-23T18:07:31.378585+00:00",
-  "report_verification_hash_sha256": "6d60e4b8a00fc2d5cdec30f5794ad425637f10eac48ab79f95d5a030f1f4f049",
+  "scan_timestamp": "2026-10-23T18:52:34.026390+00:00",
+  "report_verification_hash_sha256": "cb0ba5b7a5284e7cd0065effefdc870811cb909df638576daadbee48e95358e5",
   "standards_referenced": [
     "NIST FIPS 203 (ML-KEM Module-Lattice Key Encapsulation Mechanism)",
     "NIST FIPS 204 (ML-DSA Module-Lattice Digital Signature Algorithm)",
